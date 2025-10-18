@@ -1,0 +1,14 @@
+interface Test {
+    x: int
+}
+
+class MyClass {
+    x: int
+    
+    constructor(val: int) {
+        this.x = val
+    }
+}
+
+let obj: MyClass = new MyClass(10)
+print(obj.x)

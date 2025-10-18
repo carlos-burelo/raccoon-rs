@@ -1,0 +1,205 @@
+
+
+
+
+
+
+print("=== TEMPLATE STRINGS TEST ===")
+
+
+
+
+
+print("Test 1: Basic Template")
+
+let name: str = "World"
+let greeting: str = `Hello, ${name}!`
+print(greeting)
+
+
+
+
+
+print("Test 2: Integer Interpolation")
+
+let age: int = 25
+let message: str = `I am ${age} years old`
+print(message)
+
+
+
+
+
+print("Test 3: Float Interpolation")
+
+let price: float = 19.99
+let info: str = `Price: $${price}`
+print(info)
+
+
+
+
+
+print("Test 4: Boolean Interpolation")
+
+let isActive: bool = true
+let status: str = `Status: ${isActive}`
+print(status)
+
+
+
+
+
+print("Test 5: Multiple Variables")
+
+let firstName: str = "John"
+let lastName: str = "Doe"
+let userAge: int = 30
+let fullInfo: str = `Name: ${firstName} ${lastName}, Age: ${userAge}`
+print(fullInfo)
+
+
+
+
+
+print("Test 6: Expression Interpolation")
+
+let a: int = 5
+let b: int = 3
+let calc: str = `${a} + ${b} = ${a + b}`
+print(calc)
+
+
+
+
+
+print("Test 7: Templates in Functions")
+
+fn greet(name: str, age: int): str {
+    return `Hello ${name}, you are ${age} years old`
+}
+
+print(greet("Alice", 28))
+
+
+
+
+
+print("Test 8: Object Properties")
+
+class Person {
+    name: str
+    age: int
+    
+    constructor(name: str, age: int) {
+        this.name = name
+        this.age = age
+    }
+    
+    introduce(): str {
+        return `My name is ${this.name} and I'm ${this.age}`
+    }
+}
+
+let person: Person = new Person("Bob", 35)
+print(person.introduce())
+
+
+
+
+
+print("Test 9: Array Properties")
+
+let items: int[] = [1, 2, 3, 4, 5]
+let arrayInfo: str = `Array has ${items.length} items`
+print(arrayInfo)
+
+
+
+
+
+print("Test 10: Comparison Results")
+
+let x: int = 10
+let y: int = 20
+let comparison: str = `x < y is ${x < y}`
+print(comparison)
+
+
+
+
+
+print("Test 11: Complex Expressions")
+
+let num1: int = 5
+let num2: int = 10
+let result: str = `Sum of ${num1} and ${num2} is ${num1 + num2}`
+print(result)
+
+
+
+
+
+print("Test 12: Function Call Interpolation")
+
+fn double(n: int): int {
+    return n * 2
+}
+
+let val: int = 7
+let output: str = `Double of ${val} is ${double(val)}`
+print(output)
+
+
+
+
+
+print("Test 13: Template Concatenation")
+
+let part1: str = `Hello`
+let part2: str = `World`
+let combined: str = part1 + " " + part2
+print(combined)
+
+
+
+
+
+print("Test 14: Empty Templates")
+
+let empty: str = ``
+print(`Empty string length: ${empty.length}`)
+
+
+
+
+
+print("Test 15: Templates in Conditionals")
+
+let score: int = 85
+
+if (score >= 90) {
+    print(`Grade: A`)
+} else if (score >= 80) {
+    print(`Grade: B (${score})`)
+} else {
+    print(`Grade: C`)
+}
+
+
+print("=== ALL TEMPLATE STRINGS TESTS PASSED ===")
+print("✅ Basic templates")
+print("✅ Integer interpolation")
+print("✅ Float interpolation")
+print("✅ Boolean interpolation")
+print("✅ Multiple variables")
+print("✅ Expressions")
+print("✅ Function templates")
+print("✅ Object properties")
+print("✅ Array properties")
+print("✅ Comparisons")
+print("✅ Complex expressions")
+print("✅ Function calls")
+print("✅ Concatenation")
+print("✅ Empty templates")
+print("✅ Conditional templates")

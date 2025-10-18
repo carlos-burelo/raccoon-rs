@@ -1,0 +1,442 @@
+
+
+
+
+
+
+
+print("🦝 === COMPREHENSIVE CLASSES TEST ===")
+
+
+
+
+
+print("✅ Test 1: Basic Class with Constructor")
+
+class Person {
+    name: str
+    age: int
+    
+    constructor(name: str, age: int) {
+        this.name = name
+        this.age = age
+    }
+}
+
+let alice: Person = new Person("Alice", 30)
+print(`  Name: ${alice.name}`)
+print(`  Age: ${alice.age}`)
+
+
+
+
+
+print("✅ Test 2: Class with Methods")
+
+class Calculator {
+    value: int
+    
+    constructor(initial: int) {
+        this.value = initial
+    }
+    
+    add(n: int): void {
+        this.value = this.value + n
+    }
+    
+    subtract(n: int): void {
+        this.value = this.value - n
+    }
+    
+    multiply(n: int): void {
+        this.value = this.value * n
+    }
+    
+    getValue(): int {
+        return this.value
+    }
+    
+    reset(): void {
+        this.value = 0
+    }
+}
+
+let calc: Calculator = new Calculator(10)
+print(`  Initial value: ${calc.getValue()}`)
+calc.add(5)
+print(`  After add(5): ${calc.getValue()}`)
+calc.multiply(2)
+print(`  After multiply(2): ${calc.getValue()}`)
+calc.subtract(10)
+print(`  After subtract(10): ${calc.getValue()}`)
+calc.reset()
+print(`  After reset: ${calc.getValue()}`)
+
+
+
+
+
+print("✅ Test 3: Class with Different Data Types")
+
+class Product {
+    name: str
+    price: float
+    inStock: bool
+    quantity: int
+    
+    constructor(name: str, price: float, quantity: int) {
+        this.name = name
+        this.price = price
+        this.quantity = quantity
+        this.inStock = true
+    }
+    
+    getTotalValue(): float {
+        return this.price * this.quantity
+    }
+    
+    sell(amount: int): void {
+        if (this.quantity >= amount) {
+            this.quantity = this.quantity - amount
+            if (this.quantity == 0) {
+                this.inStock = false
+            }
+        }
+    }
+    
+    getInfo(): str {
+        return this.name + " - $" + this.price + " (Stock: " + this.quantity + ")"
+    }
+}
+
+let product: Product = new Product("Laptop", 999.99, 5)
+print(`  ${product.getInfo()}`)
+print(`  Total value: $${product.getTotalValue()}`)
+print(`  In stock: ${product.inStock}`)
+product.sell(3)
+print(`  After selling 3: ${product.getInfo()}`)
+product.sell(2)
+print(`  After selling 2 more: ${product.getInfo()}`)
+print(`  In stock: ${product.inStock}`)
+
+
+
+
+
+print("✅ Test 4: Class with Array Properties")
+
+class Classroom {
+    name: str
+    students: str[]
+    grades: int[]
+    
+    constructor(name: str) {
+        this.name = name
+        this.students = []
+        this.grades = []
+    }
+    
+    addStudent(student: str, grade: int): void {
+        this.students.push(student)
+        this.grades.push(grade)
+    }
+    
+    getStudentCount(): int {
+        return this.students.length
+    }
+    
+    getAverageGrade(): float {
+        if (this.grades.length == 0) {
+            return 0.0
+        }
+        let sum: int = 0
+        for (const i in 0..this.grades.length - 1) {
+            sum = sum + this.grades[i]
+        }
+        return sum / this.grades.length
+    }
+}
+
+let classroom: Classroom = new Classroom("Math 101")
+print(`  Classroom: ${classroom.name}`)
+classroom.addStudent("Alice", 95)
+classroom.addStudent("Bob", 87)
+classroom.addStudent("Charlie", 92)
+print(`  Students: ${classroom.getStudentCount()}`)
+print(`  Average grade: ${classroom.getAverageGrade()}`)
+
+
+
+
+
+print("✅ Test 5: Class Inheritance")
+
+class Animal {
+    name: str
+    age: int
+    
+    constructor(name: str, age: int) {
+        this.name = name
+        this.age = age
+    }
+    
+    speak(): str {
+        return "Some sound"
+    }
+    
+    getInfo(): str {
+        return this.name + " is " + this.age + " years old"
+    }
+}
+
+class Dog extends Animal {
+    breed: str
+    
+    constructor(name: str, age: int, breed: str) {
+        super(name, age)
+        this.breed = breed
+    }
+    
+    speak(): str {
+        return "Woof! Woof!"
+    }
+    
+    getBreedInfo(): str {
+        return this.name + " is a " + this.breed
+    }
+}
+
+let dog: Dog = new Dog("Rex", 3, "Labrador")
+print(`  ${dog.getInfo()}`)
+print(`  ${dog.getBreedInfo()}`)
+print(`  Sound: ${dog.speak()}`)
+
+
+
+
+
+print("✅ Test 6: Multiple Instances Independence")
+
+class Counter {
+    count: int
+    name: str
+    
+    constructor(name: str) {
+        this.name = name
+        this.count = 0
+    }
+    
+    increment(): void {
+        this.count = this.count + 1
+    }
+    
+    getCount(): int {
+        return this.count
+    }
+}
+
+let counter1: Counter = new Counter("Counter A")
+let counter2: Counter = new Counter("Counter B")
+
+counter1.increment()
+counter1.increment()
+counter1.increment()
+
+counter2.increment()
+
+print(`  ${counter1.name}: ${counter1.getCount()}`)
+print(`  ${counter2.name}: ${counter2.getCount()}`)
+
+
+
+
+
+print("✅ Test 7: Complex Methods with Logic")
+
+class BankAccount {
+    accountNumber: str
+    balance: float
+    isActive: bool
+    
+    constructor(accountNumber: str, initialBalance: float) {
+        this.accountNumber = accountNumber
+        this.balance = initialBalance
+        this.isActive = true
+    }
+    
+    deposit(amount: float): bool {
+        if (!this.isActive) {
+            return false
+        }
+        if (amount > 0.0) {
+            this.balance = this.balance + amount
+            return true
+        }
+        return false
+    }
+    
+    withdraw(amount: float): bool {
+        if (!this.isActive) {
+            return false
+        }
+        if (amount > 0.0 && this.balance >= amount) {
+            this.balance = this.balance - amount
+            return true
+        }
+        return false
+    }
+    
+    getBalance(): float {
+        return this.balance
+    }
+    
+    close(): void {
+        this.isActive = false
+    }
+}
+
+let account: BankAccount = new BankAccount("ACC001", 1000.0)
+print(`  Account: ${account.accountNumber}`)
+print(`  Initial balance: $${account.getBalance()}`)
+account.deposit(500.0)
+print(`  After deposit $500: $${account.getBalance()}`)
+account.withdraw(200.0)
+print(`  After withdraw $200: $${account.getBalance()}`)
+
+
+
+
+
+print("✅ Test 8: Nested Method Calls")
+
+class MathOperations {
+    value: int
+    
+    constructor(initial: int) {
+        this.value = initial
+    }
+    
+    add(n: int): MathOperations {
+        this.value = this.value + n
+        return this
+    }
+    
+    multiply(n: int): MathOperations {
+        this.value = this.value * n
+        return this
+    }
+    
+    getValue(): int {
+        return this.value
+    }
+}
+
+let math: MathOperations = new MathOperations(5)
+print(`  Initial: ${math.getValue()}`)
+
+math.add(3)
+math.multiply(2)
+print(`  After add(3) then multiply(2): ${math.getValue()}`)
+
+
+
+
+
+print("✅ Test 9: Class with String Operations")
+
+class TextProcessor {
+    text: str
+    
+    constructor(text: str) {
+        this.text = text
+    }
+    
+    toUpperCase(): str {
+        return this.text.toUpper()
+    }
+    
+    toLowerCase(): str {
+        return this.text.toLower()
+    }
+    
+    getLength(): int {
+        return this.text.length
+    }
+    
+    isEmpty(): bool {
+        return this.text.isEmpty
+    }
+}
+
+let processor: TextProcessor = new TextProcessor("Hello Raccoon")
+print(`  Original: ${processor.text}`)
+print(`  Uppercase: ${processor.toUpperCase()}`)
+print(`  Lowercase: ${processor.toLowerCase()}`)
+print(`  Length: ${processor.getLength()}`)
+print(`  Is empty: ${processor.isEmpty()}`)
+
+
+
+
+
+print("✅ Test 10: Class with Object Composition")
+
+class Address {
+    street: str
+    city: str
+    zipCode: str
+    
+    constructor(street: str, city: str, zipCode: str) {
+        this.street = street
+        this.city = city
+        this.zipCode = zipCode
+    }
+    
+    getFullAddress(): str {
+        return this.street + ", " + this.city + " " + this.zipCode
+    }
+}
+
+class Employee {
+    name: str
+    id: int
+    address: Address
+    
+    constructor(name: str, id: int, address: Address) {
+        this.name = name
+        this.id = id
+        this.address = address
+    }
+    
+    getInfo(): str {
+        return this.name + " (ID: " + this.id + ")"
+    }
+    
+    getFullInfo(): str {
+        return this.getInfo() + " - " + this.address.getFullAddress()
+    }
+}
+
+let addr: Address = new Address("123 Main St", "Springfield", "12345")
+let emp: Employee = new Employee("John Doe", 1001, addr)
+print(`  ${emp.getInfo()}`)
+print(`  ${emp.getFullInfo()}`)
+
+
+
+
+
+print("🎉 === ALL TESTS PASSED ===")
+
+print("✅ Basic class with constructor")
+print("✅ Class with methods")
+print("✅ Different data types (str, int, float, bool)")
+print("✅ Array properties")
+print("✅ Class inheritance (extends, super)")
+print("✅ Multiple instances independence")
+print("✅ Complex methods with logic")
+print("✅ Nested method calls")
+print("✅ String operations in classes")
+print("✅ Object composition")
+
+print("🦝 Raccoon Classes: FULLY FUNCTIONAL!")

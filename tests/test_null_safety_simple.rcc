@@ -1,0 +1,57 @@
+
+
+
+fn test1(): void {
+    let x: str? = null;
+    let y: str = x ?? "default";
+    print(y);  
+}
+
+
+fn test2(): void {
+    let age: int = 20;
+    let status: str = age >= 18 ? "adult" : "minor";
+    print(status);  
+}
+
+
+fn test3(): void {
+    let x: int = 5;
+    let y: int = ++x;
+    print(x);  
+    print(y);  
+}
+
+
+fn test4(): void {
+    let x: int = 5;
+    let y: int = x++;
+    print(x);  
+    print(y);  
+}
+
+
+fn test5(): void {
+    let x: str? = "hello";
+    let y: str = x!;
+    print(y);  
+}
+
+fn main(): void {
+    print("=== Test 1: Null Coalescing ===");
+    test1();
+    
+    print("=== Test 2: Conditional ===");
+    test2();
+    
+    print("=== Test 3: Prefix Increment ===");
+    test3();
+    
+    print("=== Test 4: Postfix Increment ===");
+    test4();
+    
+    print("=== Test 5: Null Assertion ===");
+    test5();
+}
+
+main();

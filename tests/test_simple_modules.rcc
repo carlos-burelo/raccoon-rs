@@ -1,0 +1,9 @@
+
+print("Test 1: print simple")
+print("Test 2: print con múltiples args", 123, 456)
+
+import { PI } from "std:math"
+print("PI =", PI)
+
+import * as Math from "std:math"
+print("Math.E =", Math.E)

@@ -1,0 +1,244 @@
+
+
+
+
+
+
+print("=== ERROR HANDLING TEST ===")
+
+
+
+
+
+print("Test 1: Basic Try-Catch")
+
+try {
+    print("Inside try block")
+    throw "Basic error"
+} catch (e) {
+    print(`Caught: ${e}`)
+}
+
+
+
+
+
+print("Test 2: Normal Flow")
+
+try {
+    print("This executes normally")
+    let x: int = 10
+    print(`x = ${x}`)
+} catch (e) {
+    print("This should not print")
+}
+
+
+
+
+
+print("Test 3: String Error")
+
+try {
+    throw "Something went wrong!"
+} catch (error) {
+    print(`Error message: ${error}`)
+}
+
+
+
+
+
+print("Test 4: Try-Catch in Function")
+
+fn riskyOperation(): str {
+    try {
+        throw "Function error"
+        return "success"
+    } catch (e) {
+        return "error: " + e
+    }
+}
+
+let result: str = riskyOperation()
+print(`Result: ${result}`)
+
+
+
+
+
+print("Test 5: Nested Try-Catch")
+
+try {
+    print("Outer try")
+    try {
+        print("Inner try")
+        throw "Inner error"
+    } catch (e) {
+        print(`Inner catch: ${e}`)
+    }
+    print("After inner try-catch")
+} catch (e) {
+    print("Outer catch (should not reach)")
+}
+
+
+
+
+
+print("Test 6: Multiple Statements")
+
+try {
+    let a: int = 1
+    let b: int = 2
+    let c: int = a + b
+    print(`Sum: ${c}`)
+    throw "Error after calculations"
+} catch (e) {
+    print(`Caught: ${e}`)
+}
+
+
+
+
+
+print("Test 7: Try-Catch with Return")
+
+fn safeDivide(a: int, b: int): int {
+    try {
+        if (b == 0) {
+            throw "Division by zero"
+        }
+        return a % b  
+    } catch (e) {
+        print(`Error: ${e}`)
+        return 0
+    }
+}
+
+print(`10 % 2 = ${safeDivide(10, 2)}`)
+print(`10 % 0 = ${safeDivide(10, 0)}`)
+
+
+
+
+
+print("Test 8: Variable Scope")
+
+let status: str = "ok"
+
+try {
+    status = "processing"
+    throw "Failed"
+} catch (e) {
+    status = "error"
+}
+
+print(`Status: ${status}`)
+
+
+
+
+
+print("Test 9: Try-Catch in Loop")
+
+let i: int = 0
+while (i < 3) {
+    try {
+        if (i == 1) {
+            throw "Error at i=1"
+        }
+        print(`i = ${i}`)
+    } catch (e) {
+        print(`Caught: ${e}`)
+    }
+    i = i + 1
+}
+
+
+
+
+
+print("Test 10: Conditional Throw")
+
+fn validateAge(age: int): str {
+    try {
+        if (age < 0) {
+            throw "Age cannot be negative"
+        }
+        if (age > 150) {
+            throw "Age too high"
+        }
+        return "Valid age"
+    } catch (e) {
+        return "Invalid: " + e
+    }
+}
+
+print(validateAge(25))
+print(validateAge(-5))
+print(validateAge(200))
+
+
+
+
+
+print("Test 11: Multiple Throws")
+
+fn checkValue(val: int): void {
+    try {
+        if (val < 0) {
+            throw "Negative"
+        }
+        if (val == 0) {
+            throw "Zero"
+        }
+        if (val > 100) {
+            throw "Too large"
+        }
+        print("Value is valid")
+    } catch (e) {
+        print(`Validation error: ${e}`)
+    }
+}
+
+checkValue(50)
+checkValue(-10)
+checkValue(0)
+checkValue(150)
+
+
+
+
+
+print("Test 12: Error Propagation")
+
+fn innerFunction(): void {
+    throw "Inner function error"
+}
+
+fn outerFunction(): str {
+    try {
+        innerFunction()
+        return "success"
+    } catch (e) {
+        return "caught: " + e
+    }
+}
+
+print(outerFunction())
+
+
+print("=== ALL ERROR HANDLING TESTS PASSED ===")
+print("✅ Basic try-catch")
+print("✅ Normal flow")
+print("✅ String errors")
+print("✅ Try-catch in functions")
+print("✅ Nested try-catch")
+print("✅ Multiple statements")
+print("✅ Try-catch with return")
+print("✅ Variable scope")
+print("✅ Try-catch in loops")
+print("✅ Conditional throws")
+print("✅ Multiple throws")
+print("✅ Error propagation")

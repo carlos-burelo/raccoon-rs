@@ -1,0 +1,102 @@
+
+
+fn testBitwiseAND(): void {
+    let a: int = 12    
+    let b: int = 10    
+    let result: int = a & b  
+    print(result)
+}
+
+fn testBitwiseOR(): void {
+    let a: int = 12    
+    let b: int = 10    
+    let result: int = a | b  
+    print(result)
+}
+
+fn testBitwiseXOR(): void {
+    let a: int = 12    
+    let b: int = 10    
+    let result: int = a ^ b  
+    print(result)
+}
+
+fn testBitwiseNOT(): void {
+    let a: int = 5
+    let result: int = ~a
+    print(result)  
+}
+
+fn testLeftShift(): void {
+    let a: int = 5     
+    let result: int = a << 2  
+    print(result)
+}
+
+fn testRightShift(): void {
+    let a: int = 20    
+    let result: int = a >> 2  
+    print(result)
+}
+
+fn testUnsignedRightShift(): void {
+    let a: int = -8
+    let result: int = a >>> 2
+    print(result)
+}
+
+fn testExponent(): void {
+    let a: int = 2
+    let b: int = 3
+    let result: int = a ** b  
+    print(result)
+}
+
+fn testExponentRightAssociative(): void {
+    let result: int = 2 ** 3 ** 2  
+    print(result)
+}
+
+fn testCompoundAssignmentBitwise(): void {
+    let x: int = 12
+    x &= 10  
+    print(x)
+    
+    x = 12
+    x |= 10  
+    print(x)
+    
+    x = 12
+    x ^= 10  
+    print(x)
+}
+
+fn testCompoundAssignmentShift(): void {
+    let x: int = 5
+    x <<= 2  
+    print(x)
+    
+    x = 20
+    x >>= 2  
+    print(x)
+}
+
+fn testCompoundAssignmentExponent(): void {
+    let x: int = 2
+    x **= 3  
+    print(x)
+}
+
+
+testBitwiseAND()       
+testBitwiseOR()        
+testBitwiseXOR()       
+testBitwiseNOT()       
+testLeftShift()        
+testRightShift()       
+testUnsignedRightShift() 
+testExponent()         
+testExponentRightAssociative()  
+testCompoundAssignmentBitwise() 
+testCompoundAssignmentShift()   
+testCompoundAssignmentExponent() 

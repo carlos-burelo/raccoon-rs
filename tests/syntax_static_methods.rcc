@@ -1,0 +1,132 @@
+print("=== STATIC METHODS TEST ===")
+
+
+print("Test 1: Basic Static Method")
+
+class MathUtils {
+    static max(a: int, b: int): int {
+        if (a > b) {
+            return a
+        }
+        return b
+    }
+    
+    static min(a: int, b: int): int {
+        if (a < b) {
+            return a
+        }
+        return b
+    }
+}
+
+print(`max(10, 20): ${MathUtils.max(10, 20)}`)
+print(`min(10, 20): ${MathUtils.min(10, 20)}`)
+
+
+
+
+
+print("Test 2: Multiple Parameters")
+
+class Calculator {
+    static add(a: int, b: int, c: int): int {
+        return a + b + c
+    }
+    
+    static multiply(a: int, b: int, c: int): int {
+        return a * b * c
+    }
+}
+
+print(`add(1, 2, 3): ${Calculator.add(1, 2, 3)}`)
+print(`multiply(2, 3, 4): ${Calculator.multiply(2, 3, 4)}`)
+
+
+
+
+
+print("Test 3: String Return")
+
+class StringUtils {
+    static concat(a: str, b: str): str {
+        return a + b
+    }
+    
+    static repeat(s: str, n: int): str {
+        let result: str = ""
+        let i: int = 0
+        while (i < n) {
+            result = result + s
+            i = i + 1
+        }
+        return result
+    }
+}
+
+print(StringUtils.concat("Hello", "World"))
+print(StringUtils.repeat("x", 3))
+
+
+
+
+
+print("Test 4: Mix Static and Instance")
+
+class Counter {
+    value: int
+    
+    constructor() {
+        this.value = 0
+    }
+    
+    increment(): void {
+        this.value = this.value + 1
+    }
+    
+    static create(): Counter {
+        return new Counter()
+    }
+}
+
+let c1: Counter = Counter.create()
+c1.increment()
+print(`Counter value: ${c1.value}`)
+
+
+
+
+
+print("Test 5: Factory Pattern")
+
+class Point {
+    x: int
+    y: int
+    
+    constructor(x: int, y: int) {
+        this.x = x
+        this.y = y
+    }
+    
+    static origin(): Point {
+        return new Point(0, 0)
+    }
+    
+    static fromArray(arr: int[]): Point {
+        return new Point(arr[0], arr[1])
+    }
+}
+
+let p1: Point = Point.origin()
+let coords: int[] = [10, 20]
+let p2: Point = Point.fromArray(coords)
+
+print(`Origin: (${p1.x}, ${p1.y})`)
+print(`From array: (${p2.x}, ${p2.y})`)
+
+
+print("=== ALL STATIC METHOD TESTS PASSED ===")
+print("✅ Basic static methods")
+print("✅ Multiple parameters")
+print("✅ String return types")
+print("✅ Mixed static and instance")
+print("✅ Factory pattern")

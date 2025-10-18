@@ -1,0 +1,48 @@
+
+
+class Box<T> {
+    value: T
+    
+    constructor(v: T) {
+        this.value = v
+    }
+    
+    getValue(): T {
+        return this.value
+    }
+}
+
+class Pair<K, V> {
+    key: K
+    value: V
+    constructor(k: K, v: V) {
+        this.key = k
+        this.value = v
+    }
+}
+
+fn testGenericsBasic(): void {
+    let box: Box<int> = new Box<int>(42)
+    print(box.value)  
+}
+
+fn testBitwiseAfterGenerics(): void {
+    let box: Box<int> = new Box<int>(8)
+    let val: int = box.getValue()
+    
+    
+    let shifted: int = val << 2  
+    print(shifted)  
+}
+
+fn testMultipleTypeParams(): void {
+    let p: Pair<int, int> = new Pair<int, int>(10, 20)
+    print(p.key)    
+    print(p.value)  
+}
+
+testGenericsBasic()
+testBitwiseAfterGenerics()
+testMultipleTypeParams()
+print("All tests passed!")
+

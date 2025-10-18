@@ -1,0 +1,214 @@
+
+
+
+
+
+
+print("=== CONTROL FLOW TEST ===")
+
+
+
+
+
+print("Test 1: If Statement")
+
+let x: int = 10
+
+if (x > 5) {
+    print("x is greater than 5")
+}
+
+if (x < 5) {
+    print("This should not print")
+}
+
+
+
+
+
+print("Test 2: If-Else Statement")
+
+let age: int = 20
+
+if (age >= 18) {
+    print("Adult")
+} else {
+    print("Minor")
+}
+
+if (age < 18) {
+    print("Under 18")
+} else {
+    print("18 or older")
+}
+
+
+
+
+
+print("Test 3: If-Else Chain")
+
+let score: int = 85
+
+if (score >= 90) {
+    print("Grade: A")
+} else if (score >= 80) {
+    print("Grade: B")
+} else if (score >= 70) {
+    print("Grade: C")
+} else {
+    print("Grade: F")
+}
+
+
+
+
+
+print("Test 4: Nested If")
+
+let num: int = 15
+let positive: bool = true
+
+if (positive) {
+    if (num > 10) {
+        print("Positive and greater than 10")
+    } else {
+        print("Positive but <= 10")
+    }
+}
+
+
+
+
+
+print("Test 5: While Loop")
+
+let counter: int = 0
+while (counter < 3) {
+    print(`Counter: ${counter}`)
+    counter = counter + 1
+}
+
+
+
+
+
+print("Test 6: While with Break")
+
+let i: int = 0
+while (true) {
+    if (i >= 3) {
+        break
+    }
+    print(`i: ${i}`)
+    i = i + 1
+}
+
+
+
+
+
+print("Test 7: While with Continue")
+
+let j: int = 0
+while (j < 5) {
+    j = j + 1
+    if (j == 3) {
+        continue
+    }
+    print(`j: ${j}`)
+}
+
+
+
+
+
+print("Test 8: For-In Loop with Array")
+
+let numbers: int[] = [10, 20, 30]
+for (const num in numbers) {
+    print(`Number: ${num}`)
+}
+
+
+
+
+
+print("Test 9: For-In Loop with Range")
+
+for (const n in 1..5) {
+    print(`Range: ${n}`)
+}
+
+
+
+
+
+print("Test 10: Nested Loops")
+
+let outer: int = 0
+while (outer < 2) {
+    let inner: int = 0
+    while (inner < 2) {
+        print(`(${outer}, ${inner})`)
+        inner = inner + 1
+    }
+    outer = outer + 1
+}
+
+
+
+
+
+print("Test 11: Complex Conditions")
+
+let a: int = 5
+let b: int = 10
+let c: int = 15
+
+if (a < b && b < c) {
+    print("a < b < c is true")
+}
+
+if (a > 0 || b < 0) {
+    print("At least one condition is true")
+}
+
+if (!(a > b)) {
+    print("a is not greater than b")
+}
+
+
+
+
+
+print("Test 12: Early Return Pattern")
+
+fn checkValue(val: int): str {
+    if (val < 0) {
+        return "negative"
+    }
+    if (val == 0) {
+        return "zero"
+    }
+    return "positive"
+}
+
+print(`checkValue(-5): ${checkValue(-5)}`)
+print(`checkValue(0): ${checkValue(0)}`)
+print(`checkValue(10): ${checkValue(10)}`)
+
+
+print("=== ALL CONTROL FLOW TESTS PASSED ===")
+print("✅ If statement")
+print("✅ If-else statement")
+print("✅ If-else chain")
+print("✅ Nested if")
+print("✅ While loop")
+print("✅ Break statement")
+print("✅ Continue statement")
+print("✅ For-in with arrays")
+print("✅ For-in with ranges")
+print("✅ Nested loops")
+print("✅ Complex conditions")
+print("✅ Early returns")

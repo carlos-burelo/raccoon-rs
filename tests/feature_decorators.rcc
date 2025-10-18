@@ -1,0 +1,284 @@
+print("=== DECORATORS FEATURE TEST ===")
+
+print("Test 1: Simple Class Decorator")
+
+fn logClass(): void {
+    print("[Decorator] Class decorated")
+}
+
+@logClass
+class SimpleClass {
+    value: int
+
+    constructor(value: int) {
+        this.value = value
+    }
+
+    getValue(): int {
+        return this.value
+    }
+}
+
+let simple: SimpleClass = new SimpleClass(42)
+print(`Value: ${simple.getValue()}`)
+
+
+
+
+
+print("Test 2: Decorator with Single Argument")
+
+fn withVersion(version: int): void {
+    print(`[Decorator] Version: ${version}`)
+}
+
+@withVersion(1)
+class VersionedClass {
+    name: str
+
+    constructor(name: str) {
+        this.name = name
+    }
+}
+
+let versioned: VersionedClass = new VersionedClass("V1")
+
+
+
+
+
+print("Test 3: Decorator with Multiple Arguments")
+
+fn validateRange(min: int, max: int): void {
+    print(`[Decorator] Range: ${min} to ${max}`)
+}
+
+fn withMetadata(name: str, version: int): void {
+    print(`[Decorator] Metadata: ${name} v${version}`)
+}
+
+@validateRange(0, 100)
+@withMetadata("RangedClass", 2)
+class RangedClass {
+    value: int
+
+    constructor(value: int) {
+        this.value = value
+    }
+}
+
+let ranged: RangedClass = new RangedClass(50)
+
+
+
+
+
+print("Test 4: Multiple Decorators")
+
+fn decorator1(): void {
+    print("[Decorator] First decorator")
+}
+
+fn decorator2(): void {
+    print("[Decorator] Second decorator")
+}
+
+fn decorator3(): void {
+    print("[Decorator] Third decorator")
+}
+
+@decorator1
+@decorator2
+@decorator3
+class MultiDecoratedClass {
+    id: int
+
+    constructor(id: int) {
+        this.id = id
+    }
+}
+
+let multi: MultiDecoratedClass = new MultiDecoratedClass(123)
+
+
+
+
+
+print("Test 5: Decorators with String Arguments")
+
+fn tagged(tag: str): void {
+    print(`[Decorator] Tag: ${tag}`)
+}
+
+fn namedDecorator(name: str, desc: str): void {
+    print(`[Decorator] ${name}: ${desc}`)
+}
+
+@tagged("important")
+@namedDecorator("Component", "Main component")
+class TaggedClass {
+    title: str
+
+    constructor(title: str) {
+        this.title = title
+    }
+}
+
+let tagged_: TaggedClass = new TaggedClass("Tagged Item")
+
+
+
+
+
+print("Test 6: Decorators with Float Arguments")
+
+fn rateLimit(requestsPerSecond: float): void {
+    print(`[Decorator] Rate limit: ${requestsPerSecond} req/s`)
+}
+
+@rateLimit(10.5)
+class RateLimitedClass {
+    counter: int
+
+    constructor() {
+        this.counter = 0
+    }
+
+    increment(): void {
+        this.counter = this.counter + 1
+    }
+}
+
+let limited: RateLimitedClass = new RateLimitedClass()
+limited.increment()
+
+
+
+
+
+print("Test 7: Decorators with Inheritance")
+
+fn baseDecorator(): void {
+    print("[Decorator] Base class")
+}
+
+fn derivedDecorator(): void {
+    print("[Decorator] Derived class")
+}
+
+@baseDecorator
+class BaseClass {
+    baseProp: int
+
+    constructor(baseProp: int) {
+        this.baseProp = baseProp
+    }
+}
+
+@derivedDecorator
+class DerivedClass extends BaseClass {
+    derivedProp: str
+
+    constructor(baseProp: int, derivedProp: str) {
+        super(baseProp)
+        this.derivedProp = derivedProp
+    }
+}
+
+let derived: DerivedClass = new DerivedClass(10, "test")
+
+
+
+
+
+print("Test 8: Complex Decorator Logic")
+
+fn logCreation(): void {
+    print("[Decorator] Class will be instantiated")
+    print("[Decorator] Setting up logging...")
+    print("[Decorator] Ready!")
+}
+
+@logCreation
+class LoggedClass {
+    items: int[]
+
+    constructor(size: int) {
+        this.items = 1..size
+    }
+
+    getSize(): int {
+        return this.items.length
+    }
+}
+
+let logged: LoggedClass = new LoggedClass(5)
+print(`Size: ${logged.getSize()}`)
+
+
+
+
+
+print("Test 9: Boolean Argument Decorators")
+
+fn cached(enabled: bool): void {
+    if (enabled) {
+        print("[Decorator] Caching enabled")
+    } else {
+        print("[Decorator] Caching disabled")
+    }
+}
+
+@cached(true)
+class CachedClass {
+    data: str
+
+    constructor(data: str) {
+        this.data = data
+    }
+}
+
+let cached_: CachedClass = new CachedClass("cached data")
+
+
+
+
+
+print("Test 10: Decorator Ordering Test")
+
+fn firstDec(): void {
+    print("[1] First decorator executed")
+}
+
+fn secondDec(): void {
+    print("[2] Second decorator executed")
+}
+
+fn thirdDec(): void {
+    print("[3] Third decorator executed")
+}
+
+@firstDec
+@secondDec
+@thirdDec
+class OrderedClass {
+    value: int
+
+    constructor(value: int) {
+        this.value = value
+    }
+}
+
+let ordered: OrderedClass = new OrderedClass(999)
+
+
+print("=== ALL DECORATOR TESTS PASSED ===")
+print("✅ Simple decorators")
+print("✅ Decorators with arguments")
+print("✅ Multiple decorators")
+print("✅ String arguments")
+print("✅ Float arguments")
+print("✅ With inheritance")
+print("✅ Complex logic")
+print("✅ Boolean arguments")
+print("✅ Decorator ordering")

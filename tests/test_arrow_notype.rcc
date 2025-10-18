@@ -1,0 +1,5 @@
+
+
+let double = (x: int) => x * 2;
+let result: int = double(7);
+print(result); 

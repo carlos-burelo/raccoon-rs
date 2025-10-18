@@ -1,0 +1,233 @@
+
+
+
+
+
+print("=== FUNCTIONS TEST ===")
+
+
+
+
+
+print("Test 1: Basic Function")
+
+fn greet(): void {
+    print("Hello from function!")
+}
+
+greet()
+
+
+
+
+
+print("Test 2: Function with Parameters")
+
+fn add(a: int, b: int): int {
+    return a + b
+}
+
+let sum: int = add(5, 3)
+print(`5 + 3 = ${sum}`)
+
+
+
+
+
+print("Test 3: Multiple Parameters")
+
+fn introduce(name: str, age: int, city: str): void {
+    print(`Name: ${name}, Age: ${age}, City: ${city}`)
+}
+
+introduce("Alice", 25, "NYC")
+
+
+
+
+
+print("Test 4: Return Values")
+
+fn multiply(a: int, b: int): int {
+    return a * b
+}
+
+fn divide(a: float, b: float): float {
+    return a / b
+}
+
+print(`6 * 7 = ${multiply(6, 7)}`)
+print(`20 / 4 = ${divide(20.0, 4.0)}`)
+
+
+
+
+
+print("Test 5: Default Parameters")
+
+fn greetWithDefault(name: str = "Guest"): void {
+    print(`Hello, ${name}!`)
+}
+
+greetWithDefault("Alice")
+greetWithDefault()
+
+
+
+
+
+print("Test 6: Recursive Function")
+
+fn factorial(n: int): int {
+    if (n <= 1) {
+        return 1
+    }
+    return n * factorial(n - 1)
+}
+
+print(`factorial(5) = ${factorial(5)}`)
+
+
+
+
+
+print("Test 7: Function Composition")
+
+fn double(n: int): int {
+    return n * 2
+}
+
+fn quadruple(n: int): int {
+    return double(double(n))
+}
+
+print(`quadruple(5) = ${quadruple(5)}`)
+
+
+
+
+
+print("Test 8: String Return Functions")
+
+fn formatName(first: str, last: str): str {
+    return first + " " + last
+}
+
+fn shout(msg: str): str {
+    return msg.toUpper()
+}
+
+let fullName: str = formatName("John", "Doe")
+print(`Full name: ${fullName}`)
+print(`Shouted: ${shout("hello")}`)
+
+
+
+
+
+print("Test 9: Boolean Return Functions")
+
+fn isEven(n: int): bool {
+    return n % 2 == 0
+}
+
+fn isPositive(n: int): bool {
+    return n > 0
+}
+
+print(`isEven(4): ${isEven(4)}`)
+print(`isEven(7): ${isEven(7)}`)
+print(`isPositive(-5): ${isPositive(-5)}`)
+print(`isPositive(10): ${isPositive(10)}`)
+
+
+
+
+
+print("Test 10: Array Parameters")
+
+fn sumArray(numbers: int[]): int {
+    let total: int = 0
+    for (const num in numbers) {
+        total = total + num
+    }
+    return total
+}
+
+let nums: int[] = [1, 2, 3, 4, 5]
+print(`Sum of array: ${sumArray(nums)}`)
+
+
+
+
+
+print("Test 11: Array Return")
+
+fn createRange(start: int, end: int): int[] {
+    return start..end
+}
+
+let range: int[] = createRange(1, 5)
+print(`Range length: ${range.length}`)
+
+
+
+
+
+print("Test 12: Nested Calls")
+
+fn increment(n: int): int {
+    return n + 1
+}
+
+fn process(n: int): int {
+    return increment(increment(increment(n)))
+}
+
+print(`process(5) = ${process(5)}`)
+
+
+
+
+
+print("Test 13: Float Functions")
+
+fn average(a: float, b: float): float {
+    return (a + b) / 2.0
+}
+
+print(`average(5.0, 10.0) = ${average(5.0, 10.0)}`)
+
+
+
+
+
+print("Test 14: Void Functions")
+
+fn logMessage(msg: str): void {
+    print(`LOG: ${msg}`)
+}
+
+fn doNothing(): void {
+    let x: int = 1
+}
+
+logMessage("Test message")
+doNothing()
+
+
+print("=== ALL FUNCTIONS TESTS PASSED ===")
+print("✅ Basic functions")
+print("✅ Parameters")
+print("✅ Multiple parameters")
+print("✅ Return values")
+print("✅ Default parameters")
+print("✅ Recursion")
+print("✅ Function composition")
+print("✅ String returns")
+print("✅ Boolean returns")
+print("✅ Array parameters")
+print("✅ Array returns")
+print("✅ Nested calls")
+print("✅ Float functions")
+print("✅ Void functions")

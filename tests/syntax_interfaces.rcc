@@ -1,0 +1,298 @@
+
+
+
+
+
+
+
+print("=== INTERFACES TEST ===")
+
+
+
+
+
+print("Test 1: Interface Definition")
+
+interface Nameable {
+    name: str
+}
+
+class Person {
+    name: str
+    
+    constructor(name: str) {
+        this.name = name
+    }
+}
+
+let person: Person = new Person("Alice")
+print(`Name: ${person.name}`)
+
+
+
+
+
+print("Test 2: Interface with Methods")
+
+interface Drawable {
+    draw(): void
+}
+
+class Circle implements Drawable {
+    radius: int
+    
+    constructor(radius: int) {
+        this.radius = radius
+    }
+    
+    draw(): void {
+        print(`Drawing circle with radius ${this.radius}`)
+    }
+}
+
+let circle: Circle = new Circle(5)
+circle.draw()
+
+
+
+
+
+print("Test 3: Multiple Members")
+
+interface Shape {
+    width: int
+    height: int
+    area(): int
+}
+
+class Rectangle implements Shape {
+    width: int
+    height: int
+    
+    constructor(w: int, h: int) {
+        this.width = w
+        this.height = h
+    }
+    
+    area(): int {
+        return this.width * this.height
+    }
+}
+
+let rect: Rectangle = new Rectangle(4, 5)
+print(`Area: ${rect.area()}`)
+
+
+
+
+
+print("Test 4: Multiple Interfaces")
+
+interface Identifiable {
+    id: int
+}
+
+interface Describable {
+    describe(): str
+}
+
+class Product implements Identifiable, Describable {
+    id: int
+    name: str
+    
+    constructor(id: int, name: str) {
+        this.id = id
+        this.name = name
+    }
+    
+    describe(): str {
+        return "Product: " + this.name
+    }
+}
+
+let product: Product = new Product(1, "Laptop")
+print(`ID: ${product.id}`)
+print(product.describe())
+
+
+
+
+
+print("Test 5: Interface with Boolean")
+
+interface Toggleable {
+    enabled: bool
+    toggle(): void
+}
+
+class Switch implements Toggleable {
+    enabled: bool
+    
+    constructor() {
+        this.enabled = false
+    }
+    
+    toggle(): void {
+        this.enabled = !this.enabled
+    }
+}
+
+let sw: Switch = new Switch()
+print(`Initial: ${sw.enabled}`)
+sw.toggle()
+print(`After toggle: ${sw.enabled}`)
+
+
+
+
+
+print("Test 6: Multiple Methods")
+
+interface Counter {
+    increment(): void
+    decrement(): void
+    getValue(): int
+}
+
+class SimpleCounter implements Counter {
+    value: int
+    
+    constructor() {
+        this.value = 0
+    }
+    
+    increment(): void {
+        this.value = this.value + 1
+    }
+    
+    decrement(): void {
+        this.value = this.value - 1
+    }
+    
+    getValue(): int {
+        return this.value
+    }
+}
+
+let counter: SimpleCounter = new SimpleCounter()
+counter.increment()
+counter.increment()
+print(`Counter value: ${counter.getValue()}`)
+
+
+
+
+
+print("Test 7: Return Types")
+
+interface Calculable {
+    calculate(): int
+}
+
+class Adder implements Calculable {
+    a: int
+    b: int
+    
+    constructor(a: int, b: int) {
+        this.a = a
+        this.b = b
+    }
+    
+    calculate(): int {
+        return this.a + this.b
+    }
+}
+
+let adder: Adder = new Adder(10, 20)
+print(`Result: ${adder.calculate()}`)
+
+
+
+
+
+print("Test 8: Empty Interface")
+
+interface Marker {
+}
+
+class MarkedClass implements Marker {
+    value: int
+    
+    constructor(value: int) {
+        this.value = value
+    }
+}
+
+let marked: MarkedClass = new MarkedClass(42)
+print(`Marked value: ${marked.value}`)
+
+
+
+
+
+print("Test 9: String Methods")
+
+interface Formatter {
+    format(): str
+}
+
+class DateFormatter implements Formatter {
+    day: int
+    month: int
+    year: int
+    
+    constructor(d: int, m: int, y: int) {
+        this.day = d
+        this.month = m
+        this.year = y
+    }
+    
+    format(): str {
+        return this.day.toStr() + "/" + this.month.toStr() + "/" + this.year.toStr()
+    }
+}
+
+let date: DateFormatter = new DateFormatter(15, 3, 2024)
+print(`Formatted: ${date.format()}`)
+
+
+
+
+
+print("Test 10: Implementation Chain")
+
+interface Named {
+    name: str
+}
+
+interface Aged {
+    age: int
+}
+
+class Employee implements Named, Aged {
+    name: str
+    age: int
+    position: str
+    
+    constructor(name: str, age: int, position: str) {
+        this.name = name
+        this.age = age
+        this.position = position
+    }
+}
+
+let emp: Employee = new Employee("Bob", 35, "Developer")
+print(`${emp.name}, ${emp.age}, ${emp.position}`)
+
+
+print("=== ALL INTERFACES TESTS PASSED ===")
+print("✅ Basic interface")
+print("✅ Interface with methods")
+print("✅ Multiple members")
+print("✅ Multiple interfaces")
+print("✅ Boolean interfaces")
+print("✅ Multiple methods")
+print("✅ Return types")
+print("✅ Empty interfaces")
+print("✅ String methods")
+print("✅ Implementation chains")

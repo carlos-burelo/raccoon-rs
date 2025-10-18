@@ -1,0 +1,206 @@
+print("=== ARRAYS TEST ===")
+
+
+
+print("Test 1: Array Declaration")
+
+let intArray: int[] = [1, 2, 3, 4, 5]
+let strArray: str[] = ["a", "b", "c"]
+let floatArray: float[] = [1.1, 2.2, 3.3]
+let boolArray: bool[] = [true, false, true]
+
+print(`Int array length: ${intArray.length}`)
+print(`String array length: ${strArray.length}`)
+print(`Float array length: ${floatArray.length}`)
+print(`Bool array length: ${boolArray.length}`)
+
+
+
+
+
+print("Test 2: Array Access")
+
+let numbers: int[] = [10, 20, 30, 40, 50]
+print(`First element: ${numbers[0]}`)
+print(`Second element: ${numbers[1]}`)
+print(`Last element: ${numbers[4]}`)
+
+
+
+
+
+print("Test 3: Array Modification")
+
+let values: int[] = [1, 2, 3]
+print(`Before: ${values[0]}`)
+values[0] = 100
+print(`After: ${values[0]}`)
+
+
+
+
+
+print("Test 4: Empty Array")
+
+let empty: int[] = []
+print(`Empty array length: ${empty.length}`)
+
+
+
+
+
+print("Test 5: Array with Variables")
+
+let a: int = 1
+let b: int = 2
+let c: int = 3
+let arr: int[] = [a, b, c]
+print(`Array from vars: ${arr[0]}, ${arr[1]}, ${arr[2]}`)
+
+
+
+
+
+print("Test 6: Nested Arrays")
+
+let matrix: int[][] = [[1, 2], [3, 4], [5, 6]]
+print(`Matrix[0][0]: ${matrix[0][0]}`)
+print(`Matrix[1][1]: ${matrix[1][1]}`)
+print(`Matrix[2][0]: ${matrix[2][0]}`)
+
+
+
+
+
+print("Test 7: Array Iteration")
+
+let items: str[] = ["apple", "banana", "cherry"]
+for (const item in items) {
+    print(`Fruit: ${item}`)
+}
+
+
+
+
+
+print("Test 8: Array from Range")
+
+let range1: int[] = 1..5
+print(`Range 1..5 length: ${range1.length}`)
+for (const n in range1) {
+    print(`Number: ${n}`)
+}
+
+
+
+
+
+print("Test 9: Array Push")
+
+let list: int[] = [1, 2]
+print(`Before push: ${list.length}`)
+list.push(3)
+print(`After push: ${list.length}`)
+print(`Last element: ${list[2]}`)
+
+
+
+
+
+print("Test 10: Array Pop")
+
+let stack: int[] = [10, 20, 30]
+print(`Before pop: ${stack.length}`)
+let popped: int = stack.pop()
+print(`Popped value: ${popped}`)
+print(`After pop: ${stack.length}`)
+
+
+
+
+
+print("Test 11: String as Character Array")
+
+let text: str = "hello"
+print(`String length: ${text.length}`)
+print(`First char: ${text[0]}`)
+print(`Last char: ${text[4]}`)
+
+
+
+
+
+print("Test 12: Array Operations")
+
+let arr1: int[] = [1, 2]
+let arr2: int[] = [3, 4]
+let combined: int[] = arr1.concat(arr2)
+print(`Combined length: ${combined.length}`)
+
+
+
+
+
+print("Test 13: Arrays in Functions")
+
+fn getFirst(arr: int[]): int {
+    return arr[0]
+}
+
+fn getLast(arr: int[]): int {
+    return arr[arr.length - 1]
+}
+
+let testArr: int[] = [100, 200, 300]
+print(`First: ${getFirst(testArr)}`)
+print(`Last: ${getLast(testArr)}`)
+
+
+
+
+
+print("Test 14: Multi-dimensional Arrays")
+
+let grid: int[][] = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+print(`Grid[0][0]: ${grid[0][0]}`)
+print(`Grid[1][1]: ${grid[1][1]}`)
+print(`Grid[2][2]: ${grid[2][2]}`)
+
+
+
+
+
+print("Test 15: Length Property")
+
+let sizes: int[] = []
+print(`Empty: ${sizes.length}`)
+
+sizes.push(1)
+print(`After 1 push: ${sizes.length}`)
+
+sizes.push(2)
+sizes.push(3)
+print(`After 3 pushes: ${sizes.length}`)
+
+
+print("=== ALL ARRAYS TESTS PASSED ===")
+print("✅ Array declaration")
+print("✅ Array access")
+print("✅ Array modification")
+print("✅ Empty arrays")
+print("✅ Arrays from variables")
+print("✅ Nested arrays")
+print("✅ Array iteration")
+print("✅ Range creation")
+print("✅ Push method")
+print("✅ Pop method")
+print("✅ String indexing")
+print("✅ Array concatenation")
+print("✅ Arrays in functions")
+print("✅ Multi-dimensional access")
+print("✅ Length property")

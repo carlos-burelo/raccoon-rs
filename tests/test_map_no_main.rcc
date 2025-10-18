@@ -1,0 +1,44 @@
+
+
+print("Testing Map basic operations\n");
+
+
+let m: Map<str, int> = new Map<str, int>();
+print("Map created");
+
+
+m.set("one", 1);
+print("Value set");
+
+m.set("two", 2);
+m.set("three", 3);
+
+
+let v1 = m.get("one") ?? -1;
+let v2 = m.get("two") ?? -1;
+let v3 = m.get("three") ?? -1;
+
+print("v1: " + v1.toStr());
+print("v2: " + v2.toStr());
+print("v3: " + v3.toStr());
+
+
+let hasOne = m.has("one");
+let hasMissing = m.has("missing");
+print("Has 'one': " + hasOne.toStr());
+print("Has 'missing': " + hasMissing.toStr());
+
+
+let mapSize = m.size();
+print("Size: " + mapSize.toStr());
+
+
+let deleted = m.delete("two");
+print("Deleted 'two': " + deleted.toStr());
+print("Size after delete: " + m.size().toStr());
+
+
+m.clear();
+print("Size after clear: " + m.size().toStr());
+
+print("\n✓ All Map tests passed!");

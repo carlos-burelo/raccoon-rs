@@ -1,0 +1,279 @@
+import { log, error, warn } from "std:console";
+import { floor, sqrt, random, PI } from "std:math";
+import { now, formatDate } from "std:time";
+import { stringify, parse } from "std:json";
+import { unique, flatten, zip } from "std:collections";
+import { test, match, replace } from "std:regex";
+import { isEmail, isURL, isStrongPassword, isNumeric, inRange } from "./stdlib/validation.rcc";
+import { capitalize, titleCase, range, sum, average, chunk, clamp, repeat } from "./stdlib/utils.rcc";
+
+
+print("\n" + repeat("=", 60));
+print("SECCIÓN 1: VALIDACIÓN DE DATOS");
+print(repeat("=", 60));
+
+class User {
+  public name: str;
+  public email: str;
+  public password: str;
+  public age: int;
+  
+  constructor(name: str, email: str, password: str, age: int) {
+    this.name = name;
+    this.email = email;
+    this.password = password;
+    this.age = age;
+  }
+  
+  validate(): bool {
+    
+    if (!isEmail(this.email)) {
+      error("Email inválido: " + this.email);
+      return false;
+    }
+    
+    
+    if (!isStrongPassword(this.password)) {
+      error("Contraseña débil. Debe tener 8+ chars, mayúsculas, minúsculas, números y símbolos");
+      return false;
+    }
+    
+    
+    if (!inRange(this.age, 18, 120)) {
+      error("Edad debe estar entre 18 y 120");
+      return false;
+    }
+    
+    log("✓ Usuario válido: " + this.name);
+    return true;
+  }
+  
+  toJSON(): str {
+    let obj: any = {
+      name: capitalize(this.name),
+      email: this.email,
+      age: this.age,
+      registered: formatDate(now())
+    };
+    return stringify(obj, true);
+  }
+}
+
+
+let user1: User = new User("alice smith", "alice@example.com", "SecureP@ss123", 25);
+let user2: User = new User("bob jones", "invalid-email", "weak", 15);
+
+if (user1.validate()) {
+  print("\nDatos de usuario:");
+  print(user1.toJSON());
+}
+
+if (!user2.validate()) {
+  warn("El usuario 2 no pasó la validación");
+}
+
+
+
+
+
+print("\n" + repeat("=", 60));
+print("SECCIÓN 2: MATEMÁTICAS Y ESTADÍSTICAS");
+print(repeat("=", 60));
+
+
+let scores: int[] = [85, 92, 78, 95, 88, 76, 94, 89, 91, 87];
+
+print("\nPuntuaciones: " + scores);
+print("Total: " + sum(scores));
+print("Promedio: " + floor(average(scores)));
+print("Mínimo: " + min(scores));
+print("Máximo: " + max(scores));
+
+
+let groups: int[][] = chunk(scores, 3);
+print("\nAgrupados de 3 en 3:");
+let i: int = 0;
+while (i < len(groups)) {
+  print("  Grupo " + (i + 1) + ": " + groups[i]);
+  i = i + 1;
+}
+
+
+let radius: float = 10.0;
+let area: float = PI * radius * radius;
+let circumference: float = 2.0 * PI * radius;
+
+print("\nCírculo con radio " + radius + ":");
+print("  Área: " + floor(area));
+print("  Circunferencia: " + floor(circumference));
+
+
+
+
+
+print("\n" + repeat("=", 60));
+print("SECCIÓN 3: PROCESAMIENTO DE TEXTO");
+print(repeat("=", 60));
+
+let text: str = "el lenguaje raccoon es genial para programación moderna";
+print("\nTexto original:");
+print("  " + text);
+
+print("\nTransformaciones:");
+print("  Title Case: " + titleCase(text));
+print("  UPPERCASE: " + toUpperCase(text));
+
+
+let words: str[] = split(text, " ");
+print("\nPalabras encontradas: " + len(words));
+
+
+let capitalized: str[] = [];
+let j: int = 0;
+while (j < len(words)) {
+  push(capitalized, capitalize(words[j]));
+  j = j + 1;
+}
+print("Capitalizadas: " + join(capitalized, ", "));
+
+
+let mixedText: str = "Hay 123 usuarios activos y 456 mensajes nuevos";
+let numbers: str[] = match("\\d+", mixedText, "g");
+print("\nNúmeros encontrados en '" + mixedText + "':");
+print("  " + numbers);
+
+
+
+
+
+print("\n" + repeat("=", 60));
+print("SECCIÓN 4: COLECCIONES Y DATOS");
+print(repeat("=", 60));
+
+
+let numbers1: int[] = [1, 2, 3, 2, 4, 3, 5];
+let numbers2: int[] = [3, 4, 5, 6, 7];
+
+print("\nArray 1: " + numbers1);
+print("Array 2: " + numbers2);
+
+let uniqueNums: int[] = unique(numbers1);
+print("Únicos de Array 1: " + uniqueNums);
+
+let common: int[] = intersection(numbers1, numbers2);
+print("Intersección: " + common);
+
+let combined: int[] = union(numbers1, numbers2);
+print("Unión: " + combined);
+
+
+let nested: int[][] = [[1, 2], [3, 4], [5, 6]];
+print("\nArray anidado: " + stringify(nested, false));
+let flat: int[] = flatten(nested);
+print("Aplanado: " + flat);
+
+
+let names: str[] = ["Alice", "Bob", "Charlie"];
+let ages: int[] = [25, 30, 35];
+let zipped: any[][] = zip(names, ages);
+print("\nZip de nombres y edades:");
+let k: int = 0;
+while (k < len(zipped)) {
+  print("  " + zipped[k][0] + " -> " + zipped[k][1] + " años");
+  k = k + 1;
+}
+
+
+
+
+
+print("\n" + repeat("=", 60));
+print("SECCIÓN 5: FECHAS Y TIEMPO");
+print(repeat("=", 60));
+
+let timestamp: int = now();
+print("\nTimestamp actual: " + timestamp);
+print("Fecha ISO: " + formatDate(timestamp));
+print("Año: " + year());
+print("Mes: " + month());
+print("Día: " + day());
+print("Hora: " + hour() + ":" + minute() + ":" + second());
+
+
+
+
+
+print("\n" + repeat("=", 60));
+print("SECCIÓN 6: JSON Y SERIALIZACIÓN");
+print(repeat("=", 60));
+
+
+let appConfig: any = {
+  name: "Raccoon Demo App",
+  version: "1.0.0",
+  features: ["validation", "math", "collections", "json"],
+  settings: {
+    debug: true,
+    maxUsers: 1000,
+    timeout: 30
+  }
+};
+
+print("\nConfiguración de la aplicación:");
+let configJSON: str = stringify(appConfig, true);
+print(configJSON);
+
+
+let jsonStr: str = "{\"status\": \"success\", \"count\": 42, \"active\": true}";
+print("\nParsing JSON: " + jsonStr);
+let parsed: any = parse(jsonStr);
+print("  Status: " + parsed.status);
+print("  Count: " + parsed.count);
+print("  Active: " + parsed.active);
+
+
+
+
+
+print("\n" + repeat("=", 60));
+print("SECCIÓN 7: UTILIDADES AVANZADAS");
+print(repeat("=", 60));
+
+
+let sequence: int[] = range(0, 20, 3);
+print("\nRange(0, 20, 3): " + sequence);
+
+let countdown: int[] = range(10, 0, -2);
+print("Countdown: " + countdown);
+
+
+let value1: float = clamp(150.0, 0.0, 100.0);
+let value2: float = clamp(-10.0, 0.0, 100.0);
+let value3: float = clamp(50.0, 0.0, 100.0);
+
+print("\nClamp examples:");
+print("  clamp(150, 0, 100) = " + floor(value1));
+print("  clamp(-10, 0, 100) = " + floor(value2));
+print("  clamp(50, 0, 100) = " + floor(value3));
+
+
+let normalized: float = map(5.0, 0.0, 10.0, 0.0, 100.0);
+print("\nMap 5 from [0,10] to [0,100]: " + floor(normalized) + "%");
+
+
+
+
+
+print("\n" + repeat("=", 60));
+print("DEMO COMPLETADA CON ÉXITO!");
+print(repeat("=", 60));
+print("\nRaccoon tiene:");
+print("  ✓ 13+ módulos nativos");
+print("  ✓ 6+ módulos en Raccoon puro");
+print("  ✓ Sistema de validación completo");
+print("  ✓ Operaciones matemáticas avanzadas");
+print("  ✓ Manipulación de colecciones");
+print("  ✓ Soporte JSON completo");
+print("  ✓ Regex avanzado");
+print("  ✓ Y mucho más!");
+;

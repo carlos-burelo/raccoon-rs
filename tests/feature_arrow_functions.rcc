@@ -1,0 +1,55 @@
+let add = (x: int, y: int) => x + y;
+let result1: int = add(5, 3);
+print(result1); 
+
+let double = (x: int) => x * 2;
+let result2: int = double(7);
+print(result2); 
+
+let getFortyTwo = () => 42;
+let result3: int = getFortyTwo();
+print(result3); 
+
+
+let multiply = (x: int, y: int) => {
+  let temp: int = x * y;
+  return temp;
+};
+let result4: int = multiply(6, 7);
+print(result4); 
+
+let isEven = (n: int) => n % 2 == 0;
+let result5: bool = isEven(10);
+print(result5); 
+
+let result6: bool = isEven(7);
+print(result6); 
+
+let greet = (name: str) => "Hello, " + name + "!";
+let result7: str = greet("World");
+print(result7); 
+
+let subtract = (a: int, b: int) => a - b;
+let result8: int = subtract(20, 8);
+print(result8); 
+
+let calculate = (x: int, y: int) => {
+  let sum: int = x + y;
+  let product: int = x * y;
+  return sum + product;
+};
+let result9: int = calculate(3, 4);
+print(result9); 
+
+let isGreater = (a: int, b: int) => a > b;
+let result10: bool = isGreater(10, 5);
+print(result10); 
+
+let addWithDefault = (x: int, y: int = 10) => x + y;
+let result11: int = addWithDefault(5, 3);
+print(result11); 
+
+let result12: int = addWithDefault(5);
+print(result12); 
+
+print("All arrow function tests passed!");

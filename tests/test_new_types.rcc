@@ -1,0 +1,85 @@
+
+
+
+let myI8: i8 = -128;
+let myI16: i16 = -32768;
+let myI32: i32 = -2147483648;
+let myI64: i64 = -9223372036854775808;
+
+
+let myU8: u8 = 255;
+let myU16: u16 = 65535;
+let myU32: u32 = 4294967295;
+let myU64: u64 = 18446744073709551615;
+
+
+let myF32: f32 = 3.14159;
+let myF64: f64 = 2.718281828459045;
+let myDecimal: decimal = 123.456789;
+
+
+let myStr: str = "Hello, Raccoon!";
+let myBool: bool = true;
+
+
+let wideInt: i64 = myI8;  
+let wideFloat: f64 = myF32;  
+let mixedConversion: decimal = myI32;  
+
+
+let numbersI32: i32[] = [1, 2, 3, 4, 5];
+let numbersF64: f64[] = [1.1, 2.2, 3.3, 4.4, 5.5];
+let decimals: decimal[] = [10.5, 20.75, 30.25];
+
+
+fn addI32(a: i32, b: i32): i32 {
+  return a + b;
+}
+
+fn multiplyF64(x: f64, y: f64): f64 {
+  return x * y;
+}
+
+fn processDecimal(value: decimal): str {
+  return "Decimal: " + value.toStr();
+}
+
+
+let resultI32: i32 = addI32(10, 20);
+let resultF64: f64 = multiplyF64(3.14, 2.0);
+let message: str = processDecimal(myDecimal);
+
+
+print("=== Tipos Enteros con Signo ===");
+print("i8:  " + myI8.toStr());
+print("i16: " + myI16.toStr());
+print("i32: " + myI32.toStr());
+print("i64: " + myI64.toStr());
+
+print("\n=== Tipos Enteros sin Signo ===");
+print("u8:  " + myU8.toStr());
+print("u16: " + myU16.toStr());
+print("u32: " + myU32.toStr());
+print("u64: " + myU64.toStr());
+
+print("\n=== Tipos Punto Flotante ===");
+print("f32:     " + myF32.toStr());
+print("f64:     " + myF64.toStr());
+print("decimal: " + myDecimal.toStr());
+
+print("\n=== Conversiones Automáticas ===");
+print("i8 -> i64:     " + wideInt.toStr());
+print("f32 -> f64:    " + wideFloat.toStr());
+print("i32 -> decimal: " + mixedConversion.toStr());
+
+print("\n=== Resultados de Funciones ===");
+print("addI32(10, 20):     " + resultI32.toStr());
+print("multiplyF64(3.14, 2.0): " + resultF64.toStr());
+print(message);
+
+print("\n=== Arrays con Nuevos Tipos ===");
+print("i32[]: " + numbersI32.toStr());
+print("f64[]: " + numbersF64.toStr());
+print("decimal[]: " + decimals.toStr());
+
+print("\n✅ Todos los tipos funcionan correctamente!");

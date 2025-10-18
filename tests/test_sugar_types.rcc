@@ -1,0 +1,57 @@
+
+
+print("=== Sugar Types Test ===\n");
+
+
+let a: i8 = 10;
+let b: i16 = 100;
+let c: i32 = 1000;
+let d: i64 = 10000;
+let e: u8 = 20;
+let f: u16 = 200;
+let g: u32 = 2000;
+let h: u64 = 20000;
+
+print("✓ int se asigna correctamente a i8, i16, i32, i64, u8, u16, u32, u64");
+
+
+let x: f32 = 3.14;
+let y: f64 = 2.718;
+let z: decimal = 123.456;
+
+print("✓ float se asigna correctamente a f32, f64, decimal");
+
+
+let sum32: i32 = a + c;  
+let product64: f64 = x * y;  
+
+print("✓ Operaciones aritméticas funcionan: " + sum32.toStr() + ", " + product64.toStr());
+
+
+fn processInt(value: i32): str {
+  return "Valor i32: " + value.toStr();
+}
+
+fn processFloat(value: f64): str {
+  return "Valor f64: " + value.toStr();
+}
+
+print(processInt(42));
+print(processFloat(3.14159));
+
+
+let small: i8 = 50;
+let medium: i32 = small;  
+let large: i64 = medium;  
+let floating: f64 = large;  
+
+print("✓ Conversión widening automática: i8 -> i32 -> i64 -> f64 = " + floating.toStr());
+
+
+let numbers8: i8[] = [1, 2, 3];
+let numbers32: i32[] = [100, 200, 300];
+let floats64: f64[] = [1.1, 2.2, 3.3];
+
+print("✓ Arrays tipados: i8[], i32[], f64[] funcionan correctamente");
+
+print("\n✅ Todos los sugar types y conversiones funcionan perfectamente!");

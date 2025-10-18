@@ -1,0 +1,234 @@
+
+
+
+
+
+print("=== GENERICS SYSTEM TEST ===")
+
+
+
+
+
+print("Test 1: Generic Box<T>")
+
+class Box<T> {
+    value: T
+    
+    constructor(value: T) {
+        this.value = value
+    }
+    
+    getValue(): T {
+        return this.value
+    }
+    
+    setValue(newValue: T): void {
+        this.value = newValue
+    }
+}
+
+let intBox: Box<int> = new Box<int>(42)
+print(`Int box: ${intBox.getValue()}`)
+
+let strBox: Box<str> = new Box<str>("Hello")
+print(`String box: ${strBox.getValue()}`)
+
+intBox.setValue(100)
+print(`Updated int box: ${intBox.getValue()}`)
+
+
+
+
+
+print("Test 2: Generic Pair<K, V>")
+
+interface Pair<K, V> {
+    key: K
+    value: V
+}
+
+class KeyValue<K, V> {
+    key: K
+    value: V
+    
+    constructor(key: K, value: V) {
+        this.key = key
+        this.value = value
+    }
+    
+    getKey(): K {
+        return this.key
+    }
+    
+    getValue(): V {
+        return this.value
+    }
+}
+
+let pair: KeyValue<str, int> = new KeyValue<str, int>("age", 25)
+print(`Pair: ${pair.getKey()} = ${pair.getValue()}`)
+
+
+
+
+
+print("Test 3: Generic with Constraint")
+
+
+class Container<T> {
+    items: T[]
+    
+    constructor() {
+        this.items = []
+    }
+    
+    add(item: T): void {
+        this.items.push(item)
+    }
+    
+    getAt(index: int): T {
+        return this.items[index]
+    }
+    
+    size(): int {
+        return len(this.items)
+    }
+}
+
+let intContainer: Container<int> = new Container<int>()
+intContainer.add(10)
+intContainer.add(20)
+intContainer.add(30)
+print(`Container size: ${intContainer.size()}`)
+print(`First item: ${intContainer.getAt(0)}`)
+
+
+
+
+
+print("Test 4: Optional<T> Type")
+
+class Optional<T> {
+    value: T?
+    
+    constructor(value: T?) {
+        this.value = value
+    }
+    
+    hasValue(): bool {
+        return this.value != null
+    }
+    
+    getValue(): T? {
+        return this.value
+    }
+    
+    getOrDefault(defaultValue: T): T {
+        if (this.value != null) {
+            return this.value
+        }
+        return defaultValue
+    }
+}
+
+let some: Optional<int> = new Optional<int>(42)
+let none: Optional<int> = new Optional<int>(null)
+
+print(`Some has value: ${some.hasValue()}`)
+print(`None has value: ${none.hasValue()}`)
+print(`Some value: ${some.getValue()}`)
+print(`None default: ${none.getOrDefault(0)}`)
+
+
+
+
+
+print("Test 5: Result<T> Type")
+
+class Result<T> {
+    success: bool
+    value: T?
+    error: str?
+    
+    constructor(success: bool, value: T?, error: str?) {
+        this.success = success
+        this.value = value
+        this.error = error
+    }
+    
+    isSuccess(): bool {
+        return this.success
+    }
+    
+    getValue(): T? {
+        return this.value
+    }
+    
+    getError(): str? {
+        return this.error
+    }
+}
+
+fn divide(a: float, b: float): Result<float> {
+    if (b == 0.0) {
+        return new Result<float>(false, null, "Division by zero")
+    }
+    return new Result<float>(true, a / b, null)
+}
+
+let goodResult: Result<float> = divide(10.0, 2.0)
+let badResult: Result<float> = divide(10.0, 0.0)
+
+print(`Good result success: ${goodResult.isSuccess()}`)
+print(`Good result value: ${goodResult.getValue()}`)
+print(`Bad result success: ${badResult.isSuccess()}`)
+print(`Bad result error: ${badResult.getError()}`)
+
+
+
+
+
+print("Test 6: Stack<T>")
+
+class Stack<T> {
+    items: T[]
+    
+    constructor() {
+        this.items = []
+    }
+    
+    push(item: T): void {
+        this.items.push(item)
+    }
+    
+    pop(): T? {
+        if (len(this.items) > 0) {
+            return this.items.pop()
+        }
+        return null
+    }
+    
+    peek(): T? {
+        if (len(this.items) > 0) {
+            return this.items[len(this.items) - 1]
+        }
+        return null
+    }
+    
+    isEmpty(): bool {
+        return len(this.items) == 0
+    }
+}
+
+let stack: Stack<str> = new Stack<str>()
+stack.push("first")
+stack.push("second")
+stack.push("third")
+
+print(`Top: ${stack.peek()}`)
+print(`Pop: ${stack.pop()}`)
+print(`Pop: ${stack.pop()}`)
+print(`Is empty: ${stack.isEmpty()}`)
+
+
+print("=== ALL GENERIC TESTS PASSED ===")

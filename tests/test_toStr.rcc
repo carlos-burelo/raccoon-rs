@@ -1,0 +1,4 @@
+let num: int = 42
+let text: str = num.toStr()
+print(text)
+print("Success!")

@@ -1,0 +1,9 @@
+
+
+fn main(): void {
+    print("Starting test");
+    let m: Map<str, int> = new Map<str, int>();
+    print("Map created");
+    m.set("key", 42);
+    print("Value set");
+}

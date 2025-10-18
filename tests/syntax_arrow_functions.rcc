@@ -1,0 +1,142 @@
+
+
+
+
+
+
+let double = (x: int) => x * 2;
+print(double(5)); 
+
+
+
+
+let add = (x: int, y: int) => x + y;
+print(add(10, 20)); 
+
+
+
+
+let getNumber = () => 42;
+print(getNumber()); 
+
+
+
+
+let multiply = (a: int, b: int) => {
+  let result: int = a * b;
+  return result;
+};
+print(multiply(6, 7)); 
+
+
+
+
+let subtract = (x: int, y: int) => x - y;
+print(subtract(100, 25)); 
+
+
+
+
+let isEven = (n: int) => n % 2 == 0;
+print(isEven(4)); 
+print(isEven(7)); 
+
+
+
+
+let greet = (name: str) => "Hello, " + name;
+print(greet("TypeScript")); 
+
+
+
+
+fn map(x: int, func: (int) => int): int {
+  return func(x);
+}
+
+let square = (x: int) => x * x;
+print(map(5, square)); 
+
+let increment = (x: int) => x + 1;
+print(map(10, increment)); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+let calculate = (x: int, y: int) => x * 2 + y * 3;
+print(calculate(2, 3)); 
+
+
+
+
+let isGreater = (a: int, b: int) => a > b;
+print(isGreater(10, 5)); 
+print(isGreater(3, 8)); 
+
+
+
+
+let addDefault = (x: int, y: int = 10) => x + y;
+print(addDefault(5, 3)); 
+print(addDefault(5)); 
+
+
+
+
+let outer = (x: int) => {
+  let inner = (y: int) => x + y;
+  return inner(5);
+};
+print(outer(10)); 
+
+
+
+
+let complexCalc = (a: int, b: int) => {
+  let sum: int = a + b;
+  let product: int = a * b;
+  let diff: int = a - b;
+  return sum + product + diff;
+};
+print(complexCalc(5, 3)); 
+
+
+
+
+print(map(7, (x: int) => x * x)); 
+print(map(3, (n: int) => n + 100)); 
+
+
+
+
+let asyncDouble = async (x: int) => x * 2;
+
+
+let asyncCalculate = async (a: int, b: int) => {
+  let result: int = a + b;
+  return result;
+};
+
+
+
+let typedFunc: (int, int) => int = (x: int, y: int) => x + y;
+print(typedFunc(15, 20)); 
+
+
+
+
+let add2: (int, int) => int = (x: int, y: int) => x + y;
+let mul2: (int, int) => int = (x: int, y: int) => x * y;
+print(add2(3, 4)); 
+print(mul2(3, 4)); 
+
+print("All TypeScript-style arrow function tests passed!");

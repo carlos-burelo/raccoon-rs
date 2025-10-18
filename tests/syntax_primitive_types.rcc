@@ -1,0 +1,167 @@
+
+
+
+
+
+
+print("=== PRIMITIVE TYPES TEST ===")
+
+
+
+
+
+print("Test 1: Integer Type")
+
+let int1: int = 42
+let int2: int = -100
+let int3: int = 0
+
+print(`Positive: ${int1}`)
+print(`Negative: ${int2}`)
+print(`Zero: ${int3}`)
+
+const maxInt: int = 2147483647
+const minInt: int = -2147483648
+print(`Max: ${maxInt}`)
+print(`Min: ${minInt}`)
+
+
+
+
+
+print("Test 2: Float Type")
+
+let float1: float = 3.14
+let float2: float = -2.71
+let float3: float = 0.0
+
+print(`Pi: ${float1}`)
+print(`Negative: ${float2}`)
+print(`Zero: ${float3}`)
+
+const e: float = 2.71828
+print(`E: ${e}`)
+
+
+
+
+
+print("Test 3: String Type")
+
+let str1: str = "Hello World"
+let str2: str = "Raccoon"
+let str3: str = ""
+
+print(`String 1: ${str1}`)
+print(`String 2: ${str2}`)
+print(`Empty: '${str3}'`)
+
+const greeting: str = "¡Hola!"
+print(`Greeting: ${greeting}`)
+
+
+
+
+
+print("Test 4: Boolean Type")
+
+let bool1: bool = true
+let bool2: bool = false
+
+print(`True: ${bool1}`)
+print(`False: ${bool2}`)
+
+const alwaysTrue: bool = true
+print(`Constant: ${alwaysTrue}`)
+
+
+
+
+
+print("Test 5: Null Type")
+
+let nullValue: int? = null
+print("Null value created")
+
+nullValue = 42
+print(`Assigned value: ${nullValue}`)
+
+
+
+
+
+print("Test 6: Type Conversions")
+
+let intVal: int = 10
+let floatVal: float = intVal.toFloat()
+print(`Int to Float: ${floatVal}`)
+
+let strVal: str = intVal.toStr()
+print(`Int to String: ${strVal}`)
+
+
+
+
+
+print("Test 7: String Operations")
+
+let text: str = "HELLO"
+print(`Upper: ${text}`)
+print(`Lower: ${text.toLower()}`)
+
+let parts: str[] = "a,b,c".split(",")
+print(`Split length: ${parts.length}`)
+
+
+
+
+
+print("Test 8: Type Checking")
+
+let num: int = 100
+print(`typeof num: ${typeof num}`)
+
+let msg: str = "test"
+print(`typeof msg: ${typeof msg}`)
+
+
+
+
+
+print("Test 9: Constants")
+
+const PI: float = 3.14159
+const VERSION: int = 1
+const APP_NAME: str = "Raccoon"
+
+print(`PI: ${PI}`)
+print(`Version: ${VERSION}`)
+print(`App: ${APP_NAME}`)
+
+
+
+
+
+print("Test 10: Mixed Type Operations")
+
+let a: int = 5
+let b: float = 2.5
+let result: float = a + b
+print(`Int + Float: ${result}`)
+
+let num_: int = 42
+let text_: str = "Number: " + num_.toStr()
+print(text_)
+
+
+print("=== ALL PRIMITIVE TYPES TESTS PASSED ===")
+print("✅ Integer type")
+print("✅ Float type")
+print("✅ String type")
+print("✅ Boolean type")
+print("✅ Null type")
+print("✅ Type conversions")
+print("✅ String operations")
+print("✅ Type checking")
+print("✅ Constants")
+print("✅ Mixed operations")

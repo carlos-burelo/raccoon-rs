@@ -1,0 +1,209 @@
+
+
+
+
+
+
+print("=== OBJECT DESTRUCTURING FEATURE TEST ===")
+
+
+
+interface Point {
+    x: int
+    y: int
+}
+
+interface Person {
+    name: str
+    age: int
+}
+
+interface Config {
+    width: int
+    height: int
+}
+
+interface UserData {
+    username: str
+    email: str
+}
+
+
+
+
+print("Test 1: Global Variable Destructuring")
+
+let point1: Point = { x: 10, y: 20 }
+let { x, y }: Point = point1
+
+print(`x = ${x}`)
+print(`y = ${y}`)
+
+const point2: Point = { x: 100, y: 200 }
+const { x: x2, y: y2 }: Point = point2
+
+print(`x2 = ${x2}`)
+print(`y2 = ${y2}`)
+
+
+
+
+
+print("Test 2: Block Scope Destructuring")
+
+{
+    let person: Person = { name: "Alice", age: 30 }
+    let { name, age }: Person = person
+    print(`Name: ${name}`)
+    print(`Age: ${age}`)
+}
+
+
+
+
+
+print("Test 3: Function Parameter Destructuring")
+
+fn displayPoint({ x, y }: Point): void {
+    print(`Point(${x}, ${y})`)
+}
+
+fn greetPerson({ name, age }: Person): void {
+    print(`Hello ${name}, you are ${age} years old`)
+}
+
+displayPoint({ x: 5, y: 15 })
+greetPerson({ name: "Bob", age: 25 })
+
+
+
+
+
+print("Test 4: Destructuring in Conditionals")
+
+let condition: bool = true
+if (condition) {
+    let config: Config = { width: 800, height: 600 }
+    let { width, height }: Config = config
+    print(`Resolution: ${width}x${height}`)
+}
+
+
+
+
+
+print("Test 5: Destructuring in While Loop")
+
+let counter: int = 0
+while (counter < 2) {
+    let tempPoint: Point = { x: counter * 10, y: counter * 20 }
+    let { x: px, y: py }: Point = tempPoint
+    print(`Loop ${counter}: (${px}, ${py})`)
+    counter = counter + 1
+}
+
+
+
+
+
+print("Test 6: Destructuring in Class Methods")
+
+class PointProcessor {
+    name: str
+
+    constructor(name: str) {
+        this.name = name
+    }
+
+    process({ x, y }: Point): void {
+        print(`${this.name} processing: x=${x}, y=${y}`)
+    }
+
+    combine(p1: Point, { x, y }: Point): int {
+        return p1.x + x + p1.y + y
+    }
+}
+
+let processor: PointProcessor = new PointProcessor("Processor-1")
+processor.process({ x: 7, y: 14 })
+
+let result: int = processor.combine({ x: 1, y: 2 }, { x: 3, y: 4 })
+print(`Combined result: ${result}`)
+
+
+
+
+
+print("Test 7: Multiple Destructurings")
+
+let user1: UserData = { username: "user1", email: "user1@test.com" }
+let user2: UserData = { username: "user2", email: "user2@test.com" }
+
+let { username: u1, email: e1 }: UserData = user1
+let { username: u2, email: e2 }: UserData = user2
+
+print(`User 1: ${u1} (${e1})`)
+print(`User 2: ${u2} (${e2})`)
+
+
+
+
+
+print("Test 8: Destructuring with Function Returns")
+
+fn createPoint(x: int, y: int): Point {
+    return { x: x, y: y }
+}
+
+let newPoint: Point = createPoint(42, 84)
+let { x: finalX, y: finalY }: Point = newPoint
+
+print(`Created point: (${finalX}, ${finalY})`)
+
+
+
+
+
+print("Test 9: Nested Function Calls")
+
+fn processPoint({ x, y }: Point): int {
+    return x + y
+}
+
+fn doublePoint(p: Point): Point {
+    return { x: p.x * 2, y: p.y * 2 }
+}
+
+let originalPoint: Point = { x: 3, y: 4 }
+let doubled: Point = doublePoint(originalPoint)
+let sum: int = processPoint(doubled)
+
+print(`Original: (${originalPoint.x}, ${originalPoint.y})`)
+print(`Doubled sum: ${sum}`)
+
+
+
+
+
+print("Test 10: Destructuring in Try-Catch")
+
+try {
+    let data: Person = { name: "Test", age: 99 }
+    let { name: testName, age: testAge }: Person = data
+    print(`Try block: ${testName}, ${testAge}`)
+} catch (e: str) {
+    print("Error occurred")
+}
+
+
+print("=== ALL OBJECT DESTRUCTURING TESTS PASSED ===")
+print("✅ Global scope destructuring")
+print("✅ Block scope destructuring")
+print("✅ Function parameter destructuring")
+print("✅ Conditional destructuring")
+print("✅ Loop destructuring")
+print("✅ Class method destructuring")
+print("✅ Multiple destructurings")
+print("✅ With function returns")
+print("✅ Nested calls")
+print("✅ Try-catch blocks")

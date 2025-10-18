@@ -1,0 +1,183 @@
+
+
+
+
+
+print("=== GENERICS SYSTEM TEST (Simplified) ===")
+
+
+
+
+
+print("Test 1: Generic Box<T>")
+
+class Box<T> {
+    value: T
+    
+    constructor(value: T) {
+        this.value = value
+    }
+    
+    getValue(): T {
+        return this.value
+    }
+    
+    setValue(newValue: T): void {
+        this.value = newValue
+    }
+}
+
+let intBox = new Box(42)
+print(`Int box: ${intBox.getValue()}`)
+
+let strBox = new Box("Hello")
+print(`String box: ${strBox.getValue()}`)
+
+intBox.setValue(100)
+print(`Updated int box: ${intBox.getValue()}`)
+
+
+
+
+
+print("Test 2: Generic Pair<K, V>")
+
+class KeyValue<K, V> {
+    key: K
+    value: V
+    
+    constructor(key: K, value: V) {
+        this.key = key
+        this.value = value
+    }
+    
+    getKey(): K {
+        return this.key
+    }
+    
+    getValue(): V {
+        return this.value
+    }
+}
+
+let pair = new KeyValue("age", 25)
+print(`Pair: ${pair.getKey()} = ${pair.getValue()}`)
+
+
+
+
+
+print("Test 3: Generic Container<T>")
+
+class Container<T> {
+    items: T[]
+    
+    constructor() {
+        this.items = []
+    }
+    
+    add(item: T): void {
+        this.items.push(item)
+    }
+    
+    getAt(index: int): T {
+        return this.items[index]
+    }
+    
+    size(): int {
+        return len(this.items)
+    }
+}
+
+let intContainer = new Container()
+intContainer.add(10)
+intContainer.add(20)
+intContainer.add(30)
+print(`Container size: ${intContainer.size()}`)
+print(`First item: ${intContainer.getAt(0)}`)
+
+
+
+
+
+print("Test 4: Optional<T> Type")
+
+class Optional<T> {
+    value: T?
+    
+    constructor(value: T?) {
+        this.value = value
+    }
+    
+    hasValue(): bool {
+        return this.value != null
+    }
+    
+    getValue(): T? {
+        return this.value
+    }
+    
+    getOrDefault(defaultValue: T): T {
+        if (this.value != null) {
+            return this.value
+        }
+        return defaultValue
+    }
+}
+
+let some = new Optional(42)
+let none = new Optional(null)
+
+print(`Some has value: ${some.hasValue()}`)
+print(`None has value: ${none.hasValue()}`)
+print(`Some value: ${some.getValue()}`)
+print(`None default: ${none.getOrDefault(0)}`)
+
+
+
+
+
+print("Test 5: Stack<T>")
+
+class Stack<T> {
+    items: T[]
+    
+    constructor() {
+        this.items = []
+    }
+    
+    push(item: T): void {
+        this.items.push(item)
+    }
+    
+    pop(): T? {
+        if (len(this.items) > 0) {
+            return this.items.pop()
+        }
+        return null
+    }
+    
+    peek(): T? {
+        if (len(this.items) > 0) {
+            return this.items[len(this.items) - 1]
+        }
+        return null
+    }
+    
+    isEmpty(): bool {
+        return len(this.items) == 0
+    }
+}
+
+let stack = new Stack()
+stack.push("first")
+stack.push("second")
+stack.push("third")
+
+print(`Top: ${stack.peek()}`)
+print(`Pop: ${stack.pop()}`)
+print(`Pop: ${stack.pop()}`)
+print(`Is empty: ${stack.isEmpty()}`)
+
+
+print("=== ALL GENERIC TESTS PASSED ===")

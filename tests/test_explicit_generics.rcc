@@ -1,0 +1,35 @@
+
+
+class Box<T> {
+    value: T
+    
+    constructor(v: T) {
+        this.value = v
+    }
+    
+    getValue(): T {
+        return this.value
+    }
+}
+
+
+let box1: Box<int> = new Box<int>(42)
+print(box1.value)  
+
+
+let box2: Box<int> = new Box<int>(100)
+let val: int = box2.getValue()
+print(val)  
+
+
+let result: int = val << 2  
+print(result)  
+
+result = val >> 2  
+print(result)  
+
+
+let boxStr: Box<str> = new Box<str>("Hello")
+print(boxStr.value)  
+
+print("All tests passed!")

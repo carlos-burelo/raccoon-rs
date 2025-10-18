@@ -1,0 +1,53 @@
+import defaultConsole, { log, error, warn } from 'std:console'
+import { PI, E, sqrt, pow, sin, cos, random } from 'std:math'
+import { toUpperCase, toLowerCase, trim, split } from 'std:string'
+
+
+log("=== Testing std:console module ===")
+log("Hello from std:console!")
+warn("This is a warning")
+error("This is an error message")
+
+
+log("\n=== Testing std:math module ===")
+log("PI =", PI)
+log("E =", E)
+log("sqrt(16) =", sqrt(16.0))
+log("pow(2, 3) =", pow(2.0, 3.0))
+log("sin(PI/2) =", sin(PI / 2.0))
+log("cos(0) =", cos(0.0))
+log("random() =", random())
+
+
+log("\n=== Testing std:string module ===")
+let text: str = "  Hello World  "
+log("Original:", text)
+log("Uppercase:", toUpperCase(text))
+log("Lowercase:", toLowerCase(text))
+log("Trimmed:", trim(text))
+
+let sentence: str = "apple,banana,cherry"
+let words = split(sentence, ",")
+log("Split result:", words)
+
+
+fn calculateCircleArea(radius: float): float {
+    return PI * pow(radius, 2.0)
+}
+
+log("\n=== Circle Area Calculation ===")
+let radius: float = 5.0
+log("Circle with radius", radius, "has area:", calculateCircleArea(radius))
+
+
+fn calculateDistance(x1: float, y1: float, x2: float, y2: float): float {
+    let dx: float = x2 - x1
+    let dy: float = y2 - y1
+    return sqrt(pow(dx, 2.0) + pow(dy, 2.0))
+}
+
+log("\n=== Distance Calculation ===")
+let dist: float = calculateDistance(0.0, 0.0, 3.0, 4.0)
+log("Distance between (0,0) and (3,4):", dist)
+
+log("\n=== Module System Test Complete! ===")

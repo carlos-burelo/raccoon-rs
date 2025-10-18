@@ -1,0 +1,9 @@
+
+
+print("Creating Map<str, int>...");
+let m1: Map<str, int> = new Map<str, int>();
+print("Success with int!");
+
+print("Creating Map<str, i32>...");
+let m2: Map<str, i32> = new Map<str, i32>();
+print("Success with i32!");

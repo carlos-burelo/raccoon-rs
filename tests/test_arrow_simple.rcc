@@ -1,0 +1,6 @@
+
+
+
+let add: (int, int) -> int = (x: int, y: int) => x + y;
+let result1: int = add(5, 3);
+print(result1); 

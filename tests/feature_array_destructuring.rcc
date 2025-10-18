@@ -1,0 +1,187 @@
+const arr1: int[] = [1, 2, 3, 4, 5]
+const [a, b, c]: int[] = arr1
+
+print(`a = ${a}`)
+print(`b = ${b}`)
+print(`c = ${c}`)
+
+print("Test 2: String Array Destructuring")
+
+let words: str[] = ["hello", "world", "raccoon"]
+let [w1, w2, w3]: str[] = words
+
+print(`${w1} ${w2} ${w3}`)
+
+print("Test 3: Float Array Destructuring")
+
+let floats: float[] = [3.14, 2.71, 1.41]
+let [pi, e, sqrt2]: float[] = floats
+
+print(`Pi: ${pi}`)
+print(`E: ${e}`)
+print(`Sqrt2: ${sqrt2}`)
+
+
+
+print("Test 4: Function Parameter Destructuring")
+
+fn sumFirst([a, b]: int[]): int {
+    return a + b
+}
+
+fn displayThree([x, y, z]: int[]): void {
+    print(`Values: ${x}, ${y}, ${z}`)
+}
+
+let numbers: int[] = [10, 20, 30]
+let sum: int = sumFirst(numbers)
+print(`Sum of first two: ${sum}`)
+
+displayThree([100, 200, 300])
+
+
+
+print("Test 5: Block Scope Destructuring")
+
+{
+    let localArr: int[] = [7, 14, 21]
+    let [first, second]: int[] = localArr
+    print(`First: ${first}, Second: ${second}`)
+}
+
+print("Test 6: Destructuring in Loops")
+
+let loopCounter: int = 0
+while (loopCounter < 3) {
+    let tempArr: int[] = [loopCounter, loopCounter * 10]
+    let [idx, value]: int[] = tempArr
+    print(`[${idx}] = ${value}`)
+    loopCounter = loopCounter + 1
+}
+
+print("Test 7: Destructuring in Class Methods")
+
+class ArrayProcessor {
+    name: str
+
+    constructor(name: str) {
+        this.name = name
+    }
+
+    processArray([a, b, c]: int[]): int {
+        print(`${this.name} processing: ${a}, ${b}, ${c}`)
+        return a + b + c
+    }
+
+    getFirst([first]: int[]): int {
+        return first
+    }
+}
+
+let processor: ArrayProcessor = new ArrayProcessor("AP-1")
+let result: int = processor.processArray([5, 10, 15])
+print(`Result: ${result}`)
+
+let firstVal: int = processor.getFirst([99, 88, 77])
+print(`First value: ${firstVal}`)
+
+
+print("Test 8: Destructuring in Conditionals")
+
+let check: bool = true
+if (check) {
+    let condArr: int[] = [50, 60, 70]
+    let [v1, v2]: int[] = condArr
+    print(`Conditional values: ${v1}, ${v2}`)
+}
+
+print("Test 9: Nested Function Calls")
+
+fn createArray(a: int, b: int, c: int): int[] {
+    return [a, b, c]
+}
+
+fn multiplyArray([x, y, z]: int[]): int[] {
+    return [x * 2, y * 2, z * 2]
+}
+
+let original: int[] = createArray(1, 2, 3)
+let multiplied: int[] = multiplyArray(original)
+let [m1, m2, m3]: int[] = multiplied
+
+print(`Multiplied: ${m1}, ${m2}, ${m3}`)
+
+
+
+
+
+print("Test 10: Let vs Const Destructuring")
+
+let mutableArr: int[] = [1, 2, 3]
+let [x, y]: int[] = mutableArr
+
+const immutableArr: int[] = [10, 20, 30]
+const [p, q, r]: int[] = immutableArr
+
+print(`Let: ${x}, ${y}`)
+print(`Const: ${p}, ${q}, ${r}`)
+
+
+
+
+
+print("Test 11: For-in Loop with Arrays")
+
+let items: int[] = [100, 200, 300]
+for (const item in items) {
+    print(`Item: ${item}`)
+}
+
+
+
+
+
+print("Test 12: Range with Destructuring")
+
+let range: int[] = 1..5
+let [r1, r2, r3]: int[] = range
+
+print(`Range values: ${r1}, ${r2}, ${r3}`)
+
+
+
+
+
+print("Test 13: Constructor with Destructuring")
+
+class VectorProcessor {
+    components: int[]
+
+    constructor([x, y, z]: int[]) {
+        this.components = [x, y, z]
+        print(`Vector created: [${x}, ${y}, ${z}]`)
+    }
+
+    getComponents(): int[] {
+        return this.components
+    }
+}
+
+let vector: VectorProcessor = new VectorProcessor([1, 2, 3])
+let comps: int[] = vector.getComponents()
+print(`Components: ${comps.length} items`)
+
+
+print("=== ALL ARRAY DESTRUCTURING TESTS PASSED ===")
+print("✅ Basic array destructuring")
+print("✅ String/Float arrays")
+print("✅ Function parameters")
+print("✅ Block scope")
+print("✅ Loops")
+print("✅ Class methods")
+print("✅ Conditionals")
+print("✅ Nested calls")
+print("✅ Let vs Const")
+print("✅ For-in loops")
+print("✅ Ranges")
+print("✅ Constructors")

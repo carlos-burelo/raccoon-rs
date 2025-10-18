@@ -1,0 +1,82 @@
+
+
+import * as Math from "std:math"
+import * as StringUtils from "std:string"
+import * as ArrayUtils from "std:array"
+
+print("=== Testing Core Built-ins ===");
+
+
+let list_len: int = len([1, 2, 3, 4, 5]);
+print(list_len); 
+
+let str_len: int = len("Hello");
+print(str_len); 
+
+print("\n=== Testing Math Built-ins ===");
+
+
+print(Math.PI); 
+print(Math.E);  
+
+
+print(Math.floor(3.7));    
+print(Math.ceil(3.2));     
+print(Math.round(3.5));    
+print(Math.abs(-5.0));     
+print(Math.sqrt(16.0));    
+print(Math.pow(2.0, 3.0)); 
+print(Math.min(5.0, 3.0)); 
+print(Math.max(5.0, 3.0)); 
+
+
+print(Math.sin(0.0));      
+print(Math.cos(0.0));      
+
+
+let rand: float = Math.random();
+print(rand); 
+
+print("\n=== Testing String Built-ins ===");
+
+let text: str = "Hello World";
+print(StringUtils.toUpperCase(text));  
+print(StringUtils.toLowerCase(text));  
+print(StringUtils.trim("  spaces  ")); 
+
+
+print(StringUtils.charAt("Raccoon", 0));     
+print(StringUtils.substring("Raccoon", 0, 4)); 
+
+
+print(StringUtils.indexOf("Hello World", "World")); 
+
+
+print(StringUtils.replace("Hello World", "World", "Raccoon")); 
+
+
+let words: str[] = StringUtils.split("one,two,three", ",");
+print(len(words)); 
+print(StringUtils.join(words, " - ")); 
+
+print("\n=== Testing Array Built-ins ===");
+
+let numbers: int[] = [1, 2, 3];
+ArrayUtils.push(numbers, 4);
+print(len(numbers)); 
+
+let last = ArrayUtils.pop(numbers); 
+print(last);    
+print(len(numbers)); 
+
+ArrayUtils.unshift(numbers, 0);
+print(len(numbers)); 
+
+let first = ArrayUtils.shift(numbers); 
+print(first);   
+print(len(numbers)); 
+
+ArrayUtils.reverse(numbers);
+print(len(numbers)); 
+
+print("\n=== All Built-in Tests Passed! ===");

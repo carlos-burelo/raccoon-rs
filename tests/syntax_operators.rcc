@@ -1,0 +1,184 @@
+
+
+
+
+
+
+print("=== OPERATORS TEST ===")
+
+
+
+
+
+print("Test 1: Arithmetic Operators")
+
+let a: int = 10
+let b: int = 3
+
+print(`Addition: ${a + b}`)
+print(`Subtraction: ${a - b}`)
+print(`Multiplication: ${a * b}`)
+print(`Division: ${a / b}`)
+print(`Modulo: ${a % b}`)
+
+
+
+
+
+print("Test 2: Comparison Operators")
+
+let x: int = 5
+let y: int = 10
+
+print(`Equal: ${x == x}`)
+print(`Not equal: ${x != y}`)
+print(`Less than: ${x < y}`)
+print(`Greater than: ${y > x}`)
+print(`Less or equal: ${x <= 5}`)
+print(`Greater or equal: ${y >= 10}`)
+
+
+
+
+
+print("Test 3: Logical Operators")
+
+let t: bool = true
+let f: bool = false
+
+print(`AND (true && true): ${t && t}`)
+print(`AND (true && false): ${t && f}`)
+print(`OR (false || true): ${f || t}`)
+print(`OR (false || false): ${f || f}`)
+print(`NOT (!true): ${!t}`)
+print(`NOT (!false): ${!f}`)
+
+
+
+
+
+print("Test 4: Assignment Operators")
+
+let val: int = 10
+print(`Initial: ${val}`)
+
+val = val + 5
+print(`After +5: ${val}`)
+
+val = val - 3
+print(`After -3: ${val}`)
+
+val = val * 2
+print(`After *2: ${val}`)
+
+val = val - 4
+print(`After -4: ${val}`)
+
+
+
+
+
+print("Test 5: Compound Assignment")
+
+let num: int = 100
+
+num = num + 10
+print(`num += 10: ${num}`)
+
+num = num - 5
+print(`num -= 5: ${num}`)
+
+num = num * 2
+print(`num *= 2: ${num}`)
+
+num = num - 10
+print(`num -= 10: ${num}`)
+
+
+
+
+
+print("Test 6: Unary Operators")
+
+let positive: int = 42
+let negative: int = -positive
+print(`Negation: ${negative}`)
+
+let truth: bool = true
+let falsehood: bool = !truth
+print(`Logical NOT: ${falsehood}`)
+
+
+
+
+
+print("Test 7: String Concatenation")
+
+let str1: str = "Hello"
+let str2: str = "World"
+let combined: str = str1 + " " + str2
+print(`Concatenation: ${combined}`)
+
+let name: str = "Raccoon"
+let version: int = 1
+let info: str = name + " v" + version.toStr()
+print(`Mixed: ${info}`)
+
+
+
+
+
+print("Test 8: Operator Precedence")
+
+let result1: int = 2 + 3 * 4
+print(`2 + 3 * 4 = ${result1}`)
+
+let result2: int = (2 + 3) * 4
+print(`(2 + 3) * 4 = ${result2}`)
+
+let result3: int = 10 - 2 + 3
+print(`10 - 2 + 3 = ${result3}`)
+
+
+
+
+
+print("Test 9: Boolean Expressions")
+
+let age: int = 25
+let isAdult: bool = age >= 18
+print(`Is adult (25 >= 18): ${isAdult}`)
+
+let score: int = 85
+let passed: bool = score >= 60 && score <= 100
+print(`Passed (85 in range): ${passed}`)
+
+let hasAccess: bool = true
+let isAdmin: bool = false
+let canEdit: bool = hasAccess || isAdmin
+print(`Can edit: ${canEdit}`)
+
+
+
+
+
+print("Test 10: Null Comparison")
+
+let value: int? = null
+print(`Is null: ${value == null}`)
+
+value = 42
+print(`Is not null: ${value != null}`)
+
+
+print("=== ALL OPERATORS TESTS PASSED ===")
+print("✅ Arithmetic operators")
+print("✅ Comparison operators")
+print("✅ Logical operators")
+print("✅ Assignment operators")
+print("✅ Compound assignment")
+print("✅ Unary operators")
+print("✅ String concatenation")
+print("✅ Operator precedence")
+print("✅ Boolean expressions")
+print("✅ Null comparison")

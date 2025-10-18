@@ -1,0 +1,250 @@
+
+
+
+
+
+
+
+
+fn testNullCoalescing(): void {
+    let value1: str? = null;
+    let value2: str? = "hello";
+    
+    let result1: str = value1 ?? "default";
+    let result2: str = value2 ?? "default";
+    
+    if (result1 == "default" && result2 == "hello") {
+        print("✓ Test 1 passed: Null coalescing operator works");
+    } else {
+        print("✗ Test 1 failed: Expected 'default' and 'hello'");
+    }
+}
+
+
+
+
+fn testNullCoalescingChain(): void {
+    let val1: int? = null;
+    let val2: int? = null;
+    let val3: int = 42;
+    
+    let result: int = val1 ?? val2 ?? val3 ?? 100;
+    
+    if (result == 42) {
+        print("✓ Test 2 passed: Chained null coalescing works");
+    } else {
+        print("✗ Test 2 failed: Expected 42");
+    }
+}
+
+
+
+
+fn testOptionalChainingBasic(): void {
+    print("⊘ Test 3 skipped: Inline object types not yet supported");
+}
+
+
+
+
+fn testOptionalChainingWithCoalescing(): void {
+    print("⊘ Test 4 skipped: Inline object types not yet supported");
+}
+
+
+
+
+fn testNullAssertion(): void {
+    let value: str? = "not null";
+    
+    let result: str = value!;
+    
+    if (result == "not null") {
+        print("✓ Test 5 passed: Null assertion on non-null value works");
+    } else {
+        print("✗ Test 5 failed: Null assertion changed value");
+    }
+}
+
+
+
+
+fn testConditionalBasic(): void {
+    let age: int = 20;
+    let status: str = age >= 18 ? "adult" : "minor";
+    
+    if (status == "adult") {
+        print("✓ Test 6 passed: Basic ternary operator works");
+    } else {
+        print("✗ Test 6 failed: Expected 'adult'");
+    }
+}
+
+
+
+
+fn testNestedConditional(): void {
+    let score: int = 85;
+    let grade: str = score >= 90 ? "A" : score >= 80 ? "B" : score >= 70 ? "C" : "F";
+    
+    if (grade == "B") {
+        print("✓ Test 7 passed: Nested ternary operators work");
+    } else {
+        print("✗ Test 7 failed: Expected 'B'");
+    }
+}
+
+
+
+
+fn testPrefixIncrement(): void {
+    let x: int = 5;
+    let y: int = ++x;
+    
+    if (x == 6 && y == 6) {
+        print("✓ Test 8 passed: Prefix increment works");
+    } else {
+        print("✗ Test 8 failed: Expected x=6, y=6");
+    }
+}
+
+
+
+
+fn testPostfixIncrement(): void {
+    let x: int = 5;
+    let y: int = x++;
+    
+    if (x == 6 && y == 5) {
+        print("✓ Test 9 passed: Postfix increment works");
+    } else {
+        print("✗ Test 9 failed: Expected x=6, y=5");
+    }
+}
+
+
+
+
+fn testPrefixDecrement(): void {
+    let x: int = 10;
+    let y: int = --x;
+    
+    if (x == 9 && y == 9) {
+        print("✓ Test 10 passed: Prefix decrement works");
+    } else {
+        print("✗ Test 10 failed: Expected x=9, y=9");
+    }
+}
+
+
+
+
+fn testPostfixDecrement(): void {
+    let x: int = 10;
+    let y: int = x--;
+    
+    if (x == 9 && y == 10) {
+        print("✓ Test 11 passed: Postfix decrement works");
+    } else {
+        print("✗ Test 11 failed: Expected x=9, y=10");
+    }
+}
+
+
+
+
+fn testIncrementInLoop(): void {
+    let sum: int = 0;
+    for (let i: int = 0; i < 5; i++) {
+        sum += i;
+    }
+    
+    if (sum == 10) {
+        print("✓ Test 12 passed: Increment in for loop works");
+    } else {
+        print("✗ Test 12 failed: Expected sum=10");
+    }
+}
+
+
+
+
+fn testCombinedOperators(): void {
+    let x: int? = null;
+    let y: int = 5;
+    
+    let temp: int = x ?? y;
+    let result: int = temp++;
+    
+    if (result == 5 && temp == 6) {
+        print("✓ Test 13 passed: Combined operators work");
+    } else {
+        print("✗ Test 13 failed: Expected result=5, temp=6");
+    }
+}
+
+
+
+
+fn testTernaryComplex(): void {
+    let numbers: int[] = [1, 2, 3, 4, 5];
+    let sum: int = 0;
+    
+    for (let i: int = 0; i < numbers.length; i++) {
+        sum += numbers[i] > 3 ? numbers[i] * 2 : numbers[i];
+    }
+    
+    if (sum == 24) {  
+        print("✓ Test 14 passed: Ternary in complex expression works");
+    } else {
+        print("✗ Test 14 failed: Expected sum=24");
+    }
+}
+
+
+
+
+fn testFloatUpdateOps(): void {
+    let x: float = 3.5;
+    let y: float = x++;
+    let z: float = ++x;
+    
+    if (y == 3.5 && x == 5.5 && z == 5.5) {
+        print("✓ Test 15 passed: Float increment/decrement works");
+    } else {
+        print("✗ Test 15 failed: Float operations incorrect");
+    }
+}
+
+
+
+
+fn main(): void {
+    print("====================================");
+    print("NULL SAFETY OPERATORS TEST SUITE");
+    print("====================================");
+    ;
+    
+    testNullCoalescing();
+    testNullCoalescingChain();
+    testOptionalChainingBasic();
+    testOptionalChainingWithCoalescing();
+    testNullAssertion();
+    testConditionalBasic();
+    testNestedConditional();
+    testPrefixIncrement();
+    testPostfixIncrement();
+    testPrefixDecrement();
+    testPostfixDecrement();
+    testIncrementInLoop();
+    testCombinedOperators();
+    testTernaryComplex();
+    testFloatUpdateOps();
+    
+    ;
+    print("====================================");
+    print("TEST SUITE COMPLETE");
+    print("====================================");
+}
+
+main();

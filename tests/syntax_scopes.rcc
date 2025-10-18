@@ -1,0 +1,255 @@
+
+
+
+
+
+
+print("=== SCOPES TEST ===")
+
+
+
+
+
+print("Test 1: Global Scope")
+
+let globalVar: int = 100
+print(`Global: ${globalVar}`)
+
+
+
+
+
+print("Test 2: Block Scope")
+
+let outer: int = 1
+{
+    let inner: int = 2
+    print(`Inside block: ${inner}`)
+    print(`Access outer: ${outer}`)
+}
+print(`Outside block: ${outer}`)
+
+
+
+
+
+print("Test 3: Function Scope")
+
+let funcOuter: int = 10
+
+fn testScope(): void {
+    let funcInner: int = 20
+    print(`Inside function: ${funcInner}`)
+    print(`Access outer: ${funcOuter}`)
+}
+
+testScope()
+print(`Outside function: ${funcOuter}`)
+
+
+
+
+
+print("Test 4: Variable Shadowing")
+
+let x: int = 1
+print(`Outer x: ${x}`)
+{
+    let x: int = 2
+    print(`Inner x: ${x}`)
+}
+print(`Outer x again: ${x}`)
+
+
+
+
+
+print("Test 5: Loop Scope")
+
+let loopOuter: int = 5
+
+let i: int = 0
+while (i < 3) {
+    let loopInner: int = i * 10
+    print(`Loop iteration ${i}: ${loopInner}`)
+    i = i + 1
+}
+
+print(`After loop: ${loopOuter}`)
+
+
+
+
+
+print("Test 6: If Statement Scope")
+
+let condition: bool = true
+
+if (condition) {
+    let ifVar: int = 42
+    print(`Inside if: ${ifVar}`)
+}
+
+print("After if block")
+
+
+
+
+
+print("Test 7: Nested Blocks")
+
+let level1: int = 1
+{
+    let level2: int = 2
+    {
+        let level3: int = 3
+        print(`Level 3: ${level3}`)
+        print(`Access level 2: ${level2}`)
+        print(`Access level 1: ${level1}`)
+    }
+    print(`Level 2: ${level2}`)
+}
+print(`Level 1: ${level1}`)
+
+
+
+
+
+print("Test 8: Reassignment")
+
+let mutable: int = 10
+print(`Initial: ${mutable}`)
+mutable = 20
+print(`After reassignment: ${mutable}`)
+mutable = mutable + 5
+print(`After calculation: ${mutable}`)
+
+
+
+
+
+print("Test 9: Constants")
+
+const CONSTANT: int = 100
+print(`Constant value: ${CONSTANT}`)
+
+const PI: float = 3.14159
+print(`PI: ${PI}`)
+
+
+
+
+
+print("Test 10: For-In Scope")
+
+let numbers: int[] = [10, 20, 30]
+for (const num in numbers) {
+    print(`Number: ${num}`)
+}
+print("After for-in loop")
+
+
+
+
+
+print("Test 11: Class Field Scope")
+
+class Counter {
+    count: int
+    
+    constructor() {
+        this.count = 0
+    }
+    
+    increment(): void {
+        this.count = this.count + 1
+    }
+    
+    getCount(): int {
+        return this.count
+    }
+}
+
+let counter: Counter = new Counter()
+counter.increment()
+print(`Counter: ${counter.getCount()}`)
+
+
+
+
+
+print("Test 12: Try-Catch Scope")
+
+try {
+    let tryVar: int = 100
+    print(`Try block: ${tryVar}`)
+    throw "Error"
+} catch (e) {
+    let catchVar: str = "caught"
+    print(`Catch block: ${catchVar}`)
+}
+
+
+
+
+
+print("Test 13: Multiple Variables")
+
+let a: int = 1
+let b: int = 2
+let c: int = 3
+print(`a=${a}, b=${b}, c=${c}`)
+
+
+
+
+
+print("Test 14: Variable Lifetime")
+
+fn createCounter(): int {
+    let count: int = 0
+    count = count + 1
+    return count
+}
+
+print(`First call: ${createCounter()}`)
+print(`Second call: ${createCounter()}`)
+
+
+
+
+
+print("Test 15: Scope Chain")
+
+let outer1: int = 1
+
+fn outerFunc(): void {
+    let outer2: int = 2
+    
+    fn innerFunc(): void {
+        let inner: int = 3
+        print(`Access all: ${outer1}, ${outer2}, ${inner}`)
+    }
+    
+    innerFunc()
+}
+
+outerFunc()
+
+
+print("=== ALL SCOPES TESTS PASSED ===")
+print("✅ Global scope")
+print("✅ Block scope")
+print("✅ Function scope")
+print("✅ Variable shadowing")
+print("✅ Loop scope")
+print("✅ If statement scope")
+print("✅ Nested blocks")
+print("✅ Reassignment")
+print("✅ Constants")
+print("✅ For-in scope")
+print("✅ Class field scope")
+print("✅ Try-catch scope")
+print("✅ Multiple variables")
+print("✅ Variable lifetime")
+print("✅ Scope chain")

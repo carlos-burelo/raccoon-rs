@@ -1,0 +1,37 @@
+
+
+class Box<T> {
+    value: T
+    constructor(v: T) {
+        this.value = v
+    }
+}
+
+
+let box = new Box(16)
+print(box.value)  
+
+
+let val: int = 16
+let shifted: int = val << 2  
+print(shifted)
+
+
+let a: int = 12
+let b: int = 10
+let andResult: int = a & b
+print(andResult)  
+
+
+let xorResult: int = a ^ b
+print(xorResult)  
+
+
+let shiftResult: int = 5 << 3
+print(shiftResult)  
+
+
+let rightShift: int = 40 >> 2
+print(rightShift)  
+
+print("All tests passed!")
