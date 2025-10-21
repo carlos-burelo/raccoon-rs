@@ -2,9 +2,11 @@ use super::TypeHandler;
 use crate::error::RaccoonError;
 use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
+use async_trait::async_trait;
 
 pub struct BoolType;
 
+#[async_trait]
 impl TypeHandler for BoolType {
     fn type_name(&self) -> &str {
         "bool"
@@ -25,7 +27,7 @@ impl TypeHandler for BoolType {
                     format!("Expected bool, got {}", value.get_name()),
                     position,
                     file,
-                ))
+                ));
             }
         };
 
@@ -59,8 +61,12 @@ impl TypeHandler for BoolType {
                     RuntimeValue::Str(s) => {
                         let trimmed = s.value.trim().to_lowercase();
                         match trimmed.as_str() {
-                            "true" | "1" | "yes" | "y" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true))),
-                            "false" | "0" | "no" | "n" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false))),
+                            "true" | "1" | "yes" | "y" => {
+                                Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true)))
+                            }
+                            "false" | "0" | "no" | "n" => {
+                                Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false)))
+                            }
                             _ => Err(RaccoonError::new(
                                 format!("Failed to parse '{}' as bool", s.value),
                                 position,
@@ -87,8 +93,12 @@ impl TypeHandler for BoolType {
                     RuntimeValue::Str(s) => {
                         let trimmed = s.value.trim().to_lowercase();
                         match trimmed.as_str() {
-                            "true" | "1" | "yes" | "y" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true))),
-                            "false" | "0" | "no" | "n" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false))),
+                            "true" | "1" | "yes" | "y" => {
+                                Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true)))
+                            }
+                            "false" | "0" | "no" | "n" => {
+                                Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false)))
+                            }
                             _ => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
                         }
                     }
@@ -99,7 +109,7 @@ impl TypeHandler for BoolType {
                 format!("Static method '{}' not found on bool type", method),
                 position,
                 file,
-            ))
+            )),
         }
     }
 

@@ -1,8 +1,7 @@
 use crate::ast::{nodes::*, types::*};
-use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt;
-use std::rc::Rc;
+use std::sync::{Arc, RwLock};
 
 #[derive(Debug, Clone)]
 pub enum RuntimeValue {
@@ -19,6 +18,8 @@ pub enum RuntimeValue {
     ClassInstance(ClassInstance),
     Function(FunctionValue),
     NativeFunction(NativeFunctionValue),
+    NativeAsyncFunction(NativeAsyncFunctionValue),
+    Future(FutureValue),
     Enum(EnumValue),
     PrimitiveTypeObject(PrimitiveTypeObject),
     EnumObject(EnumObject),
@@ -45,6 +46,10 @@ impl RuntimeValue {
             RuntimeValue::ClassInstance(c) => c.class_type.clone(),
             RuntimeValue::Function(f) => f.fn_type.clone(),
             RuntimeValue::NativeFunction(f) => f.fn_type.clone(),
+            RuntimeValue::NativeAsyncFunction(f) => f.fn_type.clone(),
+            RuntimeValue::Future(f) => Type::Future(Box::new(FutureType {
+                inner_type: f.value_type.clone(),
+            })),
             RuntimeValue::Enum(e) => e.enum_type.clone(),
             RuntimeValue::PrimitiveTypeObject(p) => p.type_obj.clone(),
             RuntimeValue::EnumObject(e) => e.enum_type.clone(),
@@ -66,6 +71,8 @@ impl RuntimeValue {
             RuntimeValue::ClassInstance(v) => v.to_string(),
             RuntimeValue::Function(v) => v.to_string(),
             RuntimeValue::NativeFunction(v) => v.to_string(),
+            RuntimeValue::NativeAsyncFunction(v) => v.to_string(),
+            RuntimeValue::Future(v) => v.to_string(),
             RuntimeValue::Enum(v) => v.to_string(),
             RuntimeValue::PrimitiveTypeObject(v) => v.to_string(),
             RuntimeValue::EnumObject(v) => v.to_string(),
@@ -95,6 +102,8 @@ impl RuntimeValue {
                 }
             }
             RuntimeValue::NativeFunction(_) => "[Native Function]".to_string(),
+            RuntimeValue::NativeAsyncFunction(_) => "[Native Async Function]".to_string(),
+            RuntimeValue::Future(_) => "future".to_string(),
             RuntimeValue::PrimitiveTypeObject(p) => p.type_name.clone(),
             RuntimeValue::EnumObject(e) => e.enum_name.clone(),
             RuntimeValue::Enum(e) => e.enum_name.clone(),
@@ -304,7 +313,7 @@ impl ClassValue {
 #[derive(Debug, Clone)]
 pub struct ClassInstance {
     pub class_name: String,
-    pub properties: Rc<RefCell<HashMap<String, RuntimeValue>>>,
+    pub properties: Arc<RwLock<HashMap<String, RuntimeValue>>>,
     pub methods: HashMap<String, FunctionValue>,
     pub accessors: Vec<PropertyAccessor>,
     pub class_type: Type,
@@ -320,7 +329,7 @@ impl ClassInstance {
     ) -> Self {
         Self {
             class_name,
-            properties: Rc::new(RefCell::new(properties)),
+            properties: Arc::new(RwLock::new(properties)),
             methods,
             accessors,
             class_type,
@@ -328,7 +337,7 @@ impl ClassInstance {
     }
 
     pub fn to_string(&self) -> String {
-        let properties = self.properties.borrow();
+        let properties = self.properties.read().unwrap();
         let props_str: Vec<String> = properties
             .iter()
             .map(|(k, v)| format!("{}: {}", k, v.to_string()))
@@ -388,6 +397,78 @@ impl NativeFunctionValue {
 impl fmt::Debug for NativeFunctionValue {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("NativeFunctionValue")
+            .field("fn_type", &self.fn_type)
+            .finish()
+    }
+}
+
+// Native async function type
+use std::future::Future;
+use std::pin::Pin;
+
+// pub type NativeAsyncFn = fn(Vec<RuntimeValue>) -> Pin<Box<dyn Future<Output = RuntimeValue>>>;
+
+// #[derive(Clone)]
+// pub struct NativeAsyncFunctionValue {
+//     pub implementation: NativeAsyncFn,
+//     pub fn_type: Type,
+// }
+
+// impl NativeAsyncFunctionValue {
+//     pub fn new(implementation: NativeAsyncFn, fn_type: Type) -> Self {
+//         Self {
+//             implementation,
+//             fn_type,
+//         }
+//     }
+
+//     pub fn to_string(&self) -> String {
+//         "[Native Async Function]".to_string()
+//     }
+// }
+
+// impl fmt::Debug for NativeAsyncFunctionValue {
+//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+//         f.debug_struct("NativeAsyncFunctionValue")
+//             .field("fn_type", &self.fn_type)
+//             .finish()
+//     }
+// }
+
+// ++++++++++++++++ INICIO DE LA MODIFICACIÓN ++++++++++++++++
+// El tipo ahora es un Box<dyn Fn(...)> que es Send + Sync + 'static
+pub type NativeAsyncFn = Arc<
+    // <--- CAMBIADO DE Box A Arc
+    dyn Fn(Vec<RuntimeValue>) -> Pin<Box<(dyn Future<Output = RuntimeValue> + 'static)>>
+        + Send
+        + Sync
+        + 'static,
+>;
+// ++++++++++++++++ FIN DE LA MODIFICACIÓN ++++++++++++++++
+
+#[derive(Clone)]
+pub struct NativeAsyncFunctionValue {
+    pub implementation: NativeAsyncFn, // <--- CAMBIADO
+    pub fn_type: Type,
+}
+
+impl NativeAsyncFunctionValue {
+    pub fn new(implementation: NativeAsyncFn, fn_type: Type) -> Self {
+        // <--- CAMBIADO
+        Self {
+            implementation,
+            fn_type,
+        }
+    }
+
+    pub fn to_string(&self) -> String {
+        "[Native Async Function]".to_string()
+    }
+}
+
+impl fmt::Debug for NativeAsyncFunctionValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("NativeAsyncFunctionValue")
             .field("fn_type", &self.fn_type)
             .finish()
     }
@@ -480,5 +561,69 @@ impl EnumObject {
 
     pub fn to_string(&self) -> String {
         format!("<enum {}>", self.enum_name)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct FutureValue {
+    pub state: Arc<RwLock<FutureState>>,
+    pub value_type: Type,
+}
+
+#[derive(Debug, Clone)]
+pub enum FutureState {
+    Pending,
+    Resolved(Box<RuntimeValue>),
+    Rejected(String),
+}
+
+impl FutureValue {
+    pub fn new(value_type: Type) -> Self {
+        Self {
+            state: Arc::new(RwLock::new(FutureState::Pending)),
+            value_type,
+        }
+    }
+
+    pub fn new_resolved(value: RuntimeValue, value_type: Type) -> Self {
+        Self {
+            state: Arc::new(RwLock::new(FutureState::Resolved(Box::new(value)))),
+            value_type,
+        }
+    }
+
+    pub fn new_rejected(error: String, value_type: Type) -> Self {
+        Self {
+            state: Arc::new(RwLock::new(FutureState::Rejected(error))),
+            value_type,
+        }
+    }
+
+    pub fn resolve(&self, value: RuntimeValue) {
+        *self.state.write().unwrap() = FutureState::Resolved(Box::new(value));
+    }
+
+    pub fn reject(&self, error: String) {
+        *self.state.write().unwrap() = FutureState::Rejected(error);
+    }
+
+    pub fn is_resolved(&self) -> bool {
+        matches!(*self.state.read().unwrap(), FutureState::Resolved(_))
+    }
+
+    pub fn is_rejected(&self) -> bool {
+        matches!(*self.state.read().unwrap(), FutureState::Rejected(_))
+    }
+
+    pub fn is_pending(&self) -> bool {
+        matches!(*self.state.read().unwrap(), FutureState::Pending)
+    }
+
+    pub fn to_string(&self) -> String {
+        match &*self.state.read().unwrap() {
+            FutureState::Pending => "[Future: Pending]".to_string(),
+            FutureState::Resolved(value) => format!("[Future: Resolved({})]", value.to_string()),
+            FutureState::Rejected(error) => format!("[Future: Rejected({})]", error),
+        }
     }
 }

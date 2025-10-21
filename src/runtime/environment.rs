@@ -1,5 +1,6 @@
 use super::values::RuntimeValue;
 use crate::error::RaccoonError;
+use crate::tokens::Position;
 use std::collections::HashMap;
 
 #[derive(Debug, Clone)]
@@ -46,7 +47,7 @@ impl Environment {
         }
     }
 
-    pub fn assign(&mut self, name: &str, value: RuntimeValue) -> Result<(), RaccoonError> {
+    pub fn assign(&mut self, name: &str, value: RuntimeValue, position: Position) -> Result<(), RaccoonError> {
         for scope in self.scopes.iter_mut().rev() {
             if scope.contains_key(name) {
                 scope.insert(name.to_string(), value);
@@ -55,12 +56,12 @@ impl Environment {
         }
         Err(RaccoonError::new(
             format!("Variable '{}' is not declared", name),
-            (0, 0),
+            position,
             self.file.clone(),
         ))
     }
 
-    pub fn get(&self, name: &str) -> Result<RuntimeValue, RaccoonError> {
+    pub fn get(&self, name: &str, position: Position) -> Result<RuntimeValue, RaccoonError> {
         for scope in self.scopes.iter().rev() {
             if let Some(value) = scope.get(name) {
                 return Ok(value.clone());
@@ -68,7 +69,7 @@ impl Environment {
         }
         Err(RaccoonError::new(
             format!("Variable '{}' is not declared", name),
-            (0, 0),
+            position,
             self.file.clone(),
         ))
     }

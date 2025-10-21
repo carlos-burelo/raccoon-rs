@@ -1,0 +1,10 @@
+// Test: Import default
+
+import Http from "std:net"
+
+async fn main(): void {
+    print("Testing default import...")
+    print("Http:", Http)
+}
+
+await main()

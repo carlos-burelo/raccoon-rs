@@ -1,0 +1,45 @@
+// Comprehensive arrow function test
+print("=== ARROW FUNCTIONS TEST ===");
+print("");
+
+// Test 1: Basic arrow function with map
+print("1. Arrow function with map:");
+let numbers = [1, 2, 3, 4, 5];
+let doubled = numbers.map((x) => x * 2);
+print("Doubled:", doubled);
+print("");
+
+// Test 2: Arrow function with filter
+print("2. Arrow function with filter:");
+let evens = numbers.filter((n) => n % 2 == 0);
+print("Even numbers:", evens);
+print("");
+
+// Test 3: Arrow function with reduce
+print("3. Arrow function with reduce:");
+let sum = numbers.reduce((acc, n) => acc + n, 0);
+print("Sum:", sum);
+print("");
+
+// Test 4: Arrow function with type annotations
+print("4. Arrow function with type annotations:");
+let squared = numbers.map((n: int) => n * n);
+print("Squared:", squared);
+print("");
+
+// Test 5: Method chaining with arrow functions
+print("5. Method chaining:");
+let result = numbers
+    .filter((n) => n > 2)
+    .map((n) => n * 10);
+print("Filtered > 2, then * 10:", result);
+print("");
+
+//  Test 6: Arrow function assigned to variable
+print("6. Arrow function as variable:");
+let triple = (x) => x * 3;
+let tripled = numbers.map(triple);
+print("Tripled:", tripled);
+print("");
+
+print("=== ALL TESTS PASSED ===");

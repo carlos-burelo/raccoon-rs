@@ -1,0 +1,20 @@
+import { httpGet } from "std:http"
+
+async fn main(): void {
+    print("Making HTTP request...")
+    let res = await httpGet("https://httpbin.org/get")
+
+    print("Response type:", typeof(res))
+    print("Response value:", res)
+
+    if (res != null) {
+        print("Response is not null")
+
+        // Try to access as map
+        print("Keys available:", res)
+    } else {
+        print("Response is null")
+    }
+}
+
+await main()

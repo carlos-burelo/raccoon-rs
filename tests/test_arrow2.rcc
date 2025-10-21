@@ -1,0 +1,6 @@
+// Test arrow function parsing with type annotations
+let numbers = [1, 2, 3];
+
+// Test with type annotation
+let doubled = numbers.map((x: int) => x * 2);
+print(doubled);

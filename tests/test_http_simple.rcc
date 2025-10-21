@@ -1,0 +1,11 @@
+import Http from "std:net"
+
+async fn main(): void {
+    print("Testing HTTP with default import...")
+
+    let res = await Http.get("https://coatl.in/")
+    print("Response:", res)
+    print("\nSuccess! Default import working!")
+}
+
+await main()

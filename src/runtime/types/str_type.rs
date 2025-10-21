@@ -1,4 +1,5 @@
 use super::TypeHandler;
+use async_trait::async_trait;
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::{ListValue, RuntimeValue, StrValue};
@@ -6,6 +7,7 @@ use crate::tokens::Position;
 
 pub struct StrType;
 
+#[async_trait]
 impl TypeHandler for StrType {
     fn type_name(&self) -> &str {
         "str"

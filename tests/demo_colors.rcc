@@ -1,0 +1,63 @@
+// Demostración visual de colores en la consola
+println("╔══════════════════════════════════════════════╗");
+println("║   DEMOSTRACIÓN DE COLORES EN RACCOON        ║");
+println("╔══════════════════════════════════════════════╗");
+println("");
+
+println("🎨 TIPOS DE DATOS CON COLORES:");
+println("─────────────────────────────────────────────");
+println("");
+
+print("📝 Strings (Verde):");
+print("  →", "Hola", "Mundo", "Raccoon");
+println("");
+
+print("🔢 Números (Amarillo):");
+print("  Enteros →", 42, 100, -5);
+print("  Decimales →", 3.14, 2.71, 0.5);
+println("");
+
+print("✓ Booleanos (Amarillo):");
+print("  →", true, false);
+println("");
+
+print("∅ Null (Gris):");
+print("  →", null);
+println("");
+
+print("📋 Listas (Magenta):");
+print("  →", [1, 2, 3, 4, 5]);
+print("  →", ["a", "b", "c"]);
+println("");
+
+println("");
+println("🎯 OPERACIONES Y RESULTADOS:");
+println("─────────────────────────────────────────────");
+println("");
+
+let a = 10;
+let b = 20;
+print("a =", a, "│ b =", b);
+print("a + b =", a + b);
+print("a * b =", a * b);
+print("a < b =", a < b);
+println("");
+
+println("");
+println("✨ COMPARACIÓN:");
+println("─────────────────────────────────────────────");
+println("");
+
+let nombre = "Alice";
+let edad = 30;
+let activo = true;
+
+print("👤 Usuario:", nombre);
+print("   Edad:", edad, "años");
+print("   Estado:", activo ? "Activo" : "Inactivo");
+println("");
+
+println("");
+println("╚══════════════════════════════════════════════╝");
+println("║   FIN DE LA DEMOSTRACIÓN                     ║");
+println("╚══════════════════════════════════════════════╝");

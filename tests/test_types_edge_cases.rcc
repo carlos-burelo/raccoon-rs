@@ -1,9 +1,4 @@
-
-
 print("=== EDGE CASES: Sistema de Tipos ===\n");
-
-
-
 
 print("[ 1 ] Valores límite de tipos enteros con signo:");
 
@@ -329,10 +324,10 @@ fn fibonacciI64(n: i64): i64 {
 }
 
 let fact5: i32 = factorialI32(5);
-let fib10: i64 = fibonacciI64(10);
+let fib6: i64 = fibonacciI64(6);
 
 print("  ✓ factorial(5) = " + fact5.toStr());
-print("  ✓ fibonacci(10) = " + fib10.toStr());
+print("  ✓ fibonacci(6) = " + fib6.toStr());
 
 
 

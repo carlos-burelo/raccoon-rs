@@ -22,6 +22,7 @@ pub enum TypeKind {
     Void,
     Any,
     Unknown,
+    Func,
     Symbol,
     List,
     Map,
@@ -112,6 +113,15 @@ impl Type {
             return true;
         }
 
+        // Function type can be assigned to func primitive
+        if let Type::Function(_) = self {
+            if let Type::Primitive(target_prim) = target {
+                if target_prim.kind == TypeKind::Func {
+                    return true;
+                }
+            }
+        }
+
         match self {
             Type::Primitive(p) => p.is_assignable_to(target),
             Type::List(l) => l.is_assignable_to(target),
@@ -156,6 +166,13 @@ impl PrimitiveType {
 
             if self.is_numeric() && target_prim.is_numeric() {
                 return self.can_widen_to(target_prim);
+            }
+        }
+
+        // Any Function type can be assigned to func primitive
+        if let Type::Primitive(target_prim) = target {
+            if target_prim.kind == TypeKind::Func && self.kind == TypeKind::Function {
+                return true;
             }
         }
 
@@ -252,6 +269,10 @@ impl PrimitiveType {
 
     pub fn unknown() -> Type {
         Type::Primitive(PrimitiveType::new(TypeKind::Unknown, "unknown"))
+    }
+
+    pub fn func() -> Type {
+        Type::Primitive(PrimitiveType::new(TypeKind::Func, "func"))
     }
 }
 

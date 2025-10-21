@@ -1,0 +1,71 @@
+// Test: Index access and assignment for objects
+
+async fn main(): void {
+    print("Testing index access and assignment for objects...\n")
+
+    // Test 1: Reading with index notation
+    let config = {
+        "api-key": "secret123",
+        "base-url": "https://api.example.com",
+        timeout: 5000
+    }
+
+    print("Test 1: Reading properties with index notation")
+    print("  config[\"api-key\"]:", config["api-key"])
+    print("  config[\"base-url\"]:", config["base-url"])
+    print("  config[\"timeout\"]:", config["timeout"])
+    print("  ✓ Index access works!\n")
+
+    // Test 2: Assigning with index notation
+    print("Test 2: Assigning properties with index notation")
+    config["api-key"] = "new-secret-456"
+    config["version"] = "v2.0"
+    config["timeout"] = 10000
+
+    print("  After assignment:")
+    print("    config[\"api-key\"]:", config["api-key"])
+    print("    config[\"version\"]:", config["version"])
+    print("    config[\"timeout\"]:", config["timeout"])
+    print("  ✓ Index assignment works!\n")
+
+    // Test 3: Mixed access - dot notation and index notation
+    print("Test 3: Mixed access patterns")
+    let user = {
+        name: "Carlos",
+        "user-id": 12345,
+        email: "carlos@example.com"
+    }
+
+    print("  user.name:", user.name)
+    print("  user[\"user-id\"]:", user["user-id"])
+    print("  user.email:", user.email)
+
+    user.name = "Carlos López"
+    user["user-id"] = 99999
+    user.email = "new@example.com"
+
+    print("\n  After updates:")
+    print("  user.name:", user.name)
+    print("  user[\"user-id\"]:", user["user-id"])
+    print("  user.email:", user.email)
+    print("  ✓ Mixed access works!\n")
+
+    // Test 4: Dynamic property names
+    print("Test 4: Dynamic property access")
+    let data = {
+        "prop-1": "value1",
+        "prop-2": "value2",
+        "prop-3": "value3"
+    }
+
+    let propName = "prop-2"
+    print("  data[propName]:", data[propName])
+
+    data[propName] = "updated-value2"
+    print("  After update:", data[propName])
+    print("  ✓ Dynamic property access works!\n")
+
+    print("All tests passed! Index access and assignment work correctly.")
+}
+
+await main()

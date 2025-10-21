@@ -1,4 +1,4 @@
-use super::TypeHandler;
+use super::{CallbackExecutor, TypeHandler};
 use super::{bool_type::BoolType, decimal_type::DecimalType, float_type::FloatType};
 use super::{int_type::IntType, list_type::ListType, map_type::MapType, str_type::StrType};
 use crate::error::RaccoonError;
@@ -114,6 +114,38 @@ impl TypeRegistry {
     pub fn has_static_method(&self, type_name: &str, method: &str) -> bool {
         self.get_handler(type_name)
             .map(|h| h.has_static_method(method))
+            .unwrap_or(false)
+    }
+
+    /// Call an async instance method on a runtime value
+    pub async fn call_async_instance_method(
+        &self,
+        value: &mut RuntimeValue,
+        method: &str,
+        args: Vec<RuntimeValue>,
+        position: Position,
+        file: Option<String>,
+        callback_executor: &CallbackExecutor,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        let type_name = value.get_name();
+
+        if let Some(handler) = self.get_handler(&type_name) {
+            handler
+                .call_async_instance_method(value, method, args, position, file, callback_executor)
+                .await
+        } else {
+            Err(RaccoonError::new(
+                format!("No type handler found for type '{}'", type_name),
+                position,
+                file,
+            ))
+        }
+    }
+
+    /// Check if a type has an async instance method
+    pub fn has_async_instance_method(&self, type_name: &str, method: &str) -> bool {
+        self.get_handler(type_name)
+            .map(|h| h.has_async_instance_method(method))
             .unwrap_or(false)
     }
 }

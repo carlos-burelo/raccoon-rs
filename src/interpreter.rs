@@ -2,10 +2,11 @@ use crate::ast::nodes::*;
 use crate::ast::types::{PrimitiveType, Type};
 use crate::error::RaccoonError;
 use crate::runtime::{
-    BoolValue, Environment, FloatValue, FunctionValue, IntValue, ListValue, ModuleRegistry,
-    NullValue, ObjectValue, RuntimeValue, StrValue, TypeRegistry,
+    BoolValue, Environment, FloatValue, FunctionValue, FutureState, FutureValue, IntValue,
+    ListValue, NullValue, ObjectValue, RuntimeValue, StrValue, TypeRegistry, setup_builtins,
 };
 use crate::tokens::{BinaryOperator, Position};
+use async_recursion::async_recursion;
 use std::collections::HashMap;
 
 pub enum InterpreterResult {
@@ -20,75 +21,43 @@ impl InterpreterResult {}
 pub struct Interpreter {
     pub file: Option<String>,
     environment: Environment,
-    #[allow(dead_code)]
-    module_registry: ModuleRegistry,
     type_registry: TypeRegistry,
+    stdlib_loader: std::sync::Arc<crate::runtime::StdLibLoader>,
 }
 
 impl Interpreter {
     pub fn new(file: Option<String>) -> Self {
         let mut env = Environment::new(file.clone());
-        let module_registry = ModuleRegistry::new();
         let type_registry = TypeRegistry::new();
-        Self::setup_global_functions(&mut env);
+        setup_builtins(&mut env);
+        let native_bridge = std::sync::Arc::new(crate::runtime::NativeBridge::new());
+
+        for name in ["native_print", "native_eprint"] {
+            if let Some(f) = native_bridge.get(name) {
+                let _ = env.declare(name.to_string(), f);
+            }
+        }
+
+        for name in ["native_http_request"] {
+            if let Some(f) = native_bridge.get_async(name) {
+                let _ = env.declare(name.to_string(), f);
+            }
+        }
+        let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
         Self {
             environment: env,
             file,
-            module_registry,
             type_registry,
+            stdlib_loader,
         }
     }
 
-    fn setup_global_functions(env: &mut Environment) {
-        let print_fn = RuntimeValue::NativeFunction(crate::runtime::NativeFunctionValue::new(
-            |args: Vec<RuntimeValue>| {
-                for (i, arg) in args.iter().enumerate() {
-                    if i > 0 {
-                        print!(" ");
-                    }
-                    print!("{}", arg.to_string());
-                }
-                println!();
-                RuntimeValue::Null(NullValue::new())
-            },
-            Type::Function(Box::new(crate::ast::types::FunctionType {
-                params: vec![],
-                return_type: PrimitiveType::void(),
-                is_variadic: true,
-            })),
-        ));
-        let _ = env.declare("print".to_string(), print_fn);
-
-        let len_fn = RuntimeValue::NativeFunction(crate::runtime::NativeFunctionValue::new(
-            |args: Vec<RuntimeValue>| {
-                if args.len() != 1 {
-                    return RuntimeValue::Null(NullValue::new());
-                }
-                match &args[0] {
-                    RuntimeValue::Str(s) => RuntimeValue::Int(IntValue::new(s.value.len() as i64)),
-                    RuntimeValue::List(l) => {
-                        RuntimeValue::Int(IntValue::new(l.elements.len() as i64))
-                    }
-                    RuntimeValue::Map(m) => {
-                        RuntimeValue::Int(IntValue::new(m.entries.len() as i64))
-                    }
-                    _ => RuntimeValue::Null(NullValue::new()),
-                }
-            },
-            Type::Function(Box::new(crate::ast::types::FunctionType {
-                params: vec![PrimitiveType::any()],
-                return_type: PrimitiveType::int(),
-                is_variadic: false,
-            })),
-        ));
-        let _ = env.declare("len".to_string(), len_fn);
-    }
-
-    pub fn interpret(&mut self, program: &Program) -> Result<RuntimeValue, RaccoonError> {
+    #[async_recursion(?Send)]
+    pub async fn interpret(&mut self, program: &Program) -> Result<RuntimeValue, RaccoonError> {
         let mut last_value = RuntimeValue::Null(NullValue::new());
 
         for stmt in &program.stmts {
-            match self.execute_stmt_internal(stmt) {
+            match self.execute_stmt_internal(stmt).await {
                 Ok(InterpreterResult::Value(v)) => last_value = v,
                 Ok(_) => {
                     return Err(RaccoonError::new(
@@ -104,23 +73,37 @@ impl Interpreter {
         Ok(last_value)
     }
 
-    fn execute_stmt_internal(&mut self, stmt: &Stmt) -> Result<InterpreterResult, RaccoonError> {
+    #[async_recursion(?Send)]
+    async fn execute_stmt_internal(
+        &mut self,
+        stmt: &Stmt,
+    ) -> Result<InterpreterResult, RaccoonError> {
         match stmt {
-            Stmt::Program(program) => self.interpret(program).map(InterpreterResult::Value),
-            Stmt::VarDecl(decl) => self.execute_var_decl(decl).map(InterpreterResult::Value),
-            Stmt::FnDecl(decl) => self.execute_fn_decl(decl).map(InterpreterResult::Value),
-            Stmt::Block(block) => self.execute_block_internal(block),
-            Stmt::IfStmt(if_stmt) => self.execute_if_stmt_internal(if_stmt),
-            Stmt::WhileStmt(while_stmt) => self.execute_while_stmt(while_stmt),
-            Stmt::ForStmt(for_stmt) => self.execute_for_stmt(for_stmt),
-            Stmt::ForInStmt(for_in) => self.execute_for_in_stmt(for_in),
-            Stmt::ReturnStmt(ret) => self.execute_return_stmt(ret),
+            Stmt::Program(program) => self.interpret(program).await.map(InterpreterResult::Value),
+            Stmt::VarDecl(decl) => self
+                .execute_var_decl(decl)
+                .await
+                .map(InterpreterResult::Value),
+            Stmt::FnDecl(decl) => self
+                .execute_fn_decl(decl)
+                .await
+                .map(InterpreterResult::Value),
+            Stmt::Block(block) => self.execute_block_internal(block).await,
+            Stmt::IfStmt(if_stmt) => self.execute_if_stmt_internal(if_stmt).await,
+            Stmt::WhileStmt(while_stmt) => self.execute_while_stmt(while_stmt).await,
+            Stmt::ForStmt(for_stmt) => self.execute_for_stmt(for_stmt).await,
+            Stmt::ForInStmt(for_in) => self.execute_for_in_stmt(for_in).await,
+            Stmt::ReturnStmt(ret) => self.execute_return_stmt(ret).await,
             Stmt::BreakStmt(_) => Ok(InterpreterResult::Break),
             Stmt::ContinueStmt(_) => Ok(InterpreterResult::Continue),
             Stmt::ExprStmt(expr_stmt) => self
                 .evaluate_expr(&expr_stmt.expression)
+                .await
                 .map(InterpreterResult::Value),
-            Stmt::ClassDecl(decl) => self.execute_class_decl(decl).map(InterpreterResult::Value),
+            Stmt::ClassDecl(decl) => self
+                .execute_class_decl(decl)
+                .await
+                .map(InterpreterResult::Value),
             Stmt::InterfaceDecl(_) => Ok(InterpreterResult::Value(RuntimeValue::Null(
                 NullValue::new(),
             ))),
@@ -130,18 +113,18 @@ impl Interpreter {
             Stmt::TypeAliasDecl(_) => Ok(InterpreterResult::Value(RuntimeValue::Null(
                 NullValue::new(),
             ))),
-            Stmt::ImportDecl(import_decl) => self.execute_import_decl(import_decl),
+            Stmt::ImportDecl(import_decl) => self.execute_import_decl(import_decl).await,
             Stmt::ExportDecl(_) => Ok(InterpreterResult::Value(RuntimeValue::Null(
                 NullValue::new(),
             ))),
-            Stmt::TryStmt(try_stmt) => self.execute_try_stmt(try_stmt),
-            Stmt::ThrowStmt(throw) => self.execute_throw_stmt(throw),
+            Stmt::TryStmt(try_stmt) => self.execute_try_stmt(try_stmt).await,
+            Stmt::ThrowStmt(throw) => self.execute_throw_stmt(throw).await,
         }
     }
 
-    fn execute_var_decl(&mut self, decl: &VarDecl) -> Result<RuntimeValue, RaccoonError> {
+    async fn execute_var_decl(&mut self, decl: &VarDecl) -> Result<RuntimeValue, RaccoonError> {
         let value = if let Some(init) = &decl.initializer {
-            self.evaluate_expr(init)?
+            self.evaluate_expr(init).await?
         } else {
             RuntimeValue::Null(NullValue::new())
         };
@@ -151,14 +134,15 @@ impl Interpreter {
                 self.environment.declare(name.clone(), value.clone())?;
             }
             VarPattern::Destructuring(pattern) => {
-                self.destructure_pattern(pattern, &value, decl.position)?;
+                self.destructure_pattern(pattern, &value, decl.position)
+                    .await?;
             }
         }
 
         Ok(value)
     }
 
-    fn execute_fn_decl(&mut self, decl: &FnDecl) -> Result<RuntimeValue, RaccoonError> {
+    async fn execute_fn_decl(&mut self, decl: &FnDecl) -> Result<RuntimeValue, RaccoonError> {
         let fn_type = Type::Function(Box::new(crate::ast::types::FunctionType {
             params: decl
                 .parameters
@@ -181,7 +165,7 @@ impl Interpreter {
         Ok(RuntimeValue::Null(NullValue::new()))
     }
 
-    fn execute_class_decl(&mut self, decl: &ClassDecl) -> Result<RuntimeValue, RaccoonError> {
+    async fn execute_class_decl(&mut self, decl: &ClassDecl) -> Result<RuntimeValue, RaccoonError> {
         let class_type = PrimitiveType::any();
 
         let mut static_methods = HashMap::new();
@@ -200,7 +184,7 @@ impl Interpreter {
                 let function = Box::new(FunctionValue::new(
                     method.parameters.clone(),
                     method.body.clone(),
-                    false,
+                    method.is_async,
                     fn_type,
                 ));
 
@@ -220,13 +204,17 @@ impl Interpreter {
         Ok(RuntimeValue::Null(NullValue::new()))
     }
 
-    fn execute_block_internal(&mut self, block: &Block) -> Result<InterpreterResult, RaccoonError> {
+    #[async_recursion(?Send)]
+    async fn execute_block_internal(
+        &mut self,
+        block: &Block,
+    ) -> Result<InterpreterResult, RaccoonError> {
         self.environment.push_scope();
 
         let mut last_value = RuntimeValue::Null(NullValue::new());
 
         for stmt in &block.statements {
-            match self.execute_stmt_internal(stmt)? {
+            match self.execute_stmt_internal(stmt).await? {
                 InterpreterResult::Value(v) => last_value = v,
                 other => {
                     self.environment.pop_scope();
@@ -240,16 +228,17 @@ impl Interpreter {
         Ok(InterpreterResult::Value(last_value))
     }
 
-    fn execute_if_stmt_internal(
+    #[async_recursion(?Send)]
+    async fn execute_if_stmt_internal(
         &mut self,
         if_stmt: &IfStmt,
     ) -> Result<InterpreterResult, RaccoonError> {
-        let condition = self.evaluate_expr(&if_stmt.condition)?;
+        let condition = self.evaluate_expr(&if_stmt.condition).await?;
 
         if self.is_truthy(&condition) {
-            self.execute_stmt_internal(&if_stmt.then_branch)
+            self.execute_stmt_internal(&if_stmt.then_branch).await
         } else if let Some(else_branch) = &if_stmt.else_branch {
-            self.execute_stmt_internal(else_branch)
+            self.execute_stmt_internal(else_branch).await
         } else {
             Ok(InterpreterResult::Value(RuntimeValue::Null(
                 NullValue::new(),
@@ -257,17 +246,18 @@ impl Interpreter {
         }
     }
 
-    fn execute_while_stmt(
+    #[async_recursion(?Send)]
+    async fn execute_while_stmt(
         &mut self,
         while_stmt: &WhileStmt,
     ) -> Result<InterpreterResult, RaccoonError> {
         loop {
-            let condition = self.evaluate_expr(&while_stmt.condition)?;
+            let condition = self.evaluate_expr(&while_stmt.condition).await?;
             if !self.is_truthy(&condition) {
                 break;
             }
 
-            match self.execute_stmt_internal(&while_stmt.body)? {
+            match self.execute_stmt_internal(&while_stmt.body).await? {
                 InterpreterResult::Value(_) => {}
                 InterpreterResult::Break => break,
                 InterpreterResult::Continue => continue,
@@ -280,22 +270,26 @@ impl Interpreter {
         )))
     }
 
-    fn execute_for_stmt(&mut self, for_stmt: &ForStmt) -> Result<InterpreterResult, RaccoonError> {
+    #[async_recursion(?Send)]
+    async fn execute_for_stmt(
+        &mut self,
+        for_stmt: &ForStmt,
+    ) -> Result<InterpreterResult, RaccoonError> {
         self.environment.push_scope();
 
         if let Some(init) = &for_stmt.initializer {
-            self.execute_stmt_internal(init)?;
+            self.execute_stmt_internal(init).await?;
         }
 
         loop {
             if let Some(condition) = &for_stmt.condition {
-                let cond_value = self.evaluate_expr(condition)?;
+                let cond_value = self.evaluate_expr(condition).await?;
                 if !self.is_truthy(&cond_value) {
                     break;
                 }
             }
 
-            match self.execute_stmt_internal(&for_stmt.body)? {
+            match self.execute_stmt_internal(&for_stmt.body).await? {
                 InterpreterResult::Value(_) => {}
                 InterpreterResult::Break => break,
                 InterpreterResult::Continue => {}
@@ -306,7 +300,7 @@ impl Interpreter {
             }
 
             if let Some(increment) = &for_stmt.increment {
-                self.evaluate_expr(increment)?;
+                self.evaluate_expr(increment).await?;
             }
         }
 
@@ -317,11 +311,12 @@ impl Interpreter {
         )))
     }
 
-    fn execute_for_in_stmt(
+    #[async_recursion(?Send)]
+    async fn execute_for_in_stmt(
         &mut self,
         for_in: &ForInStmt,
     ) -> Result<InterpreterResult, RaccoonError> {
-        let iterable = self.evaluate_expr(&for_in.iterable)?;
+        let iterable = self.evaluate_expr(&for_in.iterable).await?;
 
         let elements = match iterable {
             RuntimeValue::List(list) => list.elements,
@@ -342,9 +337,10 @@ impl Interpreter {
         }
 
         for element in elements {
-            self.environment.assign(&for_in.variable, element)?;
+            self.environment
+                .assign(&for_in.variable, element, for_in.position)?;
 
-            match self.execute_stmt_internal(&for_in.body)? {
+            match self.execute_stmt_internal(&for_in.body).await? {
                 InterpreterResult::Value(_) => {}
                 InterpreterResult::Break => break,
                 InterpreterResult::Continue => continue,
@@ -362,9 +358,12 @@ impl Interpreter {
         )))
     }
 
-    fn execute_return_stmt(&mut self, ret: &ReturnStmt) -> Result<InterpreterResult, RaccoonError> {
+    async fn execute_return_stmt(
+        &mut self,
+        ret: &ReturnStmt,
+    ) -> Result<InterpreterResult, RaccoonError> {
         let value = if let Some(expr) = &ret.value {
-            self.evaluate_expr(expr)?
+            self.evaluate_expr(expr).await?
         } else {
             RuntimeValue::Null(NullValue::new())
         };
@@ -372,13 +371,17 @@ impl Interpreter {
         Ok(InterpreterResult::Return(value))
     }
 
-    fn execute_try_stmt(&mut self, try_stmt: &TryStmt) -> Result<InterpreterResult, RaccoonError> {
-        let result = self.execute_block_internal(&try_stmt.try_block);
+    #[async_recursion(?Send)]
+    async fn execute_try_stmt(
+        &mut self,
+        try_stmt: &TryStmt,
+    ) -> Result<InterpreterResult, RaccoonError> {
+        let result = self.execute_block_internal(&try_stmt.try_block).await;
 
         match result {
             Ok(value) => {
                 if let Some(finally_block) = &try_stmt.finally_block {
-                    self.execute_block_internal(finally_block)?;
+                    self.execute_block_internal(finally_block).await?;
                 }
                 Ok(value)
             }
@@ -389,18 +392,18 @@ impl Interpreter {
                     self.environment
                         .declare(catch_clause.error_var.clone(), error_value)?;
 
-                    let result = self.execute_block_internal(&catch_clause.body);
+                    let result = self.execute_block_internal(&catch_clause.body).await;
                     self.environment.pop_scope();
 
                     if let Some(finally_block) = &try_stmt.finally_block {
-                        self.execute_block_internal(finally_block)?;
+                        self.execute_block_internal(finally_block).await?;
                     }
 
                     return result;
                 }
 
                 if let Some(finally_block) = &try_stmt.finally_block {
-                    self.execute_block_internal(finally_block)?;
+                    self.execute_block_internal(finally_block).await?;
                 }
 
                 Err(error)
@@ -408,8 +411,11 @@ impl Interpreter {
         }
     }
 
-    fn execute_throw_stmt(&mut self, throw: &ThrowStmt) -> Result<InterpreterResult, RaccoonError> {
-        let value = self.evaluate_expr(&throw.value)?;
+    async fn execute_throw_stmt(
+        &mut self,
+        throw: &ThrowStmt,
+    ) -> Result<InterpreterResult, RaccoonError> {
+        let value = self.evaluate_expr(&throw.value).await?;
         Err(RaccoonError::new(
             value.to_string(),
             throw.position,
@@ -417,46 +423,43 @@ impl Interpreter {
         ))
     }
 
-    fn evaluate_expr(&mut self, expr: &Expr) -> Result<RuntimeValue, RaccoonError> {
+    #[async_recursion(?Send)]
+    async fn evaluate_expr(&mut self, expr: &Expr) -> Result<RuntimeValue, RaccoonError> {
         match expr {
             Expr::IntLiteral(lit) => Ok(RuntimeValue::Int(IntValue::new(lit.value))),
             Expr::FloatLiteral(lit) => Ok(RuntimeValue::Float(FloatValue::new(lit.value))),
             Expr::StrLiteral(lit) => Ok(RuntimeValue::Str(StrValue::new(lit.value.clone()))),
             Expr::BoolLiteral(lit) => Ok(RuntimeValue::Bool(BoolValue::new(lit.value))),
             Expr::NullLiteral(_) => Ok(RuntimeValue::Null(NullValue::new())),
-            Expr::Identifier(ident) => self.environment.get(&ident.name),
-            Expr::Binary(binary) => self.evaluate_binary_expr(binary),
-            Expr::Unary(unary) => self.evaluate_unary_expr(unary),
-            Expr::Assignment(assign) => self.evaluate_assignment(assign),
-            Expr::Call(call) => self.evaluate_call_expr(call),
-            Expr::ListLiteral(list) => self.evaluate_list_literal(list),
-            Expr::ObjectLiteral(obj) => self.evaluate_object_literal(obj),
-            Expr::Member(member) => self.evaluate_member_expr(member),
-            Expr::Index(index) => self.evaluate_index_expr(index),
-            Expr::Conditional(cond) => self.evaluate_conditional_expr(cond),
-            Expr::UnaryUpdate(update) => self.evaluate_unary_update(update),
-            Expr::TemplateStr(template) => self.evaluate_template_str(template),
-            Expr::ArrowFn(arrow) => self.evaluate_arrow_fn(arrow),
-            Expr::TypeOf(typeof_expr) => self.evaluate_typeof_expr(typeof_expr),
-            Expr::InstanceOf(instanceof) => self.evaluate_instanceof_expr(instanceof),
-            Expr::OptionalChaining(opt_chain) => self.evaluate_optional_chaining(opt_chain),
-            Expr::NullAssertion(null_assert) => self.evaluate_null_assertion(null_assert),
-            Expr::MethodCall(method_call) => self.evaluate_method_call(method_call),
-            Expr::This(_) => self.evaluate_this_expr(),
-            Expr::Super(_) => self.evaluate_super_expr(),
-            Expr::New(new_expr) => self.evaluate_new_expr(new_expr),
-            Expr::TaggedTemplate(tagged) => self.evaluate_tagged_template(tagged),
-            Expr::Range(range) => self.evaluate_range_expr(range),
-            Expr::NullCoalescing(null_coal) => self.evaluate_null_coalescing(null_coal),
-            _ => Err(RaccoonError::new(
-                format!("Expression not yet implemented: {:?}", expr),
-                (0, 0),
-                self.file.clone(),
-            )),
+            Expr::Identifier(ident) => self.environment.get(&ident.name, ident.position),
+            Expr::Binary(binary) => self.evaluate_binary_expr(binary).await,
+            Expr::Unary(unary) => self.evaluate_unary_expr(unary).await,
+            Expr::Assignment(assign) => self.evaluate_assignment(assign).await,
+            Expr::Call(call) => self.evaluate_call_expr(call).await,
+            Expr::ListLiteral(list) => self.evaluate_list_literal(list).await,
+            Expr::ObjectLiteral(obj) => self.evaluate_object_literal(obj).await,
+            Expr::Member(member) => self.evaluate_member_expr(member).await,
+            Expr::Index(index) => self.evaluate_index_expr(index).await,
+            Expr::Conditional(cond) => self.evaluate_conditional_expr(cond).await,
+            Expr::UnaryUpdate(update) => self.evaluate_unary_update(update).await,
+            Expr::TemplateStr(template) => self.evaluate_template_str(template).await,
+            Expr::ArrowFn(arrow) => self.evaluate_arrow_fn(arrow).await,
+            Expr::TypeOf(typeof_expr) => self.evaluate_typeof_expr(typeof_expr).await,
+            Expr::InstanceOf(instanceof) => self.evaluate_instanceof_expr(instanceof).await,
+            Expr::OptionalChaining(opt_chain) => self.evaluate_optional_chaining(opt_chain).await,
+            Expr::NullAssertion(null_assert) => self.evaluate_null_assertion(null_assert).await,
+            Expr::MethodCall(method_call) => self.evaluate_method_call(method_call).await,
+            Expr::This(_) => self.evaluate_this_expr().await,
+            Expr::Super(_) => self.evaluate_super_expr().await,
+            Expr::New(new_expr) => self.evaluate_new_expr(new_expr).await,
+            Expr::TaggedTemplate(tagged) => self.evaluate_tagged_template(tagged).await,
+            Expr::Range(range) => self.evaluate_range_expr(range).await,
+            Expr::NullCoalescing(null_coal) => self.evaluate_null_coalescing(null_coal).await,
+            Expr::Await(await_expr) => self.evaluate_await_expr(await_expr).await,
         }
     }
 
-    fn apply_binary_op(
+    async fn apply_binary_op(
         &self,
         left: RuntimeValue,
         right: RuntimeValue,
@@ -691,9 +694,13 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_binary_expr(&mut self, binary: &BinaryExpr) -> Result<RuntimeValue, RaccoonError> {
-        let left = self.evaluate_expr(&binary.left)?;
-        let right = self.evaluate_expr(&binary.right)?;
+    #[async_recursion(?Send)]
+    async fn evaluate_binary_expr(
+        &mut self,
+        binary: &BinaryExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        let left = self.evaluate_expr(&binary.left).await?;
+        let right = self.evaluate_expr(&binary.right).await?;
 
         match binary.operator {
             BinaryOperator::Add => match (&left, &right) {
@@ -1023,8 +1030,12 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_unary_expr(&mut self, unary: &UnaryExpr) -> Result<RuntimeValue, RaccoonError> {
-        let operand = self.evaluate_expr(&unary.operand)?;
+    #[async_recursion(?Send)]
+    async fn evaluate_unary_expr(
+        &mut self,
+        unary: &UnaryExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        let operand = self.evaluate_expr(&unary.operand).await?;
 
         match unary.operator {
             crate::tokens::UnaryOperator::Negate => match operand {
@@ -1050,86 +1061,126 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_assignment(&mut self, assign: &Assignment) -> Result<RuntimeValue, RaccoonError> {
+    #[async_recursion(?Send)]
+    async fn evaluate_assignment(
+        &mut self,
+        assign: &Assignment,
+    ) -> Result<RuntimeValue, RaccoonError> {
         use crate::tokens::TokenType;
 
         let final_value = if assign.operator != TokenType::Assign {
-            let current_value = self.evaluate_expr(&assign.target)?;
-            let right_value = self.evaluate_expr(&assign.value)?;
+            let current_value = self.evaluate_expr(&assign.target).await?;
+            let right_value = self.evaluate_expr(&assign.value).await?;
 
             match assign.operator {
-                TokenType::PlusAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::Add,
-                    assign.position,
-                )?,
-                TokenType::MinusAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::Subtract,
-                    assign.position,
-                )?,
-                TokenType::MultiplyAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::Multiply,
-                    assign.position,
-                )?,
-                TokenType::DivideAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::Divide,
-                    assign.position,
-                )?,
-                TokenType::ModuloAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::Modulo,
-                    assign.position,
-                )?,
-                TokenType::AmpersandAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::BitwiseAnd,
-                    assign.position,
-                )?,
-                TokenType::BitwiseOrAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::BitwiseOr,
-                    assign.position,
-                )?,
-                TokenType::BitwiseXorAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::BitwiseXor,
-                    assign.position,
-                )?,
-                TokenType::LeftShiftAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::LeftShift,
-                    assign.position,
-                )?,
-                TokenType::RightShiftAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::RightShift,
-                    assign.position,
-                )?,
-                TokenType::UnsignedRightShiftAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::UnsignedRightShift,
-                    assign.position,
-                )?,
-                TokenType::ExponentAssign => self.apply_binary_op(
-                    current_value,
-                    right_value,
-                    BinaryOperator::Exponent,
-                    assign.position,
-                )?,
+                TokenType::PlusAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::Add,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::MinusAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::Subtract,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::MultiplyAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::Multiply,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::DivideAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::Divide,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::ModuloAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::Modulo,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::AmpersandAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::BitwiseAnd,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::BitwiseOrAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::BitwiseOr,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::BitwiseXorAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::BitwiseXor,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::LeftShiftAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::LeftShift,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::RightShiftAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::RightShift,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::UnsignedRightShiftAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::UnsignedRightShift,
+                        assign.position,
+                    )
+                    .await?
+                }
+                TokenType::ExponentAssign => {
+                    self.apply_binary_op(
+                        current_value,
+                        right_value,
+                        BinaryOperator::Exponent,
+                        assign.position,
+                    )
+                    .await?
+                }
                 _ => {
                     return Err(RaccoonError::new(
                         format!(
@@ -1142,21 +1193,28 @@ impl Interpreter {
                 }
             }
         } else {
-            self.evaluate_expr(&assign.value)?
+            self.evaluate_expr(&assign.value).await?
         };
 
         match &*assign.target {
             Expr::Identifier(ident) => {
-                self.environment.assign(&ident.name, final_value.clone())?;
+                self.environment
+                    .assign(&ident.name, final_value.clone(), ident.position)?;
                 Ok(final_value)
             }
             Expr::Member(member) => {
-                let mut object = self.evaluate_expr(&member.object)?;
+                let mut object = self.evaluate_expr(&member.object).await?;
 
                 match &mut object {
                     RuntimeValue::Object(obj) => {
                         obj.properties
                             .insert(member.property.clone(), final_value.clone());
+
+                        if let Expr::Identifier(ident) = &*member.object {
+                            self.environment
+                                .assign(&ident.name, object.clone(), ident.position)?;
+                        }
+
                         Ok(final_value)
                     }
                     RuntimeValue::ClassInstance(instance) => {
@@ -1181,13 +1239,14 @@ impl Interpreter {
                                             pattern,
                                             &final_value,
                                             assign.position,
-                                        )?;
+                                        )
+                                        .await?;
                                     }
                                 }
                             }
 
                             for stmt in &accessor.body {
-                                match self.execute_stmt_internal(stmt)? {
+                                match self.execute_stmt_internal(stmt).await? {
                                     InterpreterResult::Return(_) => break,
                                     _ => {}
                                 }
@@ -1199,8 +1258,15 @@ impl Interpreter {
 
                         instance
                             .properties
-                            .borrow_mut()
+                            .write()
+                            .unwrap()
                             .insert(member.property.clone(), final_value.clone());
+
+                        if let Expr::Identifier(ident) = &*member.object {
+                            self.environment
+                                .assign(&ident.name, object.clone(), ident.position)?;
+                        }
+
                         Ok(final_value)
                     }
                     _ => Err(RaccoonError::new(
@@ -1211,10 +1277,10 @@ impl Interpreter {
                 }
             }
             Expr::Index(index_expr) => {
-                let mut object = self.evaluate_expr(&index_expr.object)?;
-                let idx = self.evaluate_expr(&index_expr.index)?;
+                let mut object = self.evaluate_expr(&index_expr.object).await?;
+                let idx = self.evaluate_expr(&index_expr.index).await?;
 
-                match (&mut object, idx) {
+                match (&mut object, &idx) {
                     (RuntimeValue::List(list), RuntimeValue::Int(i)) => {
                         if i.value < 0 || i.value >= list.elements.len() as i64 {
                             return Err(RaccoonError::new(
@@ -1224,18 +1290,35 @@ impl Interpreter {
                             ));
                         }
                         list.elements[i.value as usize] = final_value.clone();
-                        Ok(final_value)
                     }
                     (RuntimeValue::Map(map), key) => {
                         map.entries.insert(key.to_string(), final_value.clone());
-                        Ok(final_value)
                     }
-                    _ => Err(RaccoonError::new(
-                        "Invalid index assignment target".to_string(),
-                        assign.position,
-                        self.file.clone(),
-                    )),
+                    (RuntimeValue::Object(obj), RuntimeValue::Str(key)) => {
+                        obj.properties
+                            .insert(key.value.clone(), final_value.clone());
+                    }
+                    (RuntimeValue::ClassInstance(inst), RuntimeValue::Str(key)) => {
+                        inst.properties
+                            .write()
+                            .unwrap()
+                            .insert(key.value.clone(), final_value.clone());
+                    }
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "Invalid index assignment target".to_string(),
+                            assign.position,
+                            self.file.clone(),
+                        ));
+                    }
                 }
+
+                if let Expr::Identifier(ident) = &*index_expr.object {
+                    self.environment
+                        .assign(&ident.name, object.clone(), ident.position)?;
+                }
+
+                Ok(final_value)
             }
             _ => Err(RaccoonError::new(
                 "Invalid assignment target".to_string(),
@@ -1245,16 +1328,22 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_call_expr(&mut self, call: &CallExpr) -> Result<RuntimeValue, RaccoonError> {
+    #[async_recursion(?Send)]
+    async fn evaluate_call_expr(&mut self, call: &CallExpr) -> Result<RuntimeValue, RaccoonError> {
         if matches!(call.callee.as_ref(), Expr::Super(_)) {
-            return self.evaluate_super_call(&call.args);
+            return self.evaluate_super_call(&call.args).await;
         }
 
-        let callee = self.evaluate_expr(&call.callee)?;
+        let callee = self.evaluate_expr(&call.callee).await?;
 
         let mut args = Vec::new();
         for arg in &call.args {
-            args.push(self.evaluate_expr(arg)?);
+            args.push(self.evaluate_expr(arg).await?);
+        }
+
+        let mut named_args = HashMap::new();
+        for (name, expr) in &call.named_args {
+            named_args.insert(name.clone(), self.evaluate_expr(expr).await?);
         }
 
         match callee {
@@ -1262,14 +1351,23 @@ impl Interpreter {
                 self.environment.push_scope();
 
                 for (i, param) in func.parameters.iter().enumerate() {
-                    let value = if i < args.len() {
+                    let param_name = match &param.pattern {
+                        VarPattern::Identifier(name) => name.clone(),
+                        VarPattern::Destructuring(_) => {
+                            format!("__param_{}", i)
+                        }
+                    };
+
+                    let value = if let Some(named_value) = named_args.get(&param_name) {
+                        named_value.clone()
+                    } else if i < args.len() {
                         args[i].clone()
                     } else if let Some(default_expr) = &param.default_value {
-                        self.evaluate_expr(default_expr)?
+                        self.evaluate_expr(default_expr).await?
                     } else {
                         self.environment.pop_scope();
                         return Err(RaccoonError::new(
-                            format!("Missing required argument for parameter {}", i),
+                            format!("Missing required argument for parameter '{}'", param_name),
                             (0, 0),
                             self.file.clone(),
                         ));
@@ -1280,7 +1378,8 @@ impl Interpreter {
                             self.environment.declare(name.clone(), value)?;
                         }
                         VarPattern::Destructuring(pattern) => {
-                            if let Err(e) = self.destructure_pattern(pattern, &value, (0, 0)) {
+                            if let Err(e) = self.destructure_pattern(pattern, &value, (0, 0)).await
+                            {
                                 self.environment.pop_scope();
                                 return Err(e);
                             }
@@ -1288,12 +1387,26 @@ impl Interpreter {
                     }
                 }
 
+                let is_async = func.is_async;
+                let fn_type = func.fn_type.clone();
+
                 let mut result = RuntimeValue::Null(NullValue::new());
                 for stmt in &func.body {
-                    match self.execute_stmt_internal(stmt)? {
+                    match self.execute_stmt_internal(stmt).await? {
                         InterpreterResult::Value(v) => result = v,
                         InterpreterResult::Return(v) => {
                             self.environment.pop_scope();
+
+                            if is_async {
+                                let return_type = match &fn_type {
+                                    Type::Function(fn_type) => fn_type.return_type.clone(),
+                                    _ => PrimitiveType::any(),
+                                };
+                                return Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                                    v,
+                                    return_type,
+                                )));
+                            }
                             return Ok(v);
                         }
                         _ => {
@@ -1308,9 +1421,32 @@ impl Interpreter {
                 }
 
                 self.environment.pop_scope();
-                Ok(result)
+
+                if is_async {
+                    let return_type = match &fn_type {
+                        Type::Function(fn_type) => fn_type.return_type.clone(),
+                        _ => PrimitiveType::any(),
+                    };
+                    Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                        result,
+                        return_type,
+                    )))
+                } else {
+                    Ok(result)
+                }
             }
             RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
+            RuntimeValue::NativeAsyncFunction(func) => {
+                let result = (func.implementation)(args).await;
+                let return_type = match &func.fn_type {
+                    Type::Function(fn_type) => fn_type.return_type.clone(),
+                    _ => PrimitiveType::any(),
+                };
+                Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                    result,
+                    return_type,
+                )))
+            }
             _ => Err(RaccoonError::new(
                 "Attempted to call a non-function value".to_string(),
                 (0, 0),
@@ -1319,10 +1455,13 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_list_literal(&mut self, list: &ListLiteral) -> Result<RuntimeValue, RaccoonError> {
+    async fn evaluate_list_literal(
+        &mut self,
+        list: &ListLiteral,
+    ) -> Result<RuntimeValue, RaccoonError> {
         let mut elements = Vec::new();
         for elem in &list.elements {
-            elements.push(self.evaluate_expr(elem)?);
+            elements.push(self.evaluate_expr(elem).await?);
         }
 
         let element_type = if elements.is_empty() {
@@ -1334,13 +1473,13 @@ impl Interpreter {
         Ok(RuntimeValue::List(ListValue::new(elements, element_type)))
     }
 
-    fn evaluate_object_literal(
+    async fn evaluate_object_literal(
         &mut self,
         obj: &ObjectLiteral,
     ) -> Result<RuntimeValue, RaccoonError> {
         let mut properties = HashMap::new();
         for (key, value) in &obj.properties {
-            properties.insert(key.clone(), self.evaluate_expr(value)?);
+            properties.insert(key.clone(), self.evaluate_expr(value).await?);
         }
 
         Ok(RuntimeValue::Object(ObjectValue::new(
@@ -1349,8 +1488,12 @@ impl Interpreter {
         )))
     }
 
-    fn evaluate_member_expr(&mut self, member: &MemberExpr) -> Result<RuntimeValue, RaccoonError> {
-        let object = self.evaluate_expr(&member.object)?;
+    #[async_recursion(?Send)]
+    async fn evaluate_member_expr(
+        &mut self,
+        member: &MemberExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        let object = self.evaluate_expr(&member.object).await?;
 
         match object {
             RuntimeValue::Class(class) => {
@@ -1379,7 +1522,7 @@ impl Interpreter {
                 }
             }
             RuntimeValue::ClassInstance(instance) => {
-                if let Some(value) = instance.properties.borrow().get(&member.property) {
+                if let Some(value) = instance.properties.read().unwrap().get(&member.property) {
                     return Ok(value.clone());
                 }
 
@@ -1397,7 +1540,7 @@ impl Interpreter {
 
                     let mut result = RuntimeValue::Null(NullValue::new());
                     for stmt in &accessor.body {
-                        match self.execute_stmt_internal(stmt)? {
+                        match self.execute_stmt_internal(stmt).await? {
                             InterpreterResult::Return(value) => {
                                 result = value;
                                 break;
@@ -1460,9 +1603,13 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_index_expr(&mut self, index: &IndexExpr) -> Result<RuntimeValue, RaccoonError> {
-        let object = self.evaluate_expr(&index.object)?;
-        let idx = self.evaluate_expr(&index.index)?;
+    #[async_recursion(?Send)]
+    async fn evaluate_index_expr(
+        &mut self,
+        index: &IndexExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        let object = self.evaluate_expr(&index.object).await?;
+        let idx = self.evaluate_expr(&index.index).await?;
 
         match (object, idx) {
             (RuntimeValue::List(list), RuntimeValue::Int(i)) => {
@@ -1503,6 +1650,20 @@ impl Interpreter {
                     Ok(RuntimeValue::Null(NullValue::new()))
                 }
             }
+            (RuntimeValue::Object(obj), RuntimeValue::Str(key)) => {
+                if let Some(value) = obj.properties.get(&key.value) {
+                    Ok(value.clone())
+                } else {
+                    Ok(RuntimeValue::Null(NullValue::new()))
+                }
+            }
+            (RuntimeValue::ClassInstance(inst), RuntimeValue::Str(key)) => {
+                if let Some(value) = inst.properties.read().unwrap().get(&key.value) {
+                    Ok(value.clone())
+                } else {
+                    Ok(RuntimeValue::Null(NullValue::new()))
+                }
+            }
             _ => Err(RaccoonError::new(
                 "Invalid index operation".to_string(),
                 index.position,
@@ -1511,25 +1672,26 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_conditional_expr(
+    #[async_recursion(?Send)]
+    async fn evaluate_conditional_expr(
         &mut self,
         cond: &ConditionalExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let condition = self.evaluate_expr(&cond.condition)?;
+        let condition = self.evaluate_expr(&cond.condition).await?;
 
         if self.is_truthy(&condition) {
-            self.evaluate_expr(&cond.then_expr)
+            self.evaluate_expr(&cond.then_expr).await
         } else {
-            self.evaluate_expr(&cond.else_expr)
+            self.evaluate_expr(&cond.else_expr).await
         }
     }
 
-    fn evaluate_unary_update(
+    async fn evaluate_unary_update(
         &mut self,
         update: &UnaryUpdateExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
         if let Expr::Identifier(ident) = &*update.operand {
-            let current = self.environment.get(&ident.name)?;
+            let current = self.environment.get(&ident.name, ident.position)?;
 
             match current {
                 RuntimeValue::Int(v) => {
@@ -1539,8 +1701,11 @@ impl Interpreter {
                     };
 
                     let new_runtime_value = RuntimeValue::Int(IntValue::new(new_value));
-                    self.environment
-                        .assign(&ident.name, new_runtime_value.clone())?;
+                    self.environment.assign(
+                        &ident.name,
+                        new_runtime_value.clone(),
+                        ident.position,
+                    )?;
 
                     if update.is_prefix {
                         Ok(new_runtime_value)
@@ -1555,8 +1720,11 @@ impl Interpreter {
                     };
 
                     let new_runtime_value = RuntimeValue::Float(FloatValue::new(new_value));
-                    self.environment
-                        .assign(&ident.name, new_runtime_value.clone())?;
+                    self.environment.assign(
+                        &ident.name,
+                        new_runtime_value.clone(),
+                        ident.position,
+                    )?;
 
                     if update.is_prefix {
                         Ok(new_runtime_value)
@@ -1579,7 +1747,7 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_template_str(
+    async fn evaluate_template_str(
         &mut self,
         template: &TemplateStrExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
@@ -1589,7 +1757,7 @@ impl Interpreter {
             match part {
                 TemplateStrPart::String(s) => result.push_str(&s.value),
                 TemplateStrPart::Expr(expr) => {
-                    let value = self.evaluate_expr(expr)?;
+                    let value = self.evaluate_expr(expr).await?;
                     result.push_str(&value.to_string());
                 }
             }
@@ -1598,7 +1766,10 @@ impl Interpreter {
         Ok(RuntimeValue::Str(StrValue::new(result)))
     }
 
-    fn evaluate_arrow_fn(&mut self, arrow: &ArrowFnExpr) -> Result<RuntimeValue, RaccoonError> {
+    async fn evaluate_arrow_fn(
+        &mut self,
+        arrow: &ArrowFnExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
         let body = match &arrow.body {
             ArrowFnBody::Expr(expr) => {
                 vec![Stmt::ReturnStmt(ReturnStmt {
@@ -1643,11 +1814,11 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_typeof_expr(
+    async fn evaluate_typeof_expr(
         &mut self,
         typeof_expr: &TypeOfExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let value = self.evaluate_expr(&typeof_expr.operand)?;
+        let value = self.evaluate_expr(&typeof_expr.operand).await?;
 
         let type_name = match value {
             RuntimeValue::Int(_) => "int",
@@ -1670,6 +1841,8 @@ impl Interpreter {
             }
             RuntimeValue::Function(_) => "function",
             RuntimeValue::NativeFunction(_) => "function",
+            RuntimeValue::NativeAsyncFunction(_) => "function",
+            RuntimeValue::Future(_) => "future",
             RuntimeValue::Enum(ref e) => {
                 return Ok(RuntimeValue::Str(StrValue::new(e.enum_name.clone())));
             }
@@ -1690,11 +1863,11 @@ impl Interpreter {
         Ok(RuntimeValue::Str(StrValue::new(type_name.to_string())))
     }
 
-    fn evaluate_instanceof_expr(
+    async fn evaluate_instanceof_expr(
         &mut self,
         instanceof: &InstanceOfExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let value = self.evaluate_expr(&instanceof.operand)?;
+        let value = self.evaluate_expr(&instanceof.operand).await?;
 
         if let RuntimeValue::ClassInstance(instance) = value {
             Ok(RuntimeValue::Bool(BoolValue::new(
@@ -1705,11 +1878,11 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_optional_chaining(
+    async fn evaluate_optional_chaining(
         &mut self,
         opt_chain: &OptionalChainingExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let object = self.evaluate_expr(&opt_chain.object)?;
+        let object = self.evaluate_expr(&opt_chain.object).await?;
 
         if matches!(object, RuntimeValue::Null(_)) {
             return Ok(RuntimeValue::Null(NullValue::new()));
@@ -1724,7 +1897,7 @@ impl Interpreter {
                 }
             }
             RuntimeValue::ClassInstance(instance) => {
-                if let Some(value) = instance.properties.borrow().get(&opt_chain.property) {
+                if let Some(value) = instance.properties.read().unwrap().get(&opt_chain.property) {
                     Ok(value.clone())
                 } else {
                     Ok(RuntimeValue::Null(NullValue::new()))
@@ -1734,11 +1907,11 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_null_assertion(
+    async fn evaluate_null_assertion(
         &mut self,
         null_assert: &NullAssertionExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let value = self.evaluate_expr(&null_assert.operand)?;
+        let value = self.evaluate_expr(&null_assert.operand).await?;
 
         if matches!(value, RuntimeValue::Null(_)) {
             Err(RaccoonError::new(
@@ -1751,8 +1924,8 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_this_expr(&mut self) -> Result<RuntimeValue, RaccoonError> {
-        match self.environment.get("this") {
+    async fn evaluate_this_expr(&mut self) -> Result<RuntimeValue, RaccoonError> {
+        match self.environment.get("this", (0, 0)) {
             Ok(value) => Ok(value),
             Err(_) => Err(RaccoonError::new(
                 "Cannot use 'this' outside of a class method".to_string(),
@@ -1762,7 +1935,7 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_super_expr(&mut self) -> Result<RuntimeValue, RaccoonError> {
+    async fn evaluate_super_expr(&mut self) -> Result<RuntimeValue, RaccoonError> {
         Err(RaccoonError::new(
             "Cannot use 'super' outside of a class method".to_string(),
             (0, 0),
@@ -1770,23 +1943,23 @@ impl Interpreter {
         ))
     }
 
-    fn evaluate_super_call(&mut self, args: &[Expr]) -> Result<RuntimeValue, RaccoonError> {
-        let this_instance = self.environment.get("this")?;
+    async fn evaluate_super_call(&mut self, args: &[Expr]) -> Result<RuntimeValue, RaccoonError> {
+        let this_instance = self.environment.get("this", (0, 0))?;
 
         if let RuntimeValue::ClassInstance(instance) = this_instance {
             let class_name = instance.class_name.clone();
 
-            let class_value = self.environment.get(&class_name)?;
+            let class_value = self.environment.get(&class_name, (0, 0))?;
 
             if let RuntimeValue::Class(class) = class_value {
                 if let Some(ref superclass_name) = class.declaration.superclass {
-                    let superclass_value = self.environment.get(superclass_name)?;
+                    let superclass_value = self.environment.get(superclass_name, (0, 0))?;
 
                     if let RuntimeValue::Class(superclass) = superclass_value {
                         if let Some(ref super_constructor) = superclass.declaration.constructor {
                             let mut arg_values = Vec::new();
                             for arg in args {
-                                arg_values.push(self.evaluate_expr(arg)?);
+                                arg_values.push(self.evaluate_expr(arg).await?);
                             }
 
                             self.environment.push_scope();
@@ -1800,7 +1973,7 @@ impl Interpreter {
                                     }
                                     VarPattern::Destructuring(pattern) => {
                                         if let Err(e) =
-                                            self.destructure_pattern(pattern, arg, (0, 0))
+                                            self.destructure_pattern(pattern, arg, (0, 0)).await
                                         {
                                             self.environment.pop_scope();
                                             return Err(e);
@@ -1819,10 +1992,12 @@ impl Interpreter {
                                     if let Expr::Assignment(assign) = &expr_stmt.expression {
                                         if let Expr::Member(member) = &*assign.target {
                                             if let Expr::This(_) = &*member.object {
-                                                let value = self.evaluate_expr(&assign.value)?;
+                                                let value =
+                                                    self.evaluate_expr(&assign.value).await?;
                                                 instance
                                                     .properties
-                                                    .borrow_mut()
+                                                    .write()
+                                                    .unwrap()
                                                     .insert(member.property.clone(), value);
                                                 continue;
                                             }
@@ -1830,7 +2005,7 @@ impl Interpreter {
                                     }
                                 }
 
-                                match self.execute_stmt_internal(stmt)? {
+                                match self.execute_stmt_internal(stmt).await? {
                                     InterpreterResult::Return(_) => break,
                                     _ => {}
                                 }
@@ -1876,9 +2051,12 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_range_expr(&mut self, range: &RangeExpr) -> Result<RuntimeValue, RaccoonError> {
-        let start = self.evaluate_expr(&range.start)?;
-        let end = self.evaluate_expr(&range.end)?;
+    async fn evaluate_range_expr(
+        &mut self,
+        range: &RangeExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        let start = self.evaluate_expr(&range.start).await?;
+        let end = self.evaluate_expr(&range.end).await?;
 
         match (start, end) {
             (RuntimeValue::Int(s), RuntimeValue::Int(e)) => {
@@ -1899,20 +2077,23 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_null_coalescing(
+    async fn evaluate_null_coalescing(
         &mut self,
         null_coal: &NullCoalescingExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let left = self.evaluate_expr(&null_coal.left)?;
+        let left = self.evaluate_expr(&null_coal.left).await?;
 
         if matches!(left, RuntimeValue::Null(_)) {
-            self.evaluate_expr(&null_coal.right)
+            self.evaluate_expr(&null_coal.right).await
         } else {
             Ok(left)
         }
     }
 
-    fn evaluate_new_expr(&mut self, new_expr: &NewExpr) -> Result<RuntimeValue, RaccoonError> {
+    async fn evaluate_new_expr(
+        &mut self,
+        new_expr: &NewExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
         if new_expr.class_name == "Map" {
             if new_expr.type_args.len() != 2 {
                 return Err(RaccoonError::new(
@@ -1932,7 +2113,9 @@ impl Interpreter {
             )));
         }
 
-        let class_value = self.environment.get(&new_expr.class_name)?;
+        let class_value = self
+            .environment
+            .get(&new_expr.class_name, new_expr.position)?;
 
         match class_value {
             RuntimeValue::Class(class) => {
@@ -1941,11 +2124,11 @@ impl Interpreter {
 
                 if let Some(ref superclass_name) = class.declaration.superclass {
                     if let Ok(RuntimeValue::Class(superclass)) =
-                        self.environment.get(superclass_name)
+                        self.environment.get(superclass_name, new_expr.position)
                     {
                         for prop in &superclass.declaration.properties {
                             let value = if let Some(init) = &prop.initializer {
-                                self.evaluate_expr(init)?
+                                self.evaluate_expr(init).await?
                             } else {
                                 RuntimeValue::Null(NullValue::new())
                             };
@@ -1980,7 +2163,7 @@ impl Interpreter {
 
                 for prop in &class.declaration.properties {
                     let value = if let Some(init) = &prop.initializer {
-                        self.evaluate_expr(init)?
+                        self.evaluate_expr(init).await?
                     } else {
                         RuntimeValue::Null(NullValue::new())
                     };
@@ -2014,7 +2197,7 @@ impl Interpreter {
 
                 if let Some(ref superclass_name) = class.declaration.superclass {
                     if let Ok(RuntimeValue::Class(superclass)) =
-                        self.environment.get(superclass_name)
+                        self.environment.get(superclass_name, new_expr.position)
                     {
                         accessors.extend(superclass.declaration.accessors.clone());
                     }
@@ -2033,7 +2216,7 @@ impl Interpreter {
                 if let Some(constructor) = &class.declaration.constructor {
                     let mut args = Vec::new();
                     for arg in &new_expr.args {
-                        args.push(self.evaluate_expr(arg)?);
+                        args.push(self.evaluate_expr(arg).await?);
                     }
 
                     self.environment.push_scope();
@@ -2044,7 +2227,8 @@ impl Interpreter {
                                 self.environment.declare(name.clone(), arg.clone())?;
                             }
                             VarPattern::Destructuring(pattern) => {
-                                if let Err(e) = self.destructure_pattern(pattern, arg, (0, 0)) {
+                                if let Err(e) = self.destructure_pattern(pattern, arg, (0, 0)).await
+                                {
                                     self.environment.pop_scope();
                                     return Err(e);
                                 }
@@ -2062,10 +2246,11 @@ impl Interpreter {
                             if let Expr::Assignment(assign) = &expr_stmt.expression {
                                 if let Expr::Member(member) = &*assign.target {
                                     if let Expr::This(_) = &*member.object {
-                                        let value = self.evaluate_expr(&assign.value)?;
+                                        let value = self.evaluate_expr(&assign.value).await?;
                                         instance
                                             .properties
-                                            .borrow_mut()
+                                            .write()
+                                            .unwrap()
                                             .insert(member.property.clone(), value);
                                         continue;
                                     }
@@ -2073,7 +2258,7 @@ impl Interpreter {
                             }
                         }
 
-                        match self.execute_stmt_internal(stmt)? {
+                        match self.execute_stmt_internal(stmt).await? {
                             InterpreterResult::Return(_) => break,
                             _ => {}
                         }
@@ -2095,11 +2280,11 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_tagged_template(
+    async fn evaluate_tagged_template(
         &mut self,
         tagged: &TaggedTemplateExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let tag = self.evaluate_expr(&tagged.tag)?;
+        let tag = self.evaluate_expr(&tagged.tag).await?;
 
         let mut strings = Vec::new();
         let mut values = Vec::new();
@@ -2110,7 +2295,7 @@ impl Interpreter {
                     strings.push(RuntimeValue::Str(StrValue::new(s.value.clone())));
                 }
                 TemplateStrPart::Expr(expr) => {
-                    values.push(self.evaluate_expr(expr)?);
+                    values.push(self.evaluate_expr(expr).await?);
                 }
             }
         }
@@ -2134,7 +2319,7 @@ impl Interpreter {
                             self.environment.declare(name.clone(), arg.clone())?;
                         }
                         VarPattern::Destructuring(pattern) => {
-                            if let Err(e) = self.destructure_pattern(pattern, arg, (0, 0)) {
+                            if let Err(e) = self.destructure_pattern(pattern, arg, (0, 0)).await {
                                 self.environment.pop_scope();
                                 return Err(e);
                             }
@@ -2144,7 +2329,7 @@ impl Interpreter {
 
                 let mut result = RuntimeValue::Null(NullValue::new());
                 for stmt in &func.body {
-                    match self.execute_stmt_internal(stmt)? {
+                    match self.execute_stmt_internal(stmt).await? {
                         InterpreterResult::Value(v) => result = v,
                         InterpreterResult::Return(v) => {
                             self.environment.pop_scope();
@@ -2165,6 +2350,17 @@ impl Interpreter {
                 Ok(result)
             }
             RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
+            RuntimeValue::NativeAsyncFunction(func) => {
+                let result = (func.implementation)(args).await;
+                let return_type = match &func.fn_type {
+                    Type::Function(fn_type) => fn_type.return_type.clone(),
+                    _ => PrimitiveType::any(),
+                };
+                Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                    result,
+                    return_type,
+                )))
+            }
             _ => Err(RaccoonError::new(
                 "Tagged template tag must be a function".to_string(),
                 tagged.position,
@@ -2173,19 +2369,20 @@ impl Interpreter {
         }
     }
 
-    fn evaluate_method_call(
+    #[async_recursion(?Send)]
+    async fn evaluate_method_call(
         &mut self,
         method_call: &MethodCallExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let mut object = self.evaluate_expr(&method_call.object)?;
+        let mut object = self.evaluate_expr(&method_call.object).await?;
 
         let mut args = Vec::new();
         for arg in &method_call.args {
-            args.push(self.evaluate_expr(arg)?);
+            args.push(self.evaluate_expr(arg).await?);
         }
 
-        let var_name = if let Expr::Identifier(ident) = method_call.object.as_ref() {
-            Some(ident.name.clone())
+        let var_info = if let Expr::Identifier(ident) = method_call.object.as_ref() {
+            Some((ident.name.clone(), ident.position))
         } else {
             None
         };
@@ -2205,13 +2402,17 @@ impl Interpreter {
                 if let Some(static_method) = class.static_methods.get(&method_call.method) {
                     self.environment.push_scope();
 
+                    let is_async = static_method.is_async;
+                    let fn_type = static_method.fn_type.clone();
+
                     for (param, arg) in static_method.parameters.iter().zip(args.iter()) {
                         match &param.pattern {
                             VarPattern::Identifier(name) => {
                                 self.environment.declare(name.clone(), arg.clone())?;
                             }
                             VarPattern::Destructuring(pattern) => {
-                                if let Err(e) = self.destructure_pattern(pattern, arg, (0, 0)) {
+                                if let Err(e) = self.destructure_pattern(pattern, arg, (0, 0)).await
+                                {
                                     self.environment.pop_scope();
                                     return Err(e);
                                 }
@@ -2221,11 +2422,23 @@ impl Interpreter {
 
                     let mut result = RuntimeValue::Null(NullValue::new());
                     for stmt in &static_method.body {
-                        match self.execute_stmt_internal(stmt)? {
+                        match self.execute_stmt_internal(stmt).await? {
                             InterpreterResult::Value(v) => result = v,
                             InterpreterResult::Return(v) => {
                                 self.environment.pop_scope();
-                                return Ok(v);
+
+                                if is_async {
+                                    let return_type = match &fn_type {
+                                        Type::Function(ft) => ft.return_type.clone(),
+                                        _ => PrimitiveType::any(),
+                                    };
+                                    return Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                                        v,
+                                        return_type,
+                                    )));
+                                } else {
+                                    return Ok(v);
+                                }
                             }
                             _ => {
                                 self.environment.pop_scope();
@@ -2239,7 +2452,19 @@ impl Interpreter {
                     }
 
                     self.environment.pop_scope();
-                    Ok(result)
+
+                    if is_async {
+                        let return_type = match &fn_type {
+                            Type::Function(ft) => ft.return_type.clone(),
+                            _ => PrimitiveType::any(),
+                        };
+                        Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                            result,
+                            return_type,
+                        )))
+                    } else {
+                        Ok(result)
+                    }
                 } else {
                     Err(RaccoonError::new(
                         format!(
@@ -2252,8 +2477,36 @@ impl Interpreter {
                 }
             }
 
+            RuntimeValue::List(_) => {
+                if matches!(
+                    method_call.method.as_str(),
+                    "map"
+                        | "filter"
+                        | "reduce"
+                        | "forEach"
+                        | "find"
+                        | "findIndex"
+                        | "some"
+                        | "every"
+                ) {
+                    self.handle_list_functional_method(
+                        &mut object,
+                        &method_call.method,
+                        args,
+                        method_call.position,
+                    )
+                    .await
+                } else {
+                    self.type_registry.call_instance_method(
+                        &mut object,
+                        &method_call.method,
+                        args,
+                        method_call.position,
+                        self.file.clone(),
+                    )
+                }
+            }
             RuntimeValue::Str(_)
-            | RuntimeValue::List(_)
             | RuntimeValue::Map(_)
             | RuntimeValue::Int(_)
             | RuntimeValue::Float(_)
@@ -2271,6 +2524,9 @@ impl Interpreter {
                         RuntimeValue::Function(func) => {
                             self.environment.push_scope();
 
+                            let is_async = func.is_async;
+                            let fn_type = func.fn_type.clone();
+
                             for (param, arg) in func.parameters.iter().zip(args.iter()) {
                                 match &param.pattern {
                                     VarPattern::Identifier(name) => {
@@ -2278,7 +2534,7 @@ impl Interpreter {
                                     }
                                     VarPattern::Destructuring(pattern) => {
                                         if let Err(e) =
-                                            self.destructure_pattern(pattern, arg, (0, 0))
+                                            self.destructure_pattern(pattern, arg, (0, 0)).await
                                         {
                                             self.environment.pop_scope();
                                             return Err(e);
@@ -2289,11 +2545,22 @@ impl Interpreter {
 
                             let mut result = RuntimeValue::Null(NullValue::new());
                             for stmt in &func.body {
-                                match self.execute_stmt_internal(stmt)? {
+                                match self.execute_stmt_internal(stmt).await? {
                                     InterpreterResult::Value(v) => result = v,
                                     InterpreterResult::Return(v) => {
                                         self.environment.pop_scope();
-                                        return Ok(v);
+
+                                        if is_async {
+                                            let return_type = match &fn_type {
+                                                Type::Function(ft) => ft.return_type.clone(),
+                                                _ => PrimitiveType::any(),
+                                            };
+                                            return Ok(RuntimeValue::Future(
+                                                FutureValue::new_resolved(v, return_type),
+                                            ));
+                                        } else {
+                                            return Ok(v);
+                                        }
                                     }
                                     _ => {
                                         self.environment.pop_scope();
@@ -2307,9 +2574,33 @@ impl Interpreter {
                             }
 
                             self.environment.pop_scope();
-                            Ok(result)
+
+                            if is_async {
+                                let return_type = match &fn_type {
+                                    Type::Function(ft) => ft.return_type.clone(),
+                                    _ => PrimitiveType::any(),
+                                };
+                                Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                                    result,
+                                    return_type,
+                                )))
+                            } else {
+                                Ok(result)
+                            }
                         }
                         RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
+                        RuntimeValue::NativeAsyncFunction(func) => {
+                            let result = (func.implementation)(args).await;
+
+                            let return_type = match &func.fn_type {
+                                Type::Function(ft) => ft.return_type.clone(),
+                                _ => PrimitiveType::any(),
+                            };
+                            Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                                result,
+                                return_type,
+                            )))
+                        }
                         _ => Err(RaccoonError::new(
                             format!("Property '{}' is not a function", method_call.method),
                             method_call.position,
@@ -2337,13 +2628,17 @@ impl Interpreter {
                         RuntimeValue::ClassInstance(instance.clone()),
                     )?;
 
+                    let is_async = method.is_async;
+                    let fn_type = method.fn_type.clone();
+
                     for (param, arg) in method.parameters.iter().zip(args.iter()) {
                         match &param.pattern {
                             VarPattern::Identifier(name) => {
                                 self.environment.declare(name.clone(), arg.clone())?;
                             }
                             VarPattern::Destructuring(pattern) => {
-                                if let Err(e) = self.destructure_pattern(pattern, arg, (0, 0)) {
+                                if let Err(e) = self.destructure_pattern(pattern, arg, (0, 0)).await
+                                {
                                     self.environment.pop_scope();
                                     return Err(e);
                                 }
@@ -2353,11 +2648,23 @@ impl Interpreter {
 
                     let mut result = RuntimeValue::Null(NullValue::new());
                     for stmt in &method.body {
-                        match self.execute_stmt_internal(stmt)? {
+                        match self.execute_stmt_internal(stmt).await? {
                             InterpreterResult::Value(v) => result = v,
                             InterpreterResult::Return(v) => {
                                 self.environment.pop_scope();
-                                return Ok(v);
+
+                                if is_async {
+                                    let return_type = match &fn_type {
+                                        Type::Function(ft) => ft.return_type.clone(),
+                                        _ => PrimitiveType::any(),
+                                    };
+                                    return Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                                        v,
+                                        return_type,
+                                    )));
+                                } else {
+                                    return Ok(v);
+                                }
                             }
                             _ => {
                                 self.environment.pop_scope();
@@ -2371,7 +2678,19 @@ impl Interpreter {
                     }
 
                     self.environment.pop_scope();
-                    Ok(result)
+
+                    if is_async {
+                        let return_type = match &fn_type {
+                            Type::Function(ft) => ft.return_type.clone(),
+                            _ => PrimitiveType::any(),
+                        };
+                        Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                            result,
+                            return_type,
+                        )))
+                    } else {
+                        Ok(result)
+                    }
                 } else {
                     Err(RaccoonError::new(
                         format!(
@@ -2393,15 +2712,18 @@ impl Interpreter {
         let should_update = matches!(object, RuntimeValue::List(_) | RuntimeValue::Map(_));
 
         if should_update {
-            if let Some(name) = var_name {
-                self.environment.assign(&name, object.clone())?;
+            if let Some((name, position)) = var_info {
+                self.environment.assign(&name, object.clone(), position)?;
             }
 
             if let Some(property_name) = member_info {
-                if let Ok(RuntimeValue::ClassInstance(instance)) = self.environment.get("this") {
+                if let Ok(RuntimeValue::ClassInstance(instance)) =
+                    self.environment.get("this", method_call.position)
+                {
                     instance
                         .properties
-                        .borrow_mut()
+                        .write()
+                        .unwrap()
                         .insert(property_name, object);
                 }
             }
@@ -2410,7 +2732,7 @@ impl Interpreter {
         result
     }
 
-    fn destructure_pattern(
+    async fn destructure_pattern(
         &mut self,
         pattern: &DestructuringPattern,
         value: &RuntimeValue,
@@ -2419,14 +2741,17 @@ impl Interpreter {
         match pattern {
             DestructuringPattern::List(list_pattern) => {
                 self.destructure_list_pattern(list_pattern, value, position)
+                    .await
             }
             DestructuringPattern::Object(obj_pattern) => {
                 self.destructure_object_pattern(obj_pattern, value, position)
+                    .await
             }
         }
     }
 
-    fn destructure_list_pattern(
+    #[async_recursion(?Send)]
+    async fn destructure_list_pattern(
         &mut self,
         pattern: &ListPattern,
         value: &RuntimeValue,
@@ -2460,10 +2785,12 @@ impl Interpreter {
                             .declare(id.name.clone(), elements[index].clone())?;
                     }
                     ListPatternElement::List(nested_list) => {
-                        self.destructure_list_pattern(nested_list, &elements[index], position)?;
+                        self.destructure_list_pattern(nested_list, &elements[index], position)
+                            .await?;
                     }
                     ListPatternElement::Object(nested_obj) => {
-                        self.destructure_object_pattern(nested_obj, &elements[index], position)?;
+                        self.destructure_object_pattern(nested_obj, &elements[index], position)
+                            .await?;
                     }
                 }
             }
@@ -2480,7 +2807,8 @@ impl Interpreter {
         Ok(())
     }
 
-    fn destructure_object_pattern(
+    #[async_recursion(?Send)]
+    async fn destructure_object_pattern(
         &mut self,
         pattern: &ObjectPattern,
         value: &RuntimeValue,
@@ -2500,7 +2828,8 @@ impl Interpreter {
                     .unwrap_or(RuntimeValue::Null(NullValue::new())),
                 RuntimeValue::ClassInstance(inst) => inst
                     .properties
-                    .borrow()
+                    .read()
+                    .unwrap()
                     .get(&prop.key)
                     .cloned()
                     .unwrap_or(RuntimeValue::Null(NullValue::new())),
@@ -2518,10 +2847,12 @@ impl Interpreter {
                     self.environment.declare(id.name.clone(), prop_value)?;
                 }
                 ObjectPatternValue::List(nested_list) => {
-                    self.destructure_list_pattern(nested_list, &prop_value, position)?;
+                    self.destructure_list_pattern(nested_list, &prop_value, position)
+                        .await?;
                 }
                 ObjectPatternValue::Object(nested_obj) => {
-                    self.destructure_object_pattern(nested_obj, &prop_value, position)?;
+                    self.destructure_object_pattern(nested_obj, &prop_value, position)
+                        .await?;
                 }
             }
         }
@@ -2544,7 +2875,7 @@ impl Interpreter {
                     }
                 }
                 RuntimeValue::ClassInstance(inst) => {
-                    for (key, val) in inst.properties.borrow().iter() {
+                    for (key, val) in inst.properties.read().unwrap().iter() {
                         if !pattern.properties.iter().any(|p| p.key == *key) {
                             remaining.insert(key.clone(), val.clone());
                         }
@@ -2561,14 +2892,14 @@ impl Interpreter {
         Ok(())
     }
 
-    fn execute_import_decl(
+    async fn execute_import_decl(
         &mut self,
         import_decl: &ImportDecl,
     ) -> Result<InterpreterResult, RaccoonError> {
         let module_spec = &import_decl.module_specifier;
 
         if let Some(namespace_name) = &import_decl.namespace_import {
-            let namespace_obj = self.get_module_namespace(module_spec)?;
+            let namespace_obj = self.get_module_namespace(module_spec).await?;
             self.environment
                 .declare(namespace_name.clone(), namespace_obj)?;
             return Ok(InterpreterResult::Value(RuntimeValue::Null(
@@ -2580,12 +2911,12 @@ impl Interpreter {
             let imported_name = &spec.imported;
             let local_name = spec.local.as_ref().unwrap_or(imported_name);
 
-            let value = self.get_module_export(module_spec, imported_name)?;
+            let value = self.get_module_export(module_spec, imported_name).await?;
             self.environment.declare(local_name.clone(), value)?;
         }
 
         if let Some(default_name) = &import_decl.default_import {
-            let value = self.get_module_export(module_spec, "default")?;
+            let value = self.get_module_export(module_spec, "default").await?;
             self.environment.declare(default_name.clone(), value)?;
         }
 
@@ -2594,21 +2925,17 @@ impl Interpreter {
         )))
     }
 
-    fn get_module_namespace(&self, module_spec: &str) -> Result<RuntimeValue, RaccoonError> {
+    async fn get_module_namespace(&self, module_spec: &str) -> Result<RuntimeValue, RaccoonError> {
         if module_spec.starts_with("std:") {
-            let properties = crate::runtime::std::ModuleRegistry::get_module_exports(module_spec)
-                .ok_or_else(|| {
-                RaccoonError::new(
+            if self.stdlib_loader.module_exists(module_spec) {
+                return self.stdlib_loader.load_module(module_spec).await;
+            } else {
+                return Err(RaccoonError::new(
                     format!("Unknown module: {}", module_spec),
                     (0, 0),
                     self.file.clone(),
-                )
-            })?;
-
-            Ok(RuntimeValue::Object(ObjectValue::new(
-                properties,
-                PrimitiveType::any(),
-            )))
+                ));
+            }
         } else {
             Err(RaccoonError::new(
                 format!(
@@ -2621,20 +2948,24 @@ impl Interpreter {
         }
     }
 
-    fn get_module_export(
+    async fn get_module_export(
         &self,
         module_spec: &str,
         export_name: &str,
     ) -> Result<RuntimeValue, RaccoonError> {
         if module_spec.starts_with("std:") {
-            crate::runtime::std::ModuleRegistry::get_module_export(module_spec, export_name)
-                .ok_or_else(|| {
-                    RaccoonError::new(
-                        format!("{} does not export '{}'", module_spec, export_name),
-                        (0, 0),
-                        self.file.clone(),
-                    )
-                })
+            if self.stdlib_loader.module_exists(module_spec) {
+                return self
+                    .stdlib_loader
+                    .get_module_export(module_spec, export_name)
+                    .await;
+            } else {
+                return Err(RaccoonError::new(
+                    format!("Unknown module: {}", module_spec),
+                    (0, 0),
+                    self.file.clone(),
+                ));
+            }
         } else {
             Err(RaccoonError::new(
                 format!(
@@ -2645,5 +2976,415 @@ impl Interpreter {
                 self.file.clone(),
             ))
         }
+    }
+
+    async fn evaluate_await_expr(
+        &mut self,
+        await_expr: &AwaitExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        let future_value = self.evaluate_expr(&await_expr.expression).await?;
+
+        match future_value {
+            RuntimeValue::Future(future) => {
+                let state = future.state.read().unwrap();
+                match &*state {
+                    FutureState::Resolved(value) => Ok((**value).clone()),
+                    FutureState::Rejected(error) => Err(RaccoonError::new(
+                        format!("Future rejected: {}", error),
+                        await_expr.position,
+                        self.file.clone(),
+                    )),
+                    FutureState::Pending => Err(RaccoonError::new(
+                        "Cannot await pending future (async runtime not fully implemented)"
+                            .to_string(),
+                        await_expr.position,
+                        self.file.clone(),
+                    )),
+                }
+            }
+            _ => Err(RaccoonError::new(
+                format!("Cannot await non-future value: {}", future_value.get_name()),
+                await_expr.position,
+                self.file.clone(),
+            )),
+        }
+    }
+
+    #[async_recursion(?Send)]
+    async fn call_function(
+        &mut self,
+        func: &RuntimeValue,
+        args: Vec<RuntimeValue>,
+        position: Position,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        match func {
+            RuntimeValue::Function(fn_val) => {
+                self.environment.push_scope();
+
+                for (i, param) in fn_val.parameters.iter().enumerate() {
+                    let value = if i < args.len() {
+                        args[i].clone()
+                    } else if let Some(default_expr) = &param.default_value {
+                        self.evaluate_expr(default_expr).await?
+                    } else {
+                        self.environment.pop_scope();
+                        return Err(RaccoonError::new(
+                            format!("Missing required argument for parameter {}", i),
+                            position,
+                            self.file.clone(),
+                        ));
+                    };
+
+                    match &param.pattern {
+                        VarPattern::Identifier(name) => {
+                            self.environment.declare(name.clone(), value)?;
+                        }
+                        VarPattern::Destructuring(pattern) => {
+                            if let Err(e) =
+                                self.destructure_pattern(pattern, &value, position).await
+                            {
+                                self.environment.pop_scope();
+                                return Err(e);
+                            }
+                        }
+                    }
+                }
+
+                let mut result = RuntimeValue::Null(NullValue::new());
+                for stmt in &fn_val.body {
+                    match self.execute_stmt_internal(stmt).await? {
+                        InterpreterResult::Value(v) => result = v,
+                        InterpreterResult::Return(v) => {
+                            self.environment.pop_scope();
+                            return Ok(v);
+                        }
+                        _ => {
+                            self.environment.pop_scope();
+                            return Err(RaccoonError::new(
+                                "Unexpected break/continue in function".to_string(),
+                                position,
+                                self.file.clone(),
+                            ));
+                        }
+                    }
+                }
+
+                self.environment.pop_scope();
+                Ok(result)
+            }
+            RuntimeValue::NativeFunction(fn_val) => Ok((fn_val.implementation)(args)),
+            RuntimeValue::NativeAsyncFunction(fn_val) => {
+                let result = (fn_val.implementation)(args).await;
+                let return_type = match &fn_val.fn_type {
+                    Type::Function(fn_type) => fn_type.return_type.clone(),
+                    _ => PrimitiveType::any(),
+                };
+                Ok(RuntimeValue::Future(FutureValue::new_resolved(
+                    result,
+                    return_type,
+                )))
+            }
+            _ => Err(RaccoonError::new(
+                "Expected a function".to_string(),
+                position,
+                self.file.clone(),
+            )),
+        }
+    }
+
+    async fn handle_list_functional_method(
+        &mut self,
+        object: &mut RuntimeValue,
+        method: &str,
+        args: Vec<RuntimeValue>,
+        position: Position,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        let list = match object {
+            RuntimeValue::List(l) => l,
+            _ => {
+                return Err(RaccoonError::new(
+                    format!("Expected list, got {}", object.get_name()),
+                    position,
+                    self.file.clone(),
+                ));
+            }
+        };
+
+        match method {
+            "map" => {
+                if args.is_empty() {
+                    return Err(RaccoonError::new(
+                        "map requires a callback function".to_string(),
+                        position,
+                        self.file.clone(),
+                    ));
+                }
+
+                let callback = &args[0];
+                let mut mapped = Vec::new();
+
+                for (index, element) in list.elements.iter().enumerate() {
+                    let result = self
+                        .call_function(
+                            callback,
+                            vec![
+                                element.clone(),
+                                RuntimeValue::Int(IntValue::new(index as i64)),
+                            ],
+                            position,
+                        )
+                        .await?;
+                    mapped.push(result);
+                }
+
+                let element_type = if mapped.is_empty() {
+                    PrimitiveType::any()
+                } else {
+                    mapped[0].get_type()
+                };
+
+                Ok(RuntimeValue::List(ListValue::new(mapped, element_type)))
+            }
+            "filter" => {
+                if args.is_empty() {
+                    return Err(RaccoonError::new(
+                        "filter requires a callback function".to_string(),
+                        position,
+                        self.file.clone(),
+                    ));
+                }
+
+                let callback = &args[0];
+                let mut filtered = Vec::new();
+
+                for (index, element) in list.elements.iter().enumerate() {
+                    let result = self
+                        .call_function(
+                            callback,
+                            vec![
+                                element.clone(),
+                                RuntimeValue::Int(IntValue::new(index as i64)),
+                            ],
+                            position,
+                        )
+                        .await?;
+
+                    if self.is_truthy(&result) {
+                        filtered.push(element.clone());
+                    }
+                }
+
+                Ok(RuntimeValue::List(ListValue::new(
+                    filtered,
+                    list.element_type.clone(),
+                )))
+            }
+            "reduce" => {
+                if args.is_empty() {
+                    return Err(RaccoonError::new(
+                        "reduce requires a callback function".to_string(),
+                        position,
+                        self.file.clone(),
+                    ));
+                }
+
+                let callback = &args[0];
+                if list.elements.is_empty() && args.len() < 2 {
+                    return Err(RaccoonError::new(
+                        "reduce of empty array with no initial value".to_string(),
+                        position,
+                        self.file.clone(),
+                    ));
+                }
+
+                let mut accumulator = if args.len() >= 2 {
+                    args[1].clone()
+                } else {
+                    list.elements[0].clone()
+                };
+
+                let start_index = if args.len() >= 2 { 0 } else { 1 };
+
+                for (index, element) in list.elements.iter().enumerate().skip(start_index) {
+                    accumulator = self
+                        .call_function(
+                            callback,
+                            vec![
+                                accumulator,
+                                element.clone(),
+                                RuntimeValue::Int(IntValue::new(index as i64)),
+                            ],
+                            position,
+                        )
+                        .await?;
+                }
+
+                Ok(accumulator)
+            }
+            "forEach" => {
+                if args.is_empty() {
+                    return Err(RaccoonError::new(
+                        "forEach requires a callback function".to_string(),
+                        position,
+                        self.file.clone(),
+                    ));
+                }
+
+                let callback = &args[0];
+                for (index, element) in list.elements.iter().enumerate() {
+                    self.call_function(
+                        callback,
+                        vec![
+                            element.clone(),
+                            RuntimeValue::Int(IntValue::new(index as i64)),
+                        ],
+                        position,
+                    )
+                    .await?;
+                }
+                Ok(RuntimeValue::Null(NullValue::new()))
+            }
+            "find" => {
+                if args.is_empty() {
+                    return Err(RaccoonError::new(
+                        "find requires a callback function".to_string(),
+                        position,
+                        self.file.clone(),
+                    ));
+                }
+
+                let callback = &args[0];
+                for (index, element) in list.elements.iter().enumerate() {
+                    let result = self
+                        .call_function(
+                            callback,
+                            vec![
+                                element.clone(),
+                                RuntimeValue::Int(IntValue::new(index as i64)),
+                            ],
+                            position,
+                        )
+                        .await?;
+
+                    if self.is_truthy(&result) {
+                        return Ok(element.clone());
+                    }
+                }
+                Ok(RuntimeValue::Null(NullValue::new()))
+            }
+            "findIndex" => {
+                if args.is_empty() {
+                    return Err(RaccoonError::new(
+                        "findIndex requires a callback function".to_string(),
+                        position,
+                        self.file.clone(),
+                    ));
+                }
+
+                let callback = &args[0];
+                for (index, element) in list.elements.iter().enumerate() {
+                    let result = self
+                        .call_function(
+                            callback,
+                            vec![
+                                element.clone(),
+                                RuntimeValue::Int(IntValue::new(index as i64)),
+                            ],
+                            position,
+                        )
+                        .await?;
+
+                    if self.is_truthy(&result) {
+                        return Ok(RuntimeValue::Int(IntValue::new(index as i64)));
+                    }
+                }
+                Ok(RuntimeValue::Int(IntValue::new(-1)))
+            }
+            "some" => {
+                if args.is_empty() {
+                    return Err(RaccoonError::new(
+                        "some requires a callback function".to_string(),
+                        position,
+                        self.file.clone(),
+                    ));
+                }
+
+                let callback = &args[0];
+                for (index, element) in list.elements.iter().enumerate() {
+                    let result = self
+                        .call_function(
+                            callback,
+                            vec![
+                                element.clone(),
+                                RuntimeValue::Int(IntValue::new(index as i64)),
+                            ],
+                            position,
+                        )
+                        .await?;
+
+                    if self.is_truthy(&result) {
+                        return Ok(RuntimeValue::Bool(BoolValue::new(true)));
+                    }
+                }
+                Ok(RuntimeValue::Bool(BoolValue::new(false)))
+            }
+            "every" => {
+                if args.is_empty() {
+                    return Err(RaccoonError::new(
+                        "every requires a callback function".to_string(),
+                        position,
+                        self.file.clone(),
+                    ));
+                }
+
+                let callback = &args[0];
+                for (index, element) in list.elements.iter().enumerate() {
+                    let result = self
+                        .call_function(
+                            callback,
+                            vec![
+                                element.clone(),
+                                RuntimeValue::Int(IntValue::new(index as i64)),
+                            ],
+                            position,
+                        )
+                        .await?;
+
+                    if !self.is_truthy(&result) {
+                        return Ok(RuntimeValue::Bool(BoolValue::new(false)));
+                    }
+                }
+                Ok(RuntimeValue::Bool(BoolValue::new(true)))
+            }
+            _ => Err(RaccoonError::new(
+                format!("Method '{}' not found on list", method),
+                position,
+                self.file.clone(),
+            )),
+        }
+    }
+
+    pub async fn execute_stmt(&mut self, stmt: &Stmt) -> Result<RuntimeValue, RaccoonError> {
+        match self.execute_stmt_internal(stmt).await? {
+            InterpreterResult::Value(v) => Ok(v),
+            InterpreterResult::Return(v) => Ok(v),
+            _ => Ok(RuntimeValue::Null(NullValue::new())),
+        }
+    }
+
+    pub async fn eval_expr_public(&mut self, expr: &Expr) -> Result<RuntimeValue, RaccoonError> {
+        self.evaluate_expr(expr).await
+    }
+
+    pub fn get_from_env(&self, name: &str) -> Result<RuntimeValue, RaccoonError> {
+        self.environment.get(name, (0, 0))
+    }
+
+    pub fn declare_in_env(
+        &mut self,
+        name: String,
+        value: RuntimeValue,
+    ) -> Result<(), RaccoonError> {
+        self.environment.declare(name, value)
     }
 }

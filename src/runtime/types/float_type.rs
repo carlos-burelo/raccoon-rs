@@ -1,10 +1,12 @@
 use super::TypeHandler;
+use async_trait::async_trait;
 use crate::error::RaccoonError;
 use crate::runtime::{DecimalValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 
 pub struct FloatType;
 
+#[async_trait]
 impl TypeHandler for FloatType {
     fn type_name(&self) -> &str {
         "float"

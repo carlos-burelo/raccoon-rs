@@ -1,0 +1,21 @@
+// HTTP Client Module - Implemented in Raccoon using native bridge
+
+class Http {
+    static async get(url: str): any {
+        return await native_http_request("GET", url, null, null, 30000)
+    }
+
+    static async post(url: str, body: any, headers: any): any {
+        return await native_http_request("POST", url, body, headers, 30000)
+    }
+
+    static async put(url: str, body: any, headers: any): any {
+        return await native_http_request("PUT", url, body, headers, 30000)
+    }
+
+    static async delete(url: str, headers: any): any {
+        return await native_http_request("DELETE", url, null, headers, 30000)
+    }
+}
+
+export default Http

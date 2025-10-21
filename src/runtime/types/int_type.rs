@@ -2,9 +2,11 @@ use super::TypeHandler;
 use crate::error::RaccoonError;
 use crate::runtime::{DecimalValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
+use async_trait::async_trait;
 
 pub struct IntType;
 
+#[async_trait]
 impl TypeHandler for IntType {
     fn type_name(&self) -> &str {
         "int"

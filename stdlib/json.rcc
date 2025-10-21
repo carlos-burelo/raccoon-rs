@@ -1,0 +1,55 @@
+// Standard Library - JSON Module
+// Provides JSON parsing and serialization
+
+// Native function declarations
+@native("native_json_parse")
+declare fn _parse_native(json: str): any;
+
+@native("native_json_stringify")
+declare fn _stringify_native(value: any): str;
+
+@native("native_json_stringify_pretty")
+declare fn _stringify_pretty_native(value: any, indent: int): str;
+
+/**
+ * Parses a JSON string into a value
+ */
+export fn parse(json: str): any {
+    return _parse_native(json);
+}
+
+/**
+ * Converts a value to a JSON string
+ */
+export fn stringify(value: any): str {
+    return _stringify_native(value);
+}
+
+/**
+ * Converts a value to a pretty-printed JSON string
+ */
+export fn stringifyPretty(value: any, indent: int): str {
+    return _stringify_pretty_native(value, indent);
+}
+
+/**
+ * Safely parses JSON, returning null on error
+ */
+export fn tryParse(json: str): any | null {
+    try {
+        return parse(json);
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Safely stringifies a value, returning null on error
+ */
+export fn tryStringify(value: any): str | null {
+    try {
+        return stringify(value);
+    } catch (e) {
+        return null;
+    }
+}

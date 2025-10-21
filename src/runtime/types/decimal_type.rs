@@ -1,10 +1,12 @@
 use super::TypeHandler;
+use async_trait::async_trait;
 use crate::error::RaccoonError;
 use crate::runtime::{FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 
 pub struct DecimalType;
 
+#[async_trait]
 impl TypeHandler for DecimalType {
     fn type_name(&self) -> &str {
         "decimal"

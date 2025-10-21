@@ -1,10 +1,12 @@
 use super::TypeHandler;
+use async_trait::async_trait;
 use crate::error::RaccoonError;
 use crate::runtime::{BoolValue, IntValue, NullValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 
 pub struct MapType;
 
+#[async_trait]
 impl TypeHandler for MapType {
     fn type_name(&self) -> &str {
         "map"

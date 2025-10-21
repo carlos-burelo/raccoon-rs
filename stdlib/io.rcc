@@ -1,0 +1,106 @@
+// Standard Library - IO Module
+// Provides file I/O and input/output functionality
+
+// Native function declarations
+@native("native_io_read_file")
+declare fn _read_file_native(path: str): str;
+
+@native("native_io_write_file")
+declare fn _write_file_native(path: str, content: str): void;
+
+@native("native_io_append_file")
+declare fn _append_file_native(path: str, content: str): void;
+
+@native("native_io_file_exists")
+declare fn _file_exists_native(path: str): bool;
+
+@native("native_io_delete_file")
+declare fn _delete_file_native(path: str): void;
+
+@native("native_io_read_dir")
+declare fn _read_dir_native(path: str): str[];
+
+@native("native_io_create_dir")
+declare fn _create_dir_native(path: str): void;
+
+@native("native_io_input")
+declare fn _input_native(prompt: str): str;
+
+/**
+ * Reads the entire contents of a file as a string
+ */
+export fn readFile(path: str): str {
+    return _read_file_native(path);
+}
+
+/**
+ * Writes content to a file, overwriting if it exists
+ */
+export fn writeFile(path: str, content: str): void {
+    _write_file_native(path, content);
+}
+
+/**
+ * Appends content to a file
+ */
+export fn appendFile(path: str, content: str): void {
+    _append_file_native(path, content);
+}
+
+/**
+ * Checks if a file exists
+ */
+export fn fileExists(path: str): bool {
+    return _file_exists_native(path);
+}
+
+/**
+ * Deletes a file
+ */
+export fn deleteFile(path: str): void {
+    _delete_file_native(path);
+}
+
+/**
+ * Reads the contents of a directory
+ */
+export fn readDir(path: str): str[] {
+    return _read_dir_native(path);
+}
+
+/**
+ * Creates a directory
+ */
+export fn createDir(path: str): void {
+    _create_dir_native(path);
+}
+
+/**
+ * Reads a line of input from the user
+ */
+export fn input(prompt: str): str {
+    return _input_native(prompt);
+}
+
+/**
+ * Safely reads a file, returning null on error
+ */
+export fn tryReadFile(path: str): str | null {
+    try {
+        return readFile(path);
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Safely writes to a file, returning false on error
+ */
+export fn tryWriteFile(path: str, content: str): bool {
+    try {
+        writeFile(path, content);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}

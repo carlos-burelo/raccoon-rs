@@ -26,8 +26,8 @@ enum Commands {
         #[arg(long, short)]
         ast: bool,
 
-        #[arg(long, short)]
-        interpret: bool,
+        #[arg(long, short = 'n')]
+        no_interpret: bool,
     },
     Repl {
         #[arg(long, short)]
@@ -38,7 +38,8 @@ enum Commands {
     },
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let cli = Cli::parse();
 
     match cli.command {
@@ -46,14 +47,14 @@ fn main() {
             file,
             tokens,
             ast,
-            interpret,
-        }) => run_file(file, tokens, ast, interpret),
-        Some(Commands::Repl { tokens, interpret }) => run_repl(tokens, interpret),
-        None => run_repl(false, true),
+            no_interpret,
+        }) => run_file(file, tokens, ast, !no_interpret).await,
+        Some(Commands::Repl { tokens, interpret }) => run_repl(tokens, interpret).await,
+        None => run_repl(false, true).await,
     }
 }
 
-fn run_file(path: PathBuf, show_tokens: bool, show_ast: bool, should_interpret: bool) {
+async fn run_file(path: PathBuf, show_tokens: bool, show_ast: bool, should_interpret: bool) {
     let file = Some(path.to_string_lossy().to_string());
     let source = match fs::read_to_string(&path) {
         Ok(content) => content,
@@ -91,7 +92,7 @@ fn run_file(path: PathBuf, show_tokens: bool, show_ast: bool, should_interpret: 
 
             if should_interpret {
                 let mut interpreter = Interpreter::new(file.clone());
-                match interpreter.interpret(&program) {
+                match interpreter.interpret(&program).await {
                     Ok(result) => {
                         println!("{}", result.to_string());
                     }
@@ -110,7 +111,7 @@ fn run_file(path: PathBuf, show_tokens: bool, show_ast: bool, should_interpret: 
     }
 }
 
-fn run_repl(show_tokens: bool, should_interpret: bool) {
+async fn run_repl(show_tokens: bool, should_interpret: bool) {
     println!("Raccoon REPL");
     if should_interpret {
         println!("Modo de interpretación activado");
@@ -169,7 +170,7 @@ fn run_repl(show_tokens: bool, should_interpret: bool) {
                             println!("{:#?}", program);
                             println!("\n✓ Parseo exitoso");
                         } else {
-                            match interpreter.interpret(&program) {
+                            match interpreter.interpret(&program).await {
                                 Ok(result) => {
                                     println!("{}", result.to_string());
                                 }

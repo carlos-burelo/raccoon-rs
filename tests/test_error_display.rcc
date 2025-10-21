@@ -1,0 +1,10 @@
+// Test para mostrar errores mejorados
+print("Iniciando test...");
+
+let x = 10;
+let y = 5;
+
+// Esta línea causará un error: variable no definida
+print("Resultado:", x + z);
+
+print("Esta línea no se ejecutará");

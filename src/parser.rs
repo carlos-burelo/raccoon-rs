@@ -269,6 +269,12 @@ impl Parser {
                 is_static = true;
             }
 
+            // Check for async keyword before methods
+            let mut is_async = false;
+            if self.match_token(&[TokenType::Async]) {
+                is_async = true;
+            }
+
             if self.match_token(&[TokenType::Constructor]) {
                 if constructor.is_some() {
                     return Err(RaccoonError::new(
@@ -278,13 +284,15 @@ impl Parser {
                     ));
                 }
                 constructor = Some(self.parse_constructor()?);
-            } else if self.match_token(&[TokenType::Get]) {
+            } else if !is_async && self.match_token(&[TokenType::Get]) {
+                // Only parse as accessor if not async
                 accessors.push(self.parse_accessor(
                     AccessorKind::Get,
                     member_decorators,
                     access_modifier,
                 )?);
-            } else if self.match_token(&[TokenType::Set]) {
+            } else if !is_async && self.match_token(&[TokenType::Set]) {
+                // Only parse as accessor if not async
                 accessors.push(self.parse_accessor(
                     AccessorKind::Set,
                     member_decorators,
@@ -292,7 +300,22 @@ impl Parser {
                 )?);
             } else if self.check(&TokenType::Identifier) && self.check_next(&[TokenType::LeftParen])
             {
-                methods.push(self.parse_method(member_decorators, access_modifier, is_static)?);
+                methods.push(self.parse_method(
+                    member_decorators,
+                    access_modifier,
+                    is_static,
+                    is_async,
+                )?);
+            } else if (self.check(&TokenType::Get) || self.check(&TokenType::Set))
+                && self.check_next(&[TokenType::LeftParen])
+            {
+                // Async methods named 'get' or 'set'
+                methods.push(self.parse_method(
+                    member_decorators,
+                    access_modifier,
+                    is_static,
+                    is_async,
+                )?);
             } else {
                 properties.push(self.parse_class_property(member_decorators, access_modifier)?);
             }
@@ -364,11 +387,18 @@ impl Parser {
         decorators: Vec<DecoratorDecl>,
         access_modifier: AccessModifier,
         is_static: bool,
+        is_async: bool,
     ) -> Result<ClassMethod, RaccoonError> {
-        let name = self
-            .consume(TokenType::Identifier, "Expected method name")?
-            .value
-            .clone();
+        // Allow 'get' and 'set' as method names when they're followed by '('
+        let name = if (self.check(&TokenType::Get) || self.check(&TokenType::Set))
+            && self.check_next(&[TokenType::LeftParen])
+        {
+            self.advance().value.clone()
+        } else {
+            self.consume(TokenType::Identifier, "Expected method name")?
+                .value
+                .clone()
+        };
 
         self.consume(TokenType::LeftParen, "Expected '(' after method name")?;
         let parameters = self.function_parameters()?;
@@ -385,7 +415,7 @@ impl Parser {
             parameters,
             return_type,
             body,
-            is_async: false,
+            is_async,
             decorators,
             access_modifier,
             is_static,
@@ -961,6 +991,7 @@ impl Parser {
                 "void" => Some(PrimitiveType::void()),
                 "any" => Some(PrimitiveType::any()),
                 "unknown" => Some(PrimitiveType::unknown()),
+                "func" => Some(PrimitiveType::func()),
                 _ => None,
             };
 
@@ -1939,7 +1970,18 @@ impl Parser {
             }));
         }
 
-        if self.match_token(&[TokenType::LeftParen]) {
+        if self.check(&TokenType::LeftParen) {
+            // Save position before consuming anything
+            let saved_pos = self.current;
+
+            // Try to parse as arrow function
+            if let Ok(arrow) = self.try_parse_arrow_function(false) {
+                return Ok(Expr::ArrowFn(arrow));
+            }
+
+            // Restore position and parse as grouped expression
+            self.current = saved_pos;
+            self.advance(); // consume LeftParen
             let expr = self.expression()?;
             self.consume(TokenType::RightParen, "Expected ')' after expression")?;
             return Ok(expr);
@@ -1987,10 +2029,17 @@ impl Parser {
 
         if !self.check(&TokenType::RightBrace) {
             loop {
-                let key = self
-                    .consume(TokenType::Identifier, "Expected property name")?
+                // Allow both identifiers and string literals as property keys
+                let key = if self.check(&TokenType::StrLiteral) {
+                    self.advance().value.clone()
+                } else {
+                    self.consume(
+                        TokenType::Identifier,
+                        "Expected property name or string literal",
+                    )?
                     .value
-                    .clone();
+                    .clone()
+                };
                 self.consume(TokenType::Colon, "Expected ':' after property name")?;
                 let value = self.expression()?;
                 properties.insert(key, value);
@@ -2174,7 +2223,7 @@ impl Parser {
 
         // Parse parameters
         self.consume(TokenType::LeftParen, "Expected '('")?;
-        let parameters = self.function_parameters()?;
+        let parameters = self.arrow_function_parameters()?;
         self.consume(TokenType::RightParen, "Expected ')'")?;
 
         // Optional return type
@@ -2209,6 +2258,57 @@ impl Parser {
             is_async,
             position,
         })
+    }
+
+    // Parse arrow function parameters where type annotations are optional
+    fn arrow_function_parameters(&mut self) -> Result<Vec<FnParam>, RaccoonError> {
+        let mut params = Vec::new();
+
+        if !self.check(&TokenType::RightParen) {
+            loop {
+                if self.check(&TokenType::LeftBracket) || self.check(&TokenType::LeftBrace) {
+                    let pattern = VarPattern::Destructuring(self.parse_destructuring_pattern()?);
+                    self.consume(TokenType::Colon, "Expected ':' after destructuring pattern")?;
+                    let param_type = self.parse_type()?;
+                    params.push(FnParam {
+                        pattern,
+                        param_type,
+                        default_value: None,
+                        is_rest: false,
+                    });
+                } else {
+                    let name = self
+                        .consume(TokenType::Identifier, "Expected parameter name")?
+                        .value
+                        .clone();
+
+                    // Type annotation is OPTIONAL for arrow functions
+                    let param_type = if self.match_token(&[TokenType::Colon]) {
+                        self.parse_type()?
+                    } else {
+                        PrimitiveType::any() // Default to 'any' if no type is specified
+                    };
+
+                    let mut default_value = None;
+                    if self.match_token(&[TokenType::Assign]) {
+                        default_value = Some(self.expression()?);
+                    }
+
+                    params.push(FnParam {
+                        pattern: VarPattern::Identifier(name),
+                        param_type,
+                        default_value,
+                        is_rest: false,
+                    });
+                }
+
+                if !self.match_token(&[TokenType::Comma]) {
+                    break;
+                }
+            }
+        }
+
+        Ok(params)
     }
 }
 

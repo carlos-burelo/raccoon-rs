@@ -1,0 +1,52 @@
+// Test de funcionalidades de debugging mejoradas
+println("=== TEST DE DEBUGGING Y COLORES ===");
+println("");
+
+// Test 1: print() con colores
+println("Test 1: print() con colores para diferentes tipos");
+print("Strings en verde:", "Hello World");
+print("Números en amarillo:", 42, 3.14);
+print("Booleanos en amarillo:", true, false);
+print("Null en gris:", null);
+print("Lista en magenta:", [1, 2, 3]);
+println("");
+
+// Test 2: println() - línea en blanco y mensajes
+println("Test 2: función println()");
+println("Primera línea");
+println("Segunda línea");
+println("Tercera línea");
+println("");
+
+// Test 3: Tipos mezclados
+println("Test 3: Mezcla de tipos en una sola llamada");
+print("Usuario:", "Bob", "Edad:", 25, "Activo:", true, "Score:", 95.5);
+println("");
+
+// Test 4: Operaciones con números
+println("Test 4: Resultados de operaciones");
+let x = 10;
+let y = 5;
+print("x =", x, "y =", y);
+print("x + y =", x + y);
+print("x * y =", x * y);
+print("x > y =", x > y);
+println("");
+
+// Test 5: Listas
+println("Test 5: Estructuras de datos");
+let numbers = [10, 20, 30, 40, 50];
+print("Lista de números:", numbers);
+let mixed = [1, "two", 3, "four"];
+print("Lista mixta:", mixed);
+println("");
+
+// Test 6: Funciones
+println("Test 6: Funciones");
+fn greet(name: str): str {
+    return "Hello, " + name;
+}
+print("Resultado:", greet("World"));
+println("");
+
+println("=== TODOS LOS TESTS COMPLETADOS ===");

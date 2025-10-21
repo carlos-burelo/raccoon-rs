@@ -1,0 +1,79 @@
+// Standard Library - Time Module
+// Provides time and date functionality
+
+// Native function declarations
+@native("native_time_now")
+declare fn _now_native(): int;
+
+@native("native_time_sleep")
+declare fn _sleep_native(ms: int): void;
+
+@native("native_time_format")
+declare fn _format_native(timestamp: int, format: str): str;
+
+/**
+ * Returns the current timestamp in milliseconds
+ */
+export fn now(): int {
+    return _now_native();
+}
+
+/**
+ * Pauses execution for the specified number of milliseconds
+ */
+export fn sleep(ms: int): void {
+    _sleep_native(ms);
+}
+
+/**
+ * Formats a timestamp according to the given format string
+ */
+export fn format(timestamp: int, formatStr: str): str {
+    return _format_native(timestamp, formatStr);
+}
+
+/**
+ * Returns the current timestamp in seconds
+ */
+export fn nowSeconds(): int {
+    return now() / 1000;
+}
+
+/**
+ * Sleeps for the specified number of seconds
+ */
+export fn sleepSeconds(seconds: int): void {
+    sleep(seconds * 1000);
+}
+
+/**
+ * Simple timer class for measuring elapsed time
+ */
+export class Timer {
+    startTime: int;
+
+    constructor() {
+        this.startTime = now();
+    }
+
+    /**
+     * Returns elapsed time in milliseconds
+     */
+    elapsed(): int {
+        return now() - this.startTime;
+    }
+
+    /**
+     * Returns elapsed time in seconds
+     */
+    elapsedSeconds(): float {
+        return (now() - this.startTime) / 1000.0;
+    }
+
+    /**
+     * Resets the timer
+     */
+    reset(): void {
+        this.startTime = now();
+    }
+}

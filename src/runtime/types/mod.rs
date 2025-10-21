@@ -10,10 +10,26 @@ pub mod str_type;
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
+use async_trait::async_trait;
+use std::future::Future;
+use std::pin::Pin;
+
+/// Type alias for async callback executor
+/// Takes a function value and arguments, returns a future that resolves to a result
+pub type CallbackExecutor = Box<
+    dyn Fn(
+            RuntimeValue,
+            Vec<RuntimeValue>,
+            Position,
+        ) -> Pin<Box<dyn Future<Output = Result<RuntimeValue, RaccoonError>> + Send>>
+        + Send
+        + Sync,
+>;
 
 /// Trait that all type handlers must implement
 /// This allows types to define their own instance and static methods
-pub trait TypeHandler {
+#[async_trait]
+pub trait TypeHandler: Send + Sync {
     /// Get the name of the type (e.g., "str", "int", "bool")
     fn type_name(&self) -> &str;
 
@@ -59,4 +75,25 @@ pub trait TypeHandler {
 
     /// Check if this type has a static method
     fn has_static_method(&self, method: &str) -> bool;
+
+    /// Call an async instance method that requires callback execution
+    /// This is used for methods like map, filter, reduce that need to call user functions
+    async fn call_async_instance_method(
+        &self,
+        value: &mut RuntimeValue,
+        method: &str,
+        args: Vec<RuntimeValue>,
+        position: Position,
+        file: Option<String>,
+        _callback_executor: &CallbackExecutor,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        // Default implementation: delegate to sync method
+        self.call_instance_method(value, method, args, position, file)
+    }
+
+    /// Check if this type has an async instance method
+    fn has_async_instance_method(&self, _method: &str) -> bool {
+        // Default: no async methods
+        false
+    }
 }

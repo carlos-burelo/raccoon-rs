@@ -276,4 +276,3 @@ print("  ✓ Manipulación de colecciones");
 print("  ✓ Soporte JSON completo");
 print("  ✓ Regex avanzado");
 print("  ✓ Y mucho más!");
-;

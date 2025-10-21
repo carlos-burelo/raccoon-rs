@@ -1,0 +1,163 @@
+// Standard Library - String Module
+// Provides string manipulation functions
+
+// Native function declarations
+@native("native_str_length")
+declare fn _length_native(s: str): int;
+
+@native("native_str_upper")
+declare fn _upper_native(s: str): str;
+
+@native("native_str_lower")
+declare fn _lower_native(s: str): str;
+
+@native("native_str_trim")
+declare fn _trim_native(s: str): str;
+
+@native("native_str_substring")
+declare fn _substring_native(s: str, start: int, end: int): str;
+
+@native("native_str_char_at")
+declare fn _char_at_native(s: str, index: int): str;
+
+@native("native_str_index_of")
+declare fn _index_of_native(s: str, substr: str): int;
+
+@native("native_str_replace")
+declare fn _replace_native(s: str, from: str, to: str): str;
+
+@native("native_str_split")
+declare fn _split_native(s: str, delimiter: str): str[];
+
+@native("native_str_starts_with")
+declare fn _starts_with_native(s: str, prefix: str): bool;
+
+@native("native_str_ends_with")
+declare fn _ends_with_native(s: str, suffix: str): bool;
+
+/**
+ * Returns the length of a string
+ */
+export fn length(s: str): int {
+    return _length_native(s);
+}
+
+/**
+ * Converts a string to uppercase
+ */
+export fn upper(s: str): str {
+    return _upper_native(s);
+}
+
+/**
+ * Converts a string to lowercase
+ */
+export fn lower(s: str): str {
+    return _lower_native(s);
+}
+
+/**
+ * Removes whitespace from both ends of a string
+ */
+export fn trim(s: str): str {
+    return _trim_native(s);
+}
+
+/**
+ * Extracts a section of a string
+ */
+export fn substring(s: str, start: int, end: int): str {
+    return _substring_native(s, start, end);
+}
+
+/**
+ * Returns the character at a specified index
+ */
+export fn charAt(s: str, index: int): str {
+    return _char_at_native(s, index);
+}
+
+/**
+ * Returns the index of the first occurrence of a substring
+ */
+export fn indexOf(s: str, substr: str): int {
+    return _index_of_native(s, substr);
+}
+
+/**
+ * Replaces occurrences of a substring with another string
+ */
+export fn replace(s: str, from: str, to: str): str {
+    return _replace_native(s, from, to);
+}
+
+/**
+ * Splits a string into an array of substrings
+ */
+export fn split(s: str, delimiter: str): str[] {
+    return _split_native(s, delimiter);
+}
+
+/**
+ * Checks if a string starts with a specified prefix
+ */
+export fn startsWith(s: str, prefix: str): bool {
+    return _starts_with_native(s, prefix);
+}
+
+/**
+ * Checks if a string ends with a specified suffix
+ */
+export fn endsWith(s: str, suffix: str): bool {
+    return _ends_with_native(s, suffix);
+}
+
+/**
+ * Concatenates multiple strings
+ */
+export fn concat(...strings: str[]): str {
+    let result: str = "";
+    for (let i = 0; i < strings.length; i = i + 1) {
+        result = result + strings[i];
+    }
+    return result;
+}
+
+/**
+ * Repeats a string n times
+ */
+export fn repeat(s: str, count: int): str {
+    let result: str = "";
+    for (let i = 0; i < count; i = i + 1) {
+        result = result + s;
+    }
+    return result;
+}
+
+/**
+ * Pads a string to a certain length with another string
+ */
+export fn padStart(s: str, targetLength: int, padString: str): str {
+    let currentLength = length(s);
+    if (currentLength >= targetLength) {
+        return s;
+    }
+
+    let padCount = targetLength - currentLength;
+    let padding = repeat(padString, padCount);
+    return substring(padding, 0, padCount) + s;
+}
+
+/**
+ * Pads the end of a string to a certain length
+ */
+export fn padEnd(s: str, targetLength: int, padString: str): str {
+    let currentLength = length(s);
+    if (currentLength >= targetLength) {
+        return s;
+    }
+
+    let padCount = targetLength - currentLength;
+    let padding = repeat(padString, padCount);
+    return s + substring(padding, 0, padCount);
+}
