@@ -1,62 +1,28 @@
-export fn log(...args: any[]): void {
-    _print_native(...args);
-}
-
-/**
- * Logs errores a stderr con prefijo
- */
-export fn error(...args: any[]): void {
-    _eprint_native("ERROR:", ...args);
-}
-
-/**
- * Logs warnings a stderr con prefijo
- */
-export fn warn(...args: any[]): void {
-    _eprint_native("WARN:", ...args);
-}
-
-/**
- * Logs información a stdout con prefijo
- */
-export fn info(...args: any[]): void {
-    _print_native("INFO:", ...args);
-}
-
-/**
- * Logs debug a stdout con prefijo
- */
-export fn debug(...args: any[]): void {
-    _print_native("DEBUG:", ...args);
-}
-
-/**
- * Limpia la consola (implementación futura)
- */
-export fn clear(): void {
-    // TODO: Implementar con ANSI codes o command del sistema
-    _print_native("\n\n\n\n\n\n\n\n\n\n");
-}
-
-/**
- * Tabla simple para visualizar datos
- */
-export fn table(data: any[]): void {
-    if (data.length == 0) {
-        log("(empty)");
-        return;
+export class console {
+    
+    static log(...args: any[]): void {
+        _print_native(...args);
     }
 
-    log("┌─────────┬───────────────────────────┐");
-    log("│ Index   │ Value                     │");
-    log("├─────────┼───────────────────────────┤");
-
-    for (let i = 0; i < data.length; i = i + 1) {
-        log("│", i, "      │", data[i], "│");
+    
+    static error(...args: any[]): void {
+        _eprint_native("ERROR:", ...args);
     }
 
-    log("└─────────┴───────────────────────────┘");
+    
+    static warn(...args: any[]): void {
+        _eprint_native("WARN:", ...args);
+    }
+
+    
+    static info(...args: any[]): void {
+        _print_native("INFO:", ...args);
+    }
+
+    
+    static debug(...args: any[]) {
+        _print_native("DEBUG:", ...args);
+    }
 }
 
-// Default export
-export default log;
+export default console;

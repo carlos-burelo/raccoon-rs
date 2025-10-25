@@ -1,0 +1,38 @@
+// Test enum type syntax (parsing only - runtime implementation pending)
+
+// Define an enum
+enum Status {
+    Pending = 0,
+    Active = 1,
+    Completed = 2
+}
+
+// Use enum as type annotation - this should parse correctly
+let status: Status;
+
+// Use enum in function parameter type
+fn updateStatus(newStatus: Status): void {
+    print("Status updated");
+}
+
+// Use enum in function return type
+fn getDefaultStatus(): Status {
+    // Note: Enum runtime implementation is pending
+    // For now this just demonstrates type syntax
+    let s: Status;
+    return s;
+}
+
+// Use enum in type aliases
+type StatusOrNull = Status?;
+type StatusList = Status[];
+type StatusUnion = Status | int;
+
+// Use enum in object types
+type Task = {
+    title: str,
+    status: Status,
+    priority?: int
+};
+
+print("Enum type syntax test completed - parsing successful!");

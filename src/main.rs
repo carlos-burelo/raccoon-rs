@@ -38,8 +38,21 @@ enum Commands {
     },
 }
 
-#[tokio::main]
-async fn main() {
+fn main() {
+    // Increase stack size to handle deeper recursion (256MB)
+    // This is needed because async_recursion creates large futures on the stack
+    // Each recursive call with async_recursion can consume ~500KB-1MB of stack space
+    // With 256MB stack, we can support ~250-500 levels of recursion
+    let runtime = tokio::runtime::Builder::new_current_thread()
+        .thread_stack_size(256 * 1024 * 1024)
+        .enable_all()
+        .build()
+        .expect("Failed to create Tokio runtime");
+
+    runtime.block_on(async_main());
+}
+
+async fn async_main() {
     let cli = Cli::parse();
 
     match cli.command {

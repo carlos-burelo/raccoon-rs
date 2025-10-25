@@ -1,0 +1,263 @@
+// Comprehensive test for ALL function parameter combinations
+// Testing: positional, named, defaults, variadic, destructuring
+
+print("=== COMPREHENSIVE FUNCTION PARAMETERS TEST ===\n")
+
+// ============================================
+// 1. BASIC POSITIONAL PARAMETERS
+// ============================================
+print("1. Basic positional parameters")
+fn add(a: int, b: int): int {
+    return a + b
+}
+print("  add(5, 3) = " + add(5, 3))
+
+// ============================================
+// 2. NAMED ARGUMENTS
+// ============================================
+print("\n2. Named arguments")
+fn connect(host: str, port: int, ssl: bool): str {
+    return host + ":" + port + " (SSL: " + ssl + ")"
+}
+print("  Positional: " + connect("localhost", 8080, true))
+print("  Named: " + connect(port:3000, host:"example.com", ssl:false))
+print("  Mixed: " + connect("server.com", ssl:true, port:443))
+
+// ============================================
+// 3. DEFAULT VALUES
+// ============================================
+print("\n3. Default values")
+fn greet(name: str, prefix: str = "Hello", suffix: str = "!"): str {
+    return prefix + " " + name + suffix
+}
+print("  All defaults: " + greet("Alice"))
+print("  One override: " + greet("Bob", "Hi"))
+print("  All specified: " + greet("Charlie", "Hey", "!!!"))
+print("  Named override: " + greet("Dave", suffix:"?"))
+
+// ============================================
+// 4. VARIADIC PARAMETERS (REST)
+// ============================================
+print("\n4. Variadic parameters")
+fn sum(...numbers: int[]): int {
+    let total: int = 0
+    for (let i = 0; i < numbers.length; i = i + 1) {
+        total = total + numbers[i]
+    }
+    return total
+}
+print("  sum(1,2,3,4,5) = " + sum(1, 2, 3, 4, 5))
+print("  sum(10,20,30) = " + sum(10, 20, 30))
+print("  sum() = " + sum())
+
+// ============================================
+// 5. POSITIONAL + VARIADIC
+// ============================================
+print("\n5. Positional + Variadic")
+fn format(prefix: str, ...items: str[]): str {
+    let result: str = prefix + ":"
+    for (let i = 0; i < items.length; i = i + 1) {
+        result = result + " " + items[i]
+    }
+    return result
+}
+print("  " + format("Items", "apple", "banana", "cherry"))
+print("  " + format("Empty"))
+print("  " + format("Single", "item"))
+
+// ============================================
+// 6. DEFAULTS + VARIADIC
+// ============================================
+print("\n6. Defaults + Variadic")
+fn log(level: str = "INFO", ...messages: str[]): str {
+    let result: str = "[" + level + "]"
+    for (let i = 0; i < messages.length; i = i + 1) {
+        result = result + " " + messages[i]
+    }
+    return result
+}
+print("  " + log("ERROR", "Failed", "to", "connect"))
+print("  " + log("WARN", "Low", "memory"))
+print("  " + log("INFO", "Single message"))
+
+// ============================================
+// 7. NAMED + DEFAULTS + VARIADIC
+// ============================================
+print("\n7. Named + Defaults + Variadic")
+fn buildUrl(protocol: str = "https", host: str, ...paths: str[]): str {
+    let url: str = protocol + "://" + host
+    for (let i = 0; i < paths.length; i = i + 1) {
+        url = url + "/" + paths[i]
+    }
+    return url
+}
+print("  " + buildUrl("https", "example.com", "api", "v1", "users"))
+print("  " + buildUrl("http", "localhost", "admin"))
+print("  " + buildUrl(host:"site.com"))
+
+// ============================================
+// 8. ARRAY DESTRUCTURING
+// ============================================
+print("\n8. Array destructuring")
+fn getCoords([x, y]: int[]): str {
+    return "x=" + x + ", y=" + y
+}
+print("  " + getCoords([10, 20]))
+print("  " + getCoords([100, 200]))
+
+fn swapPair([a, b]: int[]): int[] {
+    return [b, a]
+}
+let swapped: int[] = swapPair([1, 2])
+print("  swapped [1,2] = [" + swapped[0] + "," + swapped[1] + "]")
+
+// ============================================
+// 9. ARROW FUNCTIONS WITH VARIADIC
+// ============================================
+print("\n9. Arrow functions with variadic")
+let multiply = (...nums: int[]): int => {
+    let product: int = 1
+    for (let i = 0; i < nums.length; i = i + 1) {
+        product = product * nums[i]
+    }
+    return product
+}
+print("  multiply(2,3,4) = " + multiply(2, 3, 4))
+
+let concat = (sep: str, ...parts: str[]): str => {
+    let result: str = ""
+    for (let i = 0; i < parts.length; i = i + 1) {
+        if (i > 0) {
+            result = result + sep
+        }
+        result = result + parts[i]
+    }
+    return result
+}
+print("  concat('-', 'a','b','c') = " + concat("-", "a", "b", "c"))
+
+// ============================================
+// 10. ARROW FUNCTIONS WITH DEFAULTS
+// ============================================
+print("\n10. Arrow functions with defaults")
+let power = (base: int, exp: int = 2): int => {
+    let result: int = 1
+    for (let i = 0; i < exp; i = i + 1) {
+        result = result * base
+    }
+    return result
+}
+print("  power(3) = " + power(3))
+print("  power(2, 5) = " + power(2, 5))
+
+// ============================================
+// 11. COMPLEX COMBINATIONS
+// ============================================
+print("\n11. Complex combinations")
+fn process(
+    mode: str,
+    [start, end]: int[],
+    config: str = "default",
+    ...items: str[]
+): str {
+    let result: str = "[" + mode + "|" + config + "|" + start + "-" + end + "]"
+    for (let i = 0; i < items.length; i = i + 1) {
+        result = result + " " + items[i]
+    }
+    return result
+}
+print("  " + process("batch", [0, 10], "fast", "file1", "file2", "file3"))
+// Skip default by relying on smart matching
+print("  " + process("single", [5, 15], "data"))
+
+// ============================================
+// 12. NAMED ARGS COMPREHENSIVE
+// ============================================
+print("\n12. Named arguments comprehensive")
+fn configure(
+    server: str,
+    port: int = 8080,
+    timeout: int = 30,
+    retries: int = 3
+): str {
+    return server + ":" + port + " timeout:" + timeout + " retries:" + retries
+}
+print("  All defaults: " + configure("localhost"))
+print("  Named override: " + configure(server:"api.com", timeout:60))
+print("  Mixed order: " + configure(retries:5, server:"db.local", port:5432))
+
+// ============================================
+// 13. VARIADIC WITH DIFFERENT TYPES
+// ============================================
+print("\n13. Variadic with different types")
+fn average(...values: int[]): int {
+    if (values.length == 0) {
+        return 0
+    }
+    let sum: int = 0
+    for (let i = 0; i < values.length; i = i + 1) {
+        sum = sum + values[i]
+    }
+    return sum / values.length
+}
+print("  average(10,20,30,40) = " + average(10, 20, 30, 40))
+print("  average(5,15) = " + average(5, 15))
+
+// ============================================
+// 14. NESTED FUNCTION CALLS WITH VARIADIC
+// ============================================
+print("\n14. Nested calls with variadic")
+fn min(...nums: int[]): int {
+    if (nums.length == 0) {
+        return 0
+    }
+    let minimum: int = nums[0]
+    for (let i = 1; i < nums.length; i = i + 1) {
+        if (nums[i] < minimum) {
+            minimum = nums[i]
+        }
+    }
+    return minimum
+}
+
+fn max(...nums: int[]): int {
+    if (nums.length == 0) {
+        return 0
+    }
+    let maximum: int = nums[0]
+    for (let i = 1; i < nums.length; i = i + 1) {
+        if (nums[i] > maximum) {
+            maximum = nums[i]
+        }
+    }
+    return maximum
+}
+
+print("  min(5,2,8,1,9) = " + min(5, 2, 8, 1, 9))
+print("  max(5,2,8,1,9) = " + max(5, 2, 8, 1, 9))
+
+// ============================================
+// 15. EDGE CASES
+// ============================================
+print("\n15. Edge cases")
+
+// Empty variadic
+fn noArgs(...args: int[]): int {
+    return args.length
+}
+print("  Empty variadic: " + noArgs())
+
+// Only variadic parameter
+fn onlyVariadic(...items: str[]): int {
+    return items.length
+}
+print("  Only variadic (3 args): " + onlyVariadic("a", "b", "c"))
+
+// Many parameters
+fn manyParams(a: int, b: int, c: int, d: int = 10, e: int = 20): int {
+    return a + b + c + d + e
+}
+print("  Many params: " + manyParams(1, 2, 3))
+print("  Many params (all): " + manyParams(1, 2, 3, 4, 5))
+
+print("\n=== ALL TESTS PASSED ===")

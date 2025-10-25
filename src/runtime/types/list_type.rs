@@ -118,8 +118,22 @@ impl TypeHandler for ListType {
     fn has_instance_method(&self, method: &str) -> bool {
         matches!(
             method,
-            "push" | "pop" | "concat" | "length" | "len" | "reverse" | "clear" | "toStr"
-                | "map" | "filter" | "reduce" | "forEach" | "find" | "findIndex" | "some" | "every"
+            "push"
+                | "pop"
+                | "concat"
+                | "length"
+                | "len"
+                | "reverse"
+                | "clear"
+                | "toStr"
+                | "map"
+                | "filter"
+                | "reduce"
+                | "forEach"
+                | "find"
+                | "findIndex"
+                | "some"
+                | "every"
         )
     }
 
@@ -205,7 +219,6 @@ impl TypeHandler for ListType {
                     )
                     .await?;
 
-                    // Check if result is truthy
                     let is_truthy = match result {
                         RuntimeValue::Bool(b) => b.value,
                         RuntimeValue::Null(_) => false,
@@ -313,7 +326,6 @@ impl TypeHandler for ListType {
                     )
                     .await?;
 
-                    // Check if result is truthy
                     let is_truthy = match result {
                         RuntimeValue::Bool(b) => b.value,
                         RuntimeValue::Null(_) => false,
@@ -351,7 +363,6 @@ impl TypeHandler for ListType {
                     )
                     .await?;
 
-                    // Check if result is truthy
                     let is_truthy = match result {
                         RuntimeValue::Bool(b) => b.value,
                         RuntimeValue::Null(_) => false,
@@ -389,7 +400,6 @@ impl TypeHandler for ListType {
                     )
                     .await?;
 
-                    // Check if result is truthy
                     let is_truthy = match result {
                         RuntimeValue::Bool(b) => b.value,
                         RuntimeValue::Null(_) => false,
@@ -427,7 +437,6 @@ impl TypeHandler for ListType {
                     )
                     .await?;
 
-                    // Check if result is truthy
                     let is_truthy = match result {
                         RuntimeValue::Bool(b) => b.value,
                         RuntimeValue::Null(_) => false,
@@ -444,10 +453,7 @@ impl TypeHandler for ListType {
                 Ok(RuntimeValue::Bool(BoolValue::new(true)))
             }
 
-            _ => {
-                // Fall back to sync method
-                self.call_instance_method(value, method, args, position, file)
-            }
+            _ => self.call_instance_method(value, method, args, position, file),
         }
     }
 

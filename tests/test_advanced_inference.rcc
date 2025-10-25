@@ -1,0 +1,47 @@
+// Pruebas avanzadas de inferencia de tipos en Raccoon
+
+// 1. Inferencia de tipo de retorno en arrow functions
+let add = (a: int, b: int) => a + b;  // Infiere (int, int) => int
+let result1 = add(5, 10);  // result1 es int
+
+// 2. Widening numérico en listas
+let mixed = [1, 2, 3.14, 4.5];  // Infiere float[] (int se amplía a float)
+
+// 3. Objetos literales crean tipos estructurales (interfaces anónimas)
+let person = {
+    name: "Alice",
+    age: 30,
+    active: true
+};  // person tiene tipo interface { name: str, age: int, active: bool }
+
+// 4. Inferencia en expresiones condicionales
+let value = true ? 42 : 10;  // int (ambos branches son int)
+let mixed2 = true ? 1 : 2.5;  // float (widening numérico)
+
+// 5. Arrow function con bloque y return statement
+let multiply = (x: int, y: int) => {
+    let temp = x * y;
+    return temp;
+};  // Infiere (int, int) => int
+
+// 6. For-in con inferencia de tipo de elemento
+for (let num in mixed) {
+    // num es float (tipo del elemento de mixed)
+    let doubled = num * 2.0;
+}
+
+// 7. Objetos anidados
+let config = {
+    server: "localhost",
+    port: 8080,
+    settings: {
+        debug: true,
+        timeout: 5000
+    }
+};
+
+// 8. Listas de tipos compatibles
+let numbers: any = [1, 2, 3, 4, 5];  // int[]
+let floats: any = [1.0, 2.0, 3.0];   // float[]
+
+print("Todas las inferencias completadas exitosamente!");

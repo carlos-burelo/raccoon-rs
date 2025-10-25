@@ -1,0 +1,21 @@
+// Test union types in function parameters using type aliases
+
+type StringOrNumber = str | int;
+
+fn processValue(value: StringOrNumber): void {
+    print(value);
+}
+
+processValue("hello");
+processValue(42);
+
+// Test with multiple parameters
+fn combine(first: StringOrNumber, second: StringOrNumber): void {
+    print(first);
+    print(second);
+}
+
+combine("test", 123);
+combine(456, "world");
+
+print("Union type function tests completed!");

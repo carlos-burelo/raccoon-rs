@@ -108,7 +108,7 @@ impl TypeChecker {
         }
     }
 
-    fn get_wider_numeric_type(&self, left: &Type, right: &Type) -> Type {
+    pub fn get_wider_numeric_type(&self, left: &Type, right: &Type) -> Type {
         let type_priority = HashMap::from([
             (TypeKind::Decimal, 13),
             (TypeKind::F64, 12),

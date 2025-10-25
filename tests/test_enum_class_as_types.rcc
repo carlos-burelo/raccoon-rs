@@ -1,0 +1,70 @@
+// Test using enums and classes as types
+
+// Define an enum
+enum Status {
+    Pending = 0,
+    Active = 1,
+    Completed = 2,
+    Failed = 3
+}
+
+// Define a class
+class User {
+    name: str;
+    age: int;
+
+    constructor(name: str, age: int) {
+        this.name = name;
+        this.age = age;
+    }
+
+    greet(): void {
+        print("Hello, I'm " + this.name);
+    }
+}
+
+// Use enum as type
+let currentStatus: Status;
+currentStatus = Status.Pending;
+print(currentStatus);
+
+// Use class as type
+let user: User = new User("Alice", 30);
+user.greet();
+
+// Use enum in function parameter
+fn processStatus(status: Status): void {
+    print("Processing status:");
+    print(status);
+}
+
+processStatus(Status.Active);
+
+// Use class in function parameter
+fn greetUser(u: User): void {
+    u.greet();
+}
+
+greetUser(user);
+
+// Use enum in variable declaration
+let nextStatus: Status = Status.Completed;
+print(nextStatus);
+
+// Use class in variable declaration
+let admin: User = new User("Admin", 99);
+admin.greet();
+
+// Combine with union types
+type UserOrStatus = User | Status;
+let mixed: UserOrStatus = user;
+mixed = Status.Failed;
+
+// Use in object types
+type TaskInfo = {
+    assignee: User,
+    status: Status,
+    title: str
+};
+
+print("All enum and class type tests completed!");

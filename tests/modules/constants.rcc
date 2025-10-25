@@ -1,0 +1,20 @@
+// Module with only constants
+
+export let APP_NAME: str = "Raccoon Test"
+export let APP_VERSION: str = "2.0.0"
+export let MAX_RETRIES: int = 3
+export let TIMEOUT: int = 5000
+export let DEBUG: bool = true
+
+export enum LogLevel {
+    Debug,
+    Info,
+    Warning,
+    Error
+}
+
+export class Config {
+    static appName: str = APP_NAME
+    static version: str = APP_VERSION
+    static maxRetries: int = MAX_RETRIES
+}

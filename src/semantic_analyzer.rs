@@ -1,10 +1,11 @@
 use std::collections::HashMap;
 
 use crate::{
-    ast::{InterfaceProperty, nodes::*, types::*},
+    ast::{nodes::*, types::*},
     error::RaccoonError,
     symbol_table::{SymbolItem, SymbolKind, SymbolTable},
     type_checker::TypeChecker,
+    type_inference::TypeInferenceEngine,
     type_resolver::TypeResolver,
 };
 
@@ -12,6 +13,7 @@ pub struct SemanticAnalyzer {
     pub file: Option<String>,
     pub symbol_table: SymbolTable,
     pub type_checker: TypeChecker,
+    pub type_inference: TypeInferenceEngine,
     pub current_function: Option<SymbolItem>,
     pub current_class: Option<SymbolItem>,
     pub in_loop: bool,
@@ -24,6 +26,7 @@ impl SemanticAnalyzer {
             file: file.clone(),
             symbol_table: SymbolTable::new(file.clone()),
             type_checker: TypeChecker::new(file.clone()),
+            type_inference: TypeInferenceEngine::new(file.clone()),
             current_function: None,
             current_class: None,
             in_loop: false,
@@ -36,6 +39,7 @@ impl SemanticAnalyzer {
             file: None,
             symbol_table,
             type_checker: TypeChecker::new(None),
+            type_inference: TypeInferenceEngine::new(None),
             current_function: None,
             current_class: None,
             in_loop: false,
@@ -215,7 +219,13 @@ impl SemanticAnalyzer {
             param_types.push(resolved);
         }
 
-        let mut return_type = resolver.resolve(&decl.return_type)?;
+        // If return type is not explicitly specified, use 'unknown' for now
+        // It will be inferred during the second pass in check_fn_decl
+        let mut return_type = if let Some(ref ret_type) = decl.return_type {
+            resolver.resolve(ret_type)?
+        } else {
+            PrimitiveType::unknown()
+        };
 
         if decl.is_async {
             if !matches!(return_type, Type::Future(_)) {
@@ -305,41 +315,107 @@ impl SemanticAnalyzer {
             Expr::NullLiteral(_) => Ok(PrimitiveType::null()),
             Expr::ListLiteral(e) => self.check_list_literal(e),
             Expr::ObjectLiteral(e) => self.check_object_literal(e),
+            Expr::Spread(_) => {
+                // Spread should only appear in call arguments context, not as standalone expression
+                Err(RaccoonError::new(
+                    "Spread operator cannot be used outside of function calls",
+                    (1, 1),
+                    self.file.clone(),
+                ))
+            }
         }
     }
 
+    // fn check_var_decl(&mut self, decl: &VarDecl) -> Result<Type, RaccoonError> {
+    //     let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
+    //     let mut var_type = resolver.resolve(&decl.type_annotation)?;
+
+    //     if let Some(ref initializer) = decl.initializer {
+    //         let init_type = self.check_expr(initializer)?;
+
+    //         if matches!(var_type.kind(), TypeKind::Any) {
+    //             var_type = init_type.clone();
+    //         }
+
+    //         if !init_type.is_assignable_to(&var_type) {
+    //             return Err(RaccoonError::new(
+    //                 format!(
+    //                     "Cannot assign type '{:?}' to variable of type '{:?}'",
+    //                     init_type, var_type
+    //                 ),
+    //                 decl.position,
+    //                 self.file.clone(),
+    //             ));
+    //         }
+
+    //         if let VarPattern::Identifier(ref name) = decl.pattern {
+    //             self.symbol_table.define(
+    //                 name.clone(),
+    //                 SymbolKind::Variable,
+    //                 var_type.clone(),
+    //                 decl.is_constant,
+    //                 Some(Box::new(Stmt::VarDecl(decl.clone()))),
+    //             );
+    //         }
+    //     } else if let VarPattern::Identifier(ref name) = decl.pattern {
+    //         self.symbol_table.define(
+    //             name.clone(),
+    //             SymbolKind::Variable,
+    //             var_type.clone(),
+    //             decl.is_constant,
+    //             Some(Box::new(Stmt::VarDecl(decl.clone()))),
+    //         );
+    //     }
+
+    //     Ok(var_type)
+    // }
+
     fn check_var_decl(&mut self, decl: &VarDecl) -> Result<Type, RaccoonError> {
         let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
-        let mut var_type = resolver.resolve(&decl.type_annotation)?;
+
+        // 1. Resuelve el tipo explícito que dio el usuario (si lo hay)
+        let explicit_type = resolver.resolve(&decl.type_annotation)?;
+
+        let var_type: Type; // Este será el tipo final de la variable
 
         if let Some(ref initializer) = decl.initializer {
+            // 2. Hay un inicializador, así que revisa su tipo
             let init_type = self.check_expr(initializer)?;
 
-            if matches!(var_type.kind(), TypeKind::Any) {
-                var_type = init_type.clone();
+            // 3. Comprueba si el tipo explícito es 'unknown' o 'any'
+            //    (asumiendo que 'unknown' es el tipo por defecto si no se anota nada)
+            if matches!(explicit_type.kind(), TypeKind::Unknown | TypeKind::Any) {
+                // 4. INFERENCIA: El tipo de la variable ES el tipo del inicializador
+                var_type = init_type;
+            } else {
+                // 5. VERIFICACIÓN: Hay un tipo explícito, así que verifica la asignación
+                if !init_type.is_assignable_to(&explicit_type) {
+                    return Err(RaccoonError::new(
+                        format!(
+                            "Cannot assign type '{:?}' to variable of type '{:?}'",
+                            init_type, explicit_type
+                        ),
+                        decl.position,
+                        self.file.clone(),
+                    ));
+                }
+                var_type = explicit_type;
             }
-
-            if !init_type.is_assignable_to(&var_type) {
+        } else {
+            // No hay inicializador, se debe usar el tipo explícito.
+            // Si es 'unknown' o 'any', podría ser un error si el lenguaje no lo permite.
+            if matches!(explicit_type.kind(), TypeKind::Unknown) {
                 return Err(RaccoonError::new(
-                    format!(
-                        "Cannot assign type '{:?}' to variable of type '{:?}'",
-                        init_type, var_type
-                    ),
+                    "Variable must have a type annotation or an initializer",
                     decl.position,
                     self.file.clone(),
                 ));
             }
+            var_type = explicit_type;
+        }
 
-            if let VarPattern::Identifier(ref name) = decl.pattern {
-                self.symbol_table.define(
-                    name.clone(),
-                    SymbolKind::Variable,
-                    var_type.clone(),
-                    decl.is_constant,
-                    Some(Box::new(Stmt::VarDecl(decl.clone()))),
-                );
-            }
-        } else if let VarPattern::Identifier(ref name) = decl.pattern {
+        // 6. Define la variable en la tabla de símbolos con el tipo determinado
+        if let VarPattern::Identifier(ref name) = decl.pattern {
             self.symbol_table.define(
                 name.clone(),
                 SymbolKind::Variable,
@@ -396,16 +472,125 @@ impl SemanticAnalyzer {
             }
         }
 
-        for stmt in &decl.body {
-            self.check_stmt(stmt)?;
+        // Get the explicit return type if provided
+        let explicit_return_type = if let Some(ref ret_type) = decl.return_type {
+            let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
+            Some(resolver.resolve(ret_type)?)
+        } else {
+            None
+        };
+
+        // Determine final return type
+        let mut final_return_type = if let Some(explicit) = explicit_return_type {
+            // If there's an explicit type, use it directly without inferring from body
+            // This prevents stack overflow in recursive functions
+            explicit
+        } else {
+            // Only infer return type from body if no explicit type was provided
+            self.infer_function_return_type(&decl.body)?
+        };
+
+        // Wrap in Future if async and not already a Future
+        if decl.is_async && !matches!(final_return_type, Type::Future(_)) {
+            final_return_type = Type::Future(Box::new(FutureType {
+                inner_type: final_return_type,
+            }));
         }
 
-        self.symbol_table.exit_scope();
+        // Update the function symbol with the inferred type
+        let updated_fn_type = FunctionType {
+            params: param_types,
+            return_type: final_return_type.clone(),
+            is_variadic: false,
+        };
 
+        self.symbol_table.update_symbol_type(
+            &decl.name,
+            Type::Function(Box::new(updated_fn_type)),
+        )?;
+
+        self.symbol_table.exit_scope();
         self.current_function = prev_function;
         self.in_async_function = prev_async;
 
-        Ok(fn_symbol.symbol_type.clone())
+        Ok(Type::Function(Box::new(FunctionType {
+            params: vec![],
+            return_type: final_return_type,
+            is_variadic: false,
+        })))
+    }
+
+    /// Infer the return type of a function by analyzing its body
+    fn infer_function_return_type(&mut self, body: &[Stmt]) -> Result<Type, RaccoonError> {
+        let mut return_types = Vec::new();
+
+        for stmt in body {
+            self.collect_return_types(stmt, &mut return_types)?;
+        }
+
+        if return_types.is_empty() {
+            // No return statements found
+            return Ok(PrimitiveType::void());
+        }
+
+        // Find the common type among all return types
+        self.type_inference
+            .infer_common_type(&return_types, (0, 0))
+    }
+
+    /// Recursively collect all return statement types
+    fn collect_return_types(
+        &mut self,
+        stmt: &Stmt,
+        return_types: &mut Vec<Type>,
+    ) -> Result<(), RaccoonError> {
+        match stmt {
+            Stmt::ReturnStmt(ret) => {
+                if let Some(ref value) = ret.value {
+                    let value_type = self.check_expr(value)?;
+                    return_types.push(value_type);
+                } else {
+                    return_types.push(PrimitiveType::void());
+                }
+            }
+            Stmt::Block(block) => {
+                for s in &block.statements {
+                    self.collect_return_types(s, return_types)?;
+                }
+            }
+            Stmt::IfStmt(if_stmt) => {
+                self.collect_return_types(&if_stmt.then_branch, return_types)?;
+                if let Some(ref else_branch) = if_stmt.else_branch {
+                    self.collect_return_types(else_branch, return_types)?;
+                }
+            }
+            Stmt::WhileStmt(while_stmt) => {
+                self.collect_return_types(&while_stmt.body, return_types)?;
+            }
+            Stmt::ForStmt(for_stmt) => {
+                self.collect_return_types(&for_stmt.body, return_types)?;
+            }
+            Stmt::ForInStmt(for_in) => {
+                self.collect_return_types(&for_in.body, return_types)?;
+            }
+            Stmt::TryStmt(try_stmt) => {
+                for s in &try_stmt.try_block.statements {
+                    self.collect_return_types(s, return_types)?;
+                }
+                for catch in &try_stmt.catch_clauses {
+                    for s in &catch.body.statements {
+                        self.collect_return_types(s, return_types)?;
+                    }
+                }
+                if let Some(ref finally) = try_stmt.finally_block {
+                    for s in &finally.statements {
+                        self.collect_return_types(s, return_types)?;
+                    }
+                }
+            }
+            _ => {}
+        }
+        Ok(())
     }
 
     fn check_class_decl(&mut self, decl: &ClassDecl) -> Result<Type, RaccoonError> {
@@ -503,10 +688,27 @@ impl SemanticAnalyzer {
             ));
         }
 
-        self.check_stmt(&stmt.then_branch)?;
+        // Analyze type narrowing from condition
+        let narrowing_info = self
+            .type_inference
+            .analyze_type_narrowing(&stmt.condition, &self.symbol_table)?;
 
+        // Apply narrowing to then branch
+        self.type_inference.push_narrowing_scope();
+        for (name, ty) in narrowing_info.then_narrows {
+            self.type_inference.set_narrowed_type(name, ty);
+        }
+        self.check_stmt(&stmt.then_branch)?;
+        self.type_inference.pop_narrowing_scope();
+
+        // Apply narrowing to else branch
         if let Some(ref else_branch) = stmt.else_branch {
+            self.type_inference.push_narrowing_scope();
+            for (name, ty) in narrowing_info.else_narrows {
+                self.type_inference.set_narrowed_type(name, ty);
+            }
             self.check_stmt(else_branch)?;
+            self.type_inference.pop_narrowing_scope();
         }
 
         Ok(PrimitiveType::void())
@@ -986,14 +1188,44 @@ impl SemanticAnalyzer {
             }
         }
 
-        let return_type = match &expr.body {
+        // Infer return type from body
+        let inferred_return_type = match &expr.body {
             ArrowFnBody::Expr(body_expr) => self.check_expr(body_expr)?,
             ArrowFnBody::Block(stmts) => {
+                let mut last_return_type = PrimitiveType::void();
                 for stmt in stmts {
-                    self.check_stmt(stmt)?;
+                    if let Stmt::ReturnStmt(ret) = stmt {
+                        if let Some(ref value) = ret.value {
+                            last_return_type = self.check_expr(value)?;
+                        }
+                    } else {
+                        self.check_stmt(stmt)?;
+                    }
                 }
-                PrimitiveType::void()
+                last_return_type
             }
+        };
+
+        // Use explicit return type if provided, otherwise use inferred
+        let return_type = if let Some(ref explicit_type) = expr.return_type {
+            let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
+            let resolved_type = resolver.resolve(explicit_type)?;
+
+            // Verify that inferred type is assignable to explicit type
+            if !inferred_return_type.is_assignable_to(&resolved_type) {
+                self.symbol_table.exit_scope();
+                return Err(RaccoonError::new(
+                    format!(
+                        "Function body returns '{:?}' but declared return type is '{:?}'",
+                        inferred_return_type, resolved_type
+                    ),
+                    expr.position,
+                    self.file.clone(),
+                ));
+            }
+            resolved_type
+        } else {
+            inferred_return_type
         };
 
         self.symbol_table.exit_scope();
@@ -1005,6 +1237,11 @@ impl SemanticAnalyzer {
         })))
     }
     fn check_identifier(&mut self, identifier: &Identifier) -> Result<Type, RaccoonError> {
+        // Check if there's a narrowed type first
+        if let Some(narrowed_type) = self.type_inference.get_narrowed_type(&identifier.name) {
+            return Ok(narrowed_type);
+        }
+
         let symbol = self.symbol_table.lookup(&identifier.name).ok_or_else(|| {
             RaccoonError::new(
                 format!("Undefined variable '{}'", identifier.name),
@@ -1138,23 +1375,19 @@ impl SemanticAnalyzer {
             })));
         }
 
-        let first_type = self.check_expr(&list.elements[0])?;
-
-        for element in &list.elements[1..] {
-            let element_type = self.check_expr(element)?;
-            if !element_type.is_assignable_to(&first_type)
-                && !first_type.is_assignable_to(&element_type)
-            {
-                return Err(RaccoonError::new(
-                    "List elements must have compatible types",
-                    list.position,
-                    self.file.clone(),
-                ));
-            }
+        // Collect all element types
+        let mut element_types = Vec::new();
+        for element in &list.elements {
+            element_types.push(self.check_expr(element)?);
         }
 
+        // Use the improved type inference engine
+        let common_type = self
+            .type_inference
+            .infer_common_type(&element_types, list.position)?;
+
         Ok(Type::List(Box::new(ListType {
-            element_type: first_type,
+            element_type: common_type,
         })))
     }
 

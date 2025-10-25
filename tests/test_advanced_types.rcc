@@ -1,0 +1,102 @@
+// Test file for advanced type system features
+
+// Test 1: Tuple Types
+let tuple1: [str, int, bool] = ["hello", 42, true];
+// TODO: Implement tuple indexing
+// print(tuple1[0]); // should print "hello"
+
+// Test 2: Object Inline Types
+let person: { name: str, age: int, email?: str } = {
+    name: "Alice",
+    age: 30
+};
+
+let personWithEmail: { name: str, age: int, email?: str } = {
+    name: "Bob",
+    age: 25,
+    email: "bob@example.com"
+};
+
+// Test 3: Union Types
+fn processValue(value: str | int) {
+    print(value);
+}
+
+processValue("hello");
+processValue(42);
+
+// Test 4: Intersection Types
+// Note: This requires interface support to be meaningful
+// For now, test that the syntax is accepted
+type Point = { x: int, y: int };
+type Named = { name: str };
+type NamedPoint = Point & Named;
+
+// Test 5: Readonly Types
+let immutableValue: readonly str = "cannot change";
+// immutableValue = "new value"; // Should error
+
+// Test 6: Object with readonly properties
+let config: { readonly apiUrl: str, timeout: int } = {
+    apiUrl: "https://api.example.com",
+    timeout: 5000
+};
+
+// Test 7: Never Type
+fn throwError(): never {
+    throw "This function never returns";
+}
+
+fn exhaustiveCheck(value: never): never {
+    throw "Should never reach here";
+}
+
+// Test 8: Type Aliases with new types
+type StringOrNumber = str | int;
+type Coordinate = [int, int];
+type User = {
+    name: str,
+    age: int,
+    email?: str,
+    readonly id: int
+};
+
+let user: User = {
+    id: 1,
+    name: "Charlie",
+    age: 35,
+    email: "charlie@example.com"
+};
+
+// Test 9: Optional properties
+let partialUser: { name: str, email?: str } = {
+    name: "Diana"
+};
+
+// Test 10: Complex nested types
+type Response = {
+    data: { items: [str, int, bool] },
+    status: int,
+    error?: str
+};
+
+let response: Response = {
+    data: { items: ["test", 123, true] },
+    status: 200
+};
+
+// Test 11: Union with never
+type Result = str | never;
+let result: Result = "success";
+
+// Test 12: Multiple optional properties
+let options: {
+    host?: str,
+    port?: int,
+    secure?: bool,
+    readonly protocol: str
+} = {
+    protocol: "https"
+};
+
+print("Advanced type system tests completed!");

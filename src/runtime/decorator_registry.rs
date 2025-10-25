@@ -125,6 +125,70 @@ impl DecoratorRegistry {
             description: "Marks method as override of base class method".to_string(),
             allowed_on: vec![DecoratorTarget::ClassMethod],
         });
+
+        // @measureTime(label) - Medir tiempo de ejecución
+        self.register_decorator(DecoratorSpec {
+            name: "measureTime".to_string(),
+            visibility: DecoratorVisibility::Public,
+            description: "Measures execution time of function".to_string(),
+            allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
+        });
+
+        // @memoize() - Cachear resultados (alias de cache)
+        self.register_decorator(DecoratorSpec {
+            name: "memoize".to_string(),
+            visibility: DecoratorVisibility::Public,
+            description: "Memoizes function results (alias for cache)".to_string(),
+            allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
+        });
+
+        // @throttle(ms) - Limitar llamadas
+        self.register_decorator(DecoratorSpec {
+            name: "throttle".to_string(),
+            visibility: DecoratorVisibility::Public,
+            description: "Throttles function calls to max N times per interval".to_string(),
+            allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
+        });
+
+        // @debounce(ms) - Retardar ejecución
+        self.register_decorator(DecoratorSpec {
+            name: "debounce".to_string(),
+            visibility: DecoratorVisibility::Public,
+            description: "Debounces function calls by N milliseconds".to_string(),
+            allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
+        });
+
+        // @retry(times) - Reintentar en error
+        self.register_decorator(DecoratorSpec {
+            name: "retry".to_string(),
+            visibility: DecoratorVisibility::Public,
+            description: "Retries function on error".to_string(),
+            allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
+        });
+
+        // @log() - Loguear llamadas
+        self.register_decorator(DecoratorSpec {
+            name: "log".to_string(),
+            visibility: DecoratorVisibility::Public,
+            description: "Logs function calls with arguments and return value".to_string(),
+            allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
+        });
+
+        // @sealed() - Prevenir extensión
+        self.register_decorator(DecoratorSpec {
+            name: "sealed".to_string(),
+            visibility: DecoratorVisibility::Public,
+            description: "Marks class as sealed (cannot be extended)".to_string(),
+            allowed_on: vec![DecoratorTarget::Class],
+        });
+
+        // @abstract() - Clase/método abstracto
+        self.register_decorator(DecoratorSpec {
+            name: "abstract".to_string(),
+            visibility: DecoratorVisibility::Public,
+            description: "Marks class or method as abstract".to_string(),
+            allowed_on: vec![DecoratorTarget::Class, DecoratorTarget::ClassMethod],
+        });
     }
 
     pub fn register_decorator(&mut self, spec: DecoratorSpec) {

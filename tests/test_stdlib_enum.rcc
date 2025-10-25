@@ -1,0 +1,5 @@
+import { TestEnum, TestClass } from "std:test_enum";
+
+print("TestEnum:", TestEnum);
+print("TestClass:", TestClass);
+TestClass.test();

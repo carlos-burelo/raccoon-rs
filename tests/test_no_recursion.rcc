@@ -1,0 +1,12 @@
+// Test: No recursion
+
+fn add(a: int, b: int): int {
+  return a + b;
+}
+
+fn greet(name: str) {
+  print("Hello, " + name);
+}
+
+print("add(5, 3) = " + add(5, 3));
+greet("Alice");

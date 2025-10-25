@@ -1,8 +1,8 @@
 use super::TypeHandler;
-use async_trait::async_trait;
 use crate::error::RaccoonError;
 use crate::runtime::{DecimalValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
+use async_trait::async_trait;
 
 pub struct FloatType;
 
@@ -27,7 +27,7 @@ impl TypeHandler for FloatType {
                     format!("Expected float, got {}", value.get_name()),
                     position,
                     file,
-                ))
+                ));
             }
         };
 
@@ -76,16 +76,14 @@ impl TypeHandler for FloatType {
                     ));
                 }
                 match &args[0] {
-                    RuntimeValue::Str(s) => {
-                        match s.value.trim().parse::<f64>() {
-                            Ok(num) => Ok(RuntimeValue::Float(FloatValue::new(num))),
-                            Err(_) => Err(RaccoonError::new(
-                                format!("Failed to parse '{}' as float", s.value),
-                                position,
-                                file,
-                            )),
-                        }
-                    }
+                    RuntimeValue::Str(s) => match s.value.trim().parse::<f64>() {
+                        Ok(num) => Ok(RuntimeValue::Float(FloatValue::new(num))),
+                        Err(_) => Err(RaccoonError::new(
+                            format!("Failed to parse '{}' as float", s.value),
+                            position,
+                            file,
+                        )),
+                    },
                     _ => Err(RaccoonError::new(
                         "parse requires string argument".to_string(),
                         position,
@@ -102,12 +100,10 @@ impl TypeHandler for FloatType {
                     ));
                 }
                 match &args[0] {
-                    RuntimeValue::Str(s) => {
-                        match s.value.trim().parse::<f64>() {
-                            Ok(num) => Ok(RuntimeValue::Float(FloatValue::new(num))),
-                            Err(_) => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
-                        }
-                    }
+                    RuntimeValue::Str(s) => match s.value.trim().parse::<f64>() {
+                        Ok(num) => Ok(RuntimeValue::Float(FloatValue::new(num))),
+                        Err(_) => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
+                    },
                     _ => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
                 }
             }
@@ -120,7 +116,9 @@ impl TypeHandler for FloatType {
                     ));
                 }
                 match &args[0] {
-                    RuntimeValue::Float(f) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(f.value.is_nan()))),
+                    RuntimeValue::Float(f) => Ok(RuntimeValue::Bool(
+                        crate::runtime::BoolValue::new(f.value.is_nan()),
+                    )),
                     _ => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false))),
                 }
             }
@@ -133,7 +131,9 @@ impl TypeHandler for FloatType {
                     ));
                 }
                 match &args[0] {
-                    RuntimeValue::Float(f) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(f.value.is_infinite()))),
+                    RuntimeValue::Float(f) => Ok(RuntimeValue::Bool(
+                        crate::runtime::BoolValue::new(f.value.is_infinite()),
+                    )),
                     _ => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false))),
                 }
             }
@@ -146,7 +146,9 @@ impl TypeHandler for FloatType {
                     ));
                 }
                 match &args[0] {
-                    RuntimeValue::Float(f) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(f.value.is_finite()))),
+                    RuntimeValue::Float(f) => Ok(RuntimeValue::Bool(
+                        crate::runtime::BoolValue::new(f.value.is_finite()),
+                    )),
                     _ => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false))),
                 }
             }
@@ -154,7 +156,7 @@ impl TypeHandler for FloatType {
                 format!("Static method '{}' not found on float type", method),
                 position,
                 file,
-            ))
+            )),
         }
     }
 
@@ -175,7 +177,7 @@ impl TypeHandler for FloatType {
                 format!("Static property '{}' not found on float type", property),
                 position,
                 file,
-            ))
+            )),
         }
     }
 
@@ -205,6 +207,9 @@ impl TypeHandler for FloatType {
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        matches!(method, "parse" | "tryParse" | "isNaN" | "isInfinite" | "isFinite")
+        matches!(
+            method,
+            "parse" | "tryParse" | "isNaN" | "isInfinite" | "isFinite"
+        )
     }
 }

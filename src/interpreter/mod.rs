@@ -310,6 +310,41 @@ impl Interpreter {
                 "@inline" => {
                     // Sugerencia de inline para compilador/intérprete
                 }
+                "@measureTime" => {
+                    // Medir tiempo de ejecución
+                    let _label = decorator_info.arg_as_string(0)
+                        .unwrap_or_else(|| "Function execution".to_string());
+                }
+                "@memoize" => {
+                    // Alias para @cache
+                }
+                "@throttle" => {
+                    // Limitar llamadas
+                    if let Some(_ms) = decorator_info.arg_as_int(0) {
+                        // Guardar intervalo para throttle
+                    }
+                }
+                "@debounce" => {
+                    // Retardar ejecución
+                    if let Some(_ms) = decorator_info.arg_as_int(0) {
+                        // Guardar delay para debounce
+                    }
+                }
+                "@retry" => {
+                    // Reintentar en error
+                    if let Some(_times) = decorator_info.arg_as_int(0) {
+                        // Guardar número de reintentos
+                    }
+                }
+                "@log" => {
+                    // Loguear llamadas
+                }
+                "@sealed" => {
+                    // Clase no puede ser extendida
+                }
+                "@abstract" => {
+                    // Clase/método abstracto
+                }
                 _ => {}
             }
         }

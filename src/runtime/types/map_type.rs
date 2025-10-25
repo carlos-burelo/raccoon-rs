@@ -1,8 +1,8 @@
 use super::TypeHandler;
-use async_trait::async_trait;
 use crate::error::RaccoonError;
 use crate::runtime::{BoolValue, IntValue, NullValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
+use async_trait::async_trait;
 
 pub struct MapType;
 
@@ -27,7 +27,7 @@ impl TypeHandler for MapType {
                     format!("Expected map, got {}", value.get_name()),
                     position,
                     file,
-                ))
+                ));
             }
         };
 

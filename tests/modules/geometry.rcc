@@ -1,0 +1,40 @@
+// Module with default export and named exports
+
+export class Point {
+    x: float
+    y: float
+
+    constructor(x: float, y: float) {
+        this.x = x
+        this.y = y
+    }
+
+    distance(other: Point): float {
+        let dx: float = this.x - other.x
+        let dy: float = this.y - other.y
+        return _sqrt_native(dx * dx + dy * dy)
+    }
+}
+
+export fn calculateArea(width: float, height: float): float {
+    return width * height
+}
+
+export fn calculatePerimeter(width: float, height: float): float {
+    return 2.0 * (width + height)
+}
+
+// Default export
+class Shape {
+    name: str
+
+    constructor(name: str) {
+        this.name = name
+    }
+
+    describe(): str {
+        return "Shape: " + this.name
+    }
+}
+
+export default Shape

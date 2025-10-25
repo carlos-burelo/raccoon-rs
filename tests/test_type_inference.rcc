@@ -1,0 +1,55 @@
+// Test básico de inferencia de tipos en Raccoon
+
+// 1. Inferencia simple de literales
+let x = 42;              // Inferido como int
+let y = 3.14;            // Inferido como float
+let name = "Raccoon";    // Inferido como str
+let active = true;       // Inferido como bool
+
+// 2. Inferencia de listas
+let numbers = [1, 2, 3, 4, 5];  // Inferido como int[]
+let mixed = [1, 2.5];            // Los int se promueven a float -> float[]
+
+// 3. Inferencia con funciones
+fn add(a: int, b: int): int {
+    return a + b;
+}
+
+let result = add(5, 10);  // result es int
+
+// 4. Inferencia con arrow functions
+let multiply = (a: int, b: int) => a * b;  // Inferido como (int, int) => int
+
+// 5. Type narrowing con null checks
+let nullable: str? = "hello";
+
+if (nullable !== null) {
+    // Dentro de este bloque, nullable es de tipo str (sin el ?)
+    let len = nullable.length;
+}
+
+// 6. Type narrowing con typeof
+fn process(value: int | str): void {
+    if (typeof value === "int") {
+        // value es int aquí
+        let doubled = value * 2;
+    } else {
+        // value es str aquí
+        let upper = value.toUpperCase();
+    }
+}
+
+// 7. Inferencia con expresiones condicionales
+let message = active ? "On" : "Off";  // Inferido como str
+
+// 8. Inferencia con null coalescing
+let defaultName = nullable ?? "Anonymous";  // Inferido como str
+
+// 9. Inferencia de rangos
+let range = 1..10;  // Inferido como int[]
+
+// 10. Inferencia con for-in
+for (let num in numbers) {
+    // num es inferido como int (tipo del elemento de numbers)
+    let squared = num * num;
+}

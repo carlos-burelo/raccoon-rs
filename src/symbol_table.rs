@@ -25,7 +25,7 @@ pub struct SymbolItem {
     pub symbol_type: Type,
     pub is_constant: bool,
     pub declaration: Option<Box<Stmt>>,
-    pub value: Option<RuntimeValue>, // Añadido para almacenar valores en runtime
+    pub value: Option<RuntimeValue>,
 }
 
 impl SymbolItem {
@@ -262,6 +262,20 @@ impl SymbolTable {
 
     pub fn get_scope_depth(&self) -> usize {
         self.scopes.len()
+    }
+
+    pub fn update_symbol_type(&mut self, name: &str, new_type: Type) -> Result<(), RaccoonError> {
+        for scope in self.scopes.iter_mut().rev() {
+            if let Some(symbol) = scope.get_mut(name) {
+                symbol.symbol_type = new_type;
+                return Ok(());
+            }
+        }
+        Err(RaccoonError::new(
+            format!("Symbol '{}' not found", name),
+            (0, 0),
+            self.file.clone(),
+        ))
     }
 }
 

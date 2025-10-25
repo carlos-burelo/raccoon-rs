@@ -1,54 +1,39 @@
-// Standard Library - Random Module
-// Provides random number generation
+import Math from "std:math";
 
-import { floor } from "std:math";
 
-// Native function declarations
 @native("native_random")
 declare fn _random_native(): float;
 
 @native("native_random_seed")
 declare fn _seed_native(seed: int): void;
 
-/**
- * Returns a random float between 0 (inclusive) and 1 (exclusive)
- */
+
 export fn random(): float {
     return _random_native();
 }
 
-/**
- * Sets the random seed
- */
+
 export fn seed(seedValue: int): void {
     _seed_native(seedValue);
 }
 
-/**
- * Returns a random integer between min (inclusive) and max (exclusive)
- */
+
 export fn randomInt(min: int, max: int): int {
     let range: float = max - min;
-    return min + floor(random() * range);
+    return min + Math.floor(random() * range);
 }
 
-/**
- * Returns a random float between min (inclusive) and max (exclusive)
- */
+
 export fn randomFloat(min: float, max: float): float {
     return min + random() * (max - min);
 }
 
-/**
- * Returns a random boolean value
- */
+
 export fn randomBool(): bool {
     return random() < 0.5;
 }
 
-/**
- * Returns a random element from an array
- */
+
 export fn choice<T>(arr: T[]): T | null {
     if (arr.length == 0) {
         return null;
@@ -57,9 +42,7 @@ export fn choice<T>(arr: T[]): T | null {
     return arr[index];
 }
 
-/**
- * Shuffles an array in place
- */
+
 export fn shuffle<T>(arr: T[]): T[] {
     for (let i = arr.length - 1; i > 0; i = i - 1) {
         let j = randomInt(0, i + 1);
@@ -70,9 +53,7 @@ export fn shuffle<T>(arr: T[]): T[] {
     return arr;
 }
 
-/**
- * Returns a random sample of n elements from an array
- */
+
 export fn sample<T>(arr: T[], n: int): T[] {
     if (n >= arr.length) {
         return arr;

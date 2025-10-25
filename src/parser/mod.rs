@@ -2,10 +2,7 @@ use std::collections::HashMap;
 
 use crate::{
     Position, RaccoonError, Token, TokenType,
-    ast::{
-        nodes::{InterfaceProperty, *},
-        types::*,
-    },
+    ast::{nodes::*, types::*},
     tokens::{AccessModifier, BinaryOperator, UnaryOperator},
 };
 
@@ -59,11 +56,14 @@ impl Parser {
         if self.match_token(&[TokenType::Let, TokenType::Const]) {
             return self.var_declaration();
         }
+        if self.match_token(&[TokenType::Declare]) {
+            return self.function_declaration(decorators, true);
+        }
         if self.match_token(&[TokenType::Async]) {
-            return self.function_declaration(decorators);
+            return self.function_declaration(decorators, false);
         }
         if self.match_token(&[TokenType::Fn]) {
-            return self.function_declaration(decorators);
+            return self.function_declaration(decorators, false);
         }
         if self.match_token(&[TokenType::Class]) {
             return self.class_declaration(decorators);
@@ -140,11 +140,16 @@ impl Parser {
     fn function_declaration(
         &mut self,
         decorators: Vec<DecoratorDecl>,
+        is_declare: bool,
     ) -> Result<Stmt, RaccoonError> {
-        let is_async = self.previous().token_type == TokenType::Async;
+        let is_async = if is_declare {
+            self.match_token(&[TokenType::Async])
+        } else {
+            self.previous().token_type == TokenType::Async
+        };
 
-        if is_async {
-            self.consume(TokenType::Fn, "Expected 'fn' after 'async'")?;
+        if is_declare || is_async {
+            self.consume(TokenType::Fn, "Expected 'fn' after 'declare' or 'async'")?;
         }
 
         let name = self
@@ -159,11 +164,19 @@ impl Parser {
         let parameters = self.function_parameters()?;
         self.consume(TokenType::RightParen, "Expected ')' after parameters")?;
 
-        self.consume(TokenType::Colon, "Expected ':' after parameters")?;
-        let return_type = self.parse_type()?;
+        let return_type = if self.match_token(&[TokenType::Colon]) {
+            Some(self.parse_type()?)
+        } else {
+            None
+        };
 
-        self.consume(TokenType::LeftBrace, "Expected '{' before function body")?;
-        let body = self.block_statements()?;
+        let body = if is_declare {
+            self.optional_semicolon();
+            Vec::new()
+        } else {
+            self.consume(TokenType::LeftBrace, "Expected '{' before function body")?;
+            self.block_statements()?
+        };
 
         Ok(Stmt::FnDecl(FnDecl {
             name,
@@ -172,6 +185,7 @@ impl Parser {
             return_type,
             body,
             is_async,
+            is_declare,
             decorators,
             position,
         }))
@@ -269,7 +283,6 @@ impl Parser {
                 is_static = true;
             }
 
-            // Check for async keyword before methods
             let mut is_async = false;
             if self.match_token(&[TokenType::Async]) {
                 is_async = true;
@@ -285,14 +298,12 @@ impl Parser {
                 }
                 constructor = Some(self.parse_constructor()?);
             } else if !is_async && self.match_token(&[TokenType::Get]) {
-                // Only parse as accessor if not async
                 accessors.push(self.parse_accessor(
                     AccessorKind::Get,
                     member_decorators,
                     access_modifier,
                 )?);
             } else if !is_async && self.match_token(&[TokenType::Set]) {
-                // Only parse as accessor if not async
                 accessors.push(self.parse_accessor(
                     AccessorKind::Set,
                     member_decorators,
@@ -309,7 +320,6 @@ impl Parser {
             } else if (self.check(&TokenType::Get) || self.check(&TokenType::Set))
                 && self.check_next(&[TokenType::LeftParen])
             {
-                // Async methods named 'get' or 'set'
                 methods.push(self.parse_method(
                     member_decorators,
                     access_modifier,
@@ -389,7 +399,6 @@ impl Parser {
         is_static: bool,
         is_async: bool,
     ) -> Result<ClassMethod, RaccoonError> {
-        // Allow 'get' and 'set' as method names when they're followed by '('
         let name = if (self.check(&TokenType::Get) || self.check(&TokenType::Set))
             && self.check_next(&[TokenType::LeftParen])
         {
@@ -404,8 +413,11 @@ impl Parser {
         let parameters = self.function_parameters()?;
         self.consume(TokenType::RightParen, "Expected ')' after parameters")?;
 
-        self.consume(TokenType::Colon, "Expected ':' after parameters")?;
-        let return_type = self.parse_type()?;
+        let return_type = if self.match_token(&[TokenType::Colon]) {
+            Some(self.parse_type()?)
+        } else {
+            None
+        };
 
         self.consume(TokenType::LeftBrace, "Expected '{' before method body")?;
         let body = self.block_statements()?;
@@ -453,8 +465,11 @@ impl Parser {
             ));
         }
 
-        self.consume(TokenType::Colon, "Expected ':' after parameters")?;
-        let return_type = self.parse_type()?;
+        let return_type = if self.match_token(&[TokenType::Colon]) {
+            Some(self.parse_type()?)
+        } else {
+            None
+        };
 
         self.consume(TokenType::LeftBrace, "Expected '{' before accessor body")?;
         let body = self.block_statements()?;
@@ -503,26 +518,68 @@ impl Parser {
 
     fn function_parameters(&mut self) -> Result<Vec<FnParam>, RaccoonError> {
         let mut params = Vec::new();
+        let mut has_optional = false;
 
         if !self.check(&TokenType::RightParen) {
             loop {
+                let is_rest = self.match_token(&[TokenType::Spread]);
+
                 if self.check(&TokenType::LeftBracket) || self.check(&TokenType::LeftBrace) {
                     let pattern = VarPattern::Destructuring(self.parse_destructuring_pattern()?);
                     self.consume(TokenType::Colon, "Expected ':' after destructuring pattern")?;
                     let param_type = self.parse_type()?;
+
+                    let is_optional = self.match_token(&[TokenType::Question]);
+                    if is_optional && is_rest {
+                        return Err(RaccoonError::new(
+                            "Rest parameters cannot be optional".to_string(),
+                            self.peek().position.clone(),
+                            None::<String>,
+                        ));
+                    }
+                    if is_optional {
+                        has_optional = true;
+                    } else if has_optional {
+                        return Err(RaccoonError::new(
+                            "Required parameters cannot follow optional parameters".to_string(),
+                            self.peek().position.clone(),
+                            None::<String>,
+                        ));
+                    }
+
                     params.push(FnParam {
                         pattern,
                         param_type,
                         default_value: None,
-                        is_rest: false,
+                        is_rest,
+                        is_optional,
                     });
                 } else {
                     let name = self
                         .consume(TokenType::Identifier, "Expected parameter name")?
                         .value
                         .clone();
+
+                    let is_optional = self.match_token(&[TokenType::Question]);
                     self.consume(TokenType::Colon, "Expected ':' after parameter name")?;
                     let param_type = self.parse_type()?;
+
+                    if is_optional && is_rest {
+                        return Err(RaccoonError::new(
+                            "Rest parameters cannot be optional".to_string(),
+                            self.peek().position.clone(),
+                            None::<String>,
+                        ));
+                    }
+                    if is_optional {
+                        has_optional = true;
+                    } else if has_optional {
+                        return Err(RaccoonError::new(
+                            "Required parameters cannot follow optional parameters".to_string(),
+                            self.peek().position.clone(),
+                            None::<String>,
+                        ));
+                    }
 
                     let mut default_value = None;
                     if self.match_token(&[TokenType::Assign]) {
@@ -533,8 +590,13 @@ impl Parser {
                         pattern: VarPattern::Identifier(name),
                         param_type,
                         default_value,
-                        is_rest: false,
+                        is_rest,
+                        is_optional,
                     });
+                }
+
+                if is_rest {
+                    break;
                 }
 
                 if !self.match_token(&[TokenType::Comma]) {
@@ -567,7 +629,7 @@ impl Parser {
 
         if !self.check(&TokenType::RightBracket) {
             loop {
-                if self.match_token(&[TokenType::Dot, TokenType::Dot, TokenType::Dot]) {
+                if self.match_token(&[TokenType::Spread]) {
                     let name = self
                         .consume(TokenType::Identifier, "Expected identifier after ...")?
                         .value
@@ -624,7 +686,7 @@ impl Parser {
 
         if !self.check(&TokenType::RightBrace) {
             loop {
-                if self.match_token(&[TokenType::Dot, TokenType::Dot, TokenType::Dot]) {
+                if self.match_token(&[TokenType::Spread]) {
                     let name = self
                         .consume(TokenType::Identifier, "Expected identifier after ...")?
                         .value
@@ -735,7 +797,7 @@ impl Parser {
                 self.consume(TokenType::Colon, "Expected ':' after method signature")?;
                 let return_type = self.parse_type()?;
 
-                properties.push(InterfaceProperty {
+                properties.push(InterfaceDeclProperty {
                     name: prop_name,
                     property_type: Type::Function(Box::new(FunctionType {
                         params: param_types,
@@ -748,7 +810,7 @@ impl Parser {
             } else {
                 self.consume(TokenType::Colon, "Expected ':' after property name")?;
                 let prop_type = self.parse_type()?;
-                properties.push(InterfaceProperty {
+                properties.push(InterfaceDeclProperty {
                     name: prop_name,
                     property_type: prop_type,
                     optional: false,
@@ -904,6 +966,7 @@ impl Parser {
                 declaration: Some(declaration),
                 specifiers: Vec::new(),
                 is_default: true,
+                module_specifier: None,
                 position,
             }));
         }
@@ -932,11 +995,23 @@ impl Parser {
                 TokenType::RightBrace,
                 "Expected '}' after export specifiers",
             )?;
+
+            let module_specifier = if self.match_token(&[TokenType::From]) {
+                Some(
+                    self.consume(TokenType::StrLiteral, "Expected module path after 'from'")?
+                        .value
+                        .clone(),
+                )
+            } else {
+                None
+            };
+
             self.optional_semicolon();
             return Ok(Stmt::ExportDecl(ExportDecl {
                 declaration: None,
                 specifiers,
                 is_default: false,
+                module_specifier,
                 position,
             }));
         }
@@ -946,11 +1021,46 @@ impl Parser {
             declaration: Some(declaration),
             specifiers: Vec::new(),
             is_default: false,
+            module_specifier: None,
             position,
         }))
     }
 
     fn parse_type(&mut self) -> Result<Type, RaccoonError> {
+        let mut type_ = self.parse_intersection_type()?;
+
+        if self.match_token(&[TokenType::BitwiseOr]) {
+            let mut types = vec![type_];
+            loop {
+                types.push(self.parse_intersection_type()?);
+                if !self.match_token(&[TokenType::BitwiseOr]) {
+                    break;
+                }
+            }
+            type_ = Type::Union(Box::new(UnionType::new(types)));
+        }
+
+        Ok(type_)
+    }
+
+    fn parse_intersection_type(&mut self) -> Result<Type, RaccoonError> {
+        let mut type_ = self.parse_postfix_type()?;
+
+        if self.match_token(&[TokenType::Ampersand]) {
+            let mut types = vec![type_];
+            loop {
+                types.push(self.parse_postfix_type()?);
+                if !self.match_token(&[TokenType::Ampersand]) {
+                    break;
+                }
+            }
+            type_ = Type::Intersection(Box::new(IntersectionType::new(types)));
+        }
+
+        Ok(type_)
+    }
+
+    fn parse_postfix_type(&mut self) -> Result<Type, RaccoonError> {
         let mut type_ = self.parse_primary_type()?;
 
         if self.match_token(&[TokenType::Question]) {
@@ -964,21 +1074,40 @@ impl Parser {
             }));
         }
 
-        if self.match_token(&[TokenType::BitwiseOr]) {
-            let mut types = vec![type_];
-            loop {
-                types.push(self.parse_primary_type()?);
-                if !self.match_token(&[TokenType::BitwiseOr]) {
-                    break;
-                }
-            }
-            type_ = Type::Union(Box::new(UnionType::new(types)));
-        }
-
         Ok(type_)
     }
 
     fn parse_primary_type(&mut self) -> Result<Type, RaccoonError> {
+        if self.match_token(&[TokenType::Readonly]) {
+            let inner_type = self.parse_primary_type()?;
+            return Ok(Type::Readonly(Box::new(ReadonlyType::new(inner_type))));
+        }
+
+        if self.match_token(&[TokenType::KeyOf]) {
+            let target_type = self.parse_primary_type()?;
+            return Ok(Type::KeyOf(Box::new(KeyOfType::new(target_type))));
+        }
+
+        if self.match_token(&[TokenType::Typeof]) {
+            let expression_name = self
+                .consume(TokenType::Identifier, "Expected identifier after typeof")?
+                .value
+                .clone();
+            return Ok(Type::TypeOf(Box::new(TypeOfType::new(expression_name))));
+        }
+
+        if self.check(&TokenType::LeftBrace) {
+            return self.parse_object_type();
+        }
+
+        if self.check(&TokenType::LeftBracket) {
+            return self.parse_tuple_type();
+        }
+
+        if self.match_token(&[TokenType::NullLiteral]) {
+            return Ok(PrimitiveType::null());
+        }
+
         if self.check(&TokenType::Identifier) {
             let name = self.advance().value.clone();
 
@@ -991,6 +1120,7 @@ impl Parser {
                 "void" => Some(PrimitiveType::void()),
                 "any" => Some(PrimitiveType::any()),
                 "unknown" => Some(PrimitiveType::unknown()),
+                "never" => Some(PrimitiveType::never()),
                 "func" => Some(PrimitiveType::func()),
                 _ => None,
             };
@@ -1056,6 +1186,10 @@ impl Parser {
             let mut param_types = Vec::new();
             if !self.check(&TokenType::RightParen) {
                 loop {
+                    if self.check(&TokenType::Identifier) && self.check_next(&[TokenType::Colon]) {
+                        self.advance();
+                        self.advance();
+                    }
                     param_types.push(self.parse_type()?);
                     if !self.match_token(&[TokenType::Comma]) {
                         break;
@@ -1063,7 +1197,7 @@ impl Parser {
                 }
             }
             self.consume(TokenType::RightParen, "Expected ')'")?;
-            self.consume(TokenType::Arrow, "Expected '->'")?;
+            self.consume(TokenType::Arrow, "Expected '=>' or '->'")?;
             let return_type = self.parse_type()?;
 
             return Ok(Type::Function(Box::new(FunctionType {
@@ -1354,11 +1488,9 @@ impl Parser {
     }
 
     fn assignment(&mut self) -> Result<Expr, RaccoonError> {
-        // Check for arrow function patterns
-        // Case 1: async (params) => ...
         if self.check(&TokenType::Async) {
             let saved_pos = self.current;
-            self.advance(); // consume async
+            self.advance();
             if self.check(&TokenType::LeftParen) {
                 if let Ok(arrow) = self.try_parse_arrow_function(true) {
                     return Ok(Expr::ArrowFn(arrow));
@@ -1367,7 +1499,6 @@ impl Parser {
             self.current = saved_pos;
         }
 
-        // Case 2: (params) => ...
         if self.check(&TokenType::LeftParen) {
             let saved_pos = self.current;
             if let Ok(arrow) = self.try_parse_arrow_function(false) {
@@ -1669,9 +1800,8 @@ impl Parser {
     fn exponent(&mut self) -> Result<Expr, RaccoonError> {
         let mut expr = self.unary()?;
 
-        // Exponentiation is right-associative
         if self.match_token(&[TokenType::Exponent]) {
-            let right = Box::new(self.exponent()?); // Recursive for right-associativity
+            let right = Box::new(self.exponent()?);
             let position = expr.position();
             expr = Expr::Binary(BinaryExpr {
                 left: Box::new(expr),
@@ -1786,7 +1916,6 @@ impl Parser {
             self.consume(TokenType::Gt, "Expected '>' after type arguments")?;
         }
 
-        // Los paréntesis son opcionales si no hay argumentos
         let mut args = Vec::new();
         if self.match_token(&[TokenType::LeftParen]) {
             if !self.check(&TokenType::RightParen) {
@@ -1874,7 +2003,12 @@ impl Parser {
 
         if !self.check(&TokenType::RightParen) {
             loop {
-                if self.check(&TokenType::Identifier) && self.check_next(&[TokenType::Colon]) {
+                if self.match_token(&[TokenType::Spread]) {
+                    let position = self.previous().position;
+                    let argument = Box::new(self.expression()?);
+                    args.push(Expr::Spread(SpreadExpr { argument, position }));
+                } else if self.check(&TokenType::Identifier) && self.check_next(&[TokenType::Colon])
+                {
                     let name = self.advance().value.clone();
                     self.advance();
                     let value = self.expression()?;
@@ -1971,17 +2105,14 @@ impl Parser {
         }
 
         if self.check(&TokenType::LeftParen) {
-            // Save position before consuming anything
             let saved_pos = self.current;
 
-            // Try to parse as arrow function
             if let Ok(arrow) = self.try_parse_arrow_function(false) {
                 return Ok(Expr::ArrowFn(arrow));
             }
 
-            // Restore position and parse as grouped expression
             self.current = saved_pos;
-            self.advance(); // consume LeftParen
+            self.advance();
             let expr = self.expression()?;
             self.consume(TokenType::RightParen, "Expected ')' after expression")?;
             return Ok(expr);
@@ -2029,7 +2160,6 @@ impl Parser {
 
         if !self.check(&TokenType::RightBrace) {
             loop {
-                // Allow both identifiers and string literals as property keys
                 let key = if self.check(&TokenType::StrLiteral) {
                     self.advance().value.clone()
                 } else {
@@ -2184,11 +2314,9 @@ impl Parser {
         }
     }
 
-    // Helper method to consume a property/method name that might be a keyword
     fn consume_property_name(&mut self) -> Result<String, RaccoonError> {
         let token = self.peek();
 
-        // Allow identifiers and most keywords as property names
         match token.token_type {
             TokenType::Identifier
             | TokenType::Get
@@ -2221,18 +2349,15 @@ impl Parser {
     fn try_parse_arrow_function(&mut self, is_async: bool) -> Result<ArrowFnExpr, RaccoonError> {
         let position = self.peek().position;
 
-        // Parse parameters
         self.consume(TokenType::LeftParen, "Expected '('")?;
         let parameters = self.arrow_function_parameters()?;
         self.consume(TokenType::RightParen, "Expected ')'")?;
 
-        // Optional return type
         let mut return_type = None;
         if self.match_token(&[TokenType::Colon]) {
             return_type = Some(self.parse_type()?);
         }
 
-        // Must have =>
         if !self.match_token(&[TokenType::Arrow]) {
             return Err(RaccoonError::new(
                 "Expected '=>' for arrow function",
@@ -2241,9 +2366,8 @@ impl Parser {
             ));
         }
 
-        // Parse body - either expression or block
         let body = if self.check(&TokenType::LeftBrace) {
-            self.advance(); // consume {
+            self.advance();
             let stmts = self.block_statements()?;
             ArrowFnBody::Block(stmts)
         } else {
@@ -2260,21 +2384,43 @@ impl Parser {
         })
     }
 
-    // Parse arrow function parameters where type annotations are optional
     fn arrow_function_parameters(&mut self) -> Result<Vec<FnParam>, RaccoonError> {
         let mut params = Vec::new();
+        let mut has_optional = false;
 
         if !self.check(&TokenType::RightParen) {
             loop {
+                let is_rest = self.match_token(&[TokenType::Spread]);
+
                 if self.check(&TokenType::LeftBracket) || self.check(&TokenType::LeftBrace) {
                     let pattern = VarPattern::Destructuring(self.parse_destructuring_pattern()?);
                     self.consume(TokenType::Colon, "Expected ':' after destructuring pattern")?;
                     let param_type = self.parse_type()?;
+
+                    let is_optional = self.match_token(&[TokenType::Question]);
+                    if is_optional && is_rest {
+                        return Err(RaccoonError::new(
+                            "Rest parameters cannot be optional".to_string(),
+                            self.peek().position.clone(),
+                            None::<String>,
+                        ));
+                    }
+                    if is_optional {
+                        has_optional = true;
+                    } else if has_optional {
+                        return Err(RaccoonError::new(
+                            "Required parameters cannot follow optional parameters".to_string(),
+                            self.peek().position.clone(),
+                            None::<String>,
+                        ));
+                    }
+
                     params.push(FnParam {
                         pattern,
                         param_type,
                         default_value: None,
-                        is_rest: false,
+                        is_rest,
+                        is_optional,
                     });
                 } else {
                     let name = self
@@ -2282,12 +2428,30 @@ impl Parser {
                         .value
                         .clone();
 
-                    // Type annotation is OPTIONAL for arrow functions
+                    let is_optional = self.match_token(&[TokenType::Question]);
+
                     let param_type = if self.match_token(&[TokenType::Colon]) {
                         self.parse_type()?
                     } else {
-                        PrimitiveType::any() // Default to 'any' if no type is specified
+                        PrimitiveType::any()
                     };
+
+                    if is_optional && is_rest {
+                        return Err(RaccoonError::new(
+                            "Rest parameters cannot be optional".to_string(),
+                            self.peek().position.clone(),
+                            None::<String>,
+                        ));
+                    }
+                    if is_optional {
+                        has_optional = true;
+                    } else if has_optional {
+                        return Err(RaccoonError::new(
+                            "Required parameters cannot follow optional parameters".to_string(),
+                            self.peek().position.clone(),
+                            None::<String>,
+                        ));
+                    }
 
                     let mut default_value = None;
                     if self.match_token(&[TokenType::Assign]) {
@@ -2298,8 +2462,13 @@ impl Parser {
                         pattern: VarPattern::Identifier(name),
                         param_type,
                         default_value,
-                        is_rest: false,
+                        is_rest,
+                        is_optional,
                     });
+                }
+
+                if is_rest {
+                    break;
                 }
 
                 if !self.match_token(&[TokenType::Comma]) {
@@ -2309,6 +2478,67 @@ impl Parser {
         }
 
         Ok(params)
+    }
+
+    fn parse_tuple_type(&mut self) -> Result<Type, RaccoonError> {
+        self.advance();
+        let mut element_types = Vec::new();
+
+        if !self.check(&TokenType::RightBracket) {
+            loop {
+                element_types.push(self.parse_type()?);
+                if !self.match_token(&[TokenType::Comma]) {
+                    break;
+                }
+            }
+        }
+
+        self.consume(TokenType::RightBracket, "Expected ']' after tuple types")?;
+        Ok(Type::Tuple(Box::new(TupleType::new(element_types))))
+    }
+
+    fn parse_object_type(&mut self) -> Result<Type, RaccoonError> {
+        self.advance();
+        let mut properties = HashMap::new();
+
+        if !self.check(&TokenType::RightBrace) {
+            loop {
+                let is_readonly = self.match_token(&[TokenType::Readonly]);
+
+                let prop_name = self
+                    .consume(TokenType::Identifier, "Expected property name")?
+                    .value
+                    .clone();
+
+                let is_optional = self.match_token(&[TokenType::Question]);
+
+                self.consume(TokenType::Colon, "Expected ':' after property name")?;
+                let prop_type = self.parse_type()?;
+
+                let mut object_prop = ObjectProperty::new(prop_type);
+                if is_optional {
+                    object_prop = object_prop.optional();
+                }
+                if is_readonly {
+                    object_prop = object_prop.readonly();
+                }
+
+                properties.insert(prop_name, object_prop);
+
+                if !self.match_token(&[TokenType::Comma])
+                    && !self.match_token(&[TokenType::Semicolon])
+                {
+                    break;
+                }
+
+                if self.check(&TokenType::RightBrace) {
+                    break;
+                }
+            }
+        }
+
+        self.consume(TokenType::RightBrace, "Expected '}' after object type")?;
+        Ok(Type::Object(Box::new(ObjectType::new(properties))))
     }
 }
 
@@ -2345,6 +2575,7 @@ impl Expr {
             Expr::NullLiteral(e) => e.position,
             Expr::ListLiteral(e) => e.position,
             Expr::ObjectLiteral(e) => e.position,
+            Expr::Spread(e) => e.position,
         }
     }
 }

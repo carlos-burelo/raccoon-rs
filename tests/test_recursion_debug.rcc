@@ -1,0 +1,11 @@
+// Simple recursion test
+fn factorial(n: int): int {
+  if (n <= 1) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+
+print("Testing factorial(10): " + factorial(10));
+print("Testing factorial(20): " + factorial(20));
+print("Testing factorial(100): " + factorial(100));

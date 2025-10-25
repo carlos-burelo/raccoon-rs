@@ -1,280 +1,197 @@
-// Standard Library - Math Module
-// Implementado casi completamente en Raccoon puro
-// Solo usa operaciones nativas de Raccoon (+, -, *, /, %, <, >, etc.)
+class Math {
+    static PI: float = 3.141592653589793;
+    static E: float = 2.718281828459045;
+    static TAU: float = 6.283185307179586;  
+    static SQRT2: float = 1.4142135623730951;
+    static LN2: float = 0.6931471805599453;
+    static LN10: float = 2.302585092994046;
+    static EPSILON: float = 0.0000001;
 
-// ============================================================================
-// CONSTANTES MATEMÁTICAS
-// ============================================================================
-
-export const PI: float = 3.141592653589793;
-export const E: float = 2.718281828459045;
-export const TAU: float = 6.283185307179586;  // 2 * PI
-export const SQRT2: float = 1.4142135623730951;
-export const LN2: float = 0.6931471805599453;
-export const LN10: float = 2.302585092994046;
-export const EPSILON: float = 0.0000001;      // Para comparaciones
-
-// ============================================================================
-// FUNCIONES BÁSICAS - Implementadas en Raccoon puro
-// ============================================================================
-
-/**
- * Retorna el valor absoluto de un número
- * NO requiere acceso nativo - solo usa operador condicional
- */
-export fn abs(x: float): float {
-    return x < 0.0 ? -x : x;
-}
-
-/**
- * Retorna el mínimo de dos o más números
- * Implementado con operadores de Raccoon
- */
-export fn min(...values: float[]): float {
-    if (values.length == 0) {
-        return 0.0;
+    static abs(x: float): float {
+        return x < 0.0 ? -x : x;
     }
 
-    let minVal: float = values[0];
-    for (let i = 1; i < values.length; i = i + 1) {
-        if (values[i] < minVal) {
-            minVal = values[i];
+    static min(...values: float[]): float {
+        if (values.length == 0) {
+            return 0.0;
         }
-    }
-    return minVal;
-}
 
-/**
- * Retorna el máximo de dos o más números
- */
-export fn max(...values: float[]): float {
-    if (values.length == 0) {
-        return 0.0;
-    }
-
-    let maxVal: float = values[0];
-    for (let i = 1; i < values.length; i = i + 1) {
-        if (values[i] > maxVal) {
-            maxVal = values[i];
+        let minVal: float = values[0];
+        for (let i = 1; i < values.length; i = i + 1) {
+            if (values[i] < minVal) {
+                minVal = values[i];
+            }
         }
-    }
-    return maxVal;
-}
-
-/**
- * Clamp - Limita un valor entre min y max
- */
-export fn clamp(value: float, minVal: float, maxVal: float): float {
-    if (value < minVal) {
         return minVal;
     }
-    if (value > maxVal) {
+
+    static max(...values: float[]): float {
+        if (values.length == 0) {
+            return 0.0;
+        }
+
+        let maxVal: float = values[0];
+        for (let i = 1; i < values.length; i = i + 1) {
+            if (values[i] > maxVal) {
+                maxVal = values[i];
+            }
+        }
         return maxVal;
     }
-    return value;
-}
 
-/**
- * Linear interpolation entre a y b
- */
-export fn lerp(a: float, b: float, t: float): float {
-    return a + (b - a) * t;
-}
-
-/**
- * Sign - Retorna el signo de un número (-1, 0, 1)
- */
-export fn sign(x: float): float {
-    if (x < 0.0) {
-        return -1.0;
-    }
-    if (x > 0.0) {
-        return 1.0;
-    }
-    return 0.0;
-}
-
-/**
- * Floor - Mayor entero menor o igual a x
- * Implementado sin acceso nativo
- */
-export fn floor(x: float): float {
-    let intPart: int = x;  // Conversión implícita trunca
-    if (x < 0.0 && x != intPart) {
-        return intPart - 1.0;
-    }
-    return intPart;
-}
-
-/**
- * Ceil - Menor entero mayor o igual a x
- */
-export fn ceil(x: float): float {
-    let intPart: int = x;
-    if (x > 0.0 && x != intPart) {
-        return intPart + 1.0;
-    }
-    return intPart;
-}
-
-/**
- * Round - Redondea al entero más cercano
- */
-export fn round(x: float): float {
-    if (x >= 0.0) {
-        return floor(x + 0.5);
-    }
-    return ceil(x - 0.5);
-}
-
-/**
- * Truncate - Elimina la parte decimal
- */
-export fn trunc(x: float): float {
-    return x;  // Conversión a int y de vuelta
-}
-
-/**
- * Factorial - Implementado recursivamente en Raccoon
- */
-export fn factorial(n: int): int {
-    if (n <= 1) {
-        return 1;
-    }
-    return n * factorial(n - 1);
-}
-
-/**
- * GCD - Greatest Common Divisor (algoritmo de Euclides)
- */
-export fn gcd(a: int, b: int): int {
-    let x = abs(a);
-    let y = abs(b);
-
-    while (y != 0) {
-        let temp = y;
-        y = x % y;
-        x = temp;
+    
+    static clamp(value: float, minVal: float, maxVal: float): float {
+        if (value < minVal) {
+            return minVal;
+        }
+        if (value > maxVal) {
+            return maxVal;
+        }
+        return value;
     }
 
-    return x;
-}
+    
+    static lerp(a: float, b: float, t: float): float {
+        return a + (b - a) * t;
+    }
 
-/**
- * LCM - Least Common Multiple
- */
-export fn lcm(a: int, b: int): int {
-    if (a == 0 || b == 0) {
+    
+    static sign(x: float): int {
+        if (x < 0) {
+            return -1;
+        }
+        if (x > 0) {
+            return 1;
+        }
         return 0;
     }
-    return abs(a * b) / gcd(a, b);
-}
 
-/**
- * Conversión de grados a radianes
- */
-export fn toRadians(degrees: float): float {
-    return degrees * (PI / 180.0);
-}
 
-/**
- * Conversión de radianes a grados
- */
-export fn toDegrees(radians: float): float {
-    return radians * (180.0 / PI);
-}
-
-/**
- * Aproximación de sqrt usando método de Newton
- * Solo si NO tenemos nativa (para demostrar poder de Raccoon)
- */
-export fn sqrt_pure(x: float): float {
-    if (x < 0.0) {
-        return 0.0;  // O lanzar error
-    }
-    if (x == 0.0) {
-        return 0.0;
-    }
-
-    // Método de Newton: x_{n+1} = (x_n + S/x_n) / 2
-    let guess: float = x / 2.0;
-    let iterations = 0;
-
-    while (iterations < 20) {  // Límite de iteraciones
-        let newGuess = (guess + x / guess) / 2.0;
-
-        // Convergencia
-        if (abs(newGuess - guess) < EPSILON) {
-            return newGuess;
+    
+    static floor(x: float): float {
+        let intPart: int = x;  
+        if (x < 0.0 && x != intPart) {
+            return intPart - 1.0;
         }
-
-        guess = newGuess;
-        iterations = iterations + 1;
+        return intPart;
     }
 
-    return guess;
-}
 
-/**
- * Potencia usando multiplicación repetida (para exponentes enteros)
- */
-export fn pow_int(base: float, exp: int): float {
-    if (exp == 0) {
-        return 1.0;
+    
+
+    static ceil(x: float): float {
+        let intPart: int = x;
+        if (x > 0.0 && x != intPart) {
+            return intPart + 1.0;
+        }
+        return intPart;
     }
 
-    let result: float = 1.0;
-    let absExp = abs(exp);
-
-    for (let i = 0; i < absExp; i = i + 1) {
-        result = result * base;
+    
+    static round(x: float): float {
+        if (x >= 0.0) {
+            return Math.floor(x + 0.5);
+        }
+        return Math.ceil(x - 0.5);
     }
 
-    return exp < 0 ? 1.0 / result : result;
-}
 
-// ============================================================================
-// TODO: Funciones trigonométricas
-// Si realmente necesitamos sin/cos/tan, podríamos:
-// 1. Implementarlas con series de Taylor en Raccoon (educativo)
-// 2. Usar natives solo si es crítico para rendimiento
-// ============================================================================
-
-/**
- * Verifica si un número es par
- */
-export fn isEven(n: int): bool {
-    return n % 2 == 0;
-}
-
-/**
- * Verifica si un número es impar
- */
-export fn isOdd(n: int): bool {
-    return n % 2 != 0;
-}
-
-/**
- * Verifica si un número es primo (algoritmo simple)
- */
-export fn isPrime(n: int): bool {
-    if (n < 2) {
-        return false;
-    }
-    if (n == 2) {
-        return true;
-    }
-    if (isEven(n)) {
-        return false;
+    
+    static trunc(x: float): float {
+        return x;  
+        return int.parse(x);
     }
 
-    let i = 3;
-    while (i * i <= n) {
-        if (n % i == 0) {
+
+    
+    static factorial(n: int): int {
+        if (n <= 1) {
+            return 1;
+        }
+        return n * Math.factorial(n - 1);
+    }
+
+    
+    static gcd(a: int, b: int): int {
+        while (b != 0) {
+            let t: int = b;
+            b = a % b;
+            a = t;
+        }
+        return a;
+    }
+
+    
+    static lcm(a: int, b: int): int {
+        return (a / Math.gcd(a, b)) * b;
+    }
+
+
+    
+    static toRadians(degrees: float): float {
+        return degrees * (Math.PI / 180.0);
+    }
+
+    
+
+    static toDegrees(radians: float): float {
+        return radians * (180.0 / Math.PI);
+    }
+
+
+    static sqrt(x: float): float {
+        return _sqrt_native(x);
+    }
+
+    static pow(base: float, exp: float): float {
+        return _pow_native(base, exp);
+    }
+
+    static sin(x: float): float {
+        return _sin_native(x);
+    }
+
+    static cos(x: float): float {
+        return _cos_native(x);
+    }
+
+    static random(): float {
+        return _random_native();
+    }
+
+    static tan(x: float): float {
+        return _tan_native(x);
+    }
+
+    static isEven(n: int): bool {
+        return n % 2 == 0;
+    }
+
+    static isOdd(n: int): bool {
+        return n % 2 != 0;
+    }
+
+    static isPrime(n: int): bool {
+        if (n < 2) {
             return false;
         }
-        i = i + 2;
-    }
+        if (n == 2) {
+            return true;
+        }
+        if (Math.isEven(n)) {
+            return false;
+        }
 
-    return true;
+        let i = 3;
+        while (i * i <= n) {
+            if (n % i == 0) {
+                return false;
+            }
+            i = i + 2;
+        }
+
+        return true;
+    }
 }
+
+export default Math;

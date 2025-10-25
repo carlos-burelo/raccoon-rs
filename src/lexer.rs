@@ -25,7 +25,9 @@ static KEYWORDS: phf::Map<&'static str, TokenType> = phf_map! {
     "enum" => TokenType::Enum,
     "type" => TokenType::TypeAlias,
     "typeof" => TokenType::Typeof,
+    "keyof" => TokenType::KeyOf,
     "instanceof" => TokenType::Instanceof,
+    "readonly" => TokenType::Readonly,
     "implements" => TokenType::Implements,
     "extends" => TokenType::Extends,
     "static" => TokenType::Static,
@@ -45,6 +47,7 @@ static KEYWORDS: phf::Map<&'static str, TokenType> = phf_map! {
     "from" => TokenType::From,
     "as" => TokenType::As,
     "default" => TokenType::Default,
+    "declare" => TokenType::Declare,
     "true" => TokenType::True,
     "false" => TokenType::False,
     "null" => TokenType::NullLiteral,
@@ -79,12 +82,15 @@ static SIMPLE_OPERATORS: phf::Map<char, TokenType> = phf_map! {
 };
 
 static COMPOUND_OPERATORS: phf::Map<&'static str, TokenType> = phf_map! {
+    "===" => TokenType::Eq,
+    "!==" => TokenType::Neq,
     "==" => TokenType::Eq,
     "!=" => TokenType::Neq,
     "<=" => TokenType::Lte,
     ">=" => TokenType::Gte,
     "&&" => TokenType::And,
     "||" => TokenType::Or,
+    "..." => TokenType::Spread,
     ".." => TokenType::Range,
     "->" => TokenType::Arrow,
     "=>" => TokenType::Arrow,
@@ -520,10 +526,7 @@ impl Lexer {
     }
 
     fn add_token(&mut self, token_type: TokenType, text: String, position: Option<Position>) {
-        let pos = position.unwrap_or((
-            self.line,
-            self.column.saturating_sub(text.len())
-        ));
+        let pos = position.unwrap_or((self.line, self.column.saturating_sub(text.len())));
         self.tokens.push(Token::new(token_type, text, pos));
     }
 }

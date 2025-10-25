@@ -22,12 +22,16 @@ pub enum TypeKind {
     Void,
     Any,
     Unknown,
+    Never,
     Func,
     Symbol,
     List,
+    Tuple,
     Map,
+    Object,
     Nullable,
     Union,
+    Intersection,
     Function,
     Interface,
     Class,
@@ -35,11 +39,16 @@ pub enum TypeKind {
     Future,
     TypeRef,
     Generic,
+    Mapped,
+    Indexed,
+    KeyOf,
+    TypeOfType,
     PrimitiveTypeObject,
     ClassObject,
     Date,
     Regex,
     Error,
+    Readonly,
 }
 
 pub trait TypeTrait {
@@ -56,9 +65,12 @@ pub trait TypeTrait {
 pub enum Type {
     Primitive(PrimitiveType),
     List(Box<ListType>),
+    Tuple(Box<TupleType>),
     Map(Box<MapType>),
+    Object(Box<ObjectType>),
     Nullable(Box<NullableType>),
     Union(Box<UnionType>),
+    Intersection(Box<IntersectionType>),
     Function(Box<FunctionType>),
     Interface(Box<InterfaceType>),
     Class(Box<ClassType>),
@@ -67,6 +79,11 @@ pub enum Type {
     TypeRef(TypeReference),
     TypeParam(TypeParameter),
     Generic(Box<GenericType>),
+    Mapped(Box<MappedType>),
+    Indexed(Box<IndexedAccessType>),
+    KeyOf(Box<KeyOfType>),
+    TypeOf(Box<TypeOfType>),
+    Readonly(Box<ReadonlyType>),
     PrimitiveTypeObject(Box<PrimitiveTypeObjectType>),
     ClassObject(Box<ClassObjectType>),
 }
@@ -76,9 +93,12 @@ impl Type {
         match self {
             Type::Primitive(t) => t.kind.clone(),
             Type::List(_) => TypeKind::List,
+            Type::Tuple(_) => TypeKind::Tuple,
             Type::Map(_) => TypeKind::Map,
+            Type::Object(_) => TypeKind::Object,
             Type::Nullable(_) => TypeKind::Nullable,
             Type::Union(_) => TypeKind::Union,
+            Type::Intersection(_) => TypeKind::Intersection,
             Type::Function(_) => TypeKind::Function,
             Type::Interface(_) => TypeKind::Interface,
             Type::Class(_) => TypeKind::Class,
@@ -87,6 +107,11 @@ impl Type {
             Type::TypeRef(_) => TypeKind::TypeRef,
             Type::TypeParam(_) => TypeKind::Generic,
             Type::Generic(_) => TypeKind::Generic,
+            Type::Mapped(_) => TypeKind::Mapped,
+            Type::Indexed(_) => TypeKind::Indexed,
+            Type::KeyOf(_) => TypeKind::KeyOf,
+            Type::TypeOf(_) => TypeKind::TypeOfType,
+            Type::Readonly(_) => TypeKind::Readonly,
             Type::PrimitiveTypeObject(_) => TypeKind::PrimitiveTypeObject,
             Type::ClassObject(_) => TypeKind::ClassObject,
         }
@@ -96,14 +121,21 @@ impl Type {
         match (self, other) {
             (Type::Primitive(a), Type::Primitive(b)) => a.equals(b),
             (Type::List(a), Type::List(b)) => a.element_type.equals(&b.element_type),
+            (Type::Tuple(a), Type::Tuple(b)) => a.equals(b),
             (Type::Map(a), Type::Map(b)) => {
                 a.key_type.equals(&b.key_type) && a.value_type.equals(&b.value_type)
             }
+            (Type::Object(a), Type::Object(b)) => a.equals(b),
             (Type::Nullable(a), Type::Nullable(b)) => a.inner_type.equals(&b.inner_type),
             (Type::Union(a), Type::Union(b)) => a.equals(b),
+            (Type::Intersection(a), Type::Intersection(b)) => a.equals(b),
             (Type::Function(a), Type::Function(b)) => a.equals(b),
+            (Type::Interface(a), Type::Interface(b)) => a.name == b.name,
+            (Type::Class(a), Type::Class(b)) => a.name == b.name,
+            (Type::Enum(a), Type::Enum(b)) => a.name == b.name,
             (Type::TypeRef(a), Type::TypeRef(b)) => a.name == b.name,
             (Type::TypeParam(a), Type::TypeParam(b)) => a.equals(b),
+            (Type::Readonly(a), Type::Readonly(b)) => a.inner_type.equals(&b.inner_type),
             _ => false,
         }
     }
@@ -113,7 +145,14 @@ impl Type {
             return true;
         }
 
-        // Function type can be assigned to func primitive
+        if matches!(self.kind(), TypeKind::Never) {
+            return true;
+        }
+
+        if matches!(target.kind(), TypeKind::Never) {
+            return matches!(self.kind(), TypeKind::Never);
+        }
+
         if let Type::Function(_) = self {
             if let Type::Primitive(target_prim) = target {
                 if target_prim.kind == TypeKind::Func {
@@ -125,8 +164,12 @@ impl Type {
         match self {
             Type::Primitive(p) => p.is_assignable_to(target),
             Type::List(l) => l.is_assignable_to(target),
+            Type::Tuple(t) => t.is_assignable_to(target),
+            Type::Object(o) => o.is_assignable_to(target),
             Type::Nullable(n) => n.is_assignable_to(target),
             Type::Union(u) => u.is_assignable_to(target),
+            Type::Intersection(i) => i.is_assignable_to(target),
+            Type::Readonly(r) => r.is_assignable_to(target),
             _ => self.equals(target),
         }
     }
@@ -169,7 +212,6 @@ impl PrimitiveType {
             }
         }
 
-        // Any Function type can be assigned to func primitive
         if let Type::Primitive(target_prim) = target {
             if target_prim.kind == TypeKind::Func && self.kind == TypeKind::Function {
                 return true;
@@ -273,6 +315,10 @@ impl PrimitiveType {
 
     pub fn func() -> Type {
         Type::Primitive(PrimitiveType::new(TypeKind::Func, "func"))
+    }
+
+    pub fn never() -> Type {
+        Type::Primitive(PrimitiveType::new(TypeKind::Never, "never"))
     }
 }
 
@@ -497,4 +543,254 @@ pub struct PrimitiveTypeObjectType {
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClassObjectType {
     pub class_type: ClassType,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct TupleType {
+    pub element_types: Vec<Type>,
+}
+
+impl TupleType {
+    pub fn new(element_types: Vec<Type>) -> Self {
+        Self { element_types }
+    }
+
+    pub fn equals(&self, other: &TupleType) -> bool {
+        if self.element_types.len() != other.element_types.len() {
+            return false;
+        }
+        self.element_types
+            .iter()
+            .zip(&other.element_types)
+            .all(|(a, b)| a.equals(b))
+    }
+
+    pub fn is_assignable_to(&self, target: &Type) -> bool {
+        if matches!(target.kind(), TypeKind::Any | TypeKind::Unknown) {
+            return true;
+        }
+
+        if let Type::Tuple(target_tuple) = target {
+            if self.element_types.len() != target_tuple.element_types.len() {
+                return false;
+            }
+            return self
+                .element_types
+                .iter()
+                .zip(&target_tuple.element_types)
+                .all(|(a, b)| a.is_assignable_to(b));
+        }
+
+        false
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ObjectType {
+    pub properties: HashMap<String, ObjectProperty>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ObjectProperty {
+    pub property_type: Type,
+    pub optional: bool,
+    pub readonly: bool,
+}
+
+impl ObjectProperty {
+    pub fn new(property_type: Type) -> Self {
+        Self {
+            property_type,
+            optional: false,
+            readonly: false,
+        }
+    }
+
+    pub fn optional(mut self) -> Self {
+        self.optional = true;
+        self
+    }
+
+    pub fn readonly(mut self) -> Self {
+        self.readonly = true;
+        self
+    }
+}
+
+impl ObjectType {
+    pub fn new(properties: HashMap<String, ObjectProperty>) -> Self {
+        Self { properties }
+    }
+
+    pub fn equals(&self, other: &ObjectType) -> bool {
+        if self.properties.len() != other.properties.len() {
+            return false;
+        }
+
+        for (key, prop) in &self.properties {
+            if let Some(other_prop) = other.properties.get(key) {
+                if !prop.property_type.equals(&other_prop.property_type)
+                    || prop.optional != other_prop.optional
+                    || prop.readonly != other_prop.readonly
+                {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        true
+    }
+
+    pub fn is_assignable_to(&self, target: &Type) -> bool {
+        if matches!(target.kind(), TypeKind::Any | TypeKind::Unknown) {
+            return true;
+        }
+
+        if let Type::Object(target_obj) = target {
+            for (key, target_prop) in &target_obj.properties {
+                if let Some(self_prop) = self.properties.get(key) {
+                    if !self_prop
+                        .property_type
+                        .is_assignable_to(&target_prop.property_type)
+                    {
+                        return false;
+                    }
+                } else if !target_prop.optional {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        false
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct IntersectionType {
+    pub types: Vec<Type>,
+}
+
+impl IntersectionType {
+    pub fn new(types: Vec<Type>) -> Self {
+        Self {
+            types: Self::flatten_intersections(types),
+        }
+    }
+
+    fn flatten_intersections(types: Vec<Type>) -> Vec<Type> {
+        let mut flattened = Vec::new();
+        for t in types {
+            if let Type::Intersection(intersection) = t {
+                flattened.extend(intersection.types);
+            } else {
+                flattened.push(t);
+            }
+        }
+        flattened
+    }
+
+    pub fn equals(&self, other: &IntersectionType) -> bool {
+        if self.types.len() != other.types.len() {
+            return false;
+        }
+        self.types
+            .iter()
+            .all(|t| other.types.iter().any(|ot| t.equals(ot)))
+    }
+
+    pub fn is_assignable_to(&self, target: &Type) -> bool {
+        if matches!(target.kind(), TypeKind::Any | TypeKind::Unknown) {
+            return true;
+        }
+
+        self.types.iter().any(|t| t.is_assignable_to(target))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ReadonlyType {
+    pub inner_type: Type,
+}
+
+impl ReadonlyType {
+    pub fn new(inner_type: Type) -> Self {
+        Self { inner_type }
+    }
+
+    pub fn is_assignable_to(&self, target: &Type) -> bool {
+        if matches!(target.kind(), TypeKind::Any | TypeKind::Unknown) {
+            return true;
+        }
+
+        if let Type::Readonly(target_readonly) = target {
+            return self
+                .inner_type
+                .is_assignable_to(&target_readonly.inner_type);
+        }
+
+        self.inner_type.is_assignable_to(target)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct MappedType {
+    pub type_parameter: String,
+    pub constraint: Box<Type>,
+    pub value_type: Box<Type>,
+    pub optional: bool,
+    pub readonly: bool,
+}
+
+impl MappedType {
+    pub fn new(type_parameter: String, constraint: Type, value_type: Type) -> Self {
+        Self {
+            type_parameter,
+            constraint: Box::new(constraint),
+            value_type: Box::new(value_type),
+            optional: false,
+            readonly: false,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct IndexedAccessType {
+    pub object_type: Box<Type>,
+    pub index_type: Box<Type>,
+}
+
+impl IndexedAccessType {
+    pub fn new(object_type: Type, index_type: Type) -> Self {
+        Self {
+            object_type: Box::new(object_type),
+            index_type: Box::new(index_type),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct KeyOfType {
+    pub target_type: Box<Type>,
+}
+
+impl KeyOfType {
+    pub fn new(target_type: Type) -> Self {
+        Self {
+            target_type: Box::new(target_type),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct TypeOfType {
+    pub expression_name: String,
+}
+
+impl TypeOfType {
+    pub fn new(expression_name: String) -> Self {
+        Self { expression_name }
+    }
 }

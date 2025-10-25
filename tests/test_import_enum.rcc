@@ -1,0 +1,4 @@
+import { MyEnum, MyClass } from "./test_simple_enum_export.rcc";
+
+print("MyEnum:", MyEnum);
+print("MyClass:", MyClass);

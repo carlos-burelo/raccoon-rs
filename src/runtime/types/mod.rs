@@ -14,8 +14,6 @@ use async_trait::async_trait;
 use std::future::Future;
 use std::pin::Pin;
 
-/// Type alias for async callback executor
-/// Takes a function value and arguments, returns a future that resolves to a result
 pub type CallbackExecutor = Box<
     dyn Fn(
             RuntimeValue,
@@ -26,14 +24,10 @@ pub type CallbackExecutor = Box<
         + Sync,
 >;
 
-/// Trait that all type handlers must implement
-/// This allows types to define their own instance and static methods
 #[async_trait]
 pub trait TypeHandler: Send + Sync {
-    /// Get the name of the type (e.g., "str", "int", "bool")
     fn type_name(&self) -> &str;
 
-    /// Call an instance method on a value of this type
     fn call_instance_method(
         &self,
         value: &mut RuntimeValue,
@@ -43,7 +37,6 @@ pub trait TypeHandler: Send + Sync {
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError>;
 
-    /// Call a static method on this type
     fn call_static_method(
         &self,
         method: &str,
@@ -52,7 +45,6 @@ pub trait TypeHandler: Send + Sync {
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError>;
 
-    /// Get a static property of this type
     fn get_static_property(
         &self,
         property: &str,
@@ -70,14 +62,10 @@ pub trait TypeHandler: Send + Sync {
         ))
     }
 
-    /// Check if this type has an instance method
     fn has_instance_method(&self, method: &str) -> bool;
 
-    /// Check if this type has a static method
     fn has_static_method(&self, method: &str) -> bool;
 
-    /// Call an async instance method that requires callback execution
-    /// This is used for methods like map, filter, reduce that need to call user functions
     async fn call_async_instance_method(
         &self,
         value: &mut RuntimeValue,
@@ -87,13 +75,10 @@ pub trait TypeHandler: Send + Sync {
         file: Option<String>,
         _callback_executor: &CallbackExecutor,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // Default implementation: delegate to sync method
         self.call_instance_method(value, method, args, position, file)
     }
 
-    /// Check if this type has an async instance method
     fn has_async_instance_method(&self, _method: &str) -> bool {
-        // Default: no async methods
         false
     }
 }

@@ -1,8 +1,8 @@
 
 
-import * as Math from "std:math"
-import * as StringUtils from "std:string"
-import * as ArrayUtils from "std:array"
+import  Math from "std:math"
+import  StringUtils from "std:string"
+import  ArrayUtils from "std:array"
 
 print("=== Testing Core Built-ins ===");
 

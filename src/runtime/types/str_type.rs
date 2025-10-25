@@ -1,9 +1,9 @@
 use super::TypeHandler;
-use async_trait::async_trait;
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::{ListValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
+use async_trait::async_trait;
 
 pub struct StrType;
 
@@ -200,8 +200,12 @@ impl TypeHandler for StrType {
                     ));
                 }
                 match &args[0] {
-                    RuntimeValue::Null(_) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true))),
-                    RuntimeValue::Str(s) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(s.value.is_empty()))),
+                    RuntimeValue::Null(_) => {
+                        Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true)))
+                    }
+                    RuntimeValue::Str(s) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
+                        s.value.is_empty(),
+                    ))),
                     _ => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false))),
                 }
             }
@@ -214,18 +218,23 @@ impl TypeHandler for StrType {
                     ));
                 }
                 match &args[0] {
-                    RuntimeValue::Null(_) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true))),
-                    RuntimeValue::Str(s) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(s.value.trim().is_empty()))),
+                    RuntimeValue::Null(_) => {
+                        Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true)))
+                    }
+                    RuntimeValue::Str(s) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
+                        s.value.trim().is_empty(),
+                    ))),
                     _ => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false))),
                 }
             }
             "concat" => {
-                let parts: Vec<String> = args.iter().map(|v| {
-                    match v {
+                let parts: Vec<String> = args
+                    .iter()
+                    .map(|v| match v {
                         RuntimeValue::Str(s) => s.value.clone(),
                         _ => v.to_string(),
-                    }
-                }).collect();
+                    })
+                    .collect();
                 Ok(RuntimeValue::Str(StrValue::new(parts.join(""))))
             }
             "join" => {
@@ -238,24 +247,30 @@ impl TypeHandler for StrType {
                 }
                 let separator = match &args[0] {
                     RuntimeValue::Str(s) => &s.value,
-                    _ => return Err(RaccoonError::new(
-                        "join requires string separator as first argument".to_string(),
-                        position,
-                        file,
-                    )),
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "join requires string separator as first argument".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
                 };
-                let parts: Vec<String> = args[1..].iter().map(|v| {
-                    match v {
+                let parts: Vec<String> = args[1..]
+                    .iter()
+                    .map(|v| match v {
                         RuntimeValue::Str(s) => s.value.clone(),
-                        RuntimeValue::List(l) => {
-                            l.elements.iter().map(|e| match e {
+                        RuntimeValue::List(l) => l
+                            .elements
+                            .iter()
+                            .map(|e| match e {
                                 RuntimeValue::Str(s) => s.value.clone(),
                                 _ => e.to_string(),
-                            }).collect::<Vec<_>>().join(separator)
-                        }
+                            })
+                            .collect::<Vec<_>>()
+                            .join(separator),
                         _ => v.to_string(),
-                    }
-                }).collect();
+                    })
+                    .collect();
                 Ok(RuntimeValue::Str(StrValue::new(parts.join(separator))))
             }
             "format" => {
@@ -268,11 +283,13 @@ impl TypeHandler for StrType {
                 }
                 let format_str = match &args[0] {
                     RuntimeValue::Str(s) => &s.value,
-                    _ => return Err(RaccoonError::new(
-                        "format requires string as first argument".to_string(),
-                        position,
-                        file,
-                    )),
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "format requires string as first argument".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
                 };
 
                 let mut result = format_str.clone();
@@ -290,7 +307,7 @@ impl TypeHandler for StrType {
                 format!("Static method '{}' not found on str type", method),
                 position,
                 file,
-            ))
+            )),
         }
     }
 
@@ -306,7 +323,7 @@ impl TypeHandler for StrType {
                 format!("Static property '{}' not found on str type", property),
                 position,
                 file,
-            ))
+            )),
         }
     }
 
@@ -333,6 +350,9 @@ impl TypeHandler for StrType {
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        matches!(method, "isNullOrEmpty" | "isNullOrWhiteSpace" | "concat" | "join" | "format")
+        matches!(
+            method,
+            "isNullOrEmpty" | "isNullOrWhiteSpace" | "concat" | "join" | "format"
+        )
     }
 }

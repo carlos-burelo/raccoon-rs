@@ -1,0 +1,46 @@
+import calculate from "./math_utils.rcc";
+
+import { add, subtract, multiply, PI, Calculator } from "./math_utils.rcc";
+
+import { divide as div } from "./math_utils.rcc";
+
+import * as MathUtils from "./math_utils.rcc";
+
+fn main(): void {
+    print("=== Prueba de Sistema de Módulos ===\n");
+
+
+    let result1: float = calculate("add", 10.0, 5.0);
+    print("calculate('add', 10, 5) =", result1);
+
+
+    let result2: int = add(10, 5);
+    print("add(10, 5) =", result2);
+
+    let result3: int = subtract(10, 5);
+    print("subtract(10, 5) =", result3);
+
+    let result4: int = multiply(10, 5);
+    print("multiply(10, 5) =", result4);
+
+    let result5: float = div(10.0, 2.0);
+    print("divide(10, 2) =", result5);
+
+
+    print("\nPI =", PI);
+
+
+    print("\n=== Prueba de Calculator ===");
+    const calc: Calculator = new Calculator();
+    calc.add(10.0).multiply(2.0).subtract(5.0);
+    print("((0 + 10) * 2) - 5 =", calc.getResult());
+
+
+    print("\n=== Prueba de Namespace Import ===");
+    let result6: int = MathUtils.add(100, 50);
+    print("MathUtils.add(100, 50) =", result6);
+
+    print("\nMathUtils.PI =", MathUtils.PI);
+}
+
+main();

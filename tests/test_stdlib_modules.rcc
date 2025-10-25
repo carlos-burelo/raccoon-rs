@@ -1,0 +1,45 @@
+// Test stdlib modules loading
+
+// Test console module
+import { log, error, warn } from "std:console";
+
+log("Testing console module...");
+warn("This is a warning");
+error("This is an error");
+
+// Test math module
+import { PI, E, abs, min, max, clamp } from "std:math";
+
+log("PI =", PI);
+log("E =", E);
+log("abs(-5) =", abs(-5.0));
+log("min(10, 20, 5) =", min(10.0, 20.0, 5.0));
+log("max(10, 20, 5) =", max(10.0, 20.0, 5.0));
+log("clamp(15, 0, 10) =", clamp(15.0, 0.0, 10.0));
+
+// Test string module
+import { upper, lower, length, substring } from "std:string";
+
+const text: str = "Hello World";
+log("Original:", text);
+log("Upper:", upper(text));
+log("Lower:", lower(text));
+log("Length:", length(text));
+log("Substring(0, 5):", substring(text, 0, 5));
+
+// Test JSON module
+import { parse, stringify } from "std:json";
+
+const obj: any = {
+    name: "Test",
+    value: 42,
+    active: true
+};
+
+const jsonStr: str = stringify(obj);
+log("JSON string:", jsonStr);
+
+const parsed: any = parse(jsonStr);
+log("Parsed:", parsed);
+
+log("All tests completed!");

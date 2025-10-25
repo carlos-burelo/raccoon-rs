@@ -1,0 +1,17 @@
+// Module that re-exports from other modules
+
+import { add, multiply } from "./utilities.rcc"
+import { Point } from "./geometry.rcc"
+
+// Re-export imported items
+export { add, multiply, Point }
+
+// Also export with rename
+export { add as sum, multiply as product }
+
+// Own exports
+export fn divide(a: int, b: int): int {
+    return a / b
+}
+
+export let MODULE_NAME: str = "ReExport Module"

@@ -1,107 +1,107 @@
 
 
 
-import { log, warn, error } from 'std:console'
-import { PI, sqrt, pow, abs, floor, ceil, round, sin, cos, min, max } from 'std:math'
-import { toUpperCase, toLowerCase, trim, split } from 'std:string'
+import console from 'std:console'
+import Math from 'std:math'
+import String from 'std:string'
 
-log("╔═══════════════════════════════════════════════╗")
-log("║   Raccoon Standard Library - Module System   ║")
-log("╚═══════════════════════════════════════════════╝")
-
-
-
-
-log("\n[1] Módulo std:console - Salida formateada")
-log("   → Información normal")
-warn("   ⚠ Advertencia importante")
-error("   ✗ Error de ejemplo")
+console.log("╔═══════════════════════════════════════════════╗")
+console.log("║   Raccoon Standard Library - Module System   ║")
+console.log("╚═══════════════════════════════════════════════╝")
 
 
 
 
-log("\n[2] Módulo std:math - Constantes matemáticas")
-log("   PI =", PI)
-log("   2π =", PI * 2.0)
+console.log("\n[1] Módulo std:console - Salida formateada")
+console.log("   → Información normal")
+console.warn("   ⚠ Advertencia importante")
+console.error("   ✗ Error de ejemplo")
 
 
 
 
-log("\n[3] Módulo std:math - Funciones básicas")
+console.log("\n[2] Módulo std:math - Constantes matemáticas")
+console.log("   Math.PI =", Math.PI)
+console.log("   2π =", Math.PI * 2.0)
+
+
+
+
+console.log("\n[3] Módulo std:math - Funciones básicas")
 let num: float = -15.75
-log("   Número:", num)
-log("   abs(-15.75) =", abs(num))
-log("   floor(-15.75) =", floor(num))
-log("   ceil(-15.75) =", ceil(num))
-log("   round(-15.75) =", round(num))
+console.log("   Número:", num)
+console.log("   abs(-15.75) =", Math.abs(num))
+console.log("   floor(-15.75) =", Math.floor(num))
+console.log("   ceil(-15.75) =", Math.ceil(num))
+console.log("   round(-15.75) =", Math.round(num))
 
 
 
 
-log("\n[4] Módulo std:math - Funciones trigonométricas")
-let angle: float = PI / 4.0
-log("   Ángulo: π/4")
-log("   sin(π/4) =", sin(angle))
-log("   cos(π/4) =", cos(angle))
+console.log("\n[4] Módulo std:math - Funciones trigonométricas")
+let angle: float = Math.PI / 4.0
+console.log("   Ángulo: π/4")
+console.log("   sin(π/4) =", Math.sin(angle))
+console.log("   cos(π/4) =", Math.cos(angle))
 
 
 
 
-log("\n[5] Aplicación: Teorema de Pitágoras")
+console.log("\n[5] Aplicación: Teorema de Pitágoras")
 fn pythagoras(a: float, b: float): float {
-    return sqrt(pow(a, 2.0) + pow(b, 2.0))
+    return Math.sqrt(Math.pow(a, 2.0) + Math.pow(b, 2.0))
 }
 
 let side_a: float = 3.0
 let side_b: float = 4.0
 let hypotenuse: float = pythagoras(side_a, side_b)
-log("   Catetos: a =", side_a, ", b =", side_b)
-log("   Hipotenusa: c =", hypotenuse)
+console.log("   Catetos: a =", side_a, ", b =", side_b)
+console.log("   Hipotenusa: c =", hypotenuse)
 
 
 
 
-log("\n[6] Módulo std:string - Transformaciones de texto")
+console.log("\n[6] Módulo std:string - Transformaciones de texto")
 let original: str = "  Raccoon Programming Language  "
-log("   Original:", original)
-log("   Uppercase:", toUpperCase(original))
-log("   Lowercase:", toLowerCase(original))
-log("   Trimmed:", trim(original))
+console.log("   Original:", original)
+console.log("   Uppercase:", String.upper(original))
+console.log("   Lowercase:", String.lower(original))
+console.log("   Trimmed:", String.trim(original))
 
 
 
 
-log("\n[7] Módulo std:string - Procesamiento de texto")
+console.log("\n[7] Módulo std:string - Procesamiento de texto")
 let csv: str = "manzana,naranja,plátano,uva"
-log("   CSV:", csv)
-let fruits = split(csv, ",")
-log("   Frutas separadas:", fruits)
+console.log("   CSV:", csv)
+let fruits = String.split(csv, ",")
+console.log("   Frutas separadas:", fruits)
 
 
 
 
-log("\n[8] Combinando std:math y std:string")
+console.log("\n[8] Combinando std:math y std:string")
 
 fn formatNumber(value: float): str {
-    
-    return toUpperCase("pi value")
+
+    return String.toUpperCase("pi value")
 }
 
-let valor: float = PI
-log("   Ejemplo de formateo:", formatNumber(valor))
+let valor: float = Math.PI
+console.log("   Ejemplo de formateo:", formatNumber(valor))
 
 
 
 
-log("\n[9] Función geométrica con std:math")
+console.log("\n[9] Función geométrica con std:math")
 
 fn calculateCircle(radius: float): void {
-    let area: float = PI * pow(radius, 2.0)
-    let circumference: float = 2.0 * PI * radius
+    let area: float = Math.PI * Math.pow(radius, 2.0)
+    let circumference: float = 2.0 * Math.PI * radius
     
-    log("   Radio:", radius)
-    log("   Área:", area)
-    log("   Circunferencia:", circumference)
+    console.log("   Radio:", radius)
+    console.log("   Área:", area)
+    console.log("   Circunferencia:", circumference)
 }
 
 calculateCircle(5.0)
@@ -109,19 +109,19 @@ calculateCircle(5.0)
 
 
 
-log("\n[10] Módulo std:math - Comparación de valores")
+console.log("\n[10] Módulo std:math - Comparación de valores")
 let x: float = 42.7
 let y: float = 38.3
-log("   x =", x, ", y =", y)
-log("   min(x, y) =", min(x, y))
-log("   max(x, y) =", max(x, y))
+console.log("   x =", x, ", y =", y)
+console.log("   min(x, y) =", Math.min(x, y))
+console.log("   max(x, y) =", Math.max(x, y))
 
 
 
 
-log("\n╔═══════════════════════════════════════════════╗")
-log("║        Sistema de módulos funcionando         ║")
-log("║           std:console ✓                       ║")
-log("║           std:math    ✓                       ║")
-log("║           std:string  ✓                       ║")
-log("╚═══════════════════════════════════════════════╝")
+console.log("\n╔═══════════════════════════════════════════════╗")
+console.log("║        Sistema de módulos funcionando         ║")
+console.log("║           std:console ✓                       ║")
+console.log("║           std:math    ✓                       ║")
+console.log("║           std:string  ✓                       ║")
+console.log("╚═══════════════════════════════════════════════╝")

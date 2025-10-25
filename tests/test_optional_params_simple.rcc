@@ -1,0 +1,27 @@
+// Test optional parameters feature
+print("Testing optional parameters...\n");
+
+// Simple function with optional parameter
+fn test_optional(name: str, age?: int): void {
+    print("Name: " + name);
+}
+
+// Call with required param only
+test_optional("Alice");
+print("✓ Called with required param only\n");
+
+// Call with both params
+test_optional("Bob", 30);
+print("✓ Called with both params\n");
+
+// Multiple optional params
+fn multi_optional(a: str, b?: int, c?: str): void {
+    print(a);
+}
+
+multi_optional("test");
+multi_optional("test", 42);
+multi_optional("test", 42, "extra");
+print("✓ Multiple optional parameters working\n");
+
+print("=== ALL OPTIONAL PARAMETER TESTS PASSED ===");

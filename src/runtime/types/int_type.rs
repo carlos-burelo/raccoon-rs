@@ -1,6 +1,6 @@
 use super::TypeHandler;
 use crate::error::RaccoonError;
-use crate::runtime::{DecimalValue, FloatValue, IntValue, RuntimeValue, StrValue};
+use crate::runtime::{DecimalValue, FloatValue, IntValue, NullValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -27,7 +27,7 @@ impl TypeHandler for IntType {
                     format!("Expected int, got {}", value.get_name()),
                     position,
                     file,
-                ))
+                ));
             }
         };
 
@@ -72,16 +72,14 @@ impl TypeHandler for IntType {
                     ));
                 }
                 match &args[0] {
-                    RuntimeValue::Str(s) => {
-                        match s.value.trim().parse::<i64>() {
-                            Ok(num) => Ok(RuntimeValue::Int(IntValue::new(num))),
-                            Err(_) => Err(RaccoonError::new(
-                                format!("Failed to parse '{}' as int", s.value),
-                                position,
-                                file,
-                            )),
-                        }
-                    }
+                    RuntimeValue::Str(s) => match s.value.trim().parse::<i64>() {
+                        Ok(num) => Ok(RuntimeValue::Int(IntValue::new(num))),
+                        Err(_) => Err(RaccoonError::new(
+                            format!("Failed to parse '{}' as int", s.value),
+                            position,
+                            file,
+                        )),
+                    },
                     _ => Err(RaccoonError::new(
                         "parse requires string argument".to_string(),
                         position,
@@ -98,13 +96,11 @@ impl TypeHandler for IntType {
                     ));
                 }
                 match &args[0] {
-                    RuntimeValue::Str(s) => {
-                        match s.value.trim().parse::<i64>() {
-                            Ok(num) => Ok(RuntimeValue::Int(IntValue::new(num))),
-                            Err(_) => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
-                        }
-                    }
-                    _ => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
+                    RuntimeValue::Str(s) => match s.value.trim().parse::<i64>() {
+                        Ok(num) => Ok(RuntimeValue::Int(IntValue::new(num))),
+                        Err(_) => Ok(RuntimeValue::Null(NullValue::new())),
+                    },
+                    _ => Ok(RuntimeValue::Null(NullValue::new())),
                 }
             }
             "compare" => {
@@ -117,27 +113,37 @@ impl TypeHandler for IntType {
                 }
                 let a = match &args[0] {
                     RuntimeValue::Int(i) => i.value,
-                    _ => return Err(RaccoonError::new(
-                        "compare requires int arguments".to_string(),
-                        position,
-                        file,
-                    )),
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "compare requires int arguments".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
                 };
                 let b = match &args[1] {
                     RuntimeValue::Int(i) => i.value,
-                    _ => return Err(RaccoonError::new(
-                        "compare requires int arguments".to_string(),
-                        position,
-                        file,
-                    )),
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "compare requires int arguments".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
                 };
-                Ok(RuntimeValue::Int(IntValue::new(if a < b { -1 } else if a > b { 1 } else { 0 })))
+                Ok(RuntimeValue::Int(IntValue::new(if a < b {
+                    -1
+                } else if a > b {
+                    1
+                } else {
+                    0
+                })))
             }
             _ => Err(RaccoonError::new(
                 format!("Static method '{}' not found on int type", method),
                 position,
                 file,
-            ))
+            )),
         }
     }
 
@@ -154,7 +160,7 @@ impl TypeHandler for IntType {
                 format!("Static property '{}' not found on int type", property),
                 position,
                 file,
-            ))
+            )),
         }
     }
 

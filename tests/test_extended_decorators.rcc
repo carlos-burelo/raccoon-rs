@@ -1,0 +1,51 @@
+// Test: Decoradores extendidos
+
+@pure()
+@inline()
+fn add(a: int, b: int): int {
+    return a + b;
+}
+
+@cache(10000)
+fn fib(n: int): int {
+    if (n <= 1) return n;
+    return fib(n - 1) + fib(n - 2);
+}
+
+@measureTime("Calculation")
+fn slowCalculation(n: int): int {
+    let result = 0;
+    for (let i = 0; i < n; i = i + 1) {
+        result = result + i;
+    }
+    return result;
+}
+
+@deprecated("Use add() instead")
+fn sum(a: int, b: int): int {
+    return add(a, b);
+}
+
+@memoize()
+fn expensiveOp(x: int): int {
+    return x * x * x;
+}
+
+@log()
+fn testLog(value: int): str {
+    return "Value: " + value;
+}
+
+@pure()
+@inline()
+fn multiply(a: int, b: int): int {
+    return a * b;
+}
+
+// Test execution
+print("add(5, 3) = " + add(5, 3));
+print("multiply(4, 7) = " + multiply(4, 7));
+print("fib(10) = " + fib(10));
+print("slowCalculation(50) = " + slowCalculation(50));
+print("expensiveOp(5) = " + expensiveOp(5));
+print(testLog(42));

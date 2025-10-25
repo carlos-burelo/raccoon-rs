@@ -1,90 +1,43 @@
-// Standard Library - Array Module
-// Provides array manipulation and utility functions
-
-// Native function declarations
-@native("native_array_length")
-declare fn _length_native<T>(arr: T[]): int;
-
-@native("native_array_push")
-declare fn _push_native<T>(arr: T[], item: T): void;
-
-@native("native_array_pop")
-declare fn _pop_native<T>(arr: T[]): T;
-
-@native("native_array_shift")
-declare fn _shift_native<T>(arr: T[]): T;
-
-@native("native_array_unshift")
-declare fn _unshift_native<T>(arr: T[], item: T): void;
-
-@native("native_array_slice")
-declare fn _slice_native<T>(arr: T[], start: int, end: int): T[];
-
-@native("native_array_reverse")
-declare fn _reverse_native<T>(arr: T[]): T[];
-
-@native("native_array_sort")
-declare fn _sort_native<T>(arr: T[]): T[];
-
-/**
- * Returns the length of an array
- */
 export fn length<T>(arr: T[]): int {
     return _length_native(arr);
 }
 
-/**
- * Adds an element to the end of an array
- */
+
 export fn push<T>(arr: T[], item: T): void {
     _push_native(arr, item);
 }
 
-/**
- * Removes and returns the last element of an array
- */
+
 export fn pop<T>(arr: T[]): T {
     return _pop_native(arr);
 }
 
-/**
- * Removes and returns the first element of an array
- */
+
 export fn shift<T>(arr: T[]): T {
     return _shift_native(arr);
 }
 
-/**
- * Adds an element to the beginning of an array
- */
+
 export fn unshift<T>(arr: T[], item: T): void {
     _unshift_native(arr, item);
 }
 
-/**
- * Returns a shallow copy of a portion of an array
- */
+
 export fn slice<T>(arr: T[], start: int, end: int): T[] {
     return _slice_native(arr, start, end);
 }
 
-/**
- * Reverses an array in place
- */
+
 export fn reverse<T>(arr: T[]): T[] {
     return _reverse_native(arr);
 }
 
-/**
- * Sorts an array in place
- */
+
 export fn sort<T>(arr: T[]): T[] {
     return _sort_native(arr);
 }
 
-/**
- * Maps each element using a callback function
- */
+
 export fn map<T, R>(arr: T[], callback: (item: T, index: int) => R): R[] {
     let result: R[] = [];
     for (let i = 0; i < length(arr); i = i + 1) {
@@ -93,9 +46,7 @@ export fn map<T, R>(arr: T[], callback: (item: T, index: int) => R): R[] {
     return result;
 }
 
-/**
- * Filters elements using a predicate function
- */
+
 export fn filter<T>(arr: T[], predicate: (item: T, index: int) => bool): T[] {
     let result: T[] = [];
     for (let i = 0; i < length(arr); i = i + 1) {
@@ -106,9 +57,7 @@ export fn filter<T>(arr: T[], predicate: (item: T, index: int) => bool): T[] {
     return result;
 }
 
-/**
- * Reduces an array to a single value
- */
+
 export fn reduce<T, R>(arr: T[], callback: (acc: R, item: T, index: int) => R, initial: R): R {
     let accumulator = initial;
     for (let i = 0; i < length(arr); i = i + 1) {
@@ -117,9 +66,7 @@ export fn reduce<T, R>(arr: T[], callback: (acc: R, item: T, index: int) => R, i
     return accumulator;
 }
 
-/**
- * Checks if any element satisfies a predicate
- */
+
 export fn some<T>(arr: T[], predicate: (item: T, index: int) => bool): bool {
     for (let i = 0; i < length(arr); i = i + 1) {
         if (predicate(arr[i], i)) {
@@ -129,9 +76,7 @@ export fn some<T>(arr: T[], predicate: (item: T, index: int) => bool): bool {
     return false;
 }
 
-/**
- * Checks if all elements satisfy a predicate
- */
+
 export fn every<T>(arr: T[], predicate: (item: T, index: int) => bool): bool {
     for (let i = 0; i < length(arr); i = i + 1) {
         if (!predicate(arr[i], i)) {
@@ -141,9 +86,7 @@ export fn every<T>(arr: T[], predicate: (item: T, index: int) => bool): bool {
     return true;
 }
 
-/**
- * Finds the first element that satisfies a predicate
- */
+
 export fn find<T>(arr: T[], predicate: (item: T, index: int) => bool): T | null {
     for (let i = 0; i < length(arr); i = i + 1) {
         if (predicate(arr[i], i)) {
@@ -153,9 +96,7 @@ export fn find<T>(arr: T[], predicate: (item: T, index: int) => bool): T | null 
     return null;
 }
 
-/**
- * Finds the index of the first element that satisfies a predicate
- */
+
 export fn findIndex<T>(arr: T[], predicate: (item: T, index: int) => bool): int {
     for (let i = 0; i < length(arr); i = i + 1) {
         if (predicate(arr[i], i)) {
@@ -165,9 +106,7 @@ export fn findIndex<T>(arr: T[], predicate: (item: T, index: int) => bool): int 
     return -1;
 }
 
-/**
- * Checks if an array includes a certain element
- */
+
 export fn includes<T>(arr: T[], item: T): bool {
     for (let i = 0; i < length(arr); i = i + 1) {
         if (arr[i] == item) {
@@ -177,9 +116,7 @@ export fn includes<T>(arr: T[], item: T): bool {
     return false;
 }
 
-/**
- * Joins array elements into a string
- */
+
 export fn join<T>(arr: T[], separator: str): str {
     if (length(arr) == 0) {
         return "";

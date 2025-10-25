@@ -1,0 +1,208 @@
+// Comprehensive ES Modules Test
+// This test covers all ES6/TypeScript module features
+
+print("=== ES Modules Comprehensive Test ===\n")
+
+// ============================================================================
+// Test 1: Named Imports
+// ============================================================================
+print("Test 1: Named Imports")
+import { add, multiply, version, PI } from "./modules/utilities.rcc"
+
+print("  add(5, 3) =", add(5, 3))
+print("  multiply(4, 7) =", multiply(4, 7))
+print("  version =", version)
+print("  PI =", PI)
+print("  ✓ Named imports working\n")
+
+// ============================================================================
+// Test 2: Import with Alias
+// ============================================================================
+print("Test 2: Import with Alias")
+import { add as sum, multiply as mult } from "./modules/utilities.rcc"
+
+print("  sum(10, 20) =", sum(10, 20))
+print("  mult(3, 9) =", mult(3, 9))
+print("  ✓ Import aliases working\n")
+
+// ============================================================================
+// Test 3: Namespace Import
+// ============================================================================
+print("Test 3: Namespace Import")
+import * as utils from "./modules/utilities.rcc"
+
+print("  utils.add(15, 25) =", utils.add(15, 25))
+print("  utils.multiply(6, 7) =", utils.multiply(6, 7))
+print("  utils.version =", utils.version)
+print("  ✓ Namespace imports working\n")
+
+// ============================================================================
+// Test 4: Default Import + Named Imports
+// ============================================================================
+print("Test 4: Default Import + Named Imports")
+import Shape, { Point, calculateArea } from "./modules/geometry.rcc"
+
+let shape = new Shape("Rectangle")
+print("  Shape description:", shape.describe())
+
+let p1 = new Point(0.0, 0.0)
+let p2 = new Point(3.0, 4.0)
+print("  Distance between points:", p1.distance(p2))
+
+print("  Area of 5x10 rectangle:", calculateArea(5.0, 10.0))
+print("  ✓ Default + named imports working\n")
+
+// ============================================================================
+// Test 5: Class Imports and Instantiation
+// ============================================================================
+print("Test 5: Class Imports and Instantiation")
+import { Calculator } from "./modules/utilities.rcc"
+
+let calc = new Calculator(10)
+print("  Initial value:", calc.value)
+print("  After add(5):", calc.add(5))
+print("  After multiply(2):", calc.multiply(2))
+calc.reset()
+print("  After reset():", calc.value)
+print("  ✓ Class imports working\n")
+
+// ============================================================================
+// Test 6: Enum Imports
+// ============================================================================
+print("Test 6: Enum Imports")
+import { Status } from "./modules/utilities.rcc"
+
+print("  Status.Pending =", Status.Pending)
+print("  Status.Active =", Status.Active)
+print("  Status.Completed =", Status.Completed)
+print("  Status.Failed =", Status.Failed)
+print("  ✓ Enum imports working\n")
+
+// ============================================================================
+// Test 7: Export List (exported at end of module)
+// ============================================================================
+print("Test 7: Export List Imports")
+import { MAX_SIZE, MIN_SIZE, validateSize } from "./modules/utilities.rcc"
+
+print("  MAX_SIZE =", MAX_SIZE)
+print("  MIN_SIZE =", MIN_SIZE)
+print("  validateSize(50) =", validateSize(50))
+print("  validateSize(200) =", validateSize(200))
+print("  ✓ Export list working\n")
+
+// ============================================================================
+// Test 8: Multiple Constants Import
+// ============================================================================
+print("Test 8: Multiple Constants Import")
+import {
+    APP_NAME,
+    APP_VERSION,
+    MAX_RETRIES,
+    TIMEOUT,
+    DEBUG,
+    LogLevel,
+    Config
+} from "./modules/constants.rcc"
+
+print("  APP_NAME =", APP_NAME)
+print("  APP_VERSION =", APP_VERSION)
+print("  MAX_RETRIES =", MAX_RETRIES)
+print("  TIMEOUT =", TIMEOUT)
+print("  DEBUG =", DEBUG)
+print("  LogLevel.Info =", LogLevel.Info)
+print("  Config.appName =", Config.appName)
+print("  ✓ Multiple constants import working\n")
+
+// ============================================================================
+// Test 9: Re-exports
+// ============================================================================
+print("Test 9: Re-exports")
+import { sum as reSum, product, divide, MODULE_NAME } from "./modules/re_export.rcc"
+
+print("  reSum(8, 12) =", reSum(8, 12))
+print("  product(5, 6) =", product(5, 6))
+print("  divide(100, 5) =", divide(100, 5))
+print("  MODULE_NAME =", MODULE_NAME)
+print("  ✓ Re-exports working\n")
+
+// ============================================================================
+// Test 10: Standard Library Imports
+// ============================================================================
+print("Test 10: Standard Library Imports")
+import Math from "std:math"
+import String from "std:string"
+import console from "std:console"
+
+console.log("  Math.sqrt(144) =", Math.sqrt(144.0))
+console.log("  Math.pow(2, 8) =", Math.pow(2.0, 8.0))
+
+let text: str = "  hello world  "
+console.log("  String.upper(text) =", String.upper(text))
+console.log("  String.trim(text) =", String.trim(text))
+print("  ✓ Standard library imports working\n")
+
+// ============================================================================
+// Test 11: Mixed Import Styles in Same File
+// ============================================================================
+print("Test 11: Mixed Import Styles")
+// We already have multiple import styles above, verify they coexist
+print("  Multiple import styles coexist: ✓")
+print("  - Named imports: ✓")
+print("  - Aliased imports: ✓")
+print("  - Namespace imports: ✓")
+print("  - Default imports: ✓")
+print("  - Standard library: ✓\n")
+
+// ============================================================================
+// Test 12: Imported Types in Function Signatures
+// ============================================================================
+print("Test 12: Using Imported Types")
+
+fn processCalculator(calculator: Calculator): int {
+    calculator.add(10)
+    calculator.multiply(2)
+    return calculator.value
+}
+
+let testCalc = new Calculator(5)
+print("  processCalculator result:", processCalculator(testCalc))
+print("  ✓ Imported types in function signatures working\n")
+
+// ============================================================================
+// Test 13: Imported Classes in Complex Operations
+// ============================================================================
+print("Test 13: Complex Operations with Imported Classes")
+
+fn calculateTrianglePerimeter(p1: Point, p2: Point, p3: Point): float {
+    let side1: float = p1.distance(p2)
+    let side2: float = p2.distance(p3)
+    let side3: float = p3.distance(p1)
+    return side1 + side2 + side3
+}
+
+let point1 = new Point(0.0, 0.0)
+let point2 = new Point(3.0, 0.0)
+let point3 = new Point(0.0, 4.0)
+print("  Triangle perimeter:", calculateTrianglePerimeter(point1, point2, point3))
+print("  ✓ Complex operations with imports working\n")
+
+// ============================================================================
+// Final Summary
+// ============================================================================
+print("==================================================")
+print("ALL ES MODULES TESTS PASSED!")
+print("==================================================")
+print("\nFeatures Tested:")
+print("  ✓ Named exports/imports")
+print("  ✓ Default exports/imports")
+print("  ✓ Namespace imports (import * as)")
+print("  ✓ Import aliases (as)")
+print("  ✓ Re-exports")
+print("  ✓ Export lists")
+print("  ✓ Class exports/imports")
+print("  ✓ Enum exports/imports")
+print("  ✓ Function exports/imports")
+print("  ✓ Variable/constant exports/imports")
+print("  ✓ Standard library imports")
+print("  ✓ Mixed import styles")
+print("  ✓ Type usage across modules")

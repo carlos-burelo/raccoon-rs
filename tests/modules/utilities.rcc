@@ -1,0 +1,60 @@
+// Module with various export styles
+
+// 1. Named exports - functions
+export fn add(a: int, b: int): int {
+    return a + b
+}
+
+export fn multiply(a: int, b: int): int {
+    return a * b
+}
+
+// 2. Named exports - variables
+export let version: str = "1.0.0"
+export let PI: float = 3.14159
+
+// 3. Named exports - classes
+export class Calculator {
+    value: int
+
+    constructor(initial: int) {
+        this.value = initial
+    }
+
+    add(n: int): int {
+        this.value = this.value + n
+        return this.value
+    }
+
+    multiply(n: int): int {
+        this.value = this.value * n
+        return this.value
+    }
+
+    reset(): void {
+        this.value = 0
+    }
+}
+
+// 4. Named exports - enums
+export enum Status {
+    Pending,
+    Active,
+    Completed,
+    Failed
+}
+
+// 5. Internal helper (not exported)
+fn internalHelper(): str {
+    return "This is internal"
+}
+
+// 6. Export list at the end
+let MAX_SIZE: int = 100
+let MIN_SIZE: int = 1
+
+fn validateSize(size: int): bool {
+    return size >= MIN_SIZE && size <= MAX_SIZE
+}
+
+export { MAX_SIZE, MIN_SIZE, validateSize }

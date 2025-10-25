@@ -1,0 +1,14 @@
+// Barrel export pattern - re-exports everything from multiple modules
+// Using modern ES6 export-from syntax
+
+export { add, multiply, Calculator, Status } from "./utilities.rcc"
+export { Point, calculateArea, calculatePerimeter } from "./geometry.rcc"
+export { APP_NAME, APP_VERSION, LogLevel, Config } from "./constants.rcc"
+export { square, cube, config, MathUtils } from "./advanced_exports.rcc"
+
+// Add some unique exports
+export let BARREL_VERSION: str = "1.0.0"
+
+export fn greet(name: str): str {
+    return "Hello, " + name + "!"
+}

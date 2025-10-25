@@ -1,0 +1,42 @@
+// Test spread operator in function calls
+
+// Test 1: Simple spread
+fn sum(a: int, b: int, c: int): int {
+    return a + b + c;
+}
+
+let numbers: int[] = [1, 2, 3];
+let result1: int = sum(...numbers);
+print("sum(...[1,2,3]) =", result1);
+
+// Test 2: Spread with other arguments
+fn greet(greeting: str, name: str, punctuation: str): str {
+    return greeting + " " + name + punctuation;
+}
+
+let parts: str[] = ["Alice", "!"];
+let greeting: str = greet("Hello", ...parts);
+print(greeting);
+
+// Test 3: Multiple arguments
+fn combine(a: str, b: str, c: str, d: str): str {
+    return a + b + c + d;
+}
+
+let first: str[] = ["A", "B"];
+let second: str[] = ["C", "D"];
+// Note: Currently can't do multiple spreads in one call, so test single spread
+let combined: str = combine("A", "B", ...["C", "D"]);
+print("Combined:", combined);
+
+// Test 4: Variadic function with spread
+fn printAll(...args: any[]): void {
+    for (let i = 0; i < args.length; i = i + 1) {
+        print(args[i]);
+    }
+}
+
+let items: any[] = [1, "two", 3.0, true];
+printAll(...items);
+
+print("All spread operator tests completed!");

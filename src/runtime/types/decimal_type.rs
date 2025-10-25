@@ -1,8 +1,8 @@
 use super::TypeHandler;
-use async_trait::async_trait;
 use crate::error::RaccoonError;
 use crate::runtime::{FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
+use async_trait::async_trait;
 
 pub struct DecimalType;
 
@@ -27,7 +27,7 @@ impl TypeHandler for DecimalType {
                     format!("Expected decimal, got {}", value.get_name()),
                     position,
                     file,
-                ))
+                ));
             }
         };
 

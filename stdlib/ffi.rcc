@@ -1,0 +1,74 @@
+export enum FFIType {
+    Void,
+    Int,
+    Float,
+    String,
+    Bool,
+    Pointer
+}
+
+
+class FFI {
+    
+    static loadLibrary(name: str, path: str): void {
+        
+        native_ffi_load_library(name, path);
+    }
+
+    
+    static registerFunction(libName: str, descriptor: any): void {
+        
+        native_ffi_register_function(libName, descriptor);
+    }
+
+    
+    static call(libName: str, funcName: str, args: any[]): any {
+        return native_ffi_call(libName, funcName, args);
+    }
+
+    
+    static getSystemLibrary(name: str): str {
+        const os: str = getOS();
+
+        if (name == "math" || name == "m") {
+            if (os == "windows") {
+                return "C:\\Windows\\System32\\msvcrt.dll";
+            } else if (os == "linux") {
+                return "/lib/x86_64-linux-gnu/libm.so.6";
+            } else if (os == "darwin") {
+                return "/usr/lib/libm.dylib";
+            }
+        }
+
+        if (name == "c" || name == "libc") {
+            if (os == "windows") {
+                return "C:\\Windows\\System32\\msvcrt.dll";
+            } else if (os == "linux") {
+                return "/lib/x86_64-linux-gnu/libc.so.6";
+            } else if (os == "darwin") {
+                return "/usr/lib/libSystem.dylib";
+            }
+        }
+
+        throw "Unknown system library: " + name;
+    }
+}
+
+
+// declare fn native_ffi_load_library(name: str, path: str): void;
+// declare fn native_ffi_register_function(libName: str, descriptor: any): void;
+// declare fn native_ffi_call(libName: str, funcName: str, args: any[]): any;
+// declare fn getOS(): str;
+
+
+fn createFunctionDescriptor(name: str, returnType: any, paramTypes: any[]): any {
+    return {
+        name: name,
+        returnType: returnType,
+        paramTypes: paramTypes
+    };
+}
+
+
+export { FFI, FFIType, createFunctionDescriptor };
+export default FFI;

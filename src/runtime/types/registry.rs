@@ -6,20 +6,16 @@ use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
 use std::collections::HashMap;
 
-/// Central registry for all type handlers
-/// This allows for dynamic lookup of methods based on runtime type
 pub struct TypeRegistry {
     handlers: HashMap<String, Box<dyn TypeHandler>>,
 }
 
 impl TypeRegistry {
-    /// Create a new type registry with all built-in types registered
     pub fn new() -> Self {
         let mut registry = Self {
             handlers: HashMap::new(),
         };
 
-        // Register all built-in types
         registry.register(Box::new(IntType));
         registry.register(Box::new(FloatType));
         registry.register(Box::new(DecimalType));
@@ -31,18 +27,15 @@ impl TypeRegistry {
         registry
     }
 
-    /// Register a new type handler
     pub fn register(&mut self, handler: Box<dyn TypeHandler>) {
         self.handlers
             .insert(handler.type_name().to_string(), handler);
     }
 
-    /// Get a type handler by type name
     pub fn get_handler(&self, type_name: &str) -> Option<&dyn TypeHandler> {
         self.handlers.get(type_name).map(|h| h.as_ref())
     }
 
-    /// Call an instance method on a runtime value
     pub fn call_instance_method(
         &self,
         value: &mut RuntimeValue,
@@ -64,7 +57,6 @@ impl TypeRegistry {
         }
     }
 
-    /// Call a static method on a type
     pub fn call_static_method(
         &self,
         type_name: &str,
@@ -84,7 +76,6 @@ impl TypeRegistry {
         }
     }
 
-    /// Get a static property from a type
     pub fn get_static_property(
         &self,
         type_name: &str,
@@ -103,21 +94,18 @@ impl TypeRegistry {
         }
     }
 
-    /// Check if a type has an instance method
     pub fn has_instance_method(&self, type_name: &str, method: &str) -> bool {
         self.get_handler(type_name)
             .map(|h| h.has_instance_method(method))
             .unwrap_or(false)
     }
 
-    /// Check if a type has a static method
     pub fn has_static_method(&self, type_name: &str, method: &str) -> bool {
         self.get_handler(type_name)
             .map(|h| h.has_static_method(method))
             .unwrap_or(false)
     }
 
-    /// Call an async instance method on a runtime value
     pub async fn call_async_instance_method(
         &self,
         value: &mut RuntimeValue,
@@ -142,7 +130,6 @@ impl TypeRegistry {
         }
     }
 
-    /// Check if a type has an async instance method
     pub fn has_async_instance_method(&self, type_name: &str, method: &str) -> bool {
         self.get_handler(type_name)
             .map(|h| h.has_async_instance_method(method))

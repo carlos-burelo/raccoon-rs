@@ -131,6 +131,7 @@ pub enum Expr {
     NullLiteral(NullLiteral),
     ListLiteral(ListLiteral),
     ObjectLiteral(ObjectLiteral),
+    Spread(SpreadExpr),
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -166,6 +167,7 @@ pub struct FnParam {
     pub param_type: Type,
     pub default_value: Option<Expr>,
     pub is_rest: bool,
+    pub is_optional: bool,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -173,9 +175,10 @@ pub struct FnDecl {
     pub name: String,
     pub type_parameters: Vec<super::types::TypeParameter>,
     pub parameters: Vec<FnParam>,
-    pub return_type: Type,
+    pub return_type: Option<Type>,
     pub body: Vec<Stmt>,
     pub is_async: bool,
+    pub is_declare: bool,
     pub decorators: Vec<DecoratorDecl>,
     pub position: Position,
 }
@@ -193,7 +196,7 @@ pub struct ClassProperty {
 pub struct ClassMethod {
     pub name: String,
     pub parameters: Vec<FnParam>,
-    pub return_type: Type,
+    pub return_type: Option<Type>,
     pub body: Vec<Stmt>,
     pub is_async: bool,
     pub decorators: Vec<DecoratorDecl>,
@@ -226,7 +229,7 @@ pub struct PropertyAccessor {
     pub name: String,
     pub kind: AccessorKind,
     pub parameters: Vec<FnParam>,
-    pub return_type: Type,
+    pub return_type: Option<Type>,
     pub body: Vec<Stmt>,
     pub access_modifier: AccessModifier,
     pub position: Position,
@@ -246,7 +249,7 @@ pub struct DecoratorDecl {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct InterfaceProperty {
+pub struct InterfaceDeclProperty {
     pub name: String,
     pub property_type: Type,
     pub optional: bool,
@@ -256,7 +259,7 @@ pub struct InterfaceProperty {
 pub struct InterfaceDecl {
     pub name: String,
     pub type_parameters: Vec<super::types::TypeParameter>,
-    pub properties: Vec<InterfaceProperty>,
+    pub properties: Vec<InterfaceDeclProperty>,
     pub extends: Vec<String>,
     pub position: Position,
 }
@@ -307,6 +310,7 @@ pub struct ExportDecl {
     pub declaration: Option<Box<Stmt>>,
     pub specifiers: Vec<ExportSpecifier>,
     pub is_default: bool,
+    pub module_specifier: Option<String>, // For export { ... } from "module"
     pub position: Position,
 }
 
@@ -651,5 +655,11 @@ pub enum ObjectPatternValue {
 #[derive(Debug, Clone, PartialEq)]
 pub struct RestElement {
     pub argument: Identifier,
+    pub position: Position,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct SpreadExpr {
+    pub argument: Box<Expr>,
     pub position: Position,
 }

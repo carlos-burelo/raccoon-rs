@@ -1,0 +1,7 @@
+class Test {
+    static PI: float = 3.14;
+    static NAME: str = "Test";
+}
+
+print("PI =", Test.PI);
+print("NAME =", Test.NAME);

@@ -47,7 +47,12 @@ impl Environment {
         }
     }
 
-    pub fn assign(&mut self, name: &str, value: RuntimeValue, position: Position) -> Result<(), RaccoonError> {
+    pub fn assign(
+        &mut self,
+        name: &str,
+        value: RuntimeValue,
+        position: Position,
+    ) -> Result<(), RaccoonError> {
         for scope in self.scopes.iter_mut().rev() {
             if scope.contains_key(name) {
                 scope.insert(name.to_string(), value);

@@ -1,0 +1,11 @@
+export enum MyEnum {
+    A,
+    B,
+    C
+}
+
+export class MyClass {
+    static test(): void {
+        print("Test!");
+    }
+}

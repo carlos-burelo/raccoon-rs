@@ -8,9 +8,9 @@ pub mod semantic_analyzer;
 pub mod symbol_table;
 pub mod tokens;
 pub mod type_checker;
+pub mod type_inference;
 pub mod type_resolver;
 pub mod type_substitutor;
-
 pub use error::RaccoonError;
 pub use interpreter::Interpreter;
 pub use lexer::Lexer;
@@ -20,5 +20,6 @@ pub use semantic_analyzer::SemanticAnalyzer;
 pub use symbol_table::{SymbolItem, SymbolKind, SymbolTable};
 pub use tokens::{Position, Token, TokenType};
 pub use type_checker::TypeChecker;
+pub use type_inference::TypeInferenceEngine;
 pub use type_resolver::TypeResolver;
 pub use type_substitutor::TypeSubstitutor;
