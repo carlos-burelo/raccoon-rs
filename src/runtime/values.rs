@@ -286,6 +286,7 @@ impl ObjectValue {
 pub struct ClassValue {
     pub class_name: String,
     pub static_methods: HashMap<String, Box<FunctionValue>>,
+    pub static_properties: HashMap<String, RuntimeValue>,
     pub class_type: Type,
     pub declaration: ClassDecl,
 }
@@ -300,6 +301,23 @@ impl ClassValue {
         Self {
             class_name,
             static_methods,
+            static_properties: HashMap::new(),
+            class_type,
+            declaration,
+        }
+    }
+
+    pub fn with_properties(
+        class_name: String,
+        static_methods: HashMap<String, Box<FunctionValue>>,
+        static_properties: HashMap<String, RuntimeValue>,
+        class_type: Type,
+        declaration: ClassDecl,
+    ) -> Self {
+        Self {
+            class_name,
+            static_methods,
+            static_properties,
             class_type,
             declaration,
         }
@@ -352,6 +370,7 @@ pub struct FunctionValue {
     pub body: Vec<Stmt>,
     pub is_async: bool,
     pub fn_type: Type,
+    pub decorators: Vec<DecoratorDecl>,
 }
 
 impl FunctionValue {
@@ -361,7 +380,13 @@ impl FunctionValue {
             body,
             is_async,
             fn_type,
+            decorators: Vec::new(),
         }
+    }
+
+    pub fn with_decorators(mut self, decorators: Vec<DecoratorDecl>) -> Self {
+        self.decorators = decorators;
+        self
     }
 
     pub fn to_string(&self) -> String {
@@ -402,59 +427,24 @@ impl fmt::Debug for NativeFunctionValue {
     }
 }
 
-// Native async function type
 use std::future::Future;
 use std::pin::Pin;
 
-// pub type NativeAsyncFn = fn(Vec<RuntimeValue>) -> Pin<Box<dyn Future<Output = RuntimeValue>>>;
-
-// #[derive(Clone)]
-// pub struct NativeAsyncFunctionValue {
-//     pub implementation: NativeAsyncFn,
-//     pub fn_type: Type,
-// }
-
-// impl NativeAsyncFunctionValue {
-//     pub fn new(implementation: NativeAsyncFn, fn_type: Type) -> Self {
-//         Self {
-//             implementation,
-//             fn_type,
-//         }
-//     }
-
-//     pub fn to_string(&self) -> String {
-//         "[Native Async Function]".to_string()
-//     }
-// }
-
-// impl fmt::Debug for NativeAsyncFunctionValue {
-//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-//         f.debug_struct("NativeAsyncFunctionValue")
-//             .field("fn_type", &self.fn_type)
-//             .finish()
-//     }
-// }
-
-// ++++++++++++++++ INICIO DE LA MODIFICACIÓN ++++++++++++++++
-// El tipo ahora es un Box<dyn Fn(...)> que es Send + Sync + 'static
 pub type NativeAsyncFn = Arc<
-    // <--- CAMBIADO DE Box A Arc
     dyn Fn(Vec<RuntimeValue>) -> Pin<Box<(dyn Future<Output = RuntimeValue> + 'static)>>
         + Send
         + Sync
         + 'static,
 >;
-// ++++++++++++++++ FIN DE LA MODIFICACIÓN ++++++++++++++++
 
 #[derive(Clone)]
 pub struct NativeAsyncFunctionValue {
-    pub implementation: NativeAsyncFn, // <--- CAMBIADO
+    pub implementation: NativeAsyncFn,
     pub fn_type: Type,
 }
 
 impl NativeAsyncFunctionValue {
     pub fn new(implementation: NativeAsyncFn, fn_type: Type) -> Self {
-        // <--- CAMBIADO
         Self {
             implementation,
             fn_type,
