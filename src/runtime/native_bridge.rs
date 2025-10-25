@@ -1017,6 +1017,20 @@ impl NativeBridge {
             ),
         );
     }
+
+    pub fn register_all_in_env(&self, interp: &mut crate::interpreter::Interpreter) {
+        // Register all synchronous native functions
+        for (name, func) in &self.functions {
+            let value = RuntimeValue::NativeFunction(func.clone());
+            let _ = interp.declare_in_env(name.clone(), value);
+        }
+
+        // Register all asynchronous native functions
+        for (name, func) in &self.async_functions {
+            let value = RuntimeValue::NativeAsyncFunction(func.clone());
+            let _ = interp.declare_in_env(name.clone(), value);
+        }
+    }
 }
 
 impl Default for NativeBridge {

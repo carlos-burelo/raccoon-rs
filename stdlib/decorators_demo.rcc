@@ -1,4 +1,13 @@
-// Demo: Stdlib functions usando decoradores
+// Decorator System Demo Module
+//
+// This module demonstrates the use of Raccoon's decorator system
+// for function metadata and optimization hints.
+//
+// Decorators shown:
+// - @pure()    : Function has no side effects
+// - @inline()  : Suggest inlining at call sites
+// - @cache()   : Cache results for N milliseconds
+// - @deprecated() : Mark function as deprecated
 
 // Funciones matemáticas puras
 @pure()

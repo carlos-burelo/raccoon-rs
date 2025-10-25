@@ -1,26 +1,5 @@
-@native("native_io_read_file")
-declare fn _read_file_native(path: str): str;
-
-@native("native_io_write_file")
-declare fn _write_file_native(path: str, content: str): void;
-
-@native("native_io_append_file")
-declare fn _append_file_native(path: str, content: str): void;
-
-@native("native_io_file_exists")
-declare fn _file_exists_native(path: str): bool;
-
-@native("native_io_delete_file")
-declare fn _delete_file_native(path: str): void;
-
-@native("native_io_read_dir")
-declare fn _read_dir_native(path: str): str[];
-
-@native("native_io_create_dir")
-declare fn _create_dir_native(path: str): void;
-
-@native("native_io_input")
-declare fn _input_native(prompt: str): str;
+// I/O operations - Core functions with @_ffi decorator
+// These wrap native implementations for file and directory operations
 
 
 export fn readFile(path: str): str {
@@ -58,7 +37,7 @@ export fn createDir(path: str): void {
 }
 
 
-export fn input(prompt: str): str {
+export fn readInput(prompt: str): str {
     return _input_native(prompt);
 }
 

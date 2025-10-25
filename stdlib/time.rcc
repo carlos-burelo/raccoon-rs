@@ -1,11 +1,4 @@
-@native("native_time_now")
-declare fn _now_native(): int;
-
-@native("native_time_sleep")
-declare fn _sleep_native(ms: int): void;
-
-@native("native_time_format")
-declare fn _format_native(timestamp: int, format: str): str;
+// Time operations - Wraps native implementations
 
 
 export fn now(): int {

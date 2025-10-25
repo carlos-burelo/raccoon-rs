@@ -206,6 +206,31 @@ impl FFIRegistry {
         self.async_implementations.write().unwrap().clear();
         self.namespaces.write().unwrap().clear();
     }
+
+    /// Registra una función de Raccoon (no nativa) para ser invocable dinámicamente via FFI
+    /// Las funciones de Raccoon se almacenan solo con metadata, sin implementación
+    pub fn register_raccoon_function(
+        &self,
+        name: String,
+        _function: crate::runtime::FunctionValue,
+        params: Vec<(String, Type)>,
+        return_type: Type,
+    ) {
+        // Registrar metadata de la función de Raccoon
+        {
+            let mut funcs = self.functions.write().unwrap();
+            funcs.insert(
+                name.clone(),
+                FFIFunctionInfo {
+                    name: name.clone(),
+                    namespace: None,
+                    params,
+                    return_type,
+                    is_async: false, // Se determinará por el tipo de retorno si es Future
+                },
+            );
+        }
+    }
 }
 
 impl Default for FFIRegistry {

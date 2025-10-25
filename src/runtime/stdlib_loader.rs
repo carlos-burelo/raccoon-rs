@@ -211,64 +211,10 @@ impl StdLibLoader {
     }
 
     fn setup_native_functions_in_interpreter(&self, interp: &mut Interpreter) {
-        let all_native_names = vec![
-            "_print_native",
-            "_eprint_native",
-            "native_http_request",
-            "native_time_now",
-            "native_time_now_secs",
-            "native_random",
-            "native_json_parse",
-            "native_json_stringify",
-            "native_json_stringify_pretty",
-            "native_str_length",
-            "native_str_upper",
-            "native_str_lower",
-            "native_str_trim",
-            "native_str_substring",
-            "native_str_char_at",
-            "native_str_index_of",
-            "native_str_replace",
-            "native_str_split",
-            "native_str_starts_with",
-            "native_str_ends_with",
-            "native_array_length",
-            "native_array_push",
-            "native_array_slice",
-            "native_array_reverse",
-            "native_array_pop",
-            "native_array_shift",
-            "native_array_unshift",
-            "native_array_sort",
-            "native_ffi_load_library",
-            "native_ffi_register_function",
-            "native_ffi_call",
-            "getOS",
-            "native_io_read_file",
-            "native_io_write_file",
-            "native_io_append_file",
-            "native_io_file_exists",
-            "native_io_delete_file",
-            "native_io_read_dir",
-            "native_io_create_dir",
-            "native_io_input",
-            "_sqrt_native",
-            "_pow_native",
-            "_sin_native",
-            "_cos_native",
-            "_tan_native",
-            "_random_native",
-        ];
-
-        for name in all_native_names {
-            if let Some(f) = self.native_bridge.get(name) {
-                let _ = interp.declare_in_env(name.to_string(), f);
-            }
-        }
-
-        if let Some(f) = self.native_bridge.get_async("native_http_request") {
-            let _ = interp.declare_in_env("native_http_request".to_string(), f);
-        }
+        // Register all native functions from the bridge dynamically
+        // The native_bridge internally registers both primary names (native_json_stringify)
+        // and alias names (_stringify_native) via add_string_aliases()
+        self.native_bridge.register_all_in_env(interp);
     }
 
     pub fn available_modules(&self) -> Vec<String> {

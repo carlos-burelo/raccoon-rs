@@ -1,11 +1,4 @@
-@native("native_json_parse")
-declare fn _parse_native(json: str): any;
-
-@native("native_json_stringify")
-declare fn _stringify_native(value: any): str;
-
-@native("native_json_stringify_pretty")
-declare fn _stringify_pretty_native(value: any, indent: int): str;
+// JSON operations - Wraps native implementations
 
 
 export fn parse(json: str): any {

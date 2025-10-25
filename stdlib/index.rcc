@@ -1,0 +1,17 @@
+// Raccoon Standard Library Index
+//
+// Available modules:
+// - array       : Array operations (map, filter, reduce, etc)
+// - string      : String operations (upper, lower, trim, etc)
+// - json        : JSON parsing and serialization
+// - math        : Mathematical functions and constants
+// - io          : File I/O and directory operations
+// - time        : Time utilities and timers
+// - decorators_demo : Demo of decorator system
+
+export { default as Array } from "std:array";
+export { default as String } from "std:string";
+export * from "std:json";
+export { default as Math } from "std:math";
+export * from "std:io";
+export * from "std:time";

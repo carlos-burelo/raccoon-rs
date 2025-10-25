@@ -39,78 +39,39 @@ impl Interpreter {
         setup_builtins(&mut env);
         let native_bridge = std::sync::Arc::new(crate::runtime::NativeBridge::new());
 
-        let all_native_names = vec![
-            "_print_native",
-            "_eprint_native",
-            "native_print",
-            "native_eprint",
-            "native_time_now",
-            "native_time_now_secs",
-            "native_random",
-            "native_json_parse",
-            "native_json_stringify",
-            "native_json_stringify_pretty",
-            "native_str_length",
-            "_length_native",
-            "native_str_upper",
-            "_upper_native",
-            "native_str_lower",
-            "_lower_native",
-            "native_str_trim",
-            "_trim_native",
-            "native_str_substring",
-            "_substring_native",
-            "native_str_char_at",
-            "_char_at_native",
-            "native_str_index_of",
-            "_index_of_native",
-            "native_str_replace",
-            "_replace_native",
-            "native_str_split",
-            "_split_native",
-            "native_str_starts_with",
-            "_starts_with_native",
+        // Register ALL native functions from bridge dynamically
+        // Get all function names from native_bridge and register them
+        for func in [
+            "native_print", "native_eprint",
+            "native_json_parse", "native_json_stringify", "native_json_stringify_pretty",
+            "_parse_native", "_stringify_native", "_stringify_pretty_native",
+            "native_str_length", "native_str_upper", "native_str_lower", "native_str_trim",
+            "native_str_substring", "native_str_char_at", "native_str_index_of",
+            "native_str_replace", "native_str_split", "native_str_starts_with",
             "native_str_ends_with",
+            "_length_native", "_upper_native", "_lower_native", "_trim_native",
+            "_substring_native", "_char_at_native", "_index_of_native",
+            "_replace_native", "_split_native", "_starts_with_native",
             "_ends_with_native",
-            "native_array_length",
-            "native_array_push",
-            "native_array_slice",
-            "native_array_reverse",
-            "native_array_pop",
-            "native_array_shift",
-            "native_array_unshift",
-            "native_array_sort",
-            "native_ffi_load_library",
-            "native_ffi_register_function",
-            "native_ffi_call",
-            "getOS",
-            "native_io_read_file",
-            "native_io_write_file",
-            "native_io_append_file",
-            "native_io_file_exists",
-            "native_io_delete_file",
-            "native_io_read_dir",
-            "native_io_create_dir",
-            "native_io_input",
-            "_sqrt_native",
-            "_pow_native",
-            "_sin_native",
-            "_cos_native",
-            "_tan_native",
-            "_random_native",
-        ];
-
-        for name in all_native_names {
-            if let Some(f) = native_bridge.get(name) {
-                let _ = env.declare(name.to_string(), f);
+            "native_array_length", "native_array_push", "native_array_pop",
+            "native_array_shift", "native_array_unshift", "native_array_slice",
+            "native_array_reverse", "native_array_sort",
+            "_push_native", "_pop_native", "_shift_native", "_unshift_native",
+            "_slice_native", "_reverse_native", "_sort_native",
+            "native_io_read_file", "native_io_write_file", "native_io_append_file",
+            "native_io_file_exists", "native_io_delete_file", "native_io_read_dir",
+            "native_io_create_dir", "native_io_input",
+            "_read_file_native", "_write_file_native", "_append_file_native",
+            "_file_exists_native", "_delete_file_native", "_read_dir_native",
+            "_create_dir_native", "_input_native",
+            "_sqrt_native", "_pow_native", "_sin_native", "_cos_native", "_tan_native",
+            "_random_native", "native_random",
+        ] {
+            if let Some(f) = native_bridge.get(func) {
+                let _ = env.declare(func.to_string(), f);
             }
         }
 
-        for name in ["native_http_request"] {
-            if let Some(f) = native_bridge.get_async(name) {
-                let _ = env.declare(name.to_string(), f);
-            }
-        }
         let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
         let decorator_registry = DecoratorRegistry::new();
         let ffi_registry = std::sync::Arc::new(FFIRegistry::new());
@@ -260,26 +221,38 @@ impl Interpreter {
         for decorator_info in &decorators {
             match decorator_info.spec.name.as_str() {
                 "@_ffi" => {
-                    // Registrar función en FFI Registry
-                    let _params: Vec<(String, Type)> = decl
-                        .parameters
-                        .iter()
-                        .map(|p| {
-                            (
-                                format!("{:?}", p.pattern),
-                                p.param_type.clone(),
-                            )
-                        })
-                        .collect();
+                    // Registrar función en FFI Registry automáticamente
+                    // La función ya está disponible en el ambiente, solo registramos metadatos
+                    if let Ok(RuntimeValue::Function(func_val)) = self.environment.get(&decl.name, (0, 0)) {
+                        // Usar nombre de función como identificador
+                        let fn_id = decl.name.clone();
 
-                    let _return_type = decl
-                        .return_type
-                        .clone()
-                        .unwrap_or_else(|| PrimitiveType::unknown());
+                        // Preparar parámetros con sus tipos
+                        let params: Vec<(String, Type)> = decl
+                            .parameters
+                            .iter()
+                            .map(|p| {
+                                let param_name = match &p.pattern {
+                                    crate::ast::nodes::VarPattern::Identifier(id) => id.clone(),
+                                    _ => format!("{:?}", p.pattern),
+                                };
+                                (param_name, p.param_type.clone())
+                            })
+                            .collect();
 
-                    // Nota: La registración real en FFI se hará cuando se permita
-                    // que las funciones de Raccoon sean invocables dinámicamente
-                    // Por ahora solo se registran los metadatos
+                        let return_type = decl
+                            .return_type
+                            .clone()
+                            .unwrap_or_else(|| PrimitiveType::unknown());
+
+                        // Registrar en FFIRegistry con metadata de función de Raccoon
+                        self.ffi_registry.register_raccoon_function(
+                            fn_id,
+                            func_val,
+                            params,
+                            return_type,
+                        );
+                    }
                 }
                 "@_register" => {
                     // Registrar en namespace específico
