@@ -537,6 +537,8 @@ impl NativeBridge {
     }
 
     fn add_string_aliases(&mut self) {
+        // Create aliases for stdlib functions that use underscore prefix
+        // Only add aliases for functions that actually exist
         let aliases = vec![
             ("native_str_length", "_length_native"),
             ("native_str_upper", "_upper_native"),
@@ -553,12 +555,9 @@ impl NativeBridge {
             ("native_json_stringify_pretty", "_stringify_pretty_native"),
             ("native_array_length", "_length_native"),
             ("native_array_push", "_push_native"),
-            ("native_array_pop", "_pop_native"),
-            ("native_array_shift", "_shift_native"),
-            ("native_array_unshift", "_unshift_native"),
             ("native_array_slice", "_slice_native"),
             ("native_array_reverse", "_reverse_native"),
-            ("native_array_sort", "_sort_native"),
+            // NOTE: pop, shift, unshift, sort are not implemented - removed
         ];
 
         for (original, alias) in aliases {
@@ -1030,6 +1029,16 @@ impl NativeBridge {
             let value = RuntimeValue::NativeAsyncFunction(func.clone());
             let _ = interp.declare_in_env(name.clone(), value);
         }
+    }
+
+    /// Get all registered function names (sync)
+    pub fn function_names(&self) -> Vec<String> {
+        self.functions.keys().cloned().collect()
+    }
+
+    /// Get all registered async function names
+    pub fn async_function_names(&self) -> Vec<String> {
+        self.async_functions.keys().cloned().collect()
     }
 }
 
