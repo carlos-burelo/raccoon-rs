@@ -7,6 +7,7 @@ pub mod ffi;
 pub mod ffi_registry;
 pub mod module_system;
 pub mod native_bridge;
+pub mod natives;
 pub mod stdlib_loader;
 pub mod types;
 pub mod values;
