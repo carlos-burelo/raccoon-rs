@@ -1,4 +1,4 @@
-use crate::tokens::Position;
+use crate::tokens::{Position, Range};
 use colored::*;
 use std::fmt;
 use std::fs;
@@ -7,6 +7,7 @@ use std::fs;
 pub struct RaccoonError {
     pub message: String,
     pub position: Position,
+    pub range: Option<Range>,
     pub file: Option<String>,
 }
 
@@ -19,8 +20,30 @@ impl RaccoonError {
         Self {
             message: message.into(),
             position,
+            range: None,
             file: file.map(|f| f.into()),
         }
+    }
+
+    pub fn with_range(
+        message: impl Into<String>,
+        range: Range,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self {
+            message: message.into(),
+            position: range.start,
+            range: Some(range),
+            file: file.map(|f| f.into()),
+        }
+    }
+
+    pub fn at_position(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::new(message, position, file)
     }
 
     fn get_code_context(&self, context_lines: usize) -> Option<Vec<(usize, String)>> {
@@ -89,15 +112,31 @@ impl RaccoonError {
                     output.push_str(&line_content.bright_white().to_string());
                     output.push_str("\n");
 
-                    let padding = " ".repeat(6 + error_col);
+                    // Padding: 6 chars for line number + space + "│ " + (column - 1) since columns start at 1
+                    let padding = " ".repeat(7 + error_col.saturating_sub(1));
                     output.push_str(&padding);
-                    output.push_str(
-                        &"^".repeat(1.max(line_content.len().saturating_sub(error_col).min(10)))
-                            .bright_red()
-                            .bold()
-                            .to_string(),
-                    );
-                    output.push_str(&" aquí\n".bright_red().to_string());
+
+                    // If we have a range and it's on the same line, show the full range
+                    if let Some(range) = &self.range {
+                        if range.start.0 == range.end.0 && range.start.0 == error_line {
+                            let start_col = range.start.1.saturating_sub(1);
+                            let end_col = range.end.1.saturating_sub(1);
+                            let length = end_col.saturating_sub(start_col).max(1);
+                            output.push_str(
+                                &"^".repeat(length)
+                                    .bright_red()
+                                    .bold()
+                                    .to_string(),
+                            );
+                        } else {
+                            // Multi-line range or no range, show single caret
+                            output.push_str(&"^".bright_red().bold().to_string());
+                        }
+                    } else {
+                        // No range, show single caret
+                        output.push_str(&"^".bright_red().bold().to_string());
+                    }
+                    output.push_str("\n");
                 } else {
                     output.push_str(&line_content.bright_black().to_string());
                     output.push_str("\n");

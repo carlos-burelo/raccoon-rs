@@ -1,0 +1,10 @@
+// Test object spread
+let obj1: any = { a: 1, b: 2 }
+let obj2: any = { c: 3, d: 4 }
+let combined: any = { ...obj1, ...obj2 }
+print(`Combined: ${combined}`)
+
+// Test override
+let base: any = { x: 1, y: 2 }
+let override: any = { ...base, y: 99 }
+print(`Override: ${override}`)

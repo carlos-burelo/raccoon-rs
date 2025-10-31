@@ -1,0 +1,61 @@
+// Test de .catch() y .finally() con palabras reservadas como nombres de método
+
+print("=== Test 1: .catch() funciona correctamente ===")
+let errorFuture = Future.reject("Error de prueba")
+let recovered = errorFuture.catch((error: any) => {
+    print("Error capturado en .catch():", error)
+    return "Valor recuperado"
+})
+
+let recoveredValue = await recovered
+print("Valor después de .catch():", recoveredValue)
+// Esperado: "Valor recuperado"
+
+
+print("\n=== Test 2: .finally() funciona correctamente ===")
+let futureWithFinally = Future.resolve("OK")
+let withCleanup = futureWithFinally.finally(() => {
+    print("Ejecutando limpieza en .finally()")
+})
+
+let finalResult = await withCleanup
+print("Resultado después de .finally():", finalResult)
+// Esperado: "OK"
+
+
+print("\n=== Test 3: Encadenamiento .then().catch().finally() ===")
+let chainedFuture = Future.resolve(10)
+    .then((x: any) => {
+        print("En .then():", x)
+        return x * 2
+    })
+    .catch((err: any) => {
+        print("No debería llegar aquí")
+        return 0
+    })
+    .finally(() => {
+        print("Limpieza final en .finally()")
+    })
+
+let chainedResult = await chainedFuture
+print("Resultado final:", chainedResult)
+// Esperado: 20
+
+
+print("\n=== Test 4: .catch() maneja error en cadena ===")
+let errorChain = Future.reject("Fallo!")
+    .catch((err: any) => {
+        print("Manejado:", err)
+        return 42
+    })
+    .then((value: any) => {
+        print("Después de recuperar:", value)
+        return value + 8
+    })
+
+let errorChainResult = await errorChain
+print("Resultado de cadena con error:", errorChainResult)
+// Esperado: 50
+
+
+print("\n=== ✓ TODOS LOS TESTS COMPLETADOS ===")

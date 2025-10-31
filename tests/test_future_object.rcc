@@ -1,0 +1,4 @@
+// Test para verificar que el objeto Future existe
+
+print("¿Existe Future?", Future)
+print("Tipo de Future:", typeof Future)

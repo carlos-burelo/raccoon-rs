@@ -1,6 +1,6 @@
 /// I/O functions: File operations and input
 use crate::ast::types::{FunctionType, ListType, PrimitiveType, Type};
-use crate::runtime::values::{ListValue, NativeFunctionValue, RuntimeValue, StrValue, BoolValue};
+use crate::runtime::values::{BoolValue, ListValue, NativeFunctionValue, RuntimeValue, StrValue};
 use std::collections::HashMap;
 use std::fs;
 use std::io::{self, Write};
@@ -82,11 +82,7 @@ pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
 
                 use std::fs::OpenOptions;
 
-                match OpenOptions::new()
-                    .create(true)
-                    .append(true)
-                    .open(&path)
-                {
+                match OpenOptions::new().create(true).append(true).open(&path) {
                     Ok(mut file) => {
                         let _ = file.write_all(content.as_bytes());
                         RuntimeValue::Null(crate::runtime::values::NullValue::new())

@@ -1,6 +1,6 @@
 use crate::{
     error::RaccoonError,
-    tokens::{Position, Token, TokenType},
+    tokens::{Position, Range, Token, TokenType},
 };
 use phf::phf_map;
 
@@ -12,6 +12,10 @@ static KEYWORDS: phf::Map<&'static str, TokenType> = phf_map! {
     "while" => TokenType::While,
     "for" => TokenType::For,
     "in" => TokenType::In,
+    "of" => TokenType::Of,
+    "do" => TokenType::Do,
+    "switch" => TokenType::Switch,
+    "case" => TokenType::Case,
     "break" => TokenType::Break,
     "continue" => TokenType::Continue,
     "fn" => TokenType::Fn,
@@ -168,30 +172,36 @@ impl Lexer {
                     self.peek_ahead(3)
                 );
 
+                let start_pos = (self.line, self.column);
+
                 if let Some(&token_type) = COMPOUND_OPERATORS.get(&four.as_str()) {
-                    self.add_token(token_type, four, None);
+                    let lexeme = four.clone();
                     self.advance();
                     self.advance();
                     self.advance();
                     self.advance();
+                    self.add_token(token_type, four, lexeme, start_pos);
                 } else {
                     let three = format!("{}{}{}", char, next, self.peek_ahead(2));
 
                     if let Some(&token_type) = COMPOUND_OPERATORS.get(&three.as_str()) {
-                        self.add_token(token_type, three, None);
+                        let lexeme = three.clone();
                         self.advance();
                         self.advance();
                         self.advance();
+                        self.add_token(token_type, three, lexeme, start_pos);
                     } else {
                         let compound = format!("{}{}", char, next);
 
                         if let Some(&token_type) = COMPOUND_OPERATORS.get(&compound.as_str()) {
-                            self.add_token(token_type, compound, None);
+                            let lexeme = compound.clone();
                             self.advance();
                             self.advance();
+                            self.add_token(token_type, compound, lexeme, start_pos);
                         } else if let Some(&token_type) = SIMPLE_OPERATORS.get(&char) {
-                            self.add_token(token_type, char.to_string(), None);
+                            let lexeme = char.to_string();
                             self.advance();
+                            self.add_token(token_type, char.to_string(), lexeme, start_pos);
                         } else {
                             return Err(RaccoonError::new(
                                 format!("Unexpected character: '{}'", char),
@@ -204,59 +214,125 @@ impl Lexer {
             }
         }
 
-        self.add_token(TokenType::Eof, String::new(), None);
+        let eof_pos = (self.line, self.column);
+        self.add_token(TokenType::Eof, String::new(), String::new(), eof_pos);
         Ok(self.tokens.clone())
     }
 
     fn identifier(&mut self) -> Result<(), RaccoonError> {
         let start = self.position;
-        let start_column = self.column;
+        let start_pos = (self.line, self.column);
 
         while self.is_alpha_numeric(self.peek()) {
             self.advance();
         }
 
         let text: String = self.source[start..self.position].iter().collect();
+        let lexeme = text.clone();
         let token_type = KEYWORDS
             .get(&text.as_str())
             .copied()
             .unwrap_or(TokenType::Identifier);
 
-        self.add_token(token_type, text, Some((self.line, start_column)));
+        self.add_token(token_type, text, lexeme, start_pos);
         Ok(())
     }
 
     fn number(&mut self) -> Result<(), RaccoonError> {
         let start = self.position;
-        let start_column = self.column;
+        let start_pos = (self.line, self.column);
         let mut is_float = false;
+        let mut is_bigint = false;
 
-        while self.is_digit(self.peek()) {
-            self.advance();
+        // Check for binary (0b), octal (0o), or hex (0x) prefix
+        if self.source[start] == '0' && self.position + 1 < self.source.len() {
+            let next = self.source[self.position + 1];
+            if next == 'b' || next == 'B' || next == 'o' || next == 'O' || next == 'x' || next == 'X' {
+                self.advance(); // consume '0'
+                self.advance(); // consume 'b', 'o', or 'x'
+
+                // Scan binary, octal, or hex digits
+                while self.position < self.source.len() {
+                    let ch = self.peek();
+                    if ch == '_' {
+                        self.advance(); // skip numeric separator
+                        continue;
+                    }
+                    if (next == 'b' || next == 'B') && (ch == '0' || ch == '1') {
+                        self.advance();
+                    } else if (next == 'o' || next == 'O') && ch >= '0' && ch <= '7' {
+                        self.advance();
+                    } else if (next == 'x' || next == 'X') && ch.is_ascii_hexdigit() {
+                        self.advance();
+                    } else {
+                        break;
+                    }
+                }
+
+                // Check for BigInt suffix
+                if self.peek() == 'n' {
+                    is_bigint = true;
+                    self.advance();
+                }
+
+                let text: String = self.source[start..self.position].iter().collect();
+                let lexeme = text.clone();
+                let token_type = if is_bigint {
+                    TokenType::BigIntLiteral
+                } else {
+                    TokenType::IntLiteral
+                };
+
+                self.add_token(token_type, text, lexeme, start_pos);
+                return Ok(());
+            }
+        }
+
+        // Regular decimal number with optional numeric separators
+        while self.is_digit(self.peek()) || self.peek() == '_' {
+            if self.peek() != '_' {
+                self.advance();
+            } else {
+                self.advance(); // consume separator but it won't be in the final value
+            }
         }
 
         if self.peek() == '.' && self.is_digit(self.peek_next()) {
             is_float = true;
             self.advance();
 
-            while self.is_digit(self.peek()) {
-                self.advance();
+            while self.is_digit(self.peek()) || self.peek() == '_' {
+                if self.peek() != '_' {
+                    self.advance();
+                } else {
+                    self.advance();
+                }
             }
         }
 
+        // Check for BigInt suffix 'n'
+        if self.peek() == 'n' && !is_float {
+            is_bigint = true;
+            self.advance();
+        }
+
         let text: String = self.source[start..self.position].iter().collect();
-        let token_type = if is_float {
+        let lexeme = text.clone();
+        let token_type = if is_bigint {
+            TokenType::BigIntLiteral
+        } else if is_float {
             TokenType::FloatLiteral
         } else {
             TokenType::IntLiteral
         };
 
-        self.add_token(token_type, text, Some((self.line, start_column)));
+        self.add_token(token_type, text, lexeme, start_pos);
         Ok(())
     }
 
     fn string(&mut self) -> Result<(), RaccoonError> {
-        let start_column = self.column;
+        let start_pos = (self.line, self.column);
+        let lexeme_start = self.position;
         let quote = self.advance();
         let mut value = String::new();
 
@@ -268,37 +344,38 @@ impl Lexer {
             } else {
                 if self.peek() == '\n' {
                     self.line += 1;
-                    self.column = 0;
+                    self.column = 1;
+                    value.push(self.source[self.position]);
+                    self.position += 1;
+                } else {
+                    value.push(self.advance());
                 }
-                value.push(self.advance());
             }
         }
 
         if self.is_at_end() {
             return Err(RaccoonError::new(
                 "Unterminated string",
-                (self.line, start_column),
+                start_pos,
                 self.file.clone(),
             ));
         }
 
         self.advance();
-        self.add_token(
-            TokenType::StrLiteral,
-            value,
-            Some((self.line, start_column)),
-        );
+        let lexeme: String = self.source[lexeme_start..self.position].iter().collect();
+        self.add_token(TokenType::StrLiteral, value, lexeme, start_pos);
         Ok(())
     }
 
     fn template_string(&mut self) -> Result<(), RaccoonError> {
-        let start_column = self.column;
+        let start_pos = (self.line, self.column);
         self.advance();
 
         self.add_token(
             TokenType::TemplateStrStart,
             "`".to_string(),
-            Some((self.line, start_column)),
+            "`".to_string(),
+            (start_pos.0, start_pos.1),
         );
 
         let mut value = String::new();
@@ -306,22 +383,25 @@ impl Lexer {
         while self.peek() != '`' && !self.is_at_end() {
             if self.peek() == '$' && self.peek_next() == '{' {
                 if !value.is_empty() {
-                    let val_len = value.len();
+                    let part_pos = (self.line, self.column.saturating_sub(value.len()));
                     self.add_token(
                         TokenType::TemplateStrPart,
                         value.clone(),
-                        Some((self.line, self.column - val_len)),
+                        value.clone(),
+                        part_pos,
                     );
                     value.clear();
                 }
 
+                let interp_start_pos = (self.line, self.column);
                 self.advance();
                 self.advance();
 
                 self.add_token(
                     TokenType::TemplateInterpolationStart,
                     "${".to_string(),
-                    Some((self.line, self.column - 2)),
+                    "${".to_string(),
+                    interp_start_pos,
                 );
 
                 let mut brace_count = 1;
@@ -342,26 +422,41 @@ impl Lexer {
                         self.string()?;
                     } else if char == '{' {
                         brace_count += 1;
-                        self.add_token(TokenType::LeftBrace, char.to_string(), None);
+                        let brace_pos = (self.line, self.column);
                         self.advance();
+                        self.add_token(
+                            TokenType::LeftBrace,
+                            "{".to_string(),
+                            "{".to_string(),
+                            brace_pos,
+                        );
                     } else if char == '}' {
                         brace_count -= 1;
                         if brace_count == 0 {
                             break;
                         }
-                        self.add_token(TokenType::RightBrace, char.to_string(), None);
+                        let brace_pos = (self.line, self.column);
                         self.advance();
+                        self.add_token(
+                            TokenType::RightBrace,
+                            "}".to_string(),
+                            "}".to_string(),
+                            brace_pos,
+                        );
                     } else {
+                        let op_start_pos = (self.line, self.column);
                         let next = self.peek_next();
                         let compound = format!("{}{}", char, next);
 
                         if let Some(&token_type) = COMPOUND_OPERATORS.get(&compound.as_str()) {
-                            self.add_token(token_type, compound, None);
+                            let lexeme = compound.clone();
                             self.advance();
                             self.advance();
+                            self.add_token(token_type, compound, lexeme, op_start_pos);
                         } else if let Some(&token_type) = SIMPLE_OPERATORS.get(&char) {
-                            self.add_token(token_type, char.to_string(), None);
+                            let lexeme = char.to_string();
                             self.advance();
+                            self.add_token(token_type, char.to_string(), lexeme, op_start_pos);
                         } else {
                             return Err(RaccoonError::new(
                                 format!("Unexpected character in interpolation: '{}'", char),
@@ -372,11 +467,13 @@ impl Lexer {
                     }
                 }
 
+                let interp_end_pos = (self.line, self.column);
                 self.advance();
                 self.add_token(
                     TokenType::TemplateInterpolationEnd,
                     "}".to_string(),
-                    Some((self.line, self.column - 1)),
+                    "}".to_string(),
+                    interp_end_pos,
                 );
             } else {
                 if self.peek() == '\\' {
@@ -386,9 +483,12 @@ impl Lexer {
                 } else {
                     if self.peek() == '\n' {
                         self.line += 1;
-                        self.column = 0;
+                        self.column = 1;
+                        value.push(self.source[self.position]);
+                        self.position += 1;
+                    } else {
+                        value.push(self.advance());
                     }
-                    value.push(self.advance());
                 }
             }
         }
@@ -396,25 +496,23 @@ impl Lexer {
         if self.is_at_end() {
             return Err(RaccoonError::new(
                 "Unterminated template string",
-                (self.line, start_column),
+                start_pos,
                 self.file.clone(),
             ));
         }
 
         if !value.is_empty() {
-            let val_len = value.len();
-            self.add_token(
-                TokenType::TemplateStrPart,
-                value,
-                Some((self.line, self.column - val_len)),
-            );
+            let part_pos = (self.line, self.column.saturating_sub(value.len()));
+            self.add_token(TokenType::TemplateStrPart, value.clone(), value, part_pos);
         }
 
+        let end_pos = (self.line, self.column);
         self.advance();
         self.add_token(
             TokenType::TemplateStrEnd,
             "`".to_string(),
-            Some((self.line, self.column - 1)),
+            "`".to_string(),
+            end_pos,
         );
 
         Ok(())
@@ -433,9 +531,11 @@ impl Lexer {
         while !(self.peek() == '*' && self.peek_next() == '/') && !self.is_at_end() {
             if self.peek() == '\n' {
                 self.line += 1;
-                self.column = 0;
+                self.column = 1;
+                self.position += 1;
+            } else {
+                self.advance();
             }
-            self.advance();
         }
 
         if !self.is_at_end() {
@@ -452,8 +552,8 @@ impl Lexer {
                 self.advance();
             } else if char == '\n' {
                 self.line += 1;
-                self.column = 0;
-                self.advance();
+                self.column = 1;
+                self.position += 1;
             } else {
                 break;
             }
@@ -525,8 +625,16 @@ impl Lexer {
         char
     }
 
-    fn add_token(&mut self, token_type: TokenType, text: String, position: Option<Position>) {
-        let pos = position.unwrap_or((self.line, self.column.saturating_sub(text.len())));
-        self.tokens.push(Token::new(token_type, text, pos));
+    fn add_token(
+        &mut self,
+        token_type: TokenType,
+        value: String,
+        lexeme: String,
+        start_pos: Position,
+    ) {
+        let end_pos = (self.line, self.column);
+        let range = Range::new(start_pos, end_pos);
+        self.tokens
+            .push(Token::new(token_type, value, lexeme, start_pos, range));
     }
 }

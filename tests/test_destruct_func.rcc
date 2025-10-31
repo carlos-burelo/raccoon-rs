@@ -1,0 +1,12 @@
+// Function parameter destructuring
+interface ICoord {
+    x: int
+    y: int
+}
+
+fn destructParam({ x, y }: ICoord): int {
+    return x + y
+}
+
+let destructResult: int = destructParam({ x: 10, y: 20 })
+print(`Result: ${destructResult}`)

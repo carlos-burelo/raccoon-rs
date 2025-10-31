@@ -1,0 +1,46 @@
+// TEST: Section 11 - Generics only
+
+print("Testing Generics...")
+
+// 11.1 Generic function
+fn identity<T>(x: T): T {
+    return x
+}
+let idInt: int = identity<int>(42)
+let idStr: str = identity<str>("hello")
+print(`  ✓ Generic function: ${idInt}, ${idStr}`)
+
+// 11.2 Generic class
+class Box<T> {
+    value: T
+
+    constructor(v: T) {
+        this.value = v
+    }
+
+    getValue(): T {
+        return this.value
+    }
+}
+let intBox: Box<int> = new Box<int>(42)
+let strBox: Box<str> = new Box<str>("boxed")
+let boxedInt: int = intBox.getValue()
+let boxedStr: str = strBox.getValue()
+print(`  ✓ Generic class: ${boxedInt}, ${boxedStr}`)
+
+// 11.3 Generic interface
+interface IPair<T, U> {
+    first: T
+    second: U
+}
+let pair: IPair<int, str> = { first: 42, second: "answer" }
+print(`  ✓ Generic interface: ${pair}`)
+
+// 11.4 Generic constraints
+fn getLength<T extends { length(): int }>(x: T): int {
+    return x.length()
+}
+let arrLength: int = getLength<int[]>([1, 2, 3])
+print(`  ✓ Generic constraints: ${arrLength}`)
+
+print("✅ Generics tests completed")

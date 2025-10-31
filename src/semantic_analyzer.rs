@@ -4,9 +4,7 @@ use crate::{
     ast::{nodes::*, types::*},
     error::RaccoonError,
     symbol_table::{SymbolItem, SymbolKind, SymbolTable},
-    type_checker::TypeChecker,
-    type_inference::TypeInferenceEngine,
-    type_resolver::TypeResolver,
+    type_system::{TypeChecker, TypeInferenceEngine, TypeResolver},
 };
 
 pub struct SemanticAnalyzer {
@@ -219,8 +217,6 @@ impl SemanticAnalyzer {
             param_types.push(resolved);
         }
 
-        // If return type is not explicitly specified, use 'unknown' for now
-        // It will be inferred during the second pass in check_fn_decl
         let mut return_type = if let Some(ref ret_type) = decl.return_type {
             resolver.resolve(ret_type)?
         } else {
@@ -272,8 +268,11 @@ impl SemanticAnalyzer {
             Stmt::Block(block) => self.check_block(block),
             Stmt::IfStmt(stmt) => self.check_if_stmt(stmt),
             Stmt::WhileStmt(stmt) => self.check_while_stmt(stmt),
+            Stmt::DoWhileStmt(stmt) => self.check_do_while_stmt(stmt),
             Stmt::ForStmt(stmt) => self.check_for_stmt(stmt),
             Stmt::ForInStmt(stmt) => self.check_for_in_stmt(stmt),
+            Stmt::ForOfStmt(stmt) => self.check_for_of_stmt(stmt),
+            Stmt::SwitchStmt(stmt) => self.check_switch_stmt(stmt),
             Stmt::ReturnStmt(stmt) => self.check_return_stmt(stmt),
             Stmt::BreakStmt(_) => self.check_break_stmt(),
             Stmt::ContinueStmt(_) => self.check_continue_stmt(),
@@ -309,86 +308,34 @@ impl SemanticAnalyzer {
             Expr::TemplateStr(_) => Ok(PrimitiveType::str()),
             Expr::TaggedTemplate(_) => Ok(PrimitiveType::str()),
             Expr::IntLiteral(_) => Ok(PrimitiveType::int()),
+            Expr::BigIntLiteral(_) => Ok(PrimitiveType::bigint()),
             Expr::FloatLiteral(_) => Ok(PrimitiveType::float()),
             Expr::StrLiteral(_) => Ok(PrimitiveType::str()),
             Expr::BoolLiteral(_) => Ok(PrimitiveType::bool()),
             Expr::NullLiteral(_) => Ok(PrimitiveType::null()),
             Expr::ListLiteral(e) => self.check_list_literal(e),
             Expr::ObjectLiteral(e) => self.check_object_literal(e),
-            Expr::Spread(_) => {
-                // Spread should only appear in call arguments context, not as standalone expression
-                Err(RaccoonError::new(
-                    "Spread operator cannot be used outside of function calls",
-                    (1, 1),
-                    self.file.clone(),
-                ))
-            }
+            Expr::Spread(_) => Err(RaccoonError::new(
+                "Spread operator cannot be used outside of function calls",
+                (1, 1),
+                self.file.clone(),
+            )),
         }
     }
-
-    // fn check_var_decl(&mut self, decl: &VarDecl) -> Result<Type, RaccoonError> {
-    //     let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
-    //     let mut var_type = resolver.resolve(&decl.type_annotation)?;
-
-    //     if let Some(ref initializer) = decl.initializer {
-    //         let init_type = self.check_expr(initializer)?;
-
-    //         if matches!(var_type.kind(), TypeKind::Any) {
-    //             var_type = init_type.clone();
-    //         }
-
-    //         if !init_type.is_assignable_to(&var_type) {
-    //             return Err(RaccoonError::new(
-    //                 format!(
-    //                     "Cannot assign type '{:?}' to variable of type '{:?}'",
-    //                     init_type, var_type
-    //                 ),
-    //                 decl.position,
-    //                 self.file.clone(),
-    //             ));
-    //         }
-
-    //         if let VarPattern::Identifier(ref name) = decl.pattern {
-    //             self.symbol_table.define(
-    //                 name.clone(),
-    //                 SymbolKind::Variable,
-    //                 var_type.clone(),
-    //                 decl.is_constant,
-    //                 Some(Box::new(Stmt::VarDecl(decl.clone()))),
-    //             );
-    //         }
-    //     } else if let VarPattern::Identifier(ref name) = decl.pattern {
-    //         self.symbol_table.define(
-    //             name.clone(),
-    //             SymbolKind::Variable,
-    //             var_type.clone(),
-    //             decl.is_constant,
-    //             Some(Box::new(Stmt::VarDecl(decl.clone()))),
-    //         );
-    //     }
-
-    //     Ok(var_type)
-    // }
 
     fn check_var_decl(&mut self, decl: &VarDecl) -> Result<Type, RaccoonError> {
         let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
 
-        // 1. Resuelve el tipo explícito que dio el usuario (si lo hay)
         let explicit_type = resolver.resolve(&decl.type_annotation)?;
 
-        let var_type: Type; // Este será el tipo final de la variable
+        let var_type: Type;
 
         if let Some(ref initializer) = decl.initializer {
-            // 2. Hay un inicializador, así que revisa su tipo
             let init_type = self.check_expr(initializer)?;
 
-            // 3. Comprueba si el tipo explícito es 'unknown' o 'any'
-            //    (asumiendo que 'unknown' es el tipo por defecto si no se anota nada)
             if matches!(explicit_type.kind(), TypeKind::Unknown | TypeKind::Any) {
-                // 4. INFERENCIA: El tipo de la variable ES el tipo del inicializador
                 var_type = init_type;
             } else {
-                // 5. VERIFICACIÓN: Hay un tipo explícito, así que verifica la asignación
                 if !init_type.is_assignable_to(&explicit_type) {
                     return Err(RaccoonError::new(
                         format!(
@@ -402,8 +349,6 @@ impl SemanticAnalyzer {
                 var_type = explicit_type;
             }
         } else {
-            // No hay inicializador, se debe usar el tipo explícito.
-            // Si es 'unknown' o 'any', podría ser un error si el lenguaje no lo permite.
             if matches!(explicit_type.kind(), TypeKind::Unknown) {
                 return Err(RaccoonError::new(
                     "Variable must have a type annotation or an initializer",
@@ -414,7 +359,6 @@ impl SemanticAnalyzer {
             var_type = explicit_type;
         }
 
-        // 6. Define la variable en la tabla de símbolos con el tipo determinado
         if let VarPattern::Identifier(ref name) = decl.pattern {
             self.symbol_table.define(
                 name.clone(),
@@ -449,7 +393,6 @@ impl SemanticAnalyzer {
 
         self.symbol_table.enter_scope();
 
-        // Resolve all parameter types first, then drop the resolver
         let param_types: Result<Vec<_>, _> = {
             let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
             decl.parameters
@@ -459,7 +402,6 @@ impl SemanticAnalyzer {
         };
         let param_types = param_types?;
 
-        // Now we can mutably borrow symbol_table
         for (param, param_type) in decl.parameters.iter().zip(param_types.iter()) {
             if let VarPattern::Identifier(ref name) = param.pattern {
                 self.symbol_table.define(
@@ -472,7 +414,6 @@ impl SemanticAnalyzer {
             }
         }
 
-        // Get the explicit return type if provided
         let explicit_return_type = if let Some(ref ret_type) = decl.return_type {
             let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
             Some(resolver.resolve(ret_type)?)
@@ -480,34 +421,26 @@ impl SemanticAnalyzer {
             None
         };
 
-        // Determine final return type
         let mut final_return_type = if let Some(explicit) = explicit_return_type {
-            // If there's an explicit type, use it directly without inferring from body
-            // This prevents stack overflow in recursive functions
             explicit
         } else {
-            // Only infer return type from body if no explicit type was provided
             self.infer_function_return_type(&decl.body)?
         };
 
-        // Wrap in Future if async and not already a Future
         if decl.is_async && !matches!(final_return_type, Type::Future(_)) {
             final_return_type = Type::Future(Box::new(FutureType {
                 inner_type: final_return_type,
             }));
         }
 
-        // Update the function symbol with the inferred type
         let updated_fn_type = FunctionType {
             params: param_types,
             return_type: final_return_type.clone(),
             is_variadic: false,
         };
 
-        self.symbol_table.update_symbol_type(
-            &decl.name,
-            Type::Function(Box::new(updated_fn_type)),
-        )?;
+        self.symbol_table
+            .update_symbol_type(&decl.name, Type::Function(Box::new(updated_fn_type)))?;
 
         self.symbol_table.exit_scope();
         self.current_function = prev_function;
@@ -520,7 +453,6 @@ impl SemanticAnalyzer {
         })))
     }
 
-    /// Infer the return type of a function by analyzing its body
     fn infer_function_return_type(&mut self, body: &[Stmt]) -> Result<Type, RaccoonError> {
         let mut return_types = Vec::new();
 
@@ -529,16 +461,12 @@ impl SemanticAnalyzer {
         }
 
         if return_types.is_empty() {
-            // No return statements found
             return Ok(PrimitiveType::void());
         }
 
-        // Find the common type among all return types
-        self.type_inference
-            .infer_common_type(&return_types, (0, 0))
+        self.type_inference.infer_common_type(&return_types, (0, 0))
     }
 
-    /// Recursively collect all return statement types
     fn collect_return_types(
         &mut self,
         stmt: &Stmt,
@@ -688,12 +616,10 @@ impl SemanticAnalyzer {
             ));
         }
 
-        // Analyze type narrowing from condition
         let narrowing_info = self
             .type_inference
             .analyze_type_narrowing(&stmt.condition, &self.symbol_table)?;
 
-        // Apply narrowing to then branch
         self.type_inference.push_narrowing_scope();
         for (name, ty) in narrowing_info.then_narrows {
             self.type_inference.set_narrowed_type(name, ty);
@@ -701,7 +627,6 @@ impl SemanticAnalyzer {
         self.check_stmt(&stmt.then_branch)?;
         self.type_inference.pop_narrowing_scope();
 
-        // Apply narrowing to else branch
         if let Some(ref else_branch) = stmt.else_branch {
             self.type_inference.push_narrowing_scope();
             for (name, ty) in narrowing_info.else_narrows {
@@ -731,6 +656,27 @@ impl SemanticAnalyzer {
         self.check_stmt(&stmt.body)?;
 
         self.in_loop = prev_in_loop;
+
+        Ok(PrimitiveType::void())
+    }
+
+    fn check_do_while_stmt(&mut self, stmt: &DoWhileStmt) -> Result<Type, RaccoonError> {
+        let prev_in_loop = self.in_loop;
+        self.in_loop = true;
+
+        self.check_stmt(&stmt.body)?;
+
+        self.in_loop = prev_in_loop;
+
+        let cond_type = self.check_expr(&stmt.condition)?;
+
+        if !matches!(cond_type.kind(), TypeKind::Bool) {
+            return Err(RaccoonError::new(
+                format!("Do-while condition must be boolean, got '{:?}'", cond_type),
+                stmt.position,
+                self.file.clone(),
+            ));
+        }
 
         Ok(PrimitiveType::void())
     }
@@ -800,6 +746,61 @@ impl SemanticAnalyzer {
 
         self.in_loop = prev_in_loop;
         self.symbol_table.exit_scope();
+
+        Ok(PrimitiveType::void())
+    }
+
+    fn check_for_of_stmt(&mut self, stmt: &ForOfStmt) -> Result<Type, RaccoonError> {
+        let iterable_type = self.check_expr(&stmt.iterable)?;
+
+        let element_type = if let Type::List(ref list_type) = iterable_type {
+            list_type.element_type.clone()
+        } else if matches!(iterable_type.kind(), TypeKind::Str) {
+            PrimitiveType::str()
+        } else {
+            return Err(RaccoonError::new(
+                format!("Cannot iterate over type '{:?}'", iterable_type),
+                stmt.position,
+                self.file.clone(),
+            ));
+        };
+
+        self.symbol_table.enter_scope();
+
+        self.symbol_table.define(
+            stmt.variable.clone(),
+            SymbolKind::Variable,
+            element_type,
+            false,
+            None,
+        );
+
+        let prev_in_loop = self.in_loop;
+        self.in_loop = true;
+
+        self.check_stmt(&stmt.body)?;
+
+        self.in_loop = prev_in_loop;
+        self.symbol_table.exit_scope();
+
+        Ok(PrimitiveType::void())
+    }
+
+    fn check_switch_stmt(&mut self, stmt: &SwitchStmt) -> Result<Type, RaccoonError> {
+        let discriminant_type = self.check_expr(&stmt.discriminant)?;
+
+        for case in &stmt.cases {
+            if let Some(ref test) = case.test {
+                let test_type = self.check_expr(test)?;
+                // Check that test type is comparable with discriminant type
+                // For now, we'll allow any comparison
+                let _ = (discriminant_type.clone(), test_type);
+            }
+
+            for consequent_stmt in &case.consequent {
+                self.check_stmt(consequent_stmt)?;
+            }
+        }
 
         Ok(PrimitiveType::void())
     }
@@ -1165,7 +1166,6 @@ impl SemanticAnalyzer {
     fn check_arrow_fn_expr(&mut self, expr: &ArrowFnExpr) -> Result<Type, RaccoonError> {
         self.symbol_table.enter_scope();
 
-        // Resolve all parameter types first, then drop the resolver
         let param_types: Result<Vec<_>, _> = {
             let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
             expr.parameters
@@ -1175,7 +1175,6 @@ impl SemanticAnalyzer {
         };
         let param_types = param_types?;
 
-        // Now we can mutably borrow symbol_table
         for (param, param_type) in expr.parameters.iter().zip(param_types.iter()) {
             if let VarPattern::Identifier(ref name) = param.pattern {
                 self.symbol_table.define(
@@ -1188,7 +1187,6 @@ impl SemanticAnalyzer {
             }
         }
 
-        // Infer return type from body
         let inferred_return_type = match &expr.body {
             ArrowFnBody::Expr(body_expr) => self.check_expr(body_expr)?,
             ArrowFnBody::Block(stmts) => {
@@ -1206,12 +1204,10 @@ impl SemanticAnalyzer {
             }
         };
 
-        // Use explicit return type if provided, otherwise use inferred
         let return_type = if let Some(ref explicit_type) = expr.return_type {
             let resolver = TypeResolver::new(&self.symbol_table, self.file.clone());
             let resolved_type = resolver.resolve(explicit_type)?;
 
-            // Verify that inferred type is assignable to explicit type
             if !inferred_return_type.is_assignable_to(&resolved_type) {
                 self.symbol_table.exit_scope();
                 return Err(RaccoonError::new(
@@ -1237,7 +1233,6 @@ impl SemanticAnalyzer {
         })))
     }
     fn check_identifier(&mut self, identifier: &Identifier) -> Result<Type, RaccoonError> {
-        // Check if there's a narrowed type first
         if let Some(narrowed_type) = self.type_inference.get_narrowed_type(&identifier.name) {
             return Ok(narrowed_type);
         }
@@ -1375,13 +1370,20 @@ impl SemanticAnalyzer {
             })));
         }
 
-        // Collect all element types
         let mut element_types = Vec::new();
         for element in &list.elements {
-            element_types.push(self.check_expr(element)?);
+            // Handle spread expressions in array literals
+            if let Expr::Spread(spread) = element {
+                let spread_type = self.check_expr(&spread.argument)?;
+                // If it's a list, get its element type
+                if let Type::List(list_type) = spread_type {
+                    element_types.push(list_type.element_type.clone());
+                }
+            } else {
+                element_types.push(self.check_expr(element)?);
+            }
         }
 
-        // Use the improved type inference engine
         let common_type = self
             .type_inference
             .infer_common_type(&element_types, list.position)?;
@@ -1394,15 +1396,29 @@ impl SemanticAnalyzer {
     fn check_object_literal(&mut self, obj: &ObjectLiteral) -> Result<Type, RaccoonError> {
         let mut properties = HashMap::new();
 
-        for (key, value) in &obj.properties {
-            let value_type = self.check_expr(value)?;
-            properties.insert(
-                key.clone(),
-                InterfaceProperty {
-                    property_type: value_type,
-                    optional: false,
-                },
-            );
+        for prop in &obj.properties {
+            match prop {
+                ObjectLiteralProperty::KeyValue { key, value } => {
+                    let value_type = self.check_expr(value)?;
+                    properties.insert(
+                        key.clone(),
+                        InterfaceProperty {
+                            property_type: value_type,
+                            optional: false,
+                        },
+                    );
+                }
+                ObjectLiteralProperty::Spread(expr) => {
+                    // Type check the spread expression
+                    let spread_type = self.check_expr(expr)?;
+                    // If it's an object-like type, merge its properties
+                    if let Type::Interface(ref iface) = spread_type {
+                        for (k, v) in &iface.properties {
+                            properties.insert(k.clone(), v.clone());
+                        }
+                    }
+                }
+            }
         }
 
         Ok(Type::Interface(Box::new(InterfaceType {

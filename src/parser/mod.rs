@@ -223,6 +223,23 @@ impl Parser {
         Ok(type_params)
     }
 
+    fn check_next_next(&self, types: &[TokenType]) -> bool {
+        if self.current + 2 >= self.tokens.len() {
+            return false;
+        }
+        types
+            .iter()
+            .any(|t| &self.tokens[self.current + 2].token_type == t)
+    }
+
+    fn lookahead_is_class_or_interface(&self) -> bool {
+        if self.current + 1 >= self.tokens.len() {
+            return false;
+        }
+        let next_token_type = self.tokens[self.current + 1].token_type;
+        next_token_type == TokenType::Class || next_token_type == TokenType::Interface
+    }
+
     fn class_declaration(&mut self, decorators: Vec<DecoratorDecl>) -> Result<Stmt, RaccoonError> {
         let name = self
             .consume(TokenType::Identifier, "Expected class name")?
@@ -259,7 +276,6 @@ impl Parser {
 
         while !self.check(&TokenType::RightBrace) && !self.is_at_end() {
             let mut member_decorators = Vec::new();
-
             while self.match_token(&[TokenType::At]) {
                 member_decorators.push(self.parse_decorator()?);
             }
@@ -297,27 +313,31 @@ impl Parser {
                     ));
                 }
                 constructor = Some(self.parse_constructor()?);
-            } else if !is_async && self.match_token(&[TokenType::Get]) {
+            } else if !is_static
+                && !is_async
+                && self.check(&TokenType::Get)
+                && self.check_next(&[TokenType::Identifier])
+                && self.check_next_next(&[TokenType::LeftParen])
+            {
                 accessors.push(self.parse_accessor(
                     AccessorKind::Get,
                     member_decorators,
                     access_modifier,
                 )?);
-            } else if !is_async && self.match_token(&[TokenType::Set]) {
+            } else if !is_static
+                && !is_async
+                && self.check(&TokenType::Set)
+                && self.check_next(&[TokenType::Identifier])
+                && self.check_next_next(&[TokenType::LeftParen])
+            {
                 accessors.push(self.parse_accessor(
                     AccessorKind::Set,
                     member_decorators,
                     access_modifier,
                 )?);
-            } else if self.check(&TokenType::Identifier) && self.check_next(&[TokenType::LeftParen])
-            {
-                methods.push(self.parse_method(
-                    member_decorators,
-                    access_modifier,
-                    is_static,
-                    is_async,
-                )?);
-            } else if (self.check(&TokenType::Get) || self.check(&TokenType::Set))
+            } else if (self.check(&TokenType::Identifier)
+                || (is_static || is_async)
+                    && (self.check(&TokenType::Get) || self.check(&TokenType::Set)))
                 && self.check_next(&[TokenType::LeftParen])
             {
                 methods.push(self.parse_method(
@@ -440,6 +460,7 @@ impl Parser {
         _decorators: Vec<DecoratorDecl>,
         access_modifier: AccessModifier,
     ) -> Result<PropertyAccessor, RaccoonError> {
+        self.advance();
         let position = self.previous().position;
         let name = self
             .consume(TokenType::Identifier, "Expected accessor name")?
@@ -644,13 +665,13 @@ impl Parser {
                     break;
                 }
 
-                if self.match_token(&[TokenType::Comma]) {
+                if self.check(&TokenType::Comma) {
                     elements.push(None);
-                } else if self.check(&TokenType::LeftBracket) {
+                } else if self.match_token(&[TokenType::LeftBracket]) {
                     elements.push(Some(ListPatternElement::List(Box::new(
                         self.parse_list_pattern()?,
                     ))));
-                } else if self.check(&TokenType::LeftBrace) {
+                } else if self.match_token(&[TokenType::LeftBrace]) {
                     elements.push(Some(ListPatternElement::Object(Box::new(
                         self.parse_object_pattern()?,
                     ))));
@@ -665,7 +686,11 @@ impl Parser {
                     })));
                 }
 
-                if !self.match_token(&[TokenType::Comma]) || self.check(&TokenType::RightBracket) {
+                if !self.match_token(&[TokenType::Comma]) {
+                    break;
+                }
+
+                if self.check(&TokenType::RightBracket) {
                     break;
                 }
             }
@@ -707,9 +732,9 @@ impl Parser {
                     .clone();
 
                 let value = if self.match_token(&[TokenType::Colon]) {
-                    if self.check(&TokenType::LeftBracket) {
+                    if self.match_token(&[TokenType::LeftBracket]) {
                         ObjectPatternValue::List(self.parse_list_pattern()?)
-                    } else if self.check(&TokenType::LeftBrace) {
+                    } else if self.match_token(&[TokenType::LeftBrace]) {
                         ObjectPatternValue::Object(self.parse_object_pattern()?)
                     } else {
                         let value_name = self
@@ -961,6 +986,22 @@ impl Parser {
         let position = self.previous().position;
 
         if self.match_token(&[TokenType::Default]) {
+            if self.check(&TokenType::LeftBrace) && !self.lookahead_is_class_or_interface() {
+                let expression = self.expression()?;
+                self.optional_semicolon();
+
+                return Ok(Stmt::ExportDecl(ExportDecl {
+                    declaration: Some(Box::new(Stmt::ExprStmt(ExprStmt {
+                        expression,
+                        position,
+                    }))),
+                    specifiers: Vec::new(),
+                    is_default: true,
+                    module_specifier: None,
+                    position,
+                }));
+            }
+
             let declaration = Box::new(self.declaration()?);
             return Ok(Stmt::ExportDecl(ExportDecl {
                 declaration: Some(declaration),
@@ -1227,8 +1268,14 @@ impl Parser {
         if self.match_token(&[TokenType::While]) {
             return self.while_statement();
         }
+        if self.match_token(&[TokenType::Do]) {
+            return self.do_while_statement();
+        }
         if self.match_token(&[TokenType::For]) {
             return self.for_statement();
+        }
+        if self.match_token(&[TokenType::Switch]) {
+            return self.switch_statement();
         }
         if self.match_token(&[TokenType::Return]) {
             return self.return_statement();
@@ -1399,6 +1446,20 @@ impl Parser {
                 }));
             }
 
+            if self.match_token(&[TokenType::Of]) {
+                let iterable = self.expression()?;
+                self.consume(TokenType::RightParen, "Expected ')' after iterable")?;
+                let body = Box::new(self.statement()?);
+                return Ok(Stmt::ForOfStmt(ForOfStmt {
+                    variable: var_name,
+                    is_const,
+                    type_annotation,
+                    iterable,
+                    body,
+                    position,
+                }));
+            }
+
             self.consume(TokenType::Assign, "Expected '=' in variable declaration")?;
             let init_value = self.expression()?;
 
@@ -1457,6 +1518,77 @@ impl Parser {
             condition,
             increment,
             body,
+            position,
+        }))
+    }
+
+    fn do_while_statement(&mut self) -> Result<Stmt, RaccoonError> {
+        let position = self.previous().position;
+        let body = Box::new(self.statement()?);
+        self.consume(TokenType::While, "Expected 'while' after do-while body")?;
+        self.consume(TokenType::LeftParen, "Expected '(' after 'while'")?;
+        let condition = self.expression()?;
+        self.consume(TokenType::RightParen, "Expected ')' after condition")?;
+        self.optional_semicolon();
+
+        Ok(Stmt::DoWhileStmt(DoWhileStmt {
+            body,
+            condition,
+            position,
+        }))
+    }
+
+    fn switch_statement(&mut self) -> Result<Stmt, RaccoonError> {
+        let position = self.previous().position;
+        self.consume(TokenType::LeftParen, "Expected '(' after 'switch'")?;
+        let discriminant = self.expression()?;
+        self.consume(TokenType::RightParen, "Expected ')' after discriminant")?;
+        self.consume(TokenType::LeftBrace, "Expected '{' to start switch body")?;
+
+        let mut cases = Vec::new();
+
+        while !self.check(&TokenType::RightBrace) && !self.is_at_end() {
+            if self.match_token(&[TokenType::Case]) {
+                let test = Some(self.expression()?);
+                self.consume(TokenType::Colon, "Expected ':' after case value")?;
+
+                let mut consequent = Vec::new();
+                while !self.check(&TokenType::Case)
+                    && !self.check(&TokenType::Default)
+                    && !self.check(&TokenType::RightBrace)
+                    && !self.is_at_end()
+                {
+                    consequent.push(self.statement()?);
+                }
+
+                cases.push(SwitchCase { test, consequent });
+            } else if self.match_token(&[TokenType::Default]) {
+                self.consume(TokenType::Colon, "Expected ':' after 'default'")?;
+
+                let mut consequent = Vec::new();
+                while !self.check(&TokenType::Case)
+                    && !self.check(&TokenType::Default)
+                    && !self.check(&TokenType::RightBrace)
+                    && !self.is_at_end()
+                {
+                    consequent.push(self.statement()?);
+                }
+
+                cases.push(SwitchCase { test: None, consequent });
+            } else {
+                return Err(RaccoonError::new(
+                    "Expected 'case' or 'default' in switch statement".to_string(),
+                    self.peek().position,
+                    self.file.clone(),
+                ));
+            }
+        }
+
+        self.consume(TokenType::RightBrace, "Expected '}' after switch body")?;
+
+        Ok(Stmt::SwitchStmt(SwitchStmt {
+            discriminant,
+            cases,
             position,
         }))
     }
@@ -1637,22 +1769,40 @@ impl Parser {
     fn comparison(&mut self) -> Result<Expr, RaccoonError> {
         let mut expr = self.bitwise_or()?;
 
-        while self.match_token(&[TokenType::Lt, TokenType::Gt, TokenType::Lte, TokenType::Gte]) {
-            let operator = match self.previous().token_type {
-                TokenType::Lt => BinaryOperator::LessThan,
-                TokenType::Gt => BinaryOperator::GreaterThan,
-                TokenType::Lte => BinaryOperator::LessEqual,
-                TokenType::Gte => BinaryOperator::GreaterEqual,
-                _ => unreachable!(),
-            };
-            let right = Box::new(self.bitwise_or()?);
-            let position = expr.position();
-            expr = Expr::Binary(BinaryExpr {
-                left: Box::new(expr),
-                operator,
-                right,
-                position,
-            });
+        loop {
+            if self.match_token(&[TokenType::Lt, TokenType::Gt, TokenType::Lte, TokenType::Gte]) {
+                let operator = match self.previous().token_type {
+                    TokenType::Lt => BinaryOperator::LessThan,
+                    TokenType::Gt => BinaryOperator::GreaterThan,
+                    TokenType::Lte => BinaryOperator::LessEqual,
+                    TokenType::Gte => BinaryOperator::GreaterEqual,
+                    _ => unreachable!(),
+                };
+                let right = Box::new(self.bitwise_or()?);
+                let position = expr.position();
+                expr = Expr::Binary(BinaryExpr {
+                    left: Box::new(expr),
+                    operator,
+                    right,
+                    position,
+                });
+            } else if self.match_token(&[TokenType::Instanceof]) {
+                let position = expr.position();
+                let type_name = self
+                    .consume(
+                        TokenType::Identifier,
+                        "Expected class name after 'instanceof'",
+                    )?
+                    .value
+                    .clone();
+                expr = Expr::InstanceOf(InstanceOfExpr {
+                    operand: Box::new(expr),
+                    type_name,
+                    position,
+                });
+            } else {
+                break;
+            }
         }
 
         Ok(expr)
@@ -1941,6 +2091,20 @@ impl Parser {
         let mut expr = self.primary()?;
 
         loop {
+            if self.check(&TokenType::Lt)
+                && self.check_next(&[TokenType::Identifier, TokenType::LeftBracket])
+            {
+                let saved_pos = self.current;
+                if let Ok(_) = self.try_parse_call_type_arguments() {
+                    if self.match_token(&[TokenType::LeftParen]) {
+                        expr = self.finish_call(expr)?;
+                        continue;
+                    }
+                }
+
+                self.current = saved_pos;
+            }
+
             if self.match_token(&[TokenType::LeftParen]) {
                 expr = self.finish_call(expr)?;
             } else if self.match_token(&[TokenType::QuestionDot]) {
@@ -2062,8 +2226,27 @@ impl Parser {
         }
 
         if self.match_token(&[TokenType::IntLiteral]) {
-            let value = self.previous().value.parse::<i64>().unwrap_or(i64::MAX);
+            let token_value = &self.previous().value;
+            // Parse with different bases and remove separators
+            let clean_value = token_value.replace('_', "");
+            let value = if clean_value.starts_with("0b") || clean_value.starts_with("0B") {
+                i64::from_str_radix(&clean_value[2..], 2).unwrap_or(0)
+            } else if clean_value.starts_with("0o") || clean_value.starts_with("0O") {
+                i64::from_str_radix(&clean_value[2..], 8).unwrap_or(0)
+            } else if clean_value.starts_with("0x") || clean_value.starts_with("0X") {
+                i64::from_str_radix(&clean_value[2..], 16).unwrap_or(0)
+            } else {
+                clean_value.parse::<i64>().unwrap_or(i64::MAX)
+            };
             return Ok(Expr::IntLiteral(IntLiteral {
+                value,
+                position: self.previous().position,
+            }));
+        }
+
+        if self.match_token(&[TokenType::BigIntLiteral]) {
+            let value = self.previous().value.clone();
+            return Ok(Expr::BigIntLiteral(BigIntLiteral {
                 value,
                 position: self.previous().position,
             }));
@@ -2143,7 +2326,14 @@ impl Parser {
 
         if !self.check(&TokenType::RightBracket) {
             loop {
-                elements.push(self.expression()?);
+                if self.match_token(&[TokenType::Spread]) {
+                    let position = self.previous().position;
+                    let argument = Box::new(self.expression()?);
+                    elements.push(Expr::Spread(SpreadExpr { argument, position }));
+                } else {
+                    elements.push(self.expression()?);
+                }
+
                 if !self.match_token(&[TokenType::Comma]) {
                     break;
                 }
@@ -2156,23 +2346,37 @@ impl Parser {
 
     fn object_literal(&mut self) -> Result<Expr, RaccoonError> {
         let position = self.previous().position;
-        let mut properties = HashMap::new();
+        let mut properties = Vec::new();
 
         if !self.check(&TokenType::RightBrace) {
             loop {
-                let key = if self.check(&TokenType::StrLiteral) {
-                    self.advance().value.clone()
+                if self.match_token(&[TokenType::Spread]) {
+                    let spread_expr = self.expression()?;
+                    properties.push(ObjectLiteralProperty::Spread(spread_expr));
                 } else {
-                    self.consume(
-                        TokenType::Identifier,
-                        "Expected property name or string literal",
-                    )?
-                    .value
-                    .clone()
-                };
-                self.consume(TokenType::Colon, "Expected ':' after property name")?;
-                let value = self.expression()?;
-                properties.insert(key, value);
+                    let key = if self.check(&TokenType::StrLiteral) {
+                        self.advance().value.clone()
+                    } else {
+                        self.consume(
+                            TokenType::Identifier,
+                            "Expected property name or string literal",
+                        )?
+                        .value
+                        .clone()
+                    };
+
+                    if self.check(&TokenType::Comma) || self.check(&TokenType::RightBrace) {
+                        let value = Expr::Identifier(Identifier {
+                            name: key.clone(),
+                            position: self.previous().position,
+                        });
+                        properties.push(ObjectLiteralProperty::KeyValue { key, value });
+                    } else {
+                        self.consume(TokenType::Colon, "Expected ':' after property name")?;
+                        let value = self.expression()?;
+                        properties.push(ObjectLiteralProperty::KeyValue { key, value });
+                    }
+                }
 
                 if !self.match_token(&[TokenType::Comma]) {
                     break;
@@ -2334,7 +2538,22 @@ impl Parser {
             | TokenType::Await
             | TokenType::New
             | TokenType::This
-            | TokenType::Super => {
+            | TokenType::Super
+            | TokenType::Catch
+            | TokenType::Finally
+            | TokenType::Try
+            | TokenType::Throw
+            | TokenType::Return
+            | TokenType::Break
+            | TokenType::Continue
+            | TokenType::If
+            | TokenType::Else
+            | TokenType::While
+            | TokenType::For
+            | TokenType::Import
+            | TokenType::Export
+            | TokenType::From
+            | TokenType::As => {
                 let name = self.advance().value.clone();
                 Ok(name)
             }
@@ -2512,8 +2731,38 @@ impl Parser {
 
                 let is_optional = self.match_token(&[TokenType::Question]);
 
-                self.consume(TokenType::Colon, "Expected ':' after property name")?;
-                let prop_type = self.parse_type()?;
+                let prop_type = if self.match_token(&[TokenType::LeftParen]) {
+                    let mut param_types = Vec::new();
+                    if !self.check(&TokenType::RightParen) {
+                        loop {
+                            if self.check(&TokenType::Identifier)
+                                && self.check_next(&[TokenType::Colon])
+                            {
+                                self.advance();
+                                self.advance();
+                            }
+                            param_types.push(self.parse_type()?);
+                            if !self.match_token(&[TokenType::Comma]) {
+                                break;
+                            }
+                        }
+                    }
+                    self.consume(
+                        TokenType::RightParen,
+                        "Expected ')' after method parameters",
+                    )?;
+                    self.consume(TokenType::Colon, "Expected ':' after method signature")?;
+                    let return_type = self.parse_type()?;
+
+                    Type::Function(Box::new(FunctionType {
+                        params: param_types,
+                        return_type,
+                        is_variadic: false,
+                    }))
+                } else {
+                    self.consume(TokenType::Colon, "Expected ':' after property name")?;
+                    self.parse_type()?
+                };
 
                 let mut object_prop = ObjectProperty::new(prop_type);
                 if is_optional {
@@ -2525,20 +2774,76 @@ impl Parser {
 
                 properties.insert(prop_name, object_prop);
 
-                if !self.match_token(&[TokenType::Comma])
-                    && !self.match_token(&[TokenType::Semicolon])
-                {
-                    break;
-                }
+                let has_separator = self.match_token(&[TokenType::Comma])
+                    || self.match_token(&[TokenType::Semicolon]);
 
                 if self.check(&TokenType::RightBrace) {
                     break;
+                }
+
+                if !has_separator {
+                    return Err(RaccoonError::new(
+                        "Expected ',' or ';' after property type",
+                        self.peek().position,
+                        self.file.clone(),
+                    ));
                 }
             }
         }
 
         self.consume(TokenType::RightBrace, "Expected '}' after object type")?;
         Ok(Type::Object(Box::new(ObjectType::new(properties))))
+    }
+
+    fn try_parse_call_type_arguments(&mut self) -> Result<Vec<Type>, RaccoonError> {
+        if !self.match_token(&[TokenType::Lt]) {
+            return Err(RaccoonError::new(
+                "Expected '<'",
+                self.peek().position,
+                self.file.clone(),
+            ));
+        }
+
+        let mut type_args = Vec::new();
+        loop {
+            type_args.push(self.parse_type()?);
+            if !self.match_token(&[TokenType::Comma]) {
+                break;
+            }
+        }
+
+        self.consume(TokenType::Gt, "Expected '>' after type arguments")?;
+        Ok(type_args)
+    }
+}
+
+impl Stmt {
+    pub fn position(&self) -> Position {
+        match self {
+            Stmt::Program(s) => s.position,
+            Stmt::VarDecl(s) => s.position,
+            Stmt::FnDecl(s) => s.position,
+            Stmt::ClassDecl(s) => s.position,
+            Stmt::InterfaceDecl(s) => s.position,
+            Stmt::EnumDecl(s) => s.position,
+            Stmt::TypeAliasDecl(s) => s.position,
+            Stmt::ImportDecl(s) => s.position,
+            Stmt::ExportDecl(s) => s.position,
+            Stmt::Block(s) => s.position,
+            Stmt::IfStmt(s) => s.position,
+            Stmt::WhileStmt(s) => s.position,
+            Stmt::DoWhileStmt(s) => s.position,
+            Stmt::ForStmt(s) => s.position,
+            Stmt::ForInStmt(s) => s.position,
+            Stmt::ForOfStmt(s) => s.position,
+            Stmt::SwitchStmt(s) => s.position,
+            Stmt::ReturnStmt(s) => s.position,
+            Stmt::BreakStmt(s) => s.position,
+            Stmt::ContinueStmt(s) => s.position,
+            Stmt::ExprStmt(s) => s.position,
+            Stmt::TryStmt(s) => s.position,
+            Stmt::ThrowStmt(s) => s.position,
+        }
     }
 }
 
@@ -2569,6 +2874,7 @@ impl Expr {
             Expr::TemplateStr(e) => e.position,
             Expr::TaggedTemplate(e) => e.position,
             Expr::IntLiteral(e) => e.position,
+            Expr::BigIntLiteral(e) => e.position,
             Expr::FloatLiteral(e) => e.position,
             Expr::StrLiteral(e) => e.position,
             Expr::BoolLiteral(e) => e.position,

@@ -1,0 +1,70 @@
+// Test simplificado de la API de Future/Promise en Raccoon
+
+print("=== Test 1: Future.resolve() ===")
+let resolved = Future.resolve(42)
+print("Future creado:", resolved)
+
+let result = await resolved
+print("Resultado:", result)
+
+
+print("\n=== Test 2: Future.reject() ===")
+let rejected = Future.reject("Error de prueba")
+print("Future rechazado:", rejected)
+
+try {
+    let error_result = await rejected
+    print("No debería llegar aquí")
+} catch (error) {
+    print("Error capturado correctamente:", error)
+}
+
+
+print("\n=== Test 3: .then() básico ===")
+let simple = Future.resolve(10)
+let doubled_future = simple.then((value: any) => {
+    print("Valor en .then():", value)
+    return value * 2
+})
+print("Future después de .then():", doubled_future)
+let doubled = await doubled_future
+print("Valor final:", doubled)
+
+
+print("\n=== Test 4: Future.all() ===")
+let futures = [
+    Future.resolve(1),
+    Future.resolve(2),
+    Future.resolve(3)
+]
+
+let all_result = await Future.all(futures)
+print("Future.all() resultado:", all_result)
+
+
+print("\n=== Test 5: Future.all() con error ===")
+let mixed = [
+    Future.resolve(10),
+    Future.reject("Error!"),
+    Future.resolve(30)
+]
+
+try {
+    let mixed_result = await Future.all(mixed)
+    print("No debería llegar aquí")
+} catch (error) {
+    print("Error en Future.all():", error)
+}
+
+
+print("\n=== Test 6: Future.race() ===")
+let race_futures = [
+    Future.resolve("Primera"),
+    Future.resolve("Segunda")
+]
+
+let winner = await Future.race(race_futures)
+print("Ganador:", winner)
+
+
+print("\n=== TODOS LOS TESTS COMPLETADOS ===")

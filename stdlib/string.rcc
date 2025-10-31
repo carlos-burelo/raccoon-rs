@@ -1,46 +1,50 @@
 export class String {
     static length(s: str): int {
-        return _length_native(s);
+        return native_length(s);
     }
 
     static upper(s: str): str {
-        return _upper_native(s);
+        return native_upper(s);
     }
 
     static lower(s: str): str {
-        return _lower_native(s);
+        return native_lower(s);
     }
 
     static trim(s: str): str {
-        return _trim_native(s);
+        return native_trim(s);
     }
 
     static substring(s: str, start: int, end: int): str {
-        return _substring_native(s, start, end);
+        return native_substring(s, start, end);
     }
 
     static charAt(s: str, index: int): str {
-        return _char_at_native(s, index);
+        return native_char_at(s, index);
     }
 
     static indexOf(s: str, substr: str): int {
-        return _index_of_native(s, substr);
+        return native_index_of(s, substr);
     }
 
     static replace(s: str, _from: str, to: str): str {
-        return _replace_native(s, _from, to);
+        return native_replace(s, _from, to);
     }
 
     static split(s: str, delimiter: str): str[] {
-        return _split_native(s, delimiter);
+        return native_split(s, delimiter);
     }
 
     static startsWith(s: str, prefix: str): bool {
-        return _starts_with_native(s, prefix);
+        return native_starts_with(s, prefix);
     }
 
     static endsWith(s: str, suffix: str): bool {
-        return _ends_with_native(s, suffix);
+        return native_ends_with(s, suffix);
+    }
+
+    static join(parts: str[], delimiter: str): str {
+        return native_join(parts, delimiter);
     }
 }
 

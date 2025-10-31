@@ -1,0 +1,13 @@
+// Object destructuring
+interface ICoord {
+    x: int
+    y: int
+}
+let { x: coordX, y: coordY }: ICoord = { x: 100, y: 200 }
+print(`1: ${coordX}, ${coordY}`)
+
+// Object destructuring shorthand
+let { x, y }: ICoord = { x: 50, y: 75 }
+print(`2: ${x}, ${y}`)
+
+print("Done")

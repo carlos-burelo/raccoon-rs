@@ -1,0 +1,70 @@
+use crate::error::RaccoonError;
+use crate::runtime::types::TypeHandler;
+use crate::runtime::{RuntimeValue, StrValue};
+use crate::tokens::Position;
+use async_trait::async_trait;
+
+// ============================================================================
+// UnitType - Unit type (void value, represents absence of value)
+// ============================================================================
+
+pub struct UnitType;
+
+#[async_trait]
+impl TypeHandler for UnitType {
+    fn type_name(&self) -> &str {
+        "unit"
+    }
+
+    fn call_instance_method(
+        &self,
+        value: &mut RuntimeValue,
+        method: &str,
+        _args: Vec<RuntimeValue>,
+        position: Position,
+        file: Option<String>,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        // Unit type typically maps to Null in runtime (represents absence of value)
+        match value {
+            RuntimeValue::Null(_) => {}
+            _ => {
+                return Err(RaccoonError::new(
+                    format!("Expected unit, got {}", value.get_name()),
+                    position,
+                    file,
+                ));
+            }
+        }
+
+        match method {
+            "toString" | "toStr" => Ok(RuntimeValue::Str(StrValue::new("()".to_string()))),
+            _ => Err(RaccoonError::new(
+                format!("Method '{}' not found on unit", method),
+                position,
+                file,
+            )),
+        }
+    }
+
+    fn call_static_method(
+        &self,
+        method: &str,
+        _args: Vec<RuntimeValue>,
+        position: Position,
+        file: Option<String>,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        Err(RaccoonError::new(
+            format!("Static method '{}' not found on unit type", method),
+            position,
+            file,
+        ))
+    }
+
+    fn has_instance_method(&self, method: &str) -> bool {
+        matches!(method, "toString" | "toStr")
+    }
+
+    fn has_static_method(&self, _method: &str) -> bool {
+        false
+    }
+}

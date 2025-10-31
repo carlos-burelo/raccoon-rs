@@ -198,17 +198,6 @@ impl Interpreter {
 
         for decorator_info in &decorators {
             match decorator_info.spec.name.as_str() {
-                "@_ffi" => {
-                    if let Ok(RuntimeValue::Function(_)) =
-                        self.environment.get(&decl.name, (0, 0))
-                    {
-                        // Note: @_ffi decorator functionality has been removed.
-                        // Functions are registered directly in the environment.
-                    }
-                }
-                "@_register" => if let Some(_namespace) = decorator_info.arg_as_string(0) {},
-                "@_validate" => {}
-                "@cache" => if let Some(_ttl_ms) = decorator_info.arg_as_int(0) {},
                 "@deprecated" => {
                     let msg = decorator_info
                         .arg_as_string(0)
@@ -218,21 +207,9 @@ impl Interpreter {
                         decl.name, msg
                     );
                 }
-                "@pure" => {}
-                "@inline" => {}
-                "@measureTime" => {
-                    let _label = decorator_info
-                        .arg_as_string(0)
-                        .unwrap_or_else(|| "Function execution".to_string());
+                _ => {
+                    // Other decorators are registered but not actively implemented yet
                 }
-                "@memoize" => {}
-                "@throttle" => if let Some(_ms) = decorator_info.arg_as_int(0) {},
-                "@debounce" => if let Some(_ms) = decorator_info.arg_as_int(0) {},
-                "@retry" => if let Some(_times) = decorator_info.arg_as_int(0) {},
-                "@log" => {}
-                "@sealed" => {}
-                "@abstract" => {}
-                _ => {}
             }
         }
 

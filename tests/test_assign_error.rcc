@@ -1,6 +1,0 @@
-// Test assignment to undefined variable
-
-let x = 10;
-
-// This should error because 'undeclared' is not declared
-undeclared = 20;

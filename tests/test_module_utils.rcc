@@ -1,0 +1,21 @@
+// Utils module
+
+export fn greet(name: str): str {
+    return `Hello, ${name}!`
+}
+
+export fn uppercase(s: str): str {
+    return s
+}
+
+export class Helper {
+    name: str
+
+    constructor(name: str) {
+        this.name = name
+    }
+
+    help(): str {
+        return `${this.name} is helping!`
+    }
+}

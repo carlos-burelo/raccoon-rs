@@ -140,27 +140,27 @@ class Math {
 
 
     static sqrt(x: float): float {
-        return _sqrt_native(x);
+        return native_sqrt(x);
     }
 
     static pow(base: float, exp: float): float {
-        return _pow_native(base, exp);
+        return native_pow(base, exp);
     }
 
     static sin(x: float): float {
-        return _sin_native(x);
+        return native_sin(x);
     }
 
     static cos(x: float): float {
-        return _cos_native(x);
+        return native_cos(x);
     }
 
     static random(): float {
-        return _random_native();
+        return native_random();
     }
 
     static tan(x: float): float {
-        return _tan_native(x);
+        return native_tan(x);
     }
 
     static isEven(n: int): bool {

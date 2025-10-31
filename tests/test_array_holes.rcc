@@ -1,0 +1,7 @@
+// Test array destructuring with holes
+let [a, , c]: int[] = [1, 2, 3]
+print(`Result: a=${a}, c=${c}`)
+
+// Multiple holes
+let [x, , , z]: int[] = [10, 20, 30, 40]
+print(`Result: x=${x}, z=${z}`)

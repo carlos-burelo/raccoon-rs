@@ -1,8 +1,7 @@
-pub mod builtins;
 pub mod builtin_plugins;
+pub mod builtins;
 pub mod control_flow;
 pub mod decorator_registry;
-pub mod decorators;
 pub mod environment;
 pub mod module_system;
 pub mod native_bridge_v2;
@@ -15,7 +14,6 @@ pub mod values;
 pub use builtins::setup_builtins;
 pub use control_flow::{BreakValue, ContinueValue, ReturnValue, ThrownValue};
 pub use decorator_registry::{DecoratorRegistry, DecoratorTarget, DecoratorVisibility};
-pub use decorators::{DecoratorApplier, DecoratorMetadata, FunctionCache};
 pub use environment::Environment;
 pub use module_system::{Module, ModuleCache, ModuleSystem, analyze_exports, resolve_module_path};
 pub use native_bridge_v2::NativeBridgeV2;

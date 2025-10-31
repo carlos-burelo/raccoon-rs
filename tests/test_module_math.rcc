@@ -1,0 +1,28 @@
+// Math utilities module for testing imports/exports
+
+export fn add(a: int, b: int): int {
+    return a + b
+}
+
+export fn multiply(a: int, b: int): int {
+    return a * b
+}
+
+export const PI: float = 3.14159
+
+export class Calculator {
+    value: int
+
+    constructor(initial: int) {
+        this.value = initial
+    }
+
+    add(x: int): Calculator {
+        this.value = this.value + x
+        return this
+    }
+
+    getResult(): int {
+        return this.value
+    }
+}

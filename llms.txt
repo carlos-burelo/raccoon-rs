@@ -1,0 +1,234 @@
+Proyecto: raccoon
+Lenguaje principal: Rust (Cargo)
+Propósito: intérprete/REPL/runner para el lenguaje Raccoon (`.rcc`) — incluye lexer, parser, analizador semántico, intérprete y una stdlib escrita en `.rcc`.
+
+Resumen rápido (qué hace cada cosa)
+- `Cargo.toml` — manifest de Rust (build y dependencias). Punto de partida para `cargo build`, `cargo run`, `cargo test`.
+- `src/main.rs` — CLI y REPL. Soporta subcomandos `run` y `repl` con flags para mostrar tokens/AST y controlar la interpretación (ver sección CLI abajo).
+- `src/lib.rs` — API pública del crate; re-exporta componentes usados por `main` y por integraciones.
+- `target/` — artefactos de compilación generados por Cargo (no versionar).
+
+Estructura y responsabilidades por archivo/directorio (más contexto)
+- `src/lexer.rs`
+  - Responsabilidad: convertir texto fuente en una secuencia de `Token`.
+  - Funciones/entradas clave: `Lexer::new(source: String, file: Option<String>)` y `tokenize() -> Result<Vec<Token>, LexerError>`.
+  - Errores: tokens inválidos, literales sin cerrar, caracteres inesperados.
+  - Dónde cambiar: para añadir tokens nuevos, actualizar aquí y `tokens.rs`.
+
+- `src/tokens.rs`
+  - Contiene la enum `TokenType` y la estructura `Token` (lexema, posición, rango).
+  - Útil para formateadores, impresión en REPL y comunicación entre lexer/parser.
+
+- `src/parser/` (directorio)
+  - Contiene el parser y probablemente varios módulos para precedencia, expresiones y declaraciones.
+  - Entradas clave: `Parser::new(tokens, file)` y `parse() -> Result<Program, ParseError>`.
+  - Salida: AST (nodos en `src/ast/`). Cambios en gramática afectan directamente aquí.
+
+- `src/ast/`
+  - Definiciones de nodos (Program, Statement, Expression, Type annotations, etc.).
+  - Cuando añades una nueva construcción sintáctica: añadir nodo AST aquí, serialización/Debug si necesario.
+
+- `src/semantic_analyzer.rs`
+  - Comprueba tipos, declaraciones, usos de variables, consistencia de clases/miembros.
+  - Emite errores semánticos con localización (línea/columna).
+  - Puntos de cambio comunes: nuevas reglas de tipado, inferencia, coerciones.
+
+- `src/symbol_table.rs`
+  - Manejo de scopes, bindings, resolución de identificadores.
+  - Cambiar aquí si se añaden reglas sobre visibilidad, shadowing o namespaces.
+
+- `src/type_system/`
+  - Implementación del sistema de tipos (representación interna de tipos, inferencia, comprobaciones).
+  - Buscar funciones para `unify`, `is_assignable_to`, y conversiones.
+
+- `src/interpreter/`
+  - Implementa `Interpreter::new(file: Option<String>)` y `interpret(program).await -> Result<Value, RuntimeError>`.
+  - Aquí se ejecuta el AST: llamadas a funciones, manejo de scope en tiempo de ejecución, async/futures si aplica.
+  - Cambios de runtime (p. ej. semántica de `await`, ciclos de vida) requieren pruebas en `tests/`.
+
+- `src/runtime/`
+  - Objetos de runtime, representaciones de valores nativos, hooks FFI si existen.
+  - Lugar para exponer funciones nativas a `.rcc`.
+
+- `src/stdlib/` y archivos `.rcc` en la raíz del proyecto (`io.rcc`, `math.rcc`, `string.rcc`, `time.rcc`, `ffi.rcc`, `array.rcc`, `http.rcc`, ...)
+  - Implementación de la biblioteca estándar escrita en el propio lenguaje. Útil para ver API pública y expectativas de comportamiento.
+  - Para añadir API estándar: editar los `.rcc` y, si requiere implementación nativa, añadirlo en `runtime/`.
+
+- `tests/` (scripts `.rcc`)
+  - Contienen casos de integración y ejemplos. Ejecutarlos manualmente con el runner o automatizarlos con `cargo test` si hay harness.
+
+CLI y REPL (invocación exacta encontrada en `src/main.rs`)
+- Binario: `raccoon` (definido con clap)
+- Subcomandos y flags:
+  - `raccoon run <FILE>`
+    - `--tokens` / `-t`  — imprime tokens generados por el lexer y sale.
+    - `--ast` / `-a`     — imprime la representación del AST parseado y sale.
+    - `--no-interpret` / `-n` — parsea (y opcionalmente imprime) pero no ejecuta el intérprete.
+  - `raccoon repl`
+    - `--tokens` / `-t`  — muestra tokens mientras se escribe en REPL.
+    - `--interpret` / `-i` — activa la interpretación de las entradas (por defecto true si no se especifica comando).
+
+Ejemplos:
+  pwsh> cargo run -- run tests/syntax_functions.rcc
+  pwsh> cargo run -- run tests/syntax_functions.rcc --tokens
+  pwsh> cargo run -- repl
+
+(Nota: `cargo run -- <subcommand>` pasa los args al binario; también se puede compilar primero y ejecutar `target/debug/raccoon`)
+
+Detalles importantes detectados en `src/main.rs`
+- Usa Tokio runtime con `thread_stack_size` aumentado a 256MB debido a recursión profunda (importante para análisis que usan async_recursion).
+- REPL usa `rustyline` con historial en `.raccoon_history` y soporta comandos internos: `.help`, `.exit`, `.clear`, `.example`.
+
+Contracto rápido para LLMs (entrada/salida)
+- Entrada: archivo `.rcc` o fragmento en REPL.
+- Salidas:
+  - Lista de `Token` (si se pide).
+  - AST (estructura serializable, `Debug`/`{:#?}` en la implementación actual).
+  - Resultado de la ejecución (valor o efectos I/O). Errores en lexer/parser/semántica/runtime con mensajes y localizaciones.
+
+Puntos de integración y cambios frecuentes (lista práctica)
+- Añadir token: `src/tokens.rs` + `src/lexer.rs` + tests en `tests/`.
+- Cambiar gramática: `src/parser/` + `src/ast/` + `src/semantic_analyzer.rs` + adaptaciones en `interpreter/`.
+- Nuevas APIs nativas: `src/runtime/` y `src/stdlib/*.rcc`.
+
+Errores y edge-cases a vigilar
+- Literales multilínea, templates e interpolación — revisar manejo en `lexer.rs` y `parser`.
+- Incompatibilidades entre versiones de stdlib y runtime — versionar la stdlib o comprobar compatibilidad al cargar.
+- Codificación de archivos (UTF-8 vs otros) — `fs::read_to_string` asume UTF-8; añadir manejo para otros encodings si necesario.
+
+Dónde mirar primero para entender o modificar comportamiento
+1. `src/main.rs` — flujo de entrada y flags (actualizado).  
+2. `src/lexer.rs` y `src/tokens.rs` — cómo se divide el texto.  
+3. `src/parser/` y `src/ast/` — representación del lenguaje y lugares para cambios sintácticos.  
+4. `src/semantic_analyzer.rs` y `src/type_system/` — reglas semánticas y tipos.  
+5. `src/interpreter/` y `src/runtime/` — ejecución y valores nativos.
+
+Pequeños consejos para LLMs que inspeccionan el repo
+- Priorizar tests en `tests/` cuando se infiere comportamiento de la stdlib o compatibilidad.  
+- Buscar `TODO`, `FIXME` o `NOTE` en fuentes para atajos de contexto.  
+- Para errores de runtime, reproducir con REPL (modo interactivo) puede dar pistas rápidas.
+
+Notas finales
+- Este archivo está pensado para ser breve pero operativo: añade ejemplos concretos y referencias a funciones/constructores más usadas (Lexer::new, Parser::new, Interpreter::interpret) para facilitar a modelos que automatizan cambios.  
+-- Si quieres, puedo: añadir un mapa de funciones/archivos con nombres de funciones exactos (por ejemplo, listar firmas públicas), generar una versión en inglés, o extraer docstrings y pruebas relevantes para enriquecer aún más este archivo.
+
+---
+
+Inventario de archivos bajo `src/` (lista exacta)
+- Archivos raíz:
+  - `src/main.rs`
+  - `src/lib.rs`
+  - `src/lexer.rs`
+  - `src/tokens.rs`
+  - `src/output_style.rs`
+  - `src/error.rs`
+  - `src/semantic_analyzer.rs`
+  - `src/symbol_table.rs`
+  - `src/parser/mod.rs`
+
+- Directorios y ficheros relevantes:
+  - `src/ast/`
+    - `mod.rs`
+    - `nodes.rs`
+    - `types.rs`
+  - `src/parser/`
+    - `mod.rs`
+  - `src/interpreter/`
+    - `mod.rs`
+    - `operators.rs`
+  - `src/runtime/`
+    - `mod.rs`
+    - `module_system.rs`
+    - `stdlib_loader.rs`
+    - `native_bridge.rs`
+    - `ffi.rs`
+    - `ffi_registry.rs`
+    - `environment.rs`
+    - `decorators.rs`
+    - `decorator_registry.rs`
+    - `control_flow.rs`
+    - `builtins.rs`
+    - `values.rs`
+    - `natives/` (subcarpeta)
+      - `mod.rs`
+      - `time.rs`
+      - `string.rs`
+      - `random.rs`
+      - `output.rs`
+      - `math.rs`
+      - `json.rs`
+      - `io.rs`
+      - `http.rs`
+      - `ffi.rs`
+      - `array.rs`
+    - `types/` (subcarpeta)
+      - `mod.rs`
+      - `registry.rs`
+      - `str_type.rs`
+      - `map_type.rs`
+      - `list_type.rs`
+      - `int_type.rs`
+      - `float_type.rs`
+      - `decimal_type.rs`
+      - `bool_type.rs`
+      - `bigint_type.rs`
+  - `src/type_system/`
+    - `mod.rs`
+    - `checker.rs`
+    - `inference.rs`
+    - `resolver.rs`
+    - `substitutor.rs`
+
+Cantidad observada aprox.: 52 ficheros / rutas (código fuente y módulos).
+
+Firmas públicas (extracto) — funciones/estructuras/exports clave encontradas
+Nota: listado simplificado para lectura rápida; hay muchas funciones privadas adicionales en cada archivo.
+
+- `src/lexer.rs`
+  - pub struct Lexer { ... }
+  - pub fn new(source: String, file: Option<String>) -> Self
+  - pub fn tokenize(&mut self) -> Result<Vec<Token>, RaccoonError>
+
+- `src/tokens.rs`
+  - pub type Position = (usize, usize)
+  - pub struct Range { pub fn new(start: Position, end: Position) -> Self }
+  - pub enum TokenType { ... } (lista de tokens públicamente disponible)
+  - pub struct Token { pub fn new(token_type: TokenType, value: String, lexeme: String, position: Position, range: Range) -> Self }
+  - pub enum BinaryOperator { ... }
+  - pub enum UnaryOperator { ... }
+  - pub enum AccessModifier { Public, Private, Protected }
+
+- `src/parser/mod.rs`
+  - pub struct Parser { tokens: Vec<Token>, file: Option<String>, current: usize }
+  - pub fn new(tokens: Vec<Token>, file: Option<String>) -> Self
+  - pub fn parse(&mut self) -> Result<Program, RaccoonError>
+
+- `src/interpreter/mod.rs`
+  - pub enum InterpreterResult { Value(RuntimeValue), Return(RuntimeValue), Break, Continue }
+  - pub struct Interpreter { pub file: Option<String>, environment: Environment, ... }
+  - pub fn new(file: Option<String>) -> Self
+  - pub async fn interpret(&mut self, program: &Program) -> Result<RuntimeValue, RaccoonError>
+
+- `src/runtime/mod.rs` (re-exports clave)
+  - pub mod builtins; pub use builtins::setup_builtins
+  - pub use environment::Environment
+  - pub use ffi_registry::FFIRegistry
+  - pub use native_bridge::NativeBridge
+  - pub use stdlib_loader::StdLibLoader
+  - pub use types::registry::TypeRegistry
+  - pub use values::*
+
+- `src/type_system/mod.rs` (re-exports)
+  - pub use checker::TypeChecker
+  - pub use inference::TypeInferenceEngine
+  - pub use resolver::TypeResolver
+  - pub use substitutor::TypeSubstitutor
+
+Cómo añadí esto
+- He inspeccionado `src/` recursivamente y leí los archivos clave (`lexer.rs`, `tokens.rs`, `parser/mod.rs`, `interpreter/mod.rs`, `runtime/mod.rs`, `type_system/mod.rs`) para extraer firmas públicas y los reexports más importantes.
+
+Siguientes pasos opcionales (puedo ejecutar ahora)
+- Incluir firmas públicas adicionales de más ficheros (por ejemplo `runtime/*`, `interpreter/operators.rs`, `type_system/checker.rs`).
+- Generar una sección con ejemplos de uso concretos extraídos de `tests/` y comandos para reproducir fallos.
+- Añadir una versión en inglés del mismo contenido.
+

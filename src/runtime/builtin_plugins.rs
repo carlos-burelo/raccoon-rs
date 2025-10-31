@@ -2,7 +2,6 @@
 ///
 /// This module provides plugin implementations for all standard native functions,
 /// consolidating the previous distributed registration system.
-
 use crate::ast::types::{FunctionType, PrimitiveType, Type};
 use crate::runtime::plugin_system::{NativePlugin, PluginRegistry};
 use crate::runtime::values::{NativeFunctionValue, NullValue, RuntimeValue};
@@ -40,12 +39,7 @@ impl NativePlugin for OutputPlugin {
             })),
         );
 
-        registry.register_sync(
-            "print",
-            None::<String>,
-            print_fn.fn_type.clone(),
-            print_fn,
-        );
+        registry.register_sync("print", None::<String>, print_fn.fn_type.clone(), print_fn);
 
         // eprint function
         let eprint_fn = NativeFunctionValue::new(
@@ -54,10 +48,7 @@ impl NativePlugin for OutputPlugin {
                     .iter()
                     .map(|arg| {
                         let plain = arg.to_string();
-                        if plain.contains('{')
-                            || plain.contains('[')
-                            || plain.starts_with('"')
-                        {
+                        if plain.contains('{') || plain.contains('[') || plain.starts_with('"') {
                             crate::output_style::format_value(&plain)
                         } else {
                             plain

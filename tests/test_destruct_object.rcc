@@ -1,0 +1,7 @@
+// Object destructuring
+interface ICoord {
+    x: int
+    y: int
+}
+let { x: coordX, y: coordY }: ICoord = { x: 100, y: 200 }
+print(`Result: ${coordX}, ${coordY}`)

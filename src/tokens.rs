@@ -1,5 +1,17 @@
 pub type Position = (usize, usize);
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Range {
+    pub start: Position,
+    pub end: Position,
+}
+
+impl Range {
+    pub fn new(start: Position, end: Position) -> Self {
+        Self { start, end }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TokenType {
     Let,
@@ -16,8 +28,12 @@ pub enum TokenType {
     Else,
     While,
     For,
+    Do,
+    Switch,
+    Case,
     Break,
     Continue,
+    Of,
     Interface,
     Enum,
     TypeAlias,
@@ -48,6 +64,7 @@ pub enum TokenType {
     At,
     Identifier,
     IntLiteral,
+    BigIntLiteral,
     FloatLiteral,
     StrLiteral,
     True,
@@ -120,15 +137,19 @@ pub enum TokenType {
 pub struct Token {
     pub token_type: TokenType,
     pub value: String,
+    pub lexeme: String,
     pub position: Position,
+    pub range: Range,
 }
 
 impl Token {
-    pub fn new(token_type: TokenType, value: String, position: Position) -> Self {
+    pub fn new(token_type: TokenType, value: String, lexeme: String, position: Position, range: Range) -> Self {
         Self {
             token_type,
             value,
+            lexeme,
             position,
+            range,
         }
     }
 }

@@ -1,6 +1,17 @@
 use super::{CallbackExecutor, TypeHandler};
-use super::{bool_type::BoolType, decimal_type::DecimalType, float_type::FloatType};
-use super::{int_type::IntType, list_type::ListType, map_type::MapType, str_type::StrType};
+// New modular imports - Primitives
+use super::primitives::{BigIntType, BoolType, DecimalType, IntType, StrType};
+use super::primitives::{I8Type, I16Type, I32Type, I64Type, U8Type, U16Type, U32Type, U64Type};
+use super::primitives::{Float32Type, CharType, NullType, UnitType};
+use super::primitives::floats::Float64Type; // Import Float64Type directly
+// Collections
+use super::collections::{ListType, MapType, SetType, TupleType, RangeType, OptionalType};
+// Objects
+use super::objects::{ClassType, FunctionType, InterfaceType, ObjectType};
+// Async/Control
+use super::async_control::{FutureType, ResultType, StreamType, EitherType};
+// Special
+use super::special::{EnumType, VoidType, NeverType, SymbolType, UnionType, IntersectionType, NullableType, ReadonlyType};
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
@@ -16,13 +27,59 @@ impl TypeRegistry {
             handlers: HashMap::new(),
         };
 
+        // Primitive types - Integers
         registry.register(Box::new(IntType));
-        registry.register(Box::new(FloatType));
+        registry.register(Box::new(I8Type));
+        registry.register(Box::new(I16Type));
+        registry.register(Box::new(I32Type));
+        registry.register(Box::new(I64Type));
+        registry.register(Box::new(U8Type));
+        registry.register(Box::new(U16Type));
+        registry.register(Box::new(U32Type));
+        registry.register(Box::new(U64Type));
+        registry.register(Box::new(BigIntType));
+
+        // Primitive types - Floats
+        registry.register(Box::new(Float64Type)); // Default float
+        registry.register(Box::new(Float32Type));
         registry.register(Box::new(DecimalType));
+
+        // Primitive types - Other
         registry.register(Box::new(StrType));
         registry.register(Box::new(BoolType));
+        registry.register(Box::new(CharType));
+        registry.register(Box::new(NullType));
+        registry.register(Box::new(UnitType));
+
+        // Collection types
         registry.register(Box::new(ListType));
         registry.register(Box::new(MapType));
+        registry.register(Box::new(SetType));
+        registry.register(Box::new(TupleType));
+        registry.register(Box::new(RangeType));
+        registry.register(Box::new(OptionalType));
+
+        // Object types
+        registry.register(Box::new(ObjectType));
+        registry.register(Box::new(ClassType));
+        registry.register(Box::new(FunctionType));
+        registry.register(Box::new(InterfaceType));
+
+        // Async/Control types
+        registry.register(Box::new(FutureType));
+        registry.register(Box::new(ResultType));
+        registry.register(Box::new(StreamType));
+        registry.register(Box::new(EitherType));
+
+        // Special types
+        registry.register(Box::new(EnumType));
+        registry.register(Box::new(VoidType));
+        registry.register(Box::new(NeverType));
+        registry.register(Box::new(SymbolType));
+        registry.register(Box::new(UnionType));
+        registry.register(Box::new(IntersectionType));
+        registry.register(Box::new(NullableType));
+        registry.register(Box::new(ReadonlyType));
 
         registry
     }

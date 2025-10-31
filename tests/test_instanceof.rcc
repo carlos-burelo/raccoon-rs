@@ -1,0 +1,11 @@
+// Test instanceof operator
+class MyClass {
+    value: int
+    constructor(v: int) {
+        this.value = v
+    }
+}
+
+let obj: MyClass = new MyClass(42)
+let isInstance: bool = obj instanceof MyClass
+print(`instanceof result: ${isInstance}`)

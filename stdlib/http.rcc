@@ -1,0 +1,74 @@
+export type HttpResponse = {
+    status: int;
+    statusText: str;
+    headers: Map<str, str>;
+    body: str;
+    json: any?;
+}
+
+export type HttpRequestOptions = {
+    method: str?;
+    headers: Map<str, str>?;
+    body: str?;
+    timeout: int?;
+}
+
+export class Http {
+    static async get(url: str): Future<HttpResponse> {
+        let opts: HttpRequestOptions = {
+            method: "GET"
+        };
+        return await native_http_fetch_with_options(url, opts);
+    }
+
+    static async post(url: str, body: str, headers: Map<str, str>?): Future<HttpResponse> {
+        let opts: HttpRequestOptions = {
+            method: "POST",
+            body: body
+        };
+        if (headers != null) {
+            opts.headers = headers;
+        }
+        return await native_http_fetch_with_options(url, opts);
+    }
+
+    static async put(url: str, body: str, headers: Map<str, str>?): Future<HttpResponse> {
+        let opts: HttpRequestOptions = {
+            method: "PUT",
+            body: body
+        };
+        if (headers != null) {
+            opts.headers = headers;
+        }
+        return await native_http_fetch_with_options(url, opts);
+    }
+
+    static async delete(url: str, headers: Map<str, str>?): Future<HttpResponse> {
+        let opts: HttpRequestOptions = {
+            method: "DELETE"
+        };
+        if (headers != null) {
+            opts.headers = headers;
+        }
+        return await native_http_fetch_with_options(url, opts);
+    }
+
+    static async patch(url: str, body: str, headers: Map<str, str>?): Future<HttpResponse> {
+        let opts: HttpRequestOptions = {
+            method: "PATCH",
+            body: body
+        };
+        if (headers != null) {
+            opts.headers = headers;
+        }
+        return await native_http_fetch_with_options(url, opts);
+    }
+}
+
+export async fn fetch(url: str, options: HttpRequestOptions): Future<HttpResponse> {
+    return await native_http_fetch_with_options(url, options);
+}
+
+
+
+export default Http;

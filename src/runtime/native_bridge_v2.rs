@@ -2,7 +2,6 @@
 ///
 /// This is the new unified interface that will replace the old NativeBridge.
 /// It uses the PluginManager internally for cleaner, more maintainable code.
-
 use crate::runtime::plugin_system::PluginManager;
 use crate::runtime::values::RuntimeValue;
 
@@ -16,7 +15,7 @@ impl NativeBridgeV2 {
 
         // Load all built-in plugins
         crate::runtime::builtin_plugins::load_builtin_plugins(
-            &mut manager.registry().write().unwrap()
+            &mut manager.registry().write().unwrap(),
         );
 
         Self {

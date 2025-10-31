@@ -1,6 +1,4 @@
-// Test: Import default
-
-import Http from "std:net"
+import Http from "std:http"
 
 async fn main(): void {
     print("Testing default import...")

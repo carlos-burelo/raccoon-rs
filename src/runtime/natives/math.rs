@@ -6,7 +6,7 @@ use std::collections::HashMap;
 pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
     // sqrt
     functions.insert(
-        "_sqrt_native".to_string(),
+        "native_sqrt".to_string(),
         NativeFunctionValue::new(
             |args: Vec<RuntimeValue>| {
                 if let Some(RuntimeValue::Float(f)) = args.first() {
@@ -27,7 +27,7 @@ pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
 
     // pow
     functions.insert(
-        "_pow_native".to_string(),
+        "native_pow".to_string(),
         NativeFunctionValue::new(
             |args: Vec<RuntimeValue>| {
                 if args.len() < 2 {
@@ -55,7 +55,7 @@ pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
 
     // sin
     functions.insert(
-        "_sin_native".to_string(),
+        "native_sin".to_string(),
         NativeFunctionValue::new(
             |args: Vec<RuntimeValue>| {
                 if let Some(RuntimeValue::Float(f)) = args.first() {
@@ -76,7 +76,7 @@ pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
 
     // cos
     functions.insert(
-        "_cos_native".to_string(),
+        "native_cos".to_string(),
         NativeFunctionValue::new(
             |args: Vec<RuntimeValue>| {
                 if let Some(RuntimeValue::Float(f)) = args.first() {
@@ -97,7 +97,7 @@ pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
 
     // tan
     functions.insert(
-        "_tan_native".to_string(),
+        "native_tan".to_string(),
         NativeFunctionValue::new(
             |args: Vec<RuntimeValue>| {
                 if let Some(RuntimeValue::Float(f)) = args.first() {

@@ -1,0 +1,28 @@
+// Test exporting interfaces and type aliases
+export interface Person {
+    name: str;
+    age: int;
+    email: str?;
+}
+
+export type Address = {
+    street: str;
+    city: str;
+    zipCode: str;
+}
+
+export type Config = {
+    debug: bool;
+    timeout: int;
+}
+
+fn main() {
+    print("Types and interfaces exported successfully!");
+    let config: Config = {
+        debug: true,
+        timeout: 5000
+    };
+    print("Config created: " + config.debug.toStr() + ", " + config.timeout.toStr());
+}
+
+main();

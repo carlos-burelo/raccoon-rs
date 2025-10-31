@@ -1,8 +1,8 @@
 
 
-import  Math from "std:math"
-import  StringUtils from "std:string"
-import  ArrayUtils from "std:array"
+import Math from "std:math"
+import StringUtils from "std:string"
+import ArrayUtils from "std:array"
 
 print("=== Testing Core Built-ins ===");
 
@@ -40,8 +40,8 @@ print(rand);
 print("\n=== Testing String Built-ins ===");
 
 let text: str = "Hello World";
-print(StringUtils.toUpperCase(text));  
-print(StringUtils.toLowerCase(text));  
+print(StringUtils.upper(text));  
+print(StringUtils.lower(text));  
 print(StringUtils.trim("  spaces  ")); 
 
 

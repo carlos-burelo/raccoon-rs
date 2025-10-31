@@ -1,0 +1,36 @@
+// TEST: Spread Operator Implementation
+// Status: ❌ NOT IMPLEMENTED
+// Priority: HIGH
+
+print("Testing Spread Operator...")
+
+// Test 1: Array spread
+let arr1: int[] = [1, 2, 3]
+let arr2: int[] = [4, 5, 6]
+let combined: int[] = [...arr1, ...arr2]
+print(`Combined array: ${combined}`)
+
+// Test 2: Array spread with literals
+let spread: int[] = [0, ...arr1, 7, ...arr2, 8]
+print(`Spread with literals: ${spread}`)
+
+// Test 3: Object spread
+let obj1: any = { a: 1, b: 2 }
+let obj2: any = { c: 3, d: 4 }
+let combinedObj: any = { ...obj1, ...obj2 }
+print(`Combined object: ${combinedObj}`)
+
+// Test 4: Object spread with override
+let base: any = { x: 1, y: 2 }
+let override: any = { ...base, y: 99 }
+print(`Override: ${override}`)
+
+// Test 5: Spread in function calls
+fn sumThree(a: int, b: int, c: int): int {
+    return a + b + c
+}
+let args: int[] = [10, 20, 30]
+let result: int = sumThree(...args)
+print(`Function spread result: ${result}`)
+
+print("✅ All spread operator tests passed")

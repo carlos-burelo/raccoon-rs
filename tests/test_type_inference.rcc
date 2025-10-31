@@ -31,10 +31,8 @@ if (nullable !== null) {
 // 6. Type narrowing con typeof
 fn process(value: int | str): void {
     if (typeof value === "int") {
-        // value es int aquí
         let doubled = value * 2;
     } else {
-        // value es str aquí
         let upper = value.toUpperCase();
     }
 }

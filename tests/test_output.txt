@@ -1,0 +1,48 @@
+
+Error tests/test_complete_syntax_semantics.rcc 977:32 -> Expected expression
+ 975  │ // 19.1 Instanceof operator
+ 976  │ let instObj: BasicClass = new BasicClass(42)
+ 977  │ let isInstance: bool = instObj instanceof BasicClass
+                                      ^
+ 978  │ print(`  ✓ Instanceof: ${isInstance}`)
+ 979  │ 
+
+
+
+Error tests/test_complete_syntax_semantics.rcc 990:30 -> Expected property name or string literal
+ 988  │ 
+ 989  │ // 19.4 Spread operator in objects
+ 990  │ let spreadObj: any = { a: 1, ...{ b: 2, c: 3 } }
+                                    ^
+ 991  │ print(`  ✓ Spread in objects: ${spreadObj}`)
+ 992  │ 
+
+
+╔════════════════════════════════════════════════════════════════╗
+║     [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+[37m[[0m[93m1[0m[37m][0m [36mPRIMITIVE[0m [36mTYPES[0m & [36mLITERALS[0m
+  ✓ [36mInteger[0m [36mliterals[0m[37m:[0m [93m42[0m[37m,[0m [93m-100[0m[37m,[0m [93m999999999[0m
+  ✓ [36mFloat[0m [36mliterals[0m[37m:[0m [93m3.14159[0m[37m,[0m [93m-2.5[0m[37m,[0m [93m1.5[0m
+  ✓ [36mString[0m [36mliterals[0m[37m:[0m [36mhello[0m [36mworld[0m[37m,[0m [36mempty[0m=[92m""[0m
+  ✓ [36mBoolean[0m [36mliterals[0m[37m:[0m [93mtrue[0m[37m,[0m [93mfalse[0m
+  ✓ [36mNull[0m [36mliteral[0m[37m:[0m [93mnull[0m
+  ✓ [36mTemplate[0m [36mstrings[0m[37m:[0m [36mLanguage[0m[37m:[0m [36mRaccoon[0m[37m,[0m [36mVersion[0m[37m:[0m [93m1[0m
+
+[37m[[0m[93m2[0m[37m][0m [36mOPERATORS[0m
+  ✓ [36mArithmetic[0m[37m:[0m +=[93m13[0m[37m,[0m -=[93m7[0m[37m,[0m *=[93m30[0m[37m,[0m /=[93m3.3333333333333335[0m[37m,[0m %=[93m1[0m[37m,[0m **=[93m8[0m
+  ✓ [36mComparison[0m[37m:[0m ==[93mfalse[0m[37m,[0m !=[93mtrue[0m[37m,[0m <[93mfalse[0m[37m,[0m >[93mtrue[0m
+  ✓ [36mLogical[0m[37m:[0m &&=[93mfalse[0m[37m,[0m ||=[93mtrue[0m[37m,[0m !=[93mfalse[0m
+  ✓ [36mBitwise[0m[37m:[0m &=[93m1[0m[37m,[0m |=[93m7[0m[37m,[0m ^=[93m6[0m[37m,[0m ~=[93m-6[0m
+    [36mShifts[0m[37m:[0m <<=[93m10[0m[37m,[0m >>=[93m2[0m[37m,[0m >>>=[93m2[0m
+
+Error tests/test_complete_syntax_semantics.rcc 103:1 -> Invalid operands for modulo
+ 101  │ asgnVal *= 2
+ 102  │ asgnVal /= 4
+ 103  │ asgnVal %= 3
+       ^
+ 104  │ print(`  ✓ Assignment operators: result=${asgnVal}`)
+ 105  │ 
+
+

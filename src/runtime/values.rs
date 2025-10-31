@@ -1,11 +1,14 @@
 use crate::ast::{nodes::*, types::*};
 use std::collections::HashMap;
 use std::fmt;
+use std::future::Future;
+use std::pin::Pin;
 use std::sync::{Arc, RwLock};
 
 #[derive(Debug, Clone)]
 pub enum RuntimeValue {
     Int(IntValue),
+    BigInt(BigIntValue),
     Float(FloatValue),
     Decimal(DecimalValue),
     Str(StrValue),
@@ -29,6 +32,7 @@ impl RuntimeValue {
     pub fn get_type(&self) -> Type {
         match self {
             RuntimeValue::Int(_) => PrimitiveType::int(),
+            RuntimeValue::BigInt(_) => PrimitiveType::bigint(),
             RuntimeValue::Float(_) => PrimitiveType::float(),
             RuntimeValue::Decimal(_) => PrimitiveType::decimal(),
             RuntimeValue::Str(_) => PrimitiveType::str(),
@@ -59,6 +63,7 @@ impl RuntimeValue {
     pub fn to_string(&self) -> String {
         match self {
             RuntimeValue::Int(v) => v.to_string(),
+            RuntimeValue::BigInt(v) => v.to_string(),
             RuntimeValue::Float(v) => v.to_string(),
             RuntimeValue::Decimal(v) => v.to_string(),
             RuntimeValue::Str(v) => v.to_string(),
@@ -96,18 +101,19 @@ impl RuntimeValue {
             RuntimeValue::ClassInstance(c) => c.class_name.clone(),
             RuntimeValue::Function(f) => {
                 if f.is_async {
-                    "[Async Function]".to_string()
+                    "[async fn]".to_string()
                 } else {
                     "[Function]".to_string()
                 }
             }
             RuntimeValue::NativeFunction(_) => "[Native Function]".to_string(),
-            RuntimeValue::NativeAsyncFunction(_) => "[Native Async Function]".to_string(),
+            RuntimeValue::NativeAsyncFunction(_) => "[Native async fn]".to_string(),
             RuntimeValue::Future(_) => "future".to_string(),
             RuntimeValue::PrimitiveTypeObject(p) => p.type_name.clone(),
             RuntimeValue::EnumObject(e) => e.enum_name.clone(),
             RuntimeValue::Enum(e) => e.enum_name.clone(),
             RuntimeValue::Int(_) => "int".to_string(),
+            RuntimeValue::BigInt(_) => "bigint".to_string(),
             RuntimeValue::Float(_) => "float".to_string(),
             RuntimeValue::Decimal(_) => "decimal".to_string(),
             RuntimeValue::Str(_) => "str".to_string(),
@@ -132,6 +138,21 @@ impl IntValue {
 
     pub fn to_string(&self) -> String {
         self.value.to_string()
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct BigIntValue {
+    pub value: i128, // Using i128 for simplicity instead of external bigint library
+}
+
+impl BigIntValue {
+    pub fn new(value: i128) -> Self {
+        Self { value }
+    }
+
+    pub fn to_string(&self) -> String {
+        format!("{}n", self.value)
     }
 }
 
@@ -391,7 +412,7 @@ impl FunctionValue {
 
     pub fn to_string(&self) -> String {
         if self.is_async {
-            "[Async Function]".to_string()
+            "[async fn]".to_string()
         } else {
             "[Function]".to_string()
         }
@@ -426,9 +447,6 @@ impl fmt::Debug for NativeFunctionValue {
             .finish()
     }
 }
-
-use std::future::Future;
-use std::pin::Pin;
 
 pub type NativeAsyncFn = Arc<
     dyn Fn(Vec<RuntimeValue>) -> Pin<Box<(dyn Future<Output = RuntimeValue> + 'static)>>

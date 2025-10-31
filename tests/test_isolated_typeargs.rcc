@@ -1,0 +1,8 @@
+// Test isolated: explicit type arguments in function calls
+
+fn identity<T>(x: T): T {
+    return x
+}
+
+let result: int = identity<int>(42)
+print(`Result: ${result}`)

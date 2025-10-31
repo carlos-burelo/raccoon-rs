@@ -146,6 +146,36 @@ pub async fn apply_binary_op(
                 }
                 Ok(RuntimeValue::Int(IntValue::new(l.value % r.value)))
             }
+            (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
+                if r.value == 0.0 {
+                    return Err(RaccoonError::new(
+                        "Modulo by zero".to_string(),
+                        position,
+                        file.clone(),
+                    ));
+                }
+                Ok(RuntimeValue::Float(FloatValue::new(l.value % r.value)))
+            }
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
+                if r.value == 0.0 {
+                    return Err(RaccoonError::new(
+                        "Modulo by zero".to_string(),
+                        position,
+                        file.clone(),
+                    ));
+                }
+                Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 % r.value)))
+            }
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
+                if r.value == 0 {
+                    return Err(RaccoonError::new(
+                        "Modulo by zero".to_string(),
+                        position,
+                        file.clone(),
+                    ));
+                }
+                Ok(RuntimeValue::Float(FloatValue::new(l.value % r.value as f64)))
+            }
             _ => Err(RaccoonError::new(
                 "Invalid operands for modulo".to_string(),
                 position,
@@ -306,7 +336,14 @@ where
 
         BinaryOperator::Add => match (&left, &right) {
             (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
-                Ok(RuntimeValue::Int(IntValue::new(l.value + r.value)))
+                match l.value.checked_add(r.value) {
+                    Some(result) => Ok(RuntimeValue::Int(IntValue::new(result))),
+                    None => Err(RaccoonError::new(
+                        "Integer overflow in addition".to_string(),
+                        position,
+                        file.clone(),
+                    )),
+                }
             }
             (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
                 Ok(RuntimeValue::Float(FloatValue::new(l.value + r.value)))
@@ -340,7 +377,14 @@ where
 
         BinaryOperator::Subtract => match (left, right) {
             (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
-                Ok(RuntimeValue::Int(IntValue::new(l.value - r.value)))
+                match l.value.checked_sub(r.value) {
+                    Some(result) => Ok(RuntimeValue::Int(IntValue::new(result))),
+                    None => Err(RaccoonError::new(
+                        "Integer overflow in subtraction".to_string(),
+                        position,
+                        file.clone(),
+                    )),
+                }
             }
             (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
                 Ok(RuntimeValue::Float(FloatValue::new(l.value - r.value)))
@@ -360,7 +404,14 @@ where
 
         BinaryOperator::Multiply => match (left, right) {
             (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
-                Ok(RuntimeValue::Int(IntValue::new(l.value * r.value)))
+                match l.value.checked_mul(r.value) {
+                    Some(result) => Ok(RuntimeValue::Int(IntValue::new(result))),
+                    None => Err(RaccoonError::new(
+                        "Integer overflow in multiplication".to_string(),
+                        position,
+                        file.clone(),
+                    )),
+                }
             }
             (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
                 Ok(RuntimeValue::Float(FloatValue::new(l.value * r.value)))
@@ -442,6 +493,36 @@ where
                     ));
                 }
                 Ok(RuntimeValue::Int(IntValue::new(l.value % r.value)))
+            }
+            (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
+                if r.value == 0.0 {
+                    return Err(RaccoonError::new(
+                        "Modulo by zero".to_string(),
+                        position,
+                        file.clone(),
+                    ));
+                }
+                Ok(RuntimeValue::Float(FloatValue::new(l.value % r.value)))
+            }
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
+                if r.value == 0.0 {
+                    return Err(RaccoonError::new(
+                        "Modulo by zero".to_string(),
+                        position,
+                        file.clone(),
+                    ));
+                }
+                Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 % r.value)))
+            }
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
+                if r.value == 0 {
+                    return Err(RaccoonError::new(
+                        "Modulo by zero".to_string(),
+                        position,
+                        file.clone(),
+                    ));
+                }
+                Ok(RuntimeValue::Float(FloatValue::new(l.value % r.value as f64)))
             }
             _ => Err(RaccoonError::new(
                 "Invalid operands for modulo".to_string(),

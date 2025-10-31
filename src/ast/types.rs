@@ -4,6 +4,7 @@ use std::collections::HashMap;
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum TypeKind {
     Int,
+    BigInt,
     Float,
     I8,
     I16,
@@ -233,6 +234,7 @@ impl PrimitiveType {
         matches!(
             self.kind,
             TypeKind::Int
+                | TypeKind::BigInt
                 | TypeKind::Float
                 | TypeKind::I8
                 | TypeKind::I16
@@ -279,6 +281,10 @@ impl PrimitiveType {
 
     pub fn int() -> Type {
         Type::Primitive(PrimitiveType::new(TypeKind::Int, "int"))
+    }
+
+    pub fn bigint() -> Type {
+        Type::Primitive(PrimitiveType::new(TypeKind::BigInt, "bigint"))
     }
 
     pub fn float() -> Type {

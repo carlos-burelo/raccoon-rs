@@ -45,34 +45,7 @@ impl DecoratorRegistry {
     }
 
     fn register_all_decorators(&mut self) {
-        // DECORADORES INTERNOS (Prefijo _)
-
-        // @_ffi() - Registra función en FFI Registry
-        self.register_decorator(DecoratorSpec {
-            name: "_ffi".to_string(),
-            visibility: DecoratorVisibility::Internal,
-            description: "Registers function in FFI Registry for dynamic invocation".to_string(),
-            allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
-        });
-
-        // @_register(namespace) - Registra en namespace
-        self.register_decorator(DecoratorSpec {
-            name: "_register".to_string(),
-            visibility: DecoratorVisibility::Internal,
-            description: "Registers function in a specific namespace".to_string(),
-            allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
-        });
-
-        // @_validate() - Validación automática de tipos
-        self.register_decorator(DecoratorSpec {
-            name: "_validate".to_string(),
-            visibility: DecoratorVisibility::Internal,
-            description: "Enables automatic type validation for parameters and return value"
-                .to_string(),
-            allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
-        });
-
-        // DECORADORES PÚBLICOS (Users pueden usarlos)
+        // DECORADORES PÚBLICOS
 
         // @cache(ttl_ms) - Cachea resultados
         self.register_decorator(DecoratorSpec {
@@ -216,13 +189,22 @@ impl DecoratorRegistry {
         let mut result = Vec::new();
 
         for decorator in decorators {
-            let spec = self.get(&decorator.name).ok_or_else(|| {
-                RaccoonError::new(
-                    format!("Unknown decorator '@{}'", decorator.name),
-                    decorator.position,
-                    file_path.map(|s| s.to_string()),
-                )
-            })?;
+            // Get the spec if it exists, otherwise create a default one for user-defined decorators
+            let spec = if let Some(spec) = self.get(&decorator.name) {
+                spec.clone()
+            } else {
+                // Allow user-defined decorators: create a default spec that accepts any target
+                DecoratorSpec {
+                    name: decorator.name.clone(),
+                    description: format!("User-defined decorator: {}", decorator.name),
+                    visibility: DecoratorVisibility::Public,
+                    allowed_on: vec![
+                        DecoratorTarget::Function,
+                        DecoratorTarget::Class,
+                        DecoratorTarget::ClassMethod,
+                    ],
+                }
+            };
 
             // Validar visibilidad: decoradores internos solo en stdlib
             if spec.visibility == DecoratorVisibility::Internal && !is_in_stdlib {
@@ -249,7 +231,7 @@ impl DecoratorRegistry {
             }
 
             result.push(DecoratorInfo {
-                spec: spec.clone(),
+                spec,
                 decl: decorator.clone(),
             });
         }
@@ -307,18 +289,19 @@ mod tests {
     #[test]
     fn test_decorator_registry_creation() {
         let registry = DecoratorRegistry::new();
-        assert!(registry.exists("_ffi"));
         assert!(registry.exists("cache"));
+        assert!(registry.exists("deprecated"));
         assert!(!registry.exists("nonexistent"));
     }
 
     #[test]
     fn test_decorator_visibility() {
         let registry = DecoratorRegistry::new();
-        let ffi_spec = registry.get("_ffi").unwrap();
-        assert_eq!(ffi_spec.visibility, DecoratorVisibility::Internal);
 
         let cache_spec = registry.get("cache").unwrap();
         assert_eq!(cache_spec.visibility, DecoratorVisibility::Public);
+
+        let deprecated_spec = registry.get("deprecated").unwrap();
+        assert_eq!(deprecated_spec.visibility, DecoratorVisibility::Public);
     }
 }

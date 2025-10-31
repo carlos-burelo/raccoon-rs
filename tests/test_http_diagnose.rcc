@@ -1,0 +1,19 @@
+// Diagnose HTTP module
+import { Http, HttpResponse, fetch } from "std:http";
+
+async fn main(){
+  // let response: HttpResponse = await Http.get("https://jsonplaceholder.typicode.com/posts");
+  let options = {
+    method: "GET",
+    headers: {
+        "Accept": "application/json"
+    }
+  };
+
+  let responseWithFetch: HttpResponse = await fetch("https://jsonplaceholder.typicode.com/posts", options);
+
+  print("response with fetch:", responseWithFetch.body.toStr().slice(0, 100) + "...");
+}
+
+
+main()

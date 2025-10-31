@@ -1,0 +1,56 @@
+use crate::error::RaccoonError;
+use crate::runtime::types::TypeHandler;
+use crate::runtime::RuntimeValue;
+use crate::tokens::Position;
+use async_trait::async_trait;
+
+// ============================================================================
+// IntersectionType - Intersection type (A & B)
+// ============================================================================
+// Note: Intersection types are typically compile-time only
+
+pub struct IntersectionType;
+
+#[async_trait]
+impl TypeHandler for IntersectionType {
+    fn type_name(&self) -> &str {
+        "intersection"
+    }
+
+    fn call_instance_method(
+        &self,
+        _value: &mut RuntimeValue,
+        method: &str,
+        _args: Vec<RuntimeValue>,
+        position: Position,
+        file: Option<String>,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        Err(RaccoonError::new(
+            format!("Method '{}' not found on intersection", method),
+            position,
+            file,
+        ))
+    }
+
+    fn call_static_method(
+        &self,
+        method: &str,
+        _args: Vec<RuntimeValue>,
+        position: Position,
+        file: Option<String>,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        Err(RaccoonError::new(
+            format!("Static method '{}' not found on intersection type", method),
+            position,
+            file,
+        ))
+    }
+
+    fn has_instance_method(&self, _method: &str) -> bool {
+        false
+    }
+
+    fn has_static_method(&self, _method: &str) -> bool {
+        false
+    }
+}

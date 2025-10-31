@@ -1,11 +1,10 @@
-pub mod bool_type;
-pub mod decimal_type;
-pub mod float_type;
-pub mod int_type;
-pub mod list_type;
-pub mod map_type;
+// Type system - modular organization
+pub mod primitives;
+pub mod collections;
+pub mod objects;
+pub mod async_control;
+pub mod special;
 pub mod registry;
-pub mod str_type;
 
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;

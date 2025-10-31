@@ -1,14 +1,4 @@
-
-
-
-
-
-
-
 print("🦝 === COMPREHENSIVE DECORATORS TEST ===")
-
-
-
 
 
 print("✅ Test 1: Basic Function Decorator")

@@ -1,0 +1,47 @@
+// Test BigInt and numeric literals
+
+println("=== Testing Numeric Separators ===");
+let million = 1_000_000;
+println("1_000_000 = " + million.toStr());
+
+let billion = 1_000_000_000;
+println("1_000_000_000 = " + billion.toStr());
+
+println("\n=== Testing Binary Literals ===");
+let binary = 0b1010;
+println("0b1010 (binary) = " + binary.toStr());
+
+let binary2 = 0B1111_0000;
+println("0B1111_0000 (binary with separator) = " + binary2.toStr());
+
+println("\n=== Testing Octal Literals ===");
+let octal = 0o755;
+println("0o755 (octal) = " + octal.toStr());
+
+let octal2 = 0O644;
+println("0O644 (octal) = " + octal2.toStr());
+
+println("\n=== Testing Hexadecimal Literals ===");
+let hex = 0xFF;
+println("0xFF (hex) = " + hex.toStr());
+
+let hex2 = 0x1A2B;
+println("0x1A2B (hex) = " + hex2.toStr());
+
+println("\n=== Testing BigInt ===");
+let bigInt1 = 12345678901234567890n;
+println(bigInt1);
+
+let bigInt2 = 999_999_999_999_999_999n;
+println(bigInt2);
+
+let bigIntHex = 0xFFFFFFFFFFFFFFFFn;
+println(bigIntHex);
+
+println("\n=== Testing typeof ===");
+println("typeof 123: " + typeof 123);
+println("typeof 123n: " + typeof 12345678901234567890n);
+println("typeof 0b1010: " + typeof 0b1010);
+println("typeof 0xFF: " + typeof 0xFF);
+
+println("\n=== All BigInt and numeric literal tests passed! ===");

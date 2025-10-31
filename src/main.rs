@@ -1,5 +1,5 @@
 use clap::{Parser as ClapParser, Subcommand};
-use raccoon_lang::{Interpreter, Lexer, Parser, Token};
+use raccoon_lang::{Colors, Interpreter, Lexer, Parser, Styles, Token};
 use rustyline::DefaultEditor;
 use rustyline::error::ReadlineError;
 use std::fs;
@@ -72,7 +72,13 @@ async fn run_file(path: PathBuf, show_tokens: bool, show_ast: bool, should_inter
     let source = match fs::read_to_string(&path) {
         Ok(content) => content,
         Err(error) => {
-            eprintln!("Error al leer el archivo '{}': {}", path.display(), error);
+            eprintln!(
+                "{}Error:{} Failed to read file '{}': {}",
+                Colors::RED,
+                Colors::RESET,
+                path.display(),
+                error
+            );
             process::exit(1);
         }
     };
@@ -82,13 +88,13 @@ async fn run_file(path: PathBuf, show_tokens: bool, show_ast: bool, should_inter
     let tokens = match lexer.tokenize() {
         Ok(t) => t,
         Err(error) => {
-            eprintln!("Error de tokenización: {}", error);
+            eprintln!("{}Lexer Error:{} {}", Colors::RED, Colors::RESET, error);
             process::exit(1);
         }
     };
 
     if show_tokens {
-        println!("=== TOKENS ===");
+        println!("{}", Styles::section_title("TOKENS"));
         print_tokens(&tokens);
         println!();
     }
@@ -98,7 +104,7 @@ async fn run_file(path: PathBuf, show_tokens: bool, show_ast: bool, should_inter
     match parser.parse() {
         Ok(program) => {
             if show_ast {
-                println!("=== AST ===");
+                println!("{}", Styles::section_title("AST"));
                 println!("{:#?}", program);
                 println!();
             }
@@ -106,11 +112,11 @@ async fn run_file(path: PathBuf, show_tokens: bool, show_ast: bool, should_inter
             if should_interpret {
                 let mut interpreter = Interpreter::new(file.clone());
                 match interpreter.interpret(&program).await {
-                    Ok(result) => {
-                        println!("{}", result.to_string());
+                    Ok(_result) => {
+                        // Success - output already printed by print() statements
                     }
                     Err(error) => {
-                        eprintln!("Error de ejecución: {}", error);
+                        eprintln!("{}", error);
                         process::exit(1);
                     }
                 }
@@ -118,29 +124,37 @@ async fn run_file(path: PathBuf, show_tokens: bool, show_ast: bool, should_inter
             }
         }
         Err(error) => {
-            eprintln!("Error de parseo: {}", error);
+            eprintln!("{}", error);
             process::exit(1);
         }
     }
 }
 
 async fn run_repl(show_tokens: bool, should_interpret: bool) {
-    println!("Raccoon REPL");
-    if should_interpret {
-        println!("Modo de interpretación activado");
-    }
-    println!("Escribe código para parsearlo o '.help' para ayuda\n");
+    println!();
+    println!(
+        "{}{}🦝 Raccoon Language Interactive Shell{}",
+        Colors::BRIGHT_CYAN,
+        Colors::BOLD,
+        Colors::RESET
+    );
+    println!(
+        "{}v1.0.0 | Type '.help' for assistance | '.exit' to quit{}\n",
+        Colors::DIM,
+        Colors::RESET
+    );
 
     let mut rl = DefaultEditor::new().expect("Error al inicializar REPL");
     let history_path = ".raccoon_history";
     let mut interpreter = Interpreter::new(None);
 
     if rl.load_history(history_path).is_err() {
-        println!("Sin historial previo.");
+        println!("{}(No previous history){}", Colors::DIM, Colors::RESET);
     }
 
     loop {
-        let readline = rl.readline(">> ");
+        let prompt = format!("{}raccoon ➜ {}", Colors::BRIGHT_CYAN, Colors::RESET);
+        let readline = rl.readline(&prompt);
 
         match readline {
             Ok(line) => {
@@ -164,13 +178,13 @@ async fn run_repl(show_tokens: bool, should_interpret: bool) {
                 let tokens = match lexer.tokenize() {
                     Ok(t) => t,
                     Err(error) => {
-                        eprintln!("Error de tokenización: {}", error);
+                        eprintln!("{}Lexer Error:{} {}", Colors::RED, Colors::RESET, error);
                         continue;
                     }
                 };
 
                 if show_tokens {
-                    println!("\n=== TOKENS ===");
+                    println!("{}", Styles::section_title("TOKENS"));
                     print_tokens(&tokens);
                 }
 
@@ -179,42 +193,51 @@ async fn run_repl(show_tokens: bool, should_interpret: bool) {
                 match parser.parse() {
                     Ok(program) => {
                         if !should_interpret {
-                            println!("\n=== AST ===");
+                            println!("{}", Styles::section_title("AST"));
                             println!("{:#?}", program);
-                            println!("\n✓ Parseo exitoso");
+                            println!("{}", Styles::success("Parse successful"));
                         } else {
                             match interpreter.interpret(&program).await {
                                 Ok(result) => {
-                                    println!("{}", result.to_string());
+                                    let result_str = result.to_string();
+                                    if result_str != "null" && !result_str.contains("Future") {
+                                        println!("{}{}", Colors::GREEN, result_str);
+                                        println!("{}", Colors::RESET);
+                                    }
                                 }
                                 Err(error) => {
-                                    eprintln!("Error de ejecución: {}", error);
+                                    eprintln!("{}", error);
                                 }
                             }
                         }
                     }
                     Err(error) => {
-                        eprintln!("Error de parseo: {}", error);
+                        eprintln!("{}", error);
                     }
                 }
             }
             Err(ReadlineError::Interrupted) => {
-                println!("^C");
+                println!("\n{}^C{}", Colors::YELLOW, Colors::RESET);
                 break;
             }
             Err(ReadlineError::Eof) => {
-                println!("^D");
+                println!("\n{}^D{}", Colors::YELLOW, Colors::RESET);
                 break;
             }
             Err(err) => {
-                eprintln!("Error: {:?}", err);
+                eprintln!("{}Error:{} {:?}", Colors::RED, Colors::RESET, err);
                 break;
             }
         }
     }
 
     let _ = rl.save_history(history_path);
-    println!("\n¡Hasta luego!");
+    println!(
+        "\n{}{}👋 Goodbye!{}\n",
+        Colors::BRIGHT_CYAN,
+        Colors::BOLD,
+        Colors::RESET
+    );
 }
 
 fn handle_repl_command(command: &str) -> bool {
@@ -262,18 +285,77 @@ fn handle_repl_command(command: &str) -> bool {
 }
 
 fn print_tokens(tokens: &[Token]) {
-    for (i, token) in tokens.iter().enumerate() {
+    let mut w_index = 3usize;
+    let mut w_type = 4usize;
+    let mut w_lexeme = 6usize;
+    let mut w_line = 4usize;
+    let mut w_col = 3usize;
+    let mut w_range = 7usize;
+
+    for (i, t) in tokens.iter().enumerate() {
+        let ty = format!("{:?}", t.token_type);
+        let lx = if t.lexeme.is_empty() {
+            "<empty>"
+        } else {
+            &t.lexeme
+        };
+        let rg = format!(
+            "{}:{}..{}:{}",
+            t.range.start.0, t.range.start.1, t.range.end.0, t.range.end.1
+        );
+
+        w_index = w_index.max(i.to_string().len());
+        w_type = w_type.max(ty.len());
+        w_lexeme = w_lexeme.max(lx.len());
+        w_line = w_line.max(t.position.0.to_string().len());
+        w_col = w_col.max(t.position.1.to_string().len());
+        w_range = w_range.max(rg.len());
+    }
+
+    println!(
+        "{:<w_i$}  {:<w_t$}  {:<w_lx$}  {:<w_ln$}  {:<w_cl$}  {:<w_rg$}",
+        "IDX",
+        "TYPE",
+        "LEXEME",
+        "LINE",
+        "COL",
+        "RANGE",
+        w_i = w_index,
+        w_t = w_type,
+        w_lx = w_lexeme,
+        w_ln = w_line,
+        w_cl = w_col,
+        w_rg = w_range
+    );
+
+    for (i, t) in tokens.iter().enumerate() {
+        let ty = format!("{:?}", t.token_type);
+        let lx = if t.lexeme.is_empty() {
+            "<empty>"
+        } else {
+            &t.lexeme
+        };
+        let rg = format!(
+            "{}:{}..{}:{}",
+            t.range.start.0, t.range.start.1, t.range.end.0, t.range.end.1
+        );
+
         println!(
-            "[{}] {:?} | {} | L{}:C{}",
+            "{:<w_i$}  {:<w_t$}  {:<w_lx$}  {:<w_ln$}  {:<w_cl$}  {:<w_rg$}",
             i,
-            token.token_type,
-            if token.value.is_empty() {
-                "<empty>"
-            } else {
-                &token.value
-            },
-            token.position.0,
-            token.position.1
+            ty,
+            // v,
+            lx,
+            t.position.0,
+            t.position.1,
+            rg,
+            w_i = w_index,
+            w_t = w_type,
+            // w_v = w_value,
+            w_lx = w_lexeme,
+            w_ln = w_line,
+            w_cl = w_col,
+            w_rg = w_range
         );
     }
 }

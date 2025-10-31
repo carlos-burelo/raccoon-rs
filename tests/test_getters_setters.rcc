@@ -1,0 +1,42 @@
+// Test getters and setters
+
+class Person {
+    private _name: str;
+    private _age: int;
+
+    constructor(name: str, age: int) {
+        this._name = name;
+        this._age = age;
+    }
+
+    get name(): str {
+        return this._name;
+    }
+
+    set name(value: str) {
+        this._name = value;
+    }
+
+    get age(): int {
+        return this._age;
+    }
+
+    set age(value: int) {
+        if (value >= 0) {
+            this._age = value;
+        }
+    }
+}
+
+let person = new Person("Alice", 30);
+println("Name: " + person.name);
+println("Age: " + person.age.toStr());
+
+person.name = "Bob";
+person.age = 35;
+
+println("After update:");
+println("Name: " + person.name);
+println("Age: " + person.age.toStr());
+
+println("Getters/Setters test completed!");

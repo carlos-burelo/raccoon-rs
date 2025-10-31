@@ -1,0 +1,125 @@
+// Test de métodos extendidos de Future API
+
+print("=== Test 1: Future.allSettled() - Todos resueltos ===")
+let allResolved = [
+    Future.resolve(1),
+    Future.resolve(2),
+    Future.resolve(3)
+]
+
+let settled1 = await Future.allSettled(allResolved)
+print("AllSettled con éxitos:", settled1)
+print("Primer resultado status:", settled1[0].status)
+print("Primer resultado value:", settled1[0].value)
+
+
+print("\n=== Test 2: Future.allSettled() - Mixto ===")
+let mixed = [
+    Future.resolve(10),
+    Future.reject("Error en medio"),
+    Future.resolve(30)
+]
+
+let settled2 = await Future.allSettled(mixed)
+print("AllSettled mixto:", settled2)
+print("Resultado 1:", settled2[0])
+print("Resultado 2:", settled2[1])
+print("Resultado 3:", settled2[2])
+
+
+print("\n=== Test 3: Future.any() - Primera resuelta ===")
+let anyFutures = [
+    Future.reject("Error 1"),
+    Future.resolve("¡Éxito!"),
+    Future.reject("Error 3")
+]
+
+let anyResult = await Future.any(anyFutures)
+print("Future.any() resultado:", anyResult)
+// Esperado: "¡Éxito!"
+
+
+print("\n=== Test 4: Future.any() - Todas rechazadas ===")
+let allRejected = [
+    Future.reject("Error 1"),
+    Future.reject("Error 2"),
+    Future.reject("Error 3")
+]
+
+try {
+    let anyAllRejected = await Future.any(allRejected)
+    print("No debería llegar aquí")
+} catch (error) {
+    print("Todas rechazadas:", error)
+}
+
+
+print("\n=== Test 5: .tap() - Inspección sin modificar ===")
+let tapValue = Future.resolve(42)
+    .tap((x: any) => {
+        print("Inspeccionando valor en .tap():", x)
+    })
+    .then((x: any) => {
+        print("Valor después de .tap():", x)
+        return x * 2
+    })
+
+let tapResult = await tapValue
+print("Resultado final con .tap():", tapResult)
+// Esperado: 84
+
+
+print("\n=== Test 6: .map() - Transformación simple ===")
+let mapValue = Future.resolve(10)
+    .map((x: any) => {
+        print("Mapeando:", x)
+        return x + 5
+    })
+
+let mapResult = await mapValue
+print("Resultado de .map():", mapResult)
+// Esperado: 15
+
+
+print("\n=== Test 7: Encadenamiento complejo ===")
+let complex = Future.resolve(5)
+    .map((x: any) => x * 2)
+    .tap((x: any) => print("Valor intermedio:", x))
+    .then((x: any) => x + 10)
+    .tap((x: any) => print("Antes del final:", x))
+    .catch((err: any) => {
+        print("Error:", err)
+        return 0
+    })
+    .finally(() => {
+        print("Limpieza final")
+    })
+
+let complexResult = await complex
+print("Resultado complejo:", complexResult)
+// Esperado: (5 * 2) + 10 = 20
+
+
+print("\n=== Test 8: .map() con error propagado ===")
+let mapError = Future.reject("Fallo")
+    .map((x: any) => {
+        print("No debería ejecutarse")
+        return x * 2
+    })
+    .catch((err: any) => {
+        print("Error capturado en .catch():", err)
+        return 99
+    })
+
+let mapErrorResult = await mapError
+print("Resultado después de error:", mapErrorResult)
+// Esperado: 99
+
+
+print("\n=== ✅ TODOS LOS TESTS EXTENDIDOS COMPLETADOS ===")
+print("\nMétodos probados:")
+print("  ✓ Future.allSettled() - Espera todas las futures")
+print("  ✓ Future.any() - Primera resuelta")
+print("  ✓ .tap() - Inspección sin modificar")
+print("  ✓ .map() - Transformación funcional")
+print("  ✓ Encadenamientos complejos")

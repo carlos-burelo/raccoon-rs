@@ -19,8 +19,11 @@ pub enum NodeType {
     Block,
     IfStmt,
     WhileStmt,
+    DoWhileStmt,
     ForStmt,
     ForInStmt,
+    ForOfStmt,
+    SwitchStmt,
     ReturnStmt,
     BreakStmt,
     ContinueStmt,
@@ -52,6 +55,7 @@ pub enum NodeType {
     TemplateStr,
     TaggedTemplateExpr,
     IntLiteral,
+    BigIntLiteral,
     FloatLiteral,
     StrLiteral,
     BoolLiteral,
@@ -89,8 +93,11 @@ pub enum Stmt {
     Block(Block),
     IfStmt(IfStmt),
     WhileStmt(WhileStmt),
+    DoWhileStmt(DoWhileStmt),
     ForStmt(ForStmt),
     ForInStmt(ForInStmt),
+    ForOfStmt(ForOfStmt),
+    SwitchStmt(SwitchStmt),
     ReturnStmt(ReturnStmt),
     BreakStmt(BreakStmt),
     ContinueStmt(ContinueStmt),
@@ -125,6 +132,7 @@ pub enum Expr {
     TemplateStr(TemplateStrExpr),
     TaggedTemplate(TaggedTemplateExpr),
     IntLiteral(IntLiteral),
+    BigIntLiteral(BigIntLiteral),
     FloatLiteral(FloatLiteral),
     StrLiteral(StrLiteral),
     BoolLiteral(BoolLiteral),
@@ -351,6 +359,36 @@ pub struct ForInStmt {
     pub type_annotation: Option<Type>,
     pub iterable: Expr,
     pub body: Box<Stmt>,
+    pub position: Position,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ForOfStmt {
+    pub variable: String,
+    pub is_const: bool,
+    pub type_annotation: Option<Type>,
+    pub iterable: Expr,
+    pub body: Box<Stmt>,
+    pub position: Position,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct DoWhileStmt {
+    pub body: Box<Stmt>,
+    pub condition: Expr,
+    pub position: Position,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct SwitchCase {
+    pub test: Option<Expr>, // None for default case
+    pub consequent: Vec<Stmt>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct SwitchStmt {
+    pub discriminant: Expr,
+    pub cases: Vec<SwitchCase>,
     pub position: Position,
 }
 
@@ -584,6 +622,12 @@ pub struct IntLiteral {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub struct BigIntLiteral {
+    pub value: String, // Store as string, will be parsed to BigInt in runtime
+    pub position: Position,
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct FloatLiteral {
     pub value: f64,
     pub position: Position,
@@ -613,8 +657,14 @@ pub struct ListLiteral {
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub enum ObjectLiteralProperty {
+    KeyValue { key: String, value: Expr },
+    Spread(Expr),
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct ObjectLiteral {
-    pub properties: HashMap<String, Expr>,
+    pub properties: Vec<ObjectLiteralProperty>,
     pub position: Position,
 }
 

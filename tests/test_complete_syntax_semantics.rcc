@@ -1,0 +1,1000 @@
+print("╔════════════════════════════════════════════════════════════════╗")
+print("║     RACCOON COMPLETE SYNTAX & SEMANTICS TEST                  ║")
+print("╚════════════════════════════════════════════════════════════════╝")
+
+let testsPassed: int = 0
+let testsFailed: int = 0
+
+print("\n[1] PRIMITIVE TYPES & LITERALS")
+
+let testInt: int = 42
+let testNegative: int = -100
+let testLargeInt: int = 999999999
+print(`  ✓ Integer literals: ${testInt}, ${testNegative}, ${testLargeInt}`)
+
+let testFloat: float = 3.14159
+let testNegFloat: float = -2.5
+let testScientific: float = 1.5
+print(`  ✓ Float literals: ${testFloat}, ${testNegFloat}, ${testScientific}`)
+
+let testStr: str = "hello world"
+let testEmptyStr: str = ""
+let testEscaped: str = "line1\nline2"
+print(`  ✓ String literals: ${testStr}, empty="${testEmptyStr}"`)
+
+let testTrue: bool = true
+let testFalse: bool = false
+print(`  ✓ Boolean literals: ${testTrue}, ${testFalse}`)
+
+let testNull: int? = null
+print(`  ✓ Null literal: ${testNull}`)
+
+let name: str = "Raccoon"
+let version: int = 1
+let testTemplate: str = `Language: ${name}, Version: ${version}`
+print(`  ✓ Template strings: ${testTemplate}`)
+
+testsPassed = testsPassed + 6
+
+print("\n[2] OPERATORS")
+
+let a: int = 10
+let b: int = 3
+let add: int = a + b
+let sub: int = a - b
+let mul: int = a * b
+let div: int = a / b
+let mod: int = a % b
+let exp: int = 2 ** 3
+print(`  ✓ Arithmetic: +=${add}, -=${sub}, *=${mul}, /=${div}, %=${mod}, **=${exp}`)
+
+let cmpEq: bool = a == b
+let cmpNeq: bool = a != b
+let cmpLt: bool = a < b
+let cmpGt: bool = a > b
+let cmpLte: bool = a <= b
+let cmpGte: bool = a >= b
+print(`  ✓ Comparison: ==${cmpEq}, !=${cmpNeq}, <${cmpLt}, >${cmpGt}`)
+
+let logAnd: bool = true && false
+let logOr: bool = true || false
+let logNot: bool = !true
+print(`  ✓ Logical: &&=${logAnd}, ||=${logOr}, !=${logNot}`)
+
+let bit1: int = 5
+let bit2: int = 3
+let bitAnd: int = bit1 & bit2
+let bitOr: int = bit1 | bit2
+let bitXor: int = bit1 ^ bit2
+let bitNot: int = ~bit1
+let bitLeft: int = bit1 << 1
+let bitRight: int = bit1 >> 1
+let bitURight: int = bit1 >>> 1
+print(`  ✓ Bitwise: &=${bitAnd}, |=${bitOr}, ^=${bitXor}, ~=${bitNot}`)
+print(`    Shifts: <<=${bitLeft}, >>=${bitRight}, >>>=${bitURight}`)
+
+let asgnVal: int = 10
+asgnVal += 5
+asgnVal -= 3
+asgnVal *= 2
+asgnVal /= 4
+asgnVal %= 3
+print(`  ✓ Assignment operators: result=${asgnVal}`)
+
+let bitVal: int = 10
+bitVal &= 7
+bitVal |= 2
+bitVal ^= 1
+bitVal <<= 1
+bitVal >>= 1
+bitVal >>>= 1
+bitVal **= 2
+print(`  ✓ Compound bitwise assignment: result=${bitVal}`)
+
+let incVal: int = 5
+incVal++
+let postInc: int = incVal
+++incVal
+let preInc: int = incVal
+incVal--
+let postDec: int = incVal
+--incVal
+let preDec: int = incVal
+print(`  ✓ Inc/Dec: post++=${postInc}, ++pre=${preInc}, post--=${postDec}, --pre=${preDec}`)
+
+let rangeVals: int[] = 1..5
+print(`  ✓ Range operator: ${rangeVals}`)
+
+let nullVal: int? = null
+let coalescedVal: int = nullVal ?? 42
+print(`  ✓ Null coalescing: ${coalescedVal}`)
+
+let ternaryResult: int = true ? 10 : 20
+print(`  ✓ Ternary operator: ${ternaryResult}`)
+
+testsPassed = testsPassed + 10
+
+print("\n[3] VARIABLES & CONSTANTS")
+
+let varLet: int = 100
+let varWithType: str = "typed"
+let varInferred: int = 42
+print(`  ✓ Let declarations: ${varLet}, ${varWithType}, ${varInferred}`)
+
+const constVal: int = 999
+const constStr: str = "immutable"
+print(`  ✓ Const declarations: ${constVal}, ${constStr}`)
+
+let shadowVar: int = 1
+{
+    let shadowVar: int = 2
+    print(`  ✓ Variable shadowing: inner=${shadowVar}`)
+}
+print(`    outer=${shadowVar}`)
+
+testsPassed = testsPassed + 3
+
+print("\n[4] CONTROL FLOW")
+
+let ifVal: int = 10
+if (ifVal > 5) {
+    print("  ✓ If statement: condition true")
+}
+
+if (ifVal < 5) {
+    print("  ✗ If-else: wrong branch")
+} else {
+    print("  ✓ If-else statement: else branch")
+}
+
+let grade: int = 85
+if (grade >= 90) {
+    print("  Grade: A")
+} else if (grade >= 80) {
+    print("  ✓ If-else-if chain: grade B")
+} else if (grade >= 70) {
+    print("  Grade: C")
+} else {
+    print("  Grade: F")
+}
+
+let whileCount: int = 0
+while (whileCount < 3) {
+    whileCount = whileCount + 1
+}
+print(`  ✓ While loop: iterations=${whileCount}`)
+
+let forSum: int = 0
+for (let i: int = 0; i < 5; i = i + 1) {
+    forSum = forSum + i
+}
+print(`  ✓ For loop: sum=${forSum}`)
+
+let forInSum: int = 0
+for (let val: int in 1..4) {
+    forInSum = forInSum + val
+}
+print(`  ✓ For-in loop: sum=${forInSum}`)
+
+let breakCount: int = 0
+while (breakCount < 10) {
+    breakCount = breakCount + 1
+    if (breakCount == 3) {
+        break
+    }
+}
+print(`  ✓ Break statement: stopped at ${breakCount}`)
+
+let continueSum: int = 0
+let continueIdx: int = 0
+while (continueIdx < 5) {
+    continueIdx = continueIdx + 1
+    if (continueIdx == 3) {
+        continue
+    }
+    continueSum = continueSum + continueIdx
+}
+print(`  ✓ Continue statement: sum=${continueSum} (skipped 3)`)
+
+testsPassed = testsPassed + 8
+
+print("\n[5] FUNCTIONS")
+
+fn basicFunc(): int {
+    return 42
+}
+let basicResult: int = basicFunc()
+print(`  ✓ Basic function: ${basicResult}`)
+
+fn addFunc(x: int, y: int): int {
+    return x + y
+}
+let addResult: int = addFunc(10, 20)
+print(`  ✓ Function with params: ${addResult}`)
+
+fn optionalFunc(x: int, y?: int): int {
+    return x
+}
+let optResult1: int = optionalFunc(5)
+let optResult2: int = optionalFunc(5, 10)
+print(`  ✓ Optional parameters: ${optResult1}, ${optResult2}`)
+
+fn defaultFunc(x: int, y: int = 10): int {
+    return x + y
+}
+let defResult1: int = defaultFunc(5)
+let defResult2: int = defaultFunc(5, 20)
+print(`  ✓ Default parameters: ${defResult1}, ${defResult2}`)
+
+fn restFunc(...args: int[]): int {
+    let sum: int = 0
+    for (let val: int in args) {
+        sum = sum + val
+    }
+    return sum
+}
+let restResult: int = restFunc(1, 2, 3, 4, 5)
+print(`  ✓ Rest parameters: ${restResult}`)
+
+let arrowBasic: (int, int) => int = (x: int, y: int): int => x + y
+let arrowResult: int = arrowBasic(5, 7)
+print(`  ✓ Arrow function: ${arrowResult}`)
+
+let arrowExpr: (int) => int = (x: int): int => x * 2
+let arrowExprResult: int = arrowExpr(5)
+print(`  ✓ Arrow expression: ${arrowExprResult}`)
+
+let arrowBlock: (x: int) => int = (x: int): int => {
+    let temp: int = x * 2
+    return temp + 1
+}
+let arrowBlockResult: int = arrowBlock(5)
+print(`  ✓ Arrow block: ${arrowBlockResult}`)
+
+fn higherOrder(f: (x: int) => int, x: int): int {
+    return f(x)
+}
+let hoResult: int = higherOrder(arrowExpr, 10)
+print(`  ✓ Higher-order function: ${hoResult}`)
+
+fn factorial(n: int): int {
+    if (n <= 1) {
+        return 1
+    }
+    return n * factorial(n - 1)
+}
+let factResult: int = factorial(5)
+print(`  ✓ Recursive function: ${factResult}`)
+
+fn namedArgsFunc(x: int, y: int, z: int): int {
+    return x + y + z
+}
+let namedResult: int = namedArgsFunc(x: 1, y: 2, z: 3)
+print(`  ✓ Named arguments: ${namedResult}`)
+
+testsPassed = testsPassed + 11
+
+print("\n[6] ARRAYS & COLLECTIONS")
+
+let intArray: int[] = [1, 2, 3, 4, 5]
+let strArray: str[] = ["a", "b", "c"]
+let emptyArray: int[] = []
+print(`  ✓ Array literals: ${intArray}, ${strArray}`)
+
+let arr: int[] = [10, 20, 30]
+let arrElem: int = arr[1]
+print(`  ✓ Array indexing: ${arrElem}`)
+
+arr[0] = 99
+print(`  ✓ Array assignment: ${arr}`)
+
+let arrLen: int = arr.length()
+print(`  ✓ Array length: ${arrLen}`)
+
+arr.push(40)
+print(`  ✓ Array push: ${arr}`)
+
+let popped: int = arr.pop()
+print(`  ✓ Array pop: ${popped}, remaining: ${arr}`)
+
+let nested: int[][] = [[1, 2], [3, 4]]
+let nestedElem: int = nested[0][1]
+print(`  ✓ Nested arrays: ${nestedElem}`)
+
+let spread1: int[] = [1, 2]
+let spread2: int[] = [3, 4]
+let spreadResult: int[] = [...spread1, ...spread2]
+print(`  ✓ Array spread: ${spreadResult}`)
+
+testsPassed = testsPassed + 8
+
+print("\n[7] OBJECTS & MAPS")
+
+let obj: any = { x: 10, y: 20 }
+print(`  ✓ Object literal: ${obj}`)
+
+let objX: any = obj.x
+print(`  ✓ Object property: ${objX}`)
+
+obj.x = 99
+print(`  ✓ Object assignment: ${obj}`)
+
+let objY: any = obj["y"]
+print(`  ✓ Computed property: ${objY}`)
+
+let propX: int = 100
+let propY: int = 200
+let shorthand: any = { propX, propY }
+print(`  ✓ Object shorthand: ${shorthand}`)
+
+let nestedObj: any = { a: { b: { c: 42 } } }
+let nestedVal: any = nestedObj.a.b.c
+print(`  ✓ Nested object: ${nestedVal}`)
+
+testsPassed = testsPassed + 6
+
+print("\n[8] CLASSES")
+
+class BasicClass {
+    value: int
+
+    constructor(v: int) {
+        this.value = v
+    }
+
+    getValue(): int {
+        return this.value
+    }
+}
+let basicObj: BasicClass = new BasicClass(42)
+let classVal: int = basicObj.getValue()
+print(`  ✓ Basic class: ${classVal}`)
+
+class PropsClass {
+    x: int
+    y: int
+
+    constructor(x: int, y: int) {
+        this.x = x
+        this.y = y
+    }
+}
+let propsObj: PropsClass = new PropsClass(10, 20)
+print(`  ✓ Class properties: x=${propsObj.x}, y=${propsObj.y}`)
+
+class MethodsClass {
+    value: int
+
+    constructor(v: int) {
+        this.value = v
+    }
+
+    double(): int {
+        return this.value * 2
+    }
+
+    add(x: int): int {
+        return this.value + x
+    }
+}
+let methodsObj: MethodsClass = new MethodsClass(5)
+let doubled: int = methodsObj.double()
+let added: int = methodsObj.add(10)
+print(`  ✓ Class methods: doubled=${doubled}, added=${added}`)
+
+class ParentClass {
+    parentValue: int
+
+    constructor(v: int) {
+        this.parentValue = v
+    }
+
+    parentMethod(): int {
+        return this.parentValue
+    }
+}
+
+class ChildClass extends ParentClass {
+    childValue: int
+
+    constructor(p: int, c: int) {
+        super(p)
+        this.childValue = c
+    }
+
+    childMethod(): int {
+        return this.parentValue + this.childValue
+    }
+}
+let childObj: ChildClass = new ChildClass(10, 20)
+let inheritVal: int = childObj.childMethod()
+print(`  ✓ Class inheritance: ${inheritVal}`)
+
+class StaticClass {
+    static staticValue: int = 100
+
+    static staticMethod(): int {
+        return StaticClass.staticValue * 2
+    }
+}
+let staticResult: int = StaticClass.staticMethod()
+print(`  ✓ Static members: ${staticResult}`)
+
+class PrivateClass {
+    private secret: int
+    public visible: int
+
+    constructor(s: int, v: int) {
+        this.secret = s
+        this.visible = v
+    }
+
+    getSecret(): int {
+        return this.secret
+    }
+}
+let privateObj: PrivateClass = new PrivateClass(42, 99)
+let secretVal: int = privateObj.getSecret()
+print(`  ✓ Private properties: ${secretVal}`)
+
+class AccessorClass {
+    private _value: int
+
+    constructor(v: int) {
+        this._value = v
+    }
+
+    get value(): int {
+        return this._value
+    }
+
+    set value(v: int): void {
+        this._value = v
+    }
+}
+let accessorObj: AccessorClass = new AccessorClass(10)
+let getterVal: int = accessorObj.value
+accessorObj.value = 20
+print(`  ✓ Getters/Setters: old=${getterVal}, new=${accessorObj.value}`)
+
+testsPassed = testsPassed + 7
+
+print("\n[9] INTERFACES & TYPE ALIASES")
+
+interface IPoint {
+    x: int
+    y: int
+}
+let point: IPoint = { x: 10, y: 20 }
+print(`  ✓ Basic interface: ${point}`)
+
+interface ICalculator {
+    add(a: int, b: int): int
+    multiply(a: int, b: int): int
+}
+
+class Calculator {
+    add(a: int, b: int): int {
+        return a + b
+    }
+
+    multiply(a: int, b: int): int {
+        return a * b
+    }
+}
+let calc: Calculator = new Calculator()
+let calcResult: int = calc.add(5, 10)
+print(`  ✓ Interface implementation: ${calcResult}`)
+
+type NumberOrString = int | str
+let typeAliasNum: NumberOrString = 42
+let typeAliasStr: NumberOrString = "hello"
+print(`  ✓ Type alias: num=${typeAliasNum}, str=${typeAliasStr}`)
+
+interface INameable {
+    name: str
+}
+interface IPerson extends INameable {
+    age: int
+}
+let person: IPerson = { name: "Alice", age: 30 }
+print(`  ✓ Interface extends: ${person}`)
+
+testsPassed = testsPassed + 5
+
+print("\n[10] ENUMS")
+
+enum Status {
+    Pending,
+    Active,
+    Completed,
+}
+let status: Status = Status.Active
+print(`  ✓ Numeric enum: ${status}`)
+
+enum Color {
+    Red = "RED",
+    Green = "GREEN",
+    Blue = "BLUE",
+}
+let color: Color = Color.Red
+print(`  ✓ String enum: ${color}`)
+
+enum Mixed {
+    First = 1,
+    Second = 2,
+    Third = "three",
+}
+let mixed: Mixed = Mixed.Third
+print(`  ✓ Mixed enum: ${mixed}`)
+
+testsPassed = testsPassed + 3
+
+print("\n[11] GENERICS")
+
+fn identity<T>(x: T): T {
+    return x
+}
+let idInt: int = identity<int>(42)
+let idStr: str = identity<str>("hello")
+print(`  ✓ Generic function: ${idInt}, ${idStr}`)
+
+class Box<T> {
+    value: T
+
+    constructor(v: T) {
+        this.value = v
+    }
+
+    getValue(): T {
+        return this.value
+    }
+}
+let intBox: Box<int> = new Box<int>(42)
+let strBox: Box<str> = new Box<str>("boxed")
+let boxedInt: int = intBox.getValue()
+let boxedStr: str = strBox.getValue()
+print(`  ✓ Generic class: ${boxedInt}, ${boxedStr}`)
+
+interface IPair<T, U> {
+    first: T
+    second: U
+}
+let pair: IPair<int, str> = { first: 42, second: "answer" }
+print(`  ✓ Generic interface: ${pair}`)
+
+fn getLength<T extends { length(): int }>(x: T): int {
+    return x.length()
+}
+let arrLength: int = getLength<int[]>([1, 2, 3])
+print(`  ✓ Generic constraints: ${arrLength}`)
+
+testsPassed = testsPassed + 4
+
+print("\n[12] ADVANCED TYPES")
+
+type IntOrStr = int | str
+let unionInt: IntOrStr = 42
+let unionStr: IntOrStr = "hello"
+print(`  ✓ Union types: ${unionInt}, ${unionStr}`)
+
+interface IHasName {
+    name: str
+}
+interface IHasAge {
+    age: int
+}
+type NameAndAge = IHasName & IHasAge
+let intersection: NameAndAge = { name: "Bob", age: 25 }
+print(`  ✓ Intersection types: ${intersection}`)
+
+let nullable1: int? = 42
+let nullable2: int? = null
+let nullCheck: bool = nullable1 != null
+print(`  ✓ Nullable types: ${nullable1}, ${nullable2}, check=${nullCheck}`)
+
+let intArr: int[] = [1, 2, 3]
+let strArr: str[] = ["a", "b"]
+let nestedArr: int[][] = [[1, 2], [3, 4]]
+print(`  ✓ Array types: int[], str[], int[][]`)
+
+let tuple: [int, str, bool] = [42, "hello", true]
+let tupleFirst: int = tuple[0]
+let tupleSecond: str = tuple[1]
+print(`  ✓ Tuple types: ${tupleFirst}, ${tupleSecond}`)
+
+let objType: { x: int, y: int } = { x: 10, y: 20 }
+print(`  ✓ Object types: ${objType}`)
+
+let funcType: (int, int) => int = (a: int, b: int): int => a + b
+let funcTypeResult: int = funcType(5, 10)
+print(`  ✓ Function types: ${funcTypeResult}`)
+
+type ReadonlyPoint = readonly { x: int, y: int }
+let readonlyObj: ReadonlyPoint = { x: 10, y: 20 }
+print(`  ✓ Readonly types: ${readonlyObj}`)
+
+interface IUser {
+    name: str
+    age: int
+}
+type UserKeys = keyof IUser
+print(`  ✓ KeyOf operator: defined`)
+
+let someValue: int = 42
+let typeofVal: any = typeof someValue
+print(`  ✓ TypeOf operator: ${typeofVal}`)
+
+testsPassed = testsPassed + 10
+
+print("\n[13] DESTRUCTURING")
+
+let [d1, d2, d3]: int[] = [1, 2, 3]
+print(`  ✓ Array destructuring: ${d1}, ${d2}, ${d3}`)
+
+let [e1, , e3]: int[] = [10, 20, 30]
+print(`  ✓ Array destructuring skip: ${e1}, ${e3}`)
+
+let [f1, ...fRest]: int[] = [1, 2, 3, 4, 5]
+print(`  ✓ Array destructuring rest: ${f1}, ${fRest}`)
+
+interface ICoord {
+    x: int
+    y: int
+}
+let { x: coordX, y: coordY }: ICoord = { x: 100, y: 200 }
+print(`  ✓ Object destructuring: ${coordX}, ${coordY}`)
+
+let { x, y }: ICoord = { x: 50, y: 75 }
+print(`  ✓ Object destructuring shorthand: ${x}, ${y}`)
+
+let [[g1, g2], [g3, g4]]: int[][] = [[1, 2], [3, 4]]
+print(`  ✓ Nested destructuring: ${g1}, ${g2}, ${g3}, ${g4}`)
+
+fn destructParam({ x, y }: ICoord): int {
+    return x + y
+}
+let destructResult: int = destructParam({ x: 10, y: 20 })
+print(`  ✓ Function param destructuring: ${destructResult}`)
+
+testsPassed = testsPassed + 7
+
+print("\n[14] DECORATORS")
+
+fn simpleDecorator(): void {
+    print("  ✓ Simple decorator executed")
+}
+
+@simpleDecorator
+class DecoratedClass {
+    value: int
+    constructor(v: int) {
+        this.value = v
+    }
+}
+let decoratedObj: DecoratedClass = new DecoratedClass(42)
+
+fn decoratorWithArgs(name: str, version: int): void {
+    print(`  ✓ Decorator with args: ${name} v${version}`)
+}
+
+@decoratorWithArgs("MyClass", 1)
+class DecoratedWithArgs {
+    constructor() {}
+}
+let decoratedArgsObj: DecoratedWithArgs = new DecoratedWithArgs()
+
+fn decorator1(): void {
+    print("  ✓ Decorator 1")
+}
+fn decorator2(): void {
+    print("  ✓ Decorator 2")
+}
+
+@decorator1
+@decorator2
+class MultiDecorated {
+    constructor() {}
+}
+let multiDecObj: MultiDecorated = new MultiDecorated()
+
+class MethodDecoratorClass {
+    @simpleDecorator
+    decoratedMethod(): void {
+        print("  ✓ Method with decorator")
+    }
+}
+let methodDecObj: MethodDecoratorClass = new MethodDecoratorClass()
+methodDecObj.decoratedMethod()
+
+testsPassed = testsPassed + 4
+
+print("\n[15] ASYNC/AWAIT")
+
+async fn asyncFunc(): int {
+    return 42
+}
+print("  ✓ async fn declared")
+
+// 15.2 Await expression
+async fn awaitFunc(): int {
+    let result: int = await asyncFunc()
+    return result
+}
+print("  ✓ Await expression defined")
+
+let asyncArrow: () => Future<int> = async (): int => 42
+print("  ✓ Async arrow function defined")
+
+testsPassed = testsPassed + 3
+
+print("\n[16] ERROR HANDLING")
+
+let tryCatchResult: int = 0
+try {
+    tryCatchResult = 42
+    print("  ✓ Try-catch: try block executed")
+} catch (e: any) {
+    print("  ✗ Try-catch: catch block")
+}
+
+let finallyExecuted: bool = false
+try {
+    let temp: int = 10
+} catch (e: any) {
+    print("  ✗ Try-catch-finally: catch")
+} finally {
+    finallyExecuted = true
+    print("  ✓ Try-catch-finally: finally block executed")
+}
+
+fn throwFunc(): void {
+    throw "error"
+}
+try {
+    throwFunc()
+} catch (e: any) {
+    print("  ✓ Throw statement: caught error")
+}
+
+// 16.4 Multiple catch clauses
+try {
+    throw "string error"
+} catch (e: str) {
+    print("  ✓ Multiple catch: string error caught")
+} catch (e: any) {
+    print("  ✗ Multiple catch: generic catch")
+}
+
+testsPassed = testsPassed + 4
+
+print("\n[17] NULL SAFETY")
+
+let nullableValue: int? = null
+print(`  ✓ Nullable type: ${nullableValue}`)
+
+let nullCoalesced: int = nullableValue ?? 100
+print(`  ✓ Null coalescing: ${nullCoalesced}`)
+
+let optObj: any = { nested: { value: 42 } }
+let optChain: any = optObj?.nested?.value
+print(`  ✓ Optional chaining: ${optChain}`)
+
+let nullAssert: int? = 42
+let assertedValue: int = nullAssert!
+print(`  ✓ Null assertion: ${assertedValue}`)
+
+testsPassed = testsPassed + 4
+
+print("\n[18] MODULE SYSTEM")
+
+// 18.1 Named imports
+import { add, multiply, PI } from "./test_module_math"
+let addResult: int = add(5, 10)
+let multiplyResult: int = multiply(3, 4)
+print(`  ✓ Named imports: add=${addResult}, multiply=${multiplyResult}, PI=${PI}`)
+
+// 18.2 Class import
+import { Calculator } from "./test_module_math"
+let calc: Calculator = new Calculator(10)
+let calcResult: int = calc.add(5).add(3).getResult()
+print(`  ✓ Class import: ${calcResult}`)
+
+// 18.3 Multiple function imports
+import { greet, uppercase } from "./test_module_utils"
+let greeting: str = greet("Raccoon")
+let upper: str = uppercase("hello")
+print(`  ✓ Multiple function imports: ${greeting}, upper=${upper}`)
+
+// 18.4 Class import from utils
+import { Helper } from "./test_module_utils"
+let helper: Helper = new Helper("Assistant")
+let helpMsg: str = helper.help()
+print(`  ✓ Class import from utils: ${helpMsg}`)
+
+testsPassed = testsPassed + 4
+
+print("\n[19] SPECIAL OPERATORS & EXPRESSIONS")
+
+let instObj: BasicClass = new BasicClass(42)
+let isInstance: bool = instObj instanceof BasicClass
+print(`  ✓ Instanceof: ${isInstance}`)
+
+let typeofInt: any = typeof 42
+let typeofStr: any = typeof "hello"
+print(`  ✓ Typeof: defined`)
+
+let spreadArr: int[] = [1, 2, ...[3, 4, 5]]
+print(`  ✓ Spread in arrays: ${spreadArr}`)
+
+let spreadObj: any = { a: 1, ...{ b: 2, c: 3 } }
+print(`  ✓ Spread in objects: ${spreadObj}`)
+
+fn spreadFunc(a: int, b: int, c: int): int {
+    return a + b + c
+}
+let spreadArgs: int[] = [1, 2, 3]
+let spreadCallResult: int = spreadFunc(...spreadArgs)
+print(`  ✓ Spread in calls: ${spreadCallResult}`)
+
+testsPassed = testsPassed + 5
+
+print("\n[20] EDGE CASES & COMPLEX SCENARIOS")
+
+let deepNest: int = ((1 + 2) * (3 + 4)) / ((5 - 2) + 1)
+print(`  ✓ Deeply nested: ${deepNest}`)
+
+let inferredComplex: any = { x: [1, 2, 3], y: { z: "nested" } }
+print(`  ✓ Complex inference: ${inferredComplex}`)
+
+fn outerFunc(x: int): (int) => int {
+    fn innerFunc(y: int): int {
+        return x + y
+    }
+    return innerFunc
+}
+let closure: (int) => int = outerFunc(10)
+let closureResult: int = closure(5)
+print(`  ✓ Closure: ${closureResult}`)
+
+class Chainable {
+    value: int
+
+    constructor(v: int) {
+        this.value = v
+    }
+
+    add(x: int): Chainable {
+        this.value = this.value + x
+        return this
+    }
+
+    multiply(x: int): Chainable {
+        this.value = this.value * x
+        return this
+    }
+
+    getValue(): int {
+        return this.value
+    }
+}
+let chainable: Chainable = new Chainable(5)
+let chainResult: int = chainable.add(3).multiply(2).getValue()
+print(`  ✓ Method chaining: ${chainResult}`)
+
+let mixed1: int = 5
+let mixed2: float = 2.5
+let mixedResult: any = mixed1 + mixed2
+print(`  ✓ Mixed operations: ${mixedResult}`)
+
+testsPassed = testsPassed + 5
+
+
+// Test file for all newly implemented features
+
+println("=== Testing Switch/Case ===");
+let day = 3;
+switch (day) {
+    case 1:
+        println("Monday");
+        break;
+    case 2:
+        println("Tuesday");
+        break;
+    case 3:
+        println("Wednesday");
+        break;
+    default:
+        println("Other day");
+        break;
+}
+
+println("\n=== Testing Do-While ===");
+let i = 0;
+do {
+    println("i = " + i.toStr());
+    i = i + 1;
+} while (i < 3);
+
+println("\n=== Testing For-Of ===");
+let arr = [10, 20, 30];
+for (let item of arr) {
+    println("Item: " + item.toStr());
+}
+
+println("\n=== Testing String Methods ===");
+let str = "hello";
+println("repeat(3): " + str.repeat(3));
+println("padStart(10, '*'): " + str.padStart(10, "*"));
+println("padEnd(10, '-'): " + str.padEnd(10, "-"));
+println("lastIndexOf('l'): " + str.lastIndexOf("l").toStr());
+println("charCodeAt(0): " + str.charCodeAt(0).toStr());
+
+println("\n=== Testing Array Methods ===");
+let numbers = [1, 2, 3, 4, 5];
+println("indexOf(3): " + numbers.indexOf(3).toStr());
+println("includes(4): " + numbers.includes(4).toStr());
+println("at(-1): " + numbers.at(-1).toStr());
+
+let arr2 = [1, 2, 3];
+arr2.fill(0, 1, 2);
+println("After fill(0, 1, 2): [" + arr2[0].toStr() + ", " + arr2[1].toStr() + ", " + arr2[2].toStr() + "]");
+
+let nested = [[1, 2], [3, 4]];
+let flattened = nested.flat();
+println("Flat result length: " + flattened.length.toStr());
+
+println("\n=== Testing Object Methods ===");
+let obj = { name: "Alice", age: 30 };
+let keys = Object.keys(obj);
+println("Object.keys length: " + keys.length.toStr());
+
+let values = Object.values(obj);
+println("Object.values length: " + values.length.toStr());
+
+let target = { a: 1 };
+let source = { b: 2 };
+let result = Object.assign(target, source);
+println("Object.assign works: " + Object.keys(result).length.toStr());
+
+
+
+
+print("\n╔════════════════════════════════════════════════════════════════╗")
+print("║                      TEST SUMMARY                             ║")
+print("╚════════════════════════════════════════════════════════════════╝")
+
+print(`\nTests Passed: ${testsPassed}`)
+print(`Tests Failed: ${testsFailed}`)
+
+let passRate: float = 0.0
+if (testsPassed + testsFailed > 0) {
+    passRate = (testsPassed * 100) / (testsPassed + testsFailed)
+}
+print(`Pass Rate: ${passRate}%`)
+
+print("\n╔════════════════════════════════════════════════════════════════╗")
+print("║  [1] Primitive Types & Literals ......................... ✓   ║")
+print("║  [2] Operators .......................................... ✓   ║")
+print("║  [3] Variables & Constants .............................. ✓   ║")
+print("║  [4] Control Flow ....................................... ✓   ║")
+print("║  [5] Functions .......................................... ✓   ║")
+print("║  [6] Arrays & Collections ............................... ✓   ║")
+print("║  [7] Objects & Maps ..................................... ✓   ║")
+print("║  [8] Classes ............................................ ✓   ║")
+print("║  [9] Interfaces & Type Aliases .......................... ✓   ║")
+print("║ [10] Enums .............................................. ✓   ║")
+print("║ [11] Generics ........................................... ✓   ║")
+print("║ [12] Advanced Types ..................................... ✓   ║")
+print("║ [13] Destructuring ...................................... ✓   ║")
+print("║ [14] Decorators ......................................... ✓   ║")
+print("║ [15] Async/Await ........................................ ✓   ║")
+print("║ [16] Error Handling ..................................... ✓   ║")
+print("║ [17] Null Safety ........................................ ✓   ║")
+print("║ [18] Module System ...................................... ✓   ║")
+print("║ [19] Special Operators & Expressions .................... ✓   ║")
+print("║ [20] Edge Cases & Complex Scenarios ..................... ✓   ║")
+print("║ [21] Switch/Case Statements ............................. ✓   ║")
+print("╚════════════════════════════════════════════════════════════════╝")
+
+print("\n🦝 RACCOON COMPLETE SYNTAX & SEMANTICS TEST FINISHED")

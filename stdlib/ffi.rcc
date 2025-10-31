@@ -1,0 +1,25 @@
+// FFI - Foreign Function Interface module
+// Provides utilities for calling native functions and handling FFI types
+
+// FFIType enum - Represents different C/FFI types
+export enum FFIType {
+    Void,
+    Int,
+    Float,
+    Double,
+    String,
+    Pointer,
+    Callback
+}
+
+// FFI class - Main FFI interface
+export class FFI {
+    // Placeholder for FFI functionality
+    static getVersion(): str {
+        return "1.0.0"
+    }
+
+    static isSupported(): bool {
+        return true
+    }
+}
