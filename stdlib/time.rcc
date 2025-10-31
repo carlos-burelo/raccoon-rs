@@ -2,17 +2,17 @@
 
 
 export fn now(): int {
-    return native_now();
+    return native_time_now();
 }
 
 
 export fn sleep(ms: int): void {
-    native_sleep(ms);
+    native_time_sleep(ms);
 }
 
 
 export fn format(timestamp: int, formatStr: str): str {
-    return native_format(timestamp, formatStr);
+    return native_time_format(timestamp, formatStr);
 }
 
 

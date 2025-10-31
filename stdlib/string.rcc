@@ -1,50 +1,50 @@
 export class String {
     static length(s: str): int {
-        return native_length(s);
+        return native_str_length(s);
     }
 
     static upper(s: str): str {
-        return native_upper(s);
+        return native_str_upper(s);
     }
 
     static lower(s: str): str {
-        return native_lower(s);
+        return native_str_lower(s);
     }
 
     static trim(s: str): str {
-        return native_trim(s);
+        return native_str_trim(s);
     }
 
     static substring(s: str, start: int, end: int): str {
-        return native_substring(s, start, end);
+        return native_str_substring(s, start, end);
     }
 
     static charAt(s: str, index: int): str {
-        return native_char_at(s, index);
+        return native_str_char_at(s, index);
     }
 
     static indexOf(s: str, substr: str): int {
-        return native_index_of(s, substr);
+        return native_str_index_of(s, substr);
     }
 
     static replace(s: str, _from: str, to: str): str {
-        return native_replace(s, _from, to);
+        return native_str_replace(s, _from, to);
     }
 
     static split(s: str, delimiter: str): str[] {
-        return native_split(s, delimiter);
+        return native_str_split(s, delimiter);
     }
 
     static startsWith(s: str, prefix: str): bool {
-        return native_starts_with(s, prefix);
+        return native_str_starts_with(s, prefix);
     }
 
     static endsWith(s: str, suffix: str): bool {
-        return native_ends_with(s, suffix);
+        return native_str_ends_with(s, suffix);
     }
 
     static join(parts: str[], delimiter: str): str {
-        return native_join(parts, delimiter);
+        return native_str_join(parts, delimiter);
     }
 }
 

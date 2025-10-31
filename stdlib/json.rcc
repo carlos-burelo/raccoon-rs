@@ -2,17 +2,17 @@
 
 
 export fn parse(json: str): any {
-    return native_parse(json);
+    return native_json_parse(json);
 }
 
 
 export fn stringify(value: any): str {
-    return native_stringify(value);
+    return native_json_stringify(value);
 }
 
 
 export fn stringifyPretty(value: any, indent: int): str {
-    return native_stringify_pretty(value, indent);
+    return native_json_stringify_pretty(value, indent);
 }
 
 

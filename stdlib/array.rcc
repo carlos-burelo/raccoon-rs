@@ -1,40 +1,40 @@
 export fn length<T>(arr: T[]): int {
-    return native_length(arr);
+    return native_array_length(arr);
 }
 
 
 export fn push<T>(arr: T[], item: T): void {
-    native_push(arr, item);
+    native_array_push(arr, item);
 }
 
 
 export fn pop<T>(arr: T[]): T {
-    return native_pop(arr);
+    return native_array_pop(arr);
 }
 
 
 export fn shift<T>(arr: T[]): T {
-    return native_shift(arr);
+    return native_array_shift(arr);
 }
 
 
 export fn unshift<T>(arr: T[], item: T): void {
-    native_unshift(arr, item);
+    native_array_unshift(arr, item);
 }
 
 
 export fn slice<T>(arr: T[], start: int, end: int): T[] {
-    return native_slice(arr, start, end);
+    return native_array_slice(arr, start, end);
 }
 
 
 export fn reverse<T>(arr: T[]): T[] {
-    return native_reverse(arr);
+    return native_array_reverse(arr);
 }
 
 
 export fn sort<T>(arr: T[]): T[] {
-    return native_sort(arr);
+    return native_array_sort(arr);
 }
 
 

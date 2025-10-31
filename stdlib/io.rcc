@@ -3,42 +3,42 @@
 
 
 export fn readFile(path: str): str {
-    return native_read_file(path);
+    return native_io_read_file(path);
 }
 
 
 export fn writeFile(path: str, content: str): void {
-    native_write_file(path, content);
+    native_io_write_file(path, content);
 }
 
 
 export fn appendFile(path: str, content: str): void {
-    native_append_file(path, content);
+    native_io_append_file(path, content);
 }
 
 
 export fn fileExists(path: str): bool {
-    return native_file_exists(path);
+    return native_io_file_exists(path);
 }
 
 
 export fn deleteFile(path: str): void {
-    native_delete_file(path);
+    native_io_delete_file(path);
 }
 
 
 export fn readDir(path: str): str[] {
-    return native_read_dir(path);
+    return native_io_read_dir(path);
 }
 
 
 export fn createDir(path: str): void {
-    native_create_dir(path);
+    native_io_create_dir(path);
 }
 
 
 export fn readInput(prompt: str): str {
-    return native_input(prompt);
+    return native_io_input(prompt);
 }
 
 
