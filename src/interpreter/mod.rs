@@ -4,7 +4,7 @@ use crate::ast::nodes::*;
 use crate::ast::types::{PrimitiveType, Type};
 use crate::error::RaccoonError;
 use crate::runtime::{
-    BoolValue, DecoratorRegistry, EnumValue, Environment, FloatValue, FFIRegistry, FunctionValue,
+    BigIntValue, BoolValue, DecoratorRegistry, EnumValue, Environment, FloatValue, FunctionValue,
     FutureState, FutureValue, IntValue, ListValue, NullValue, ObjectValue, RuntimeValue, StrValue,
     TypeRegistry, setup_builtins,
 };
@@ -29,7 +29,6 @@ pub struct Interpreter {
     recursion_depth: usize,
     max_recursion_depth: usize,
     decorator_registry: DecoratorRegistry,
-    ffi_registry: std::sync::Arc<FFIRegistry>,
 }
 
 impl Interpreter {
@@ -37,22 +36,17 @@ impl Interpreter {
         let mut env = Environment::new(file.clone());
         let type_registry = TypeRegistry::new();
         setup_builtins(&mut env);
-        let native_bridge = std::sync::Arc::new(crate::runtime::NativeBridge::new());
+        let native_bridge = crate::runtime::NativeBridgeV2::new();
 
         let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
         let decorator_registry = DecoratorRegistry::new();
-        let ffi_registry = std::sync::Arc::new(FFIRegistry::new());
 
-        // Register all native functions from the bridge dynamically
-        // This eliminates the need for a hardcoded list - adding new natives requires only
-        // registration in native_bridge.rs, not here
         for name in native_bridge.function_names() {
             if let Some(f) = native_bridge.get(&name) {
                 let _ = env.declare(name, f);
             }
         }
 
-        // Also register async natives
         for name in native_bridge.async_function_names() {
             if let Some(f) = native_bridge.get_async(&name) {
                 let _ = env.declare(name, f);
@@ -67,7 +61,6 @@ impl Interpreter {
             recursion_depth: 0,
             max_recursion_depth: 500,
             decorator_registry,
-            ffi_registry,
         }
     }
 
@@ -80,8 +73,8 @@ impl Interpreter {
                 Ok(InterpreterResult::Value(v)) => last_value = v,
                 Ok(_) => {
                     return Err(RaccoonError::new(
-                        "Unexpected control flow statement".to_string(),
-                        (0, 0),
+                        "Unexpected control flow statement",
+                        stmt.position(),
                         self.file.clone(),
                     ));
                 }
@@ -110,8 +103,11 @@ impl Interpreter {
             Stmt::Block(block) => self.execute_block_internal(block).await,
             Stmt::IfStmt(if_stmt) => self.execute_if_stmt_internal(if_stmt).await,
             Stmt::WhileStmt(while_stmt) => self.execute_while_stmt(while_stmt).await,
+            Stmt::DoWhileStmt(do_while_stmt) => self.execute_do_while_stmt(do_while_stmt).await,
             Stmt::ForStmt(for_stmt) => self.execute_for_stmt(for_stmt).await,
             Stmt::ForInStmt(for_in) => self.execute_for_in_stmt(for_in).await,
+            Stmt::ForOfStmt(for_of) => self.execute_for_of_stmt(for_of).await,
+            Stmt::SwitchStmt(switch_stmt) => self.execute_switch_stmt(switch_stmt).await,
             Stmt::ReturnStmt(ret) => self.execute_return_stmt(ret).await,
             Stmt::BreakStmt(_) => Ok(InterpreterResult::Break),
             Stmt::ContinueStmt(_) => Ok(InterpreterResult::Continue),
@@ -162,7 +158,6 @@ impl Interpreter {
     async fn execute_fn_decl(&mut self, decl: &FnDecl) -> Result<RuntimeValue, RaccoonError> {
         use crate::runtime::DecoratorTarget;
 
-        // Validar decoradores
         let target = if decl.is_async {
             DecoratorTarget::AsyncFunction
         } else {
@@ -201,107 +196,42 @@ impl Interpreter {
 
         self.environment.declare(decl.name.clone(), function)?;
 
-        // Procesar decoradores
         for decorator_info in &decorators {
             match decorator_info.spec.name.as_str() {
                 "@_ffi" => {
-                    // Registrar función en FFI Registry automáticamente
-                    // La función ya está disponible en el ambiente, solo registramos metadatos
-                    if let Ok(RuntimeValue::Function(func_val)) = self.environment.get(&decl.name, (0, 0)) {
-                        // Usar nombre de función como identificador
-                        let fn_id = decl.name.clone();
-
-                        // Preparar parámetros con sus tipos
-                        let params: Vec<(String, Type)> = decl
-                            .parameters
-                            .iter()
-                            .map(|p| {
-                                let param_name = match &p.pattern {
-                                    crate::ast::nodes::VarPattern::Identifier(id) => id.clone(),
-                                    _ => format!("{:?}", p.pattern),
-                                };
-                                (param_name, p.param_type.clone())
-                            })
-                            .collect();
-
-                        let return_type = decl
-                            .return_type
-                            .clone()
-                            .unwrap_or_else(|| PrimitiveType::unknown());
-
-                        // Registrar en FFIRegistry con metadata de función de Raccoon
-                        self.ffi_registry.register_raccoon_function(
-                            fn_id,
-                            func_val,
-                            params,
-                            return_type,
-                        );
+                    if let Ok(RuntimeValue::Function(_)) =
+                        self.environment.get(&decl.name, (0, 0))
+                    {
+                        // Note: @_ffi decorator functionality has been removed.
+                        // Functions are registered directly in the environment.
                     }
                 }
-                "@_register" => {
-                    // Registrar en namespace específico
-                    if let Some(_namespace) = decorator_info.arg_as_string(0) {
-                        // Los metadatos de namespace se almacenan para uso futuro
-                        // cuando permitamos namespaces en FFI
-                    }
-                }
-                "@_validate" => {
-                    // Validación automática está habilitada por el decorador
-                }
-                "@cache" => {
-                    // El decorador @cache se procesa en tiempo de ejecución
-                    // cuando se llama la función
-                    if let Some(_ttl_ms) = decorator_info.arg_as_int(0) {
-                        // TTL se guardará como metadato para funciones cacheables
-                    }
-                }
+                "@_register" => if let Some(_namespace) = decorator_info.arg_as_string(0) {},
+                "@_validate" => {}
+                "@cache" => if let Some(_ttl_ms) = decorator_info.arg_as_int(0) {},
                 "@deprecated" => {
-                    // Emitir warning si se usa esta función (se hace en runtime)
-                    let msg = decorator_info.arg_as_string(0)
+                    let msg = decorator_info
+                        .arg_as_string(0)
                         .unwrap_or_else(|| "This function is deprecated".to_string());
-                    eprintln!("⚠️  Warning: Function '{}' is deprecated. {}", decl.name, msg);
+                    eprintln!(
+                        "⚠️  Warning: Function '{}' is deprecated. {}",
+                        decl.name, msg
+                    );
                 }
-                "@pure" => {
-                    // Marcado como función pura - hint para optimizaciones
-                }
-                "@inline" => {
-                    // Sugerencia de inline para compilador/intérprete
-                }
+                "@pure" => {}
+                "@inline" => {}
                 "@measureTime" => {
-                    // Medir tiempo de ejecución
-                    let _label = decorator_info.arg_as_string(0)
+                    let _label = decorator_info
+                        .arg_as_string(0)
                         .unwrap_or_else(|| "Function execution".to_string());
                 }
-                "@memoize" => {
-                    // Alias para @cache
-                }
-                "@throttle" => {
-                    // Limitar llamadas
-                    if let Some(_ms) = decorator_info.arg_as_int(0) {
-                        // Guardar intervalo para throttle
-                    }
-                }
-                "@debounce" => {
-                    // Retardar ejecución
-                    if let Some(_ms) = decorator_info.arg_as_int(0) {
-                        // Guardar delay para debounce
-                    }
-                }
-                "@retry" => {
-                    // Reintentar en error
-                    if let Some(_times) = decorator_info.arg_as_int(0) {
-                        // Guardar número de reintentos
-                    }
-                }
-                "@log" => {
-                    // Loguear llamadas
-                }
-                "@sealed" => {
-                    // Clase no puede ser extendida
-                }
-                "@abstract" => {
-                    // Clase/método abstracto
-                }
+                "@memoize" => {}
+                "@throttle" => if let Some(_ms) = decorator_info.arg_as_int(0) {},
+                "@debounce" => if let Some(_ms) = decorator_info.arg_as_int(0) {},
+                "@retry" => if let Some(_times) = decorator_info.arg_as_int(0) {},
+                "@log" => {}
+                "@sealed" => {}
+                "@abstract" => {}
                 _ => {}
             }
         }
@@ -470,6 +400,36 @@ impl Interpreter {
     }
 
     #[async_recursion(?Send)]
+    async fn execute_do_while_stmt(
+        &mut self,
+        do_while_stmt: &DoWhileStmt,
+    ) -> Result<InterpreterResult, RaccoonError> {
+        loop {
+            match self.execute_stmt_internal(&do_while_stmt.body).await? {
+                InterpreterResult::Value(_) => {}
+                InterpreterResult::Break => break,
+                InterpreterResult::Continue => {
+                    let condition = self.evaluate_expr(&do_while_stmt.condition).await?;
+                    if !self.is_truthy(&condition) {
+                        break;
+                    }
+                    continue;
+                }
+                InterpreterResult::Return(v) => return Ok(InterpreterResult::Return(v)),
+            }
+
+            let condition = self.evaluate_expr(&do_while_stmt.condition).await?;
+            if !self.is_truthy(&condition) {
+                break;
+            }
+        }
+
+        Ok(InterpreterResult::Value(RuntimeValue::Null(
+            NullValue::new(),
+        )))
+    }
+
+    #[async_recursion(?Send)]
     async fn execute_for_stmt(
         &mut self,
         for_stmt: &ForStmt,
@@ -557,6 +517,112 @@ impl Interpreter {
         )))
     }
 
+    #[async_recursion(?Send)]
+    async fn execute_for_of_stmt(
+        &mut self,
+        for_of: &ForOfStmt,
+    ) -> Result<InterpreterResult, RaccoonError> {
+        let iterable = self.evaluate_expr(&for_of.iterable).await?;
+
+        let elements = match iterable {
+            RuntimeValue::List(list) => list.elements,
+            RuntimeValue::Str(s) => {
+                // Convert string to array of characters
+                s.value
+                    .chars()
+                    .map(|c| RuntimeValue::Str(StrValue::new(c.to_string())))
+                    .collect()
+            }
+            _ => {
+                return Err(RaccoonError::new(
+                    "For-of requires an iterable value (array or string)".to_string(),
+                    for_of.position,
+                    self.file.clone(),
+                ));
+            }
+        };
+
+        self.environment.push_scope();
+
+        if !elements.is_empty() {
+            self.environment
+                .declare(for_of.variable.clone(), elements[0].clone())?;
+        }
+
+        for element in elements {
+            self.environment
+                .assign(&for_of.variable, element, for_of.position)?;
+
+            match self.execute_stmt_internal(&for_of.body).await? {
+                InterpreterResult::Value(_) => {}
+                InterpreterResult::Break => break,
+                InterpreterResult::Continue => continue,
+                InterpreterResult::Return(v) => {
+                    self.environment.pop_scope();
+                    return Ok(InterpreterResult::Return(v));
+                }
+            }
+        }
+
+        self.environment.pop_scope();
+
+        Ok(InterpreterResult::Value(RuntimeValue::Null(
+            NullValue::new(),
+        )))
+    }
+
+    #[async_recursion(?Send)]
+    async fn execute_switch_stmt(
+        &mut self,
+        switch_stmt: &SwitchStmt,
+    ) -> Result<InterpreterResult, RaccoonError> {
+        let discriminant_value = self.evaluate_expr(&switch_stmt.discriminant).await?;
+
+        let mut matched = false;
+        let mut fall_through = false;
+
+        for case in &switch_stmt.cases {
+            // Check if this case matches
+            if !fall_through {
+                if let Some(test_expr) = &case.test {
+                    let test_value = self.evaluate_expr(test_expr).await?;
+                    matched = discriminant_value.equals(&test_value);
+                } else {
+                    // Default case
+                    matched = true;
+                }
+            }
+
+            // Execute the case if matched or if we're falling through
+            if matched || fall_through {
+                fall_through = true;
+
+                for stmt in &case.consequent {
+                    match self.execute_stmt_internal(stmt).await? {
+                        InterpreterResult::Value(_) => {}
+                        InterpreterResult::Break => {
+                            return Ok(InterpreterResult::Value(RuntimeValue::Null(
+                                NullValue::new(),
+                            )));
+                        }
+                        InterpreterResult::Continue => {
+                            return Err(RaccoonError::new(
+                                "Continue not allowed in switch statement".to_string(),
+                                switch_stmt.position,
+                                self.file.clone(),
+                            ));
+                        }
+                        InterpreterResult::Return(v) => return Ok(InterpreterResult::Return(v)),
+                    }
+                }
+            }
+        }
+
+        Ok(InterpreterResult::Value(RuntimeValue::Null(
+            NullValue::new(),
+        )))
+    }
+
     async fn execute_return_stmt(
         &mut self,
         ret: &ReturnStmt,
@@ -626,6 +692,20 @@ impl Interpreter {
     async fn evaluate_expr(&mut self, expr: &Expr) -> Result<RuntimeValue, RaccoonError> {
         match expr {
             Expr::IntLiteral(lit) => Ok(RuntimeValue::Int(IntValue::new(lit.value))),
+            Expr::BigIntLiteral(lit) => {
+                // Parse BigInt value (remove 'n' suffix and underscores, handle different bases)
+                let clean_value = lit.value.trim_end_matches('n').replace('_', "");
+                let value = if clean_value.starts_with("0b") || clean_value.starts_with("0B") {
+                    i128::from_str_radix(&clean_value[2..], 2).unwrap_or(0)
+                } else if clean_value.starts_with("0o") || clean_value.starts_with("0O") {
+                    i128::from_str_radix(&clean_value[2..], 8).unwrap_or(0)
+                } else if clean_value.starts_with("0x") || clean_value.starts_with("0X") {
+                    i128::from_str_radix(&clean_value[2..], 16).unwrap_or(0)
+                } else {
+                    clean_value.parse::<i128>().unwrap_or(0)
+                };
+                Ok(RuntimeValue::BigInt(BigIntValue::new(value)))
+            }
             Expr::FloatLiteral(lit) => Ok(RuntimeValue::Float(FloatValue::new(lit.value))),
             Expr::StrLiteral(lit) => Ok(RuntimeValue::Str(StrValue::new(lit.value.clone()))),
             Expr::BoolLiteral(lit) => Ok(RuntimeValue::Bool(BoolValue::new(lit.value))),
@@ -663,7 +743,6 @@ impl Interpreter {
         }
     }
 
-    // Delegated to operators module
     async fn apply_binary_op(
         &self,
         left: RuntimeValue,
@@ -679,11 +758,9 @@ impl Interpreter {
         &mut self,
         binary: &BinaryExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // Evaluate operands first
         let left = self.evaluate_expr(&binary.left).await?;
         let right = self.evaluate_expr(&binary.right).await?;
 
-        // Delegate the operation logic to operators module
         operators::apply_binary_operation(
             left,
             right,
@@ -699,10 +776,8 @@ impl Interpreter {
         &mut self,
         unary: &UnaryExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // Evaluate operand first
         let operand = self.evaluate_expr(&unary.operand).await?;
 
-        // Delegate to operators module
         operators::apply_unary_operation(operand, unary.operator, unary.position, &self.file, |v| {
             self.is_truthy(v)
         })
@@ -1083,7 +1158,7 @@ impl Interpreter {
                         self.environment.pop_scope();
                         return Err(RaccoonError::new(
                             format!("Missing required argument for parameter '{}'", param_name),
-                            (0, 0),
+                            call.position,
                             self.file.clone(),
                         ));
                     };
@@ -1181,7 +1256,15 @@ impl Interpreter {
     ) -> Result<RuntimeValue, RaccoonError> {
         let mut elements = Vec::new();
         for elem in &list.elements {
-            elements.push(self.evaluate_expr(elem).await?);
+            // Handle spread expressions in array literals
+            if let Expr::Spread(spread) = elem {
+                let spread_value = self.evaluate_expr(&spread.argument).await?;
+                if let RuntimeValue::List(list_val) = spread_value {
+                    elements.extend(list_val.elements);
+                }
+            } else {
+                elements.push(self.evaluate_expr(elem).await?);
+            }
         }
 
         let element_type = if elements.is_empty() {
@@ -1198,8 +1281,23 @@ impl Interpreter {
         obj: &ObjectLiteral,
     ) -> Result<RuntimeValue, RaccoonError> {
         let mut properties = HashMap::new();
-        for (key, value) in &obj.properties {
-            properties.insert(key.clone(), self.evaluate_expr(value).await?);
+
+        for prop in &obj.properties {
+            match prop {
+                ObjectLiteralProperty::KeyValue { key, value } => {
+                    properties.insert(key.clone(), self.evaluate_expr(value).await?);
+                }
+                ObjectLiteralProperty::Spread(expr) => {
+                    // Evaluate the spread expression
+                    let spread_value = self.evaluate_expr(expr).await?;
+                    // Merge properties from the spread object
+                    if let RuntimeValue::Object(ref obj_val) = spread_value {
+                        for (k, v) in &obj_val.properties {
+                            properties.insert(k.clone(), v.clone());
+                        }
+                    }
+                }
+            }
         }
 
         Ok(RuntimeValue::Object(ObjectValue::new(
@@ -1332,6 +1430,22 @@ impl Interpreter {
                         format!(
                             "Enum member '{}' not found on enum '{}'",
                             member.property, enum_obj.enum_name
+                        ),
+                        member.position,
+                        self.file.clone(),
+                    ))
+                }
+            }
+            RuntimeValue::PrimitiveTypeObject(type_obj) => {
+                if let Some(static_method) = type_obj.static_methods.get(&member.property) {
+                    Ok(RuntimeValue::NativeFunction((**static_method).clone()))
+                } else if let Some(static_prop) = type_obj.static_properties.get(&member.property) {
+                    Ok(static_prop.clone())
+                } else {
+                    Err(RaccoonError::new(
+                        format!(
+                            "Static member '{}' not found on type '{}'",
+                            member.property, type_obj.type_name
                         ),
                         member.position,
                         self.file.clone(),
@@ -1546,7 +1660,6 @@ impl Interpreter {
         )))
     }
 
-    // Delegated to operators module
     fn is_truthy(&self, value: &RuntimeValue) -> bool {
         operators::is_truthy(value)
     }
@@ -1559,6 +1672,7 @@ impl Interpreter {
 
         let type_name = match value {
             RuntimeValue::Int(_) => "int",
+            RuntimeValue::BigInt(_) => "bigint",
             RuntimeValue::Float(_) => "float",
             RuntimeValue::Decimal(_) => "decimal",
             RuntimeValue::Str(_) => "str",
@@ -2065,6 +2179,7 @@ impl Interpreter {
         &mut self,
         tagged: &TaggedTemplateExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
+        let tagged_position = tagged.position;
         let tag = self.evaluate_expr(&tagged.tag).await?;
 
         let mut strings = Vec::new();
@@ -2129,7 +2244,7 @@ impl Interpreter {
                         self.environment.pop_scope();
                         return Err(RaccoonError::new(
                             format!("Missing required argument for parameter '{}'", param_name),
-                            (0, 0),
+                            tagged_position,
                             self.file.clone(),
                         ));
                     };
@@ -2329,6 +2444,22 @@ impl Interpreter {
                         format!(
                             "Static method '{}' not found on class '{}'",
                             method_call.method, class.class_name
+                        ),
+                        method_call.position,
+                        self.file.clone(),
+                    ))
+                }
+            }
+
+            RuntimeValue::PrimitiveTypeObject(type_obj) => {
+                if let Some(static_method) = type_obj.static_methods.get(&method_call.method) {
+                    // Call native static method
+                    Ok((static_method.implementation)(args))
+                } else {
+                    Err(RaccoonError::new(
+                        format!(
+                            "Static method '{}' not found on type '{}'",
+                            method_call.method, type_obj.type_name
                         ),
                         method_call.position,
                         self.file.clone(),
@@ -2637,6 +2768,314 @@ impl Interpreter {
                         method_call.position,
                         self.file.clone(),
                     ))
+                }
+            }
+            RuntimeValue::Future(future) => {
+                match method_call.method.as_str() {
+                    "then" => {
+                        if args.is_empty() {
+                            return Err(RaccoonError::new(
+                                "Future.then() requires at least one callback".to_string(),
+                                method_call.position,
+                                self.file.clone(),
+                            ));
+                        }
+
+                        let on_fulfilled = args[0].clone();
+                        let on_rejected = args.get(1).cloned();
+
+                        // Read current state
+                        let state = future.state.read().unwrap().clone();
+                        drop(state);
+
+                        // Create new future for the result
+                        let new_future = FutureValue::new(PrimitiveType::any());
+                        let new_future_clone = new_future.clone();
+
+                        // Handle the then callback based on current state
+                        let state = future.state.read().unwrap().clone();
+                        match state {
+                            FutureState::Resolved(value) => {
+                                // Execute on_fulfilled callback
+                                match on_fulfilled {
+                                    RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
+                                        let call_result = self
+                                            .call_function(&on_fulfilled, vec![*value], method_call.position)
+                                            .await?;
+
+                                        // If the callback returns a Future, pass it through without unwrapping
+                                        // (Raccoon has explicit await semantics, not auto-unwrapping like JS Promises)
+                                        new_future_clone.resolve(call_result);
+                                    }
+                                    _ => {
+                                        return Err(RaccoonError::new(
+                                            "Future.then() callback must be a function".to_string(),
+                                            method_call.position,
+                                            self.file.clone(),
+                                        ));
+                                    }
+                                }
+                            }
+                            FutureState::Rejected(error) => {
+                                if let Some(on_rejected_cb) = on_rejected {
+                                    match on_rejected_cb {
+                                        RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
+                                            let error_value = RuntimeValue::Str(StrValue::new(error));
+                                            let call_result = self
+                                                .call_function(&on_rejected_cb, vec![error_value], method_call.position)
+                                                .await?;
+                                            new_future_clone.resolve(call_result);
+                                        }
+                                        _ => {
+                                            return Err(RaccoonError::new(
+                                                "Future.then() rejection callback must be a function".to_string(),
+                                                method_call.position,
+                                                self.file.clone(),
+                                            ));
+                                        }
+                                    }
+                                } else {
+                                    // No rejection handler, propagate the error
+                                    new_future_clone.reject(error);
+                                }
+                            }
+                            FutureState::Pending => {
+                                return Err(RaccoonError::new(
+                                    "Cannot call .then() on a pending Future. Use 'await' to wait for the Future to resolve.".to_string(),
+                                    method_call.position,
+                                    self.file.clone(),
+                                ));
+                            }
+                        }
+
+                        Ok(RuntimeValue::Future(new_future))
+                    }
+                    "catch" => {
+                        if args.is_empty() {
+                            return Err(RaccoonError::new(
+                                "Future.catch() requires a callback".to_string(),
+                                method_call.position,
+                                self.file.clone(),
+                            ));
+                        }
+
+                        let on_rejected = args[0].clone();
+
+                        // Create new future for the result
+                        let new_future = FutureValue::new(PrimitiveType::any());
+                        let new_future_clone = new_future.clone();
+
+                        let state = future.state.read().unwrap().clone();
+                        match state {
+                            FutureState::Resolved(value) => {
+                                // Pass through the resolved value
+                                new_future_clone.resolve(*value);
+                            }
+                            FutureState::Rejected(error) => {
+                                // Execute on_rejected callback
+                                match on_rejected {
+                                    RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
+                                        let error_value = RuntimeValue::Str(StrValue::new(error));
+                                        let call_result = self
+                                            .call_function(&on_rejected, vec![error_value], method_call.position)
+                                            .await?;
+                                        new_future_clone.resolve(call_result);
+                                    }
+                                    _ => {
+                                        return Err(RaccoonError::new(
+                                            "Future.catch() callback must be a function".to_string(),
+                                            method_call.position,
+                                            self.file.clone(),
+                                        ));
+                                    }
+                                }
+                            }
+                            FutureState::Pending => {
+                                return Err(RaccoonError::new(
+                                    "Cannot call .catch() on a pending Future. Use 'await' to wait for the Future to resolve.".to_string(),
+                                    method_call.position,
+                                    self.file.clone(),
+                                ));
+                            }
+                        }
+
+                        Ok(RuntimeValue::Future(new_future))
+                    }
+                    "finally" => {
+                        if args.is_empty() {
+                            return Err(RaccoonError::new(
+                                "Future.finally() requires a callback".to_string(),
+                                method_call.position,
+                                self.file.clone(),
+                            ));
+                        }
+
+                        let on_finally = args[0].clone();
+
+                        // Create new future for the result
+                        let new_future = FutureValue::new(PrimitiveType::any());
+                        let new_future_clone = new_future.clone();
+
+                        let state = future.state.read().unwrap().clone();
+
+                        // Execute the finally callback regardless of state
+                        match on_finally {
+                            RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
+                                let _ = self
+                                    .call_function(&on_finally, vec![], method_call.position)
+                                    .await?;
+                            }
+                            _ => {
+                                return Err(RaccoonError::new(
+                                    "Future.finally() callback must be a function".to_string(),
+                                    method_call.position,
+                                    self.file.clone(),
+                                ));
+                            }
+                        }
+
+                        // Propagate the original state
+                        match state {
+                            FutureState::Resolved(value) => {
+                                new_future_clone.resolve(*value);
+                            }
+                            FutureState::Rejected(error) => {
+                                new_future_clone.reject(error);
+                            }
+                            FutureState::Pending => {
+                                return Err(RaccoonError::new(
+                                    "Cannot call .finally() on a pending Future. Use 'await' to wait for the Future to resolve.".to_string(),
+                                    method_call.position,
+                                    self.file.clone(),
+                                ));
+                            }
+                        }
+
+                        Ok(RuntimeValue::Future(new_future))
+                    }
+                    "tap" => {
+                        if args.is_empty() {
+                            return Err(RaccoonError::new(
+                                "Future.tap() requires a callback".to_string(),
+                                method_call.position,
+                                self.file.clone(),
+                            ));
+                        }
+
+                        let on_tap = args[0].clone();
+
+                        // Create new future for the result
+                        let new_future = FutureValue::new(PrimitiveType::any());
+                        let new_future_clone = new_future.clone();
+
+                        let state = future.state.read().unwrap().clone();
+                        match state {
+                            FutureState::Resolved(value) => {
+                                // Execute the tap callback for side effects
+                                match on_tap {
+                                    RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
+                                        let _ = self
+                                            .call_function(&on_tap, vec![*value.clone()], method_call.position)
+                                            .await?;
+                                    }
+                                    _ => {
+                                        return Err(RaccoonError::new(
+                                            "Future.tap() callback must be a function".to_string(),
+                                            method_call.position,
+                                            self.file.clone(),
+                                        ));
+                                    }
+                                }
+                                // Pass through the original value unchanged
+                                new_future_clone.resolve(*value);
+                            }
+                            FutureState::Rejected(error) => {
+                                // Pass through the rejection
+                                new_future_clone.reject(error);
+                            }
+                            FutureState::Pending => {
+                                return Err(RaccoonError::new(
+                                    "Cannot call .tap() on a pending Future. Use 'await' to wait for the Future to resolve.".to_string(),
+                                    method_call.position,
+                                    self.file.clone(),
+                                ));
+                            }
+                        }
+
+                        Ok(RuntimeValue::Future(new_future))
+                    }
+                    "map" => {
+                        // Alias for .then() but only accepts one argument
+                        if args.is_empty() {
+                            return Err(RaccoonError::new(
+                                "Future.map() requires a callback".to_string(),
+                                method_call.position,
+                                self.file.clone(),
+                            ));
+                        }
+
+                        let mapper = args[0].clone();
+
+                        let new_future = FutureValue::new(PrimitiveType::any());
+                        let new_future_clone = new_future.clone();
+
+                        let state = future.state.read().unwrap().clone();
+                        match state {
+                            FutureState::Resolved(value) => {
+                                match mapper {
+                                    RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
+                                        let call_result = self
+                                            .call_function(&mapper, vec![*value], method_call.position)
+                                            .await?;
+
+                                        if let RuntimeValue::Future(inner_future) = call_result {
+                                            let inner_state = inner_future.state.read().unwrap().clone();
+                                            match inner_state {
+                                                FutureState::Resolved(inner_val) => {
+                                                    new_future_clone.resolve(*inner_val);
+                                                }
+                                                FutureState::Rejected(err) => {
+                                                    new_future_clone.reject(err);
+                                                }
+                                                FutureState::Pending => {
+                                                    new_future_clone.resolve(RuntimeValue::Future(inner_future));
+                                                }
+                                            }
+                                        } else {
+                                            new_future_clone.resolve(call_result);
+                                        }
+                                    }
+                                    _ => {
+                                        return Err(RaccoonError::new(
+                                            "Future.map() callback must be a function".to_string(),
+                                            method_call.position,
+                                            self.file.clone(),
+                                        ));
+                                    }
+                                }
+                            }
+                            FutureState::Rejected(error) => {
+                                new_future_clone.reject(error);
+                            }
+                            FutureState::Pending => {
+                                return Err(RaccoonError::new(
+                                    "Cannot call .map() on a pending Future. Use 'await' to wait for the Future to resolve.".to_string(),
+                                    method_call.position,
+                                    self.file.clone(),
+                                ));
+                            }
+                        }
+
+                        Ok(RuntimeValue::Future(new_future))
+                    }
+                    _ => Err(RaccoonError::new(
+                        format!(
+                            "Method '{}' not found on Future. Available methods: then, catch, finally, tap, map",
+                            method_call.method
+                        ),
+                        method_call.position,
+                        self.file.clone(),
+                    )),
                 }
             }
             _ => Err(RaccoonError::new(
@@ -3526,17 +3965,10 @@ impl Interpreter {
         self.environment.declare(name, value)
     }
 
-    /// Obtiene acceso al FFI Registry para registrar funciones dinámicas
-    pub fn get_ffi_registry(&self) -> std::sync::Arc<FFIRegistry> {
-        self.ffi_registry.clone()
-    }
-
-    /// Obtiene acceso al Decorator Registry
     pub fn get_decorator_registry(&self) -> &DecoratorRegistry {
         &self.decorator_registry
     }
 
-    /// Verifica si estamos ejecutando código de stdlib
     fn is_in_stdlib(&self) -> bool {
         if let Some(file) = &self.file {
             file.contains("stdlib") || file.ends_with(".rcc")

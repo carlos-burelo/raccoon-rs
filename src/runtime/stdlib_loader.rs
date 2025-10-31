@@ -4,8 +4,8 @@ use crate::error::RaccoonError;
 use crate::interpreter::Interpreter;
 use crate::lexer::Lexer;
 use crate::parser::Parser;
-use crate::runtime::NativeBridge;
-use crate::runtime::values::{ObjectValue, RuntimeValue};
+use crate::runtime::NativeBridgeV2;
+use crate::runtime::values::{NullValue, ObjectValue, RuntimeValue};
 use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
@@ -14,7 +14,7 @@ use std::sync::{Arc, RwLock};
 pub struct StdLibLoader {
     stdlib_path: PathBuf,
     module_cache: Arc<RwLock<HashMap<String, RuntimeValue>>>,
-    native_bridge: Arc<NativeBridge>,
+    native_bridge: Arc<NativeBridgeV2>,
 }
 
 impl StdLibLoader {
@@ -22,7 +22,7 @@ impl StdLibLoader {
         Self {
             stdlib_path,
             module_cache: Arc::new(RwLock::new(HashMap::new())),
-            native_bridge: Arc::new(NativeBridge::new()),
+            native_bridge: Arc::new(NativeBridgeV2::new()),
         }
     }
 
@@ -136,9 +136,17 @@ impl StdLibLoader {
                         }
                     } else if let Some(decl) = &export_decl.declaration {
                         let name = self.get_declaration_name(decl)?;
-                        interp.execute_stmt(decl).await?;
-                        if let Ok(val) = interp.get_from_env(&name) {
-                            exports.insert(name, val);
+
+                        match decl.as_ref() {
+                            Stmt::InterfaceDecl(_) | Stmt::TypeAliasDecl(_) => {
+                                exports.insert(name, RuntimeValue::Null(NullValue));
+                            }
+                            _ => {
+                                interp.execute_stmt(decl).await?;
+                                if let Ok(val) = interp.get_from_env(&name) {
+                                    exports.insert(name, val);
+                                }
+                            }
                         }
                     } else {
                         for spec in &export_decl.specifiers {
@@ -175,6 +183,8 @@ impl StdLibLoader {
                 )),
             },
             Stmt::EnumDecl(e) => Ok(e.name.clone()),
+            Stmt::InterfaceDecl(i) => Ok(i.name.clone()),
+            Stmt::TypeAliasDecl(t) => Ok(t.name.clone()),
             _ => Err(RaccoonError::new(
                 "Invalid export declaration",
                 (0, 0),
@@ -201,6 +211,8 @@ impl StdLibLoader {
                 interp.execute_stmt(stmt).await?;
                 interp.get_from_env(&e.name)
             }
+            Stmt::InterfaceDecl(_i) => Ok(RuntimeValue::Null(NullValue)),
+            Stmt::TypeAliasDecl(_t) => Ok(RuntimeValue::Null(NullValue)),
             Stmt::ExprStmt(e) => Ok(interp.eval_expr_public(&e.expression).await?),
             _ => Err(RaccoonError::new(
                 "Invalid default export",
@@ -211,9 +223,6 @@ impl StdLibLoader {
     }
 
     fn setup_native_functions_in_interpreter(&self, interp: &mut Interpreter) {
-        // Register all native functions from the bridge dynamically
-        // The native_bridge internally registers both primary names (native_json_stringify)
-        // and alias names (_stringify_native) via add_string_aliases()
         self.native_bridge.register_all_in_env(interp);
     }
 
