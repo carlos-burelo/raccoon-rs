@@ -30116,3 +30116,8970 @@ Running test: .\tests\use_math_utils.rcc
 [36mMathUtils[0m.[36madd[0m([93m100[0m[37m,[0m [93m50[0m) = [93m150[0m
 
 [36mMathUtils[0m.[36mPI[0m = [93m3.14159[0m
+Running test: .\tests\arrow_functions_demo.rcc
+=== [36mARROW[0m [36mFUNCTIONS[0m [36mAS[0m [36mPARAMETERS[0m ===
+
+[36mOriginal[0m [36marray[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+
+--- [36mMAP[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mDoubled[0m ([36marrow[0m)[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m,[0m [93m12[0m[37m,[0m [93m14[0m[37m,[0m [93m16[0m[37m,[0m [93m18[0m[37m,[0m [93m20[0m[37m][0m
+[36mSquared[0m ([36marrow[0m)[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m4[0m[37m,[0m [93m9[0m[37m,[0m [93m16[0m[37m,[0m [93m25[0m[37m,[0m [93m36[0m[37m,[0m [93m49[0m[37m,[0m [93m64[0m[37m,[0m [93m81[0m[37m,[0m [93m100[0m[37m][0m
+[36mTransformed[0m ([36mx[0m*[93m3[0m+[93m1[0m)[37m:[0m [37m[[0m[93m4[0m[37m,[0m [93m7[0m[37m,[0m [93m10[0m[37m,[0m [93m13[0m[37m,[0m [93m16[0m[37m,[0m [93m19[0m[37m,[0m [93m22[0m[37m,[0m [93m25[0m[37m,[0m [93m28[0m[37m,[0m [93m31[0m[37m][0m
+
+--- [36mFILTER[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mEven[0m [36mnumbers[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m][0m
+[36mGreater[0m [36mthan[0m [93m5[0m[37m:[0m [37m[[0m[93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+[36mMultiples[0m [36mof[0m [93m3[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+
+--- [36mREDUCE[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mSum[0m[37m:[0m [93m55[0m
+[36mProduct[0m[37m:[0m [93m3628800[0m
+
+--- [36mFIND[0m/[36mSOME[0m/[36mEVERY[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mFirst[0m > [93m7[0m[37m:[0m [93m8[0m
+[36mHas[0m [36mevens[0m? [93mtrue[0m
+[36mAll[0m [36mpositive[0m? [93mtrue[0m
+
+--- [36mMETHOD[0m [36mCHAINING[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mEvens[0m * [93m3[0m[37m,[0m > [93m10[0m[37m:[0m [37m[[0m[93m12[0m[37m,[0m [93m18[0m[37m,[0m [93m24[0m[37m,[0m [93m30[0m[37m][0m
+
+=== [36mASYNC[0m [36mFUNCTIONS[0m ===
+[36mFuture[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([36mUser_42[0m)[37m][0m
+[36mUser[0m[37m:[0m [36mUser_42[0m
+
+=== [36mASYNC[0m + [36mARROW[0m [36mFUNCTIONS[0m ===
+[36mProcessed[0m [36musers[0m[37m:[0m [37m[[0m[36mProcessed_1[0m[37m,[0m [36mProcessed_2[0m[37m,[0m [36mProcessed_3[0m[37m,[0m [36mProcessed_4[0m[37m,[0m [36mProcessed_5[0m[37m][0m
+
+=== [36mHIGHER[0m-[36mORDER[0m [36mFUNCTIONS[0m ===
+[36mOriginal[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+[36mDoubled[0m [36mwith[0m [36mfunc[0m [36mtype[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+[36mTripled[0m [36mwith[0m [36mfunc[0m [36mtype[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+[36mTripled[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+
+=== [36mALL[0m [36mTESTS[0m [36mCOMPLETED[0m ===
+Running test: .\tests\async_and_arrays.rcc
+=== [36mTESTING[0m [36mASYNC[0m [36mFUNCTIONS[0m ===
+[36mFuture[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([36mData[0m [36mfetched[0m!)[37m][0m
+[36mResult[0m [36mafter[0m [36mawait[0m[37m:[0m [36mData[0m [36mfetched[0m!
+
+=== [36mTESTING[0m [36mARRAY[0m [36mMETHODS[0m ===
+[36mOriginal[0m [36marray[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+
+--- [36mmap[0m() ---
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m,[0m [93m12[0m[37m,[0m [93m14[0m[37m,[0m [93m16[0m[37m,[0m [93m18[0m[37m,[0m [93m20[0m[37m][0m
+[36mSquared[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m4[0m[37m,[0m [93m9[0m[37m,[0m [93m16[0m[37m,[0m [93m25[0m[37m,[0m [93m36[0m[37m,[0m [93m49[0m[37m,[0m [93m64[0m[37m,[0m [93m81[0m[37m,[0m [93m100[0m[37m][0m
+
+--- [36mfilter[0m() ---
+[36mEven[0m [36mnumbers[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m][0m
+[36mGreater[0m [36mthan[0m [93m5[0m[37m:[0m [37m[[0m[93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+
+--- [36mreduce[0m() ---
+[36mSum[0m [36mof[0m [36mall[0m [36mnumbers[0m[37m:[0m [93m55[0m
+[36mProduct[0m [36mof[0m [36mall[0m [36mnumbers[0m[37m:[0m [93m3628800[0m
+
+--- [36mfind[0m() ---
+[36mFirst[0m [36mnumber[0m > [93m7[0m[37m:[0m [93m8[0m
+[36mFirst[0m [36mnumber[0m > [93m100[0m[37m:[0m [93mnull[0m
+
+--- [36mfindIndex[0m() ---
+[36mIndex[0m [36mof[0m [93m5[0m[37m:[0m [93m4[0m
+[36mIndex[0m [36mof[0m > [93m100[0m[37m:[0m [93m-1[0m
+
+--- [36msome[0m() ---
+[36mHas[0m [36meven[0m [36mnumbers[0m? [93mtrue[0m
+[36mHas[0m [36mnegative[0m [36mnumbers[0m? [93mfalse[0m
+
+--- [36mevery[0m() ---
+[36mAll[0m [36mpositive[0m? [93mtrue[0m
+[36mAll[0m [36meven[0m? [93mfalse[0m
+
+=== [36mMETHOD[0m [36mCHAINING[0m ===
+[36mEven[0m [36mnumbers[0m * [93m3[0m[37m,[0m > [93m10[0m[37m:[0m [37m[[0m[93m12[0m[37m,[0m [93m18[0m[37m,[0m [93m24[0m[37m,[0m [93m30[0m[37m][0m
+
+--- [36mSmall[0m [36marray[0m [36mcomposition[0m ---
+[36mOriginal[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+[36mTripled[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+
+=== [36mALL[0m [36mTESTS[0m [36mCOMPLETED[0m ===
+Running test: .\tests\demo_colors.rcc
+╔══════════════════════════════════════════════╗
+║   [36mDEMOSTRACIÓN[0m [36mDE[0m [36mCOLORES[0m [36mEN[0m [36mRACCOON[0m        ║
+╔══════════════════════════════════════════════╗
+
+🎨 [36mTIPOS[0m [36mDE[0m [36mDATOS[0m [36mCON[0m [36mCOLORES[0m[37m:[0m
+─────────────────────────────────────────────
+
+📝 [36mStrings[0m ([36mVerde[0m)[37m:[0m
+  → [36mHola[0m [36mMundo[0m [36mRaccoon[0m
+
+🔢 [36mNúmeros[0m ([36mAmarillo[0m)[37m:[0m
+  [36mEnteros[0m → [93m42[0m [93m100[0m [93m-5[0m
+  [36mDecimales[0m → [93m3.14[0m [93m2.71[0m [93m0.5[0m
+
+✓ [36mBooleanos[0m ([36mAmarillo[0m)[37m:[0m
+  → [93mtrue[0m [93mfalse[0m
+
+∅ [36mNull[0m ([36mGris[0m)[37m:[0m
+  → [93mnull[0m
+
+📋 [36mListas[0m ([36mMagenta[0m)[37m:[0m
+  → [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  → [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+
+
+🎯 [36mOPERACIONES[0m [36mY[0m [36mRESULTADOS[0m[37m:[0m
+─────────────────────────────────────────────
+
+[36ma[0m = [93m10[0m │ [36mb[0m = [93m20[0m
+[36ma[0m + [36mb[0m = [93m30[0m
+[36ma[0m * [36mb[0m = [93m200[0m
+[36ma[0m < [36mb[0m = [93mtrue[0m
+
+
+✨ [36mCOMPARACIÓN[0m[37m:[0m
+─────────────────────────────────────────────
+
+👤 [36mUsuario[0m[37m:[0m [36mAlice[0m
+   [36mEdad[0m[37m:[0m [93m30[0m [36maños[0m
+   [36mEstado[0m[37m:[0m [36mActivo[0m
+
+
+╚══════════════════════════════════════════════╝
+║   [36mFIN[0m [36mDE[0m [36mLA[0m [36mDEMOSTRACIÓN[0m                     ║
+╚══════════════════════════════════════════════╝
+Running test: .\tests\feature_array_destructuring.rcc
+[36ma[0m = [93m1[0m
+[36mb[0m = [93m2[0m
+[36mc[0m = [93m3[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mString[0m [36mArray[0m [36mDestructuring[0m
+[36mhello[0m [36mworld[0m [36mraccoon[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFloat[0m [36mArray[0m [36mDestructuring[0m
+[36mPi[0m[37m:[0m [93m3.14[0m
+[36mE[0m[37m:[0m [93m2.71[0m
+[36mSqrt2[0m[37m:[0m [93m1.41[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mFunction[0m [36mParameter[0m [36mDestructuring[0m
+[36mSum[0m [36mof[0m [36mfirst[0m [36mtwo[0m[37m:[0m [93m30[0m
+[36mValues[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m[37m,[0m [93m300[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mBlock[0m [36mScope[0m [36mDestructuring[0m
+[36mFirst[0m[37m:[0m [93m7[0m[37m,[0m [36mSecond[0m[37m:[0m [93m14[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mLoops[0m
+[37m[[0m[93m0[0m[37m][0m = [93m0[0m
+[37m[[0m[93m1[0m[37m][0m = [93m10[0m
+[37m[[0m[93m2[0m[37m][0m = [93m20[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mClass[0m [36mMethods[0m
+[36mAP[0m[93m-1[0m [36mprocessing[0m[37m:[0m [93m5[0m[37m,[0m [93m10[0m[37m,[0m [93m15[0m
+[36mResult[0m[37m:[0m [93m30[0m
+[36mFirst[0m [36mvalue[0m[37m:[0m [93m99[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mConditionals[0m
+[36mConditional[0m [36mvalues[0m[37m:[0m [93m50[0m[37m,[0m [93m60[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mNested[0m [36mFunction[0m [36mCalls[0m
+[36mMultiplied[0m[37m:[0m [93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mLet[0m [36mvs[0m [36mConst[0m [36mDestructuring[0m
+[36mLet[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m
+[36mConst[0m[37m:[0m [93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mFor[0m-[36min[0m [36mLoop[0m [36mwith[0m [36mArrays[0m
+[36mItem[0m[37m:[0m [93m100[0m
+[36mItem[0m[37m:[0m [93m200[0m
+[36mItem[0m[37m:[0m [93m300[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mRange[0m [36mwith[0m [36mDestructuring[0m
+[36mRange[0m [36mvalues[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mConstructor[0m [36mwith[0m [36mDestructuring[0m
+[36mVector[0m [36mcreated[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+[36mComponents[0m[37m:[0m [93m3[0m [36mitems[0m
+=== [36mALL[0m [36mARRAY[0m [36mDESTRUCTURING[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36marray[0m [36mdestructuring[0m
+✅ [36mString[0m/[36mFloat[0m [36marrays[0m
+✅ [36mFunction[0m [36mparameters[0m
+✅ [36mBlock[0m [36mscope[0m
+✅ [36mLoops[0m
+✅ [36mClass[0m [36mmethods[0m
+✅ [36mConditionals[0m
+✅ [36mNested[0m [36mcalls[0m
+✅ [36mLet[0m [36mvs[0m [36mConst[0m
+✅ [36mFor[0m-[36min[0m [36mloops[0m
+✅ [36mRanges[0m
+✅ [36mConstructors[0m
+Running test: .\tests\feature_arrow_functions.rcc
+[93m8[0m
+[93m14[0m
+[93m42[0m
+[93m42[0m
+[93mtrue[0m
+[93mfalse[0m
+[36mHello[0m[37m,[0m [36mWorld[0m!
+[93m12[0m
+[93m19[0m
+[93mtrue[0m
+[93m8[0m
+[93m15[0m
+[36mAll[0m [36marrow[0m [36mfunction[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\feature_decorators.rcc
+=== [36mDECORATORS[0m [36mFEATURE[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mSimple[0m [36mClass[0m [36mDecorator[0m
+[36mValue[0m[37m:[0m [93m42[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mDecorator[0m [36mwith[0m [36mSingle[0m [36mArgument[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mDecorator[0m [36mwith[0m [36mMultiple[0m [36mArguments[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mMultiple[0m [36mDecorators[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mDecorators[0m [36mwith[0m [36mString[0m [36mArguments[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mDecorators[0m [36mwith[0m [36mFloat[0m [36mArguments[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mDecorators[0m [36mwith[0m [36mInheritance[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mComplex[0m [36mDecorator[0m [36mLogic[0m
+[36mSize[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mBoolean[0m [36mArgument[0m [36mDecorators[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mDecorator[0m [36mOrdering[0m [36mTest[0m
+=== [36mALL[0m [36mDECORATOR[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mSimple[0m [36mdecorators[0m
+✅ [36mDecorators[0m [36mwith[0m [36marguments[0m
+✅ [36mMultiple[0m [36mdecorators[0m
+✅ [36mString[0m [36marguments[0m
+✅ [36mFloat[0m [36marguments[0m
+✅ [36mWith[0m [36minheritance[0m
+✅ [36mComplex[0m [36mlogic[0m
+✅ [36mBoolean[0m [36marguments[0m
+✅ [36mDecorator[0m [36mordering[0m
+Running test: .\tests\feature_object_destructuring.rcc
+=== [36mOBJECT[0m [36mDESTRUCTURING[0m [36mFEATURE[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGlobal[0m [36mVariable[0m [36mDestructuring[0m
+[36mx[0m = [93m10[0m
+[36my[0m = [93m20[0m
+[36mx2[0m = [93m100[0m
+[36my2[0m = [93m200[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mBlock[0m [36mScope[0m [36mDestructuring[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFunction[0m [36mParameter[0m [36mDestructuring[0m
+[36mPoint[0m([93m5[0m[37m,[0m [93m15[0m)
+[36mHello[0m [36mBob[0m[37m,[0m [36myou[0m [36mare[0m [93m25[0m [36myears[0m [36mold[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mConditionals[0m
+[36mResolution[0m[37m:[0m [93m800[0m[36mx600[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mWhile[0m [36mLoop[0m
+[36mLoop[0m [93m0[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+[36mLoop[0m [93m1[0m[37m:[0m ([93m10[0m[37m,[0m [93m20[0m)
+[36mTest[0m [93m6[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mClass[0m [36mMethods[0m
+[36mProcessor[0m[93m-1[0m [36mprocessing[0m[37m:[0m [36mx[0m=[93m7[0m[37m,[0m [36my[0m=[93m14[0m
+[36mCombined[0m [36mresult[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mMultiple[0m [36mDestructurings[0m
+[36mUser[0m [93m1[0m[37m:[0m [36muser1[0m ([36muser1[0m@[36mtest[0m.[36mcom[0m)
+[36mUser[0m [93m2[0m[37m:[0m [36muser2[0m ([36muser2[0m@[36mtest[0m.[36mcom[0m)
+[36mTest[0m [93m8[0m[37m:[0m [36mDestructuring[0m [36mwith[0m [36mFunction[0m [36mReturns[0m
+[36mCreated[0m [36mpoint[0m[37m:[0m ([93m42[0m[37m,[0m [93m84[0m)
+[36mTest[0m [93m9[0m[37m:[0m [36mNested[0m [36mFunction[0m [36mCalls[0m
+[36mOriginal[0m[37m:[0m ([93m3[0m[37m,[0m [93m4[0m)
+[36mDoubled[0m [36msum[0m[37m:[0m [93m14[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mTry[0m-[36mCatch[0m
+[36mTry[0m [36mblock[0m[37m:[0m [36mTest[0m[37m,[0m [93m99[0m
+=== [36mALL[0m [36mOBJECT[0m [36mDESTRUCTURING[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mGlobal[0m [36mscope[0m [36mdestructuring[0m
+✅ [36mBlock[0m [36mscope[0m [36mdestructuring[0m
+✅ [36mFunction[0m [36mparameter[0m [36mdestructuring[0m
+✅ [36mConditional[0m [36mdestructuring[0m
+✅ [36mLoop[0m [36mdestructuring[0m
+✅ [36mClass[0m [36mmethod[0m [36mdestructuring[0m
+✅ [36mMultiple[0m [36mdestructurings[0m
+✅ [36mWith[0m [36mfunction[0m [36mreturns[0m
+✅ [36mNested[0m [36mcalls[0m
+✅ [36mTry[0m-[36mcatch[0m [36mblocks[0m
+Running test: .\tests\math_utils.rcc
+Running test: .\tests\REFERENCE_COMPATIBILITY_TEST.rcc
+╔════════════════════════════════════════════╗
+║  [36mRACCOON[0m [36mCOMPATIBILITY[0m [36mREFERENCE[0m [36mTEST[0m     ║
+║  [36mVersion[0m[37m:[0m [93m1.0[0m.[93m0[0m                           ║
+║  [36mDate[0m[37m:[0m [36mOctober[0m [93m2025[0m                       ║
+╚════════════════════════════════════════════╝
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m1[0m[37m:[0m [36mObject[0m [36mDestructuring[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m1.1[0m [36mBasic[0m [36mObject[0m [36mDestructuring[0m
+  ✓ [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+[93m1.2[0m [36mObject[0m [36mDestructuring[0m [36min[0m [36mFunctions[0m
+  ✓ [36msum[0m=[93m20[0m
+[93m1.3[0m [36mObject[0m [36mDestructuring[0m [36min[0m [36mClass[0m [36mMethods[0m
+  ✓ [36mresult[0m=[93m14[0m
+  ✅ [36mObject[0m [36mDestructuring[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m2[0m[37m:[0m [36mArray[0m [36mDestructuring[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m2.1[0m [36mBasic[0m [36mArray[0m [36mDestructuring[0m
+  ✓ [36ma[0m=[93m1[0m[37m,[0m [36mb[0m=[93m2[0m[37m,[0m [36mc[0m=[93m3[0m
+[93m2.2[0m [36mString[0m [36mArray[0m [36mDestructuring[0m
+  ✓ [36mw1[0m=[36mhello[0m[37m,[0m [36mw2[0m=[36mworld[0m
+[93m2.3[0m [36mArray[0m [36mDestructuring[0m [36min[0m [36mFunction[0m [36mParameters[0m
+  ✓ [36marraySum[0m=[93m60[0m
+[93m2.4[0m [36mArray[0m [36mDestructuring[0m [36min[0m [36mConstructors[0m
+  ✓ [36mmagnitude[0m=[93m7[0m
+  ✅ [36mArray[0m [36mDestructuring[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m3[0m[37m:[0m [36mDecorators[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m3.1[0m [36mSimple[0m [36mClass[0m [36mDecorator[0m
+[93m3.2[0m [36mDecorator[0m [36mwith[0m [36mArguments[0m
+[93m3.3[0m [36mMultiple[0m [36mDecorators[0m
+  ✅ [36mDecorators[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m4[0m[37m:[0m [36mFeature[0m [36mIntegration[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m4.1[0m [36mDecorators[0m + [36mObject[0m [36mDestructuring[0m
+  ✓ [36mAuthenticating[0m [36muser[0m[37m:[0m [36madmin[0m
+[93m4.2[0m [36mDecorators[0m + [36mArray[0m [36mDestructuring[0m
+  ✓ [36mProcessing[0m[37m:[0m [36mmin[0m=[93m10[0m[37m,[0m [36mmax[0m=[93m100[0m[37m,[0m [36mavg[0m=[93m55[0m
+[93m4.3[0m [36mAll[0m [36mFeatures[0m [36mCombined[0m
+  ✓ [36mQuerying[0m [36musers[0m [36mwith[0m [36mlimit[0m [93m100[0m
+  ✓ [36mBatch[0m [36minserting[0m [93m10[0m [36mrecords[0m [36mof[0m [36msize[0m [93m1024[0m
+  ✓ [36mTotal[0m [36mbytes[0m[37m:[0m [93m10240[0m
+  ✅ [36mFeature[0m [36mIntegration[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m5[0m[37m:[0m [36mEdge[0m [36mCases[0m & [36mStress[0m [36mTests[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m5.1[0m [36mNested[0m [36mObject[0m [36mAccess[0m
+  ✓ [36mLocation[0m[37m:[0m [36mNYC[0m[37m,[0m [36mUSA[0m
+[93m5.2[0m [36mDestructuring[0m [36min[0m [36mLoops[0m
+  ✓ [36mLoop[0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m0[0m
+  ✓ [36mLoop[0m[37m[[0m[93m1[0m[37m][0m[37m:[0m [93m10[0m
+[93m5.3[0m [36mDestructuring[0m [36mwith[0m [36mRanges[0m
+  ✓ [36mRange[0m [36mvalues[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[93m5.4[0m [36mMultiple[0m [36mDestructurings[0m
+  ✓ [36mP1[0m([93m1[0m[37m,[0m[93m2[0m)[37m,[0m [36mP2[0m([93m3[0m[37m,[0m[93m4[0m)
+[93m5.5[0m [36mDecorator[0m [36mwith[0m [36mComplex[0m [36mArguments[0m
+  ✓ [36mService[0m [36mcall[0m [36mexecuted[0m
+  ✅ [36mEdge[0m [36mCases[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m6[0m[37m:[0m [36mBackward[0m [36mCompatibility[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m6.1[0m [36mRegular[0m [36mClasses[0m
+  ✓ [36mOld[0m [36mstyle[0m [36mclass[0m [36mvalue[0m[37m:[0m [93m100[0m
+[93m6.2[0m [36mRegular[0m [36mFunctions[0m
+  ✓ [36mRegular[0m [36mfunction[0m [36mresult[0m[37m:[0m [93m15[0m
+[93m6.3[0m [36mRegular[0m [36mVariables[0m
+  ✓ [36mNormal[0m [36mvar[0m[37m:[0m [93m42[0m[37m,[0m [36mconst[0m[37m:[0m [36mconstant[0m
+  ✅ [36mBackward[0m [36mCompatibility[0m[37m:[0m [36mPASSED[0m
+╔════════════════════════════════════════════╗
+║           [36mCOMPATIBILITY[0m [36mREPORT[0m            ║
+╚════════════════════════════════════════════╝
+✅ [36mSECTION[0m [93m1[0m[37m:[0m [36mObject[0m [36mDestructuring[0m ......... [36mPASSED[0m
+✅ [36mSECTION[0m [93m2[0m[37m:[0m [36mArray[0m [36mDestructuring[0m .......... [36mPASSED[0m
+✅ [36mSECTION[0m [93m3[0m[37m:[0m [36mDecorators[0m ................... [36mPASSED[0m
+✅ [36mSECTION[0m [93m4[0m[37m:[0m [36mFeature[0m [36mIntegration[0m .......... [36mPASSED[0m
+✅ [36mSECTION[0m [93m5[0m[37m:[0m [36mEdge[0m [36mCases[0m ................... [36mPASSED[0m
+✅ [36mSECTION[0m [93m6[0m[37m:[0m [36mBackward[0m [36mCompatibility[0m ....... [36mPASSED[0m
+╔════════════════════════════════════════════╗
+║    [36mALL[0m [36mCOMPATIBILITY[0m [36mTESTS[0m [36mPASSED[0m ✅      ║
+║                                           ║
+║  [36mObject[0m [36mDestructuring[0m[37m:[0m    [93m100[0m% ✅         ║
+║  [36mArray[0m [36mDestructuring[0m[37m:[0m     [93m100[0m% ✅         ║
+║  [36mDecorators[0m[37m:[0m              [93m100[0m% ✅         ║
+║  [36mFeature[0m [36mIntegration[0m[37m:[0m     [93m100[0m% ✅         ║
+║  [36mEdge[0m [36mCases[0m[37m:[0m              [93m100[0m% ✅         ║
+║  [36mBackward[0m [36mCompatibility[0m[37m:[0m  [93m100[0m% ✅         ║
+║                                           ║
+║  [36mOVERALL[0m [36mSTATUS[0m[37m:[0m          [36mEXCELLENT[0m ✅    ║
+╚════════════════════════════════════════════╝
+Running test: .\tests\syntax_arrays.rcc
+=== [36mARRAYS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mArray[0m [36mDeclaration[0m
+[36mInt[0m [36marray[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mString[0m [36marray[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mFloat[0m [36marray[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mBool[0m [36marray[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mArray[0m [36mAccess[0m
+[36mFirst[0m [36melement[0m[37m:[0m [93m10[0m
+[36mSecond[0m [36melement[0m[37m:[0m [93m20[0m
+[36mLast[0m [36melement[0m[37m:[0m [93m50[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mArray[0m [36mModification[0m
+[36mBefore[0m[37m:[0m [93m1[0m
+[36mAfter[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mEmpty[0m [36mArray[0m
+[36mEmpty[0m [36marray[0m [36mlength[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mArray[0m [36mwith[0m [36mVariables[0m
+[36mArray[0m [36mfrom[0m [36mvars[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mNested[0m [36mArrays[0m
+[36mMatrix[0m[37m[[0m[93m0[0m[37m][0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m1[0m
+[36mMatrix[0m[37m[[0m[93m1[0m[37m][0m[37m[[0m[93m1[0m[37m][0m[37m:[0m [93m4[0m
+[36mMatrix[0m[37m[[0m[93m2[0m[37m][0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m5[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mArray[0m [36mIteration[0m
+[36mFruit[0m[37m:[0m [36mapple[0m
+[36mFruit[0m[37m:[0m [36mbanana[0m
+[36mFruit[0m[37m:[0m [36mcherry[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mArray[0m [36mfrom[0m [36mRange[0m
+[36mRange[0m [93m1.[0m.[93m5[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mNumber[0m[37m:[0m [93m1[0m
+[36mNumber[0m[37m:[0m [93m2[0m
+[36mNumber[0m[37m:[0m [93m3[0m
+[36mNumber[0m[37m:[0m [93m4[0m
+[36mNumber[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mArray[0m [36mPush[0m
+[36mBefore[0m [36mpush[0m[37m:[0m [93m2[0m
+[36mAfter[0m [36mpush[0m[37m:[0m [93m3[0m
+[36mLast[0m [36melement[0m[37m:[0m [93m3[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mArray[0m [36mPop[0m
+[36mBefore[0m [36mpop[0m[37m:[0m [93m3[0m
+[36mPopped[0m [36mvalue[0m[37m:[0m [93m30[0m
+[36mAfter[0m [36mpop[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mString[0m [36mas[0m [36mCharacter[0m [36mArray[0m
+[36mString[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mFirst[0m [36mchar[0m[37m:[0m [36mh[0m
+[36mLast[0m [36mchar[0m[37m:[0m [36mo[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mArray[0m [36mOperations[0m
+[36mCombined[0m [36mlength[0m[37m:[0m [93m4[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mArrays[0m [36min[0m [36mFunctions[0m
+[36mFirst[0m[37m:[0m [93m100[0m
+[36mLast[0m[37m:[0m [93m300[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mMulti[0m-[36mdimensional[0m [36mArrays[0m
+[36mGrid[0m[37m[[0m[93m0[0m[37m][0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m1[0m
+[36mGrid[0m[37m[[0m[93m1[0m[37m][0m[37m[[0m[93m1[0m[37m][0m[37m:[0m [93m5[0m
+[36mGrid[0m[37m[[0m[93m2[0m[37m][0m[37m[[0m[93m2[0m[37m][0m[37m:[0m [93m9[0m
+[36mTest[0m [93m15[0m[37m:[0m [36mLength[0m [36mProperty[0m
+[36mEmpty[0m[37m:[0m [93m0[0m
+[36mAfter[0m [93m1[0m [36mpush[0m[37m:[0m [93m1[0m
+[36mAfter[0m [93m3[0m [36mpushes[0m[37m:[0m [93m3[0m
+=== [36mALL[0m [36mARRAYS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mArray[0m [36mdeclaration[0m
+✅ [36mArray[0m [36maccess[0m
+✅ [36mArray[0m [36mmodification[0m
+✅ [36mEmpty[0m [36marrays[0m
+✅ [36mArrays[0m [36mfrom[0m [36mvariables[0m
+✅ [36mNested[0m [36marrays[0m
+✅ [36mArray[0m [36miteration[0m
+✅ [36mRange[0m [36mcreation[0m
+✅ [36mPush[0m [36mmethod[0m
+✅ [36mPop[0m [36mmethod[0m
+✅ [36mString[0m [36mindexing[0m
+✅ [36mArray[0m [36mconcatenation[0m
+✅ [36mArrays[0m [36min[0m [36mfunctions[0m
+✅ [36mMulti[0m-[36mdimensional[0m [36maccess[0m
+✅ [36mLength[0m [36mproperty[0m
+Running test: .\tests\syntax_arrow_functions.rcc
+[93m10[0m
+[93m30[0m
+[93m42[0m
+[93m42[0m
+[93m75[0m
+[93mtrue[0m
+[93mfalse[0m
+[36mHello[0m[37m,[0m [36mTypeScript[0m
+[93m25[0m
+[93m11[0m
+[93m13[0m
+[93mtrue[0m
+[93mfalse[0m
+[93m8[0m
+[93m15[0m
+[93m15[0m
+[93m25[0m
+[93m49[0m
+[93m103[0m
+[93m35[0m
+[93m7[0m
+[93m12[0m
+[36mAll[0m [36mTypeScript[0m-[36mstyle[0m [36marrow[0m [36mfunction[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\syntax_bitwise_operators.rcc
+[93m8[0m
+[93m14[0m
+[93m6[0m
+[93m-6[0m
+[93m20[0m
+[93m5[0m
+[93m4611686018427387902[0m
+[93m8[0m
+[93m512[0m
+[93m8[0m
+[93m14[0m
+[93m6[0m
+[93m20[0m
+[93m5[0m
+[93m8[0m
+Running test: .\tests\syntax_classes.rcc
+=== [36mCLASSES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mClass[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mClass[0m [36mMethods[0m
+[36mInitial[0m[37m:[0m [93m10[0m
+[36mAfter[0m [36madd[0m([93m5[0m)[37m:[0m [93m15[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mMultiple[0m [36mMethods[0m
+[36mAfter[0m [93m2[0m [36mincrements[0m[37m:[0m [93m2[0m
+[36mAfter[0m [93m1[0m [36mdecrement[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mString[0m [36mFields[0m
+[93m1984[0m [36mby[0m [36mOrwell[0m
+[36mPages[0m[37m:[0m [93m328[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mBoolean[0m [36mFields[0m
+[36mStatus[0m[37m:[0m [36mOFF[0m
+[36mAfter[0m [36mtoggle[0m[37m:[0m [36mON[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mArray[0m [36mFields[0m
+[36mStudent[0m [36mcount[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mMethod[0m [36mReturn[0m [36mValues[0m
+[36mArea[0m[37m:[0m [93m15[0m
+[36mPerimeter[0m[37m:[0m [93m16[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mInheritance[0m
+[36mDog[0m [36mname[0m[37m:[0m [36mRex[0m
+[36mBreed[0m[37m:[0m [36mLabrador[0m
+[36mSound[0m[37m:[0m [36mWoof[0m!
+[36mTest[0m [93m9[0m[37m:[0m [36mMethods[0m [36mwith[0m [36mParameters[0m
+[36mmax[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m20[0m
+[36mmin[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m10[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mMultiple[0m [36mInstances[0m
+[36mp1[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+[36mp2[0m[37m:[0m ([93m10[0m[37m,[0m [93m20[0m)
+=== [36mALL[0m [36mCLASSES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mclass[0m [36mcreation[0m
+✅ [36mClass[0m [36mmethods[0m
+✅ [36mMultiple[0m [36mmethods[0m
+✅ [36mString[0m [36mfields[0m
+✅ [36mBoolean[0m [36mfields[0m
+✅ [36mArray[0m [36mfields[0m
+✅ [36mMethod[0m [36mreturns[0m
+✅ [36mInheritance[0m
+✅ [36mStatic[0m [36mmethods[0m
+✅ [36mMultiple[0m [36minstances[0m
+Running test: .\tests\syntax_control_flow.rcc
+=== [36mCONTROL[0m [36mFLOW[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mIf[0m [36mStatement[0m
+[36mx[0m [36mis[0m [36mgreater[0m [36mthan[0m [93m5[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mIf[0m-[36mElse[0m [36mStatement[0m
+[36mAdult[0m
+[93m18[0m [36mor[0m [36molder[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mIf[0m-[36mElse[0m [36mChain[0m
+[36mGrade[0m[37m:[0m [36mB[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mNested[0m [36mIf[0m
+[36mPositive[0m [36mand[0m [36mgreater[0m [36mthan[0m [93m10[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mWhile[0m [36mLoop[0m
+[36mCounter[0m[37m:[0m [93m0[0m
+[36mCounter[0m[37m:[0m [93m1[0m
+[36mCounter[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mWhile[0m [36mwith[0m [36mBreak[0m
+[36mi[0m[37m:[0m [93m0[0m
+[36mi[0m[37m:[0m [93m1[0m
+[36mi[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mWhile[0m [36mwith[0m [36mContinue[0m
+[36mj[0m[37m:[0m [93m1[0m
+[36mj[0m[37m:[0m [93m2[0m
+[36mj[0m[37m:[0m [93m4[0m
+[36mj[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mFor[0m-[36mIn[0m [36mLoop[0m [36mwith[0m [36mArray[0m
+[36mNumber[0m[37m:[0m [93m10[0m
+[36mNumber[0m[37m:[0m [93m20[0m
+[36mNumber[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mFor[0m-[36mIn[0m [36mLoop[0m [36mwith[0m [36mRange[0m
+[36mRange[0m[37m:[0m [93m1[0m
+[36mRange[0m[37m:[0m [93m2[0m
+[36mRange[0m[37m:[0m [93m3[0m
+[36mRange[0m[37m:[0m [93m4[0m
+[36mRange[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mNested[0m [36mLoops[0m
+([93m0[0m[37m,[0m [93m0[0m)
+([93m0[0m[37m,[0m [93m1[0m)
+([93m1[0m[37m,[0m [93m0[0m)
+([93m1[0m[37m,[0m [93m1[0m)
+[36mTest[0m [93m11[0m[37m:[0m [36mComplex[0m [36mConditions[0m
+[36ma[0m < [36mb[0m < [36mc[0m [36mis[0m [93mtrue[0m
+[36mAt[0m [36mleast[0m [36mone[0m [36mcondition[0m [36mis[0m [93mtrue[0m
+[36ma[0m [36mis[0m [36mnot[0m [36mgreater[0m [36mthan[0m [36mb[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mEarly[0m [36mReturn[0m [36mPattern[0m
+[36mcheckValue[0m([93m-5[0m)[37m:[0m [36mnegative[0m
+[36mcheckValue[0m([93m0[0m)[37m:[0m [36mzero[0m
+[36mcheckValue[0m([93m10[0m)[37m:[0m [36mpositive[0m
+=== [36mALL[0m [36mCONTROL[0m [36mFLOW[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mIf[0m [36mstatement[0m
+✅ [36mIf[0m-[36melse[0m [36mstatement[0m
+✅ [36mIf[0m-[36melse[0m [36mchain[0m
+✅ [36mNested[0m [36mif[0m
+✅ [36mWhile[0m [36mloop[0m
+✅ [36mBreak[0m [36mstatement[0m
+✅ [36mContinue[0m [36mstatement[0m
+✅ [36mFor[0m-[36min[0m [36mwith[0m [36marrays[0m
+✅ [36mFor[0m-[36min[0m [36mwith[0m [36mranges[0m
+✅ [36mNested[0m [36mloops[0m
+✅ [36mComplex[0m [36mconditions[0m
+✅ [36mEarly[0m [36mreturns[0m
+Running test: .\tests\syntax_error_handling.rcc
+=== [36mERROR[0m [36mHANDLING[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mTry[0m-[36mCatch[0m
+[36mInside[0m [36mtry[0m [36mblock[0m
+[36mCaught[0m[37m:[0m [36mBasic[0m [36merror[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mNormal[0m [36mFlow[0m
+[36mThis[0m [36mexecutes[0m [36mnormally[0m
+[36mx[0m = [93m10[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mString[0m [36mError[0m
+[36mError[0m [36mmessage[0m[37m:[0m [36mSomething[0m [36mwent[0m [36mwrong[0m!
+[36mTest[0m [93m4[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36min[0m [36mFunction[0m
+[36mResult[0m[37m:[0m [36merror[0m[37m:[0m [36mFunction[0m [36merror[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mNested[0m [36mTry[0m-[36mCatch[0m
+[36mOuter[0m [36mtry[0m
+[36mInner[0m [36mtry[0m
+[36mInner[0m [36mcatch[0m[37m:[0m [36mInner[0m [36merror[0m
+[36mAfter[0m [36minner[0m [36mtry[0m-[36mcatch[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mMultiple[0m [36mStatements[0m
+[36mSum[0m[37m:[0m [93m3[0m
+[36mCaught[0m[37m:[0m [36mError[0m [36mafter[0m [36mcalculations[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36mwith[0m [36mReturn[0m
+[93m10[0m % [93m2[0m = [93m0[0m
+[36mError[0m[37m:[0m [36mDivision[0m [36mby[0m [36mzero[0m
+[93m10[0m % [93m0[0m = [93m0[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mVariable[0m [36mScope[0m
+[36mStatus[0m[37m:[0m [36merror[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36min[0m [36mLoop[0m
+[36mi[0m = [93m0[0m
+[36mCaught[0m[37m:[0m [36mError[0m [36mat[0m [36mi[0m=[93m1[0m
+[36mi[0m = [93m2[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mConditional[0m [36mThrow[0m
+[36mValid[0m [36mage[0m
+[36mInvalid[0m[37m:[0m [36mAge[0m [36mcannot[0m [36mbe[0m [36mnegative[0m
+[36mInvalid[0m[37m:[0m [36mAge[0m [36mtoo[0m [36mhigh[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mMultiple[0m [36mThrows[0m
+[36mValue[0m [36mis[0m [36mvalid[0m
+[36mValidation[0m [36merror[0m[37m:[0m [36mNegative[0m
+[36mValidation[0m [36merror[0m[37m:[0m [36mZero[0m
+[36mValidation[0m [36merror[0m[37m:[0m [36mToo[0m [36mlarge[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mError[0m [36mPropagation[0m
+[36mcaught[0m[37m:[0m [36mInner[0m [36mfunction[0m [36merror[0m
+=== [36mALL[0m [36mERROR[0m [36mHANDLING[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mtry[0m-[36mcatch[0m
+✅ [36mNormal[0m [36mflow[0m
+✅ [36mString[0m [36merrors[0m
+✅ [36mTry[0m-[36mcatch[0m [36min[0m [36mfunctions[0m
+✅ [36mNested[0m [36mtry[0m-[36mcatch[0m
+✅ [36mMultiple[0m [36mstatements[0m
+✅ [36mTry[0m-[36mcatch[0m [36mwith[0m [36mreturn[0m
+✅ [36mVariable[0m [36mscope[0m
+✅ [36mTry[0m-[36mcatch[0m [36min[0m [36mloops[0m
+✅ [36mConditional[0m [36mthrows[0m
+✅ [36mMultiple[0m [36mthrows[0m
+✅ [36mError[0m [36mpropagation[0m
+Running test: .\tests\syntax_functions.rcc
+=== [36mFUNCTIONS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mFunction[0m
+[36mHello[0m [36mfrom[0m [36mfunction[0m!
+[36mTest[0m [93m2[0m[37m:[0m [36mFunction[0m [36mwith[0m [36mParameters[0m
+[93m5[0m + [93m3[0m = [93m8[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mMultiple[0m [36mParameters[0m
+[36mName[0m[37m:[0m [36mAlice[0m[37m,[0m [36mAge[0m[37m:[0m [93m25[0m[37m,[0m [36mCity[0m[37m:[0m [36mNYC[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mReturn[0m [36mValues[0m
+[93m6[0m * [93m7[0m = [93m42[0m
+[93m20[0m / [93m4[0m = [93m5[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mDefault[0m [36mParameters[0m
+[36mHello[0m[37m,[0m [36mAlice[0m!
+[36mHello[0m[37m,[0m [36mGuest[0m!
+[36mTest[0m [93m6[0m[37m:[0m [36mRecursive[0m [36mFunction[0m
+[36mfactorial[0m([93m5[0m) = [93m120[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mFunction[0m [36mComposition[0m
+[36mquadruple[0m([93m5[0m) = [93m20[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mString[0m [36mReturn[0m [36mFunctions[0m
+[36mFull[0m [36mname[0m[37m:[0m [36mJohn[0m [36mDoe[0m
+[36mShouted[0m[37m:[0m [36mHELLO[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mBoolean[0m [36mReturn[0m [36mFunctions[0m
+[36misEven[0m([93m4[0m)[37m:[0m [93mtrue[0m
+[36misEven[0m([93m7[0m)[37m:[0m [93mfalse[0m
+[36misPositive[0m([93m-5[0m)[37m:[0m [93mfalse[0m
+[36misPositive[0m([93m10[0m)[37m:[0m [93mtrue[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mArray[0m [36mParameters[0m
+[36mSum[0m [36mof[0m [36marray[0m[37m:[0m [93m15[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mArray[0m [36mReturn[0m
+[36mRange[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mNested[0m [36mCalls[0m
+[36mprocess[0m([93m5[0m) = [93m8[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mFloat[0m [36mFunctions[0m
+[36maverage[0m([93m5.0[0m[37m,[0m [93m10.0[0m) = [93m7.5[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mVoid[0m [36mFunctions[0m
+[36mLOG[0m[37m:[0m [36mTest[0m [36mmessage[0m
+=== [36mALL[0m [36mFUNCTIONS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mfunctions[0m
+✅ [36mParameters[0m
+✅ [36mMultiple[0m [36mparameters[0m
+✅ [36mReturn[0m [36mvalues[0m
+✅ [36mDefault[0m [36mparameters[0m
+✅ [36mRecursion[0m
+✅ [36mFunction[0m [36mcomposition[0m
+✅ [36mString[0m [36mreturns[0m
+✅ [36mBoolean[0m [36mreturns[0m
+✅ [36mArray[0m [36mparameters[0m
+✅ [36mArray[0m [36mreturns[0m
+✅ [36mNested[0m [36mcalls[0m
+✅ [36mFloat[0m [36mfunctions[0m
+✅ [36mVoid[0m [36mfunctions[0m
+Running test: .\tests\syntax_interfaces.rcc
+=== [36mINTERFACES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mInterface[0m [36mDefinition[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mInterface[0m [36mwith[0m [36mMethods[0m
+[36mDrawing[0m [36mcircle[0m [36mwith[0m [36mradius[0m [93m5[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mMultiple[0m [36mMembers[0m
+[36mArea[0m[37m:[0m [93m20[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mMultiple[0m [36mInterfaces[0m
+[36mID[0m[37m:[0m [93m1[0m
+[36mProduct[0m[37m:[0m [36mLaptop[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mInterface[0m [36mwith[0m [36mBoolean[0m
+[36mInitial[0m[37m:[0m [93mfalse[0m
+[36mAfter[0m [36mtoggle[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mMultiple[0m [36mMethods[0m
+[36mCounter[0m [36mvalue[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mReturn[0m [36mTypes[0m
+[36mResult[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mEmpty[0m [36mInterface[0m
+[36mMarked[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mString[0m [36mMethods[0m
+[36mFormatted[0m[37m:[0m [93m15[0m/[93m3[0m/[93m2024[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mImplementation[0m [36mChain[0m
+[36mBob[0m[37m,[0m [93m35[0m[37m,[0m [36mDeveloper[0m
+=== [36mALL[0m [36mINTERFACES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36minterface[0m
+✅ [36mInterface[0m [36mwith[0m [36mmethods[0m
+✅ [36mMultiple[0m [36mmembers[0m
+✅ [36mMultiple[0m [36minterfaces[0m
+✅ [36mBoolean[0m [36minterfaces[0m
+✅ [36mMultiple[0m [36mmethods[0m
+✅ [36mReturn[0m [36mtypes[0m
+✅ [36mEmpty[0m [36minterfaces[0m
+✅ [36mString[0m [36mmethods[0m
+✅ [36mImplementation[0m [36mchains[0m
+Running test: .\tests\syntax_interfaces_simple.rcc
+=== [36mINTERFACES[0m [36mTEST[0m ([36mSIMPLIFIED[0m) ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mInterface[0m
+✓ [36mInterface[0m [36mPoint[0m [36mdefined[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mMultiple[0m [36mInterfaces[0m
+✓ [36mMultiple[0m [36minterfaces[0m [36mdefined[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mInterface[0m [36mwith[0m [36mDifferent[0m [36mTypes[0m
+✓ [36mInterface[0m [36mwith[0m [36mmultiple[0m [36mtypes[0m [36mdefined[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mClasses[0m [36mFollowing[0m [36mInterface[0m [36mStructure[0m
+[36mArea[0m[37m:[0m [93m50[0m
+=== [36mALL[0m [36mINTERFACE[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36minterface[0m [36mdefinitions[0m
+✅ [36mMultiple[0m [36minterfaces[0m
+✅ [36mInterfaces[0m [36mwith[0m [36mmultiple[0m [36mtypes[0m
+✅ [36mClasses[0m [36mfollowing[0m [36minterface[0m [36mstructure[0m
+[36mNote[0m[37m:[0m [36mInterfaces[0m [36monly[0m [36msupport[0m [36mproperties[0m[37m,[0m [36mnot[0m [36mmethods[0m
+[36mNote[0m[37m:[0m [92m'implements'[0m [36mkeyword[0m [36mis[0m [36mnot[0m [36mcurrently[0m [36menforced[0m
+Running test: .\tests\syntax_operators.rcc
+=== [36mOPERATORS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mArithmetic[0m [36mOperators[0m
+[36mAddition[0m[37m:[0m [93m13[0m
+[36mSubtraction[0m[37m:[0m [93m7[0m
+[36mMultiplication[0m[37m:[0m [93m30[0m
+[36mDivision[0m[37m:[0m [93m3.3333333333333335[0m
+[36mModulo[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mComparison[0m [36mOperators[0m
+[36mEqual[0m[37m:[0m [93mtrue[0m
+[36mNot[0m [36mequal[0m[37m:[0m [93mtrue[0m
+[36mLess[0m [36mthan[0m[37m:[0m [93mtrue[0m
+[36mGreater[0m [36mthan[0m[37m:[0m [93mtrue[0m
+[36mLess[0m [36mor[0m [36mequal[0m[37m:[0m [93mtrue[0m
+[36mGreater[0m [36mor[0m [36mequal[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mLogical[0m [36mOperators[0m
+[36mAND[0m ([93mtrue[0m && [93mtrue[0m)[37m:[0m [93mtrue[0m
+[36mAND[0m ([93mtrue[0m && [93mfalse[0m)[37m:[0m [93mfalse[0m
+[36mOR[0m ([93mfalse[0m || [93mtrue[0m)[37m:[0m [93mtrue[0m
+[36mOR[0m ([93mfalse[0m || [93mfalse[0m)[37m:[0m [93mfalse[0m
+[36mNOT[0m (![93mtrue[0m)[37m:[0m [93mfalse[0m
+[36mNOT[0m (![93mfalse[0m)[37m:[0m [93mtrue[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mAssignment[0m [36mOperators[0m
+[36mInitial[0m[37m:[0m [93m10[0m
+[36mAfter[0m +[93m5[0m[37m:[0m [93m15[0m
+[36mAfter[0m [93m-3[0m[37m:[0m [93m12[0m
+[36mAfter[0m *[93m2[0m[37m:[0m [93m24[0m
+[36mAfter[0m [93m-4[0m[37m:[0m [93m20[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mCompound[0m [36mAssignment[0m
+[36mnum[0m += [93m10[0m[37m:[0m [93m110[0m
+[36mnum[0m -= [93m5[0m[37m:[0m [93m105[0m
+[36mnum[0m *= [93m2[0m[37m:[0m [93m210[0m
+[36mnum[0m -= [93m10[0m[37m:[0m [93m200[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mUnary[0m [36mOperators[0m
+[36mNegation[0m[37m:[0m [93m-42[0m
+[36mLogical[0m [36mNOT[0m[37m:[0m [93mfalse[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mString[0m [36mConcatenation[0m
+[36mConcatenation[0m[37m:[0m [36mHello[0m [36mWorld[0m
+[36mMixed[0m[37m:[0m [36mRaccoon[0m [36mv1[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mOperator[0m [36mPrecedence[0m
+[93m2[0m + [93m3[0m * [93m4[0m = [93m14[0m
+([93m2[0m + [93m3[0m) * [93m4[0m = [93m20[0m
+[93m10[0m - [93m2[0m + [93m3[0m = [93m11[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mBoolean[0m [36mExpressions[0m
+[36mIs[0m [36madult[0m ([93m25[0m >= [93m18[0m)[37m:[0m [93mtrue[0m
+[36mPassed[0m ([93m85[0m [36min[0m [36mrange[0m)[37m:[0m [93mtrue[0m
+[36mCan[0m [36medit[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mNull[0m [36mComparison[0m
+[36mIs[0m [93mnull[0m[37m:[0m [93mtrue[0m
+[36mIs[0m [36mnot[0m [93mnull[0m[37m:[0m [93mtrue[0m
+=== [36mALL[0m [36mOPERATORS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mArithmetic[0m [36moperators[0m
+✅ [36mComparison[0m [36moperators[0m
+✅ [36mLogical[0m [36moperators[0m
+✅ [36mAssignment[0m [36moperators[0m
+✅ [36mCompound[0m [36massignment[0m
+✅ [36mUnary[0m [36moperators[0m
+✅ [36mString[0m [36mconcatenation[0m
+✅ [36mOperator[0m [36mprecedence[0m
+✅ [36mBoolean[0m [36mexpressions[0m
+✅ [36mNull[0m [36mcomparison[0m
+Running test: .\tests\syntax_primitive_types.rcc
+=== [36mPRIMITIVE[0m [36mTYPES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mInteger[0m [36mType[0m
+[36mPositive[0m[37m:[0m [93m42[0m
+[36mNegative[0m[37m:[0m [93m-100[0m
+[36mZero[0m[37m:[0m [93m0[0m
+[36mMax[0m[37m:[0m [93m2147483647[0m
+[36mMin[0m[37m:[0m [93m-2147483648[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mFloat[0m [36mType[0m
+[36mPi[0m[37m:[0m [93m3.14[0m
+[36mNegative[0m[37m:[0m [93m-2.71[0m
+[36mZero[0m[37m:[0m [93m0[0m
+[36mE[0m[37m:[0m [93m2.71828[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mString[0m [36mType[0m
+[36mString[0m [93m1[0m[37m:[0m [36mHello[0m [36mWorld[0m
+[36mString[0m [93m2[0m[37m:[0m [36mRaccoon[0m
+[36mEmpty[0m[37m:[0m [92m''[0m
+[36mGreeting[0m[37m:[0m ¡[36mHola[0m!
+[36mTest[0m [93m4[0m[37m:[0m [36mBoolean[0m [36mType[0m
+[36mTrue[0m[37m:[0m [93mtrue[0m
+[36mFalse[0m[37m:[0m [93mfalse[0m
+[36mConstant[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mNull[0m [36mType[0m
+[36mNull[0m [36mvalue[0m [36mcreated[0m
+[36mAssigned[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mType[0m [36mConversions[0m
+[36mInt[0m [36mto[0m [36mFloat[0m[37m:[0m [93m10[0m
+[36mInt[0m [36mto[0m [36mString[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mString[0m [36mOperations[0m
+[36mUpper[0m[37m:[0m [36mHELLO[0m
+[36mLower[0m[37m:[0m [36mhello[0m
+[36mSplit[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mType[0m [36mChecking[0m
+[36mtypeof[0m [36mnum[0m[37m:[0m [36mint[0m
+[36mtypeof[0m [36mmsg[0m[37m:[0m [36mstr[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mConstants[0m
+[36mPI[0m[37m:[0m [93m3.14159[0m
+[36mVersion[0m[37m:[0m [93m1[0m
+[36mApp[0m[37m:[0m [36mRaccoon[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mMixed[0m [36mType[0m [36mOperations[0m
+[36mInt[0m + [36mFloat[0m[37m:[0m [93m7.5[0m
+[36mNumber[0m[37m:[0m [93m42[0m
+=== [36mALL[0m [36mPRIMITIVE[0m [36mTYPES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mInteger[0m [36mtype[0m
+✅ [36mFloat[0m [36mtype[0m
+✅ [36mString[0m [36mtype[0m
+✅ [36mBoolean[0m [36mtype[0m
+✅ [36mNull[0m [36mtype[0m
+✅ [36mType[0m [36mconversions[0m
+✅ [36mString[0m [36moperations[0m
+✅ [36mType[0m [36mchecking[0m
+✅ [36mConstants[0m
+✅ [36mMixed[0m [36moperations[0m
+Running test: .\tests\syntax_scopes.rcc
+=== [36mSCOPES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGlobal[0m [36mScope[0m
+[36mGlobal[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mBlock[0m [36mScope[0m
+[36mInside[0m [36mblock[0m[37m:[0m [93m2[0m
+[36mAccess[0m [36mouter[0m[37m:[0m [93m1[0m
+[36mOutside[0m [36mblock[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFunction[0m [36mScope[0m
+[36mInside[0m [36mfunction[0m[37m:[0m [93m20[0m
+[36mAccess[0m [36mouter[0m[37m:[0m [93m10[0m
+[36mOutside[0m [36mfunction[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mVariable[0m [36mShadowing[0m
+[36mOuter[0m [36mx[0m[37m:[0m [93m1[0m
+[36mInner[0m [36mx[0m[37m:[0m [93m2[0m
+[36mOuter[0m [36mx[0m [36magain[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mLoop[0m [36mScope[0m
+[36mLoop[0m [36miteration[0m [93m0[0m[37m:[0m [93m0[0m
+[36mLoop[0m [36miteration[0m [93m1[0m[37m:[0m [93m10[0m
+[36mLoop[0m [36miteration[0m [93m2[0m[37m:[0m [93m20[0m
+[36mAfter[0m [36mloop[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mIf[0m [36mStatement[0m [36mScope[0m
+[36mInside[0m [36mif[0m[37m:[0m [93m42[0m
+[36mAfter[0m [36mif[0m [36mblock[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mNested[0m [36mBlocks[0m
+[36mLevel[0m [93m3[0m[37m:[0m [93m3[0m
+[36mAccess[0m [36mlevel[0m [93m2[0m[37m:[0m [93m2[0m
+[36mAccess[0m [36mlevel[0m [93m1[0m[37m:[0m [93m1[0m
+[36mLevel[0m [93m2[0m[37m:[0m [93m2[0m
+[36mLevel[0m [93m1[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mReassignment[0m
+[36mInitial[0m[37m:[0m [93m10[0m
+[36mAfter[0m [36mreassignment[0m[37m:[0m [93m20[0m
+[36mAfter[0m [36mcalculation[0m[37m:[0m [93m25[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mConstants[0m
+[36mConstant[0m [36mvalue[0m[37m:[0m [93m100[0m
+[36mPI[0m[37m:[0m [93m3.14159[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mFor[0m-[36mIn[0m [36mScope[0m
+[36mNumber[0m[37m:[0m [93m10[0m
+[36mNumber[0m[37m:[0m [93m20[0m
+[36mNumber[0m[37m:[0m [93m30[0m
+[36mAfter[0m [36mfor[0m-[36min[0m [36mloop[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mClass[0m [36mField[0m [36mScope[0m
+[36mCounter[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36mScope[0m
+[36mTry[0m [36mblock[0m[37m:[0m [93m100[0m
+[36mCatch[0m [36mblock[0m[37m:[0m [36mcaught[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mMultiple[0m [36mVariables[0m
+[36ma[0m=[93m1[0m[37m,[0m [36mb[0m=[93m2[0m[37m,[0m [36mc[0m=[93m3[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mVariable[0m [36mLifetime[0m
+[36mFirst[0m [36mcall[0m[37m:[0m [93m1[0m
+[36mSecond[0m [36mcall[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m15[0m[37m:[0m [36mScope[0m [36mChain[0m
+[36mAccess[0m [36mall[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+=== [36mALL[0m [36mSCOPES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mGlobal[0m [36mscope[0m
+✅ [36mBlock[0m [36mscope[0m
+✅ [36mFunction[0m [36mscope[0m
+✅ [36mVariable[0m [36mshadowing[0m
+✅ [36mLoop[0m [36mscope[0m
+✅ [36mIf[0m [36mstatement[0m [36mscope[0m
+✅ [36mNested[0m [36mblocks[0m
+✅ [36mReassignment[0m
+✅ [36mConstants[0m
+✅ [36mFor[0m-[36min[0m [36mscope[0m
+✅ [36mClass[0m [36mfield[0m [36mscope[0m
+✅ [36mTry[0m-[36mcatch[0m [36mscope[0m
+✅ [36mMultiple[0m [36mvariables[0m
+✅ [36mVariable[0m [36mlifetime[0m
+✅ [36mScope[0m [36mchain[0m
+Running test: .\tests\syntax_static_methods.rcc
+=== [36mSTATIC[0m [36mMETHODS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mStatic[0m [36mMethod[0m
+[36mmax[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m20[0m
+[36mmin[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m10[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mMultiple[0m [36mParameters[0m
+[36madd[0m([93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m)[37m:[0m [93m6[0m
+[36mmultiply[0m([93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m)[37m:[0m [93m24[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mString[0m [36mReturn[0m
+[36mHelloWorld[0m
+[36mxxx[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mMix[0m [36mStatic[0m [36mand[0m [36mInstance[0m
+[36mCounter[0m [36mvalue[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mFactory[0m [36mPattern[0m
+[36mOrigin[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+[36mFrom[0m [36marray[0m[37m:[0m ([93m10[0m[37m,[0m [93m20[0m)
+=== [36mALL[0m [36mSTATIC[0m [36mMETHOD[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mstatic[0m [36mmethods[0m
+✅ [36mMultiple[0m [36mparameters[0m
+✅ [36mString[0m [36mreturn[0m [36mtypes[0m
+✅ [36mMixed[0m [36mstatic[0m [36mand[0m [36minstance[0m
+✅ [36mFactory[0m [36mpattern[0m
+Running test: .\tests\syntax_templates.rcc
+=== [36mTEMPLATE[0m [36mSTRINGS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mTemplate[0m
+[36mHello[0m[37m,[0m [36mWorld[0m!
+[36mTest[0m [93m2[0m[37m:[0m [36mInteger[0m [36mInterpolation[0m
+[36mI[0m [36mam[0m [93m25[0m [36myears[0m [36mold[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFloat[0m [36mInterpolation[0m
+[36mPrice[0m[37m:[0m $[93m19.99[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mBoolean[0m [36mInterpolation[0m
+[36mStatus[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mMultiple[0m [36mVariables[0m
+[36mName[0m[37m:[0m [36mJohn[0m [36mDoe[0m[37m,[0m [36mAge[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mExpression[0m [36mInterpolation[0m
+[93m5[0m + [93m3[0m = [93m8[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mTemplates[0m [36min[0m [36mFunctions[0m
+[36mHello[0m [36mAlice[0m[37m,[0m [36myou[0m [36mare[0m [93m28[0m [36myears[0m [36mold[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mObject[0m [36mProperties[0m
+[36mMy[0m [36mname[0m [36mis[0m [36mBob[0m [36mand[0m [36mI[0m[92m'm 35[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mArray[0m [36mProperties[0m
+[36mArray[0m [36mhas[0m [93m5[0m [36mitems[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mComparison[0m [36mResults[0m
+[36mx[0m < [36my[0m [36mis[0m [93mtrue[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mComplex[0m [36mExpressions[0m
+[36mSum[0m [36mof[0m [93m5[0m [36mand[0m [93m10[0m [36mis[0m [93m15[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mFunction[0m [36mCall[0m [36mInterpolation[0m
+[36mDouble[0m [36mof[0m [93m7[0m [36mis[0m [93m14[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mTemplate[0m [36mConcatenation[0m
+[36mHello[0m [36mWorld[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mEmpty[0m [36mTemplates[0m
+[36mEmpty[0m [36mstring[0m [36mlength[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m15[0m[37m:[0m [36mTemplates[0m [36min[0m [36mConditionals[0m
+[36mGrade[0m[37m:[0m [36mB[0m ([93m85[0m)
+=== [36mALL[0m [36mTEMPLATE[0m [36mSTRINGS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mtemplates[0m
+✅ [36mInteger[0m [36minterpolation[0m
+✅ [36mFloat[0m [36minterpolation[0m
+✅ [36mBoolean[0m [36minterpolation[0m
+✅ [36mMultiple[0m [36mvariables[0m
+✅ [36mExpressions[0m
+✅ [36mFunction[0m [36mtemplates[0m
+✅ [36mObject[0m [36mproperties[0m
+✅ [36mArray[0m [36mproperties[0m
+✅ [36mComparisons[0m
+✅ [36mComplex[0m [36mexpressions[0m
+✅ [36mFunction[0m [36mcalls[0m
+✅ [36mConcatenation[0m
+✅ [36mEmpty[0m [36mtemplates[0m
+✅ [36mConditional[0m [36mtemplates[0m
+Running test: .\tests\test_advanced_inference.rcc
+[36mTodas[0m [36mlas[0m [36minferencias[0m [36mcompletadas[0m [36mexitosamente[0m!
+Running test: .\tests\test_advanced_return_inference.rcc
+[36mdouble[0m([93m5[0m) = [93m10[0m
+[36mquadruple[0m([93m3[0m) = [93m12[0m
+[36mcalculate[0m([93mtrue[0m) = [93m42[0m
+[36mcalculate[0m([93mfalse[0m) = [93m3.14[0m
+[36mgetNumbers[0m() = [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[36mcheckValue[0m([93m-5[0m) = [36mnegative[0m
+[36mcheckValue[0m([93m0[0m) = [36mzero[0m
+[36mcheckValue[0m([93m10[0m) = [36mpositive[0m
+[36mdoNothing[0m() = [93m5[0m
+Running test: .\tests\test_advanced_types.rcc
+[36mhello[0m
+[93m42[0m
+[36mAdvanced[0m [36mtype[0m [36msystem[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_array_holes.rcc
+[36mResult[0m[37m:[0m [36ma[0m=[93m1[0m[37m,[0m [36mc[0m=[93m3[0m
+[36mResult[0m[37m:[0m [36mx[0m=[93m10[0m[37m,[0m [36mz[0m=[93m40[0m
+Running test: .\tests\test_array_methods.rcc
+[36mOriginal[0m [36marray[0m[37m:[0m
+[36mDoubled[0m[37m:[0m
+[36mEvens[0m[37m:[0m
+[36mSum[0m[37m:[0m
+[36mForEach[0m[37m:[0m
+  -
+  -
+  -
+  -
+  -
+[36mFirst[0m > [93m3[0m[37m:[0m
+[36mIndex[0m [36mof[0m [36mfirst[0m > [93m3[0m[37m:[0m
+[36mHas[0m > [93m10[0m[37m:[0m
+[36mHas[0m < [93m3[0m[37m:[0m
+[36mAll[0m [36mpositive[0m[37m:[0m
+[36mAll[0m > [93m10[0m[37m:[0m
+[36mAll[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_arrow.rcc
+[37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+Running test: .\tests\test_arrow2.rcc
+[37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+Running test: .\tests\test_arrow_complete.rcc
+=== [36mARROW[0m [36mFUNCTIONS[0m [36mTEST[0m ===
+
+[93m1.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mmap[0m[37m:[0m
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m][0m
+
+[93m2.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mfilter[0m[37m:[0m
+[36mEven[0m [36mnumbers[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m][0m
+
+[93m3.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mreduce[0m[37m:[0m
+[36mSum[0m[37m:[0m [93m15[0m
+
+[93m4.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mtype[0m [36mannotations[0m[37m:[0m
+[36mSquared[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m4[0m[37m,[0m [93m9[0m[37m,[0m [93m16[0m[37m,[0m [93m25[0m[37m][0m
+
+[93m5.[0m [36mMethod[0m [36mchaining[0m[37m:[0m
+[36mFiltered[0m > [93m2[0m[37m,[0m [36mthen[0m * [93m10[0m[37m:[0m [37m[[0m[93m30[0m[37m,[0m [93m40[0m[37m,[0m [93m50[0m[37m][0m
+
+[93m6.[0m [36mArrow[0m [36mfunction[0m [36mas[0m [36mvariable[0m[37m:[0m
+[36mTripled[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m,[0m [93m12[0m[37m,[0m [93m15[0m[37m][0m
+
+=== [36mALL[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_arrow_notype.rcc
+[93m14[0m
+Running test: .\tests\test_arrow_simple.rcc
+[93m8[0m
+Running test: .\tests\test_arrow_single.rcc
+[93m14[0m
+Running test: .\tests\test_bigint_numerics.rcc
+=== [36mTesting[0m [36mNumeric[0m [36mSeparators[0m ===
+[93m1[0m[36m_000_000[0m = [93m1000000[0m
+[93m1[0m[36m_000_000_000[0m = [93m1000000000[0m
+
+=== [36mTesting[0m [36mBinary[0m [36mLiterals[0m ===
+[93m0[0m[36mb1010[0m ([36mbinary[0m) = [93m10[0m
+[93m0[0m[36mB1111_0000[0m ([36mbinary[0m [36mwith[0m [36mseparator[0m) = [93m240[0m
+
+=== [36mTesting[0m [36mOctal[0m [36mLiterals[0m ===
+[93m0[0m[36mo755[0m ([36moctal[0m) = [93m493[0m
+[93m0[0m[36mO644[0m ([36moctal[0m) = [93m420[0m
+
+=== [36mTesting[0m [36mHexadecimal[0m [36mLiterals[0m ===
+[93m0[0m[36mxFF[0m ([36mhex[0m) = [93m255[0m
+[93m0[0m[36mx1A2B[0m ([36mhex[0m) = [93m6699[0m
+
+=== [36mTesting[0m [36mBigInt[0m ===
+[93m12345678901234567890[0m[36mn[0m
+[93m999999999999999999[0m[36mn[0m
+[93m18446744073709551615[0m[36mn[0m
+
+=== [36mTesting[0m [36mtypeof[0m ===
+[36mtypeof[0m [93m123[0m[37m:[0m [36mint[0m
+[36mtypeof[0m [93m123[0m[36mn[0m[37m:[0m [36mbigint[0m
+[36mtypeof[0m [93m0[0m[36mb1010[0m[37m:[0m [36mint[0m
+[36mtypeof[0m [93m0[0m[36mxFF[0m[37m:[0m [36mint[0m
+
+=== [36mAll[0m [36mBigInt[0m [36mand[0m [36mnumeric[0m [36mliteral[0m [36mtests[0m [36mpassed[0m! ===
+Running test: .\tests\test_builtins.rcc
+=== [36mTesting[0m [36mCore[0m [36mBuilt[0m-[36mins[0m ===
+[93m5[0m
+[93m5[0m
+
+=== [36mTesting[0m [36mMath[0m [36mBuilt[0m-[36mins[0m ===
+[93m3.141592653589793[0m
+[93m2.718281828459045[0m
+[93m3.7[0m
+[93m3.2[0m
+[93m4[0m
+[93m5[0m
+[93m4[0m
+[93m8[0m
+[93m3[0m
+[93m5[0m
+[93m0[0m
+[93m1[0m
+[93m1761926902.8820848[0m
+
+=== [36mTesting[0m [36mString[0m [36mBuilt[0m-[36mins[0m ===
+Running test: .\tests\test_classes_advanced.rcc
+🦝 === [36mADVANCED[0m [36mCLASSES[0m [36mTEST[0m ===
+✅ [36mTest[0m [93m1[0m[37m:[0m [36mStatic[0m [36mMethods[0m
+  [36mmax[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m20[0m
+  [36mmin[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m10[0m
+  [36mabs[0m([93m-15[0m)[37m:[0m [93m15[0m
+  [36mabs[0m([93m15[0m)[37m:[0m [93m15[0m
+✅ [36mTest[0m [93m2[0m[37m:[0m [36mGetters[0m [36mand[0m [36mSetters[0m
+  [36mCelsius[0m[37m:[0m [93m25[0m
+  [36mFahrenheit[0m[37m:[0m [93m77[0m
+  [36mKelvin[0m[37m:[0m [93m298.15[0m
+  [36mAfter[0m [36msetting[0m [36mto[0m [93m68[0m°[36mF[0m[37m:[0m
+  [36mCelsius[0m[37m:[0m [93m20[0m
+✅ [36mTest[0m [93m3[0m[37m:[0m [36mMethod[0m [36mOverriding[0m
+  [36mCircle[0m [36mwith[0m [36mradius[0m [93m5[0m
+  [36mArea[0m[37m:[0m [93m78.53975[0m
+  [36mRectangle[0m [93m4[0m[36mx6[0m
+  [36mArea[0m[37m:[0m [93m24[0m
+✅ [36mTest[0m [93m4[0m[37m:[0m [36mEncapsulation[0m [36mPattern[0m
+  [36mInitial[0m[37m:[0m [93m0[0m/[93m3[0m
+  [36mAfter[0m [36mincrement[0m[37m:[0m [93m1[0m
+  [36mAfter[0m [93m2[0m [36mmore[0m [36mincrements[0m[37m:[0m [93m3[0m
+  [36mCan[0m [36mincrement[0m [36mmore[0m[37m:[0m [93mfalse[0m
+  [36mAfter[0m [36mreset[0m[37m:[0m [93m0[0m
+✅ [36mTest[0m [93m5[0m[37m:[0m [36mComplex[0m [36mConstructor[0m
+  [36mUser[0m[37m:[0m [36mjohn_doe[0m
+  [36mEmail[0m[37m:[0m [36mjohn[0m@[36mexample[0m.[36mcom[0m
+  [36mStatus[0m[37m:[0m [36mActive[0m ([93m0[0m [36mlogins[0m)
+  [36mAfter[0m [93m3[0m [36mlogins[0m[37m:[0m [36mActive[0m ([93m3[0m [36mlogins[0m)
+  [36mAfter[0m [36mdeactivation[0m[37m:[0m [36mInactive[0m
+✅ [36mTest[0m [93m6[0m[37m:[0m [36mTwo[0m-[36mLevel[0m [36mInheritance[0m
+  [36mCar[0m[37m:[0m [36mToyota[0m ([93m4[0m [36mdoors[0m)
+  [36mBrand[0m[37m:[0m [36mToyota[0m
+  [36mDoors[0m[37m:[0m [93m4[0m
+✅ [36mTest[0m [93m7[0m[37m:[0m [36mComplex[0m [36mState[0m [36mManagement[0m
+  [36mCart[0m [36mempty[0m[37m:[0m [93mtrue[0m
+  [36mItems[0m [36min[0m [36mcart[0m[37m:[0m [93m3[0m
+  [36mTotal[0m[37m:[0m $[93m12.25[0m
+✅ [36mTest[0m [93m8[0m[37m:[0m [36mMethods[0m [36mwith[0m [36mMultiple[0m [36mReturns[0m
+  [36mEmpty[0m [36mstring[0m[37m:[0m [36mError[0m[37m:[0m [36mValue[0m [36mis[0m [36mempty[0m
+  [92m'ab'[0m[37m:[0m [36mError[0m[37m:[0m [36mValue[0m [36mtoo[0m [36mshort[0m
+  [92m'hello'[0m[37m:[0m [36mValid[0m
+  [36mLong[0m [36mstring[0m[37m:[0m [36mError[0m[37m:[0m [36mValue[0m [36mtoo[0m [36mlong[0m
+✅ [36mTest[0m [93m9[0m[37m:[0m [36mInstance[0m [36mType[0m [36mChecking[0m
+  [36mAnimal[0m [36mname[0m[37m:[0m [36mGeneric[0m
+  [36mCat[0m [36mname[0m[37m:[0m [36mWhiskers[0m
+  [36mCat[0m [36msays[0m[37m:[0m [36mMeow[0m!
+✅ [36mTest[0m [93m10[0m[37m:[0m [36mMultiple[0m [36mInstances[0m [36mStress[0m [36mTest[0m
+  [36mCreated[0m [93m5[0m [36mpoints[0m
+  [36mPoint[0m [93m0[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+  [36mPoint[0m [93m1[0m[37m:[0m ([93m3[0m[37m,[0m [93m4[0m)
+  [36mPoint[0m [93m2[0m[37m:[0m ([93m5[0m[37m,[0m [93m12[0m)
+🎉 === [36mALL[0m [36mADVANCED[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mStatic[0m [36mmethods[0m
+✅ [36mGetters[0m [36mand[0m [36msetters[0m
+✅ [36mMethod[0m [36moverriding[0m [36min[0m [36minheritance[0m
+✅ [36mEncapsulation[0m [36mpatterns[0m
+✅ [36mComplex[0m [36mconstructor[0m [36mlogic[0m
+✅ [36mTwo[0m-[36mlevel[0m [36minheritance[0m
+✅ [36mComplex[0m [36mstate[0m [36mmanagement[0m
+✅ [36mMultiple[0m [36mreturn[0m [36mpoints[0m
+✅ [36mInstance[0m [36mtype[0m [36mchecking[0m
+✅ [36mMultiple[0m [36minstances[0m [36mstress[0m [36mtest[0m
+🦝 [36mRaccoon[0m [36mClasses[0m[37m:[0m [36mALL[0m [36mADVANCED[0m [36mFEATURES[0m [36mWORKING[0m!
+Running test: .\tests\test_classes_comprehensive.rcc
+🦝 === [36mCOMPREHENSIVE[0m [36mCLASSES[0m [36mTEST[0m ===
+✅ [36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mClass[0m [36mwith[0m [36mConstructor[0m
+  [36mName[0m[37m:[0m [36mAlice[0m
+  [36mAge[0m[37m:[0m [93m30[0m
+✅ [36mTest[0m [93m2[0m[37m:[0m [36mClass[0m [36mwith[0m [36mMethods[0m
+  [36mInitial[0m [36mvalue[0m[37m:[0m [93m10[0m
+  [36mAfter[0m [36madd[0m([93m5[0m)[37m:[0m [93m15[0m
+  [36mAfter[0m [36mmultiply[0m([93m2[0m)[37m:[0m [93m30[0m
+  [36mAfter[0m [36msubtract[0m([93m10[0m)[37m:[0m [93m20[0m
+  [36mAfter[0m [36mreset[0m[37m:[0m [93m0[0m
+✅ [36mTest[0m [93m3[0m[37m:[0m [36mClass[0m [36mwith[0m [36mDifferent[0m [36mData[0m [36mTypes[0m
+  [36mLaptop[0m - $[93m999.99[0m ([36mStock[0m[37m:[0m [93m5[0m)
+  [36mTotal[0m [36mvalue[0m[37m:[0m $[93m4999.95[0m
+  [36mIn[0m [36mstock[0m[37m:[0m [93mtrue[0m
+  [36mAfter[0m [36mselling[0m [93m3[0m[37m:[0m [36mLaptop[0m - $[93m999.99[0m ([36mStock[0m[37m:[0m [93m2[0m)
+  [36mAfter[0m [36mselling[0m [93m2[0m [36mmore[0m[37m:[0m [36mLaptop[0m - $[93m999.99[0m ([36mStock[0m[37m:[0m [93m0[0m)
+  [36mIn[0m [36mstock[0m[37m:[0m [93mfalse[0m
+✅ [36mTest[0m [93m4[0m[37m:[0m [36mClass[0m [36mwith[0m [36mArray[0m [36mProperties[0m
+  [36mClassroom[0m[37m:[0m [36mMath[0m [93m101[0m
+  [36mStudents[0m[37m:[0m [93m3[0m
+  [36mAverage[0m [36mgrade[0m[37m:[0m [93m91.33333333333333[0m
+✅ [36mTest[0m [93m5[0m[37m:[0m [36mClass[0m [36mInheritance[0m
+  [36mRex[0m [36mis[0m [93m3[0m [36myears[0m [36mold[0m
+  [36mRex[0m [36mis[0m [36ma[0m [36mLabrador[0m
+  [36mSound[0m[37m:[0m [36mWoof[0m! [36mWoof[0m!
+✅ [36mTest[0m [93m6[0m[37m:[0m [36mMultiple[0m [36mInstances[0m [36mIndependence[0m
+  [36mCounter[0m [36mA[0m[37m:[0m [93m3[0m
+  [36mCounter[0m [36mB[0m[37m:[0m [93m1[0m
+✅ [36mTest[0m [93m7[0m[37m:[0m [36mComplex[0m [36mMethods[0m [36mwith[0m [36mLogic[0m
+  [36mAccount[0m[37m:[0m [36mACC001[0m
+  [36mInitial[0m [36mbalance[0m[37m:[0m $[93m1000[0m
+  [36mAfter[0m [36mdeposit[0m $[93m500[0m[37m:[0m $[93m1500[0m
+  [36mAfter[0m [36mwithdraw[0m $[93m200[0m[37m:[0m $[93m1300[0m
+✅ [36mTest[0m [93m8[0m[37m:[0m [36mNested[0m [36mMethod[0m [36mCalls[0m
+  [36mInitial[0m[37m:[0m [93m5[0m
+  [36mAfter[0m [36madd[0m([93m3[0m) [36mthen[0m [36mmultiply[0m([93m2[0m)[37m:[0m [93m16[0m
+✅ [36mTest[0m [93m9[0m[37m:[0m [36mClass[0m [36mwith[0m [36mString[0m [36mOperations[0m
+  [36mOriginal[0m[37m:[0m [36mHello[0m [36mRaccoon[0m
+  [36mUppercase[0m[37m:[0m [36mHELLO[0m [36mRACCOON[0m
+  [36mLowercase[0m[37m:[0m [36mhello[0m [36mraccoon[0m
+  [36mLength[0m[37m:[0m [93m13[0m
+  [36mIs[0m [36mempty[0m[37m:[0m [93mfalse[0m
+✅ [36mTest[0m [93m10[0m[37m:[0m [36mClass[0m [36mwith[0m [36mObject[0m [36mComposition[0m
+  [36mJohn[0m [36mDoe[0m ([36mID[0m[37m:[0m [93m1001[0m)
+  [36mJohn[0m [36mDoe[0m ([36mID[0m[37m:[0m [93m1001[0m) - [93m123[0m [36mMain[0m [36mSt[0m[37m,[0m [36mSpringfield[0m [93m12345[0m
+🎉 === [36mALL[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mclass[0m [36mwith[0m [36mconstructor[0m
+✅ [36mClass[0m [36mwith[0m [36mmethods[0m
+✅ [36mDifferent[0m [36mdata[0m [36mtypes[0m ([36mstr[0m[37m,[0m [36mint[0m[37m,[0m [36mfloat[0m[37m,[0m [36mbool[0m)
+✅ [36mArray[0m [36mproperties[0m
+✅ [36mClass[0m [36minheritance[0m ([36mextends[0m[37m,[0m [36msuper[0m)
+✅ [36mMultiple[0m [36minstances[0m [36mindependence[0m
+✅ [36mComplex[0m [36mmethods[0m [36mwith[0m [36mlogic[0m
+✅ [36mNested[0m [36mmethod[0m [36mcalls[0m
+✅ [36mString[0m [36moperations[0m [36min[0m [36mclasses[0m
+✅ [36mObject[0m [36mcomposition[0m
+🦝 [36mRaccoon[0m [36mClasses[0m[37m:[0m [36mFULLY[0m [36mFUNCTIONAL[0m!
+Running test: .\tests\test_class_rest.rcc
+[36mIn[0m [36mstatic[0m [36mmethod[0m[37m,[0m [36margs[0m[37m:[0m [37m[[0m[36mhello[0m[37m,[0m [36mworld[0m[37m][0m
+[36mhello[0m [36mworld[0m
+Running test: .\tests\test_complete_syntax_semantics.rcc
+╔════════════════════════════════════════════════════════════════╗
+║     [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+[37m[[0m[93m1[0m[37m][0m [36mPRIMITIVE[0m [36mTYPES[0m & [36mLITERALS[0m
+  ✓ [36mInteger[0m [36mliterals[0m[37m:[0m [93m42[0m[37m,[0m [93m-100[0m[37m,[0m [93m999999999[0m
+  ✓ [36mFloat[0m [36mliterals[0m[37m:[0m [93m3.14159[0m[37m,[0m [93m-2.5[0m[37m,[0m [93m1.5[0m
+  ✓ [36mString[0m [36mliterals[0m[37m:[0m [36mhello[0m [36mworld[0m[37m,[0m [36mempty[0m=[92m""[0m
+  ✓ [36mBoolean[0m [36mliterals[0m[37m:[0m [93mtrue[0m[37m,[0m [93mfalse[0m
+  ✓ [36mNull[0m [36mliteral[0m[37m:[0m [93mnull[0m
+  ✓ [36mTemplate[0m [36mstrings[0m[37m:[0m [36mLanguage[0m[37m:[0m [36mRaccoon[0m[37m,[0m [36mVersion[0m[37m:[0m [93m1[0m
+
+[37m[[0m[93m2[0m[37m][0m [36mOPERATORS[0m
+  ✓ [36mArithmetic[0m[37m:[0m +=[93m13[0m[37m,[0m -=[93m7[0m[37m,[0m *=[93m30[0m[37m,[0m /=[93m3.3333333333333335[0m[37m,[0m %=[93m1[0m[37m,[0m **=[93m8[0m
+  ✓ [36mComparison[0m[37m:[0m ==[93mfalse[0m[37m,[0m !=[93mtrue[0m[37m,[0m <[93mfalse[0m[37m,[0m >[93mtrue[0m
+  ✓ [36mLogical[0m[37m:[0m &&=[93mfalse[0m[37m,[0m ||=[93mtrue[0m[37m,[0m !=[93mfalse[0m
+  ✓ [36mBitwise[0m[37m:[0m &=[93m1[0m[37m,[0m |=[93m7[0m[37m,[0m ^=[93m6[0m[37m,[0m ~=[93m-6[0m
+    [36mShifts[0m[37m:[0m <<=[93m10[0m[37m,[0m >>=[93m2[0m[37m,[0m >>>=[93m2[0m
+  ✓ [36mAssignment[0m [36moperators[0m[37m:[0m [36mresult[0m=[93m0[0m
+  ✓ [36mCompound[0m [36mbitwise[0m [36massignment[0m[37m:[0m [36mresult[0m=[93m1[0m
+  ✓ [36mInc[0m/[36mDec[0m[37m:[0m [36mpost[0m++=[93m6[0m[37m,[0m ++[36mpre[0m=[93m7[0m[37m,[0m [36mpost[0m--=[93m6[0m[37m,[0m --[36mpre[0m=[93m5[0m
+  ✓ [36mRange[0m [36moperator[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mNull[0m [36mcoalescing[0m[37m:[0m [93m42[0m
+  ✓ [36mTernary[0m [36moperator[0m[37m:[0m [93m10[0m
+
+[37m[[0m[93m3[0m[37m][0m [36mVARIABLES[0m & [36mCONSTANTS[0m
+  ✓ [36mLet[0m [36mdeclarations[0m[37m:[0m [93m100[0m[37m,[0m [36mtyped[0m[37m,[0m [93m42[0m
+  ✓ [36mConst[0m [36mdeclarations[0m[37m:[0m [93m999[0m[37m,[0m [36mimmutable[0m
+  ✓ [36mVariable[0m [36mshadowing[0m[37m:[0m [36minner[0m=[93m2[0m
+    [36mouter[0m=[93m1[0m
+
+[37m[[0m[93m4[0m[37m][0m [36mCONTROL[0m [36mFLOW[0m
+  ✓ [36mIf[0m [36mstatement[0m[37m:[0m [36mcondition[0m [93mtrue[0m
+  ✓ [36mIf[0m-[36melse[0m [36mstatement[0m[37m:[0m [36melse[0m [36mbranch[0m
+  ✓ [36mIf[0m-[36melse[0m-[36mif[0m [36mchain[0m[37m:[0m [36mgrade[0m [36mB[0m
+  ✓ [36mWhile[0m [36mloop[0m[37m:[0m [36miterations[0m=[93m3[0m
+  ✓ [36mFor[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mFor[0m-[36min[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mBreak[0m [36mstatement[0m[37m:[0m [36mstopped[0m [36mat[0m [93m3[0m
+  ✓ [36mContinue[0m [36mstatement[0m[37m:[0m [36msum[0m=[93m12[0m ([36mskipped[0m [93m3[0m)
+
+[37m[[0m[93m5[0m[37m][0m [36mFUNCTIONS[0m
+  ✓ [36mBasic[0m [36mfunction[0m[37m:[0m [93m42[0m
+  ✓ [36mFunction[0m [36mwith[0m [36mparams[0m[37m:[0m [93m30[0m
+  ✓ [36mOptional[0m [36mparameters[0m[37m:[0m [93m5[0m[37m,[0m [93m5[0m
+  ✓ [36mDefault[0m [36mparameters[0m[37m:[0m [93m15[0m[37m,[0m [93m25[0m
+  ✓ [36mRest[0m [36mparameters[0m[37m:[0m [93m15[0m
+  ✓ [36mArrow[0m [36mfunction[0m[37m:[0m [93m12[0m
+  ✓ [36mArrow[0m [36mexpression[0m[37m:[0m [93m10[0m
+  ✓ [36mArrow[0m [36mblock[0m[37m:[0m [93m11[0m
+  ✓ [36mHigher[0m-[36morder[0m [36mfunction[0m[37m:[0m [93m20[0m
+  ✓ [36mRecursive[0m [36mfunction[0m[37m:[0m [93m120[0m
+  ✓ [36mNamed[0m [36marguments[0m[37m:[0m [93m6[0m
+
+[37m[[0m[93m6[0m[37m][0m [36mARRAYS[0m & [36mCOLLECTIONS[0m
+  ✓ [36mArray[0m [36mliterals[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m[37m,[0m [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+  ✓ [36mArray[0m [36mindexing[0m[37m:[0m [93m20[0m
+  ✓ [36mArray[0m [36massignment[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mArray[0m [36mlength[0m[37m:[0m [93m3[0m
+  ✓ [36mArray[0m [36mpush[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m][0m
+  ✓ [36mArray[0m [36mpop[0m[37m:[0m [93m40[0m[37m,[0m [36mremaining[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mNested[0m [36marrays[0m[37m:[0m [93m2[0m
+  ✓ [36mArray[0m [36mspread[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m][0m
+
+[37m[[0m[93m7[0m[37m][0m [36mOBJECTS[0m & [36mMAPS[0m
+  ✓ [36mObject[0m [36mliteral[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mObject[0m [36mproperty[0m[37m:[0m [93m10[0m
+  ✓ [36mObject[0m [36massignment[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m99[0m [37m}[0m
+  ✓ [36mComputed[0m [36mproperty[0m[37m:[0m [93m20[0m
+  ✓ [36mObject[0m [36mshorthand[0m[37m:[0m [37m{[0m [36mpropY[0m[37m:[0m [93m200[0m[37m,[0m [36mpropX[0m[37m:[0m [93m100[0m [37m}[0m
+  ✓ [36mNested[0m [36mobject[0m[37m:[0m [93m42[0m
+
+[37m[[0m[93m8[0m[37m][0m [36mCLASSES[0m
+  ✓ [36mBasic[0m [36mclass[0m[37m:[0m [93m42[0m
+  ✓ [36mClass[0m [36mproperties[0m[37m:[0m [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+  ✓ [36mClass[0m [36mmethods[0m[37m:[0m [36mdoubled[0m=[93m10[0m[37m,[0m [36madded[0m=[93m15[0m
+  ✓ [36mClass[0m [36minheritance[0m[37m:[0m [93m30[0m
+  ✓ [36mStatic[0m [36mmembers[0m[37m:[0m [93m200[0m
+  ✓ [36mPrivate[0m [36mproperties[0m[37m:[0m [93m42[0m
+  ✓ [36mGetters[0m/[36mSetters[0m[37m:[0m [36mold[0m=[93m10[0m[37m,[0m [36mnew[0m=[93m20[0m
+
+[37m[[0m[93m9[0m[37m][0m [36mINTERFACES[0m & [36mTYPE[0m [36mALIASES[0m
+  ✓ [36mBasic[0m [36minterface[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mInterface[0m [36mimplementation[0m[37m:[0m [93m15[0m
+  ✓ [36mType[0m [36malias[0m[37m:[0m [36mnum[0m=[93m42[0m[37m,[0m [36mstr[0m=[36mhello[0m
+  ✓ [36mInterface[0m [36mextends[0m[37m:[0m [37m{[0m [36mage[0m[37m:[0m [93m30[0m[37m,[0m [36mname[0m[37m:[0m [36mAlice[0m [37m}[0m
+
+[37m[[0m[93m10[0m[37m][0m [36mENUMS[0m
+  ✓ [36mNumeric[0m [36menum[0m[37m:[0m [93m1[0m
+  ✓ [36mString[0m [36menum[0m[37m:[0m [36mRED[0m
+  ✓ [36mMixed[0m [36menum[0m[37m:[0m [36mthree[0m
+
+[37m[[0m[93m11[0m[37m][0m [36mGENERICS[0m
+  ✓ [36mGeneric[0m [36mfunction[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mGeneric[0m [36mclass[0m[37m:[0m [93m42[0m[37m,[0m [36mboxed[0m
+  ✓ [36mGeneric[0m [36minterface[0m[37m:[0m [37m{[0m [36mfirst[0m[37m:[0m [93m42[0m[37m,[0m [36msecond[0m[37m:[0m [36manswer[0m [37m}[0m
+  ✓ [36mGeneric[0m [36mconstraints[0m[37m:[0m [93m3[0m
+
+[37m[[0m[93m12[0m[37m][0m [36mADVANCED[0m [36mTYPES[0m
+  ✓ [36mUnion[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mIntersection[0m [36mtypes[0m[37m:[0m [37m{[0m [36mage[0m[37m:[0m [93m25[0m[37m,[0m [36mname[0m[37m:[0m [36mBob[0m [37m}[0m
+  ✓ [36mNullable[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [93mnull[0m[37m,[0m [36mcheck[0m=[93mtrue[0m
+  ✓ [36mArray[0m [36mtypes[0m[37m:[0m [36mint[0m[37m[[0m[37m][0m[37m,[0m [36mstr[0m[37m[[0m[37m][0m[37m,[0m [36mint[0m[37m[[0m[37m][0m[37m[[0m[37m][0m
+  ✓ [36mTuple[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mObject[0m [36mtypes[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mFunction[0m [36mtypes[0m[37m:[0m [93m15[0m
+  ✓ [36mReadonly[0m [36mtypes[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mKeyOf[0m [36moperator[0m[37m:[0m [36mdefined[0m
+  ✓ [36mTypeOf[0m [36moperator[0m[37m:[0m [36mint[0m
+
+[37m[[0m[93m13[0m[37m][0m [36mDESTRUCTURING[0m
+  ✓ [36mArray[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+  ✓ [36mArray[0m [36mdestructuring[0m [36mskip[0m[37m:[0m [93m10[0m[37m,[0m [93m30[0m
+  ✓ [36mArray[0m [36mdestructuring[0m [36mrest[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mObject[0m [36mdestructuring[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+  ✓ [36mObject[0m [36mdestructuring[0m [36mshorthand[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+  ✓ [36mNested[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+  ✓ [36mFunction[0m [36mparam[0m [36mdestructuring[0m[37m:[0m [93m30[0m
+
+[37m[[0m[93m14[0m[37m][0m [36mDECORATORS[0m
+  ✓ [36mMethod[0m [36mwith[0m [36mdecorator[0m
+
+[37m[[0m[93m15[0m[37m][0m [36mASYNC[0m/[36mAWAIT[0m
+  ✓ [36masync[0m [36mfn[0m [36mdeclared[0m
+  ✓ [36mAwait[0m [36mexpression[0m [36mdefined[0m
+  ✓ [36mAsync[0m [36marrow[0m [36mfunction[0m [36mdefined[0m
+
+[37m[[0m[93m16[0m[37m][0m [36mERROR[0m [36mHANDLING[0m
+  ✓ [36mTry[0m-[36mcatch[0m[37m:[0m [36mtry[0m [36mblock[0m [36mexecuted[0m
+  ✓ [36mTry[0m-[36mcatch[0m-[36mfinally[0m[37m:[0m [36mfinally[0m [36mblock[0m [36mexecuted[0m
+  ✓ [36mThrow[0m [36mstatement[0m[37m:[0m [36mcaught[0m [36merror[0m
+  ✓ [36mMultiple[0m [36mcatch[0m[37m:[0m [36mstring[0m [36merror[0m [36mcaught[0m
+
+[37m[[0m[93m17[0m[37m][0m [36mNULL[0m [36mSAFETY[0m
+  ✓ [36mNullable[0m [36mtype[0m[37m:[0m [93mnull[0m
+  ✓ [36mNull[0m [36mcoalescing[0m[37m:[0m [93m100[0m
+  ✓ [36mOptional[0m [36mchaining[0m[37m:[0m [93m42[0m
+  ✓ [36mNull[0m [36massertion[0m[37m:[0m [93m42[0m
+
+[37m[[0m[93m18[0m[37m][0m [36mMODULE[0m [36mSYSTEM[0m
+  ✓ [36mNamed[0m [36mimports[0m[37m:[0m [36madd[0m=[93m15[0m[37m,[0m [36mmultiply[0m=[93m12[0m[37m,[0m [36mPI[0m=[93m3.14159[0m
+  ✓ [36mClass[0m [36mimport[0m[37m:[0m [93m18[0m
+  ✓ [36mMultiple[0m [36mfunction[0m [36mimports[0m[37m:[0m [36mHello[0m[37m,[0m [36mRaccoon[0m![37m,[0m [36mupper[0m=[36mhello[0m
+  ✓ [36mClass[0m [36mimport[0m [36mfrom[0m [36mutils[0m[37m:[0m [36mAssistant[0m [36mis[0m [36mhelping[0m!
+
+[37m[[0m[93m19[0m[37m][0m [36mSPECIAL[0m [36mOPERATORS[0m & [36mEXPRESSIONS[0m
+  ✓ [36mInstanceof[0m[37m:[0m [93mtrue[0m
+  ✓ [36mTypeof[0m[37m:[0m [36mdefined[0m
+  ✓ [36mSpread[0m [36min[0m [36marrays[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mSpread[0m [36min[0m [36mobjects[0m[37m:[0m [37m{[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mc[0m[37m:[0m [93m3[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m [37m}[0m
+  ✓ [36mSpread[0m [36min[0m [36mcalls[0m[37m:[0m [93m6[0m
+
+[37m[[0m[93m20[0m[37m][0m [36mEDGE[0m [36mCASES[0m & [36mCOMPLEX[0m [36mSCENARIOS[0m
+  ✓ [36mDeeply[0m [36mnested[0m[37m:[0m [93m5.25[0m
+  ✓ [36mComplex[0m [36minference[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [37m{[0m [36mz[0m[37m:[0m [36mnested[0m [37m}[0m[37m,[0m [36mx[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m [37m}[0m
+  ✓ [36mClosure[0m[37m:[0m [93m55[0m
+  ✓ [36mMethod[0m [36mchaining[0m[37m:[0m [93m16[0m
+  ✓ [36mMixed[0m [36moperations[0m[37m:[0m [93m7.5[0m
+=== [36mTesting[0m [36mSwitch[0m/[36mCase[0m ===
+[36mWednesday[0m
+
+=== [36mTesting[0m [36mDo[0m-[36mWhile[0m ===
+[36mi[0m = [93m0[0m
+[36mi[0m = [93m1[0m
+[36mi[0m = [93m2[0m
+
+=== [36mTesting[0m [36mFor[0m-[36mOf[0m ===
+[36mItem[0m[37m:[0m [93m10[0m
+[36mItem[0m[37m:[0m [93m20[0m
+[36mItem[0m[37m:[0m [93m30[0m
+
+=== [36mTesting[0m [36mString[0m [36mMethods[0m ===
+[36mrepeat[0m([93m3[0m)[37m:[0m [36mhellohellohello[0m
+[36mpadStart[0m([93m10[0m[37m,[0m [92m'*'[0m)[37m:[0m *****[36mhello[0m
+[36mpadEnd[0m([93m10[0m[37m,[0m [92m'-'[0m)[37m:[0m [36mhello[0m-----
+[36mlastIndexOf[0m([92m'l'[0m)[37m:[0m [93m3[0m
+[36mcharCodeAt[0m([93m0[0m)[37m:[0m [93m104[0m
+
+=== [36mTesting[0m [36mArray[0m [36mMethods[0m ===
+[36mindexOf[0m([93m3[0m)[37m:[0m [93m2[0m
+[36mincludes[0m([93m4[0m)[37m:[0m [93mtrue[0m
+[36mat[0m([93m-1[0m)[37m:[0m [93m5[0m
+[36mAfter[0m [36mfill[0m([93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m)[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m0[0m[37m,[0m [93m3[0m[37m][0m
+[36mFlat[0m [36mresult[0m [36mlength[0m[37m:[0m [93m4[0m
+
+=== [36mTesting[0m [36mObject[0m [36mMethods[0m ===
+[36mObject[0m.[36mkeys[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36mvalues[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36massign[0m [36mworks[0m[37m:[0m [93m2[0m
+
+╔════════════════════════════════════════════════════════════════╗
+║                      [36mTEST[0m [36mSUMMARY[0m                             ║
+╚════════════════════════════════════════════════════════════════╝
+
+[36mTests[0m [36mPassed[0m[37m:[0m [93m117[0m
+[36mTests[0m [36mFailed[0m[37m:[0m [93m0[0m
+[36mPass[0m [36mRate[0m[37m:[0m [93m100[0m%
+
+╔════════════════════════════════════════════════════════════════╗
+║  [37m[[0m[93m1[0m[37m][0m [36mPrimitive[0m [36mTypes[0m & [36mLiterals[0m ......................... ✓   ║
+║  [37m[[0m[93m2[0m[37m][0m [36mOperators[0m .......................................... ✓   ║
+║  [37m[[0m[93m3[0m[37m][0m [36mVariables[0m & [36mConstants[0m .............................. ✓   ║
+║  [37m[[0m[93m4[0m[37m][0m [36mControl[0m [36mFlow[0m ....................................... ✓   ║
+║  [37m[[0m[93m5[0m[37m][0m [36mFunctions[0m .......................................... ✓   ║
+║  [37m[[0m[93m6[0m[37m][0m [36mArrays[0m & [36mCollections[0m ............................... ✓   ║
+║  [37m[[0m[93m7[0m[37m][0m [36mObjects[0m & [36mMaps[0m ..................................... ✓   ║
+║  [37m[[0m[93m8[0m[37m][0m [36mClasses[0m ............................................ ✓   ║
+║  [37m[[0m[93m9[0m[37m][0m [36mInterfaces[0m & [36mType[0m [36mAliases[0m .......................... ✓   ║
+║ [37m[[0m[93m10[0m[37m][0m [36mEnums[0m .............................................. ✓   ║
+║ [37m[[0m[93m11[0m[37m][0m [36mGenerics[0m ........................................... ✓   ║
+║ [37m[[0m[93m12[0m[37m][0m [36mAdvanced[0m [36mTypes[0m ..................................... ✓   ║
+║ [37m[[0m[93m13[0m[37m][0m [36mDestructuring[0m ...................................... ✓   ║
+║ [37m[[0m[93m14[0m[37m][0m [36mDecorators[0m ......................................... ✓   ║
+║ [37m[[0m[93m15[0m[37m][0m [36mAsync[0m/[36mAwait[0m ........................................ ✓   ║
+║ [37m[[0m[93m16[0m[37m][0m [36mError[0m [36mHandling[0m ..................................... ✓   ║
+║ [37m[[0m[93m17[0m[37m][0m [36mNull[0m [36mSafety[0m ........................................ ✓   ║
+║ [37m[[0m[93m18[0m[37m][0m [36mModule[0m [36mSystem[0m ...................................... ✓   ║
+║ [37m[[0m[93m19[0m[37m][0m [36mSpecial[0m [36mOperators[0m & [36mExpressions[0m .................... ✓   ║
+║ [37m[[0m[93m20[0m[37m][0m [36mEdge[0m [36mCases[0m & [36mComplex[0m [36mScenarios[0m ..................... ✓   ║
+║ [37m[[0m[93m21[0m[37m][0m [36mSwitch[0m/[36mCase[0m [36mStatements[0m ............................. ✓   ║
+╚════════════════════════════════════════════════════════════════╝
+
+🦝 [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m [36mFINISHED[0m
+Running test: .\tests\test_complete_typing_system.rcc
+=== [36mRACCOON[0m [36mTYPE[0m [36mSYSTEM[0m [36mCOMPREHENSIVE[0m [36mTEST[0m ===
+
+[93m1.[0m [36mPRIMITIVE[0m [36mTYPES[0m
+✓ [36mAll[0m [36mprimitive[0m [36mtypes[0m [36mworking[0m
+
+[93m2.[0m [36mNULLABLE[0m [36mTYPES[0m ([36mCustom[0m [36mSugar[0m [36mSyntax[0m)
+✓ [36mNullable[0m [36mtypes[0m [36mworking[0m [36mwith[0m [36mType[0m? [36msyntax[0m
+
+[93m3.[0m [36mARRAYS[0m
+✓ [36mArrays[0m [36mof[0m [36mprimitives[0m [36mand[0m [36mnullable[0m [36mtypes[0m [36mworking[0m
+
+[93m4.[0m [36mTUPLES[0m
+✓ [36mTuples[0m [36mworking[0m [36mcorrectly[0m
+
+[93m5.[0m [36mUNION[0m [36mTYPES[0m
+✓ [36mUnion[0m [36mtypes[0m [36mworking[0m
+
+[93m6.[0m [36mINTERSECTION[0m [36mTYPES[0m (&)
+✓ [36mIntersection[0m [36mtypes[0m [36mdefined[0m [36msuccessfully[0m
+
+[93m7.[0m [36mOBJECT[0m [36mTYPES[0m [36mWITH[0m [36mOPTIONAL[0m [36mPROPERTIES[0m
+✓ [36mObject[0m [36mtypes[0m [36mwith[0m [36moptional[0m [36mproperties[0m [36mworking[0m
+
+[93m8.[0m [36mREADONLY[0m [36mTYPES[0m
+✓ [36mReadonly[0m [36mtypes[0m [36mworking[0m
+
+[93m9.[0m [36mENUM[0m [36mTYPES[0m
+✓ [36mEnum[0m [36mtypes[0m [36mworking[0m
+
+[93m10.[0m [36mCLASS[0m [36mTYPES[0m
+✓ [36mClasses[0m [36mwith[0m [36minheritance[0m [36mworking[0m
+
+[93m11.[0m [36mINTERFACE[0m [36mTYPES[0m
+✓ [36mInterface[0m [36mtypes[0m [36mworking[0m
+
+[93m12.[0m [36mFUNCTION[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mtypes[0m [36mworking[0m
+
+[93m13.[0m [36mFUNCTION[0m [36mDECLARATIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mdeclarations[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m14.[0m [36mOPTIONAL[0m [36mPARAMETERS[0m ([36mparam[0m?[37m:[0m [36mType[0m)
+[36mAlice[0m
+[36mBob[0m
+[36mtest[0m
+[36mtest[0m
+[36mtest[0m
+✓ [36mOptional[0m [36mparameters[0m [36mworking[0m
+
+[93m15.[0m [36mARROW[0m [36mFUNCTIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m16.[0m [36mCOMPLEX[0m [36mNESTED[0m [36mSTRUCTURES[0m
+✓ [36mComplex[0m [36mnested[0m [36mstructures[0m [36mworking[0m
+
+[93m17.[0m [36mTYPE[0m [36mALIASES[0m
+✓ [36mType[0m [36maliases[0m [36mwith[0m [36munions[0m [36mand[0m [36mintersections[0m [36mworking[0m
+
+[93m18.[0m [36mNULLABLE[0m [36mTYPES[0m [36mIN[0m [36mDIFFERENT[0m [36mCONTEXTS[0m
+✓ [36mNullable[0m [36mtypes[0m [36min[0m [36mdifferent[0m [36mcontexts[0m [36mworking[0m
+
+[93m19.[0m [36mEXECUTION[0m [36mTEST[0m
+
+[36madd_numbers[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mgreet[0m([92m'World'[0m) = [36mHello[0m[37m,[0m [36mWorld[0m
+[36mdouble[0m([93m21[0m) = [93m42[0m
+[36mconcat[0m([92m'Hello, '[0m[37m,[0m [92m'Raccoon!'[0m) = [36mHello[0m[37m,[0m [36mRaccoon[0m!
+[36mdog[0m.[36mgetName[0m() = [36mBuddy[0m
+[36mdog[0m.[36mbreed[0m = [36mLabrador[0m
+
+=== [36mCOMPLETE[0m [36mTYPE[0m [36mSYSTEM[0m [36mTEST[0m [36mSUMMARY[0m ===
+✓ [36mAll[0m [36mTypeScript[0m-[36mstyle[0m [36mfeatures[0m [36mworking[0m
+✓ [36mNullable[0m [36msugar[0m [36msyntax[0m ([36mType[0m?) [36mworking[0m
+✓ [36mOptional[0m [36mparameters[0m [36mworking[0m
+✓ [36mOptional[0m [36mobject[0m [36mproperties[0m [36mworking[0m
+✓ [36mComplex[0m [36mnested[0m [36mtypes[0m [36mworking[0m
+✓ [36mUnions[0m [36mand[0m [36mintersections[0m [36mworking[0m
+✓ [36mReadonly[0m [36mtypes[0m [36mworking[0m
+✓ [36mClasses[0m [36mand[0m [36minheritance[0m [36mworking[0m
+✓ [36mInterfaces[0m [36mworking[0m
+✓ [36mEnums[0m [36mworking[0m
+✓ [36mArrow[0m [36mfunctions[0m [36mworking[0m
+
+[36mRaccoon[0m [36mType[0m [36mSystem[0m[37m:[0m [36mFULLY[0m [36mOPERATIONAL[0m!
+Running test: .\tests\test_debugging_features.rcc
+=== [36mTEST[0m [36mDE[0m [36mDEBUGGING[0m [36mY[0m [36mCOLORES[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mprint[0m() [36mcon[0m [36mcolores[0m [36mpara[0m [36mdiferentes[0m [36mtipos[0m
+[36mStrings[0m [36men[0m [36mverde[0m[37m:[0m [36mHello[0m [36mWorld[0m
+[36mNúmeros[0m [36men[0m [36mamarillo[0m[37m:[0m [93m42[0m [93m3.14[0m
+[36mBooleanos[0m [36men[0m [36mamarillo[0m[37m:[0m [93mtrue[0m [93mfalse[0m
+[36mNull[0m [36men[0m [36mgris[0m[37m:[0m [93mnull[0m
+[36mLista[0m [36men[0m [36mmagenta[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mfunción[0m [36mprintln[0m()
+[36mPrimera[0m [36mlínea[0m
+[36mSegunda[0m [36mlínea[0m
+[36mTercera[0m [36mlínea[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mMezcla[0m [36mde[0m [36mtipos[0m [36men[0m [36muna[0m [36msola[0m [36mllamada[0m
+[36mUsuario[0m[37m:[0m [36mBob[0m [36mEdad[0m[37m:[0m [93m25[0m [36mActivo[0m[37m:[0m [93mtrue[0m [36mScore[0m[37m:[0m [93m95.5[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mResultados[0m [36mde[0m [36moperaciones[0m
+[36mx[0m = [93m10[0m [36my[0m = [93m5[0m
+[36mx[0m + [36my[0m = [93m15[0m
+[36mx[0m * [36my[0m = [93m50[0m
+[36mx[0m > [36my[0m = [93mtrue[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mEstructuras[0m [36mde[0m [36mdatos[0m
+[36mLista[0m [36mde[0m [36mnúmeros[0m[37m:[0m [37m[[0m[93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m,[0m [93m50[0m[37m][0m
+[36mLista[0m [36mmixta[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [36mtwo[0m[37m,[0m [93m3[0m[37m,[0m [36mfour[0m[37m][0m
+
+[36mTest[0m [93m6[0m[37m:[0m [36mFunciones[0m
+[36mResultado[0m[37m:[0m [36mHello[0m[37m,[0m [36mWorld[0m
+
+=== [36mTODOS[0m [36mLOS[0m [36mTESTS[0m [36mCOMPLETADOS[0m ===
+Running test: .\tests\test_decorators.rcc
+[93m5[0m + [93m3[0m = [93m8[0m
+[93m4[0m * [93m5[0m = [93m20[0m
+[36mFirst[0m [36mcall[0m[37m:[0m [93m4950[0m
+[36mSecond[0m [36mcall[0m[37m:[0m [93m4950[0m
+[36mOld[0m [36mresult[0m[37m:[0m [93m42[0m
+Running test: .\tests\test_decorators_comprehensive.rcc
+🦝 === [36mCOMPREHENSIVE[0m [36mDECORATORS[0m [36mTEST[0m ===
+✅ [36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mFunction[0m [36mDecorator[0m
+  [36mResult[0m[37m:[0m [36mHello[0m[37m,[0m [36mAlice[0m
+✅ [36mTest[0m [93m2[0m[37m:[0m [36mFunction[0m [36mDecorator[0m [36mwith[0m [36mArguments[0m
+  [36mSum[0m[37m:[0m [93m8[0m
+✅ [36mTest[0m [93m3[0m[37m:[0m [36mClass[0m [36mDecorator[0m
+  [36mUser[0m [36mgreeting[0m[37m:[0m [36mHello[0m[37m,[0m [36mBob[0m
+✅ [36mTest[0m [93m4[0m[37m:[0m [36mMultiple[0m [36mDecorators[0m [36mon[0m [36mFunction[0m
+  [36mResult[0m[37m:[0m [36mFunction[0m [36mwith[0m [36mmultiple[0m [36mdecorators[0m
+✅ [36mTest[0m [93m5[0m[37m:[0m [36mDecorator[0m [36mwith[0m [36mMultiple[0m [36mArguments[0m
+  [36mPercentage[0m[37m:[0m [93m75[0m%
+✅ [36mTest[0m [93m6[0m[37m:[0m [36mClass[0m [36mDecorator[0m [36mwith[0m [36mArguments[0m
+  [36mCharlie[0m [36mis[0m [93m30[0m [36myears[0m [36mold[0m
+✅ [36mTest[0m [93m7[0m[37m:[0m [36mPerformance[0m [36mTracking[0m [36mDecorator[0m
+  [36mFibonacci[0m([93m6[0m) = [93m8[0m
+✅ [36mTest[0m [93m8[0m[37m:[0m [36mMetadata[0m [36mDecorator[0m
+  [36mProcessed[0m[37m:[0m [36mtest[0m [36mdata[0m
+✅ [36mTest[0m [93m9[0m[37m:[0m [36mAuthorization[0m [36mDecorator[0m
+  [36mDeleted[0m [36muser[0m [93m123[0m
+✅ [36mTest[0m [93m10[0m[37m:[0m [36mCaching[0m [36mDecorator[0m
+  [36mResult[0m [36mfor[0m[37m:[0m [36mquery[0m
+✅ [36mTest[0m [93m11[0m[37m:[0m [36mDecorator[0m [36mon[0m [36mInherited[0m [36mClass[0m
+  [36mDog[0m[37m:[0m [36mRex[0m[37m,[0m [36mBreed[0m[37m:[0m [36mLabrador[0m
+✅ [36mTest[0m [93m12[0m[37m:[0m [36mDeprecation[0m [36mDecorator[0m
+  [36mThis[0m [36mis[0m [36mold[0m
+✅ [36mTest[0m [93m13[0m[37m:[0m [36mRetry[0m [36mDecorator[0m
+  [36mOperation[0m [36mcompleted[0m
+✅ [36mTest[0m [93m14[0m[37m:[0m [36mType[0m [36mValidation[0m [36mDecorator[0m
+  [36mProcessed[0m[37m:[0m [36mtest[0m
+✅ [36mTest[0m [93m15[0m[37m:[0m [36mMultiple[0m [36mClass[0m [36mDecorators[0m
+  [36mGetting[0m [36musers[0m [36mfrom[0m [36mUser[0m [36mService[0m
+🎉 === [36mALL[0m [36mDECORATOR[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mfunction[0m [36mdecorator[0m
+✅ [36mFunction[0m [36mdecorator[0m [36mwith[0m [36marguments[0m
+✅ [36mClass[0m [36mdecorator[0m
+✅ [36mMultiple[0m [36mdecorators[0m [36mon[0m [36mfunction[0m
+✅ [36mDecorator[0m [36mwith[0m [36mmultiple[0m [36marguments[0m
+✅ [36mClass[0m [36mdecorator[0m [36mwith[0m [36marguments[0m
+✅ [36mPerformance[0m [36mtracking[0m [36mdecorator[0m
+✅ [36mMetadata[0m [36mdecorator[0m
+✅ [36mAuthorization[0m [36mdecorator[0m
+✅ [36mCaching[0m [36mdecorator[0m
+✅ [36mDecorator[0m [36mon[0m [36minherited[0m [36mclass[0m
+✅ [36mDeprecation[0m [36mdecorator[0m
+✅ [36mRetry[0m [36mdecorator[0m
+✅ [36mType[0m [36mvalidation[0m [36mdecorator[0m
+✅ [36mMultiple[0m [36mclass[0m [36mdecorators[0m
+🦝 [36mRaccoon[0m [36mDecorators[0m[37m:[0m [36mFULLY[0m [36mFUNCTIONAL[0m!
+Running test: .\tests\test_destruct_combined.rcc
+[93m1[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[93m2[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[93m3[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+[93m4[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+[93m5[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+[93m6[0m[37m:[0m [93m30[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m
+Running test: .\tests\test_destruct_debug1.rcc
+[93m1[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[93m2[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[93m3[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+[36mPart[0m [93m1[0m [36mdone[0m
+Running test: .\tests\test_destruct_debug2.rcc
+[93m1[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+[93m2[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+[36mDone[0m
+Running test: .\tests\test_destruct_func.rcc
+[36mResult[0m[37m:[0m [93m30[0m
+Running test: .\tests\test_destruct_nested.rcc
+[36mResult[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+Running test: .\tests\test_destruct_object.rcc
+[36mResult[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+Running test: .\tests\test_destruct_rest.rcc
+[36mResult[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+Running test: .\tests\test_destruct_step1.rcc
+[36mResult[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+Running test: .\tests\test_enum_class_as_types.rcc
+[93m0[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[36mProcessing[0m [36mstatus[0m[37m:[0m
+[93m1[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[93m2[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Admin[0m
+[36mAll[0m [36menum[0m [36mand[0m [36mclass[0m [36mtype[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_enum_type_syntax.rcc
+[36mEnum[0m [36mtype[0m [36msyntax[0m [36mtest[0m [36mcompleted[0m - [36mparsing[0m [36msuccessful[0m!
+Running test: .\tests\test_esm_advanced.rcc
+=== [36mAdvanced[0m [36mES[0m [36mModules[0m [36mTest[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mFunction[0m [36mExpression[0m [36mExports[0m
+  [36msquare[0m([93m5[0m) = [93m25[0m
+  [36mcube[0m([93m3[0m) = [93m27[0m
+  ✓ [36mFunction[0m [36mexpression[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mObject[0m [36mand[0m [36mArray[0m [36mExports[0m
+  [36mconfig[0m.[36mhost[0m = [36mlocalhost[0m
+  [36mconfig[0m.[36mport[0m = [93m8080[0m
+  [36mcolors[0m[37m[[0m[93m0[0m[37m][0m = [36mred[0m
+  [36mcolors[0m [36mlength[0m = [93m3[0m
+  ✓ [36mObject[0m [36mand[0m [36marray[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mStatic[0m [36mMember[0m [36mExports[0m
+  [36mMathUtils[0m.[36mPI[0m = [93m3.14159[0m
+  [36mMathUtils[0m.[36mE[0m = [93m2.71828[0m
+  [36mMathUtils[0m.[36madd[0m([93m10[0m[37m,[0m [93m20[0m) = [93m30[0m
+  [36mMathUtils[0m.[36mmax[0m([93m15[0m[37m,[0m [93m8[0m) = [93m15[0m
+  ✓ [36mStatic[0m [36mmember[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mTyped[0m [36mExports[0m
+  [36mtypedValue[0m = [93m42[0m
+  [36mtypedString[0m = [36mhello[0m
+  [36mtypedFloat[0m = [93m3.14[0m
+  ✓ [36mTyped[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mMultiple[0m [36mRelated[0m [36mFunctions[0m
+  [36mmin[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+  [36mabs[0m([93m-42[0m) = [93m42[0m
+  [36mclamp[0m([93m150[0m[37m,[0m [93m0[0m[37m,[0m [93m100[0m) = [93m100[0m
+  [36mclamp[0m([93m50[0m[37m,[0m [93m0[0m[37m,[0m [93m100[0m) = [93m50[0m
+  ✓ [36mMultiple[0m [36mrelated[0m [36mfunctions[0m [36mworking[0m
+
+[36mTest[0m [93m6[0m[37m:[0m [36mBarrel[0m [36mExports[0m
+  [36madd[0m([93m3[0m[37m,[0m [93m7[0m) = [93m10[0m
+  [36mCalculator[0m [36minstance[0m[37m:[0m [93m5[0m
+  [36mPoint[0m [36minstance[0m[37m:[0m [93m1[0m [93m2[0m
+  [36mAPP_NAME[0m = [36mRaccoon[0m [36mTest[0m
+  [36mbarrelSquare[0m([93m6[0m) = [93m36[0m
+  [36mBarrelMath[0m.[36mPI[0m = [93m3.14159[0m
+  [36mBARREL_VERSION[0m = [93m1.0[0m.[93m0[0m
+  [36mgreet[0m([92m'Raccoon'[0m) = [36mHello[0m[37m,[0m [36mRaccoon[0m!
+  ✓ [36mBarrel[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m7[0m[37m:[0m [36mImport[0m [36mOrder[0m [36mIndependence[0m
+  [36mmultiply[0m([93m4[0m[37m,[0m [93m5[0m) = [93m20[0m
+  [36mcalculateArea[0m([93m3.0[0m[37m,[0m [93m4.0[0m) = [93m12[0m
+  ✓ [36mImport[0m [36morder[0m [36mindependence[0m [36mworking[0m
+
+[36mTest[0m [93m8[0m[37m:[0m [36mMultiple[0m [36mImports[0m [36mfrom[0m [36mSame[0m [36mModule[0m
+  [36mStatus[0m.[36mActive[0m = [93m1[0m
+  [36mutilPI[0m = [93m3.14159[0m
+  [36mversion[0m = [93m1.0[0m.[93m0[0m
+  ✓ [36mMultiple[0m [36mimports[0m [36mfrom[0m [36msame[0m [36mmodule[0m [36mworking[0m
+
+[36mTest[0m [93m9[0m[37m:[0m [36mDeep[0m [36mImport[0m [36mChains[0m
+  [36mBarrelStatus[0m.[36mPending[0m = [93m0[0m
+  [36mBarrelStatus[0m.[36mCompleted[0m = [93m2[0m
+  ✓ [36mDeep[0m [36mimport[0m [36mchains[0m [36mworking[0m
+
+[36mTest[0m [93m10[0m[37m:[0m [36mUsing[0m [36mImported[0m [36mValues[0m [36min[0m [36mExpressions[0m
+  [36mRange[0m[37m:[0m [93m99[0m
+  [36mAverage[0m[37m:[0m [93m50.5[0m
+  ✓ [36mUsing[0m [36mimported[0m [36mvalues[0m [36min[0m [36mexpressions[0m [36mworking[0m
+
+[36mTest[0m [93m11[0m[37m:[0m [36mNamespace[0m [36mwith[0m [36mRe[0m-[36mexports[0m
+  [36mbarrel[0m.[36madd[0m([93m100[0m[37m,[0m [93m200[0m) = [93m300[0m
+  [36mbarrel[0m.[36mgreet[0m([92m'Module'[0m) = [36mHello[0m[37m,[0m [36mModule[0m!
+  [36mbarrel[0m.[36mBARREL_VERSION[0m = [93m1.0[0m.[93m0[0m
+  ✓ [36mNamespace[0m [36mwith[0m [36mre[0m-[36mexports[0m [36mworking[0m
+
+==================================================
+[36mALL[0m [36mADVANCED[0m [36mES[0m [36mMODULES[0m [36mTESTS[0m [36mPASSED[0m!
+==================================================
+
+[36mAdvanced[0m [36mFeatures[0m [36mTested[0m[37m:[0m
+  ✓ [36mFunction[0m [36mexpression[0m [36mexports[0m
+  ✓ [36mObject[0m [36mliteral[0m [36mexports[0m
+  ✓ [36mArray[0m [36mexports[0m
+  ✓ [36mStatic[0m [36mclass[0m [36mmember[0m [36mexports[0m
+  ✓ [36mTyped[0m [36mexports[0m
+  ✓ [36mBarrel[0m [36mexports[0m ([36mre[0m-[36mexport[0m [36maggregation[0m)
+  ✓ [36mImport[0m [36morder[0m [36mindependence[0m
+  ✓ [36mMultiple[0m [36mimports[0m [36mfrom[0m [36msame[0m [36mmodule[0m
+  ✓ [36mDeep[0m [36mimport[0m [36mchains[0m
+  ✓ [36mComplex[0m [36mexpressions[0m [36mwith[0m [36mimports[0m
+  ✓ [36mNamespace[0m [36mwith[0m [36mre[0m-[36mexports[0m
+Running test: .\tests\test_esm_modules_comprehensive.rcc
+=== [36mES[0m [36mModules[0m [36mComprehensive[0m [36mTest[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mNamed[0m [36mImports[0m
+  [36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+  [36mmultiply[0m([93m4[0m[37m,[0m [93m7[0m) = [93m28[0m
+  [36mversion[0m = [93m1.0[0m.[93m0[0m
+  [36mPI[0m = [93m3.14159[0m
+  ✓ [36mNamed[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mImport[0m [36mwith[0m [36mAlias[0m
+  [36msum[0m([93m10[0m[37m,[0m [93m20[0m) = [93m30[0m
+  [36mmult[0m([93m3[0m[37m,[0m [93m9[0m) = [93m27[0m
+  ✓ [36mImport[0m [36maliases[0m [36mworking[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mNamespace[0m [36mImport[0m
+  [36mutils[0m.[36madd[0m([93m15[0m[37m,[0m [93m25[0m) = [93m40[0m
+  [36mutils[0m.[36mmultiply[0m([93m6[0m[37m,[0m [93m7[0m) = [93m42[0m
+  [36mutils[0m.[36mversion[0m = [93m1.0[0m.[93m0[0m
+  ✓ [36mNamespace[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mDefault[0m [36mImport[0m + [36mNamed[0m [36mImports[0m
+  [36mShape[0m [36mdescription[0m[37m:[0m [36mShape[0m[37m:[0m [36mRectangle[0m
+  [36mDistance[0m [36mbetween[0m [36mpoints[0m[37m:[0m [93m5[0m
+  [36mArea[0m [36mof[0m [93m5[0m[36mx10[0m [36mrectangle[0m[37m:[0m [93m50[0m
+  ✓ [36mDefault[0m + [36mnamed[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mClass[0m [36mImports[0m [36mand[0m [36mInstantiation[0m
+  [36mInitial[0m [36mvalue[0m[37m:[0m [93m10[0m
+  [36mAfter[0m [36madd[0m([93m5[0m)[37m:[0m [93m15[0m
+  [36mAfter[0m [36mmultiply[0m([93m2[0m)[37m:[0m [93m30[0m
+  [36mAfter[0m [36mreset[0m()[37m:[0m [93m0[0m
+  ✓ [36mClass[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m6[0m[37m:[0m [36mEnum[0m [36mImports[0m
+  [36mStatus[0m.[36mPending[0m = [93m0[0m
+  [36mStatus[0m.[36mActive[0m = [93m1[0m
+  [36mStatus[0m.[36mCompleted[0m = [93m2[0m
+  [36mStatus[0m.[36mFailed[0m = [93m3[0m
+  ✓ [36mEnum[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m7[0m[37m:[0m [36mExport[0m [36mList[0m [36mImports[0m
+  [36mMAX_SIZE[0m = [93m100[0m
+  [36mMIN_SIZE[0m = [93m1[0m
+  [36mvalidateSize[0m([93m50[0m) = [93mtrue[0m
+  [36mvalidateSize[0m([93m200[0m) = [93mfalse[0m
+  ✓ [36mExport[0m [36mlist[0m [36mworking[0m
+
+[36mTest[0m [93m8[0m[37m:[0m [36mMultiple[0m [36mConstants[0m [36mImport[0m
+  [36mAPP_NAME[0m = [36mRaccoon[0m [36mTest[0m
+  [36mAPP_VERSION[0m = [93m2.0[0m.[93m0[0m
+  [36mMAX_RETRIES[0m = [93m3[0m
+  [36mTIMEOUT[0m = [93m5000[0m
+  [36mDEBUG[0m = [93mtrue[0m
+  [36mLogLevel[0m.[36mInfo[0m = [93m1[0m
+  [36mConfig[0m.[36mappName[0m = [36mRaccoon[0m [36mTest[0m
+  ✓ [36mMultiple[0m [36mconstants[0m [36mimport[0m [36mworking[0m
+
+[36mTest[0m [93m9[0m[37m:[0m [36mRe[0m-[36mexports[0m
+  [36mreSum[0m([93m8[0m[37m,[0m [93m12[0m) = [93m20[0m
+  [36mproduct[0m([93m5[0m[37m,[0m [93m6[0m) = [93m30[0m
+  [36mdivide[0m([93m100[0m[37m,[0m [93m5[0m) = [93m20[0m
+  [36mMODULE_NAME[0m = [36mReExport[0m [36mModule[0m
+  ✓ [36mRe[0m-[36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m10[0m[37m:[0m [36mStandard[0m [36mLibrary[0m [36mImports[0m
+  [36mMath[0m.[36msqrt[0m([93m144[0m) = [93m12[0m
+  [36mMath[0m.[36mpow[0m([93m2[0m[37m,[0m [93m8[0m) = [93m256[0m
+Running test: .\tests\test_explicit_generics.rcc
+[93m42[0m
+[93m100[0m
+[93m400[0m
+[93m25[0m
+[36mHello[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_export_types.rcc
+[36mTypes[0m [36mand[0m [36minterfaces[0m [36mexported[0m [36msuccessfully[0m!
+[36mConfig[0m [36mcreated[0m[37m:[0m [93mtrue[0m[37m,[0m [93m5000[0m
+Running test: .\tests\test_extended_decorators.rcc
+[36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mmultiply[0m([93m4[0m[37m,[0m [93m7[0m) = [93m28[0m
+Running test: .\tests\test_ffi_import.rcc
+[36mFFI[0m [36mimported[0m [36msuccessfully[0m!
+[36mFFI[0m[37m:[0m [36mclass[0m [36mFFI[0m
+[36mFFIType[0m[37m:[0m <[36menum[0m [36mFFIType[0m>
+Running test: .\tests\test_float_modulo.rcc
+[36mFloat[0m [36mmodulo[0m[37m:[0m [93m0.8999999999999995[0m
+[36mFloat[0m % [36mint[0m[37m:[0m [93m1[0m
+[36mInt[0m % [36mfloat[0m[37m:[0m [93m1[0m
+Running test: .\tests\test_function_params.rcc
+=== [36mTesting[0m [36mFunction[0m [36mParameters[0m ===
+
+[93m1.[0m [36mBasic[0m [36mparameters[0m
+[36mAnswer[0m[37m:[0m [93m42[0m
+
+[93m2.[0m [36mDefault[0m [36mparameters[0m
+[36mHello[0m [36mAlice[0m!
+[36mHi[0m [36mBob[0m!
+[36mHey[0m [36mCharlie[0m!
+
+[93m3.[0m [36mVariadic[0m [36mparameters[0m
+[93m15[0m
+[93m30[0m
+
+[93m4.[0m [36mMix[0m [36mregular[0m + [36mvariadic[0m
+[36mItems[0m[37m:[0m [36mapple[0m[37m,[0m [36mbanana[0m[37m,[0m [36mcherry[0m
+
+[93m5.[0m [36mDefaults[0m + [36mvariadic[0m
+[36mHi[0m [36mAlice[0m [36mBob[0m [36mCharlie[0m
+[36mWelcome[0m [36mDave[0m
+
+[93m6.[0m [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mvariadic[0m
+[93m24[0m
+
+[93m7.[0m [36mArray[0m [36mdestructuring[0m
+[36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+
+=== [36mAll[0m [36mParameter[0m [36mTests[0m [36mPassed[0m ===
+Running test: .\tests\test_func_type.rcc
+=== [36mFUNC[0m [36mTYPE[0m [36mTESTS[0m ===
+
+[37m[[0m [93m1[0m [37m][0m [36mBasic[0m [36mfunc[0m [36mtype[0m [36massignment[0m
+  [36mResult[0m[37m:[0m [36mHello[0m[37m,[0m [36mAlice[0m
+
+[37m[[0m [93m2[0m [37m][0m [36mfunc[0m [36mas[0m [36mfunction[0m [36mparameter[0m
+  [36msquare[0m([93m5[0m) = [93m25[0m
+  [36mdouble[0m([93m5[0m) = [93m10[0m
+
+[37m[[0m [93m3[0m [37m][0m [36mArrays[0m [36mof[0m [36mfunc[0m
+  [36mApplying[0m [36moperations[0m [36mto[0m [93m3[0m[37m:[0m
+    [36moperations[0m[37m[[0m[93m0[0m[37m][0m([93m3[0m) = [93m9[0m
+    [36moperations[0m[37m[[0m[93m1[0m[37m][0m([93m3[0m) = [93m6[0m
+
+[37m[[0m [93m4[0m [37m][0m [36mfunc[0m [36mwith[0m [36marrow[0m [36mfunctions[0m
+  [36madd[0m([93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+  [36msubtract[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+
+[37m[[0m [93m5[0m [37m][0m [36mfunc[0m [36mreturning[0m [36mfunc[0m
+  [36maddOp[0m([93m4[0m[37m,[0m [93m3[0m) = [93m7[0m
+  [36mmulOp[0m([93m4[0m[37m,[0m [93m3[0m) = [93m12[0m
+
+[37m[[0m [93m6[0m [37m][0m [36mfunc[0m [36mwith[0m [36mdifferent[0m [36mreturn[0m [36mtypes[0m
+  [36mtoString[0m([93m42[0m) = [93m42[0m
+  [36mtoBool[0m([93m5[0m) = [93mtrue[0m
+  [36mtoBool[0m([93m-1[0m) = [93mfalse[0m
+
+[37m[[0m [93m7[0m [37m][0m [36mfunc[0m [36mwith[0m [36mhigher[0m-[36morder[0m [36marray[0m [36mmethods[0m
+  [36mOriginal[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  [36mMapped[0m ([36mincrement[0m)[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m][0m
+  [36mFiltered[0m ([36misEven[0m)[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m][0m
+  [36mReduced[0m ([36msum[0m)[37m:[0m [93m15[0m
+
+[37m[[0m [93m8[0m [37m][0m [36mMultiple[0m [36mfunc[0m [36mvariables[0m
+  [36maddFunc[0m([93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+  [36msubFunc[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+  [36mmulFunc[0m([93m10[0m[37m,[0m [93m5[0m) = [93m50[0m
+
+[37m[[0m [93m9[0m [37m][0m [36mfunc[0m [36mwith[0m [36masync[0m [36mfunctions[0m
+  [36mAsync[0m [36mresult[0m[37m:[0m [36mData_123[0m
+
+==================================================
+✅ [36mALL[0m [36mFUNC[0m [36mTYPE[0m [36mTESTS[0m [36mPASSED[0m
+==================================================
+
+[36mThe[0m [92m'func'[0m [36mtype[0m [36mworks[0m [36mas[0m [36ma[0m [36mgeneric[0m [36mfunction[0m [36mtype[0m!
+[36mIt[0m [36mcan[0m [36mrepresent[0m [36many[0m [36mfunction[0m [36msignature[0m [36mdynamically[0m.
+Running test: .\tests\test_future_api_complete.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mFuture[0m.[36mresolve[0m() ===
+[37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([93m42[0m)[37m][0m
+[36mResultado[0m [36mde[0m [36mFuture[0m.[36mresolve[0m([93m42[0m)[37m:[0m [93m42[0m
+
+=== [36mTest[0m [93m2[0m[37m:[0m [36mFuture[0m.[36mreject[0m() ===
+[37m[[0m[36mFuture[0m[37m:[0m [36mRejected[0m([36mError[0m [36mde[0m [36mprueba[0m)[37m][0m
+[36mError[0m [36mcapturado[0m[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m [36mde[0m [36mprueba[0m
+
+=== [36mTest[0m [93m3[0m[37m:[0m .[36mthen[0m() [36mcon[0m [36mcallback[0m ===
+[36mFuture1[0m [36minicial[0m[37m:[0m [93m10[0m
+[36mDentro[0m [36mde[0m .[36mthen[0m()[37m,[0m [36mvalor[0m[37m:[0m [93m10[0m
+[36mDespués[0m [36mde[0m .[36mthen[0m([36mx[0m => [36mx[0m * [93m2[0m)[37m:[0m [93m20[0m
+
+=== [36mTest[0m [93m4[0m[37m:[0m .[36mcatch[0m() [36mpara[0m [36merrores[0m ===
+[36mError[0m [36mcapturado[0m [36men[0m .[36mcatch[0m()[37m:[0m [36mAlgo[0m [36msalió[0m [36mmal[0m
+[36mValor[0m [36mdespués[0m [36mde[0m .[36mcatch[0m()[37m:[0m [36mValor[0m [36mrecuperado[0m
+
+=== [36mTest[0m [93m5[0m[37m:[0m .[36mthen[0m() [36mcon[0m [36mdos[0m [36mcallbacks[0m ===
+[36mManejado[0m [36men[0m .[36mthen[0m()[37m:[0m [36mError[0m!
+[36mResultado[0m[37m:[0m [36mManejado[0m
+
+=== [36mTest[0m [93m6[0m[37m:[0m .[36mfinally[0m() ===
+[36mEjecutando[0m [36mlimpieza[0m [36men[0m .[36mfinally[0m()
+[36mResultado[0m [36mdespués[0m [36mde[0m .[36mfinally[0m()[37m:[0m [36mOK[0m
+
+=== [36mTest[0m [93m7[0m[37m:[0m [36mFuture[0m.[36mall[0m() [36mcon[0m [36méxito[0m ===
+[36mFuture[0m.[36mall[0m() [36mresultados[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+=== [36mTest[0m [93m8[0m[37m:[0m [36mFuture[0m.[36mall[0m() [36mcon[0m [36merror[0m ===
+[36mError[0m [36men[0m [36mFuture[0m.[36mall[0m()[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m [36men[0m [36mmedio[0m
+
+=== [36mTest[0m [93m9[0m[37m:[0m [36mFuture[0m.[36mrace[0m() ===
+[36mGanador[0m [36mde[0m [36mFuture[0m.[36mrace[0m()[37m:[0m [36mPrimera[0m
+
+=== [36mTest[0m [93m10[0m[37m:[0m [36mEncadenamiento[0m [36mcomplejo[0m ===
+[36mPaso[0m [93m1[0m[37m:[0m [93m5[0m
+[36mPaso[0m [93m2[0m[37m:[0m [93m10[0m
+[36mPaso[0m [93m3[0m[37m:[0m [93m20[0m
+[36mLimpieza[0m [36mfinal[0m
+[36mValor[0m [36mfinal[0m [36mdel[0m [36mencadenamiento[0m[37m:[0m [93m17[0m
+
+=== [36mTest[0m [93m11[0m[37m:[0m .[36mthen[0m() [36mretornando[0m [36mFuture[0m ===
+[36mValor[0m [36mexterior[0m[37m:[0m [93m100[0m
+[36mResultado[0m [36manidado[0m[37m:[0m [36mResultado[0m [36manidado[0m
+
+=== [36mRESUMEN[0m ===
+✓ [36mFuture[0m.[36mresolve[0m() - [36mOK[0m
+✓ [36mFuture[0m.[36mreject[0m() - [36mOK[0m
+✓ .[36mthen[0m() - [36mOK[0m
+✓ .[36mcatch[0m() - [36mOK[0m
+✓ .[36mfinally[0m() - [36mOK[0m
+✓ [36mFuture[0m.[36mall[0m() - [36mOK[0m
+✓ [36mFuture[0m.[36mrace[0m() - [36mOK[0m
+✓ [36mEncadenamiento[0m [36mcomplejo[0m - [36mOK[0m
+
+¡[36mTodos[0m [36mlos[0m [36mtests[0m [36mde[0m [36mla[0m [36mAPI[0m [36mde[0m [36mFuture[0m [36mcompletados[0m!
+Running test: .\tests\test_future_api_simple.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mFuture[0m.[36mresolve[0m() ===
+[36mFuture[0m [36mcreado[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([93m42[0m)[37m][0m
+[36mResultado[0m[37m:[0m [93m42[0m
+
+=== [36mTest[0m [93m2[0m[37m:[0m [36mFuture[0m.[36mreject[0m() ===
+[36mFuture[0m [36mrechazado[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mRejected[0m([36mError[0m [36mde[0m [36mprueba[0m)[37m][0m
+[36mError[0m [36mcapturado[0m [36mcorrectamente[0m[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m [36mde[0m [36mprueba[0m
+
+=== [36mTest[0m [93m3[0m[37m:[0m .[36mthen[0m() [36mbásico[0m ===
+[36mValor[0m [36men[0m .[36mthen[0m()[37m:[0m [93m10[0m
+[36mFuture[0m [36mdespués[0m [36mde[0m .[36mthen[0m()[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([93m20[0m)[37m][0m
+[36mValor[0m [36mfinal[0m[37m:[0m [93m20[0m
+
+=== [36mTest[0m [93m4[0m[37m:[0m [36mFuture[0m.[36mall[0m() ===
+[36mFuture[0m.[36mall[0m() [36mresultado[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+=== [36mTest[0m [93m5[0m[37m:[0m [36mFuture[0m.[36mall[0m() [36mcon[0m [36merror[0m ===
+[36mError[0m [36men[0m [36mFuture[0m.[36mall[0m()[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m!
+
+=== [36mTest[0m [93m6[0m[37m:[0m [36mFuture[0m.[36mrace[0m() ===
+[36mGanador[0m[37m:[0m [36mPrimera[0m
+
+=== [36mTODOS[0m [36mLOS[0m [36mTESTS[0m [36mCOMPLETADOS[0m ===
+Running test: .\tests\test_future_catch_finally.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m .[36mcatch[0m() [36mfunciona[0m [36mcorrectamente[0m ===
+[36mError[0m [36mcapturado[0m [36men[0m .[36mcatch[0m()[37m:[0m [36mError[0m [36mde[0m [36mprueba[0m
+[36mValor[0m [36mdespués[0m [36mde[0m .[36mcatch[0m()[37m:[0m [36mValor[0m [36mrecuperado[0m
+
+=== [36mTest[0m [93m2[0m[37m:[0m .[36mfinally[0m() [36mfunciona[0m [36mcorrectamente[0m ===
+[36mEjecutando[0m [36mlimpieza[0m [36men[0m .[36mfinally[0m()
+[36mResultado[0m [36mdespués[0m [36mde[0m .[36mfinally[0m()[37m:[0m [36mOK[0m
+
+=== [36mTest[0m [93m3[0m[37m:[0m [36mEncadenamiento[0m .[36mthen[0m().[36mcatch[0m().[36mfinally[0m() ===
+[36mEn[0m .[36mthen[0m()[37m:[0m [93m10[0m
+[36mLimpieza[0m [36mfinal[0m [36men[0m .[36mfinally[0m()
+[36mResultado[0m [36mfinal[0m[37m:[0m [93m20[0m
+
+=== [36mTest[0m [93m4[0m[37m:[0m .[36mcatch[0m() [36mmaneja[0m [36merror[0m [36men[0m [36mcadena[0m ===
+[36mManejado[0m[37m:[0m [36mFallo[0m!
+[36mDespués[0m [36mde[0m [36mrecuperar[0m[37m:[0m [93m42[0m
+[36mResultado[0m [36mde[0m [36mcadena[0m [36mcon[0m [36merror[0m[37m:[0m [93m50[0m
+
+=== ✓ [36mTODOS[0m [36mLOS[0m [36mTESTS[0m [36mCOMPLETADOS[0m ===
+Running test: .\tests\test_future_extended_api.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mFuture[0m.[36mallSettled[0m() - [36mTodos[0m [36mresueltos[0m ===
+[36mAllSettled[0m [36mcon[0m [36méxitos[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+Running test: .\tests\test_future_object.rcc
+¿[36mExiste[0m [36mFuture[0m? <[36mtype[0m [36mFuture[0m>
+[36mTipo[0m [36mde[0m [36mFuture[0m[37m:[0m [36mtype[0m [36mFuture[0m
+Running test: .\tests\test_generics.rcc
+=== [36mGENERICS[0m [36mSYSTEM[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGeneric[0m [36mBox[0m<[36mT[0m>
+[36mInt[0m [36mbox[0m[37m:[0m [93m42[0m
+[36mString[0m [36mbox[0m[37m:[0m [36mHello[0m
+[36mUpdated[0m [36mint[0m [36mbox[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mGeneric[0m [36mPair[0m<[36mK[0m[37m,[0m [36mV[0m>
+[36mPair[0m[37m:[0m [36mage[0m = [93m25[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mGeneric[0m [36mwith[0m [36mConstraint[0m
+[36mContainer[0m [36msize[0m[37m:[0m [93m3[0m
+[36mFirst[0m [36mitem[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mOptional[0m<[36mT[0m> [36mType[0m
+[36mSome[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mtrue[0m
+[36mNone[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mfalse[0m
+[36mSome[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mNone[0m [36mdefault[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mResult[0m<[36mT[0m> [36mType[0m
+[36mGood[0m [36mresult[0m [36msuccess[0m[37m:[0m [93mtrue[0m
+[36mGood[0m [36mresult[0m [36mvalue[0m[37m:[0m [93m5[0m
+[36mBad[0m [36mresult[0m [36msuccess[0m[37m:[0m [93mfalse[0m
+[36mBad[0m [36mresult[0m [36merror[0m[37m:[0m [36mDivision[0m [36mby[0m [36mzero[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mStack[0m<[36mT[0m>
+[36mTop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36msecond[0m
+[36mIs[0m [36mempty[0m[37m:[0m [93mfalse[0m
+=== [36mALL[0m [36mGENERIC[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_generics_simple.rcc
+=== [36mGENERICS[0m [36mSYSTEM[0m [36mTEST[0m ([36mSimplified[0m) ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGeneric[0m [36mBox[0m<[36mT[0m>
+[36mInt[0m [36mbox[0m[37m:[0m [93m42[0m
+[36mString[0m [36mbox[0m[37m:[0m [36mHello[0m
+[36mUpdated[0m [36mint[0m [36mbox[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mGeneric[0m [36mPair[0m<[36mK[0m[37m,[0m [36mV[0m>
+[36mPair[0m[37m:[0m [36mage[0m = [93m25[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mGeneric[0m [36mContainer[0m<[36mT[0m>
+[36mContainer[0m [36msize[0m[37m:[0m [93m3[0m
+[36mFirst[0m [36mitem[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mOptional[0m<[36mT[0m> [36mType[0m
+[36mSome[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mtrue[0m
+[36mNone[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mfalse[0m
+[36mSome[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mNone[0m [36mdefault[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mStack[0m<[36mT[0m>
+[36mTop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36msecond[0m
+[36mIs[0m [36mempty[0m[37m:[0m [93mfalse[0m
+=== [36mALL[0m [36mGENERIC[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_generics_vs_bitwise.rcc
+[93m42[0m
+[93m32[0m
+[93m10[0m
+[93m20[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_getters_setters.rcc
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mAfter[0m [36mupdate[0m[37m:[0m
+[36mName[0m[37m:[0m [36mBob[0m
+[36mAge[0m[37m:[0m [93m35[0m
+[36mGetters[0m/[36mSetters[0m [36mtest[0m [36mcompleted[0m!
+Running test: .\tests\test_http_diagnose.rcc
+[36mresponse[0m [36mwith[0m [36mfetch[0m[37m:[0m [37m[[0m
+  [37m{[0m
+    [92m"userId"[0m[37m:[0m [93m1[0m[37m,[0m
+    [92m"id"[0m[37m:[0m [93m1[0m[37m,[0m
+    [92m"title"[0m[37m:[0m [92m"sunt aut facere repellat provident occaecati excep...[0m
+Running test: .\tests\test_import_default.rcc
+[36mTesting[0m [36mdefault[0m [36mimport[0m...
+[36mHttp[0m[37m:[0m [36mclass[0m [36mHttp[0m
+Running test: .\tests\test_import_enum.rcc
+[36mMyEnum[0m[37m:[0m <[36menum[0m [36mMyEnum[0m>
+[36mMyClass[0m[37m:[0m [36mclass[0m [36mMyClass[0m
+Running test: .\tests\test_improved_inference.rcc
+[36mType[0m [36minference[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_index_access_assignment.rcc
+[36mTesting[0m [36mindex[0m [36maccess[0m [36mand[0m [36massignment[0m [36mfor[0m [36mobjects[0m...
+
+[36mTest[0m [93m1[0m[37m:[0m [36mReading[0m [36mproperties[0m [36mwith[0m [36mindex[0m [36mnotation[0m
+  [36mconfig[0m[37m[[0m[92m"api-key"[0m[37m][0m[37m:[0m [36msecret123[0m
+  [36mconfig[0m[37m[[0m[92m"base-url"[0m[37m][0m[37m:[0m [36mhttps[0m[37m:[0m//[36mapi[0m.[36mexample[0m.[36mcom[0m
+  [36mconfig[0m[37m[[0m[92m"timeout"[0m[37m][0m[37m:[0m [93m5000[0m
+  ✓ [36mIndex[0m [36maccess[0m [36mworks[0m!
+
+[36mTest[0m [93m2[0m[37m:[0m [36mAssigning[0m [36mproperties[0m [36mwith[0m [36mindex[0m [36mnotation[0m
+  [36mAfter[0m [36massignment[0m[37m:[0m
+    [36mconfig[0m[37m[[0m[92m"api-key"[0m[37m][0m[37m:[0m [36mnew[0m-[36msecret[0m[93m-456[0m
+    [36mconfig[0m[37m[[0m[92m"version"[0m[37m][0m[37m:[0m [36mv2[0m.[93m0[0m
+    [36mconfig[0m[37m[[0m[92m"timeout"[0m[37m][0m[37m:[0m [93m10000[0m
+  ✓ [36mIndex[0m [36massignment[0m [36mworks[0m!
+
+[36mTest[0m [93m3[0m[37m:[0m [36mMixed[0m [36maccess[0m [36mpatterns[0m
+  [36muser[0m.[36mname[0m[37m:[0m [36mCarlos[0m
+  [36muser[0m[37m[[0m[92m"user-id"[0m[37m][0m[37m:[0m [93m12345[0m
+  [36muser[0m.[36memail[0m[37m:[0m [36mcarlos[0m@[36mexample[0m.[36mcom[0m
+
+  [36mAfter[0m [36mupdates[0m[37m:[0m
+  [36muser[0m.[36mname[0m[37m:[0m [36mCarlos[0m [36mLópez[0m
+  [36muser[0m[37m[[0m[92m"user-id"[0m[37m][0m[37m:[0m [93m99999[0m
+  [36muser[0m.[36memail[0m[37m:[0m [36mnew[0m@[36mexample[0m.[36mcom[0m
+  ✓ [36mMixed[0m [36maccess[0m [36mworks[0m!
+
+[36mTest[0m [93m4[0m[37m:[0m [36mDynamic[0m [36mproperty[0m [36maccess[0m
+  [36mdata[0m[37m[[0m[36mpropName[0m[37m][0m[37m:[0m [36mvalue2[0m
+  [36mAfter[0m [36mupdate[0m[37m:[0m [36mupdated[0m-[36mvalue2[0m
+  ✓ [36mDynamic[0m [36mproperty[0m [36maccess[0m [36mworks[0m!
+
+[36mAll[0m [36mtests[0m [36mpassed[0m! [36mIndex[0m [36maccess[0m [36mand[0m [36massignment[0m [36mwork[0m [36mcorrectly[0m.
+Running test: .\tests\test_inference_simple.rcc
+[36mType[0m [36minference[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_instanceof.rcc
+[36minstanceof[0m [36mresult[0m[37m:[0m [93mtrue[0m
+Running test: .\tests\test_interface.rcc
+[93m10[0m
+Running test: .\tests\test_isolated_typeargs.rcc
+[36mResult[0m[37m:[0m [93m42[0m
+Running test: .\tests\test_issue_spread_operator.rcc
+[36mTesting[0m [36mSpread[0m [36mOperator[0m...
+[36mCombined[0m [36marray[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m][0m
+[36mSpread[0m [36mwith[0m [36mliterals[0m[37m:[0m [37m[[0m[93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m7[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m][0m
+[36mCombined[0m [36mobject[0m[37m:[0m [37m{[0m [36mc[0m[37m:[0m [93m3[0m[37m,[0m [36md[0m[37m:[0m [93m4[0m[37m,[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m [37m}[0m
+[36mOverride[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m99[0m[37m,[0m [36mx[0m[37m:[0m [93m1[0m [37m}[0m
+[36mFunction[0m [36mspread[0m [36mresult[0m[37m:[0m [93m60[0m
+✅ [36mAll[0m [36mspread[0m [36moperator[0m [36mtests[0m [36mpassed[0m
+Running test: .\tests\test_map_complete.rcc
+=== [36mMap[0m<[36mK[0m[37m,[0m[36mV[0m> [36mImplementation[0m [36mTests[0m ===
+
+[37m[[0m [93m1[0m [37m][0m [36mBasic[0m [36mMap[0m<[36mstr[0m[37m,[0m [36mint[0m> [36moperations[0m[37m:[0m
+  [36mSet[0m [93m3[0m [36mvalues[0m
+  [36mGet[0m [92m'one'[0m[37m:[0m [93m1[0m
+  [36mGet[0m [92m'two'[0m[37m:[0m [93m2[0m
+  [36mHas[0m [92m'one'[0m[37m:[0m [93mtrue[0m
+  [36mHas[0m [92m'missing'[0m[37m:[0m [93mfalse[0m
+  [36mSize[0m[37m:[0m [93m3[0m
+  ✓ [36mTest[0m [93m1[0m [36mpassed[0m
+
+[37m[[0m [93m2[0m [37m][0m [36mMap[0m [36mdelete[0m [36moperation[0m[37m:[0m
+  [36mInitial[0m [36msize[0m[37m:[0m [93m3[0m
+  [36mDeleted[0m [92m'b'[0m[37m:[0m [93mtrue[0m
+  [36mSize[0m [36mafter[0m [36mdelete[0m[37m:[0m [93m2[0m
+  [36mHas[0m [92m'b'[0m[37m:[0m [93mfalse[0m
+  [36mDeleted[0m [36mnon[0m-[36mexistent[0m [92m'xyz'[0m[37m:[0m [93mfalse[0m
+  ✓ [36mTest[0m [93m2[0m [36mpassed[0m
+
+[37m[[0m [93m3[0m [37m][0m [36mMap[0m [36mclear[0m [36moperation[0m[37m:[0m
+  [36mSize[0m [36mbefore[0m [36mclear[0m[37m:[0m [93m3[0m
+  [36mSize[0m [36mafter[0m [36mclear[0m[37m:[0m [93m0[0m
+  [36mHas[0m [92m'x'[0m[37m:[0m [93mfalse[0m
+  ✓ [36mTest[0m [93m3[0m [36mpassed[0m
+
+[37m[[0m [93m4[0m [37m][0m [36mMap[0m [36mwith[0m [36mfloat[0m [36mvalues[0m[37m:[0m
+  [36mpi[0m = [93m3.14159[0m
+  ✓ [36mTest[0m [93m4[0m [36mpassed[0m
+
+[37m[[0m [93m5[0m [37m][0m [36mMap[0m<[36mint[0m[37m,[0m [36mstr[0m> [36mwith[0m [36mint[0m [36mkeys[0m[37m:[0m
+  [93m1[0m -> [36mone[0m
+  [93m2[0m -> [36mtwo[0m
+  [36mSize[0m[37m:[0m [93m3[0m
+  ✓ [36mTest[0m [93m5[0m [36mpassed[0m
+
+[37m[[0m [93m6[0m [37m][0m [36mMap[0m [36moverwrites[0m [36mexisting[0m [36mvalues[0m[37m:[0m
+  [36mInitial[0m [36mvalue[0m[37m:[0m [93m100[0m
+  [36mAfter[0m [36moverwrite[0m[37m:[0m [93m200[0m
+  [36mSize[0m ([36mshould[0m [36mbe[0m [93m1[0m)[37m:[0m [93m1[0m
+  ✓ [36mTest[0m [93m6[0m [36mpassed[0m
+
+[37m[[0m [93m7[0m [37m][0m [36mGet[0m [36mnon[0m-[36mexistent[0m [36mkey[0m [36mreturns[0m [93mnull[0m[37m:[0m
+  [36mNon[0m-[36mexistent[0m [36mkey[0m [36mreturns[0m [93mnull[0m ✓
+  ✓ [36mTest[0m [93m7[0m [36mpassed[0m
+
+[37m[[0m [93m8[0m [37m][0m [36mMap[0m [36mtoStr[0m() [36mmethod[0m[37m:[0m
+  [36mMap[0m [36mas[0m [36mstring[0m[37m:[0m [36mMap[0m [37m{[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m [37m}[0m
+  ✓ [36mTest[0m [93m8[0m [36mpassed[0m
+
+[37m[[0m [93m9[0m [37m][0m [36mMap[0m [36mwith[0m [36mtyped[0m [36mintegers[0m[37m:[0m
+  [36mi32[0m [36mvalue[0m[37m:[0m [93m12345[0m
+  [36mu64[0m [36mvalue[0m[37m:[0m [93m999999[0m
+  ✓ [36mTest[0m [93m9[0m [36mpassed[0m
+
+[37m[[0m [93m10[0m [37m][0m [36mNull[0m [36mcoalescing[0m [36mwith[0m [36mMap[0m.[36mget[0m()[37m:[0m
+  [36mExisting[0m [36mkey[0m ([36mwith[0m ??)[37m:[0m [93m123[0m
+  [36mMissing[0m [36mkey[0m ([36mwith[0m ??)[37m:[0m [93m-1[0m
+  ✓ [36mTest[0m [93m10[0m [36mpassed[0m
+
+[37m[[0m [93m11[0m [37m][0m [36mComplex[0m [36moperation[0m [36msequence[0m[37m:[0m
+  [36mAdded[0m [93m5[0m [36melements[0m[37m,[0m [36msize[0m[37m:[0m [93m5[0m
+  [36mDeleted[0m [93m2[0m [36melements[0m[37m,[0m [36msize[0m[37m:[0m [93m3[0m
+  [36mAdded[0m [93m1[0m [36mmore[0m [36melement[0m[37m,[0m [36msize[0m[37m:[0m [93m4[0m
+  [36mHas[0m [92m'a'[0m[37m:[0m [93mtrue[0m
+  [36mHas[0m [92m'b'[0m[37m:[0m [93mfalse[0m
+  [36mHas[0m [92m'f'[0m[37m:[0m [93mtrue[0m
+  ✓ [36mTest[0m [93m11[0m [36mpassed[0m
+
+[37m[[0m [93m12[0m [37m][0m [36mMap[0m [36mwith[0m [36mfloat[0m [36mtypes[0m[37m:[0m
+  [36mf32[0m [36msize[0m[37m:[0m [93m2[0m
+  [36mf64[0m [36msize[0m[37m:[0m [93m2[0m
+  ✓ [36mTest[0m [93m12[0m [36mpassed[0m
+
+==================================================
+✅ [36mALL[0m [36mMAP[0m [36mTESTS[0m [36mPASSED[0m [36mSUCCESSFULLY[0m!
+==================================================
+
+[36mTypes[0m [36mtested[0m[37m:[0m
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mint[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mfloat[0m>
+  • [36mMap[0m<[36mint[0m[37m,[0m [36mstr[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mi32[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mu64[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mf32[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mf64[0m>
+
+[36mOperations[0m [36mtested[0m[37m:[0m
+  • [36mset[0m([36mkey[0m[37m,[0m [36mvalue[0m)
+  • [36mget[0m([36mkey[0m) -> [36mvalue[0m?
+  • [36mhas[0m([36mkey[0m) -> [36mbool[0m
+  • [36mdelete[0m([36mkey[0m) -> [36mbool[0m
+  • [36mclear[0m()
+  • [36msize[0m() -> [36mint[0m
+  • [36mtoStr[0m() -> [36mstr[0m
+
+🎉 [36mMap[0m<[36mK[0m[37m,[0m[36mV[0m> [36mimplementation[0m [36mworking[0m [36mperfectly[0m!
+Running test: .\tests\test_map_i32.rcc
+[36mCreating[0m [36mMap[0m<[36mstr[0m[37m,[0m [36mint[0m>...
+[36mSuccess[0m [36mwith[0m [36mint[0m!
+[36mCreating[0m [36mMap[0m<[36mstr[0m[37m,[0m [36mi32[0m>...
+[36mSuccess[0m [36mwith[0m [36mi32[0m!
+Running test: .\tests\test_map_minimal.rcc
+Running test: .\tests\test_map_no_main.rcc
+[36mTesting[0m [36mMap[0m [36mbasic[0m [36moperations[0m
+
+[36mMap[0m [36mcreated[0m
+[36mValue[0m [36mset[0m
+[36mv1[0m[37m:[0m [93m1[0m
+[36mv2[0m[37m:[0m [93m2[0m
+[36mv3[0m[37m:[0m [93m3[0m
+[36mHas[0m [92m'one'[0m[37m:[0m [93mtrue[0m
+[36mHas[0m [92m'missing'[0m[37m:[0m [93mfalse[0m
+[36mSize[0m[37m:[0m [93m3[0m
+[36mDeleted[0m [92m'two'[0m[37m:[0m [93mtrue[0m
+[36mSize[0m [36mafter[0m [36mdelete[0m[37m:[0m [93m2[0m
+[36mSize[0m [36mafter[0m [36mclear[0m[37m:[0m [93m0[0m
+
+✓ [36mAll[0m [36mMap[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_module_math.rcc
+Running test: .\tests\test_module_utils.rcc
+Running test: .\tests\test_named_args.rcc
+=== [36mTest[0m [36mde[0m [36margumentos[0m [36mnombrados[0m ===
+
+[36mLlamada[0m [36mposicional[0m[37m:[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mCity[0m[37m:[0m [36mMadrid[0m
+
+[36mLlamada[0m [36mcon[0m [36margumentos[0m [36mnombrados[0m[37m:[0m
+[36mName[0m[37m:[0m [36mBob[0m
+[36mAge[0m[37m:[0m [93m25[0m
+[36mCity[0m[37m:[0m [36mBarcelona[0m
+
+[36mLlamada[0m [36mmixta[0m[37m:[0m
+[36mName[0m[37m:[0m [36mCharlie[0m
+[36mAge[0m[37m:[0m [93m35[0m
+[36mCity[0m[37m:[0m [36mValencia[0m
+
+=== [36mTest[0m [36mcompletado[0m ===
+Running test: .\tests\test_named_args_comprehensive.rcc
+=== [36mTest[0m [36mCompleto[0m [36mde[0m [36mArgumentos[0m [36mNombrados[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mArgumentos[0m [36mnombrados[0m [36men[0m [36morden[0m [36mdiferente[0m
+[36mHost[0m[37m:[0m [36mlocalhost[0m [36mPort[0m[37m:[0m [93m8080[0m [36mSSL[0m[37m:[0m [93mtrue[0m
+[36mHost[0m[37m:[0m [36mexample[0m.[36mcom[0m [36mPort[0m[37m:[0m [93m3000[0m [36mSSL[0m[37m:[0m [93mfalse[0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mValores[0m [36mpor[0m [36mdefecto[0m
+[36mName[0m[37m:[0m [36mAlice[0m [36mAge[0m[37m:[0m [93m18[0m [36mActive[0m[37m:[0m [93mtrue[0m
+[36mName[0m[37m:[0m [36mBob[0m [36mAge[0m[37m:[0m [93m25[0m [36mActive[0m[37m:[0m [93mtrue[0m
+[36mName[0m[37m:[0m [36mCharlie[0m [36mAge[0m[37m:[0m [93m18[0m [36mActive[0m[37m:[0m [93mfalse[0m
+[36mName[0m[37m:[0m [36mDiana[0m [36mAge[0m[37m:[0m [93m30[0m [36mActive[0m[37m:[0m [93mfalse[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mMezcla[0m [36mde[0m [36mposicionales[0m [36my[0m [36mnombrados[0m
+[36mFrom[0m[37m:[0m [36mMadrid[0m [36mTo[0m[37m:[0m [36mBarcelona[0m [36mDate[0m[37m:[0m [93m2024[0m[93m-01[0m[93m-15[0m [36mClass[0m[37m:[0m [36meconomy[0m
+[36mFrom[0m[37m:[0m [36mMadrid[0m [36mTo[0m[37m:[0m [36mBarcelona[0m [36mDate[0m[37m:[0m [93m2024[0m[93m-01[0m[93m-15[0m [36mClass[0m[37m:[0m [36mbusiness[0m
+[36mFrom[0m[37m:[0m [36mMadrid[0m [36mTo[0m[37m:[0m [36mBarcelona[0m [36mDate[0m[37m:[0m [93m2024[0m[93m-01[0m[93m-15[0m [36mClass[0m[37m:[0m [36meconomy[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mFunciones[0m [36mcon[0m [36mretorno[0m
+[93m5[0m + [93m3[0m = [93m8[0m
+[93m5[0m * [93m3[0m = [93m15[0m
+[93m5[0m * [93m3[0m = [93m15[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mDiferentes[0m [36mtipos[0m [36mde[0m [36mdatos[0m
+[36mMessage[0m [93m1[0m[37m:[0m [36mHELLO[0m [36mHELLO[0m [36mHELLO[0m 
+[36mMessage[0m [93m2[0m[37m:[0m [36mworld[0m [36mworld[0m 
+
+[36mTest[0m [93m6[0m[37m:[0m [36mSolo[0m [36margumentos[0m [36mnombrados[0m
+[36mDebug[0m[37m:[0m [93mtrue[0m [36mVerbose[0m[37m:[0m [93mfalse[0m [36mLogLevel[0m[37m:[0m [36minfo[0m
+[36mDebug[0m[37m:[0m [93mfalse[0m [36mVerbose[0m[37m:[0m [93mtrue[0m [36mLogLevel[0m[37m:[0m [36mdebug[0m
+
+=== [36mTodos[0m [36mlos[0m [36mtests[0m [36mcompletados[0m [36mexitosamente[0m ===
+Running test: .\tests\test_new_features.rcc
+=== [36mTesting[0m [36mSwitch[0m/[36mCase[0m ===
+[36mWednesday[0m
+
+=== [36mTesting[0m [36mDo[0m-[36mWhile[0m ===
+[36mi[0m = [93m0[0m
+[36mi[0m = [93m1[0m
+[36mi[0m = [93m2[0m
+
+=== [36mTesting[0m [36mFor[0m-[36mOf[0m ===
+[36mItem[0m[37m:[0m [93m10[0m
+[36mItem[0m[37m:[0m [93m20[0m
+[36mItem[0m[37m:[0m [93m30[0m
+
+=== [36mTesting[0m [36mString[0m [36mMethods[0m ===
+[36mrepeat[0m([93m3[0m)[37m:[0m [36mhellohellohello[0m
+[36mpadStart[0m([93m10[0m[37m,[0m [92m'*'[0m)[37m:[0m *****[36mhello[0m
+[36mpadEnd[0m([93m10[0m[37m,[0m [92m'-'[0m)[37m:[0m [36mhello[0m-----
+[36mlastIndexOf[0m([92m'l'[0m)[37m:[0m [93m3[0m
+[36mcharCodeAt[0m([93m0[0m)[37m:[0m [93m104[0m
+
+=== [36mTesting[0m [36mArray[0m [36mMethods[0m ===
+[36mindexOf[0m([93m3[0m)[37m:[0m [93m2[0m
+[36mincludes[0m([93m4[0m)[37m:[0m [93mtrue[0m
+[36mat[0m([93m-1[0m)[37m:[0m [93m5[0m
+[36mAfter[0m [36mfill[0m([93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m)[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m0[0m[37m,[0m [93m3[0m[37m][0m
+[36mFlat[0m [36mresult[0m [36mlength[0m[37m:[0m [93m4[0m
+
+=== [36mTesting[0m [36mObject[0m [36mMethods[0m ===
+[36mObject[0m.[36mkeys[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36mvalues[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36massign[0m [36mworks[0m[37m:[0m [93m2[0m
+
+=== [36mAll[0m [36mtests[0m [36mcompleted[0m! ===
+Running test: .\tests\test_new_types.rcc
+=== [36mTipos[0m [36mEnteros[0m [36mcon[0m [36mSigno[0m ===
+[36mi8[0m[37m:[0m  [93m-128[0m
+[36mi16[0m[37m:[0m [93m-32768[0m
+[36mi32[0m[37m:[0m [93m-2147483648[0m
+[36mi64[0m[37m:[0m [93m-9223372036854775807[0m
+
+=== [36mTipos[0m [36mEnteros[0m [36msin[0m [36mSigno[0m ===
+[36mu8[0m[37m:[0m  [93m255[0m
+[36mu16[0m[37m:[0m [93m65535[0m
+[36mu32[0m[37m:[0m [93m4294967295[0m
+[36mu64[0m[37m:[0m [93m9223372036854775807[0m
+
+=== [36mTipos[0m [36mPunto[0m [36mFlotante[0m ===
+[36mf32[0m[37m:[0m     [93m3.14159[0m
+[36mf64[0m[37m:[0m     [93m2.718281828459045[0m
+[36mdecimal[0m[37m:[0m [93m123.456789[0m
+
+=== [36mConversiones[0m [36mAutomáticas[0m ===
+[36mi8[0m -> [36mi64[0m[37m:[0m     [93m-128[0m
+[36mf32[0m -> [36mf64[0m[37m:[0m    [93m3.14159[0m
+[36mi32[0m -> [36mdecimal[0m[37m:[0m [93m-2147483648[0m
+
+=== [36mResultados[0m [36mde[0m [36mFunciones[0m ===
+[36maddI32[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m     [93m30[0m
+[36mmultiplyF64[0m([93m3.14[0m[37m,[0m [93m2.0[0m)[37m:[0m [93m6.28[0m
+[36mDecimal[0m[37m:[0m [93m123.456789[0m
+
+=== [36mArrays[0m [36mcon[0m [36mNuevos[0m [36mTipos[0m ===
+[36mi32[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[36mf64[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m1.1[0m[37m,[0m [93m2.2[0m[37m,[0m [93m3.3[0m[37m,[0m [93m4.4[0m[37m,[0m [93m5.5[0m[37m][0m
+[36mdecimal[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m10.5[0m[37m,[0m [93m20.75[0m[37m,[0m [93m30.25[0m[37m][0m
+
+✅ [36mTodos[0m [36mlos[0m [36mtipos[0m [36mfuncionan[0m [36mcorrectamente[0m!
+Running test: .\tests\test_no_conflict_generics_bitwise.rcc
+[93m16[0m
+[93m64[0m
+[93m8[0m
+[93m6[0m
+[93m40[0m
+[93m10[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_no_recursion.rcc
+[36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mHello[0m[37m,[0m [36mAlice[0m
+Running test: .\tests\test_null_safety_operators.rcc
+====================================
+[36mNULL[0m [36mSAFETY[0m [36mOPERATORS[0m [36mTEST[0m [36mSUITE[0m
+====================================
+✓ [36mTest[0m [93m1[0m [36mpassed[0m[37m:[0m [36mNull[0m [36mcoalescing[0m [36moperator[0m [36mworks[0m
+✓ [36mTest[0m [93m2[0m [36mpassed[0m[37m:[0m [36mChained[0m [93mnull[0m [36mcoalescing[0m [36mworks[0m
+⊘ [36mTest[0m [93m3[0m [36mskipped[0m[37m:[0m [36mInline[0m [36mobject[0m [36mtypes[0m [36mnot[0m [36myet[0m [36msupported[0m
+⊘ [36mTest[0m [93m4[0m [36mskipped[0m[37m:[0m [36mInline[0m [36mobject[0m [36mtypes[0m [36mnot[0m [36myet[0m [36msupported[0m
+✓ [36mTest[0m [93m5[0m [36mpassed[0m[37m:[0m [36mNull[0m [36massertion[0m [36mon[0m [36mnon[0m-[93mnull[0m [36mvalue[0m [36mworks[0m
+✓ [36mTest[0m [93m6[0m [36mpassed[0m[37m:[0m [36mBasic[0m [36mternary[0m [36moperator[0m [36mworks[0m
+✓ [36mTest[0m [93m7[0m [36mpassed[0m[37m:[0m [36mNested[0m [36mternary[0m [36moperators[0m [36mwork[0m
+✓ [36mTest[0m [93m8[0m [36mpassed[0m[37m:[0m [36mPrefix[0m [36mincrement[0m [36mworks[0m
+✓ [36mTest[0m [93m9[0m [36mpassed[0m[37m:[0m [36mPostfix[0m [36mincrement[0m [36mworks[0m
+✓ [36mTest[0m [93m10[0m [36mpassed[0m[37m:[0m [36mPrefix[0m [36mdecrement[0m [36mworks[0m
+✓ [36mTest[0m [93m11[0m [36mpassed[0m[37m:[0m [36mPostfix[0m [36mdecrement[0m [36mworks[0m
+✓ [36mTest[0m [93m12[0m [36mpassed[0m[37m:[0m [36mIncrement[0m [36min[0m [36mfor[0m [36mloop[0m [36mworks[0m
+✓ [36mTest[0m [93m13[0m [36mpassed[0m[37m:[0m [36mCombined[0m [36moperators[0m [36mwork[0m
+✓ [36mTest[0m [93m14[0m [36mpassed[0m[37m:[0m [36mTernary[0m [36min[0m [36mcomplex[0m [36mexpression[0m [36mworks[0m
+✓ [36mTest[0m [93m15[0m [36mpassed[0m[37m:[0m [36mFloat[0m [36mincrement[0m/[36mdecrement[0m [36mworks[0m
+====================================
+[36mTEST[0m [36mSUITE[0m [36mCOMPLETE[0m
+====================================
+Running test: .\tests\test_null_safety_simple.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mNull[0m [36mCoalescing[0m ===
+[36mdefault[0m
+=== [36mTest[0m [93m2[0m[37m:[0m [36mConditional[0m ===
+[36madult[0m
+=== [36mTest[0m [93m3[0m[37m:[0m [36mPrefix[0m [36mIncrement[0m ===
+[93m6[0m
+[93m6[0m
+=== [36mTest[0m [93m4[0m[37m:[0m [36mPostfix[0m [36mIncrement[0m ===
+[93m6[0m
+[93m5[0m
+=== [36mTest[0m [93m5[0m[37m:[0m [36mNull[0m [36mAssertion[0m ===
+[36mhello[0m
+Running test: .\tests\test_object_spread.rcc
+[36mCombined[0m[37m:[0m [37m{[0m [36mc[0m[37m:[0m [93m3[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m[37m,[0m [36md[0m[37m:[0m [93m4[0m[37m,[0m [36ma[0m[37m:[0m [93m1[0m [37m}[0m
+[36mOverride[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m1[0m[37m,[0m [36my[0m[37m:[0m [93m99[0m [37m}[0m
+Running test: .\tests\test_object_string_keys.rcc
+[36mTesting[0m [36mstring[0m [36mliterals[0m [36mas[0m [36mobject[0m [36mkeys[0m...
+✓ [36mCreated[0m [36mobject[0m [36mwith[0m [36mstring[0m [36mliteral[0m [36mkeys[0m
+  [36mContent[0m-[36mType[0m[37m:[0m [36mapplication[0m/[36mjson[0m
+  [36mAuthorization[0m[37m:[0m [36mBearer[0m [36mtoken123[0m
+  [36mX[0m-[36mCustom[0m-[36mHeader[0m[37m:[0m [36mcustom[0m [36mvalue[0m
+
+✓ [36mCreated[0m [36mobject[0m [36mwith[0m [36mmixed[0m [36mkey[0m [36mtypes[0m
+  [36mname[0m[37m:[0m [36mCarlos[0m
+  [36mfull[0m-[36mname[0m[37m:[0m [36mCarlos[0m [36mLópez[0m
+  [36mage[0m[37m:[0m [93m25[0m
+  [36muser[0m-[36mid[0m[37m:[0m [93m12345[0m
+
+✓ [36mCreated[0m [36mnested[0m [36mobject[0m [36mwith[0m [36mstring[0m [36mkeys[0m
+  [36mAPI[0m [36mbase[0m [36mURL[0m[37m:[0m [36mhttps[0m[37m:[0m//[36mapi[0m.[36mexample[0m.[36mcom[0m
+  [36mAPI[0m [36mtimeout[0m[37m:[0m [93m5000[0m
+  [36mContent[0m-[36mType[0m[37m:[0m [36mapplication[0m/[36mjson[0m
+
+[36mAll[0m [36mtests[0m [36mpassed[0m! [36mString[0m [36mliterals[0m [36mas[0m [36mobject[0m [36mkeys[0m [36mwork[0m [36mcorrectly[0m.
+Running test: .\tests\test_optional_params_simple.rcc
+[36mTesting[0m [36moptional[0m [36mparameters[0m...
+
+[36mName[0m[37m:[0m [36mAlice[0m
+✓ [36mCalled[0m [36mwith[0m [36mrequired[0m [36mparam[0m [36monly[0m
+
+[36mName[0m[37m:[0m [36mBob[0m
+✓ [36mCalled[0m [36mwith[0m [36mboth[0m [36mparams[0m
+
+[36mtest[0m
+[36mtest[0m
+[36mtest[0m
+✓ [36mMultiple[0m [36moptional[0m [36mparameters[0m [36mworking[0m
+
+=== [36mALL[0m [36mOPTIONAL[0m [36mPARAMETER[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_params_comprehensive.rcc
+=== [36mCOMPREHENSIVE[0m [36mFUNCTION[0m [36mPARAMETERS[0m [36mTEST[0m ===
+
+[93m1.[0m [36mBasic[0m [36mpositional[0m [36mparameters[0m
+  [36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+
+[93m2.[0m [36mNamed[0m [36marguments[0m
+  [36mPositional[0m[37m:[0m [36mlocalhost[0m[37m:[0m[93m8080[0m ([36mSSL[0m[37m:[0m [93mtrue[0m)
+  [36mNamed[0m[37m:[0m [36mexample[0m.[36mcom[0m[37m:[0m[93m3000[0m ([36mSSL[0m[37m:[0m [93mfalse[0m)
+  [36mMixed[0m[37m:[0m [36mserver[0m.[36mcom[0m[37m:[0m[93m443[0m ([36mSSL[0m[37m:[0m [93mtrue[0m)
+
+[93m3.[0m [36mDefault[0m [36mvalues[0m
+  [36mAll[0m [36mdefaults[0m[37m:[0m [36mHello[0m [36mAlice[0m!
+  [36mOne[0m [36moverride[0m[37m:[0m [36mHi[0m [36mBob[0m!
+  [36mAll[0m [36mspecified[0m[37m:[0m [36mHey[0m [36mCharlie[0m!!!
+  [36mNamed[0m [36moverride[0m[37m:[0m [36mHello[0m [36mDave[0m?
+
+[93m4.[0m [36mVariadic[0m [36mparameters[0m
+  [36msum[0m([93m1[0m[37m,[0m[93m2[0m[37m,[0m[93m3[0m[37m,[0m[93m4[0m[37m,[0m[93m5[0m) = [93m15[0m
+  [36msum[0m([93m10[0m[37m,[0m[93m20[0m[37m,[0m[93m30[0m) = [93m60[0m
+  [36msum[0m() = [93m0[0m
+
+[93m5.[0m [36mPositional[0m + [36mVariadic[0m
+  [36mItems[0m[37m:[0m [36mapple[0m [36mbanana[0m [36mcherry[0m
+  [36mEmpty[0m[37m:[0m
+  [36mSingle[0m[37m:[0m [36mitem[0m
+
+[93m6.[0m [36mDefaults[0m + [36mVariadic[0m
+  [37m[[0m[36mERROR[0m[37m][0m [36mFailed[0m [36mto[0m [36mconnect[0m
+  [37m[[0m[36mWARN[0m[37m][0m [36mLow[0m [36mmemory[0m
+  [37m[[0m[36mINFO[0m[37m][0m [36mSingle[0m [36mmessage[0m
+
+[93m7.[0m [36mNamed[0m + [36mDefaults[0m + [36mVariadic[0m
+  [36mhttps[0m[37m:[0m//[36mexample[0m.[36mcom[0m/[36mapi[0m/[36mv1[0m/[36musers[0m
+  [36mhttp[0m[37m:[0m//[36mlocalhost[0m/[36madmin[0m
+  [36mhttps[0m[37m:[0m//[36msite[0m.[36mcom[0m
+
+[93m8.[0m [36mArray[0m [36mdestructuring[0m
+  [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+  [36mx[0m=[93m100[0m[37m,[0m [36my[0m=[93m200[0m
+  [36mswapped[0m [37m[[0m[93m1[0m[37m,[0m[93m2[0m[37m][0m = [37m[[0m[93m2[0m[37m,[0m[93m1[0m[37m][0m
+
+[93m9.[0m [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mvariadic[0m
+  [36mmultiply[0m([93m2[0m[37m,[0m[93m3[0m[37m,[0m[93m4[0m) = [93m24[0m
+  [36mconcat[0m([92m'-'[0m[37m,[0m [92m'a'[0m[37m,[0m[92m'b'[0m[37m,[0m[92m'c'[0m) = [36ma[0m-[36mb[0m-[36mc[0m
+
+[93m10.[0m [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mdefaults[0m
+  [36mpower[0m([93m3[0m) = [93m9[0m
+  [36mpower[0m([93m2[0m[37m,[0m [93m5[0m) = [93m32[0m
+
+[93m11.[0m [36mComplex[0m [36mcombinations[0m
+  [37m[[0m[36mbatch[0m|[36mfast[0m|[93m0[0m[93m-10[0m[37m][0m [36mfile1[0m [36mfile2[0m [36mfile3[0m
+  [37m[[0m[36msingle[0m|[36mdata[0m|[93m5[0m[93m-15[0m[37m][0m
+
+[93m12.[0m [36mNamed[0m [36marguments[0m [36mcomprehensive[0m
+  [36mAll[0m [36mdefaults[0m[37m:[0m [36mlocalhost[0m[37m:[0m[93m8080[0m [36mtimeout[0m[37m:[0m[93m30[0m [36mretries[0m[37m:[0m[93m3[0m
+  [36mNamed[0m [36moverride[0m[37m:[0m [36mapi[0m.[36mcom[0m[37m:[0m[93m8080[0m [36mtimeout[0m[37m:[0m[93m60[0m [36mretries[0m[37m:[0m[93m3[0m
+  [36mMixed[0m [36morder[0m[37m:[0m [36mdb[0m.[36mlocal[0m[37m:[0m[93m5432[0m [36mtimeout[0m[37m:[0m[93m30[0m [36mretries[0m[37m:[0m[93m5[0m
+
+[93m13.[0m [36mVariadic[0m [36mwith[0m [36mdifferent[0m [36mtypes[0m
+  [36maverage[0m([93m10[0m[37m,[0m[93m20[0m[37m,[0m[93m30[0m[37m,[0m[93m40[0m) = [93m25[0m
+  [36maverage[0m([93m5[0m[37m,[0m[93m15[0m) = [93m10[0m
+
+[93m14.[0m [36mNested[0m [36mcalls[0m [36mwith[0m [36mvariadic[0m
+  [36mmin[0m([93m5[0m[37m,[0m[93m2[0m[37m,[0m[93m8[0m[37m,[0m[93m1[0m[37m,[0m[93m9[0m) = [93m1[0m
+  [36mmax[0m([93m5[0m[37m,[0m[93m2[0m[37m,[0m[93m8[0m[37m,[0m[93m1[0m[37m,[0m[93m9[0m) = [93m9[0m
+
+[93m15.[0m [36mEdge[0m [36mcases[0m
+  [36mEmpty[0m [36mvariadic[0m[37m:[0m [93m0[0m
+  [36mOnly[0m [36mvariadic[0m ([93m3[0m [36margs[0m)[37m:[0m [93m3[0m
+  [36mMany[0m [36mparams[0m[37m:[0m [93m36[0m
+  [36mMany[0m [36mparams[0m ([36mall[0m)[37m:[0m [93m15[0m
+
+=== [36mALL[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_partial_sections_1_10.rcc
+╔════════════════════════════════════════════════════════════════╗
+║     [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+[37m[[0m[93m1[0m[37m][0m [36mPRIMITIVE[0m [36mTYPES[0m & [36mLITERALS[0m
+  ✓ [36mInteger[0m [36mliterals[0m[37m:[0m [93m42[0m[37m,[0m [93m-100[0m[37m,[0m [93m999999999[0m
+  ✓ [36mFloat[0m [36mliterals[0m[37m:[0m [93m3.14159[0m[37m,[0m [93m-2.5[0m[37m,[0m [93m1.5[0m
+  ✓ [36mString[0m [36mliterals[0m[37m:[0m [36mhello[0m [36mworld[0m[37m,[0m [36mempty[0m=[92m""[0m
+  ✓ [36mBoolean[0m [36mliterals[0m[37m:[0m [93mtrue[0m[37m,[0m [93mfalse[0m
+  ✓ [36mNull[0m [36mliteral[0m[37m:[0m [93mnull[0m
+  ✓ [36mTemplate[0m [36mstrings[0m[37m:[0m [36mLanguage[0m[37m:[0m [36mRaccoon[0m[37m,[0m [36mVersion[0m[37m:[0m [93m1[0m
+
+[37m[[0m[93m2[0m[37m][0m [36mOPERATORS[0m
+  ✓ [36mArithmetic[0m[37m:[0m +=[93m13[0m[37m,[0m -=[93m7[0m[37m,[0m *=[93m30[0m[37m,[0m /=[93m3.3333333333333335[0m[37m,[0m %=[93m1[0m[37m,[0m **=[93m8[0m
+  ✓ [36mComparison[0m[37m:[0m ==[93mfalse[0m[37m,[0m !=[93mtrue[0m[37m,[0m <[93mfalse[0m[37m,[0m >[93mtrue[0m
+  ✓ [36mLogical[0m[37m:[0m &&=[93mfalse[0m[37m,[0m ||=[93mtrue[0m[37m,[0m !=[93mfalse[0m
+  ✓ [36mBitwise[0m[37m:[0m &=[93m1[0m[37m,[0m |=[93m7[0m[37m,[0m ^=[93m6[0m[37m,[0m ~=[93m-6[0m
+    [36mShifts[0m[37m:[0m <<=[93m10[0m[37m,[0m >>=[93m2[0m[37m,[0m >>>=[93m2[0m
+  ✓ [36mAssignment[0m [36moperators[0m[37m:[0m [36mresult[0m=[93m0[0m
+  ✓ [36mCompound[0m [36mbitwise[0m [36massignment[0m[37m:[0m [36mresult[0m=[93m1[0m
+  ✓ [36mInc[0m/[36mDec[0m[37m:[0m [36mpost[0m++=[93m6[0m[37m,[0m ++[36mpre[0m=[93m7[0m[37m,[0m [36mpost[0m--=[93m6[0m[37m,[0m --[36mpre[0m=[93m5[0m
+  ✓ [36mRange[0m [36moperator[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mNull[0m [36mcoalescing[0m[37m:[0m [93m42[0m
+  ✓ [36mTernary[0m [36moperator[0m[37m:[0m [93m10[0m
+
+[37m[[0m[93m3[0m[37m][0m [36mVARIABLES[0m & [36mCONSTANTS[0m
+  ✓ [36mLet[0m [36mdeclarations[0m[37m:[0m [93m100[0m[37m,[0m [36mtyped[0m[37m,[0m [93m42[0m
+  ✓ [36mConst[0m [36mdeclarations[0m[37m:[0m [93m999[0m[37m,[0m [36mimmutable[0m
+  ✓ [36mVariable[0m [36mshadowing[0m[37m:[0m [36minner[0m=[93m2[0m
+    [36mouter[0m=[93m1[0m
+
+[37m[[0m[93m4[0m[37m][0m [36mCONTROL[0m [36mFLOW[0m
+  ✓ [36mIf[0m [36mstatement[0m[37m:[0m [36mcondition[0m [93mtrue[0m
+  ✓ [36mIf[0m-[36melse[0m [36mstatement[0m[37m:[0m [36melse[0m [36mbranch[0m
+  ✓ [36mIf[0m-[36melse[0m-[36mif[0m [36mchain[0m[37m:[0m [36mgrade[0m [36mB[0m
+  ✓ [36mWhile[0m [36mloop[0m[37m:[0m [36miterations[0m=[93m3[0m
+  ✓ [36mFor[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mFor[0m-[36min[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mBreak[0m [36mstatement[0m[37m:[0m [36mstopped[0m [36mat[0m [93m3[0m
+  ✓ [36mContinue[0m [36mstatement[0m[37m:[0m [36msum[0m=[93m12[0m ([36mskipped[0m [93m3[0m)
+
+[37m[[0m[93m5[0m[37m][0m [36mFUNCTIONS[0m
+  ✓ [36mBasic[0m [36mfunction[0m[37m:[0m [93m42[0m
+  ✓ [36mFunction[0m [36mwith[0m [36mparams[0m[37m:[0m [93m30[0m
+  ✓ [36mOptional[0m [36mparameters[0m[37m:[0m [93m5[0m[37m,[0m [93m5[0m
+  ✓ [36mDefault[0m [36mparameters[0m[37m:[0m [93m15[0m[37m,[0m [93m25[0m
+  ✓ [36mRest[0m [36mparameters[0m[37m:[0m [93m15[0m
+  ✓ [36mArrow[0m [36mfunction[0m[37m:[0m [93m12[0m
+  ✓ [36mArrow[0m [36mexpression[0m[37m:[0m [93m10[0m
+  ✓ [36mArrow[0m [36mblock[0m[37m:[0m [93m11[0m
+  ✓ [36mHigher[0m-[36morder[0m [36mfunction[0m[37m:[0m [93m20[0m
+  ✓ [36mRecursive[0m [36mfunction[0m[37m:[0m [93m120[0m
+  ✓ [36mNamed[0m [36marguments[0m[37m:[0m [93m6[0m
+
+[37m[[0m[93m6[0m[37m][0m [36mARRAYS[0m & [36mCOLLECTIONS[0m
+  ✓ [36mArray[0m [36mliterals[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m[37m,[0m [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+  ✓ [36mArray[0m [36mindexing[0m[37m:[0m [93m20[0m
+  ✓ [36mArray[0m [36massignment[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mArray[0m [36mlength[0m[37m:[0m [93m3[0m
+  ✓ [36mArray[0m [36mpush[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m][0m
+  ✓ [36mArray[0m [36mpop[0m[37m:[0m [93m40[0m[37m,[0m [36mremaining[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mNested[0m [36marrays[0m[37m:[0m [93m2[0m
+  ✓ [36mArray[0m [36mspread[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m][0m
+
+[37m[[0m[93m7[0m[37m][0m [36mOBJECTS[0m & [36mMAPS[0m
+  ✓ [36mObject[0m [36mliteral[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mObject[0m [36mproperty[0m[37m:[0m [93m10[0m
+  ✓ [36mObject[0m [36massignment[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m99[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mComputed[0m [36mproperty[0m[37m:[0m [93m20[0m
+  ✓ [36mObject[0m [36mshorthand[0m[37m:[0m [37m{[0m [36mpropY[0m[37m:[0m [93m200[0m[37m,[0m [36mpropX[0m[37m:[0m [93m100[0m [37m}[0m
+  ✓ [36mNested[0m [36mobject[0m[37m:[0m [93m42[0m
+
+[37m[[0m[93m8[0m[37m][0m [36mCLASSES[0m
+  ✓ [36mBasic[0m [36mclass[0m[37m:[0m [93m42[0m
+  ✓ [36mClass[0m [36mproperties[0m[37m:[0m [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+  ✓ [36mClass[0m [36mmethods[0m[37m:[0m [36mdoubled[0m=[93m10[0m[37m,[0m [36madded[0m=[93m15[0m
+  ✓ [36mClass[0m [36minheritance[0m[37m:[0m [93m30[0m
+  ✓ [36mStatic[0m [36mmembers[0m[37m:[0m [93m200[0m
+  ✓ [36mPrivate[0m [36mproperties[0m[37m:[0m [93m42[0m
+  ✓ [36mGetters[0m/[36mSetters[0m[37m:[0m [36mold[0m=[93m10[0m[37m,[0m [36mnew[0m=[93m20[0m
+
+[37m[[0m[93m9[0m[37m][0m [36mINTERFACES[0m & [36mTYPE[0m [36mALIASES[0m
+  ✓ [36mBasic[0m [36minterface[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mInterface[0m [36mimplementation[0m[37m:[0m [93m15[0m
+  ✓ [36mType[0m [36malias[0m[37m:[0m [36mnum[0m=[93m42[0m[37m,[0m [36mstr[0m=[36mhello[0m
+  ✓ [36mInterface[0m [36mextends[0m[37m:[0m [37m{[0m [36mage[0m[37m:[0m [93m30[0m[37m,[0m [36mname[0m[37m:[0m [36mAlice[0m [37m}[0m
+
+[37m[[0m[93m10[0m[37m][0m [36mENUMS[0m
+  ✓ [36mNumeric[0m [36menum[0m[37m:[0m [93m1[0m
+  ✓ [36mString[0m [36menum[0m[37m:[0m [36mRED[0m
+  ✓ [36mMixed[0m [36menum[0m[37m:[0m [36mthree[0m
+
+[37m[[0m[93m11[0m[37m][0m [36mGENERICS[0m
+  ✓ [36mGeneric[0m [36mfunction[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+Running test: .\tests\test_raccoon_modules.rcc
+Running test: .\tests\test_recursion_debug.rcc
+Running test: .\tests\test_recursion_limit.rcc
+[36mCall[0m[37m:[0m [93m0[0m
+[36mCall[0m[37m:[0m [93m1[0m
+[36mCall[0m[37m:[0m [93m2[0m
+[36mCall[0m[37m:[0m [93m3[0m
+[36mCall[0m[37m:[0m [93m4[0m
+[36mCall[0m[37m:[0m [93m5[0m
+[36mCall[0m[37m:[0m [93m6[0m
+[36mCall[0m[37m:[0m [93m7[0m
+Running test: .\tests\test_rest_params.rcc
+[36mGot[0m [93m3[0m [36marguments[0m
+[36mArgs[0m[37m:[0m [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+[36ma[0m [36mb[0m [36mc[0m
+Running test: .\tests\test_return_type_inference.rcc
+[36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mmax[0m([93m10[0m[37m,[0m [93m20[0m) = [93m20[0m
+[36mgetName[0m() = [36mAlice[0m
+[36misPositive[0m([93m5[0m) = [93mtrue[0m
+[36mmultiply[0m([93m4[0m[37m,[0m [93m5[0m) = [93m20[0m
+[36msubtract[0m([93m10[0m[37m,[0m [93m3[0m) = [93m7[0m
+[36mHello[0m[37m,[0m [36mBob[0m
+Running test: .\tests\test_section_11_generics.rcc
+[36mTesting[0m [36mGenerics[0m...
+  ✓ [36mGeneric[0m [36mfunction[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mGeneric[0m [36mclass[0m[37m:[0m [93m42[0m[37m,[0m [36mboxed[0m
+  ✓ [36mGeneric[0m [36minterface[0m[37m:[0m [37m{[0m [36msecond[0m[37m:[0m [36manswer[0m[37m,[0m [36mfirst[0m[37m:[0m [93m42[0m [37m}[0m
+  ✓ [36mGeneric[0m [36mconstraints[0m[37m:[0m [93m3[0m
+✅ [36mGenerics[0m [36mtests[0m [36mcompleted[0m
+Running test: .\tests\test_section_12_advanced_types.rcc
+[36mTesting[0m [36mAdvanced[0m [36mTypes[0m...
+  ✓ [36mUnion[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mIntersection[0m [36mtypes[0m[37m:[0m [37m{[0m [36mage[0m[37m:[0m [93m25[0m[37m,[0m [36mname[0m[37m:[0m [36mBob[0m [37m}[0m
+  ✓ [36mNullable[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [93mnull[0m[37m,[0m [36mcheck[0m=[93mtrue[0m
+  ✓ [36mArray[0m [36mtypes[0m[37m:[0m [36mint[0m[37m[[0m[37m][0m[37m,[0m [36mstr[0m[37m[[0m[37m][0m[37m,[0m [36mint[0m[37m[[0m[37m][0m[37m[[0m[37m][0m
+  ✓ [36mTuple[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mObject[0m [36mtypes[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mFunction[0m [36mtypes[0m[37m:[0m [93m15[0m
+  ✓ [36mReadonly[0m [36mtypes[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mKeyOf[0m [36moperator[0m[37m:[0m [36mdefined[0m
+  ✓ [36mTypeOf[0m [36moperator[0m[37m:[0m [36mint[0m
+✅ [36mAdvanced[0m [36mTypes[0m [36mtests[0m [36mcompleted[0m
+Running test: .\tests\test_section_13_destructuring.rcc
+[36mTesting[0m [36mDestructuring[0m...
+  ✓ [36mArray[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+  ⊗ [36mArray[0m [36mdestructuring[0m [36mskip[0m[37m:[0m [36mNOT[0m [36mIMPLEMENTED[0m
+  ✓ [36mArray[0m [36mdestructuring[0m [36mrest[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mObject[0m [36mdestructuring[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+  ✓ [36mObject[0m [36mdestructuring[0m [36mshorthand[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+  ✓ [36mNested[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+  ✓ [36mFunction[0m [36mparam[0m [36mdestructuring[0m[37m:[0m [93m30[0m
+✅ [36mDestructuring[0m [36mtests[0m [36mcompleted[0m
+Running test: .\tests\test_simple_advanced_types.rcc
+[36mAdvanced[0m [36mtype[0m [36msystem[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_simple_array.rcc
+Running test: .\tests\test_simple_enum_class_types.rcc
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Admin[0m
+[36mOptional[0m [36muser[0m [36mcreated[0m
+[36mClass[0m [36mas[0m [36mtype[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_simple_enum_export.rcc
+Running test: .\tests\test_simple_modules.rcc
+[36mTest[0m [93m1[0m[37m:[0m [36mprint[0m [36msimple[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mprint[0m [36mcon[0m [36mmúltiples[0m [36margs[0m [93m123[0m [93m456[0m
+[36mPI[0m = [93m3.141592653589793[0m
+[36mMath[0m.[36mE[0m = [93m2.718281828459045[0m
+[36mMath[0m.[36msqrt[0m([93m16[0m) = [93m4[0m
+Running test: .\tests\test_simple_recursion.rcc
+[36mTesting[0m [36mrecursion[0m[37m:[0m
+[36mfactorial[0m([93m5[0m) = [93m120[0m
+Running test: .\tests\test_spread_operator.rcc
+[36msum[0m(...[37m[[0m[93m1[0m[37m,[0m[93m2[0m[37m,[0m[93m3[0m[37m][0m) = [93m6[0m
+[36mHello[0m [36mAlice[0m!
+[36mCombined[0m[37m:[0m [36mABCD[0m
+[93m1[0m
+[36mtwo[0m
+[93m3[0m
+[93mtrue[0m
+[36mAll[0m [36mspread[0m [36moperator[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_static_prop.rcc
+[36mPI[0m = [93m3.14[0m
+[36mNAME[0m = [36mTest[0m
+Running test: .\tests\test_stdlib_complete.rcc
+=== [36mArray[0m [36mTests[0m ===
+Running test: .\tests\test_stdlib_demo.rcc
+Running test: .\tests\test_sugar_types.rcc
+=== [36mSugar[0m [36mTypes[0m [36mTest[0m ===
+
+✓ [36mint[0m [36mse[0m [36masigna[0m [36mcorrectamente[0m [36ma[0m [36mi8[0m[37m,[0m [36mi16[0m[37m,[0m [36mi32[0m[37m,[0m [36mi64[0m[37m,[0m [36mu8[0m[37m,[0m [36mu16[0m[37m,[0m [36mu32[0m[37m,[0m [36mu64[0m
+✓ [36mfloat[0m [36mse[0m [36masigna[0m [36mcorrectamente[0m [36ma[0m [36mf32[0m[37m,[0m [36mf64[0m[37m,[0m [36mdecimal[0m
+✓ [36mOperaciones[0m [36maritméticas[0m [36mfuncionan[0m[37m:[0m [93m1010[0m[37m,[0m [93m8.53452[0m
+[36mValor[0m [36mi32[0m[37m:[0m [93m42[0m
+[36mValor[0m [36mf64[0m[37m:[0m [93m3.14159[0m
+✓ [36mConversión[0m [36mwidening[0m [36mautomática[0m[37m:[0m [36mi8[0m -> [36mi32[0m -> [36mi64[0m -> [36mf64[0m = [93m50[0m
+✓ [36mArrays[0m [36mtipados[0m[37m:[0m [36mi8[0m[37m[[0m[37m][0m[37m,[0m [36mi32[0m[37m[[0m[37m][0m[37m,[0m [36mf64[0m[37m[[0m[37m][0m [36mfuncionan[0m [36mcorrectamente[0m
+
+✅ [36mTodos[0m [36mlos[0m [36msugar[0m [36mtypes[0m [36my[0m [36mconversiones[0m [36mfuncionan[0m [36mperfectamente[0m!
+Running test: .\tests\test_toStr.rcc
+[93m42[0m
+[36mSuccess[0m!
+Running test: .\tests\test_types_edge_cases.rcc
+=== [36mEDGE[0m [36mCASES[0m[37m:[0m [36mSistema[0m [36mde[0m [36mTipos[0m ===
+
+[37m[[0m [93m1[0m [37m][0m [36mValores[0m [36mlímite[0m [36mde[0m [36mtipos[0m [36menteros[0m [36mcon[0m [36msigno[0m[37m:[0m
+  ✓ [36mi8[0m[37m:[0m  [93m-128[0m [36ma[0m [93m127[0m
+  ✓ [36mi16[0m[37m:[0m [93m-32768[0m [36ma[0m [93m32767[0m
+  ✓ [36mi32[0m[37m:[0m [93m-2147483648[0m [36ma[0m [93m2147483647[0m
+  ✓ [36mi64[0m[37m:[0m [93m-9223372036854775807[0m [36ma[0m [93m9223372036854775807[0m
+
+[37m[[0m [93m2[0m [37m][0m [36mValores[0m [36mlímite[0m [36mde[0m [36mtipos[0m [36msin[0m [36msigno[0m[37m:[0m
+  ✓ [36mu8[0m[37m:[0m  [93m0[0m [36ma[0m [93m255[0m
+  ✓ [36mu16[0m[37m:[0m [93m0[0m [36ma[0m [93m65535[0m
+  ✓ [36mu32[0m[37m:[0m [93m0[0m [36ma[0m [93m4294967295[0m
+  ✓ [36mu64[0m[37m:[0m [93m0[0m [36ma[0m [93m9223372036854775807[0m
+
+[37m[[0m [93m3[0m [37m][0m [36mCadenas[0m [36mde[0m [36mconversión[0m [36mwidening[0m[37m:[0m
+  ✓ [36mi8[0m -> [36mi16[0m -> [36mi32[0m -> [36mi64[0m -> [36mf64[0m -> [36mdecimal[0m[37m:[0m [93m42[0m
+  ✓ [36mu8[0m -> [36mu16[0m -> [36mu32[0m -> [36mu64[0m -> [36mf64[0m[37m:[0m [93m200[0m
+  ✓ [36mu8[0m -> [36mi16[0m -> [36mi64[0m -> [36mdecimal[0m[37m:[0m [93m100[0m
+
+[37m[[0m [93m4[0m [37m][0m [36mOperaciones[0m [36maritméticas[0m [36mentre[0m [36mdiferentes[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m10[0m) + [36mi32[0m([93m20[0m) = [36mi32[0m([93m30[0m)
+  ✓ [36mi16[0m([93m5[0m) * [36mi64[0m([93m15[0m) = [36mi64[0m([93m75[0m)
+  ✓ [36mu8[0m([93m8[0m) - [36mu32[0m([93m4[0m) = [36mu32[0m([93m4[0m)
+  ✓ [36mf32[0m([93m3.5[0m) * [36mf64[0m([93m2.0[0m) = [36mf64[0m([93m7[0m)
+  ✓ [36mi32[0m([93m100[0m) + [36mf32[0m([93m2.5[0m) = [36mf32[0m([93m102.5[0m)
+
+[37m[[0m [93m5[0m [37m][0m [36mOperaciones[0m [36mbitwise[0m [36mentre[0m [36mtipos[0m [36menteros[0m[37m:[0m
+  ✓ [36mi8[0m([93m15[0m) & [36mi32[0m([93m240[0m) = [36mi32[0m([93m0[0m)
+  ✓ [36mu8[0m([93m12[0m) | [36mu16[0m([93m10[0m) = [36mu16[0m([93m14[0m)
+  ✓ [36mi16[0m([93m5[0m) ^ [36mi32[0m([93m3[0m) = [36mi32[0m([93m6[0m)
+  ✓ [36mi8[0m([93m4[0m) << [36mi32[0m([93m2[0m) = [36mi32[0m([93m16[0m)
+  ✓ [36mi32[0m([93m16[0m) >> [36mi8[0m([93m2[0m) = [36mi32[0m([93m4[0m)
+
+[37m[[0m [93m6[0m [37m][0m [36mFunciones[0m [36mcon[0m [36mmúltiples[0m [36mtipos[0m [36mde[0m [36mparámetros[0m[37m:[0m
+  ✓ [36mi8[0m[37m:[0m [93m50[0m
+  ✓ [36mi32[0m[37m:[0m [93m5000[0m
+  ✓ [36mf64[0m[37m:[0m [93m50.5[0m
+  ✓ [36mdecimal[0m[37m:[0m [93m50.123456[0m
+  ✓ [36mSugar[0m [36mtype[0m [36men[0m [36mi8[0m[37m:[0m [36mi8[0m[37m:[0m [93m25[0m
+  ✓ [36mSugar[0m [36mtype[0m [36men[0m [36mi32[0m[37m:[0m [36mi32[0m[37m:[0m [93m2500[0m
+  ✓ [36mSugar[0m [36mtype[0m [36men[0m [36mf64[0m[37m:[0m [36mf64[0m[37m:[0m [93m25.5[0m
+
+[37m[[0m [93m7[0m [37m][0m [36mArrays[0m [36mcon[0m [36mdiferentes[0m [36mtipos[0m [36mnuméricos[0m[37m:[0m
+  ✓ [36mi8[0m[37m[[0m[37m][0m[37m:[0m  [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mi32[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m100[0m[37m,[0m [93m200[0m[37m,[0m [93m300[0m[37m][0m
+  ✓ [36mu8[0m[37m[[0m[37m][0m[37m:[0m  [37m[[0m[93m255[0m[37m,[0m [93m128[0m[37m,[0m [93m64[0m[37m][0m
+  ✓ [36mf32[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m1.1[0m[37m,[0m [93m2.2[0m[37m,[0m [93m3.3[0m[37m][0m
+  ✓ [36mf64[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m10.5[0m[37m,[0m [93m20.5[0m[37m,[0m [93m30.5[0m[37m][0m
+
+[37m[[0m [93m8[0m [37m][0m [36mOperaciones[0m [36mcon[0m [36mcero[0m [36my[0m [36mnúmeros[0m [36mnegativos[0m[37m:[0m
+  ✓ [36mi8[0m([93m0[0m) + [36mi8[0m([93m-128[0m) = [93m-128[0m
+  ✓ [36mi32[0m([93m-1000000[0m) + [36mi32[0m([93m1000000[0m) = [93m0[0m
+  ✓ [36mf64[0m([93m-3.14159[0m) * [93m-1[0m = [93m3.14159[0m
+  ✓ [36mNegación[0m [36munaria[0m[37m:[0m [93m-42[0m = [93m-42[0m
+
+[37m[[0m [93m9[0m [37m][0m [36mConversiones[0m [36mexplícitas[0m [36mentre[0m [36mtipos[0m[37m:[0m
+  [36mOriginal[0m [36mi32[0m[37m:[0m [93m256[0m
+  ✓ [36mtoI8[0m()[37m:[0m  [93m0[0m
+  ✓ [36mtoI16[0m()[37m:[0m [93m256[0m
+  ✓ [36mtoI64[0m()[37m:[0m [93m256[0m
+  ✓ [36mtoF32[0m()[37m:[0m [93m256[0m
+  ✓ [36mtoF64[0m()[37m:[0m [93m256[0m
+  [36mOriginal[0m [36mf64[0m[37m:[0m [93m123.456[0m
+  ✓ [36mtoInt[0m()[37m:[0m     [93m123[0m
+  ✓ [36mtoDecimal[0m()[37m:[0m [93m123.456[0m
+
+[37m[[0m [93m10[0m [37m][0m [36mComparaciones[0m [36mentre[0m [36mdiferentes[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m10[0m) == [36mi32[0m([93m10[0m)[37m:[0m [93mtrue[0m
+  ✓ [36mu8[0m([93m50[0m) == [36mi16[0m([93m50[0m)[37m:[0m [93mtrue[0m
+  ✓ [36mf32[0m([93m3.14[0m) == [36mf64[0m([93m3.14[0m)[37m:[0m [93mtrue[0m
+  ✓ [36mi32[0m([93m100[0m) < [36mi64[0m([93m200[0m)[37m:[0m [93mtrue[0m
+
+[37m[[0m [93m11[0m [37m][0m [36mExpresiones[0m [36mcomplejas[0m [36mcon[0m [36mmúltiples[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m2[0m) + [36mi16[0m([93m3[0m) * [36mi32[0m([93m4[0m) - [36mi64[0m([93m5[0m) = [36mi64[0m([93m9[0m)
+  ✓ [36mu8[0m([93m10[0m) * [36mu16[0m([93m20[0m) + [36mu32[0m([93m30[0m) = [36mu32[0m([93m230[0m)
+  ✓ [36mf32[0m([93m2.5[0m) * [36mf64[0m([93m3.0[0m) + [36mdecimal[0m([93m1.5[0m) = [36mdecimal[0m([93m9[0m)
+
+[37m[[0m [93m12[0m [37m][0m [36mOperaciones[0m [36mcon[0m [36marrays[0m [36mde[0m [36mtipos[0m [36mmixtos[0m[37m:[0m
+  ✓ [36mArray[0m [36mi8[0m [36mlength[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+  ✓ [36mArray[0m [36mi32[0m [36mlength[0m[37m:[0m [37m[[0m[93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mArray[0m [36mf64[0m [36mlength[0m[37m:[0m [37m[[0m[93m1.5[0m[37m,[0m [93m2.5[0m[37m,[0m [93m3.5[0m[37m][0m
+  ✓ [36mDespués[0m [36mde[0m [36mpush[0m[37m:[0m [36mi8[0m[37m[[0m[37m][0m = [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m][0m
+  ✓ [36mDespués[0m [36mde[0m [36mpush[0m[37m:[0m [36mi32[0m[37m[[0m[37m][0m = [37m[[0m[93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m][0m
+  ✓ [36mDespués[0m [36mde[0m [36mpush[0m[37m:[0m [36mf64[0m[37m[[0m[37m][0m = [37m[[0m[93m1.5[0m[37m,[0m [93m2.5[0m[37m,[0m [93m3.5[0m[37m,[0m [93m4.5[0m[37m][0m
+
+[37m[[0m [93m13[0m [37m][0m [36mValores[0m [36mdecimales[0m [36mde[0m [36malta[0m [36mprecisión[0m[37m:[0m
+  ✓ [36mdecimal[0m([93m0.1[0m) + [36mdecimal[0m([93m0.2[0m) = [93m0.30000000000000004[0m
+  ✓ [36mSuma[0m [36mde[0m [36malta[0m [36mprecisión[0m[37m:[0m [93m999999999.1234568[0m
+
+[37m[[0m [93m14[0m [37m][0m [36mFunciones[0m [36mrecursivas[0m [36mcon[0m [36mtipos[0m [36mespecíficos[0m[37m:[0m
+  ⚠ [36mSkipped[0m - [36mrecursive[0m [36mfunctions[0m [36mcause[0m [36mstack[0m [36moverflow[0m [36min[0m [36mcurrent[0m [36minterpreter[0m
+
+[37m[[0m [93m15[0m [37m][0m [36mRanges[0m [36mcon[0m [36mtipos[0m [36menteros[0m [36mespecíficos[0m[37m:[0m
+  ✓ [36mRange[0m [36mi8[0m([93m1.[0m.[93m5[0m)[37m:[0m   [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mRange[0m [36mi32[0m([93m10.[0m.[93m15[0m)[37m:[0m [37m[[0m[93m10[0m[37m,[0m [93m11[0m[37m,[0m [93m12[0m[37m,[0m [93m13[0m[37m,[0m [93m14[0m[37m,[0m [93m15[0m[37m][0m
+  ✓ [36mRange[0m [36mu8[0m([93m0.[0m.[93m3[0m)[37m:[0m    [37m[[0m[93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+[37m[[0m [93m16[0m [37m][0m [36mOperador[0m [36mmódulo[0m [36mcon[0m [36mdiferentes[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m10[0m) % [36mi32[0m([93m3[0m) = [36mi32[0m([93m1[0m)
+  ✓ [36mu16[0m([93m100[0m) % [36mu32[0m([93m7[0m) = [36mu32[0m([93m2[0m)
+
+==================================================
+✅ [36mTODOS[0m [36mLOS[0m [36mEDGE[0m [36mCASES[0m [36mPASARON[0m [36mEXITOSAMENTE[0m
+==================================================
+
+[36mTipos[0m [36mprobados[0m[37m:[0m
+  • [36mSigned[0m [36mintegers[0m[37m:[0m [36mi8[0m[37m,[0m [36mi16[0m[37m,[0m [36mi32[0m[37m,[0m [36mi64[0m
+  • [36mUnsigned[0m [36mintegers[0m[37m:[0m [36mu8[0m[37m,[0m [36mu16[0m[37m,[0m [36mu32[0m[37m,[0m [36mu64[0m
+  • [36mFloating[0m [36mpoint[0m[37m:[0m [36mf32[0m[37m,[0m [36mf64[0m[37m,[0m [36mdecimal[0m
+  • [36mSugar[0m [36mtypes[0m[37m:[0m [36mint[0m[37m,[0m [36mfloat[0m
+
+[36mOperaciones[0m [36mprobadas[0m[37m:[0m
+  • [36mAritméticas[0m[37m:[0m +[37m,[0m -[37m,[0m *[37m,[0m /[37m,[0m %
+  • [36mBitwise[0m[37m:[0m &[37m,[0m |[37m,[0m ^[37m,[0m <<[37m,[0m >>
+  • [36mComparación[0m[37m:[0m ==[37m,[0m !=[37m,[0m <[37m,[0m >[37m,[0m <=[37m,[0m >=
+  • [36mWidening[0m [36mautomático[0m
+  • [36mConversiones[0m [36mexplícitas[0m
+  • [36mArrays[0m [36mtipados[0m
+  • [36mFunciones[0m [36mrecursivas[0m
+  • [36mRanges[0m
+
+🎉 [36mSistema[0m [36mde[0m [36mtipos[0m [36mfuncionando[0m [36mperfectamente[0m!
+Running test: .\tests\test_type_inference.rcc
+Running test: .\tests\test_type_system_comprehensive.rcc
+[36mhello[0m
+[93m42[0m
+[36mTest[0m [36mUser[0m
+[36mtext[0m
+[93mnull[0m
+[36mAll[0m [36madvanced[0m [36mtype[0m [36msystem[0m [36mtests[0m [36mcompleted[0m [36msuccessfully[0m!
+Running test: .\tests\test_typing_system_implemented.rcc
+=== [36mSTARTING[0m [36mTYPE[0m [36mSYSTEM[0m [36mTESTS[0m ===
+
+[93m1.[0m [36mPRIMITIVE[0m [36mTYPES[0m
+✓ [36mPrimitive[0m [36mtypes[0m [36mworking[0m
+
+[93m2.[0m [36mNULLABLE[0m [36mTYPES[0m ([36mCustom[0m [36mSugar[0m)
+✓ [36mNullable[0m [36mtypes[0m [36mworking[0m
+
+[93m3.[0m [36mARRAYS[0m
+✓ [36mArrays[0m [36mworking[0m
+
+[93m4.[0m [36mTUPLES[0m
+✓ [36mTuples[0m [36mworking[0m
+
+[93m5.[0m [36mUNION[0m [36mTYPES[0m
+✓ [36mUnion[0m [36mtypes[0m [36mworking[0m
+
+[93m6.[0m [36mINTERSECTION[0m [36mTYPES[0m
+✓ [36mIntersection[0m [36mtypes[0m [36mworking[0m
+
+[93m7.[0m [36mOBJECT[0m [36mTYPES[0m [36mWITH[0m [36mOPTIONAL[0m [36mPROPERTIES[0m
+✓ [36mObject[0m [36mtypes[0m [36mwith[0m [36moptional[0m [36mproperties[0m [36mworking[0m
+
+[93m8.[0m [36mREADONLY[0m [36mTYPES[0m
+✓ [36mReadonly[0m [36mtypes[0m [36mworking[0m
+
+[93m9.[0m [36mGENERICS[0m
+✓ [36mGeneric[0m [36mtypes[0m [36mworking[0m [36min[0m [36mclasses[0m [36mand[0m [36minterfaces[0m
+
+[93m10.[0m [36mENUM[0m [36mTYPES[0m
+✓ [36mEnum[0m [36mtypes[0m [36mworking[0m
+
+[93m11.[0m [36mCLASS[0m [36mTYPES[0m
+✓ [36mClass[0m [36mtypes[0m [36mand[0m [36minheritance[0m [36mworking[0m
+
+[93m12.[0m [36mINTERFACE[0m [36mTYPES[0m
+✓ [36mInterface[0m [36mtypes[0m [36mworking[0m
+
+[93m13.[0m [36mFUNCTION[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mtypes[0m [36mworking[0m
+
+[93m14.[0m [36mFUNCTION[0m [36mDECLARATIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mdeclarations[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m15.[0m [36mOPTIONAL[0m [36mPARAMETERS[0m ([36mNEW[0m [36mFEATURE[0m)
+[36mAlice[0m
+[36mBob[0m
+✓ [36mOptional[0m [36mparameters[0m [36mworking[0m
+
+[93m16.[0m [36mARROW[0m [36mFUNCTIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m17.[0m [36mCOMPLEX[0m [36mNESTED[0m [36mSTRUCTURES[0m
+✓ [36mComplex[0m [36mnested[0m [36mstructures[0m [36mworking[0m
+
+[93m18.[0m [36mTYPE[0m [36mALIASES[0m
+✓ [36mType[0m [36maliases[0m [36mwith[0m [36munions[0m [36mworking[0m
+
+[93m19.[0m [36mTESTING[0m [36mFUNCTIONALITY[0m
+
+[36madd_numbers[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mgreet[0m([92m'World'[0m) = [36mHello[0m[37m,[0m [36mWorld[0m
+[36mdouble[0m([93m21[0m) = [93m42[0m
+[36mconcat[0m([92m'Hello, '[0m[37m,[0m [92m'World!'[0m) = [36mHello[0m[37m,[0m [36mWorld[0m!
+[36mdog[0m.[36mgetName[0m() = [36mBuddy[0m
+[36mdog[0m.[36mbreed[0m = [36mLabrador[0m
+
+=== [36mALL[0m [36mTYPE[0m [36mSYSTEM[0m [36mTESTS[0m [36mPASSED[0m ===
+[36mAll[0m [36mimplemented[0m [36mfeatures[0m [36mare[0m [36mworking[0m [36mcorrectly[0m!
+Running test: .\tests\test_union_in_functions.rcc
+[36mhello[0m
+[93m42[0m
+[36mtest[0m
+[93m123[0m
+[93m456[0m
+[36mworld[0m
+[36mUnion[0m [36mtype[0m [36mfunction[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\use_math_utils.rcc
+=== [36mPrueba[0m [36mde[0m [36mSistema[0m [36mde[0m [36mMódulos[0m ===
+
+[36mcalculate[0m([92m'add'[0m[37m,[0m [93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+[36madd[0m([93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+[36msubtract[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+[36mmultiply[0m([93m10[0m[37m,[0m [93m5[0m) = [93m50[0m
+[36mdivide[0m([93m10[0m[37m,[0m [93m2[0m) = [93m5[0m
+
+[36mPI[0m = [93m3.14159[0m
+
+=== [36mPrueba[0m [36mde[0m [36mCalculator[0m ===
+(([93m0[0m + [93m10[0m) * [93m2[0m) - [93m5[0m = [93m15[0m
+
+=== [36mPrueba[0m [36mde[0m [36mNamespace[0m [36mImport[0m ===
+[36mMathUtils[0m.[36madd[0m([93m100[0m[37m,[0m [93m50[0m) = [93m150[0m
+
+[36mMathUtils[0m.[36mPI[0m = [93m3.14159[0m
+Running test: .\tests\arrow_functions_demo.rcc
+=== [36mARROW[0m [36mFUNCTIONS[0m [36mAS[0m [36mPARAMETERS[0m ===
+
+[36mOriginal[0m [36marray[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+
+--- [36mMAP[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mDoubled[0m ([36marrow[0m)[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m,[0m [93m12[0m[37m,[0m [93m14[0m[37m,[0m [93m16[0m[37m,[0m [93m18[0m[37m,[0m [93m20[0m[37m][0m
+[36mSquared[0m ([36marrow[0m)[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m4[0m[37m,[0m [93m9[0m[37m,[0m [93m16[0m[37m,[0m [93m25[0m[37m,[0m [93m36[0m[37m,[0m [93m49[0m[37m,[0m [93m64[0m[37m,[0m [93m81[0m[37m,[0m [93m100[0m[37m][0m
+[36mTransformed[0m ([36mx[0m*[93m3[0m+[93m1[0m)[37m:[0m [37m[[0m[93m4[0m[37m,[0m [93m7[0m[37m,[0m [93m10[0m[37m,[0m [93m13[0m[37m,[0m [93m16[0m[37m,[0m [93m19[0m[37m,[0m [93m22[0m[37m,[0m [93m25[0m[37m,[0m [93m28[0m[37m,[0m [93m31[0m[37m][0m
+
+--- [36mFILTER[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mEven[0m [36mnumbers[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m][0m
+[36mGreater[0m [36mthan[0m [93m5[0m[37m:[0m [37m[[0m[93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+[36mMultiples[0m [36mof[0m [93m3[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+
+--- [36mREDUCE[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mSum[0m[37m:[0m [93m55[0m
+[36mProduct[0m[37m:[0m [93m3628800[0m
+
+--- [36mFIND[0m/[36mSOME[0m/[36mEVERY[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mFirst[0m > [93m7[0m[37m:[0m [93m8[0m
+[36mHas[0m [36mevens[0m? [93mtrue[0m
+[36mAll[0m [36mpositive[0m? [93mtrue[0m
+
+--- [36mMETHOD[0m [36mCHAINING[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mEvens[0m * [93m3[0m[37m,[0m > [93m10[0m[37m:[0m [37m[[0m[93m12[0m[37m,[0m [93m18[0m[37m,[0m [93m24[0m[37m,[0m [93m30[0m[37m][0m
+
+=== [36mASYNC[0m [36mFUNCTIONS[0m ===
+[36mFuture[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([36mUser_42[0m)[37m][0m
+[36mUser[0m[37m:[0m [36mUser_42[0m
+
+=== [36mASYNC[0m + [36mARROW[0m [36mFUNCTIONS[0m ===
+[36mProcessed[0m [36musers[0m[37m:[0m [37m[[0m[36mProcessed_1[0m[37m,[0m [36mProcessed_2[0m[37m,[0m [36mProcessed_3[0m[37m,[0m [36mProcessed_4[0m[37m,[0m [36mProcessed_5[0m[37m][0m
+
+=== [36mHIGHER[0m-[36mORDER[0m [36mFUNCTIONS[0m ===
+[36mOriginal[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+[36mDoubled[0m [36mwith[0m [36mfunc[0m [36mtype[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+[36mTripled[0m [36mwith[0m [36mfunc[0m [36mtype[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+[36mTripled[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+
+=== [36mALL[0m [36mTESTS[0m [36mCOMPLETED[0m ===
+Running test: .\tests\async_and_arrays.rcc
+=== [36mTESTING[0m [36mASYNC[0m [36mFUNCTIONS[0m ===
+[36mFuture[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([36mData[0m [36mfetched[0m!)[37m][0m
+[36mResult[0m [36mafter[0m [36mawait[0m[37m:[0m [36mData[0m [36mfetched[0m!
+
+=== [36mTESTING[0m [36mARRAY[0m [36mMETHODS[0m ===
+[36mOriginal[0m [36marray[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+
+--- [36mmap[0m() ---
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m,[0m [93m12[0m[37m,[0m [93m14[0m[37m,[0m [93m16[0m[37m,[0m [93m18[0m[37m,[0m [93m20[0m[37m][0m
+[36mSquared[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m4[0m[37m,[0m [93m9[0m[37m,[0m [93m16[0m[37m,[0m [93m25[0m[37m,[0m [93m36[0m[37m,[0m [93m49[0m[37m,[0m [93m64[0m[37m,[0m [93m81[0m[37m,[0m [93m100[0m[37m][0m
+
+--- [36mfilter[0m() ---
+[36mEven[0m [36mnumbers[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m][0m
+[36mGreater[0m [36mthan[0m [93m5[0m[37m:[0m [37m[[0m[93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+
+--- [36mreduce[0m() ---
+[36mSum[0m [36mof[0m [36mall[0m [36mnumbers[0m[37m:[0m [93m55[0m
+[36mProduct[0m [36mof[0m [36mall[0m [36mnumbers[0m[37m:[0m [93m3628800[0m
+
+--- [36mfind[0m() ---
+[36mFirst[0m [36mnumber[0m > [93m7[0m[37m:[0m [93m8[0m
+[36mFirst[0m [36mnumber[0m > [93m100[0m[37m:[0m [93mnull[0m
+
+--- [36mfindIndex[0m() ---
+[36mIndex[0m [36mof[0m [93m5[0m[37m:[0m [93m4[0m
+[36mIndex[0m [36mof[0m > [93m100[0m[37m:[0m [93m-1[0m
+
+--- [36msome[0m() ---
+[36mHas[0m [36meven[0m [36mnumbers[0m? [93mtrue[0m
+[36mHas[0m [36mnegative[0m [36mnumbers[0m? [93mfalse[0m
+
+--- [36mevery[0m() ---
+[36mAll[0m [36mpositive[0m? [93mtrue[0m
+[36mAll[0m [36meven[0m? [93mfalse[0m
+
+=== [36mMETHOD[0m [36mCHAINING[0m ===
+[36mEven[0m [36mnumbers[0m * [93m3[0m[37m,[0m > [93m10[0m[37m:[0m [37m[[0m[93m12[0m[37m,[0m [93m18[0m[37m,[0m [93m24[0m[37m,[0m [93m30[0m[37m][0m
+
+--- [36mSmall[0m [36marray[0m [36mcomposition[0m ---
+[36mOriginal[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+[36mTripled[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+
+=== [36mALL[0m [36mTESTS[0m [36mCOMPLETED[0m ===
+Running test: .\tests\demo_colors.rcc
+╔══════════════════════════════════════════════╗
+║   [36mDEMOSTRACIÓN[0m [36mDE[0m [36mCOLORES[0m [36mEN[0m [36mRACCOON[0m        ║
+╔══════════════════════════════════════════════╗
+
+🎨 [36mTIPOS[0m [36mDE[0m [36mDATOS[0m [36mCON[0m [36mCOLORES[0m[37m:[0m
+─────────────────────────────────────────────
+
+📝 [36mStrings[0m ([36mVerde[0m)[37m:[0m
+  → [36mHola[0m [36mMundo[0m [36mRaccoon[0m
+
+🔢 [36mNúmeros[0m ([36mAmarillo[0m)[37m:[0m
+  [36mEnteros[0m → [93m42[0m [93m100[0m [93m-5[0m
+  [36mDecimales[0m → [93m3.14[0m [93m2.71[0m [93m0.5[0m
+
+✓ [36mBooleanos[0m ([36mAmarillo[0m)[37m:[0m
+  → [93mtrue[0m [93mfalse[0m
+
+∅ [36mNull[0m ([36mGris[0m)[37m:[0m
+  → [93mnull[0m
+
+📋 [36mListas[0m ([36mMagenta[0m)[37m:[0m
+  → [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  → [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+
+
+🎯 [36mOPERACIONES[0m [36mY[0m [36mRESULTADOS[0m[37m:[0m
+─────────────────────────────────────────────
+
+[36ma[0m = [93m10[0m │ [36mb[0m = [93m20[0m
+[36ma[0m + [36mb[0m = [93m30[0m
+[36ma[0m * [36mb[0m = [93m200[0m
+[36ma[0m < [36mb[0m = [93mtrue[0m
+
+
+✨ [36mCOMPARACIÓN[0m[37m:[0m
+─────────────────────────────────────────────
+
+👤 [36mUsuario[0m[37m:[0m [36mAlice[0m
+   [36mEdad[0m[37m:[0m [93m30[0m [36maños[0m
+   [36mEstado[0m[37m:[0m [36mActivo[0m
+
+
+╚══════════════════════════════════════════════╝
+║   [36mFIN[0m [36mDE[0m [36mLA[0m [36mDEMOSTRACIÓN[0m                     ║
+╚══════════════════════════════════════════════╝
+Running test: .\tests\feature_array_destructuring.rcc
+[36ma[0m = [93m1[0m
+[36mb[0m = [93m2[0m
+[36mc[0m = [93m3[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mString[0m [36mArray[0m [36mDestructuring[0m
+[36mhello[0m [36mworld[0m [36mraccoon[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFloat[0m [36mArray[0m [36mDestructuring[0m
+[36mPi[0m[37m:[0m [93m3.14[0m
+[36mE[0m[37m:[0m [93m2.71[0m
+[36mSqrt2[0m[37m:[0m [93m1.41[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mFunction[0m [36mParameter[0m [36mDestructuring[0m
+[36mSum[0m [36mof[0m [36mfirst[0m [36mtwo[0m[37m:[0m [93m30[0m
+[36mValues[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m[37m,[0m [93m300[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mBlock[0m [36mScope[0m [36mDestructuring[0m
+[36mFirst[0m[37m:[0m [93m7[0m[37m,[0m [36mSecond[0m[37m:[0m [93m14[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mLoops[0m
+[37m[[0m[93m0[0m[37m][0m = [93m0[0m
+[37m[[0m[93m1[0m[37m][0m = [93m10[0m
+[37m[[0m[93m2[0m[37m][0m = [93m20[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mClass[0m [36mMethods[0m
+[36mAP[0m[93m-1[0m [36mprocessing[0m[37m:[0m [93m5[0m[37m,[0m [93m10[0m[37m,[0m [93m15[0m
+[36mResult[0m[37m:[0m [93m30[0m
+[36mFirst[0m [36mvalue[0m[37m:[0m [93m99[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mConditionals[0m
+[36mConditional[0m [36mvalues[0m[37m:[0m [93m50[0m[37m,[0m [93m60[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mNested[0m [36mFunction[0m [36mCalls[0m
+[36mMultiplied[0m[37m:[0m [93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mLet[0m [36mvs[0m [36mConst[0m [36mDestructuring[0m
+[36mLet[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m
+[36mConst[0m[37m:[0m [93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mFor[0m-[36min[0m [36mLoop[0m [36mwith[0m [36mArrays[0m
+[36mItem[0m[37m:[0m [93m100[0m
+[36mItem[0m[37m:[0m [93m200[0m
+[36mItem[0m[37m:[0m [93m300[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mRange[0m [36mwith[0m [36mDestructuring[0m
+[36mRange[0m [36mvalues[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mConstructor[0m [36mwith[0m [36mDestructuring[0m
+[36mVector[0m [36mcreated[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+[36mComponents[0m[37m:[0m [93m3[0m [36mitems[0m
+=== [36mALL[0m [36mARRAY[0m [36mDESTRUCTURING[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36marray[0m [36mdestructuring[0m
+✅ [36mString[0m/[36mFloat[0m [36marrays[0m
+✅ [36mFunction[0m [36mparameters[0m
+✅ [36mBlock[0m [36mscope[0m
+✅ [36mLoops[0m
+✅ [36mClass[0m [36mmethods[0m
+✅ [36mConditionals[0m
+✅ [36mNested[0m [36mcalls[0m
+✅ [36mLet[0m [36mvs[0m [36mConst[0m
+✅ [36mFor[0m-[36min[0m [36mloops[0m
+✅ [36mRanges[0m
+✅ [36mConstructors[0m
+Running test: .\tests\feature_arrow_functions.rcc
+[93m8[0m
+[93m14[0m
+[93m42[0m
+[93m42[0m
+[93mtrue[0m
+[93mfalse[0m
+[36mHello[0m[37m,[0m [36mWorld[0m!
+[93m12[0m
+[93m19[0m
+[93mtrue[0m
+[93m8[0m
+[93m15[0m
+[36mAll[0m [36marrow[0m [36mfunction[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\feature_decorators.rcc
+=== [36mDECORATORS[0m [36mFEATURE[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mSimple[0m [36mClass[0m [36mDecorator[0m
+[36mValue[0m[37m:[0m [93m42[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mDecorator[0m [36mwith[0m [36mSingle[0m [36mArgument[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mDecorator[0m [36mwith[0m [36mMultiple[0m [36mArguments[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mMultiple[0m [36mDecorators[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mDecorators[0m [36mwith[0m [36mString[0m [36mArguments[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mDecorators[0m [36mwith[0m [36mFloat[0m [36mArguments[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mDecorators[0m [36mwith[0m [36mInheritance[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mComplex[0m [36mDecorator[0m [36mLogic[0m
+[36mSize[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mBoolean[0m [36mArgument[0m [36mDecorators[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mDecorator[0m [36mOrdering[0m [36mTest[0m
+=== [36mALL[0m [36mDECORATOR[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mSimple[0m [36mdecorators[0m
+✅ [36mDecorators[0m [36mwith[0m [36marguments[0m
+✅ [36mMultiple[0m [36mdecorators[0m
+✅ [36mString[0m [36marguments[0m
+✅ [36mFloat[0m [36marguments[0m
+✅ [36mWith[0m [36minheritance[0m
+✅ [36mComplex[0m [36mlogic[0m
+✅ [36mBoolean[0m [36marguments[0m
+✅ [36mDecorator[0m [36mordering[0m
+Running test: .\tests\feature_object_destructuring.rcc
+=== [36mOBJECT[0m [36mDESTRUCTURING[0m [36mFEATURE[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGlobal[0m [36mVariable[0m [36mDestructuring[0m
+[36mx[0m = [93m10[0m
+[36my[0m = [93m20[0m
+[36mx2[0m = [93m100[0m
+[36my2[0m = [93m200[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mBlock[0m [36mScope[0m [36mDestructuring[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFunction[0m [36mParameter[0m [36mDestructuring[0m
+[36mPoint[0m([93m5[0m[37m,[0m [93m15[0m)
+[36mHello[0m [36mBob[0m[37m,[0m [36myou[0m [36mare[0m [93m25[0m [36myears[0m [36mold[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mConditionals[0m
+[36mResolution[0m[37m:[0m [93m800[0m[36mx600[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mWhile[0m [36mLoop[0m
+[36mLoop[0m [93m0[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+[36mLoop[0m [93m1[0m[37m:[0m ([93m10[0m[37m,[0m [93m20[0m)
+[36mTest[0m [93m6[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mClass[0m [36mMethods[0m
+[36mProcessor[0m[93m-1[0m [36mprocessing[0m[37m:[0m [36mx[0m=[93m7[0m[37m,[0m [36my[0m=[93m14[0m
+[36mCombined[0m [36mresult[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mMultiple[0m [36mDestructurings[0m
+[36mUser[0m [93m1[0m[37m:[0m [36muser1[0m ([36muser1[0m@[36mtest[0m.[36mcom[0m)
+[36mUser[0m [93m2[0m[37m:[0m [36muser2[0m ([36muser2[0m@[36mtest[0m.[36mcom[0m)
+[36mTest[0m [93m8[0m[37m:[0m [36mDestructuring[0m [36mwith[0m [36mFunction[0m [36mReturns[0m
+[36mCreated[0m [36mpoint[0m[37m:[0m ([93m42[0m[37m,[0m [93m84[0m)
+[36mTest[0m [93m9[0m[37m:[0m [36mNested[0m [36mFunction[0m [36mCalls[0m
+[36mOriginal[0m[37m:[0m ([93m3[0m[37m,[0m [93m4[0m)
+[36mDoubled[0m [36msum[0m[37m:[0m [93m14[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mTry[0m-[36mCatch[0m
+[36mTry[0m [36mblock[0m[37m:[0m [36mTest[0m[37m,[0m [93m99[0m
+=== [36mALL[0m [36mOBJECT[0m [36mDESTRUCTURING[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mGlobal[0m [36mscope[0m [36mdestructuring[0m
+✅ [36mBlock[0m [36mscope[0m [36mdestructuring[0m
+✅ [36mFunction[0m [36mparameter[0m [36mdestructuring[0m
+✅ [36mConditional[0m [36mdestructuring[0m
+✅ [36mLoop[0m [36mdestructuring[0m
+✅ [36mClass[0m [36mmethod[0m [36mdestructuring[0m
+✅ [36mMultiple[0m [36mdestructurings[0m
+✅ [36mWith[0m [36mfunction[0m [36mreturns[0m
+✅ [36mNested[0m [36mcalls[0m
+✅ [36mTry[0m-[36mcatch[0m [36mblocks[0m
+Running test: .\tests\math_utils.rcc
+Running test: .\tests\REFERENCE_COMPATIBILITY_TEST.rcc
+╔════════════════════════════════════════════╗
+║  [36mRACCOON[0m [36mCOMPATIBILITY[0m [36mREFERENCE[0m [36mTEST[0m     ║
+║  [36mVersion[0m[37m:[0m [93m1.0[0m.[93m0[0m                           ║
+║  [36mDate[0m[37m:[0m [36mOctober[0m [93m2025[0m                       ║
+╚════════════════════════════════════════════╝
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m1[0m[37m:[0m [36mObject[0m [36mDestructuring[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m1.1[0m [36mBasic[0m [36mObject[0m [36mDestructuring[0m
+  ✓ [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+[93m1.2[0m [36mObject[0m [36mDestructuring[0m [36min[0m [36mFunctions[0m
+  ✓ [36msum[0m=[93m20[0m
+[93m1.3[0m [36mObject[0m [36mDestructuring[0m [36min[0m [36mClass[0m [36mMethods[0m
+  ✓ [36mresult[0m=[93m14[0m
+  ✅ [36mObject[0m [36mDestructuring[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m2[0m[37m:[0m [36mArray[0m [36mDestructuring[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m2.1[0m [36mBasic[0m [36mArray[0m [36mDestructuring[0m
+  ✓ [36ma[0m=[93m1[0m[37m,[0m [36mb[0m=[93m2[0m[37m,[0m [36mc[0m=[93m3[0m
+[93m2.2[0m [36mString[0m [36mArray[0m [36mDestructuring[0m
+  ✓ [36mw1[0m=[36mhello[0m[37m,[0m [36mw2[0m=[36mworld[0m
+[93m2.3[0m [36mArray[0m [36mDestructuring[0m [36min[0m [36mFunction[0m [36mParameters[0m
+  ✓ [36marraySum[0m=[93m60[0m
+[93m2.4[0m [36mArray[0m [36mDestructuring[0m [36min[0m [36mConstructors[0m
+  ✓ [36mmagnitude[0m=[93m7[0m
+  ✅ [36mArray[0m [36mDestructuring[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m3[0m[37m:[0m [36mDecorators[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m3.1[0m [36mSimple[0m [36mClass[0m [36mDecorator[0m
+[93m3.2[0m [36mDecorator[0m [36mwith[0m [36mArguments[0m
+[93m3.3[0m [36mMultiple[0m [36mDecorators[0m
+  ✅ [36mDecorators[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m4[0m[37m:[0m [36mFeature[0m [36mIntegration[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m4.1[0m [36mDecorators[0m + [36mObject[0m [36mDestructuring[0m
+  ✓ [36mAuthenticating[0m [36muser[0m[37m:[0m [36madmin[0m
+[93m4.2[0m [36mDecorators[0m + [36mArray[0m [36mDestructuring[0m
+  ✓ [36mProcessing[0m[37m:[0m [36mmin[0m=[93m10[0m[37m,[0m [36mmax[0m=[93m100[0m[37m,[0m [36mavg[0m=[93m55[0m
+[93m4.3[0m [36mAll[0m [36mFeatures[0m [36mCombined[0m
+  ✓ [36mQuerying[0m [36musers[0m [36mwith[0m [36mlimit[0m [93m100[0m
+  ✓ [36mBatch[0m [36minserting[0m [93m10[0m [36mrecords[0m [36mof[0m [36msize[0m [93m1024[0m
+  ✓ [36mTotal[0m [36mbytes[0m[37m:[0m [93m10240[0m
+  ✅ [36mFeature[0m [36mIntegration[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m5[0m[37m:[0m [36mEdge[0m [36mCases[0m & [36mStress[0m [36mTests[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m5.1[0m [36mNested[0m [36mObject[0m [36mAccess[0m
+  ✓ [36mLocation[0m[37m:[0m [36mNYC[0m[37m,[0m [36mUSA[0m
+[93m5.2[0m [36mDestructuring[0m [36min[0m [36mLoops[0m
+  ✓ [36mLoop[0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m0[0m
+  ✓ [36mLoop[0m[37m[[0m[93m1[0m[37m][0m[37m:[0m [93m10[0m
+[93m5.3[0m [36mDestructuring[0m [36mwith[0m [36mRanges[0m
+  ✓ [36mRange[0m [36mvalues[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[93m5.4[0m [36mMultiple[0m [36mDestructurings[0m
+  ✓ [36mP1[0m([93m1[0m[37m,[0m[93m2[0m)[37m,[0m [36mP2[0m([93m3[0m[37m,[0m[93m4[0m)
+[93m5.5[0m [36mDecorator[0m [36mwith[0m [36mComplex[0m [36mArguments[0m
+  ✓ [36mService[0m [36mcall[0m [36mexecuted[0m
+  ✅ [36mEdge[0m [36mCases[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m6[0m[37m:[0m [36mBackward[0m [36mCompatibility[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m6.1[0m [36mRegular[0m [36mClasses[0m
+  ✓ [36mOld[0m [36mstyle[0m [36mclass[0m [36mvalue[0m[37m:[0m [93m100[0m
+[93m6.2[0m [36mRegular[0m [36mFunctions[0m
+  ✓ [36mRegular[0m [36mfunction[0m [36mresult[0m[37m:[0m [93m15[0m
+[93m6.3[0m [36mRegular[0m [36mVariables[0m
+  ✓ [36mNormal[0m [36mvar[0m[37m:[0m [93m42[0m[37m,[0m [36mconst[0m[37m:[0m [36mconstant[0m
+  ✅ [36mBackward[0m [36mCompatibility[0m[37m:[0m [36mPASSED[0m
+╔════════════════════════════════════════════╗
+║           [36mCOMPATIBILITY[0m [36mREPORT[0m            ║
+╚════════════════════════════════════════════╝
+✅ [36mSECTION[0m [93m1[0m[37m:[0m [36mObject[0m [36mDestructuring[0m ......... [36mPASSED[0m
+✅ [36mSECTION[0m [93m2[0m[37m:[0m [36mArray[0m [36mDestructuring[0m .......... [36mPASSED[0m
+✅ [36mSECTION[0m [93m3[0m[37m:[0m [36mDecorators[0m ................... [36mPASSED[0m
+✅ [36mSECTION[0m [93m4[0m[37m:[0m [36mFeature[0m [36mIntegration[0m .......... [36mPASSED[0m
+✅ [36mSECTION[0m [93m5[0m[37m:[0m [36mEdge[0m [36mCases[0m ................... [36mPASSED[0m
+✅ [36mSECTION[0m [93m6[0m[37m:[0m [36mBackward[0m [36mCompatibility[0m ....... [36mPASSED[0m
+╔════════════════════════════════════════════╗
+║    [36mALL[0m [36mCOMPATIBILITY[0m [36mTESTS[0m [36mPASSED[0m ✅      ║
+║                                           ║
+║  [36mObject[0m [36mDestructuring[0m[37m:[0m    [93m100[0m% ✅         ║
+║  [36mArray[0m [36mDestructuring[0m[37m:[0m     [93m100[0m% ✅         ║
+║  [36mDecorators[0m[37m:[0m              [93m100[0m% ✅         ║
+║  [36mFeature[0m [36mIntegration[0m[37m:[0m     [93m100[0m% ✅         ║
+║  [36mEdge[0m [36mCases[0m[37m:[0m              [93m100[0m% ✅         ║
+║  [36mBackward[0m [36mCompatibility[0m[37m:[0m  [93m100[0m% ✅         ║
+║                                           ║
+║  [36mOVERALL[0m [36mSTATUS[0m[37m:[0m          [36mEXCELLENT[0m ✅    ║
+╚════════════════════════════════════════════╝
+Running test: .\tests\syntax_arrays.rcc
+=== [36mARRAYS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mArray[0m [36mDeclaration[0m
+[36mInt[0m [36marray[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mString[0m [36marray[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mFloat[0m [36marray[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mBool[0m [36marray[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mArray[0m [36mAccess[0m
+[36mFirst[0m [36melement[0m[37m:[0m [93m10[0m
+[36mSecond[0m [36melement[0m[37m:[0m [93m20[0m
+[36mLast[0m [36melement[0m[37m:[0m [93m50[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mArray[0m [36mModification[0m
+[36mBefore[0m[37m:[0m [93m1[0m
+[36mAfter[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mEmpty[0m [36mArray[0m
+[36mEmpty[0m [36marray[0m [36mlength[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mArray[0m [36mwith[0m [36mVariables[0m
+[36mArray[0m [36mfrom[0m [36mvars[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mNested[0m [36mArrays[0m
+[36mMatrix[0m[37m[[0m[93m0[0m[37m][0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m1[0m
+[36mMatrix[0m[37m[[0m[93m1[0m[37m][0m[37m[[0m[93m1[0m[37m][0m[37m:[0m [93m4[0m
+[36mMatrix[0m[37m[[0m[93m2[0m[37m][0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m5[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mArray[0m [36mIteration[0m
+[36mFruit[0m[37m:[0m [36mapple[0m
+[36mFruit[0m[37m:[0m [36mbanana[0m
+[36mFruit[0m[37m:[0m [36mcherry[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mArray[0m [36mfrom[0m [36mRange[0m
+[36mRange[0m [93m1.[0m.[93m5[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mNumber[0m[37m:[0m [93m1[0m
+[36mNumber[0m[37m:[0m [93m2[0m
+[36mNumber[0m[37m:[0m [93m3[0m
+[36mNumber[0m[37m:[0m [93m4[0m
+[36mNumber[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mArray[0m [36mPush[0m
+[36mBefore[0m [36mpush[0m[37m:[0m [93m2[0m
+[36mAfter[0m [36mpush[0m[37m:[0m [93m3[0m
+[36mLast[0m [36melement[0m[37m:[0m [93m3[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mArray[0m [36mPop[0m
+[36mBefore[0m [36mpop[0m[37m:[0m [93m3[0m
+[36mPopped[0m [36mvalue[0m[37m:[0m [93m30[0m
+[36mAfter[0m [36mpop[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mString[0m [36mas[0m [36mCharacter[0m [36mArray[0m
+[36mString[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mFirst[0m [36mchar[0m[37m:[0m [36mh[0m
+[36mLast[0m [36mchar[0m[37m:[0m [36mo[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mArray[0m [36mOperations[0m
+[36mCombined[0m [36mlength[0m[37m:[0m [93m4[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mArrays[0m [36min[0m [36mFunctions[0m
+[36mFirst[0m[37m:[0m [93m100[0m
+[36mLast[0m[37m:[0m [93m300[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mMulti[0m-[36mdimensional[0m [36mArrays[0m
+[36mGrid[0m[37m[[0m[93m0[0m[37m][0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m1[0m
+[36mGrid[0m[37m[[0m[93m1[0m[37m][0m[37m[[0m[93m1[0m[37m][0m[37m:[0m [93m5[0m
+[36mGrid[0m[37m[[0m[93m2[0m[37m][0m[37m[[0m[93m2[0m[37m][0m[37m:[0m [93m9[0m
+[36mTest[0m [93m15[0m[37m:[0m [36mLength[0m [36mProperty[0m
+[36mEmpty[0m[37m:[0m [93m0[0m
+[36mAfter[0m [93m1[0m [36mpush[0m[37m:[0m [93m1[0m
+[36mAfter[0m [93m3[0m [36mpushes[0m[37m:[0m [93m3[0m
+=== [36mALL[0m [36mARRAYS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mArray[0m [36mdeclaration[0m
+✅ [36mArray[0m [36maccess[0m
+✅ [36mArray[0m [36mmodification[0m
+✅ [36mEmpty[0m [36marrays[0m
+✅ [36mArrays[0m [36mfrom[0m [36mvariables[0m
+✅ [36mNested[0m [36marrays[0m
+✅ [36mArray[0m [36miteration[0m
+✅ [36mRange[0m [36mcreation[0m
+✅ [36mPush[0m [36mmethod[0m
+✅ [36mPop[0m [36mmethod[0m
+✅ [36mString[0m [36mindexing[0m
+✅ [36mArray[0m [36mconcatenation[0m
+✅ [36mArrays[0m [36min[0m [36mfunctions[0m
+✅ [36mMulti[0m-[36mdimensional[0m [36maccess[0m
+✅ [36mLength[0m [36mproperty[0m
+Running test: .\tests\syntax_arrow_functions.rcc
+[93m10[0m
+[93m30[0m
+[93m42[0m
+[93m42[0m
+[93m75[0m
+[93mtrue[0m
+[93mfalse[0m
+[36mHello[0m[37m,[0m [36mTypeScript[0m
+[93m25[0m
+[93m11[0m
+[93m13[0m
+[93mtrue[0m
+[93mfalse[0m
+[93m8[0m
+[93m15[0m
+[93m15[0m
+[93m25[0m
+[93m49[0m
+[93m103[0m
+[93m35[0m
+[93m7[0m
+[93m12[0m
+[36mAll[0m [36mTypeScript[0m-[36mstyle[0m [36marrow[0m [36mfunction[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\syntax_bitwise_operators.rcc
+[93m8[0m
+[93m14[0m
+[93m6[0m
+[93m-6[0m
+[93m20[0m
+[93m5[0m
+[93m4611686018427387902[0m
+[93m8[0m
+[93m512[0m
+[93m8[0m
+[93m14[0m
+[93m6[0m
+[93m20[0m
+[93m5[0m
+[93m8[0m
+Running test: .\tests\syntax_classes.rcc
+=== [36mCLASSES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mClass[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mClass[0m [36mMethods[0m
+[36mInitial[0m[37m:[0m [93m10[0m
+[36mAfter[0m [36madd[0m([93m5[0m)[37m:[0m [93m15[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mMultiple[0m [36mMethods[0m
+[36mAfter[0m [93m2[0m [36mincrements[0m[37m:[0m [93m2[0m
+[36mAfter[0m [93m1[0m [36mdecrement[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mString[0m [36mFields[0m
+[93m1984[0m [36mby[0m [36mOrwell[0m
+[36mPages[0m[37m:[0m [93m328[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mBoolean[0m [36mFields[0m
+[36mStatus[0m[37m:[0m [36mOFF[0m
+[36mAfter[0m [36mtoggle[0m[37m:[0m [36mON[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mArray[0m [36mFields[0m
+[36mStudent[0m [36mcount[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mMethod[0m [36mReturn[0m [36mValues[0m
+[36mArea[0m[37m:[0m [93m15[0m
+[36mPerimeter[0m[37m:[0m [93m16[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mInheritance[0m
+[36mDog[0m [36mname[0m[37m:[0m [36mRex[0m
+[36mBreed[0m[37m:[0m [36mLabrador[0m
+[36mSound[0m[37m:[0m [36mWoof[0m!
+[36mTest[0m [93m9[0m[37m:[0m [36mMethods[0m [36mwith[0m [36mParameters[0m
+[36mmax[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m20[0m
+[36mmin[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m10[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mMultiple[0m [36mInstances[0m
+[36mp1[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+[36mp2[0m[37m:[0m ([93m10[0m[37m,[0m [93m20[0m)
+=== [36mALL[0m [36mCLASSES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mclass[0m [36mcreation[0m
+✅ [36mClass[0m [36mmethods[0m
+✅ [36mMultiple[0m [36mmethods[0m
+✅ [36mString[0m [36mfields[0m
+✅ [36mBoolean[0m [36mfields[0m
+✅ [36mArray[0m [36mfields[0m
+✅ [36mMethod[0m [36mreturns[0m
+✅ [36mInheritance[0m
+✅ [36mStatic[0m [36mmethods[0m
+✅ [36mMultiple[0m [36minstances[0m
+Running test: .\tests\syntax_control_flow.rcc
+=== [36mCONTROL[0m [36mFLOW[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mIf[0m [36mStatement[0m
+[36mx[0m [36mis[0m [36mgreater[0m [36mthan[0m [93m5[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mIf[0m-[36mElse[0m [36mStatement[0m
+[36mAdult[0m
+[93m18[0m [36mor[0m [36molder[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mIf[0m-[36mElse[0m [36mChain[0m
+[36mGrade[0m[37m:[0m [36mB[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mNested[0m [36mIf[0m
+[36mPositive[0m [36mand[0m [36mgreater[0m [36mthan[0m [93m10[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mWhile[0m [36mLoop[0m
+[36mCounter[0m[37m:[0m [93m0[0m
+[36mCounter[0m[37m:[0m [93m1[0m
+[36mCounter[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mWhile[0m [36mwith[0m [36mBreak[0m
+[36mi[0m[37m:[0m [93m0[0m
+[36mi[0m[37m:[0m [93m1[0m
+[36mi[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mWhile[0m [36mwith[0m [36mContinue[0m
+[36mj[0m[37m:[0m [93m1[0m
+[36mj[0m[37m:[0m [93m2[0m
+[36mj[0m[37m:[0m [93m4[0m
+[36mj[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mFor[0m-[36mIn[0m [36mLoop[0m [36mwith[0m [36mArray[0m
+[36mNumber[0m[37m:[0m [93m10[0m
+[36mNumber[0m[37m:[0m [93m20[0m
+[36mNumber[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mFor[0m-[36mIn[0m [36mLoop[0m [36mwith[0m [36mRange[0m
+[36mRange[0m[37m:[0m [93m1[0m
+[36mRange[0m[37m:[0m [93m2[0m
+[36mRange[0m[37m:[0m [93m3[0m
+[36mRange[0m[37m:[0m [93m4[0m
+[36mRange[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mNested[0m [36mLoops[0m
+([93m0[0m[37m,[0m [93m0[0m)
+([93m0[0m[37m,[0m [93m1[0m)
+([93m1[0m[37m,[0m [93m0[0m)
+([93m1[0m[37m,[0m [93m1[0m)
+[36mTest[0m [93m11[0m[37m:[0m [36mComplex[0m [36mConditions[0m
+[36ma[0m < [36mb[0m < [36mc[0m [36mis[0m [93mtrue[0m
+[36mAt[0m [36mleast[0m [36mone[0m [36mcondition[0m [36mis[0m [93mtrue[0m
+[36ma[0m [36mis[0m [36mnot[0m [36mgreater[0m [36mthan[0m [36mb[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mEarly[0m [36mReturn[0m [36mPattern[0m
+[36mcheckValue[0m([93m-5[0m)[37m:[0m [36mnegative[0m
+[36mcheckValue[0m([93m0[0m)[37m:[0m [36mzero[0m
+[36mcheckValue[0m([93m10[0m)[37m:[0m [36mpositive[0m
+=== [36mALL[0m [36mCONTROL[0m [36mFLOW[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mIf[0m [36mstatement[0m
+✅ [36mIf[0m-[36melse[0m [36mstatement[0m
+✅ [36mIf[0m-[36melse[0m [36mchain[0m
+✅ [36mNested[0m [36mif[0m
+✅ [36mWhile[0m [36mloop[0m
+✅ [36mBreak[0m [36mstatement[0m
+✅ [36mContinue[0m [36mstatement[0m
+✅ [36mFor[0m-[36min[0m [36mwith[0m [36marrays[0m
+✅ [36mFor[0m-[36min[0m [36mwith[0m [36mranges[0m
+✅ [36mNested[0m [36mloops[0m
+✅ [36mComplex[0m [36mconditions[0m
+✅ [36mEarly[0m [36mreturns[0m
+Running test: .\tests\syntax_error_handling.rcc
+=== [36mERROR[0m [36mHANDLING[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mTry[0m-[36mCatch[0m
+[36mInside[0m [36mtry[0m [36mblock[0m
+[36mCaught[0m[37m:[0m [36mBasic[0m [36merror[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mNormal[0m [36mFlow[0m
+[36mThis[0m [36mexecutes[0m [36mnormally[0m
+[36mx[0m = [93m10[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mString[0m [36mError[0m
+[36mError[0m [36mmessage[0m[37m:[0m [36mSomething[0m [36mwent[0m [36mwrong[0m!
+[36mTest[0m [93m4[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36min[0m [36mFunction[0m
+[36mResult[0m[37m:[0m [36merror[0m[37m:[0m [36mFunction[0m [36merror[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mNested[0m [36mTry[0m-[36mCatch[0m
+[36mOuter[0m [36mtry[0m
+[36mInner[0m [36mtry[0m
+[36mInner[0m [36mcatch[0m[37m:[0m [36mInner[0m [36merror[0m
+[36mAfter[0m [36minner[0m [36mtry[0m-[36mcatch[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mMultiple[0m [36mStatements[0m
+[36mSum[0m[37m:[0m [93m3[0m
+[36mCaught[0m[37m:[0m [36mError[0m [36mafter[0m [36mcalculations[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36mwith[0m [36mReturn[0m
+[93m10[0m % [93m2[0m = [93m0[0m
+[36mError[0m[37m:[0m [36mDivision[0m [36mby[0m [36mzero[0m
+[93m10[0m % [93m0[0m = [93m0[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mVariable[0m [36mScope[0m
+[36mStatus[0m[37m:[0m [36merror[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36min[0m [36mLoop[0m
+[36mi[0m = [93m0[0m
+[36mCaught[0m[37m:[0m [36mError[0m [36mat[0m [36mi[0m=[93m1[0m
+[36mi[0m = [93m2[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mConditional[0m [36mThrow[0m
+[36mValid[0m [36mage[0m
+[36mInvalid[0m[37m:[0m [36mAge[0m [36mcannot[0m [36mbe[0m [36mnegative[0m
+[36mInvalid[0m[37m:[0m [36mAge[0m [36mtoo[0m [36mhigh[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mMultiple[0m [36mThrows[0m
+[36mValue[0m [36mis[0m [36mvalid[0m
+[36mValidation[0m [36merror[0m[37m:[0m [36mNegative[0m
+[36mValidation[0m [36merror[0m[37m:[0m [36mZero[0m
+[36mValidation[0m [36merror[0m[37m:[0m [36mToo[0m [36mlarge[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mError[0m [36mPropagation[0m
+[36mcaught[0m[37m:[0m [36mInner[0m [36mfunction[0m [36merror[0m
+=== [36mALL[0m [36mERROR[0m [36mHANDLING[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mtry[0m-[36mcatch[0m
+✅ [36mNormal[0m [36mflow[0m
+✅ [36mString[0m [36merrors[0m
+✅ [36mTry[0m-[36mcatch[0m [36min[0m [36mfunctions[0m
+✅ [36mNested[0m [36mtry[0m-[36mcatch[0m
+✅ [36mMultiple[0m [36mstatements[0m
+✅ [36mTry[0m-[36mcatch[0m [36mwith[0m [36mreturn[0m
+✅ [36mVariable[0m [36mscope[0m
+✅ [36mTry[0m-[36mcatch[0m [36min[0m [36mloops[0m
+✅ [36mConditional[0m [36mthrows[0m
+✅ [36mMultiple[0m [36mthrows[0m
+✅ [36mError[0m [36mpropagation[0m
+Running test: .\tests\syntax_functions.rcc
+=== [36mFUNCTIONS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mFunction[0m
+[36mHello[0m [36mfrom[0m [36mfunction[0m!
+[36mTest[0m [93m2[0m[37m:[0m [36mFunction[0m [36mwith[0m [36mParameters[0m
+[93m5[0m + [93m3[0m = [93m8[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mMultiple[0m [36mParameters[0m
+[36mName[0m[37m:[0m [36mAlice[0m[37m,[0m [36mAge[0m[37m:[0m [93m25[0m[37m,[0m [36mCity[0m[37m:[0m [36mNYC[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mReturn[0m [36mValues[0m
+[93m6[0m * [93m7[0m = [93m42[0m
+[93m20[0m / [93m4[0m = [93m5[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mDefault[0m [36mParameters[0m
+[36mHello[0m[37m,[0m [36mAlice[0m!
+[36mHello[0m[37m,[0m [36mGuest[0m!
+[36mTest[0m [93m6[0m[37m:[0m [36mRecursive[0m [36mFunction[0m
+[36mfactorial[0m([93m5[0m) = [93m120[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mFunction[0m [36mComposition[0m
+[36mquadruple[0m([93m5[0m) = [93m20[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mString[0m [36mReturn[0m [36mFunctions[0m
+[36mFull[0m [36mname[0m[37m:[0m [36mJohn[0m [36mDoe[0m
+[36mShouted[0m[37m:[0m [36mHELLO[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mBoolean[0m [36mReturn[0m [36mFunctions[0m
+[36misEven[0m([93m4[0m)[37m:[0m [93mtrue[0m
+[36misEven[0m([93m7[0m)[37m:[0m [93mfalse[0m
+[36misPositive[0m([93m-5[0m)[37m:[0m [93mfalse[0m
+[36misPositive[0m([93m10[0m)[37m:[0m [93mtrue[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mArray[0m [36mParameters[0m
+[36mSum[0m [36mof[0m [36marray[0m[37m:[0m [93m15[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mArray[0m [36mReturn[0m
+[36mRange[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mNested[0m [36mCalls[0m
+[36mprocess[0m([93m5[0m) = [93m8[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mFloat[0m [36mFunctions[0m
+[36maverage[0m([93m5.0[0m[37m,[0m [93m10.0[0m) = [93m7.5[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mVoid[0m [36mFunctions[0m
+[36mLOG[0m[37m:[0m [36mTest[0m [36mmessage[0m
+=== [36mALL[0m [36mFUNCTIONS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mfunctions[0m
+✅ [36mParameters[0m
+✅ [36mMultiple[0m [36mparameters[0m
+✅ [36mReturn[0m [36mvalues[0m
+✅ [36mDefault[0m [36mparameters[0m
+✅ [36mRecursion[0m
+✅ [36mFunction[0m [36mcomposition[0m
+✅ [36mString[0m [36mreturns[0m
+✅ [36mBoolean[0m [36mreturns[0m
+✅ [36mArray[0m [36mparameters[0m
+✅ [36mArray[0m [36mreturns[0m
+✅ [36mNested[0m [36mcalls[0m
+✅ [36mFloat[0m [36mfunctions[0m
+✅ [36mVoid[0m [36mfunctions[0m
+Running test: .\tests\syntax_interfaces.rcc
+=== [36mINTERFACES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mInterface[0m [36mDefinition[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mInterface[0m [36mwith[0m [36mMethods[0m
+[36mDrawing[0m [36mcircle[0m [36mwith[0m [36mradius[0m [93m5[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mMultiple[0m [36mMembers[0m
+[36mArea[0m[37m:[0m [93m20[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mMultiple[0m [36mInterfaces[0m
+[36mID[0m[37m:[0m [93m1[0m
+[36mProduct[0m[37m:[0m [36mLaptop[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mInterface[0m [36mwith[0m [36mBoolean[0m
+[36mInitial[0m[37m:[0m [93mfalse[0m
+[36mAfter[0m [36mtoggle[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mMultiple[0m [36mMethods[0m
+[36mCounter[0m [36mvalue[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mReturn[0m [36mTypes[0m
+[36mResult[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mEmpty[0m [36mInterface[0m
+[36mMarked[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mString[0m [36mMethods[0m
+[36mFormatted[0m[37m:[0m [93m15[0m/[93m3[0m/[93m2024[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mImplementation[0m [36mChain[0m
+[36mBob[0m[37m,[0m [93m35[0m[37m,[0m [36mDeveloper[0m
+=== [36mALL[0m [36mINTERFACES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36minterface[0m
+✅ [36mInterface[0m [36mwith[0m [36mmethods[0m
+✅ [36mMultiple[0m [36mmembers[0m
+✅ [36mMultiple[0m [36minterfaces[0m
+✅ [36mBoolean[0m [36minterfaces[0m
+✅ [36mMultiple[0m [36mmethods[0m
+✅ [36mReturn[0m [36mtypes[0m
+✅ [36mEmpty[0m [36minterfaces[0m
+✅ [36mString[0m [36mmethods[0m
+✅ [36mImplementation[0m [36mchains[0m
+Running test: .\tests\syntax_interfaces_simple.rcc
+=== [36mINTERFACES[0m [36mTEST[0m ([36mSIMPLIFIED[0m) ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mInterface[0m
+✓ [36mInterface[0m [36mPoint[0m [36mdefined[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mMultiple[0m [36mInterfaces[0m
+✓ [36mMultiple[0m [36minterfaces[0m [36mdefined[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mInterface[0m [36mwith[0m [36mDifferent[0m [36mTypes[0m
+✓ [36mInterface[0m [36mwith[0m [36mmultiple[0m [36mtypes[0m [36mdefined[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mClasses[0m [36mFollowing[0m [36mInterface[0m [36mStructure[0m
+[36mArea[0m[37m:[0m [93m50[0m
+=== [36mALL[0m [36mINTERFACE[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36minterface[0m [36mdefinitions[0m
+✅ [36mMultiple[0m [36minterfaces[0m
+✅ [36mInterfaces[0m [36mwith[0m [36mmultiple[0m [36mtypes[0m
+✅ [36mClasses[0m [36mfollowing[0m [36minterface[0m [36mstructure[0m
+[36mNote[0m[37m:[0m [36mInterfaces[0m [36monly[0m [36msupport[0m [36mproperties[0m[37m,[0m [36mnot[0m [36mmethods[0m
+[36mNote[0m[37m:[0m [92m'implements'[0m [36mkeyword[0m [36mis[0m [36mnot[0m [36mcurrently[0m [36menforced[0m
+Running test: .\tests\syntax_operators.rcc
+=== [36mOPERATORS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mArithmetic[0m [36mOperators[0m
+[36mAddition[0m[37m:[0m [93m13[0m
+[36mSubtraction[0m[37m:[0m [93m7[0m
+[36mMultiplication[0m[37m:[0m [93m30[0m
+[36mDivision[0m[37m:[0m [93m3.3333333333333335[0m
+[36mModulo[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mComparison[0m [36mOperators[0m
+[36mEqual[0m[37m:[0m [93mtrue[0m
+[36mNot[0m [36mequal[0m[37m:[0m [93mtrue[0m
+[36mLess[0m [36mthan[0m[37m:[0m [93mtrue[0m
+[36mGreater[0m [36mthan[0m[37m:[0m [93mtrue[0m
+[36mLess[0m [36mor[0m [36mequal[0m[37m:[0m [93mtrue[0m
+[36mGreater[0m [36mor[0m [36mequal[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mLogical[0m [36mOperators[0m
+[36mAND[0m ([93mtrue[0m && [93mtrue[0m)[37m:[0m [93mtrue[0m
+[36mAND[0m ([93mtrue[0m && [93mfalse[0m)[37m:[0m [93mfalse[0m
+[36mOR[0m ([93mfalse[0m || [93mtrue[0m)[37m:[0m [93mtrue[0m
+[36mOR[0m ([93mfalse[0m || [93mfalse[0m)[37m:[0m [93mfalse[0m
+[36mNOT[0m (![93mtrue[0m)[37m:[0m [93mfalse[0m
+[36mNOT[0m (![93mfalse[0m)[37m:[0m [93mtrue[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mAssignment[0m [36mOperators[0m
+[36mInitial[0m[37m:[0m [93m10[0m
+[36mAfter[0m +[93m5[0m[37m:[0m [93m15[0m
+[36mAfter[0m [93m-3[0m[37m:[0m [93m12[0m
+[36mAfter[0m *[93m2[0m[37m:[0m [93m24[0m
+[36mAfter[0m [93m-4[0m[37m:[0m [93m20[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mCompound[0m [36mAssignment[0m
+[36mnum[0m += [93m10[0m[37m:[0m [93m110[0m
+[36mnum[0m -= [93m5[0m[37m:[0m [93m105[0m
+[36mnum[0m *= [93m2[0m[37m:[0m [93m210[0m
+[36mnum[0m -= [93m10[0m[37m:[0m [93m200[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mUnary[0m [36mOperators[0m
+[36mNegation[0m[37m:[0m [93m-42[0m
+[36mLogical[0m [36mNOT[0m[37m:[0m [93mfalse[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mString[0m [36mConcatenation[0m
+[36mConcatenation[0m[37m:[0m [36mHello[0m [36mWorld[0m
+[36mMixed[0m[37m:[0m [36mRaccoon[0m [36mv1[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mOperator[0m [36mPrecedence[0m
+[93m2[0m + [93m3[0m * [93m4[0m = [93m14[0m
+([93m2[0m + [93m3[0m) * [93m4[0m = [93m20[0m
+[93m10[0m - [93m2[0m + [93m3[0m = [93m11[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mBoolean[0m [36mExpressions[0m
+[36mIs[0m [36madult[0m ([93m25[0m >= [93m18[0m)[37m:[0m [93mtrue[0m
+[36mPassed[0m ([93m85[0m [36min[0m [36mrange[0m)[37m:[0m [93mtrue[0m
+[36mCan[0m [36medit[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mNull[0m [36mComparison[0m
+[36mIs[0m [93mnull[0m[37m:[0m [93mtrue[0m
+[36mIs[0m [36mnot[0m [93mnull[0m[37m:[0m [93mtrue[0m
+=== [36mALL[0m [36mOPERATORS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mArithmetic[0m [36moperators[0m
+✅ [36mComparison[0m [36moperators[0m
+✅ [36mLogical[0m [36moperators[0m
+✅ [36mAssignment[0m [36moperators[0m
+✅ [36mCompound[0m [36massignment[0m
+✅ [36mUnary[0m [36moperators[0m
+✅ [36mString[0m [36mconcatenation[0m
+✅ [36mOperator[0m [36mprecedence[0m
+✅ [36mBoolean[0m [36mexpressions[0m
+✅ [36mNull[0m [36mcomparison[0m
+Running test: .\tests\syntax_primitive_types.rcc
+=== [36mPRIMITIVE[0m [36mTYPES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mInteger[0m [36mType[0m
+[36mPositive[0m[37m:[0m [93m42[0m
+[36mNegative[0m[37m:[0m [93m-100[0m
+[36mZero[0m[37m:[0m [93m0[0m
+[36mMax[0m[37m:[0m [93m2147483647[0m
+[36mMin[0m[37m:[0m [93m-2147483648[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mFloat[0m [36mType[0m
+[36mPi[0m[37m:[0m [93m3.14[0m
+[36mNegative[0m[37m:[0m [93m-2.71[0m
+[36mZero[0m[37m:[0m [93m0[0m
+[36mE[0m[37m:[0m [93m2.71828[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mString[0m [36mType[0m
+[36mString[0m [93m1[0m[37m:[0m [36mHello[0m [36mWorld[0m
+[36mString[0m [93m2[0m[37m:[0m [36mRaccoon[0m
+[36mEmpty[0m[37m:[0m [92m''[0m
+[36mGreeting[0m[37m:[0m ¡[36mHola[0m!
+[36mTest[0m [93m4[0m[37m:[0m [36mBoolean[0m [36mType[0m
+[36mTrue[0m[37m:[0m [93mtrue[0m
+[36mFalse[0m[37m:[0m [93mfalse[0m
+[36mConstant[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mNull[0m [36mType[0m
+[36mNull[0m [36mvalue[0m [36mcreated[0m
+[36mAssigned[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mType[0m [36mConversions[0m
+[36mInt[0m [36mto[0m [36mFloat[0m[37m:[0m [93m10[0m
+[36mInt[0m [36mto[0m [36mString[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mString[0m [36mOperations[0m
+[36mUpper[0m[37m:[0m [36mHELLO[0m
+[36mLower[0m[37m:[0m [36mhello[0m
+[36mSplit[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mType[0m [36mChecking[0m
+[36mtypeof[0m [36mnum[0m[37m:[0m [36mint[0m
+[36mtypeof[0m [36mmsg[0m[37m:[0m [36mstr[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mConstants[0m
+[36mPI[0m[37m:[0m [93m3.14159[0m
+[36mVersion[0m[37m:[0m [93m1[0m
+[36mApp[0m[37m:[0m [36mRaccoon[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mMixed[0m [36mType[0m [36mOperations[0m
+[36mInt[0m + [36mFloat[0m[37m:[0m [93m7.5[0m
+[36mNumber[0m[37m:[0m [93m42[0m
+=== [36mALL[0m [36mPRIMITIVE[0m [36mTYPES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mInteger[0m [36mtype[0m
+✅ [36mFloat[0m [36mtype[0m
+✅ [36mString[0m [36mtype[0m
+✅ [36mBoolean[0m [36mtype[0m
+✅ [36mNull[0m [36mtype[0m
+✅ [36mType[0m [36mconversions[0m
+✅ [36mString[0m [36moperations[0m
+✅ [36mType[0m [36mchecking[0m
+✅ [36mConstants[0m
+✅ [36mMixed[0m [36moperations[0m
+Running test: .\tests\syntax_scopes.rcc
+=== [36mSCOPES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGlobal[0m [36mScope[0m
+[36mGlobal[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mBlock[0m [36mScope[0m
+[36mInside[0m [36mblock[0m[37m:[0m [93m2[0m
+[36mAccess[0m [36mouter[0m[37m:[0m [93m1[0m
+[36mOutside[0m [36mblock[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFunction[0m [36mScope[0m
+[36mInside[0m [36mfunction[0m[37m:[0m [93m20[0m
+[36mAccess[0m [36mouter[0m[37m:[0m [93m10[0m
+[36mOutside[0m [36mfunction[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mVariable[0m [36mShadowing[0m
+[36mOuter[0m [36mx[0m[37m:[0m [93m1[0m
+[36mInner[0m [36mx[0m[37m:[0m [93m2[0m
+[36mOuter[0m [36mx[0m [36magain[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mLoop[0m [36mScope[0m
+[36mLoop[0m [36miteration[0m [93m0[0m[37m:[0m [93m0[0m
+[36mLoop[0m [36miteration[0m [93m1[0m[37m:[0m [93m10[0m
+[36mLoop[0m [36miteration[0m [93m2[0m[37m:[0m [93m20[0m
+[36mAfter[0m [36mloop[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mIf[0m [36mStatement[0m [36mScope[0m
+[36mInside[0m [36mif[0m[37m:[0m [93m42[0m
+[36mAfter[0m [36mif[0m [36mblock[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mNested[0m [36mBlocks[0m
+[36mLevel[0m [93m3[0m[37m:[0m [93m3[0m
+[36mAccess[0m [36mlevel[0m [93m2[0m[37m:[0m [93m2[0m
+[36mAccess[0m [36mlevel[0m [93m1[0m[37m:[0m [93m1[0m
+[36mLevel[0m [93m2[0m[37m:[0m [93m2[0m
+[36mLevel[0m [93m1[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mReassignment[0m
+[36mInitial[0m[37m:[0m [93m10[0m
+[36mAfter[0m [36mreassignment[0m[37m:[0m [93m20[0m
+[36mAfter[0m [36mcalculation[0m[37m:[0m [93m25[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mConstants[0m
+[36mConstant[0m [36mvalue[0m[37m:[0m [93m100[0m
+[36mPI[0m[37m:[0m [93m3.14159[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mFor[0m-[36mIn[0m [36mScope[0m
+[36mNumber[0m[37m:[0m [93m10[0m
+[36mNumber[0m[37m:[0m [93m20[0m
+[36mNumber[0m[37m:[0m [93m30[0m
+[36mAfter[0m [36mfor[0m-[36min[0m [36mloop[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mClass[0m [36mField[0m [36mScope[0m
+[36mCounter[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36mScope[0m
+[36mTry[0m [36mblock[0m[37m:[0m [93m100[0m
+[36mCatch[0m [36mblock[0m[37m:[0m [36mcaught[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mMultiple[0m [36mVariables[0m
+[36ma[0m=[93m1[0m[37m,[0m [36mb[0m=[93m2[0m[37m,[0m [36mc[0m=[93m3[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mVariable[0m [36mLifetime[0m
+[36mFirst[0m [36mcall[0m[37m:[0m [93m1[0m
+[36mSecond[0m [36mcall[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m15[0m[37m:[0m [36mScope[0m [36mChain[0m
+[36mAccess[0m [36mall[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+=== [36mALL[0m [36mSCOPES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mGlobal[0m [36mscope[0m
+✅ [36mBlock[0m [36mscope[0m
+✅ [36mFunction[0m [36mscope[0m
+✅ [36mVariable[0m [36mshadowing[0m
+✅ [36mLoop[0m [36mscope[0m
+✅ [36mIf[0m [36mstatement[0m [36mscope[0m
+✅ [36mNested[0m [36mblocks[0m
+✅ [36mReassignment[0m
+✅ [36mConstants[0m
+✅ [36mFor[0m-[36min[0m [36mscope[0m
+✅ [36mClass[0m [36mfield[0m [36mscope[0m
+✅ [36mTry[0m-[36mcatch[0m [36mscope[0m
+✅ [36mMultiple[0m [36mvariables[0m
+✅ [36mVariable[0m [36mlifetime[0m
+✅ [36mScope[0m [36mchain[0m
+Running test: .\tests\syntax_static_methods.rcc
+=== [36mSTATIC[0m [36mMETHODS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mStatic[0m [36mMethod[0m
+[36mmax[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m20[0m
+[36mmin[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m10[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mMultiple[0m [36mParameters[0m
+[36madd[0m([93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m)[37m:[0m [93m6[0m
+[36mmultiply[0m([93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m)[37m:[0m [93m24[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mString[0m [36mReturn[0m
+[36mHelloWorld[0m
+[36mxxx[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mMix[0m [36mStatic[0m [36mand[0m [36mInstance[0m
+[36mCounter[0m [36mvalue[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mFactory[0m [36mPattern[0m
+[36mOrigin[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+[36mFrom[0m [36marray[0m[37m:[0m ([93m10[0m[37m,[0m [93m20[0m)
+=== [36mALL[0m [36mSTATIC[0m [36mMETHOD[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mstatic[0m [36mmethods[0m
+✅ [36mMultiple[0m [36mparameters[0m
+✅ [36mString[0m [36mreturn[0m [36mtypes[0m
+✅ [36mMixed[0m [36mstatic[0m [36mand[0m [36minstance[0m
+✅ [36mFactory[0m [36mpattern[0m
+Running test: .\tests\syntax_templates.rcc
+=== [36mTEMPLATE[0m [36mSTRINGS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mTemplate[0m
+[36mHello[0m[37m,[0m [36mWorld[0m!
+[36mTest[0m [93m2[0m[37m:[0m [36mInteger[0m [36mInterpolation[0m
+[36mI[0m [36mam[0m [93m25[0m [36myears[0m [36mold[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFloat[0m [36mInterpolation[0m
+[36mPrice[0m[37m:[0m $[93m19.99[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mBoolean[0m [36mInterpolation[0m
+[36mStatus[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mMultiple[0m [36mVariables[0m
+[36mName[0m[37m:[0m [36mJohn[0m [36mDoe[0m[37m,[0m [36mAge[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mExpression[0m [36mInterpolation[0m
+[93m5[0m + [93m3[0m = [93m8[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mTemplates[0m [36min[0m [36mFunctions[0m
+[36mHello[0m [36mAlice[0m[37m,[0m [36myou[0m [36mare[0m [93m28[0m [36myears[0m [36mold[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mObject[0m [36mProperties[0m
+[36mMy[0m [36mname[0m [36mis[0m [36mBob[0m [36mand[0m [36mI[0m[92m'm 35[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mArray[0m [36mProperties[0m
+[36mArray[0m [36mhas[0m [93m5[0m [36mitems[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mComparison[0m [36mResults[0m
+[36mx[0m < [36my[0m [36mis[0m [93mtrue[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mComplex[0m [36mExpressions[0m
+[36mSum[0m [36mof[0m [93m5[0m [36mand[0m [93m10[0m [36mis[0m [93m15[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mFunction[0m [36mCall[0m [36mInterpolation[0m
+[36mDouble[0m [36mof[0m [93m7[0m [36mis[0m [93m14[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mTemplate[0m [36mConcatenation[0m
+[36mHello[0m [36mWorld[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mEmpty[0m [36mTemplates[0m
+[36mEmpty[0m [36mstring[0m [36mlength[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m15[0m[37m:[0m [36mTemplates[0m [36min[0m [36mConditionals[0m
+[36mGrade[0m[37m:[0m [36mB[0m ([93m85[0m)
+=== [36mALL[0m [36mTEMPLATE[0m [36mSTRINGS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mtemplates[0m
+✅ [36mInteger[0m [36minterpolation[0m
+✅ [36mFloat[0m [36minterpolation[0m
+✅ [36mBoolean[0m [36minterpolation[0m
+✅ [36mMultiple[0m [36mvariables[0m
+✅ [36mExpressions[0m
+✅ [36mFunction[0m [36mtemplates[0m
+✅ [36mObject[0m [36mproperties[0m
+✅ [36mArray[0m [36mproperties[0m
+✅ [36mComparisons[0m
+✅ [36mComplex[0m [36mexpressions[0m
+✅ [36mFunction[0m [36mcalls[0m
+✅ [36mConcatenation[0m
+✅ [36mEmpty[0m [36mtemplates[0m
+✅ [36mConditional[0m [36mtemplates[0m
+Running test: .\tests\test_advanced_inference.rcc
+[36mTodas[0m [36mlas[0m [36minferencias[0m [36mcompletadas[0m [36mexitosamente[0m!
+Running test: .\tests\test_advanced_return_inference.rcc
+[36mdouble[0m([93m5[0m) = [93m10[0m
+[36mquadruple[0m([93m3[0m) = [93m12[0m
+[36mcalculate[0m([93mtrue[0m) = [93m42[0m
+[36mcalculate[0m([93mfalse[0m) = [93m3.14[0m
+[36mgetNumbers[0m() = [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[36mcheckValue[0m([93m-5[0m) = [36mnegative[0m
+[36mcheckValue[0m([93m0[0m) = [36mzero[0m
+[36mcheckValue[0m([93m10[0m) = [36mpositive[0m
+[36mdoNothing[0m() = [93m5[0m
+Running test: .\tests\test_advanced_types.rcc
+[36mhello[0m
+[93m42[0m
+[36mAdvanced[0m [36mtype[0m [36msystem[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_array_holes.rcc
+[36mResult[0m[37m:[0m [36ma[0m=[93m1[0m[37m,[0m [36mc[0m=[93m3[0m
+[36mResult[0m[37m:[0m [36mx[0m=[93m10[0m[37m,[0m [36mz[0m=[93m40[0m
+Running test: .\tests\test_array_methods.rcc
+[36mOriginal[0m [36marray[0m[37m:[0m
+[36mDoubled[0m[37m:[0m
+[36mEvens[0m[37m:[0m
+[36mSum[0m[37m:[0m
+[36mForEach[0m[37m:[0m
+  -
+  -
+  -
+  -
+  -
+[36mFirst[0m > [93m3[0m[37m:[0m
+[36mIndex[0m [36mof[0m [36mfirst[0m > [93m3[0m[37m:[0m
+[36mHas[0m > [93m10[0m[37m:[0m
+[36mHas[0m < [93m3[0m[37m:[0m
+[36mAll[0m [36mpositive[0m[37m:[0m
+[36mAll[0m > [93m10[0m[37m:[0m
+[36mAll[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_arrow.rcc
+[37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+Running test: .\tests\test_arrow2.rcc
+[37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+Running test: .\tests\test_arrow_complete.rcc
+=== [36mARROW[0m [36mFUNCTIONS[0m [36mTEST[0m ===
+
+[93m1.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mmap[0m[37m:[0m
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m][0m
+
+[93m2.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mfilter[0m[37m:[0m
+[36mEven[0m [36mnumbers[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m][0m
+
+[93m3.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mreduce[0m[37m:[0m
+[36mSum[0m[37m:[0m [93m15[0m
+
+[93m4.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mtype[0m [36mannotations[0m[37m:[0m
+[36mSquared[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m4[0m[37m,[0m [93m9[0m[37m,[0m [93m16[0m[37m,[0m [93m25[0m[37m][0m
+
+[93m5.[0m [36mMethod[0m [36mchaining[0m[37m:[0m
+[36mFiltered[0m > [93m2[0m[37m,[0m [36mthen[0m * [93m10[0m[37m:[0m [37m[[0m[93m30[0m[37m,[0m [93m40[0m[37m,[0m [93m50[0m[37m][0m
+
+[93m6.[0m [36mArrow[0m [36mfunction[0m [36mas[0m [36mvariable[0m[37m:[0m
+[36mTripled[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m,[0m [93m12[0m[37m,[0m [93m15[0m[37m][0m
+
+=== [36mALL[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_arrow_notype.rcc
+[93m14[0m
+Running test: .\tests\test_arrow_simple.rcc
+[93m8[0m
+Running test: .\tests\test_arrow_single.rcc
+[93m14[0m
+Running test: .\tests\test_bigint_numerics.rcc
+=== [36mTesting[0m [36mNumeric[0m [36mSeparators[0m ===
+[93m1[0m[36m_000_000[0m = [93m1000000[0m
+[93m1[0m[36m_000_000_000[0m = [93m1000000000[0m
+
+=== [36mTesting[0m [36mBinary[0m [36mLiterals[0m ===
+[93m0[0m[36mb1010[0m ([36mbinary[0m) = [93m10[0m
+[93m0[0m[36mB1111_0000[0m ([36mbinary[0m [36mwith[0m [36mseparator[0m) = [93m240[0m
+
+=== [36mTesting[0m [36mOctal[0m [36mLiterals[0m ===
+[93m0[0m[36mo755[0m ([36moctal[0m) = [93m493[0m
+[93m0[0m[36mO644[0m ([36moctal[0m) = [93m420[0m
+
+=== [36mTesting[0m [36mHexadecimal[0m [36mLiterals[0m ===
+[93m0[0m[36mxFF[0m ([36mhex[0m) = [93m255[0m
+[93m0[0m[36mx1A2B[0m ([36mhex[0m) = [93m6699[0m
+
+=== [36mTesting[0m [36mBigInt[0m ===
+[93m12345678901234567890[0m[36mn[0m
+[93m999999999999999999[0m[36mn[0m
+[93m18446744073709551615[0m[36mn[0m
+
+=== [36mTesting[0m [36mtypeof[0m ===
+[36mtypeof[0m [93m123[0m[37m:[0m [36mint[0m
+[36mtypeof[0m [93m123[0m[36mn[0m[37m:[0m [36mbigint[0m
+[36mtypeof[0m [93m0[0m[36mb1010[0m[37m:[0m [36mint[0m
+[36mtypeof[0m [93m0[0m[36mxFF[0m[37m:[0m [36mint[0m
+
+=== [36mAll[0m [36mBigInt[0m [36mand[0m [36mnumeric[0m [36mliteral[0m [36mtests[0m [36mpassed[0m! ===
+Running test: .\tests\test_builtins.rcc
+=== [36mTesting[0m [36mCore[0m [36mBuilt[0m-[36mins[0m ===
+[93m5[0m
+[93m5[0m
+
+=== [36mTesting[0m [36mMath[0m [36mBuilt[0m-[36mins[0m ===
+[93m3.141592653589793[0m
+[93m2.718281828459045[0m
+[93m3.7[0m
+[93m3.2[0m
+[93m4[0m
+[93m5[0m
+[93m4[0m
+[93m8[0m
+[93m3[0m
+[93m5[0m
+[93m0[0m
+[93m1[0m
+[93m1761927058.9763157[0m
+
+=== [36mTesting[0m [36mString[0m [36mBuilt[0m-[36mins[0m ===
+[36mHELLO[0m [36mWORLD[0m
+Running test: .\tests\test_classes_advanced.rcc
+🦝 === [36mADVANCED[0m [36mCLASSES[0m [36mTEST[0m ===
+✅ [36mTest[0m [93m1[0m[37m:[0m [36mStatic[0m [36mMethods[0m
+  [36mmax[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m20[0m
+  [36mmin[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m10[0m
+  [36mabs[0m([93m-15[0m)[37m:[0m [93m15[0m
+  [36mabs[0m([93m15[0m)[37m:[0m [93m15[0m
+✅ [36mTest[0m [93m2[0m[37m:[0m [36mGetters[0m [36mand[0m [36mSetters[0m
+  [36mCelsius[0m[37m:[0m [93m25[0m
+  [36mFahrenheit[0m[37m:[0m [93m77[0m
+  [36mKelvin[0m[37m:[0m [93m298.15[0m
+  [36mAfter[0m [36msetting[0m [36mto[0m [93m68[0m°[36mF[0m[37m:[0m
+  [36mCelsius[0m[37m:[0m [93m20[0m
+✅ [36mTest[0m [93m3[0m[37m:[0m [36mMethod[0m [36mOverriding[0m
+  [36mCircle[0m [36mwith[0m [36mradius[0m [93m5[0m
+  [36mArea[0m[37m:[0m [93m78.53975[0m
+  [36mRectangle[0m [93m4[0m[36mx6[0m
+  [36mArea[0m[37m:[0m [93m24[0m
+✅ [36mTest[0m [93m4[0m[37m:[0m [36mEncapsulation[0m [36mPattern[0m
+  [36mInitial[0m[37m:[0m [93m0[0m/[93m3[0m
+  [36mAfter[0m [36mincrement[0m[37m:[0m [93m1[0m
+  [36mAfter[0m [93m2[0m [36mmore[0m [36mincrements[0m[37m:[0m [93m3[0m
+  [36mCan[0m [36mincrement[0m [36mmore[0m[37m:[0m [93mfalse[0m
+  [36mAfter[0m [36mreset[0m[37m:[0m [93m0[0m
+✅ [36mTest[0m [93m5[0m[37m:[0m [36mComplex[0m [36mConstructor[0m
+  [36mUser[0m[37m:[0m [36mjohn_doe[0m
+  [36mEmail[0m[37m:[0m [36mjohn[0m@[36mexample[0m.[36mcom[0m
+  [36mStatus[0m[37m:[0m [36mActive[0m ([93m0[0m [36mlogins[0m)
+  [36mAfter[0m [93m3[0m [36mlogins[0m[37m:[0m [36mActive[0m ([93m3[0m [36mlogins[0m)
+  [36mAfter[0m [36mdeactivation[0m[37m:[0m [36mInactive[0m
+✅ [36mTest[0m [93m6[0m[37m:[0m [36mTwo[0m-[36mLevel[0m [36mInheritance[0m
+  [36mCar[0m[37m:[0m [36mToyota[0m ([93m4[0m [36mdoors[0m)
+  [36mBrand[0m[37m:[0m [36mToyota[0m
+  [36mDoors[0m[37m:[0m [93m4[0m
+✅ [36mTest[0m [93m7[0m[37m:[0m [36mComplex[0m [36mState[0m [36mManagement[0m
+  [36mCart[0m [36mempty[0m[37m:[0m [93mtrue[0m
+  [36mItems[0m [36min[0m [36mcart[0m[37m:[0m [93m3[0m
+  [36mTotal[0m[37m:[0m $[93m12.25[0m
+✅ [36mTest[0m [93m8[0m[37m:[0m [36mMethods[0m [36mwith[0m [36mMultiple[0m [36mReturns[0m
+  [36mEmpty[0m [36mstring[0m[37m:[0m [36mError[0m[37m:[0m [36mValue[0m [36mis[0m [36mempty[0m
+  [92m'ab'[0m[37m:[0m [36mError[0m[37m:[0m [36mValue[0m [36mtoo[0m [36mshort[0m
+  [92m'hello'[0m[37m:[0m [36mValid[0m
+  [36mLong[0m [36mstring[0m[37m:[0m [36mError[0m[37m:[0m [36mValue[0m [36mtoo[0m [36mlong[0m
+✅ [36mTest[0m [93m9[0m[37m:[0m [36mInstance[0m [36mType[0m [36mChecking[0m
+  [36mAnimal[0m [36mname[0m[37m:[0m [36mGeneric[0m
+  [36mCat[0m [36mname[0m[37m:[0m [36mWhiskers[0m
+  [36mCat[0m [36msays[0m[37m:[0m [36mMeow[0m!
+✅ [36mTest[0m [93m10[0m[37m:[0m [36mMultiple[0m [36mInstances[0m [36mStress[0m [36mTest[0m
+  [36mCreated[0m [93m5[0m [36mpoints[0m
+  [36mPoint[0m [93m0[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+  [36mPoint[0m [93m1[0m[37m:[0m ([93m3[0m[37m,[0m [93m4[0m)
+  [36mPoint[0m [93m2[0m[37m:[0m ([93m5[0m[37m,[0m [93m12[0m)
+🎉 === [36mALL[0m [36mADVANCED[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mStatic[0m [36mmethods[0m
+✅ [36mGetters[0m [36mand[0m [36msetters[0m
+✅ [36mMethod[0m [36moverriding[0m [36min[0m [36minheritance[0m
+✅ [36mEncapsulation[0m [36mpatterns[0m
+✅ [36mComplex[0m [36mconstructor[0m [36mlogic[0m
+✅ [36mTwo[0m-[36mlevel[0m [36minheritance[0m
+✅ [36mComplex[0m [36mstate[0m [36mmanagement[0m
+✅ [36mMultiple[0m [36mreturn[0m [36mpoints[0m
+✅ [36mInstance[0m [36mtype[0m [36mchecking[0m
+✅ [36mMultiple[0m [36minstances[0m [36mstress[0m [36mtest[0m
+🦝 [36mRaccoon[0m [36mClasses[0m[37m:[0m [36mALL[0m [36mADVANCED[0m [36mFEATURES[0m [36mWORKING[0m!
+Running test: .\tests\test_classes_comprehensive.rcc
+🦝 === [36mCOMPREHENSIVE[0m [36mCLASSES[0m [36mTEST[0m ===
+✅ [36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mClass[0m [36mwith[0m [36mConstructor[0m
+  [36mName[0m[37m:[0m [36mAlice[0m
+  [36mAge[0m[37m:[0m [93m30[0m
+✅ [36mTest[0m [93m2[0m[37m:[0m [36mClass[0m [36mwith[0m [36mMethods[0m
+  [36mInitial[0m [36mvalue[0m[37m:[0m [93m10[0m
+  [36mAfter[0m [36madd[0m([93m5[0m)[37m:[0m [93m15[0m
+  [36mAfter[0m [36mmultiply[0m([93m2[0m)[37m:[0m [93m30[0m
+  [36mAfter[0m [36msubtract[0m([93m10[0m)[37m:[0m [93m20[0m
+  [36mAfter[0m [36mreset[0m[37m:[0m [93m0[0m
+✅ [36mTest[0m [93m3[0m[37m:[0m [36mClass[0m [36mwith[0m [36mDifferent[0m [36mData[0m [36mTypes[0m
+  [36mLaptop[0m - $[93m999.99[0m ([36mStock[0m[37m:[0m [93m5[0m)
+  [36mTotal[0m [36mvalue[0m[37m:[0m $[93m4999.95[0m
+  [36mIn[0m [36mstock[0m[37m:[0m [93mtrue[0m
+  [36mAfter[0m [36mselling[0m [93m3[0m[37m:[0m [36mLaptop[0m - $[93m999.99[0m ([36mStock[0m[37m:[0m [93m2[0m)
+  [36mAfter[0m [36mselling[0m [93m2[0m [36mmore[0m[37m:[0m [36mLaptop[0m - $[93m999.99[0m ([36mStock[0m[37m:[0m [93m0[0m)
+  [36mIn[0m [36mstock[0m[37m:[0m [93mfalse[0m
+✅ [36mTest[0m [93m4[0m[37m:[0m [36mClass[0m [36mwith[0m [36mArray[0m [36mProperties[0m
+  [36mClassroom[0m[37m:[0m [36mMath[0m [93m101[0m
+  [36mStudents[0m[37m:[0m [93m3[0m
+  [36mAverage[0m [36mgrade[0m[37m:[0m [93m91.33333333333333[0m
+✅ [36mTest[0m [93m5[0m[37m:[0m [36mClass[0m [36mInheritance[0m
+  [36mRex[0m [36mis[0m [93m3[0m [36myears[0m [36mold[0m
+  [36mRex[0m [36mis[0m [36ma[0m [36mLabrador[0m
+  [36mSound[0m[37m:[0m [36mWoof[0m! [36mWoof[0m!
+✅ [36mTest[0m [93m6[0m[37m:[0m [36mMultiple[0m [36mInstances[0m [36mIndependence[0m
+  [36mCounter[0m [36mA[0m[37m:[0m [93m3[0m
+  [36mCounter[0m [36mB[0m[37m:[0m [93m1[0m
+✅ [36mTest[0m [93m7[0m[37m:[0m [36mComplex[0m [36mMethods[0m [36mwith[0m [36mLogic[0m
+  [36mAccount[0m[37m:[0m [36mACC001[0m
+  [36mInitial[0m [36mbalance[0m[37m:[0m $[93m1000[0m
+  [36mAfter[0m [36mdeposit[0m $[93m500[0m[37m:[0m $[93m1500[0m
+  [36mAfter[0m [36mwithdraw[0m $[93m200[0m[37m:[0m $[93m1300[0m
+✅ [36mTest[0m [93m8[0m[37m:[0m [36mNested[0m [36mMethod[0m [36mCalls[0m
+  [36mInitial[0m[37m:[0m [93m5[0m
+  [36mAfter[0m [36madd[0m([93m3[0m) [36mthen[0m [36mmultiply[0m([93m2[0m)[37m:[0m [93m16[0m
+✅ [36mTest[0m [93m9[0m[37m:[0m [36mClass[0m [36mwith[0m [36mString[0m [36mOperations[0m
+  [36mOriginal[0m[37m:[0m [36mHello[0m [36mRaccoon[0m
+  [36mUppercase[0m[37m:[0m [36mHELLO[0m [36mRACCOON[0m
+  [36mLowercase[0m[37m:[0m [36mhello[0m [36mraccoon[0m
+  [36mLength[0m[37m:[0m [93m13[0m
+  [36mIs[0m [36mempty[0m[37m:[0m [93mfalse[0m
+✅ [36mTest[0m [93m10[0m[37m:[0m [36mClass[0m [36mwith[0m [36mObject[0m [36mComposition[0m
+  [36mJohn[0m [36mDoe[0m ([36mID[0m[37m:[0m [93m1001[0m)
+  [36mJohn[0m [36mDoe[0m ([36mID[0m[37m:[0m [93m1001[0m) - [93m123[0m [36mMain[0m [36mSt[0m[37m,[0m [36mSpringfield[0m [93m12345[0m
+🎉 === [36mALL[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mclass[0m [36mwith[0m [36mconstructor[0m
+✅ [36mClass[0m [36mwith[0m [36mmethods[0m
+✅ [36mDifferent[0m [36mdata[0m [36mtypes[0m ([36mstr[0m[37m,[0m [36mint[0m[37m,[0m [36mfloat[0m[37m,[0m [36mbool[0m)
+✅ [36mArray[0m [36mproperties[0m
+✅ [36mClass[0m [36minheritance[0m ([36mextends[0m[37m,[0m [36msuper[0m)
+✅ [36mMultiple[0m [36minstances[0m [36mindependence[0m
+✅ [36mComplex[0m [36mmethods[0m [36mwith[0m [36mlogic[0m
+✅ [36mNested[0m [36mmethod[0m [36mcalls[0m
+✅ [36mString[0m [36moperations[0m [36min[0m [36mclasses[0m
+✅ [36mObject[0m [36mcomposition[0m
+🦝 [36mRaccoon[0m [36mClasses[0m[37m:[0m [36mFULLY[0m [36mFUNCTIONAL[0m!
+Running test: .\tests\test_class_rest.rcc
+[36mIn[0m [36mstatic[0m [36mmethod[0m[37m,[0m [36margs[0m[37m:[0m [37m[[0m[36mhello[0m[37m,[0m [36mworld[0m[37m][0m
+[36mhello[0m [36mworld[0m
+Running test: .\tests\test_complete_syntax_semantics.rcc
+╔════════════════════════════════════════════════════════════════╗
+║     [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+[37m[[0m[93m1[0m[37m][0m [36mPRIMITIVE[0m [36mTYPES[0m & [36mLITERALS[0m
+  ✓ [36mInteger[0m [36mliterals[0m[37m:[0m [93m42[0m[37m,[0m [93m-100[0m[37m,[0m [93m999999999[0m
+  ✓ [36mFloat[0m [36mliterals[0m[37m:[0m [93m3.14159[0m[37m,[0m [93m-2.5[0m[37m,[0m [93m1.5[0m
+  ✓ [36mString[0m [36mliterals[0m[37m:[0m [36mhello[0m [36mworld[0m[37m,[0m [36mempty[0m=[92m""[0m
+  ✓ [36mBoolean[0m [36mliterals[0m[37m:[0m [93mtrue[0m[37m,[0m [93mfalse[0m
+  ✓ [36mNull[0m [36mliteral[0m[37m:[0m [93mnull[0m
+  ✓ [36mTemplate[0m [36mstrings[0m[37m:[0m [36mLanguage[0m[37m:[0m [36mRaccoon[0m[37m,[0m [36mVersion[0m[37m:[0m [93m1[0m
+
+[37m[[0m[93m2[0m[37m][0m [36mOPERATORS[0m
+  ✓ [36mArithmetic[0m[37m:[0m +=[93m13[0m[37m,[0m -=[93m7[0m[37m,[0m *=[93m30[0m[37m,[0m /=[93m3.3333333333333335[0m[37m,[0m %=[93m1[0m[37m,[0m **=[93m8[0m
+  ✓ [36mComparison[0m[37m:[0m ==[93mfalse[0m[37m,[0m !=[93mtrue[0m[37m,[0m <[93mfalse[0m[37m,[0m >[93mtrue[0m
+  ✓ [36mLogical[0m[37m:[0m &&=[93mfalse[0m[37m,[0m ||=[93mtrue[0m[37m,[0m !=[93mfalse[0m
+  ✓ [36mBitwise[0m[37m:[0m &=[93m1[0m[37m,[0m |=[93m7[0m[37m,[0m ^=[93m6[0m[37m,[0m ~=[93m-6[0m
+    [36mShifts[0m[37m:[0m <<=[93m10[0m[37m,[0m >>=[93m2[0m[37m,[0m >>>=[93m2[0m
+  ✓ [36mAssignment[0m [36moperators[0m[37m:[0m [36mresult[0m=[93m0[0m
+  ✓ [36mCompound[0m [36mbitwise[0m [36massignment[0m[37m:[0m [36mresult[0m=[93m1[0m
+  ✓ [36mInc[0m/[36mDec[0m[37m:[0m [36mpost[0m++=[93m6[0m[37m,[0m ++[36mpre[0m=[93m7[0m[37m,[0m [36mpost[0m--=[93m6[0m[37m,[0m --[36mpre[0m=[93m5[0m
+  ✓ [36mRange[0m [36moperator[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mNull[0m [36mcoalescing[0m[37m:[0m [93m42[0m
+  ✓ [36mTernary[0m [36moperator[0m[37m:[0m [93m10[0m
+
+[37m[[0m[93m3[0m[37m][0m [36mVARIABLES[0m & [36mCONSTANTS[0m
+  ✓ [36mLet[0m [36mdeclarations[0m[37m:[0m [93m100[0m[37m,[0m [36mtyped[0m[37m,[0m [93m42[0m
+  ✓ [36mConst[0m [36mdeclarations[0m[37m:[0m [93m999[0m[37m,[0m [36mimmutable[0m
+  ✓ [36mVariable[0m [36mshadowing[0m[37m:[0m [36minner[0m=[93m2[0m
+    [36mouter[0m=[93m1[0m
+
+[37m[[0m[93m4[0m[37m][0m [36mCONTROL[0m [36mFLOW[0m
+  ✓ [36mIf[0m [36mstatement[0m[37m:[0m [36mcondition[0m [93mtrue[0m
+  ✓ [36mIf[0m-[36melse[0m [36mstatement[0m[37m:[0m [36melse[0m [36mbranch[0m
+  ✓ [36mIf[0m-[36melse[0m-[36mif[0m [36mchain[0m[37m:[0m [36mgrade[0m [36mB[0m
+  ✓ [36mWhile[0m [36mloop[0m[37m:[0m [36miterations[0m=[93m3[0m
+  ✓ [36mFor[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mFor[0m-[36min[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mBreak[0m [36mstatement[0m[37m:[0m [36mstopped[0m [36mat[0m [93m3[0m
+  ✓ [36mContinue[0m [36mstatement[0m[37m:[0m [36msum[0m=[93m12[0m ([36mskipped[0m [93m3[0m)
+
+[37m[[0m[93m5[0m[37m][0m [36mFUNCTIONS[0m
+  ✓ [36mBasic[0m [36mfunction[0m[37m:[0m [93m42[0m
+  ✓ [36mFunction[0m [36mwith[0m [36mparams[0m[37m:[0m [93m30[0m
+  ✓ [36mOptional[0m [36mparameters[0m[37m:[0m [93m5[0m[37m,[0m [93m5[0m
+  ✓ [36mDefault[0m [36mparameters[0m[37m:[0m [93m15[0m[37m,[0m [93m25[0m
+  ✓ [36mRest[0m [36mparameters[0m[37m:[0m [93m15[0m
+  ✓ [36mArrow[0m [36mfunction[0m[37m:[0m [93m12[0m
+  ✓ [36mArrow[0m [36mexpression[0m[37m:[0m [93m10[0m
+  ✓ [36mArrow[0m [36mblock[0m[37m:[0m [93m11[0m
+  ✓ [36mHigher[0m-[36morder[0m [36mfunction[0m[37m:[0m [93m20[0m
+  ✓ [36mRecursive[0m [36mfunction[0m[37m:[0m [93m120[0m
+  ✓ [36mNamed[0m [36marguments[0m[37m:[0m [93m6[0m
+
+[37m[[0m[93m6[0m[37m][0m [36mARRAYS[0m & [36mCOLLECTIONS[0m
+  ✓ [36mArray[0m [36mliterals[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m[37m,[0m [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+  ✓ [36mArray[0m [36mindexing[0m[37m:[0m [93m20[0m
+  ✓ [36mArray[0m [36massignment[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mArray[0m [36mlength[0m[37m:[0m [93m3[0m
+  ✓ [36mArray[0m [36mpush[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m][0m
+  ✓ [36mArray[0m [36mpop[0m[37m:[0m [93m40[0m[37m,[0m [36mremaining[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mNested[0m [36marrays[0m[37m:[0m [93m2[0m
+  ✓ [36mArray[0m [36mspread[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m][0m
+
+[37m[[0m[93m7[0m[37m][0m [36mOBJECTS[0m & [36mMAPS[0m
+  ✓ [36mObject[0m [36mliteral[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mObject[0m [36mproperty[0m[37m:[0m [93m10[0m
+  ✓ [36mObject[0m [36massignment[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m99[0m [37m}[0m
+  ✓ [36mComputed[0m [36mproperty[0m[37m:[0m [93m20[0m
+  ✓ [36mObject[0m [36mshorthand[0m[37m:[0m [37m{[0m [36mpropX[0m[37m:[0m [93m100[0m[37m,[0m [36mpropY[0m[37m:[0m [93m200[0m [37m}[0m
+  ✓ [36mNested[0m [36mobject[0m[37m:[0m [93m42[0m
+
+[37m[[0m[93m8[0m[37m][0m [36mCLASSES[0m
+  ✓ [36mBasic[0m [36mclass[0m[37m:[0m [93m42[0m
+  ✓ [36mClass[0m [36mproperties[0m[37m:[0m [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+  ✓ [36mClass[0m [36mmethods[0m[37m:[0m [36mdoubled[0m=[93m10[0m[37m,[0m [36madded[0m=[93m15[0m
+  ✓ [36mClass[0m [36minheritance[0m[37m:[0m [93m30[0m
+  ✓ [36mStatic[0m [36mmembers[0m[37m:[0m [93m200[0m
+  ✓ [36mPrivate[0m [36mproperties[0m[37m:[0m [93m42[0m
+  ✓ [36mGetters[0m/[36mSetters[0m[37m:[0m [36mold[0m=[93m10[0m[37m,[0m [36mnew[0m=[93m20[0m
+
+[37m[[0m[93m9[0m[37m][0m [36mINTERFACES[0m & [36mTYPE[0m [36mALIASES[0m
+  ✓ [36mBasic[0m [36minterface[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mInterface[0m [36mimplementation[0m[37m:[0m [93m15[0m
+  ✓ [36mType[0m [36malias[0m[37m:[0m [36mnum[0m=[93m42[0m[37m,[0m [36mstr[0m=[36mhello[0m
+  ✓ [36mInterface[0m [36mextends[0m[37m:[0m [37m{[0m [36mname[0m[37m:[0m [36mAlice[0m[37m,[0m [36mage[0m[37m:[0m [93m30[0m [37m}[0m
+
+[37m[[0m[93m10[0m[37m][0m [36mENUMS[0m
+  ✓ [36mNumeric[0m [36menum[0m[37m:[0m [93m1[0m
+  ✓ [36mString[0m [36menum[0m[37m:[0m [36mRED[0m
+  ✓ [36mMixed[0m [36menum[0m[37m:[0m [36mthree[0m
+
+[37m[[0m[93m11[0m[37m][0m [36mGENERICS[0m
+  ✓ [36mGeneric[0m [36mfunction[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mGeneric[0m [36mclass[0m[37m:[0m [93m42[0m[37m,[0m [36mboxed[0m
+  ✓ [36mGeneric[0m [36minterface[0m[37m:[0m [37m{[0m [36msecond[0m[37m:[0m [36manswer[0m[37m,[0m [36mfirst[0m[37m:[0m [93m42[0m [37m}[0m
+  ✓ [36mGeneric[0m [36mconstraints[0m[37m:[0m [93m3[0m
+
+[37m[[0m[93m12[0m[37m][0m [36mADVANCED[0m [36mTYPES[0m
+  ✓ [36mUnion[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mIntersection[0m [36mtypes[0m[37m:[0m [37m{[0m [36mage[0m[37m:[0m [93m25[0m[37m,[0m [36mname[0m[37m:[0m [36mBob[0m [37m}[0m
+  ✓ [36mNullable[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [93mnull[0m[37m,[0m [36mcheck[0m=[93mtrue[0m
+  ✓ [36mArray[0m [36mtypes[0m[37m:[0m [36mint[0m[37m[[0m[37m][0m[37m,[0m [36mstr[0m[37m[[0m[37m][0m[37m,[0m [36mint[0m[37m[[0m[37m][0m[37m[[0m[37m][0m
+  ✓ [36mTuple[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mObject[0m [36mtypes[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mFunction[0m [36mtypes[0m[37m:[0m [93m15[0m
+  ✓ [36mReadonly[0m [36mtypes[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mKeyOf[0m [36moperator[0m[37m:[0m [36mdefined[0m
+  ✓ [36mTypeOf[0m [36moperator[0m[37m:[0m [36mint[0m
+
+[37m[[0m[93m13[0m[37m][0m [36mDESTRUCTURING[0m
+  ✓ [36mArray[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+  ✓ [36mArray[0m [36mdestructuring[0m [36mskip[0m[37m:[0m [93m10[0m[37m,[0m [93m30[0m
+  ✓ [36mArray[0m [36mdestructuring[0m [36mrest[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mObject[0m [36mdestructuring[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+  ✓ [36mObject[0m [36mdestructuring[0m [36mshorthand[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+  ✓ [36mNested[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+  ✓ [36mFunction[0m [36mparam[0m [36mdestructuring[0m[37m:[0m [93m30[0m
+
+[37m[[0m[93m14[0m[37m][0m [36mDECORATORS[0m
+  ✓ [36mMethod[0m [36mwith[0m [36mdecorator[0m
+
+[37m[[0m[93m15[0m[37m][0m [36mASYNC[0m/[36mAWAIT[0m
+  ✓ [36masync[0m [36mfn[0m [36mdeclared[0m
+  ✓ [36mAwait[0m [36mexpression[0m [36mdefined[0m
+  ✓ [36mAsync[0m [36marrow[0m [36mfunction[0m [36mdefined[0m
+
+[37m[[0m[93m16[0m[37m][0m [36mERROR[0m [36mHANDLING[0m
+  ✓ [36mTry[0m-[36mcatch[0m[37m:[0m [36mtry[0m [36mblock[0m [36mexecuted[0m
+  ✓ [36mTry[0m-[36mcatch[0m-[36mfinally[0m[37m:[0m [36mfinally[0m [36mblock[0m [36mexecuted[0m
+  ✓ [36mThrow[0m [36mstatement[0m[37m:[0m [36mcaught[0m [36merror[0m
+  ✓ [36mMultiple[0m [36mcatch[0m[37m:[0m [36mstring[0m [36merror[0m [36mcaught[0m
+
+[37m[[0m[93m17[0m[37m][0m [36mNULL[0m [36mSAFETY[0m
+  ✓ [36mNullable[0m [36mtype[0m[37m:[0m [93mnull[0m
+  ✓ [36mNull[0m [36mcoalescing[0m[37m:[0m [93m100[0m
+  ✓ [36mOptional[0m [36mchaining[0m[37m:[0m [93m42[0m
+  ✓ [36mNull[0m [36massertion[0m[37m:[0m [93m42[0m
+
+[37m[[0m[93m18[0m[37m][0m [36mMODULE[0m [36mSYSTEM[0m
+  ✓ [36mNamed[0m [36mimports[0m[37m:[0m [36madd[0m=[93m15[0m[37m,[0m [36mmultiply[0m=[93m12[0m[37m,[0m [36mPI[0m=[93m3.14159[0m
+  ✓ [36mClass[0m [36mimport[0m[37m:[0m [93m18[0m
+  ✓ [36mMultiple[0m [36mfunction[0m [36mimports[0m[37m:[0m [36mHello[0m[37m,[0m [36mRaccoon[0m![37m,[0m [36mupper[0m=[36mhello[0m
+  ✓ [36mClass[0m [36mimport[0m [36mfrom[0m [36mutils[0m[37m:[0m [36mAssistant[0m [36mis[0m [36mhelping[0m!
+
+[37m[[0m[93m19[0m[37m][0m [36mSPECIAL[0m [36mOPERATORS[0m & [36mEXPRESSIONS[0m
+  ✓ [36mInstanceof[0m[37m:[0m [93mtrue[0m
+  ✓ [36mTypeof[0m[37m:[0m [36mdefined[0m
+  ✓ [36mSpread[0m [36min[0m [36marrays[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mSpread[0m [36min[0m [36mobjects[0m[37m:[0m [37m{[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mc[0m[37m:[0m [93m3[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m [37m}[0m
+  ✓ [36mSpread[0m [36min[0m [36mcalls[0m[37m:[0m [93m6[0m
+
+[37m[[0m[93m20[0m[37m][0m [36mEDGE[0m [36mCASES[0m & [36mCOMPLEX[0m [36mSCENARIOS[0m
+  ✓ [36mDeeply[0m [36mnested[0m[37m:[0m [93m5.25[0m
+  ✓ [36mComplex[0m [36minference[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [37m{[0m [36mz[0m[37m:[0m [36mnested[0m [37m}[0m[37m,[0m [36mx[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m [37m}[0m
+  ✓ [36mClosure[0m[37m:[0m [93m55[0m
+  ✓ [36mMethod[0m [36mchaining[0m[37m:[0m [93m16[0m
+  ✓ [36mMixed[0m [36moperations[0m[37m:[0m [93m7.5[0m
+=== [36mTesting[0m [36mSwitch[0m/[36mCase[0m ===
+[36mWednesday[0m
+
+=== [36mTesting[0m [36mDo[0m-[36mWhile[0m ===
+[36mi[0m = [93m0[0m
+[36mi[0m = [93m1[0m
+[36mi[0m = [93m2[0m
+
+=== [36mTesting[0m [36mFor[0m-[36mOf[0m ===
+[36mItem[0m[37m:[0m [93m10[0m
+[36mItem[0m[37m:[0m [93m20[0m
+[36mItem[0m[37m:[0m [93m30[0m
+
+=== [36mTesting[0m [36mString[0m [36mMethods[0m ===
+[36mrepeat[0m([93m3[0m)[37m:[0m [36mhellohellohello[0m
+[36mpadStart[0m([93m10[0m[37m,[0m [92m'*'[0m)[37m:[0m *****[36mhello[0m
+[36mpadEnd[0m([93m10[0m[37m,[0m [92m'-'[0m)[37m:[0m [36mhello[0m-----
+[36mlastIndexOf[0m([92m'l'[0m)[37m:[0m [93m3[0m
+[36mcharCodeAt[0m([93m0[0m)[37m:[0m [93m104[0m
+
+=== [36mTesting[0m [36mArray[0m [36mMethods[0m ===
+[36mindexOf[0m([93m3[0m)[37m:[0m [93m2[0m
+[36mincludes[0m([93m4[0m)[37m:[0m [93mtrue[0m
+[36mat[0m([93m-1[0m)[37m:[0m [93m5[0m
+[36mAfter[0m [36mfill[0m([93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m)[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m0[0m[37m,[0m [93m3[0m[37m][0m
+[36mFlat[0m [36mresult[0m [36mlength[0m[37m:[0m [93m4[0m
+
+=== [36mTesting[0m [36mObject[0m [36mMethods[0m ===
+[36mObject[0m.[36mkeys[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36mvalues[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36massign[0m [36mworks[0m[37m:[0m [93m2[0m
+
+╔════════════════════════════════════════════════════════════════╗
+║                      [36mTEST[0m [36mSUMMARY[0m                             ║
+╚════════════════════════════════════════════════════════════════╝
+
+[36mTests[0m [36mPassed[0m[37m:[0m [93m117[0m
+[36mTests[0m [36mFailed[0m[37m:[0m [93m0[0m
+[36mPass[0m [36mRate[0m[37m:[0m [93m100[0m%
+
+╔════════════════════════════════════════════════════════════════╗
+║  [37m[[0m[93m1[0m[37m][0m [36mPrimitive[0m [36mTypes[0m & [36mLiterals[0m ......................... ✓   ║
+║  [37m[[0m[93m2[0m[37m][0m [36mOperators[0m .......................................... ✓   ║
+║  [37m[[0m[93m3[0m[37m][0m [36mVariables[0m & [36mConstants[0m .............................. ✓   ║
+║  [37m[[0m[93m4[0m[37m][0m [36mControl[0m [36mFlow[0m ....................................... ✓   ║
+║  [37m[[0m[93m5[0m[37m][0m [36mFunctions[0m .......................................... ✓   ║
+║  [37m[[0m[93m6[0m[37m][0m [36mArrays[0m & [36mCollections[0m ............................... ✓   ║
+║  [37m[[0m[93m7[0m[37m][0m [36mObjects[0m & [36mMaps[0m ..................................... ✓   ║
+║  [37m[[0m[93m8[0m[37m][0m [36mClasses[0m ............................................ ✓   ║
+║  [37m[[0m[93m9[0m[37m][0m [36mInterfaces[0m & [36mType[0m [36mAliases[0m .......................... ✓   ║
+║ [37m[[0m[93m10[0m[37m][0m [36mEnums[0m .............................................. ✓   ║
+║ [37m[[0m[93m11[0m[37m][0m [36mGenerics[0m ........................................... ✓   ║
+║ [37m[[0m[93m12[0m[37m][0m [36mAdvanced[0m [36mTypes[0m ..................................... ✓   ║
+║ [37m[[0m[93m13[0m[37m][0m [36mDestructuring[0m ...................................... ✓   ║
+║ [37m[[0m[93m14[0m[37m][0m [36mDecorators[0m ......................................... ✓   ║
+║ [37m[[0m[93m15[0m[37m][0m [36mAsync[0m/[36mAwait[0m ........................................ ✓   ║
+║ [37m[[0m[93m16[0m[37m][0m [36mError[0m [36mHandling[0m ..................................... ✓   ║
+║ [37m[[0m[93m17[0m[37m][0m [36mNull[0m [36mSafety[0m ........................................ ✓   ║
+║ [37m[[0m[93m18[0m[37m][0m [36mModule[0m [36mSystem[0m ...................................... ✓   ║
+║ [37m[[0m[93m19[0m[37m][0m [36mSpecial[0m [36mOperators[0m & [36mExpressions[0m .................... ✓   ║
+║ [37m[[0m[93m20[0m[37m][0m [36mEdge[0m [36mCases[0m & [36mComplex[0m [36mScenarios[0m ..................... ✓   ║
+║ [37m[[0m[93m21[0m[37m][0m [36mSwitch[0m/[36mCase[0m [36mStatements[0m ............................. ✓   ║
+╚════════════════════════════════════════════════════════════════╝
+
+🦝 [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m [36mFINISHED[0m
+Running test: .\tests\test_complete_typing_system.rcc
+=== [36mRACCOON[0m [36mTYPE[0m [36mSYSTEM[0m [36mCOMPREHENSIVE[0m [36mTEST[0m ===
+
+[93m1.[0m [36mPRIMITIVE[0m [36mTYPES[0m
+✓ [36mAll[0m [36mprimitive[0m [36mtypes[0m [36mworking[0m
+
+[93m2.[0m [36mNULLABLE[0m [36mTYPES[0m ([36mCustom[0m [36mSugar[0m [36mSyntax[0m)
+✓ [36mNullable[0m [36mtypes[0m [36mworking[0m [36mwith[0m [36mType[0m? [36msyntax[0m
+
+[93m3.[0m [36mARRAYS[0m
+✓ [36mArrays[0m [36mof[0m [36mprimitives[0m [36mand[0m [36mnullable[0m [36mtypes[0m [36mworking[0m
+
+[93m4.[0m [36mTUPLES[0m
+✓ [36mTuples[0m [36mworking[0m [36mcorrectly[0m
+
+[93m5.[0m [36mUNION[0m [36mTYPES[0m
+✓ [36mUnion[0m [36mtypes[0m [36mworking[0m
+
+[93m6.[0m [36mINTERSECTION[0m [36mTYPES[0m (&)
+✓ [36mIntersection[0m [36mtypes[0m [36mdefined[0m [36msuccessfully[0m
+
+[93m7.[0m [36mOBJECT[0m [36mTYPES[0m [36mWITH[0m [36mOPTIONAL[0m [36mPROPERTIES[0m
+✓ [36mObject[0m [36mtypes[0m [36mwith[0m [36moptional[0m [36mproperties[0m [36mworking[0m
+
+[93m8.[0m [36mREADONLY[0m [36mTYPES[0m
+✓ [36mReadonly[0m [36mtypes[0m [36mworking[0m
+
+[93m9.[0m [36mENUM[0m [36mTYPES[0m
+✓ [36mEnum[0m [36mtypes[0m [36mworking[0m
+
+[93m10.[0m [36mCLASS[0m [36mTYPES[0m
+✓ [36mClasses[0m [36mwith[0m [36minheritance[0m [36mworking[0m
+
+[93m11.[0m [36mINTERFACE[0m [36mTYPES[0m
+✓ [36mInterface[0m [36mtypes[0m [36mworking[0m
+
+[93m12.[0m [36mFUNCTION[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mtypes[0m [36mworking[0m
+
+[93m13.[0m [36mFUNCTION[0m [36mDECLARATIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mdeclarations[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m14.[0m [36mOPTIONAL[0m [36mPARAMETERS[0m ([36mparam[0m?[37m:[0m [36mType[0m)
+[36mAlice[0m
+[36mBob[0m
+[36mtest[0m
+[36mtest[0m
+[36mtest[0m
+✓ [36mOptional[0m [36mparameters[0m [36mworking[0m
+
+[93m15.[0m [36mARROW[0m [36mFUNCTIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m16.[0m [36mCOMPLEX[0m [36mNESTED[0m [36mSTRUCTURES[0m
+✓ [36mComplex[0m [36mnested[0m [36mstructures[0m [36mworking[0m
+
+[93m17.[0m [36mTYPE[0m [36mALIASES[0m
+✓ [36mType[0m [36maliases[0m [36mwith[0m [36munions[0m [36mand[0m [36mintersections[0m [36mworking[0m
+
+[93m18.[0m [36mNULLABLE[0m [36mTYPES[0m [36mIN[0m [36mDIFFERENT[0m [36mCONTEXTS[0m
+✓ [36mNullable[0m [36mtypes[0m [36min[0m [36mdifferent[0m [36mcontexts[0m [36mworking[0m
+
+[93m19.[0m [36mEXECUTION[0m [36mTEST[0m
+
+[36madd_numbers[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mgreet[0m([92m'World'[0m) = [36mHello[0m[37m,[0m [36mWorld[0m
+[36mdouble[0m([93m21[0m) = [93m42[0m
+[36mconcat[0m([92m'Hello, '[0m[37m,[0m [92m'Raccoon!'[0m) = [36mHello[0m[37m,[0m [36mRaccoon[0m!
+[36mdog[0m.[36mgetName[0m() = [36mBuddy[0m
+[36mdog[0m.[36mbreed[0m = [36mLabrador[0m
+
+=== [36mCOMPLETE[0m [36mTYPE[0m [36mSYSTEM[0m [36mTEST[0m [36mSUMMARY[0m ===
+✓ [36mAll[0m [36mTypeScript[0m-[36mstyle[0m [36mfeatures[0m [36mworking[0m
+✓ [36mNullable[0m [36msugar[0m [36msyntax[0m ([36mType[0m?) [36mworking[0m
+✓ [36mOptional[0m [36mparameters[0m [36mworking[0m
+✓ [36mOptional[0m [36mobject[0m [36mproperties[0m [36mworking[0m
+✓ [36mComplex[0m [36mnested[0m [36mtypes[0m [36mworking[0m
+✓ [36mUnions[0m [36mand[0m [36mintersections[0m [36mworking[0m
+✓ [36mReadonly[0m [36mtypes[0m [36mworking[0m
+✓ [36mClasses[0m [36mand[0m [36minheritance[0m [36mworking[0m
+✓ [36mInterfaces[0m [36mworking[0m
+✓ [36mEnums[0m [36mworking[0m
+✓ [36mArrow[0m [36mfunctions[0m [36mworking[0m
+
+[36mRaccoon[0m [36mType[0m [36mSystem[0m[37m:[0m [36mFULLY[0m [36mOPERATIONAL[0m!
+Running test: .\tests\test_debugging_features.rcc
+=== [36mTEST[0m [36mDE[0m [36mDEBUGGING[0m [36mY[0m [36mCOLORES[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mprint[0m() [36mcon[0m [36mcolores[0m [36mpara[0m [36mdiferentes[0m [36mtipos[0m
+[36mStrings[0m [36men[0m [36mverde[0m[37m:[0m [36mHello[0m [36mWorld[0m
+[36mNúmeros[0m [36men[0m [36mamarillo[0m[37m:[0m [93m42[0m [93m3.14[0m
+[36mBooleanos[0m [36men[0m [36mamarillo[0m[37m:[0m [93mtrue[0m [93mfalse[0m
+[36mNull[0m [36men[0m [36mgris[0m[37m:[0m [93mnull[0m
+[36mLista[0m [36men[0m [36mmagenta[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mfunción[0m [36mprintln[0m()
+[36mPrimera[0m [36mlínea[0m
+[36mSegunda[0m [36mlínea[0m
+[36mTercera[0m [36mlínea[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mMezcla[0m [36mde[0m [36mtipos[0m [36men[0m [36muna[0m [36msola[0m [36mllamada[0m
+[36mUsuario[0m[37m:[0m [36mBob[0m [36mEdad[0m[37m:[0m [93m25[0m [36mActivo[0m[37m:[0m [93mtrue[0m [36mScore[0m[37m:[0m [93m95.5[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mResultados[0m [36mde[0m [36moperaciones[0m
+[36mx[0m = [93m10[0m [36my[0m = [93m5[0m
+[36mx[0m + [36my[0m = [93m15[0m
+[36mx[0m * [36my[0m = [93m50[0m
+[36mx[0m > [36my[0m = [93mtrue[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mEstructuras[0m [36mde[0m [36mdatos[0m
+[36mLista[0m [36mde[0m [36mnúmeros[0m[37m:[0m [37m[[0m[93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m,[0m [93m50[0m[37m][0m
+[36mLista[0m [36mmixta[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [36mtwo[0m[37m,[0m [93m3[0m[37m,[0m [36mfour[0m[37m][0m
+
+[36mTest[0m [93m6[0m[37m:[0m [36mFunciones[0m
+[36mResultado[0m[37m:[0m [36mHello[0m[37m,[0m [36mWorld[0m
+
+=== [36mTODOS[0m [36mLOS[0m [36mTESTS[0m [36mCOMPLETADOS[0m ===
+Running test: .\tests\test_decorators.rcc
+[93m5[0m + [93m3[0m = [93m8[0m
+[93m4[0m * [93m5[0m = [93m20[0m
+[36mFirst[0m [36mcall[0m[37m:[0m [93m4950[0m
+[36mSecond[0m [36mcall[0m[37m:[0m [93m4950[0m
+[36mOld[0m [36mresult[0m[37m:[0m [93m42[0m
+Running test: .\tests\test_decorators_comprehensive.rcc
+🦝 === [36mCOMPREHENSIVE[0m [36mDECORATORS[0m [36mTEST[0m ===
+✅ [36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mFunction[0m [36mDecorator[0m
+  [36mResult[0m[37m:[0m [36mHello[0m[37m,[0m [36mAlice[0m
+✅ [36mTest[0m [93m2[0m[37m:[0m [36mFunction[0m [36mDecorator[0m [36mwith[0m [36mArguments[0m
+  [36mSum[0m[37m:[0m [93m8[0m
+✅ [36mTest[0m [93m3[0m[37m:[0m [36mClass[0m [36mDecorator[0m
+  [36mUser[0m [36mgreeting[0m[37m:[0m [36mHello[0m[37m,[0m [36mBob[0m
+✅ [36mTest[0m [93m4[0m[37m:[0m [36mMultiple[0m [36mDecorators[0m [36mon[0m [36mFunction[0m
+  [36mResult[0m[37m:[0m [36mFunction[0m [36mwith[0m [36mmultiple[0m [36mdecorators[0m
+✅ [36mTest[0m [93m5[0m[37m:[0m [36mDecorator[0m [36mwith[0m [36mMultiple[0m [36mArguments[0m
+  [36mPercentage[0m[37m:[0m [93m75[0m%
+✅ [36mTest[0m [93m6[0m[37m:[0m [36mClass[0m [36mDecorator[0m [36mwith[0m [36mArguments[0m
+  [36mCharlie[0m [36mis[0m [93m30[0m [36myears[0m [36mold[0m
+✅ [36mTest[0m [93m7[0m[37m:[0m [36mPerformance[0m [36mTracking[0m [36mDecorator[0m
+  [36mFibonacci[0m([93m6[0m) = [93m8[0m
+✅ [36mTest[0m [93m8[0m[37m:[0m [36mMetadata[0m [36mDecorator[0m
+  [36mProcessed[0m[37m:[0m [36mtest[0m [36mdata[0m
+✅ [36mTest[0m [93m9[0m[37m:[0m [36mAuthorization[0m [36mDecorator[0m
+  [36mDeleted[0m [36muser[0m [93m123[0m
+✅ [36mTest[0m [93m10[0m[37m:[0m [36mCaching[0m [36mDecorator[0m
+  [36mResult[0m [36mfor[0m[37m:[0m [36mquery[0m
+✅ [36mTest[0m [93m11[0m[37m:[0m [36mDecorator[0m [36mon[0m [36mInherited[0m [36mClass[0m
+  [36mDog[0m[37m:[0m [36mRex[0m[37m,[0m [36mBreed[0m[37m:[0m [36mLabrador[0m
+✅ [36mTest[0m [93m12[0m[37m:[0m [36mDeprecation[0m [36mDecorator[0m
+  [36mThis[0m [36mis[0m [36mold[0m
+✅ [36mTest[0m [93m13[0m[37m:[0m [36mRetry[0m [36mDecorator[0m
+  [36mOperation[0m [36mcompleted[0m
+✅ [36mTest[0m [93m14[0m[37m:[0m [36mType[0m [36mValidation[0m [36mDecorator[0m
+  [36mProcessed[0m[37m:[0m [36mtest[0m
+✅ [36mTest[0m [93m15[0m[37m:[0m [36mMultiple[0m [36mClass[0m [36mDecorators[0m
+  [36mGetting[0m [36musers[0m [36mfrom[0m [36mUser[0m [36mService[0m
+🎉 === [36mALL[0m [36mDECORATOR[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mfunction[0m [36mdecorator[0m
+✅ [36mFunction[0m [36mdecorator[0m [36mwith[0m [36marguments[0m
+✅ [36mClass[0m [36mdecorator[0m
+✅ [36mMultiple[0m [36mdecorators[0m [36mon[0m [36mfunction[0m
+✅ [36mDecorator[0m [36mwith[0m [36mmultiple[0m [36marguments[0m
+✅ [36mClass[0m [36mdecorator[0m [36mwith[0m [36marguments[0m
+✅ [36mPerformance[0m [36mtracking[0m [36mdecorator[0m
+✅ [36mMetadata[0m [36mdecorator[0m
+✅ [36mAuthorization[0m [36mdecorator[0m
+✅ [36mCaching[0m [36mdecorator[0m
+✅ [36mDecorator[0m [36mon[0m [36minherited[0m [36mclass[0m
+✅ [36mDeprecation[0m [36mdecorator[0m
+✅ [36mRetry[0m [36mdecorator[0m
+✅ [36mType[0m [36mvalidation[0m [36mdecorator[0m
+✅ [36mMultiple[0m [36mclass[0m [36mdecorators[0m
+🦝 [36mRaccoon[0m [36mDecorators[0m[37m:[0m [36mFULLY[0m [36mFUNCTIONAL[0m!
+Running test: .\tests\test_destruct_combined.rcc
+[93m1[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[93m2[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[93m3[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+[93m4[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+[93m5[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+[93m6[0m[37m:[0m [93m30[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m
+Running test: .\tests\test_destruct_debug1.rcc
+[93m1[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[93m2[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[93m3[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+[36mPart[0m [93m1[0m [36mdone[0m
+Running test: .\tests\test_destruct_debug2.rcc
+[93m1[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+[93m2[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+[36mDone[0m
+Running test: .\tests\test_destruct_func.rcc
+[36mResult[0m[37m:[0m [93m30[0m
+Running test: .\tests\test_destruct_nested.rcc
+[36mResult[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+Running test: .\tests\test_destruct_object.rcc
+[36mResult[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+Running test: .\tests\test_destruct_rest.rcc
+[36mResult[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+Running test: .\tests\test_destruct_step1.rcc
+[36mResult[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+Running test: .\tests\test_enum_class_as_types.rcc
+[93m0[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[36mProcessing[0m [36mstatus[0m[37m:[0m
+[93m1[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[93m2[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Admin[0m
+[36mAll[0m [36menum[0m [36mand[0m [36mclass[0m [36mtype[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_enum_type_syntax.rcc
+[36mEnum[0m [36mtype[0m [36msyntax[0m [36mtest[0m [36mcompleted[0m - [36mparsing[0m [36msuccessful[0m!
+Running test: .\tests\test_esm_advanced.rcc
+=== [36mAdvanced[0m [36mES[0m [36mModules[0m [36mTest[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mFunction[0m [36mExpression[0m [36mExports[0m
+  [36msquare[0m([93m5[0m) = [93m25[0m
+  [36mcube[0m([93m3[0m) = [93m27[0m
+  ✓ [36mFunction[0m [36mexpression[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mObject[0m [36mand[0m [36mArray[0m [36mExports[0m
+  [36mconfig[0m.[36mhost[0m = [36mlocalhost[0m
+  [36mconfig[0m.[36mport[0m = [93m8080[0m
+  [36mcolors[0m[37m[[0m[93m0[0m[37m][0m = [36mred[0m
+  [36mcolors[0m [36mlength[0m = [93m3[0m
+  ✓ [36mObject[0m [36mand[0m [36marray[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mStatic[0m [36mMember[0m [36mExports[0m
+  [36mMathUtils[0m.[36mPI[0m = [93m3.14159[0m
+  [36mMathUtils[0m.[36mE[0m = [93m2.71828[0m
+  [36mMathUtils[0m.[36madd[0m([93m10[0m[37m,[0m [93m20[0m) = [93m30[0m
+  [36mMathUtils[0m.[36mmax[0m([93m15[0m[37m,[0m [93m8[0m) = [93m15[0m
+  ✓ [36mStatic[0m [36mmember[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mTyped[0m [36mExports[0m
+  [36mtypedValue[0m = [93m42[0m
+  [36mtypedString[0m = [36mhello[0m
+  [36mtypedFloat[0m = [93m3.14[0m
+  ✓ [36mTyped[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mMultiple[0m [36mRelated[0m [36mFunctions[0m
+  [36mmin[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+  [36mabs[0m([93m-42[0m) = [93m42[0m
+  [36mclamp[0m([93m150[0m[37m,[0m [93m0[0m[37m,[0m [93m100[0m) = [93m100[0m
+  [36mclamp[0m([93m50[0m[37m,[0m [93m0[0m[37m,[0m [93m100[0m) = [93m50[0m
+  ✓ [36mMultiple[0m [36mrelated[0m [36mfunctions[0m [36mworking[0m
+
+[36mTest[0m [93m6[0m[37m:[0m [36mBarrel[0m [36mExports[0m
+  [36madd[0m([93m3[0m[37m,[0m [93m7[0m) = [93m10[0m
+  [36mCalculator[0m [36minstance[0m[37m:[0m [93m5[0m
+  [36mPoint[0m [36minstance[0m[37m:[0m [93m1[0m [93m2[0m
+  [36mAPP_NAME[0m = [36mRaccoon[0m [36mTest[0m
+  [36mbarrelSquare[0m([93m6[0m) = [93m36[0m
+  [36mBarrelMath[0m.[36mPI[0m = [93m3.14159[0m
+  [36mBARREL_VERSION[0m = [93m1.0[0m.[93m0[0m
+  [36mgreet[0m([92m'Raccoon'[0m) = [36mHello[0m[37m,[0m [36mRaccoon[0m!
+  ✓ [36mBarrel[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m7[0m[37m:[0m [36mImport[0m [36mOrder[0m [36mIndependence[0m
+  [36mmultiply[0m([93m4[0m[37m,[0m [93m5[0m) = [93m20[0m
+  [36mcalculateArea[0m([93m3.0[0m[37m,[0m [93m4.0[0m) = [93m12[0m
+  ✓ [36mImport[0m [36morder[0m [36mindependence[0m [36mworking[0m
+
+[36mTest[0m [93m8[0m[37m:[0m [36mMultiple[0m [36mImports[0m [36mfrom[0m [36mSame[0m [36mModule[0m
+  [36mStatus[0m.[36mActive[0m = [93m1[0m
+  [36mutilPI[0m = [93m3.14159[0m
+  [36mversion[0m = [93m1.0[0m.[93m0[0m
+  ✓ [36mMultiple[0m [36mimports[0m [36mfrom[0m [36msame[0m [36mmodule[0m [36mworking[0m
+
+[36mTest[0m [93m9[0m[37m:[0m [36mDeep[0m [36mImport[0m [36mChains[0m
+  [36mBarrelStatus[0m.[36mPending[0m = [93m0[0m
+  [36mBarrelStatus[0m.[36mCompleted[0m = [93m2[0m
+  ✓ [36mDeep[0m [36mimport[0m [36mchains[0m [36mworking[0m
+
+[36mTest[0m [93m10[0m[37m:[0m [36mUsing[0m [36mImported[0m [36mValues[0m [36min[0m [36mExpressions[0m
+  [36mRange[0m[37m:[0m [93m99[0m
+  [36mAverage[0m[37m:[0m [93m50.5[0m
+  ✓ [36mUsing[0m [36mimported[0m [36mvalues[0m [36min[0m [36mexpressions[0m [36mworking[0m
+
+[36mTest[0m [93m11[0m[37m:[0m [36mNamespace[0m [36mwith[0m [36mRe[0m-[36mexports[0m
+  [36mbarrel[0m.[36madd[0m([93m100[0m[37m,[0m [93m200[0m) = [93m300[0m
+  [36mbarrel[0m.[36mgreet[0m([92m'Module'[0m) = [36mHello[0m[37m,[0m [36mModule[0m!
+  [36mbarrel[0m.[36mBARREL_VERSION[0m = [93m1.0[0m.[93m0[0m
+  ✓ [36mNamespace[0m [36mwith[0m [36mre[0m-[36mexports[0m [36mworking[0m
+
+==================================================
+[36mALL[0m [36mADVANCED[0m [36mES[0m [36mMODULES[0m [36mTESTS[0m [36mPASSED[0m!
+==================================================
+
+[36mAdvanced[0m [36mFeatures[0m [36mTested[0m[37m:[0m
+  ✓ [36mFunction[0m [36mexpression[0m [36mexports[0m
+  ✓ [36mObject[0m [36mliteral[0m [36mexports[0m
+  ✓ [36mArray[0m [36mexports[0m
+  ✓ [36mStatic[0m [36mclass[0m [36mmember[0m [36mexports[0m
+  ✓ [36mTyped[0m [36mexports[0m
+  ✓ [36mBarrel[0m [36mexports[0m ([36mre[0m-[36mexport[0m [36maggregation[0m)
+  ✓ [36mImport[0m [36morder[0m [36mindependence[0m
+  ✓ [36mMultiple[0m [36mimports[0m [36mfrom[0m [36msame[0m [36mmodule[0m
+  ✓ [36mDeep[0m [36mimport[0m [36mchains[0m
+  ✓ [36mComplex[0m [36mexpressions[0m [36mwith[0m [36mimports[0m
+  ✓ [36mNamespace[0m [36mwith[0m [36mre[0m-[36mexports[0m
+Running test: .\tests\test_esm_modules_comprehensive.rcc
+=== [36mES[0m [36mModules[0m [36mComprehensive[0m [36mTest[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mNamed[0m [36mImports[0m
+  [36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+  [36mmultiply[0m([93m4[0m[37m,[0m [93m7[0m) = [93m28[0m
+  [36mversion[0m = [93m1.0[0m.[93m0[0m
+  [36mPI[0m = [93m3.14159[0m
+  ✓ [36mNamed[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mImport[0m [36mwith[0m [36mAlias[0m
+  [36msum[0m([93m10[0m[37m,[0m [93m20[0m) = [93m30[0m
+  [36mmult[0m([93m3[0m[37m,[0m [93m9[0m) = [93m27[0m
+  ✓ [36mImport[0m [36maliases[0m [36mworking[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mNamespace[0m [36mImport[0m
+  [36mutils[0m.[36madd[0m([93m15[0m[37m,[0m [93m25[0m) = [93m40[0m
+  [36mutils[0m.[36mmultiply[0m([93m6[0m[37m,[0m [93m7[0m) = [93m42[0m
+  [36mutils[0m.[36mversion[0m = [93m1.0[0m.[93m0[0m
+  ✓ [36mNamespace[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mDefault[0m [36mImport[0m + [36mNamed[0m [36mImports[0m
+  [36mShape[0m [36mdescription[0m[37m:[0m [36mShape[0m[37m:[0m [36mRectangle[0m
+  [36mDistance[0m [36mbetween[0m [36mpoints[0m[37m:[0m [93m5[0m
+  [36mArea[0m [36mof[0m [93m5[0m[36mx10[0m [36mrectangle[0m[37m:[0m [93m50[0m
+  ✓ [36mDefault[0m + [36mnamed[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mClass[0m [36mImports[0m [36mand[0m [36mInstantiation[0m
+  [36mInitial[0m [36mvalue[0m[37m:[0m [93m10[0m
+  [36mAfter[0m [36madd[0m([93m5[0m)[37m:[0m [93m15[0m
+  [36mAfter[0m [36mmultiply[0m([93m2[0m)[37m:[0m [93m30[0m
+  [36mAfter[0m [36mreset[0m()[37m:[0m [93m0[0m
+  ✓ [36mClass[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m6[0m[37m:[0m [36mEnum[0m [36mImports[0m
+  [36mStatus[0m.[36mPending[0m = [93m0[0m
+  [36mStatus[0m.[36mActive[0m = [93m1[0m
+  [36mStatus[0m.[36mCompleted[0m = [93m2[0m
+  [36mStatus[0m.[36mFailed[0m = [93m3[0m
+  ✓ [36mEnum[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m7[0m[37m:[0m [36mExport[0m [36mList[0m [36mImports[0m
+  [36mMAX_SIZE[0m = [93m100[0m
+  [36mMIN_SIZE[0m = [93m1[0m
+  [36mvalidateSize[0m([93m50[0m) = [93mtrue[0m
+  [36mvalidateSize[0m([93m200[0m) = [93mfalse[0m
+  ✓ [36mExport[0m [36mlist[0m [36mworking[0m
+
+[36mTest[0m [93m8[0m[37m:[0m [36mMultiple[0m [36mConstants[0m [36mImport[0m
+  [36mAPP_NAME[0m = [36mRaccoon[0m [36mTest[0m
+  [36mAPP_VERSION[0m = [93m2.0[0m.[93m0[0m
+  [36mMAX_RETRIES[0m = [93m3[0m
+  [36mTIMEOUT[0m = [93m5000[0m
+  [36mDEBUG[0m = [93mtrue[0m
+  [36mLogLevel[0m.[36mInfo[0m = [93m1[0m
+  [36mConfig[0m.[36mappName[0m = [36mRaccoon[0m [36mTest[0m
+  ✓ [36mMultiple[0m [36mconstants[0m [36mimport[0m [36mworking[0m
+
+[36mTest[0m [93m9[0m[37m:[0m [36mRe[0m-[36mexports[0m
+  [36mreSum[0m([93m8[0m[37m,[0m [93m12[0m) = [93m20[0m
+  [36mproduct[0m([93m5[0m[37m,[0m [93m6[0m) = [93m30[0m
+  [36mdivide[0m([93m100[0m[37m,[0m [93m5[0m) = [93m20[0m
+  [36mMODULE_NAME[0m = [36mReExport[0m [36mModule[0m
+  ✓ [36mRe[0m-[36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m10[0m[37m:[0m [36mStandard[0m [36mLibrary[0m [36mImports[0m
+  [36mMath[0m.[36msqrt[0m([93m144[0m) = [93m12[0m
+  [36mMath[0m.[36mpow[0m([93m2[0m[37m,[0m [93m8[0m) = [93m256[0m
+  [36mString[0m.[36mupper[0m([36mtext[0m) =   [36mHELLO[0m [36mWORLD[0m  
+Running test: .\tests\test_explicit_generics.rcc
+[93m42[0m
+[93m100[0m
+[93m400[0m
+[93m25[0m
+[36mHello[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_export_types.rcc
+[36mTypes[0m [36mand[0m [36minterfaces[0m [36mexported[0m [36msuccessfully[0m!
+[36mConfig[0m [36mcreated[0m[37m:[0m [93mtrue[0m[37m,[0m [93m5000[0m
+Running test: .\tests\test_extended_decorators.rcc
+[36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mmultiply[0m([93m4[0m[37m,[0m [93m7[0m) = [93m28[0m
+Running test: .\tests\test_ffi_import.rcc
+[36mFFI[0m [36mimported[0m [36msuccessfully[0m!
+[36mFFI[0m[37m:[0m [36mclass[0m [36mFFI[0m
+[36mFFIType[0m[37m:[0m <[36menum[0m [36mFFIType[0m>
+Running test: .\tests\test_float_modulo.rcc
+[36mFloat[0m [36mmodulo[0m[37m:[0m [93m0.8999999999999995[0m
+[36mFloat[0m % [36mint[0m[37m:[0m [93m1[0m
+[36mInt[0m % [36mfloat[0m[37m:[0m [93m1[0m
+Running test: .\tests\test_function_params.rcc
+=== [36mTesting[0m [36mFunction[0m [36mParameters[0m ===
+
+[93m1.[0m [36mBasic[0m [36mparameters[0m
+[36mAnswer[0m[37m:[0m [93m42[0m
+
+[93m2.[0m [36mDefault[0m [36mparameters[0m
+[36mHello[0m [36mAlice[0m!
+[36mHi[0m [36mBob[0m!
+[36mHey[0m [36mCharlie[0m!
+
+[93m3.[0m [36mVariadic[0m [36mparameters[0m
+[93m15[0m
+[93m30[0m
+
+[93m4.[0m [36mMix[0m [36mregular[0m + [36mvariadic[0m
+[36mItems[0m[37m:[0m [36mapple[0m[37m,[0m [36mbanana[0m[37m,[0m [36mcherry[0m
+
+[93m5.[0m [36mDefaults[0m + [36mvariadic[0m
+[36mHi[0m [36mAlice[0m [36mBob[0m [36mCharlie[0m
+[36mWelcome[0m [36mDave[0m
+
+[93m6.[0m [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mvariadic[0m
+[93m24[0m
+
+[93m7.[0m [36mArray[0m [36mdestructuring[0m
+[36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+
+=== [36mAll[0m [36mParameter[0m [36mTests[0m [36mPassed[0m ===
+Running test: .\tests\test_func_type.rcc
+=== [36mFUNC[0m [36mTYPE[0m [36mTESTS[0m ===
+
+[37m[[0m [93m1[0m [37m][0m [36mBasic[0m [36mfunc[0m [36mtype[0m [36massignment[0m
+  [36mResult[0m[37m:[0m [36mHello[0m[37m,[0m [36mAlice[0m
+
+[37m[[0m [93m2[0m [37m][0m [36mfunc[0m [36mas[0m [36mfunction[0m [36mparameter[0m
+  [36msquare[0m([93m5[0m) = [93m25[0m
+  [36mdouble[0m([93m5[0m) = [93m10[0m
+
+[37m[[0m [93m3[0m [37m][0m [36mArrays[0m [36mof[0m [36mfunc[0m
+  [36mApplying[0m [36moperations[0m [36mto[0m [93m3[0m[37m:[0m
+    [36moperations[0m[37m[[0m[93m0[0m[37m][0m([93m3[0m) = [93m9[0m
+    [36moperations[0m[37m[[0m[93m1[0m[37m][0m([93m3[0m) = [93m6[0m
+
+[37m[[0m [93m4[0m [37m][0m [36mfunc[0m [36mwith[0m [36marrow[0m [36mfunctions[0m
+  [36madd[0m([93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+  [36msubtract[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+
+[37m[[0m [93m5[0m [37m][0m [36mfunc[0m [36mreturning[0m [36mfunc[0m
+  [36maddOp[0m([93m4[0m[37m,[0m [93m3[0m) = [93m7[0m
+  [36mmulOp[0m([93m4[0m[37m,[0m [93m3[0m) = [93m12[0m
+
+[37m[[0m [93m6[0m [37m][0m [36mfunc[0m [36mwith[0m [36mdifferent[0m [36mreturn[0m [36mtypes[0m
+  [36mtoString[0m([93m42[0m) = [93m42[0m
+  [36mtoBool[0m([93m5[0m) = [93mtrue[0m
+  [36mtoBool[0m([93m-1[0m) = [93mfalse[0m
+
+[37m[[0m [93m7[0m [37m][0m [36mfunc[0m [36mwith[0m [36mhigher[0m-[36morder[0m [36marray[0m [36mmethods[0m
+  [36mOriginal[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  [36mMapped[0m ([36mincrement[0m)[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m][0m
+  [36mFiltered[0m ([36misEven[0m)[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m][0m
+  [36mReduced[0m ([36msum[0m)[37m:[0m [93m15[0m
+
+[37m[[0m [93m8[0m [37m][0m [36mMultiple[0m [36mfunc[0m [36mvariables[0m
+  [36maddFunc[0m([93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+  [36msubFunc[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+  [36mmulFunc[0m([93m10[0m[37m,[0m [93m5[0m) = [93m50[0m
+
+[37m[[0m [93m9[0m [37m][0m [36mfunc[0m [36mwith[0m [36masync[0m [36mfunctions[0m
+  [36mAsync[0m [36mresult[0m[37m:[0m [36mData_123[0m
+
+==================================================
+✅ [36mALL[0m [36mFUNC[0m [36mTYPE[0m [36mTESTS[0m [36mPASSED[0m
+==================================================
+
+[36mThe[0m [92m'func'[0m [36mtype[0m [36mworks[0m [36mas[0m [36ma[0m [36mgeneric[0m [36mfunction[0m [36mtype[0m!
+[36mIt[0m [36mcan[0m [36mrepresent[0m [36many[0m [36mfunction[0m [36msignature[0m [36mdynamically[0m.
+Running test: .\tests\test_future_api_complete.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mFuture[0m.[36mresolve[0m() ===
+[37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([93m42[0m)[37m][0m
+[36mResultado[0m [36mde[0m [36mFuture[0m.[36mresolve[0m([93m42[0m)[37m:[0m [93m42[0m
+
+=== [36mTest[0m [93m2[0m[37m:[0m [36mFuture[0m.[36mreject[0m() ===
+[37m[[0m[36mFuture[0m[37m:[0m [36mRejected[0m([36mError[0m [36mde[0m [36mprueba[0m)[37m][0m
+[36mError[0m [36mcapturado[0m[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m [36mde[0m [36mprueba[0m
+
+=== [36mTest[0m [93m3[0m[37m:[0m .[36mthen[0m() [36mcon[0m [36mcallback[0m ===
+[36mFuture1[0m [36minicial[0m[37m:[0m [93m10[0m
+[36mDentro[0m [36mde[0m .[36mthen[0m()[37m,[0m [36mvalor[0m[37m:[0m [93m10[0m
+[36mDespués[0m [36mde[0m .[36mthen[0m([36mx[0m => [36mx[0m * [93m2[0m)[37m:[0m [93m20[0m
+
+=== [36mTest[0m [93m4[0m[37m:[0m .[36mcatch[0m() [36mpara[0m [36merrores[0m ===
+[36mError[0m [36mcapturado[0m [36men[0m .[36mcatch[0m()[37m:[0m [36mAlgo[0m [36msalió[0m [36mmal[0m
+[36mValor[0m [36mdespués[0m [36mde[0m .[36mcatch[0m()[37m:[0m [36mValor[0m [36mrecuperado[0m
+
+=== [36mTest[0m [93m5[0m[37m:[0m .[36mthen[0m() [36mcon[0m [36mdos[0m [36mcallbacks[0m ===
+[36mManejado[0m [36men[0m .[36mthen[0m()[37m:[0m [36mError[0m!
+[36mResultado[0m[37m:[0m [36mManejado[0m
+
+=== [36mTest[0m [93m6[0m[37m:[0m .[36mfinally[0m() ===
+[36mEjecutando[0m [36mlimpieza[0m [36men[0m .[36mfinally[0m()
+[36mResultado[0m [36mdespués[0m [36mde[0m .[36mfinally[0m()[37m:[0m [36mOK[0m
+
+=== [36mTest[0m [93m7[0m[37m:[0m [36mFuture[0m.[36mall[0m() [36mcon[0m [36méxito[0m ===
+[36mFuture[0m.[36mall[0m() [36mresultados[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+=== [36mTest[0m [93m8[0m[37m:[0m [36mFuture[0m.[36mall[0m() [36mcon[0m [36merror[0m ===
+[36mError[0m [36men[0m [36mFuture[0m.[36mall[0m()[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m [36men[0m [36mmedio[0m
+
+=== [36mTest[0m [93m9[0m[37m:[0m [36mFuture[0m.[36mrace[0m() ===
+[36mGanador[0m [36mde[0m [36mFuture[0m.[36mrace[0m()[37m:[0m [36mPrimera[0m
+
+=== [36mTest[0m [93m10[0m[37m:[0m [36mEncadenamiento[0m [36mcomplejo[0m ===
+[36mPaso[0m [93m1[0m[37m:[0m [93m5[0m
+[36mPaso[0m [93m2[0m[37m:[0m [93m10[0m
+[36mPaso[0m [93m3[0m[37m:[0m [93m20[0m
+[36mLimpieza[0m [36mfinal[0m
+[36mValor[0m [36mfinal[0m [36mdel[0m [36mencadenamiento[0m[37m:[0m [93m17[0m
+
+=== [36mTest[0m [93m11[0m[37m:[0m .[36mthen[0m() [36mretornando[0m [36mFuture[0m ===
+[36mValor[0m [36mexterior[0m[37m:[0m [93m100[0m
+[36mResultado[0m [36manidado[0m[37m:[0m [36mResultado[0m [36manidado[0m
+
+=== [36mRESUMEN[0m ===
+✓ [36mFuture[0m.[36mresolve[0m() - [36mOK[0m
+✓ [36mFuture[0m.[36mreject[0m() - [36mOK[0m
+✓ .[36mthen[0m() - [36mOK[0m
+✓ .[36mcatch[0m() - [36mOK[0m
+✓ .[36mfinally[0m() - [36mOK[0m
+✓ [36mFuture[0m.[36mall[0m() - [36mOK[0m
+✓ [36mFuture[0m.[36mrace[0m() - [36mOK[0m
+✓ [36mEncadenamiento[0m [36mcomplejo[0m - [36mOK[0m
+
+¡[36mTodos[0m [36mlos[0m [36mtests[0m [36mde[0m [36mla[0m [36mAPI[0m [36mde[0m [36mFuture[0m [36mcompletados[0m!
+Running test: .\tests\test_future_api_simple.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mFuture[0m.[36mresolve[0m() ===
+[36mFuture[0m [36mcreado[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([93m42[0m)[37m][0m
+[36mResultado[0m[37m:[0m [93m42[0m
+
+=== [36mTest[0m [93m2[0m[37m:[0m [36mFuture[0m.[36mreject[0m() ===
+[36mFuture[0m [36mrechazado[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mRejected[0m([36mError[0m [36mde[0m [36mprueba[0m)[37m][0m
+[36mError[0m [36mcapturado[0m [36mcorrectamente[0m[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m [36mde[0m [36mprueba[0m
+
+=== [36mTest[0m [93m3[0m[37m:[0m .[36mthen[0m() [36mbásico[0m ===
+[36mValor[0m [36men[0m .[36mthen[0m()[37m:[0m [93m10[0m
+[36mFuture[0m [36mdespués[0m [36mde[0m .[36mthen[0m()[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([93m20[0m)[37m][0m
+[36mValor[0m [36mfinal[0m[37m:[0m [93m20[0m
+
+=== [36mTest[0m [93m4[0m[37m:[0m [36mFuture[0m.[36mall[0m() ===
+[36mFuture[0m.[36mall[0m() [36mresultado[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+=== [36mTest[0m [93m5[0m[37m:[0m [36mFuture[0m.[36mall[0m() [36mcon[0m [36merror[0m ===
+[36mError[0m [36men[0m [36mFuture[0m.[36mall[0m()[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m!
+
+=== [36mTest[0m [93m6[0m[37m:[0m [36mFuture[0m.[36mrace[0m() ===
+[36mGanador[0m[37m:[0m [36mPrimera[0m
+
+=== [36mTODOS[0m [36mLOS[0m [36mTESTS[0m [36mCOMPLETADOS[0m ===
+Running test: .\tests\test_future_catch_finally.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m .[36mcatch[0m() [36mfunciona[0m [36mcorrectamente[0m ===
+[36mError[0m [36mcapturado[0m [36men[0m .[36mcatch[0m()[37m:[0m [36mError[0m [36mde[0m [36mprueba[0m
+[36mValor[0m [36mdespués[0m [36mde[0m .[36mcatch[0m()[37m:[0m [36mValor[0m [36mrecuperado[0m
+
+=== [36mTest[0m [93m2[0m[37m:[0m .[36mfinally[0m() [36mfunciona[0m [36mcorrectamente[0m ===
+[36mEjecutando[0m [36mlimpieza[0m [36men[0m .[36mfinally[0m()
+[36mResultado[0m [36mdespués[0m [36mde[0m .[36mfinally[0m()[37m:[0m [36mOK[0m
+
+=== [36mTest[0m [93m3[0m[37m:[0m [36mEncadenamiento[0m .[36mthen[0m().[36mcatch[0m().[36mfinally[0m() ===
+[36mEn[0m .[36mthen[0m()[37m:[0m [93m10[0m
+[36mLimpieza[0m [36mfinal[0m [36men[0m .[36mfinally[0m()
+[36mResultado[0m [36mfinal[0m[37m:[0m [93m20[0m
+
+=== [36mTest[0m [93m4[0m[37m:[0m .[36mcatch[0m() [36mmaneja[0m [36merror[0m [36men[0m [36mcadena[0m ===
+[36mManejado[0m[37m:[0m [36mFallo[0m!
+[36mDespués[0m [36mde[0m [36mrecuperar[0m[37m:[0m [93m42[0m
+[36mResultado[0m [36mde[0m [36mcadena[0m [36mcon[0m [36merror[0m[37m:[0m [93m50[0m
+
+=== ✓ [36mTODOS[0m [36mLOS[0m [36mTESTS[0m [36mCOMPLETADOS[0m ===
+Running test: .\tests\test_future_extended_api.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mFuture[0m.[36mallSettled[0m() - [36mTodos[0m [36mresueltos[0m ===
+[36mAllSettled[0m [36mcon[0m [36méxitos[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+Running test: .\tests\test_future_object.rcc
+¿[36mExiste[0m [36mFuture[0m? <[36mtype[0m [36mFuture[0m>
+[36mTipo[0m [36mde[0m [36mFuture[0m[37m:[0m [36mtype[0m [36mFuture[0m
+Running test: .\tests\test_generics.rcc
+=== [36mGENERICS[0m [36mSYSTEM[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGeneric[0m [36mBox[0m<[36mT[0m>
+[36mInt[0m [36mbox[0m[37m:[0m [93m42[0m
+[36mString[0m [36mbox[0m[37m:[0m [36mHello[0m
+[36mUpdated[0m [36mint[0m [36mbox[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mGeneric[0m [36mPair[0m<[36mK[0m[37m,[0m [36mV[0m>
+[36mPair[0m[37m:[0m [36mage[0m = [93m25[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mGeneric[0m [36mwith[0m [36mConstraint[0m
+[36mContainer[0m [36msize[0m[37m:[0m [93m3[0m
+[36mFirst[0m [36mitem[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mOptional[0m<[36mT[0m> [36mType[0m
+[36mSome[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mtrue[0m
+[36mNone[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mfalse[0m
+[36mSome[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mNone[0m [36mdefault[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mResult[0m<[36mT[0m> [36mType[0m
+[36mGood[0m [36mresult[0m [36msuccess[0m[37m:[0m [93mtrue[0m
+[36mGood[0m [36mresult[0m [36mvalue[0m[37m:[0m [93m5[0m
+[36mBad[0m [36mresult[0m [36msuccess[0m[37m:[0m [93mfalse[0m
+[36mBad[0m [36mresult[0m [36merror[0m[37m:[0m [36mDivision[0m [36mby[0m [36mzero[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mStack[0m<[36mT[0m>
+[36mTop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36msecond[0m
+[36mIs[0m [36mempty[0m[37m:[0m [93mfalse[0m
+=== [36mALL[0m [36mGENERIC[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_generics_simple.rcc
+=== [36mGENERICS[0m [36mSYSTEM[0m [36mTEST[0m ([36mSimplified[0m) ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGeneric[0m [36mBox[0m<[36mT[0m>
+[36mInt[0m [36mbox[0m[37m:[0m [93m42[0m
+[36mString[0m [36mbox[0m[37m:[0m [36mHello[0m
+[36mUpdated[0m [36mint[0m [36mbox[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mGeneric[0m [36mPair[0m<[36mK[0m[37m,[0m [36mV[0m>
+[36mPair[0m[37m:[0m [36mage[0m = [93m25[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mGeneric[0m [36mContainer[0m<[36mT[0m>
+[36mContainer[0m [36msize[0m[37m:[0m [93m3[0m
+[36mFirst[0m [36mitem[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mOptional[0m<[36mT[0m> [36mType[0m
+[36mSome[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mtrue[0m
+[36mNone[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mfalse[0m
+[36mSome[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mNone[0m [36mdefault[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mStack[0m<[36mT[0m>
+[36mTop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36msecond[0m
+[36mIs[0m [36mempty[0m[37m:[0m [93mfalse[0m
+=== [36mALL[0m [36mGENERIC[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_generics_vs_bitwise.rcc
+[93m42[0m
+[93m32[0m
+[93m10[0m
+[93m20[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_getters_setters.rcc
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mAfter[0m [36mupdate[0m[37m:[0m
+[36mName[0m[37m:[0m [36mBob[0m
+[36mAge[0m[37m:[0m [93m35[0m
+[36mGetters[0m/[36mSetters[0m [36mtest[0m [36mcompleted[0m!
+Running test: .\tests\test_http_diagnose.rcc
+[36mresponse[0m [36mwith[0m [36mfetch[0m[37m:[0m [37m[[0m
+  [37m{[0m
+    [92m"userId"[0m[37m:[0m [93m1[0m[37m,[0m
+    [92m"id"[0m[37m:[0m [93m1[0m[37m,[0m
+    [92m"title"[0m[37m:[0m [92m"sunt aut facere repellat provident occaecati excep...[0m
+Running test: .\tests\test_import_default.rcc
+[36mTesting[0m [36mdefault[0m [36mimport[0m...
+[36mHttp[0m[37m:[0m [36mclass[0m [36mHttp[0m
+Running test: .\tests\test_import_enum.rcc
+[36mMyEnum[0m[37m:[0m <[36menum[0m [36mMyEnum[0m>
+[36mMyClass[0m[37m:[0m [36mclass[0m [36mMyClass[0m
+Running test: .\tests\test_improved_inference.rcc
+[36mType[0m [36minference[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_index_access_assignment.rcc
+[36mTesting[0m [36mindex[0m [36maccess[0m [36mand[0m [36massignment[0m [36mfor[0m [36mobjects[0m...
+
+[36mTest[0m [93m1[0m[37m:[0m [36mReading[0m [36mproperties[0m [36mwith[0m [36mindex[0m [36mnotation[0m
+  [36mconfig[0m[37m[[0m[92m"api-key"[0m[37m][0m[37m:[0m [36msecret123[0m
+  [36mconfig[0m[37m[[0m[92m"base-url"[0m[37m][0m[37m:[0m [36mhttps[0m[37m:[0m//[36mapi[0m.[36mexample[0m.[36mcom[0m
+  [36mconfig[0m[37m[[0m[92m"timeout"[0m[37m][0m[37m:[0m [93m5000[0m
+  ✓ [36mIndex[0m [36maccess[0m [36mworks[0m!
+
+[36mTest[0m [93m2[0m[37m:[0m [36mAssigning[0m [36mproperties[0m [36mwith[0m [36mindex[0m [36mnotation[0m
+  [36mAfter[0m [36massignment[0m[37m:[0m
+    [36mconfig[0m[37m[[0m[92m"api-key"[0m[37m][0m[37m:[0m [36mnew[0m-[36msecret[0m[93m-456[0m
+    [36mconfig[0m[37m[[0m[92m"version"[0m[37m][0m[37m:[0m [36mv2[0m.[93m0[0m
+    [36mconfig[0m[37m[[0m[92m"timeout"[0m[37m][0m[37m:[0m [93m10000[0m
+  ✓ [36mIndex[0m [36massignment[0m [36mworks[0m!
+
+[36mTest[0m [93m3[0m[37m:[0m [36mMixed[0m [36maccess[0m [36mpatterns[0m
+  [36muser[0m.[36mname[0m[37m:[0m [36mCarlos[0m
+  [36muser[0m[37m[[0m[92m"user-id"[0m[37m][0m[37m:[0m [93m12345[0m
+  [36muser[0m.[36memail[0m[37m:[0m [36mcarlos[0m@[36mexample[0m.[36mcom[0m
+
+  [36mAfter[0m [36mupdates[0m[37m:[0m
+  [36muser[0m.[36mname[0m[37m:[0m [36mCarlos[0m [36mLópez[0m
+  [36muser[0m[37m[[0m[92m"user-id"[0m[37m][0m[37m:[0m [93m99999[0m
+  [36muser[0m.[36memail[0m[37m:[0m [36mnew[0m@[36mexample[0m.[36mcom[0m
+  ✓ [36mMixed[0m [36maccess[0m [36mworks[0m!
+
+[36mTest[0m [93m4[0m[37m:[0m [36mDynamic[0m [36mproperty[0m [36maccess[0m
+  [36mdata[0m[37m[[0m[36mpropName[0m[37m][0m[37m:[0m [36mvalue2[0m
+  [36mAfter[0m [36mupdate[0m[37m:[0m [36mupdated[0m-[36mvalue2[0m
+  ✓ [36mDynamic[0m [36mproperty[0m [36maccess[0m [36mworks[0m!
+
+[36mAll[0m [36mtests[0m [36mpassed[0m! [36mIndex[0m [36maccess[0m [36mand[0m [36massignment[0m [36mwork[0m [36mcorrectly[0m.
+Running test: .\tests\test_inference_simple.rcc
+[36mType[0m [36minference[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_instanceof.rcc
+[36minstanceof[0m [36mresult[0m[37m:[0m [93mtrue[0m
+Running test: .\tests\test_interface.rcc
+[93m10[0m
+Running test: .\tests\test_isolated_typeargs.rcc
+[36mResult[0m[37m:[0m [93m42[0m
+Running test: .\tests\test_issue_spread_operator.rcc
+[36mTesting[0m [36mSpread[0m [36mOperator[0m...
+[36mCombined[0m [36marray[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m][0m
+[36mSpread[0m [36mwith[0m [36mliterals[0m[37m:[0m [37m[[0m[93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m7[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m][0m
+[36mCombined[0m [36mobject[0m[37m:[0m [37m{[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36md[0m[37m:[0m [93m4[0m[37m,[0m [36mc[0m[37m:[0m [93m3[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m [37m}[0m
+[36mOverride[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m1[0m[37m,[0m [36my[0m[37m:[0m [93m99[0m [37m}[0m
+[36mFunction[0m [36mspread[0m [36mresult[0m[37m:[0m [93m60[0m
+✅ [36mAll[0m [36mspread[0m [36moperator[0m [36mtests[0m [36mpassed[0m
+Running test: .\tests\test_map_complete.rcc
+=== [36mMap[0m<[36mK[0m[37m,[0m[36mV[0m> [36mImplementation[0m [36mTests[0m ===
+
+[37m[[0m [93m1[0m [37m][0m [36mBasic[0m [36mMap[0m<[36mstr[0m[37m,[0m [36mint[0m> [36moperations[0m[37m:[0m
+  [36mSet[0m [93m3[0m [36mvalues[0m
+  [36mGet[0m [92m'one'[0m[37m:[0m [93m1[0m
+  [36mGet[0m [92m'two'[0m[37m:[0m [93m2[0m
+  [36mHas[0m [92m'one'[0m[37m:[0m [93mtrue[0m
+  [36mHas[0m [92m'missing'[0m[37m:[0m [93mfalse[0m
+  [36mSize[0m[37m:[0m [93m3[0m
+  ✓ [36mTest[0m [93m1[0m [36mpassed[0m
+
+[37m[[0m [93m2[0m [37m][0m [36mMap[0m [36mdelete[0m [36moperation[0m[37m:[0m
+  [36mInitial[0m [36msize[0m[37m:[0m [93m3[0m
+  [36mDeleted[0m [92m'b'[0m[37m:[0m [93mtrue[0m
+  [36mSize[0m [36mafter[0m [36mdelete[0m[37m:[0m [93m2[0m
+  [36mHas[0m [92m'b'[0m[37m:[0m [93mfalse[0m
+  [36mDeleted[0m [36mnon[0m-[36mexistent[0m [92m'xyz'[0m[37m:[0m [93mfalse[0m
+  ✓ [36mTest[0m [93m2[0m [36mpassed[0m
+
+[37m[[0m [93m3[0m [37m][0m [36mMap[0m [36mclear[0m [36moperation[0m[37m:[0m
+  [36mSize[0m [36mbefore[0m [36mclear[0m[37m:[0m [93m3[0m
+  [36mSize[0m [36mafter[0m [36mclear[0m[37m:[0m [93m0[0m
+  [36mHas[0m [92m'x'[0m[37m:[0m [93mfalse[0m
+  ✓ [36mTest[0m [93m3[0m [36mpassed[0m
+
+[37m[[0m [93m4[0m [37m][0m [36mMap[0m [36mwith[0m [36mfloat[0m [36mvalues[0m[37m:[0m
+  [36mpi[0m = [93m3.14159[0m
+  ✓ [36mTest[0m [93m4[0m [36mpassed[0m
+
+[37m[[0m [93m5[0m [37m][0m [36mMap[0m<[36mint[0m[37m,[0m [36mstr[0m> [36mwith[0m [36mint[0m [36mkeys[0m[37m:[0m
+  [93m1[0m -> [36mone[0m
+  [93m2[0m -> [36mtwo[0m
+  [36mSize[0m[37m:[0m [93m3[0m
+  ✓ [36mTest[0m [93m5[0m [36mpassed[0m
+
+[37m[[0m [93m6[0m [37m][0m [36mMap[0m [36moverwrites[0m [36mexisting[0m [36mvalues[0m[37m:[0m
+  [36mInitial[0m [36mvalue[0m[37m:[0m [93m100[0m
+  [36mAfter[0m [36moverwrite[0m[37m:[0m [93m200[0m
+  [36mSize[0m ([36mshould[0m [36mbe[0m [93m1[0m)[37m:[0m [93m1[0m
+  ✓ [36mTest[0m [93m6[0m [36mpassed[0m
+
+[37m[[0m [93m7[0m [37m][0m [36mGet[0m [36mnon[0m-[36mexistent[0m [36mkey[0m [36mreturns[0m [93mnull[0m[37m:[0m
+  [36mNon[0m-[36mexistent[0m [36mkey[0m [36mreturns[0m [93mnull[0m ✓
+  ✓ [36mTest[0m [93m7[0m [36mpassed[0m
+
+[37m[[0m [93m8[0m [37m][0m [36mMap[0m [36mtoStr[0m() [36mmethod[0m[37m:[0m
+  [36mMap[0m [36mas[0m [36mstring[0m[37m:[0m [36mMap[0m [37m{[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m [37m}[0m
+  ✓ [36mTest[0m [93m8[0m [36mpassed[0m
+
+[37m[[0m [93m9[0m [37m][0m [36mMap[0m [36mwith[0m [36mtyped[0m [36mintegers[0m[37m:[0m
+  [36mi32[0m [36mvalue[0m[37m:[0m [93m12345[0m
+  [36mu64[0m [36mvalue[0m[37m:[0m [93m999999[0m
+  ✓ [36mTest[0m [93m9[0m [36mpassed[0m
+
+[37m[[0m [93m10[0m [37m][0m [36mNull[0m [36mcoalescing[0m [36mwith[0m [36mMap[0m.[36mget[0m()[37m:[0m
+  [36mExisting[0m [36mkey[0m ([36mwith[0m ??)[37m:[0m [93m123[0m
+  [36mMissing[0m [36mkey[0m ([36mwith[0m ??)[37m:[0m [93m-1[0m
+  ✓ [36mTest[0m [93m10[0m [36mpassed[0m
+
+[37m[[0m [93m11[0m [37m][0m [36mComplex[0m [36moperation[0m [36msequence[0m[37m:[0m
+  [36mAdded[0m [93m5[0m [36melements[0m[37m,[0m [36msize[0m[37m:[0m [93m5[0m
+  [36mDeleted[0m [93m2[0m [36melements[0m[37m,[0m [36msize[0m[37m:[0m [93m3[0m
+  [36mAdded[0m [93m1[0m [36mmore[0m [36melement[0m[37m,[0m [36msize[0m[37m:[0m [93m4[0m
+  [36mHas[0m [92m'a'[0m[37m:[0m [93mtrue[0m
+  [36mHas[0m [92m'b'[0m[37m:[0m [93mfalse[0m
+  [36mHas[0m [92m'f'[0m[37m:[0m [93mtrue[0m
+  ✓ [36mTest[0m [93m11[0m [36mpassed[0m
+
+[37m[[0m [93m12[0m [37m][0m [36mMap[0m [36mwith[0m [36mfloat[0m [36mtypes[0m[37m:[0m
+  [36mf32[0m [36msize[0m[37m:[0m [93m2[0m
+  [36mf64[0m [36msize[0m[37m:[0m [93m2[0m
+  ✓ [36mTest[0m [93m12[0m [36mpassed[0m
+
+==================================================
+✅ [36mALL[0m [36mMAP[0m [36mTESTS[0m [36mPASSED[0m [36mSUCCESSFULLY[0m!
+==================================================
+
+[36mTypes[0m [36mtested[0m[37m:[0m
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mint[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mfloat[0m>
+  • [36mMap[0m<[36mint[0m[37m,[0m [36mstr[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mi32[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mu64[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mf32[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mf64[0m>
+
+[36mOperations[0m [36mtested[0m[37m:[0m
+  • [36mset[0m([36mkey[0m[37m,[0m [36mvalue[0m)
+  • [36mget[0m([36mkey[0m) -> [36mvalue[0m?
+  • [36mhas[0m([36mkey[0m) -> [36mbool[0m
+  • [36mdelete[0m([36mkey[0m) -> [36mbool[0m
+  • [36mclear[0m()
+  • [36msize[0m() -> [36mint[0m
+  • [36mtoStr[0m() -> [36mstr[0m
+
+🎉 [36mMap[0m<[36mK[0m[37m,[0m[36mV[0m> [36mimplementation[0m [36mworking[0m [36mperfectly[0m!
+Running test: .\tests\test_map_i32.rcc
+[36mCreating[0m [36mMap[0m<[36mstr[0m[37m,[0m [36mint[0m>...
+[36mSuccess[0m [36mwith[0m [36mint[0m!
+[36mCreating[0m [36mMap[0m<[36mstr[0m[37m,[0m [36mi32[0m>...
+[36mSuccess[0m [36mwith[0m [36mi32[0m!
+Running test: .\tests\test_map_minimal.rcc
+Running test: .\tests\test_map_no_main.rcc
+[36mTesting[0m [36mMap[0m [36mbasic[0m [36moperations[0m
+
+[36mMap[0m [36mcreated[0m
+[36mValue[0m [36mset[0m
+[36mv1[0m[37m:[0m [93m1[0m
+[36mv2[0m[37m:[0m [93m2[0m
+[36mv3[0m[37m:[0m [93m3[0m
+[36mHas[0m [92m'one'[0m[37m:[0m [93mtrue[0m
+[36mHas[0m [92m'missing'[0m[37m:[0m [93mfalse[0m
+[36mSize[0m[37m:[0m [93m3[0m
+[36mDeleted[0m [92m'two'[0m[37m:[0m [93mtrue[0m
+[36mSize[0m [36mafter[0m [36mdelete[0m[37m:[0m [93m2[0m
+[36mSize[0m [36mafter[0m [36mclear[0m[37m:[0m [93m0[0m
+
+✓ [36mAll[0m [36mMap[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_module_math.rcc
+Running test: .\tests\test_module_utils.rcc
+Running test: .\tests\test_named_args.rcc
+=== [36mTest[0m [36mde[0m [36margumentos[0m [36mnombrados[0m ===
+
+[36mLlamada[0m [36mposicional[0m[37m:[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mCity[0m[37m:[0m [36mMadrid[0m
+
+[36mLlamada[0m [36mcon[0m [36margumentos[0m [36mnombrados[0m[37m:[0m
+[36mName[0m[37m:[0m [36mBob[0m
+[36mAge[0m[37m:[0m [93m25[0m
+[36mCity[0m[37m:[0m [36mBarcelona[0m
+
+[36mLlamada[0m [36mmixta[0m[37m:[0m
+[36mName[0m[37m:[0m [36mCharlie[0m
+[36mAge[0m[37m:[0m [93m35[0m
+[36mCity[0m[37m:[0m [36mValencia[0m
+
+=== [36mTest[0m [36mcompletado[0m ===
+Running test: .\tests\test_named_args_comprehensive.rcc
+=== [36mTest[0m [36mCompleto[0m [36mde[0m [36mArgumentos[0m [36mNombrados[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mArgumentos[0m [36mnombrados[0m [36men[0m [36morden[0m [36mdiferente[0m
+[36mHost[0m[37m:[0m [36mlocalhost[0m [36mPort[0m[37m:[0m [93m8080[0m [36mSSL[0m[37m:[0m [93mtrue[0m
+[36mHost[0m[37m:[0m [36mexample[0m.[36mcom[0m [36mPort[0m[37m:[0m [93m3000[0m [36mSSL[0m[37m:[0m [93mfalse[0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mValores[0m [36mpor[0m [36mdefecto[0m
+[36mName[0m[37m:[0m [36mAlice[0m [36mAge[0m[37m:[0m [93m18[0m [36mActive[0m[37m:[0m [93mtrue[0m
+[36mName[0m[37m:[0m [36mBob[0m [36mAge[0m[37m:[0m [93m25[0m [36mActive[0m[37m:[0m [93mtrue[0m
+[36mName[0m[37m:[0m [36mCharlie[0m [36mAge[0m[37m:[0m [93m18[0m [36mActive[0m[37m:[0m [93mfalse[0m
+[36mName[0m[37m:[0m [36mDiana[0m [36mAge[0m[37m:[0m [93m30[0m [36mActive[0m[37m:[0m [93mfalse[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mMezcla[0m [36mde[0m [36mposicionales[0m [36my[0m [36mnombrados[0m
+[36mFrom[0m[37m:[0m [36mMadrid[0m [36mTo[0m[37m:[0m [36mBarcelona[0m [36mDate[0m[37m:[0m [93m2024[0m[93m-01[0m[93m-15[0m [36mClass[0m[37m:[0m [36meconomy[0m
+[36mFrom[0m[37m:[0m [36mMadrid[0m [36mTo[0m[37m:[0m [36mBarcelona[0m [36mDate[0m[37m:[0m [93m2024[0m[93m-01[0m[93m-15[0m [36mClass[0m[37m:[0m [36mbusiness[0m
+[36mFrom[0m[37m:[0m [36mMadrid[0m [36mTo[0m[37m:[0m [36mBarcelona[0m [36mDate[0m[37m:[0m [93m2024[0m[93m-01[0m[93m-15[0m [36mClass[0m[37m:[0m [36meconomy[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mFunciones[0m [36mcon[0m [36mretorno[0m
+[93m5[0m + [93m3[0m = [93m8[0m
+[93m5[0m * [93m3[0m = [93m15[0m
+[93m5[0m * [93m3[0m = [93m15[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mDiferentes[0m [36mtipos[0m [36mde[0m [36mdatos[0m
+[36mMessage[0m [93m1[0m[37m:[0m [36mHELLO[0m [36mHELLO[0m [36mHELLO[0m 
+[36mMessage[0m [93m2[0m[37m:[0m [36mworld[0m [36mworld[0m 
+
+[36mTest[0m [93m6[0m[37m:[0m [36mSolo[0m [36margumentos[0m [36mnombrados[0m
+[36mDebug[0m[37m:[0m [93mtrue[0m [36mVerbose[0m[37m:[0m [93mfalse[0m [36mLogLevel[0m[37m:[0m [36minfo[0m
+[36mDebug[0m[37m:[0m [93mfalse[0m [36mVerbose[0m[37m:[0m [93mtrue[0m [36mLogLevel[0m[37m:[0m [36mdebug[0m
+
+=== [36mTodos[0m [36mlos[0m [36mtests[0m [36mcompletados[0m [36mexitosamente[0m ===
+Running test: .\tests\test_new_features.rcc
+=== [36mTesting[0m [36mSwitch[0m/[36mCase[0m ===
+[36mWednesday[0m
+
+=== [36mTesting[0m [36mDo[0m-[36mWhile[0m ===
+[36mi[0m = [93m0[0m
+[36mi[0m = [93m1[0m
+[36mi[0m = [93m2[0m
+
+=== [36mTesting[0m [36mFor[0m-[36mOf[0m ===
+[36mItem[0m[37m:[0m [93m10[0m
+[36mItem[0m[37m:[0m [93m20[0m
+[36mItem[0m[37m:[0m [93m30[0m
+
+=== [36mTesting[0m [36mString[0m [36mMethods[0m ===
+[36mrepeat[0m([93m3[0m)[37m:[0m [36mhellohellohello[0m
+[36mpadStart[0m([93m10[0m[37m,[0m [92m'*'[0m)[37m:[0m *****[36mhello[0m
+[36mpadEnd[0m([93m10[0m[37m,[0m [92m'-'[0m)[37m:[0m [36mhello[0m-----
+[36mlastIndexOf[0m([92m'l'[0m)[37m:[0m [93m3[0m
+[36mcharCodeAt[0m([93m0[0m)[37m:[0m [93m104[0m
+
+=== [36mTesting[0m [36mArray[0m [36mMethods[0m ===
+[36mindexOf[0m([93m3[0m)[37m:[0m [93m2[0m
+[36mincludes[0m([93m4[0m)[37m:[0m [93mtrue[0m
+[36mat[0m([93m-1[0m)[37m:[0m [93m5[0m
+[36mAfter[0m [36mfill[0m([93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m)[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m0[0m[37m,[0m [93m3[0m[37m][0m
+[36mFlat[0m [36mresult[0m [36mlength[0m[37m:[0m [93m4[0m
+
+=== [36mTesting[0m [36mObject[0m [36mMethods[0m ===
+[36mObject[0m.[36mkeys[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36mvalues[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36massign[0m [36mworks[0m[37m:[0m [93m2[0m
+
+=== [36mAll[0m [36mtests[0m [36mcompleted[0m! ===
+Running test: .\tests\test_new_types.rcc
+=== [36mTipos[0m [36mEnteros[0m [36mcon[0m [36mSigno[0m ===
+[36mi8[0m[37m:[0m  [93m-128[0m
+[36mi16[0m[37m:[0m [93m-32768[0m
+[36mi32[0m[37m:[0m [93m-2147483648[0m
+[36mi64[0m[37m:[0m [93m-9223372036854775807[0m
+
+=== [36mTipos[0m [36mEnteros[0m [36msin[0m [36mSigno[0m ===
+[36mu8[0m[37m:[0m  [93m255[0m
+[36mu16[0m[37m:[0m [93m65535[0m
+[36mu32[0m[37m:[0m [93m4294967295[0m
+[36mu64[0m[37m:[0m [93m9223372036854775807[0m
+
+=== [36mTipos[0m [36mPunto[0m [36mFlotante[0m ===
+[36mf32[0m[37m:[0m     [93m3.14159[0m
+[36mf64[0m[37m:[0m     [93m2.718281828459045[0m
+[36mdecimal[0m[37m:[0m [93m123.456789[0m
+
+=== [36mConversiones[0m [36mAutomáticas[0m ===
+[36mi8[0m -> [36mi64[0m[37m:[0m     [93m-128[0m
+[36mf32[0m -> [36mf64[0m[37m:[0m    [93m3.14159[0m
+[36mi32[0m -> [36mdecimal[0m[37m:[0m [93m-2147483648[0m
+
+=== [36mResultados[0m [36mde[0m [36mFunciones[0m ===
+[36maddI32[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m     [93m30[0m
+[36mmultiplyF64[0m([93m3.14[0m[37m,[0m [93m2.0[0m)[37m:[0m [93m6.28[0m
+[36mDecimal[0m[37m:[0m [93m123.456789[0m
+
+=== [36mArrays[0m [36mcon[0m [36mNuevos[0m [36mTipos[0m ===
+[36mi32[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[36mf64[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m1.1[0m[37m,[0m [93m2.2[0m[37m,[0m [93m3.3[0m[37m,[0m [93m4.4[0m[37m,[0m [93m5.5[0m[37m][0m
+[36mdecimal[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m10.5[0m[37m,[0m [93m20.75[0m[37m,[0m [93m30.25[0m[37m][0m
+
+✅ [36mTodos[0m [36mlos[0m [36mtipos[0m [36mfuncionan[0m [36mcorrectamente[0m!
+Running test: .\tests\test_no_conflict_generics_bitwise.rcc
+[93m16[0m
+[93m64[0m
+[93m8[0m
+[93m6[0m
+[93m40[0m
+[93m10[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_no_recursion.rcc
+[36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mHello[0m[37m,[0m [36mAlice[0m
+Running test: .\tests\test_null_safety_operators.rcc
+====================================
+[36mNULL[0m [36mSAFETY[0m [36mOPERATORS[0m [36mTEST[0m [36mSUITE[0m
+====================================
+✓ [36mTest[0m [93m1[0m [36mpassed[0m[37m:[0m [36mNull[0m [36mcoalescing[0m [36moperator[0m [36mworks[0m
+✓ [36mTest[0m [93m2[0m [36mpassed[0m[37m:[0m [36mChained[0m [93mnull[0m [36mcoalescing[0m [36mworks[0m
+⊘ [36mTest[0m [93m3[0m [36mskipped[0m[37m:[0m [36mInline[0m [36mobject[0m [36mtypes[0m [36mnot[0m [36myet[0m [36msupported[0m
+⊘ [36mTest[0m [93m4[0m [36mskipped[0m[37m:[0m [36mInline[0m [36mobject[0m [36mtypes[0m [36mnot[0m [36myet[0m [36msupported[0m
+✓ [36mTest[0m [93m5[0m [36mpassed[0m[37m:[0m [36mNull[0m [36massertion[0m [36mon[0m [36mnon[0m-[93mnull[0m [36mvalue[0m [36mworks[0m
+✓ [36mTest[0m [93m6[0m [36mpassed[0m[37m:[0m [36mBasic[0m [36mternary[0m [36moperator[0m [36mworks[0m
+✓ [36mTest[0m [93m7[0m [36mpassed[0m[37m:[0m [36mNested[0m [36mternary[0m [36moperators[0m [36mwork[0m
+✓ [36mTest[0m [93m8[0m [36mpassed[0m[37m:[0m [36mPrefix[0m [36mincrement[0m [36mworks[0m
+✓ [36mTest[0m [93m9[0m [36mpassed[0m[37m:[0m [36mPostfix[0m [36mincrement[0m [36mworks[0m
+✓ [36mTest[0m [93m10[0m [36mpassed[0m[37m:[0m [36mPrefix[0m [36mdecrement[0m [36mworks[0m
+✓ [36mTest[0m [93m11[0m [36mpassed[0m[37m:[0m [36mPostfix[0m [36mdecrement[0m [36mworks[0m
+✓ [36mTest[0m [93m12[0m [36mpassed[0m[37m:[0m [36mIncrement[0m [36min[0m [36mfor[0m [36mloop[0m [36mworks[0m
+✓ [36mTest[0m [93m13[0m [36mpassed[0m[37m:[0m [36mCombined[0m [36moperators[0m [36mwork[0m
+✓ [36mTest[0m [93m14[0m [36mpassed[0m[37m:[0m [36mTernary[0m [36min[0m [36mcomplex[0m [36mexpression[0m [36mworks[0m
+✓ [36mTest[0m [93m15[0m [36mpassed[0m[37m:[0m [36mFloat[0m [36mincrement[0m/[36mdecrement[0m [36mworks[0m
+====================================
+[36mTEST[0m [36mSUITE[0m [36mCOMPLETE[0m
+====================================
+Running test: .\tests\test_null_safety_simple.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mNull[0m [36mCoalescing[0m ===
+[36mdefault[0m
+=== [36mTest[0m [93m2[0m[37m:[0m [36mConditional[0m ===
+[36madult[0m
+=== [36mTest[0m [93m3[0m[37m:[0m [36mPrefix[0m [36mIncrement[0m ===
+[93m6[0m
+[93m6[0m
+=== [36mTest[0m [93m4[0m[37m:[0m [36mPostfix[0m [36mIncrement[0m ===
+[93m6[0m
+[93m5[0m
+=== [36mTest[0m [93m5[0m[37m:[0m [36mNull[0m [36mAssertion[0m ===
+[36mhello[0m
+Running test: .\tests\test_object_spread.rcc
+[36mCombined[0m[37m:[0m [37m{[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m[37m,[0m [36md[0m[37m:[0m [93m4[0m[37m,[0m [36mc[0m[37m:[0m [93m3[0m [37m}[0m
+[36mOverride[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m1[0m[37m,[0m [36my[0m[37m:[0m [93m99[0m [37m}[0m
+Running test: .\tests\test_object_string_keys.rcc
+[36mTesting[0m [36mstring[0m [36mliterals[0m [36mas[0m [36mobject[0m [36mkeys[0m...
+✓ [36mCreated[0m [36mobject[0m [36mwith[0m [36mstring[0m [36mliteral[0m [36mkeys[0m
+  [36mContent[0m-[36mType[0m[37m:[0m [36mapplication[0m/[36mjson[0m
+  [36mAuthorization[0m[37m:[0m [36mBearer[0m [36mtoken123[0m
+  [36mX[0m-[36mCustom[0m-[36mHeader[0m[37m:[0m [36mcustom[0m [36mvalue[0m
+
+✓ [36mCreated[0m [36mobject[0m [36mwith[0m [36mmixed[0m [36mkey[0m [36mtypes[0m
+  [36mname[0m[37m:[0m [36mCarlos[0m
+  [36mfull[0m-[36mname[0m[37m:[0m [36mCarlos[0m [36mLópez[0m
+  [36mage[0m[37m:[0m [93m25[0m
+  [36muser[0m-[36mid[0m[37m:[0m [93m12345[0m
+
+✓ [36mCreated[0m [36mnested[0m [36mobject[0m [36mwith[0m [36mstring[0m [36mkeys[0m
+  [36mAPI[0m [36mbase[0m [36mURL[0m[37m:[0m [36mhttps[0m[37m:[0m//[36mapi[0m.[36mexample[0m.[36mcom[0m
+  [36mAPI[0m [36mtimeout[0m[37m:[0m [93m5000[0m
+  [36mContent[0m-[36mType[0m[37m:[0m [36mapplication[0m/[36mjson[0m
+
+[36mAll[0m [36mtests[0m [36mpassed[0m! [36mString[0m [36mliterals[0m [36mas[0m [36mobject[0m [36mkeys[0m [36mwork[0m [36mcorrectly[0m.
+Running test: .\tests\test_optional_params_simple.rcc
+[36mTesting[0m [36moptional[0m [36mparameters[0m...
+
+[36mName[0m[37m:[0m [36mAlice[0m
+✓ [36mCalled[0m [36mwith[0m [36mrequired[0m [36mparam[0m [36monly[0m
+
+[36mName[0m[37m:[0m [36mBob[0m
+✓ [36mCalled[0m [36mwith[0m [36mboth[0m [36mparams[0m
+
+[36mtest[0m
+[36mtest[0m
+[36mtest[0m
+✓ [36mMultiple[0m [36moptional[0m [36mparameters[0m [36mworking[0m
+
+=== [36mALL[0m [36mOPTIONAL[0m [36mPARAMETER[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_params_comprehensive.rcc
+=== [36mCOMPREHENSIVE[0m [36mFUNCTION[0m [36mPARAMETERS[0m [36mTEST[0m ===
+
+[93m1.[0m [36mBasic[0m [36mpositional[0m [36mparameters[0m
+  [36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+
+[93m2.[0m [36mNamed[0m [36marguments[0m
+  [36mPositional[0m[37m:[0m [36mlocalhost[0m[37m:[0m[93m8080[0m ([36mSSL[0m[37m:[0m [93mtrue[0m)
+  [36mNamed[0m[37m:[0m [36mexample[0m.[36mcom[0m[37m:[0m[93m3000[0m ([36mSSL[0m[37m:[0m [93mfalse[0m)
+  [36mMixed[0m[37m:[0m [36mserver[0m.[36mcom[0m[37m:[0m[93m443[0m ([36mSSL[0m[37m:[0m [93mtrue[0m)
+
+[93m3.[0m [36mDefault[0m [36mvalues[0m
+  [36mAll[0m [36mdefaults[0m[37m:[0m [36mHello[0m [36mAlice[0m!
+  [36mOne[0m [36moverride[0m[37m:[0m [36mHi[0m [36mBob[0m!
+  [36mAll[0m [36mspecified[0m[37m:[0m [36mHey[0m [36mCharlie[0m!!!
+  [36mNamed[0m [36moverride[0m[37m:[0m [36mHello[0m [36mDave[0m?
+
+[93m4.[0m [36mVariadic[0m [36mparameters[0m
+  [36msum[0m([93m1[0m[37m,[0m[93m2[0m[37m,[0m[93m3[0m[37m,[0m[93m4[0m[37m,[0m[93m5[0m) = [93m15[0m
+  [36msum[0m([93m10[0m[37m,[0m[93m20[0m[37m,[0m[93m30[0m) = [93m60[0m
+  [36msum[0m() = [93m0[0m
+
+[93m5.[0m [36mPositional[0m + [36mVariadic[0m
+  [36mItems[0m[37m:[0m [36mapple[0m [36mbanana[0m [36mcherry[0m
+  [36mEmpty[0m[37m:[0m
+  [36mSingle[0m[37m:[0m [36mitem[0m
+
+[93m6.[0m [36mDefaults[0m + [36mVariadic[0m
+  [37m[[0m[36mERROR[0m[37m][0m [36mFailed[0m [36mto[0m [36mconnect[0m
+  [37m[[0m[36mWARN[0m[37m][0m [36mLow[0m [36mmemory[0m
+  [37m[[0m[36mINFO[0m[37m][0m [36mSingle[0m [36mmessage[0m
+
+[93m7.[0m [36mNamed[0m + [36mDefaults[0m + [36mVariadic[0m
+  [36mhttps[0m[37m:[0m//[36mexample[0m.[36mcom[0m/[36mapi[0m/[36mv1[0m/[36musers[0m
+  [36mhttp[0m[37m:[0m//[36mlocalhost[0m/[36madmin[0m
+  [36mhttps[0m[37m:[0m//[36msite[0m.[36mcom[0m
+
+[93m8.[0m [36mArray[0m [36mdestructuring[0m
+  [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+  [36mx[0m=[93m100[0m[37m,[0m [36my[0m=[93m200[0m
+  [36mswapped[0m [37m[[0m[93m1[0m[37m,[0m[93m2[0m[37m][0m = [37m[[0m[93m2[0m[37m,[0m[93m1[0m[37m][0m
+
+[93m9.[0m [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mvariadic[0m
+  [36mmultiply[0m([93m2[0m[37m,[0m[93m3[0m[37m,[0m[93m4[0m) = [93m24[0m
+  [36mconcat[0m([92m'-'[0m[37m,[0m [92m'a'[0m[37m,[0m[92m'b'[0m[37m,[0m[92m'c'[0m) = [36ma[0m-[36mb[0m-[36mc[0m
+
+[93m10.[0m [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mdefaults[0m
+  [36mpower[0m([93m3[0m) = [93m9[0m
+  [36mpower[0m([93m2[0m[37m,[0m [93m5[0m) = [93m32[0m
+
+[93m11.[0m [36mComplex[0m [36mcombinations[0m
+  [37m[[0m[36mbatch[0m|[36mfast[0m|[93m0[0m[93m-10[0m[37m][0m [36mfile1[0m [36mfile2[0m [36mfile3[0m
+  [37m[[0m[36msingle[0m|[36mdata[0m|[93m5[0m[93m-15[0m[37m][0m
+
+[93m12.[0m [36mNamed[0m [36marguments[0m [36mcomprehensive[0m
+  [36mAll[0m [36mdefaults[0m[37m:[0m [36mlocalhost[0m[37m:[0m[93m8080[0m [36mtimeout[0m[37m:[0m[93m30[0m [36mretries[0m[37m:[0m[93m3[0m
+  [36mNamed[0m [36moverride[0m[37m:[0m [36mapi[0m.[36mcom[0m[37m:[0m[93m8080[0m [36mtimeout[0m[37m:[0m[93m60[0m [36mretries[0m[37m:[0m[93m3[0m
+  [36mMixed[0m [36morder[0m[37m:[0m [36mdb[0m.[36mlocal[0m[37m:[0m[93m5432[0m [36mtimeout[0m[37m:[0m[93m30[0m [36mretries[0m[37m:[0m[93m5[0m
+
+[93m13.[0m [36mVariadic[0m [36mwith[0m [36mdifferent[0m [36mtypes[0m
+  [36maverage[0m([93m10[0m[37m,[0m[93m20[0m[37m,[0m[93m30[0m[37m,[0m[93m40[0m) = [93m25[0m
+  [36maverage[0m([93m5[0m[37m,[0m[93m15[0m) = [93m10[0m
+
+[93m14.[0m [36mNested[0m [36mcalls[0m [36mwith[0m [36mvariadic[0m
+  [36mmin[0m([93m5[0m[37m,[0m[93m2[0m[37m,[0m[93m8[0m[37m,[0m[93m1[0m[37m,[0m[93m9[0m) = [93m1[0m
+  [36mmax[0m([93m5[0m[37m,[0m[93m2[0m[37m,[0m[93m8[0m[37m,[0m[93m1[0m[37m,[0m[93m9[0m) = [93m9[0m
+
+[93m15.[0m [36mEdge[0m [36mcases[0m
+  [36mEmpty[0m [36mvariadic[0m[37m:[0m [93m0[0m
+  [36mOnly[0m [36mvariadic[0m ([93m3[0m [36margs[0m)[37m:[0m [93m3[0m
+  [36mMany[0m [36mparams[0m[37m:[0m [93m36[0m
+  [36mMany[0m [36mparams[0m ([36mall[0m)[37m:[0m [93m15[0m
+
+=== [36mALL[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_partial_sections_1_10.rcc
+╔════════════════════════════════════════════════════════════════╗
+║     [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+[37m[[0m[93m1[0m[37m][0m [36mPRIMITIVE[0m [36mTYPES[0m & [36mLITERALS[0m
+  ✓ [36mInteger[0m [36mliterals[0m[37m:[0m [93m42[0m[37m,[0m [93m-100[0m[37m,[0m [93m999999999[0m
+  ✓ [36mFloat[0m [36mliterals[0m[37m:[0m [93m3.14159[0m[37m,[0m [93m-2.5[0m[37m,[0m [93m1.5[0m
+  ✓ [36mString[0m [36mliterals[0m[37m:[0m [36mhello[0m [36mworld[0m[37m,[0m [36mempty[0m=[92m""[0m
+  ✓ [36mBoolean[0m [36mliterals[0m[37m:[0m [93mtrue[0m[37m,[0m [93mfalse[0m
+  ✓ [36mNull[0m [36mliteral[0m[37m:[0m [93mnull[0m
+  ✓ [36mTemplate[0m [36mstrings[0m[37m:[0m [36mLanguage[0m[37m:[0m [36mRaccoon[0m[37m,[0m [36mVersion[0m[37m:[0m [93m1[0m
+
+[37m[[0m[93m2[0m[37m][0m [36mOPERATORS[0m
+  ✓ [36mArithmetic[0m[37m:[0m +=[93m13[0m[37m,[0m -=[93m7[0m[37m,[0m *=[93m30[0m[37m,[0m /=[93m3.3333333333333335[0m[37m,[0m %=[93m1[0m[37m,[0m **=[93m8[0m
+  ✓ [36mComparison[0m[37m:[0m ==[93mfalse[0m[37m,[0m !=[93mtrue[0m[37m,[0m <[93mfalse[0m[37m,[0m >[93mtrue[0m
+  ✓ [36mLogical[0m[37m:[0m &&=[93mfalse[0m[37m,[0m ||=[93mtrue[0m[37m,[0m !=[93mfalse[0m
+  ✓ [36mBitwise[0m[37m:[0m &=[93m1[0m[37m,[0m |=[93m7[0m[37m,[0m ^=[93m6[0m[37m,[0m ~=[93m-6[0m
+    [36mShifts[0m[37m:[0m <<=[93m10[0m[37m,[0m >>=[93m2[0m[37m,[0m >>>=[93m2[0m
+  ✓ [36mAssignment[0m [36moperators[0m[37m:[0m [36mresult[0m=[93m0[0m
+  ✓ [36mCompound[0m [36mbitwise[0m [36massignment[0m[37m:[0m [36mresult[0m=[93m1[0m
+  ✓ [36mInc[0m/[36mDec[0m[37m:[0m [36mpost[0m++=[93m6[0m[37m,[0m ++[36mpre[0m=[93m7[0m[37m,[0m [36mpost[0m--=[93m6[0m[37m,[0m --[36mpre[0m=[93m5[0m
+  ✓ [36mRange[0m [36moperator[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mNull[0m [36mcoalescing[0m[37m:[0m [93m42[0m
+  ✓ [36mTernary[0m [36moperator[0m[37m:[0m [93m10[0m
+
+[37m[[0m[93m3[0m[37m][0m [36mVARIABLES[0m & [36mCONSTANTS[0m
+  ✓ [36mLet[0m [36mdeclarations[0m[37m:[0m [93m100[0m[37m,[0m [36mtyped[0m[37m,[0m [93m42[0m
+  ✓ [36mConst[0m [36mdeclarations[0m[37m:[0m [93m999[0m[37m,[0m [36mimmutable[0m
+  ✓ [36mVariable[0m [36mshadowing[0m[37m:[0m [36minner[0m=[93m2[0m
+    [36mouter[0m=[93m1[0m
+
+[37m[[0m[93m4[0m[37m][0m [36mCONTROL[0m [36mFLOW[0m
+  ✓ [36mIf[0m [36mstatement[0m[37m:[0m [36mcondition[0m [93mtrue[0m
+  ✓ [36mIf[0m-[36melse[0m [36mstatement[0m[37m:[0m [36melse[0m [36mbranch[0m
+  ✓ [36mIf[0m-[36melse[0m-[36mif[0m [36mchain[0m[37m:[0m [36mgrade[0m [36mB[0m
+  ✓ [36mWhile[0m [36mloop[0m[37m:[0m [36miterations[0m=[93m3[0m
+  ✓ [36mFor[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mFor[0m-[36min[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mBreak[0m [36mstatement[0m[37m:[0m [36mstopped[0m [36mat[0m [93m3[0m
+  ✓ [36mContinue[0m [36mstatement[0m[37m:[0m [36msum[0m=[93m12[0m ([36mskipped[0m [93m3[0m)
+
+[37m[[0m[93m5[0m[37m][0m [36mFUNCTIONS[0m
+  ✓ [36mBasic[0m [36mfunction[0m[37m:[0m [93m42[0m
+  ✓ [36mFunction[0m [36mwith[0m [36mparams[0m[37m:[0m [93m30[0m
+  ✓ [36mOptional[0m [36mparameters[0m[37m:[0m [93m5[0m[37m,[0m [93m5[0m
+  ✓ [36mDefault[0m [36mparameters[0m[37m:[0m [93m15[0m[37m,[0m [93m25[0m
+  ✓ [36mRest[0m [36mparameters[0m[37m:[0m [93m15[0m
+  ✓ [36mArrow[0m [36mfunction[0m[37m:[0m [93m12[0m
+  ✓ [36mArrow[0m [36mexpression[0m[37m:[0m [93m10[0m
+  ✓ [36mArrow[0m [36mblock[0m[37m:[0m [93m11[0m
+  ✓ [36mHigher[0m-[36morder[0m [36mfunction[0m[37m:[0m [93m20[0m
+  ✓ [36mRecursive[0m [36mfunction[0m[37m:[0m [93m120[0m
+  ✓ [36mNamed[0m [36marguments[0m[37m:[0m [93m6[0m
+
+[37m[[0m[93m6[0m[37m][0m [36mARRAYS[0m & [36mCOLLECTIONS[0m
+  ✓ [36mArray[0m [36mliterals[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m[37m,[0m [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+  ✓ [36mArray[0m [36mindexing[0m[37m:[0m [93m20[0m
+  ✓ [36mArray[0m [36massignment[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mArray[0m [36mlength[0m[37m:[0m [93m3[0m
+  ✓ [36mArray[0m [36mpush[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m][0m
+  ✓ [36mArray[0m [36mpop[0m[37m:[0m [93m40[0m[37m,[0m [36mremaining[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mNested[0m [36marrays[0m[37m:[0m [93m2[0m
+  ✓ [36mArray[0m [36mspread[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m][0m
+
+[37m[[0m[93m7[0m[37m][0m [36mOBJECTS[0m & [36mMAPS[0m
+  ✓ [36mObject[0m [36mliteral[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mObject[0m [36mproperty[0m[37m:[0m [93m10[0m
+  ✓ [36mObject[0m [36massignment[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m99[0m [37m}[0m
+  ✓ [36mComputed[0m [36mproperty[0m[37m:[0m [93m20[0m
+  ✓ [36mObject[0m [36mshorthand[0m[37m:[0m [37m{[0m [36mpropX[0m[37m:[0m [93m100[0m[37m,[0m [36mpropY[0m[37m:[0m [93m200[0m [37m}[0m
+  ✓ [36mNested[0m [36mobject[0m[37m:[0m [93m42[0m
+
+[37m[[0m[93m8[0m[37m][0m [36mCLASSES[0m
+  ✓ [36mBasic[0m [36mclass[0m[37m:[0m [93m42[0m
+  ✓ [36mClass[0m [36mproperties[0m[37m:[0m [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+  ✓ [36mClass[0m [36mmethods[0m[37m:[0m [36mdoubled[0m=[93m10[0m[37m,[0m [36madded[0m=[93m15[0m
+  ✓ [36mClass[0m [36minheritance[0m[37m:[0m [93m30[0m
+  ✓ [36mStatic[0m [36mmembers[0m[37m:[0m [93m200[0m
+  ✓ [36mPrivate[0m [36mproperties[0m[37m:[0m [93m42[0m
+  ✓ [36mGetters[0m/[36mSetters[0m[37m:[0m [36mold[0m=[93m10[0m[37m,[0m [36mnew[0m=[93m20[0m
+
+[37m[[0m[93m9[0m[37m][0m [36mINTERFACES[0m & [36mTYPE[0m [36mALIASES[0m
+  ✓ [36mBasic[0m [36minterface[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mInterface[0m [36mimplementation[0m[37m:[0m [93m15[0m
+  ✓ [36mType[0m [36malias[0m[37m:[0m [36mnum[0m=[93m42[0m[37m,[0m [36mstr[0m=[36mhello[0m
+  ✓ [36mInterface[0m [36mextends[0m[37m:[0m [37m{[0m [36mname[0m[37m:[0m [36mAlice[0m[37m,[0m [36mage[0m[37m:[0m [93m30[0m [37m}[0m
+
+[37m[[0m[93m10[0m[37m][0m [36mENUMS[0m
+  ✓ [36mNumeric[0m [36menum[0m[37m:[0m [93m1[0m
+  ✓ [36mString[0m [36menum[0m[37m:[0m [36mRED[0m
+  ✓ [36mMixed[0m [36menum[0m[37m:[0m [36mthree[0m
+
+[37m[[0m[93m11[0m[37m][0m [36mGENERICS[0m
+  ✓ [36mGeneric[0m [36mfunction[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+Running test: .\tests\test_raccoon_modules.rcc
+Running test: .\tests\test_recursion_debug.rcc
+Running test: .\tests\test_recursion_limit.rcc
+[36mCall[0m[37m:[0m [93m0[0m
+[36mCall[0m[37m:[0m [93m1[0m
+[36mCall[0m[37m:[0m [93m2[0m
+[36mCall[0m[37m:[0m [93m3[0m
+[36mCall[0m[37m:[0m [93m4[0m
+[36mCall[0m[37m:[0m [93m5[0m
+[36mCall[0m[37m:[0m [93m6[0m
+[36mCall[0m[37m:[0m [93m7[0m
+Running test: .\tests\test_rest_params.rcc
+[36mGot[0m [93m3[0m [36marguments[0m
+[36mArgs[0m[37m:[0m [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+[36ma[0m [36mb[0m [36mc[0m
+Running test: .\tests\test_return_type_inference.rcc
+[36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mmax[0m([93m10[0m[37m,[0m [93m20[0m) = [93m20[0m
+[36mgetName[0m() = [36mAlice[0m
+[36misPositive[0m([93m5[0m) = [93mtrue[0m
+[36mmultiply[0m([93m4[0m[37m,[0m [93m5[0m) = [93m20[0m
+[36msubtract[0m([93m10[0m[37m,[0m [93m3[0m) = [93m7[0m
+[36mHello[0m[37m,[0m [36mBob[0m
+Running test: .\tests\test_section_11_generics.rcc
+[36mTesting[0m [36mGenerics[0m...
+  ✓ [36mGeneric[0m [36mfunction[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mGeneric[0m [36mclass[0m[37m:[0m [93m42[0m[37m,[0m [36mboxed[0m
+  ✓ [36mGeneric[0m [36minterface[0m[37m:[0m [37m{[0m [36msecond[0m[37m:[0m [36manswer[0m[37m,[0m [36mfirst[0m[37m:[0m [93m42[0m [37m}[0m
+  ✓ [36mGeneric[0m [36mconstraints[0m[37m:[0m [93m3[0m
+✅ [36mGenerics[0m [36mtests[0m [36mcompleted[0m
+Running test: .\tests\test_section_12_advanced_types.rcc
+[36mTesting[0m [36mAdvanced[0m [36mTypes[0m...
+  ✓ [36mUnion[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mIntersection[0m [36mtypes[0m[37m:[0m [37m{[0m [36mname[0m[37m:[0m [36mBob[0m[37m,[0m [36mage[0m[37m:[0m [93m25[0m [37m}[0m
+  ✓ [36mNullable[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [93mnull[0m[37m,[0m [36mcheck[0m=[93mtrue[0m
+  ✓ [36mArray[0m [36mtypes[0m[37m:[0m [36mint[0m[37m[[0m[37m][0m[37m,[0m [36mstr[0m[37m[[0m[37m][0m[37m,[0m [36mint[0m[37m[[0m[37m][0m[37m[[0m[37m][0m
+  ✓ [36mTuple[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mObject[0m [36mtypes[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mFunction[0m [36mtypes[0m[37m:[0m [93m15[0m
+  ✓ [36mReadonly[0m [36mtypes[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mKeyOf[0m [36moperator[0m[37m:[0m [36mdefined[0m
+  ✓ [36mTypeOf[0m [36moperator[0m[37m:[0m [36mint[0m
+✅ [36mAdvanced[0m [36mTypes[0m [36mtests[0m [36mcompleted[0m
+Running test: .\tests\test_section_13_destructuring.rcc
+[36mTesting[0m [36mDestructuring[0m...
+  ✓ [36mArray[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+  ⊗ [36mArray[0m [36mdestructuring[0m [36mskip[0m[37m:[0m [36mNOT[0m [36mIMPLEMENTED[0m
+  ✓ [36mArray[0m [36mdestructuring[0m [36mrest[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mObject[0m [36mdestructuring[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+  ✓ [36mObject[0m [36mdestructuring[0m [36mshorthand[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+  ✓ [36mNested[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+  ✓ [36mFunction[0m [36mparam[0m [36mdestructuring[0m[37m:[0m [93m30[0m
+✅ [36mDestructuring[0m [36mtests[0m [36mcompleted[0m
+Running test: .\tests\test_simple_advanced_types.rcc
+[36mAdvanced[0m [36mtype[0m [36msystem[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_simple_array.rcc
+Running test: .\tests\test_simple_enum_class_types.rcc
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Admin[0m
+[36mOptional[0m [36muser[0m [36mcreated[0m
+[36mClass[0m [36mas[0m [36mtype[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_simple_enum_export.rcc
+Running test: .\tests\test_simple_modules.rcc
+[36mTest[0m [93m1[0m[37m:[0m [36mprint[0m [36msimple[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mprint[0m [36mcon[0m [36mmúltiples[0m [36margs[0m [93m123[0m [93m456[0m
+[36mPI[0m = [93m3.141592653589793[0m
+[36mMath[0m.[36mE[0m = [93m2.718281828459045[0m
+[36mMath[0m.[36msqrt[0m([93m16[0m) = [93m4[0m
+Running test: .\tests\test_simple_recursion.rcc
+[36mTesting[0m [36mrecursion[0m[37m:[0m
+[36mfactorial[0m([93m5[0m) = [93m120[0m
+Running test: .\tests\test_spread_operator.rcc
+[36msum[0m(...[37m[[0m[93m1[0m[37m,[0m[93m2[0m[37m,[0m[93m3[0m[37m][0m) = [93m6[0m
+[36mHello[0m [36mAlice[0m!
+[36mCombined[0m[37m:[0m [36mABCD[0m
+[93m1[0m
+[36mtwo[0m
+[93m3[0m
+[93mtrue[0m
+[36mAll[0m [36mspread[0m [36moperator[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_static_prop.rcc
+[36mPI[0m = [93m3.14[0m
+[36mNAME[0m = [36mTest[0m
+Running test: .\tests\test_stdlib_complete.rcc
+=== [36mArray[0m [36mTests[0m ===
+Running test: .\tests\test_stdlib_demo.rcc
+Running test: .\tests\test_sugar_types.rcc
+=== [36mSugar[0m [36mTypes[0m [36mTest[0m ===
+
+✓ [36mint[0m [36mse[0m [36masigna[0m [36mcorrectamente[0m [36ma[0m [36mi8[0m[37m,[0m [36mi16[0m[37m,[0m [36mi32[0m[37m,[0m [36mi64[0m[37m,[0m [36mu8[0m[37m,[0m [36mu16[0m[37m,[0m [36mu32[0m[37m,[0m [36mu64[0m
+✓ [36mfloat[0m [36mse[0m [36masigna[0m [36mcorrectamente[0m [36ma[0m [36mf32[0m[37m,[0m [36mf64[0m[37m,[0m [36mdecimal[0m
+✓ [36mOperaciones[0m [36maritméticas[0m [36mfuncionan[0m[37m:[0m [93m1010[0m[37m,[0m [93m8.53452[0m
+[36mValor[0m [36mi32[0m[37m:[0m [93m42[0m
+[36mValor[0m [36mf64[0m[37m:[0m [93m3.14159[0m
+✓ [36mConversión[0m [36mwidening[0m [36mautomática[0m[37m:[0m [36mi8[0m -> [36mi32[0m -> [36mi64[0m -> [36mf64[0m = [93m50[0m
+✓ [36mArrays[0m [36mtipados[0m[37m:[0m [36mi8[0m[37m[[0m[37m][0m[37m,[0m [36mi32[0m[37m[[0m[37m][0m[37m,[0m [36mf64[0m[37m[[0m[37m][0m [36mfuncionan[0m [36mcorrectamente[0m
+
+✅ [36mTodos[0m [36mlos[0m [36msugar[0m [36mtypes[0m [36my[0m [36mconversiones[0m [36mfuncionan[0m [36mperfectamente[0m!
+Running test: .\tests\test_toStr.rcc
+[93m42[0m
+[36mSuccess[0m!
+Running test: .\tests\test_types_edge_cases.rcc
+=== [36mEDGE[0m [36mCASES[0m[37m:[0m [36mSistema[0m [36mde[0m [36mTipos[0m ===
+
+[37m[[0m [93m1[0m [37m][0m [36mValores[0m [36mlímite[0m [36mde[0m [36mtipos[0m [36menteros[0m [36mcon[0m [36msigno[0m[37m:[0m
+  ✓ [36mi8[0m[37m:[0m  [93m-128[0m [36ma[0m [93m127[0m
+  ✓ [36mi16[0m[37m:[0m [93m-32768[0m [36ma[0m [93m32767[0m
+  ✓ [36mi32[0m[37m:[0m [93m-2147483648[0m [36ma[0m [93m2147483647[0m
+  ✓ [36mi64[0m[37m:[0m [93m-9223372036854775807[0m [36ma[0m [93m9223372036854775807[0m
+
+[37m[[0m [93m2[0m [37m][0m [36mValores[0m [36mlímite[0m [36mde[0m [36mtipos[0m [36msin[0m [36msigno[0m[37m:[0m
+  ✓ [36mu8[0m[37m:[0m  [93m0[0m [36ma[0m [93m255[0m
+  ✓ [36mu16[0m[37m:[0m [93m0[0m [36ma[0m [93m65535[0m
+  ✓ [36mu32[0m[37m:[0m [93m0[0m [36ma[0m [93m4294967295[0m
+  ✓ [36mu64[0m[37m:[0m [93m0[0m [36ma[0m [93m9223372036854775807[0m
+
+[37m[[0m [93m3[0m [37m][0m [36mCadenas[0m [36mde[0m [36mconversión[0m [36mwidening[0m[37m:[0m
+  ✓ [36mi8[0m -> [36mi16[0m -> [36mi32[0m -> [36mi64[0m -> [36mf64[0m -> [36mdecimal[0m[37m:[0m [93m42[0m
+  ✓ [36mu8[0m -> [36mu16[0m -> [36mu32[0m -> [36mu64[0m -> [36mf64[0m[37m:[0m [93m200[0m
+  ✓ [36mu8[0m -> [36mi16[0m -> [36mi64[0m -> [36mdecimal[0m[37m:[0m [93m100[0m
+
+[37m[[0m [93m4[0m [37m][0m [36mOperaciones[0m [36maritméticas[0m [36mentre[0m [36mdiferentes[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m10[0m) + [36mi32[0m([93m20[0m) = [36mi32[0m([93m30[0m)
+  ✓ [36mi16[0m([93m5[0m) * [36mi64[0m([93m15[0m) = [36mi64[0m([93m75[0m)
+  ✓ [36mu8[0m([93m8[0m) - [36mu32[0m([93m4[0m) = [36mu32[0m([93m4[0m)
+  ✓ [36mf32[0m([93m3.5[0m) * [36mf64[0m([93m2.0[0m) = [36mf64[0m([93m7[0m)
+  ✓ [36mi32[0m([93m100[0m) + [36mf32[0m([93m2.5[0m) = [36mf32[0m([93m102.5[0m)
+
+[37m[[0m [93m5[0m [37m][0m [36mOperaciones[0m [36mbitwise[0m [36mentre[0m [36mtipos[0m [36menteros[0m[37m:[0m
+  ✓ [36mi8[0m([93m15[0m) & [36mi32[0m([93m240[0m) = [36mi32[0m([93m0[0m)
+  ✓ [36mu8[0m([93m12[0m) | [36mu16[0m([93m10[0m) = [36mu16[0m([93m14[0m)
+  ✓ [36mi16[0m([93m5[0m) ^ [36mi32[0m([93m3[0m) = [36mi32[0m([93m6[0m)
+  ✓ [36mi8[0m([93m4[0m) << [36mi32[0m([93m2[0m) = [36mi32[0m([93m16[0m)
+  ✓ [36mi32[0m([93m16[0m) >> [36mi8[0m([93m2[0m) = [36mi32[0m([93m4[0m)
+
+[37m[[0m [93m6[0m [37m][0m [36mFunciones[0m [36mcon[0m [36mmúltiples[0m [36mtipos[0m [36mde[0m [36mparámetros[0m[37m:[0m
+  ✓ [36mi8[0m[37m:[0m [93m50[0m
+  ✓ [36mi32[0m[37m:[0m [93m5000[0m
+  ✓ [36mf64[0m[37m:[0m [93m50.5[0m
+  ✓ [36mdecimal[0m[37m:[0m [93m50.123456[0m
+  ✓ [36mSugar[0m [36mtype[0m [36men[0m [36mi8[0m[37m:[0m [36mi8[0m[37m:[0m [93m25[0m
+  ✓ [36mSugar[0m [36mtype[0m [36men[0m [36mi32[0m[37m:[0m [36mi32[0m[37m:[0m [93m2500[0m
+  ✓ [36mSugar[0m [36mtype[0m [36men[0m [36mf64[0m[37m:[0m [36mf64[0m[37m:[0m [93m25.5[0m
+
+[37m[[0m [93m7[0m [37m][0m [36mArrays[0m [36mcon[0m [36mdiferentes[0m [36mtipos[0m [36mnuméricos[0m[37m:[0m
+  ✓ [36mi8[0m[37m[[0m[37m][0m[37m:[0m  [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mi32[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m100[0m[37m,[0m [93m200[0m[37m,[0m [93m300[0m[37m][0m
+  ✓ [36mu8[0m[37m[[0m[37m][0m[37m:[0m  [37m[[0m[93m255[0m[37m,[0m [93m128[0m[37m,[0m [93m64[0m[37m][0m
+  ✓ [36mf32[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m1.1[0m[37m,[0m [93m2.2[0m[37m,[0m [93m3.3[0m[37m][0m
+  ✓ [36mf64[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m10.5[0m[37m,[0m [93m20.5[0m[37m,[0m [93m30.5[0m[37m][0m
+
+[37m[[0m [93m8[0m [37m][0m [36mOperaciones[0m [36mcon[0m [36mcero[0m [36my[0m [36mnúmeros[0m [36mnegativos[0m[37m:[0m
+  ✓ [36mi8[0m([93m0[0m) + [36mi8[0m([93m-128[0m) = [93m-128[0m
+  ✓ [36mi32[0m([93m-1000000[0m) + [36mi32[0m([93m1000000[0m) = [93m0[0m
+  ✓ [36mf64[0m([93m-3.14159[0m) * [93m-1[0m = [93m3.14159[0m
+  ✓ [36mNegación[0m [36munaria[0m[37m:[0m [93m-42[0m = [93m-42[0m
+
+[37m[[0m [93m9[0m [37m][0m [36mConversiones[0m [36mexplícitas[0m [36mentre[0m [36mtipos[0m[37m:[0m
+  [36mOriginal[0m [36mi32[0m[37m:[0m [93m256[0m
+  ✓ [36mtoI8[0m()[37m:[0m  [93m0[0m
+  ✓ [36mtoI16[0m()[37m:[0m [93m256[0m
+  ✓ [36mtoI64[0m()[37m:[0m [93m256[0m
+  ✓ [36mtoF32[0m()[37m:[0m [93m256[0m
+  ✓ [36mtoF64[0m()[37m:[0m [93m256[0m
+  [36mOriginal[0m [36mf64[0m[37m:[0m [93m123.456[0m
+  ✓ [36mtoInt[0m()[37m:[0m     [93m123[0m
+  ✓ [36mtoDecimal[0m()[37m:[0m [93m123.456[0m
+
+[37m[[0m [93m10[0m [37m][0m [36mComparaciones[0m [36mentre[0m [36mdiferentes[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m10[0m) == [36mi32[0m([93m10[0m)[37m:[0m [93mtrue[0m
+  ✓ [36mu8[0m([93m50[0m) == [36mi16[0m([93m50[0m)[37m:[0m [93mtrue[0m
+  ✓ [36mf32[0m([93m3.14[0m) == [36mf64[0m([93m3.14[0m)[37m:[0m [93mtrue[0m
+  ✓ [36mi32[0m([93m100[0m) < [36mi64[0m([93m200[0m)[37m:[0m [93mtrue[0m
+
+[37m[[0m [93m11[0m [37m][0m [36mExpresiones[0m [36mcomplejas[0m [36mcon[0m [36mmúltiples[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m2[0m) + [36mi16[0m([93m3[0m) * [36mi32[0m([93m4[0m) - [36mi64[0m([93m5[0m) = [36mi64[0m([93m9[0m)
+  ✓ [36mu8[0m([93m10[0m) * [36mu16[0m([93m20[0m) + [36mu32[0m([93m30[0m) = [36mu32[0m([93m230[0m)
+  ✓ [36mf32[0m([93m2.5[0m) * [36mf64[0m([93m3.0[0m) + [36mdecimal[0m([93m1.5[0m) = [36mdecimal[0m([93m9[0m)
+
+[37m[[0m [93m12[0m [37m][0m [36mOperaciones[0m [36mcon[0m [36marrays[0m [36mde[0m [36mtipos[0m [36mmixtos[0m[37m:[0m
+  ✓ [36mArray[0m [36mi8[0m [36mlength[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+  ✓ [36mArray[0m [36mi32[0m [36mlength[0m[37m:[0m [37m[[0m[93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mArray[0m [36mf64[0m [36mlength[0m[37m:[0m [37m[[0m[93m1.5[0m[37m,[0m [93m2.5[0m[37m,[0m [93m3.5[0m[37m][0m
+  ✓ [36mDespués[0m [36mde[0m [36mpush[0m[37m:[0m [36mi8[0m[37m[[0m[37m][0m = [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m][0m
+  ✓ [36mDespués[0m [36mde[0m [36mpush[0m[37m:[0m [36mi32[0m[37m[[0m[37m][0m = [37m[[0m[93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m][0m
+  ✓ [36mDespués[0m [36mde[0m [36mpush[0m[37m:[0m [36mf64[0m[37m[[0m[37m][0m = [37m[[0m[93m1.5[0m[37m,[0m [93m2.5[0m[37m,[0m [93m3.5[0m[37m,[0m [93m4.5[0m[37m][0m
+
+[37m[[0m [93m13[0m [37m][0m [36mValores[0m [36mdecimales[0m [36mde[0m [36malta[0m [36mprecisión[0m[37m:[0m
+  ✓ [36mdecimal[0m([93m0.1[0m) + [36mdecimal[0m([93m0.2[0m) = [93m0.30000000000000004[0m
+  ✓ [36mSuma[0m [36mde[0m [36malta[0m [36mprecisión[0m[37m:[0m [93m999999999.1234568[0m
+
+[37m[[0m [93m14[0m [37m][0m [36mFunciones[0m [36mrecursivas[0m [36mcon[0m [36mtipos[0m [36mespecíficos[0m[37m:[0m
+  ⚠ [36mSkipped[0m - [36mrecursive[0m [36mfunctions[0m [36mcause[0m [36mstack[0m [36moverflow[0m [36min[0m [36mcurrent[0m [36minterpreter[0m
+
+[37m[[0m [93m15[0m [37m][0m [36mRanges[0m [36mcon[0m [36mtipos[0m [36menteros[0m [36mespecíficos[0m[37m:[0m
+  ✓ [36mRange[0m [36mi8[0m([93m1.[0m.[93m5[0m)[37m:[0m   [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mRange[0m [36mi32[0m([93m10.[0m.[93m15[0m)[37m:[0m [37m[[0m[93m10[0m[37m,[0m [93m11[0m[37m,[0m [93m12[0m[37m,[0m [93m13[0m[37m,[0m [93m14[0m[37m,[0m [93m15[0m[37m][0m
+  ✓ [36mRange[0m [36mu8[0m([93m0.[0m.[93m3[0m)[37m:[0m    [37m[[0m[93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+[37m[[0m [93m16[0m [37m][0m [36mOperador[0m [36mmódulo[0m [36mcon[0m [36mdiferentes[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m10[0m) % [36mi32[0m([93m3[0m) = [36mi32[0m([93m1[0m)
+  ✓ [36mu16[0m([93m100[0m) % [36mu32[0m([93m7[0m) = [36mu32[0m([93m2[0m)
+
+==================================================
+✅ [36mTODOS[0m [36mLOS[0m [36mEDGE[0m [36mCASES[0m [36mPASARON[0m [36mEXITOSAMENTE[0m
+==================================================
+
+[36mTipos[0m [36mprobados[0m[37m:[0m
+  • [36mSigned[0m [36mintegers[0m[37m:[0m [36mi8[0m[37m,[0m [36mi16[0m[37m,[0m [36mi32[0m[37m,[0m [36mi64[0m
+  • [36mUnsigned[0m [36mintegers[0m[37m:[0m [36mu8[0m[37m,[0m [36mu16[0m[37m,[0m [36mu32[0m[37m,[0m [36mu64[0m
+  • [36mFloating[0m [36mpoint[0m[37m:[0m [36mf32[0m[37m,[0m [36mf64[0m[37m,[0m [36mdecimal[0m
+  • [36mSugar[0m [36mtypes[0m[37m:[0m [36mint[0m[37m,[0m [36mfloat[0m
+
+[36mOperaciones[0m [36mprobadas[0m[37m:[0m
+  • [36mAritméticas[0m[37m:[0m +[37m,[0m -[37m,[0m *[37m,[0m /[37m,[0m %
+  • [36mBitwise[0m[37m:[0m &[37m,[0m |[37m,[0m ^[37m,[0m <<[37m,[0m >>
+  • [36mComparación[0m[37m:[0m ==[37m,[0m !=[37m,[0m <[37m,[0m >[37m,[0m <=[37m,[0m >=
+  • [36mWidening[0m [36mautomático[0m
+  • [36mConversiones[0m [36mexplícitas[0m
+  • [36mArrays[0m [36mtipados[0m
+  • [36mFunciones[0m [36mrecursivas[0m
+  • [36mRanges[0m
+
+🎉 [36mSistema[0m [36mde[0m [36mtipos[0m [36mfuncionando[0m [36mperfectamente[0m!
+Running test: .\tests\test_type_inference.rcc
+Running test: .\tests\test_type_system_comprehensive.rcc
+[36mhello[0m
+[93m42[0m
+[36mTest[0m [36mUser[0m
+[36mtext[0m
+[93mnull[0m
+[36mAll[0m [36madvanced[0m [36mtype[0m [36msystem[0m [36mtests[0m [36mcompleted[0m [36msuccessfully[0m!
+Running test: .\tests\test_typing_system_implemented.rcc
+=== [36mSTARTING[0m [36mTYPE[0m [36mSYSTEM[0m [36mTESTS[0m ===
+
+[93m1.[0m [36mPRIMITIVE[0m [36mTYPES[0m
+✓ [36mPrimitive[0m [36mtypes[0m [36mworking[0m
+
+[93m2.[0m [36mNULLABLE[0m [36mTYPES[0m ([36mCustom[0m [36mSugar[0m)
+✓ [36mNullable[0m [36mtypes[0m [36mworking[0m
+
+[93m3.[0m [36mARRAYS[0m
+✓ [36mArrays[0m [36mworking[0m
+
+[93m4.[0m [36mTUPLES[0m
+✓ [36mTuples[0m [36mworking[0m
+
+[93m5.[0m [36mUNION[0m [36mTYPES[0m
+✓ [36mUnion[0m [36mtypes[0m [36mworking[0m
+
+[93m6.[0m [36mINTERSECTION[0m [36mTYPES[0m
+✓ [36mIntersection[0m [36mtypes[0m [36mworking[0m
+
+[93m7.[0m [36mOBJECT[0m [36mTYPES[0m [36mWITH[0m [36mOPTIONAL[0m [36mPROPERTIES[0m
+✓ [36mObject[0m [36mtypes[0m [36mwith[0m [36moptional[0m [36mproperties[0m [36mworking[0m
+
+[93m8.[0m [36mREADONLY[0m [36mTYPES[0m
+✓ [36mReadonly[0m [36mtypes[0m [36mworking[0m
+
+[93m9.[0m [36mGENERICS[0m
+✓ [36mGeneric[0m [36mtypes[0m [36mworking[0m [36min[0m [36mclasses[0m [36mand[0m [36minterfaces[0m
+
+[93m10.[0m [36mENUM[0m [36mTYPES[0m
+✓ [36mEnum[0m [36mtypes[0m [36mworking[0m
+
+[93m11.[0m [36mCLASS[0m [36mTYPES[0m
+✓ [36mClass[0m [36mtypes[0m [36mand[0m [36minheritance[0m [36mworking[0m
+
+[93m12.[0m [36mINTERFACE[0m [36mTYPES[0m
+✓ [36mInterface[0m [36mtypes[0m [36mworking[0m
+
+[93m13.[0m [36mFUNCTION[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mtypes[0m [36mworking[0m
+
+[93m14.[0m [36mFUNCTION[0m [36mDECLARATIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mdeclarations[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m15.[0m [36mOPTIONAL[0m [36mPARAMETERS[0m ([36mNEW[0m [36mFEATURE[0m)
+[36mAlice[0m
+[36mBob[0m
+✓ [36mOptional[0m [36mparameters[0m [36mworking[0m
+
+[93m16.[0m [36mARROW[0m [36mFUNCTIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m17.[0m [36mCOMPLEX[0m [36mNESTED[0m [36mSTRUCTURES[0m
+✓ [36mComplex[0m [36mnested[0m [36mstructures[0m [36mworking[0m
+
+[93m18.[0m [36mTYPE[0m [36mALIASES[0m
+✓ [36mType[0m [36maliases[0m [36mwith[0m [36munions[0m [36mworking[0m
+
+[93m19.[0m [36mTESTING[0m [36mFUNCTIONALITY[0m
+
+[36madd_numbers[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mgreet[0m([92m'World'[0m) = [36mHello[0m[37m,[0m [36mWorld[0m
+[36mdouble[0m([93m21[0m) = [93m42[0m
+[36mconcat[0m([92m'Hello, '[0m[37m,[0m [92m'World!'[0m) = [36mHello[0m[37m,[0m [36mWorld[0m!
+[36mdog[0m.[36mgetName[0m() = [36mBuddy[0m
+[36mdog[0m.[36mbreed[0m = [36mLabrador[0m
+
+=== [36mALL[0m [36mTYPE[0m [36mSYSTEM[0m [36mTESTS[0m [36mPASSED[0m ===
+[36mAll[0m [36mimplemented[0m [36mfeatures[0m [36mare[0m [36mworking[0m [36mcorrectly[0m!
+Running test: .\tests\test_union_in_functions.rcc
+[36mhello[0m
+[93m42[0m
+[36mtest[0m
+[93m123[0m
+[93m456[0m
+[36mworld[0m
+[36mUnion[0m [36mtype[0m [36mfunction[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\use_math_utils.rcc
+=== [36mPrueba[0m [36mde[0m [36mSistema[0m [36mde[0m [36mMódulos[0m ===
+
+[36mcalculate[0m([92m'add'[0m[37m,[0m [93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+[36madd[0m([93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+[36msubtract[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+[36mmultiply[0m([93m10[0m[37m,[0m [93m5[0m) = [93m50[0m
+[36mdivide[0m([93m10[0m[37m,[0m [93m2[0m) = [93m5[0m
+
+[36mPI[0m = [93m3.14159[0m
+
+=== [36mPrueba[0m [36mde[0m [36mCalculator[0m ===
+(([93m0[0m + [93m10[0m) * [93m2[0m) - [93m5[0m = [93m15[0m
+
+=== [36mPrueba[0m [36mde[0m [36mNamespace[0m [36mImport[0m ===
+[36mMathUtils[0m.[36madd[0m([93m100[0m[37m,[0m [93m50[0m) = [93m150[0m
+
+[36mMathUtils[0m.[36mPI[0m = [93m3.14159[0m
+Running test: .\tests\arrow_functions_demo.rcc
+=== [36mARROW[0m [36mFUNCTIONS[0m [36mAS[0m [36mPARAMETERS[0m ===
+
+[36mOriginal[0m [36marray[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+
+--- [36mMAP[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mDoubled[0m ([36marrow[0m)[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m,[0m [93m12[0m[37m,[0m [93m14[0m[37m,[0m [93m16[0m[37m,[0m [93m18[0m[37m,[0m [93m20[0m[37m][0m
+[36mSquared[0m ([36marrow[0m)[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m4[0m[37m,[0m [93m9[0m[37m,[0m [93m16[0m[37m,[0m [93m25[0m[37m,[0m [93m36[0m[37m,[0m [93m49[0m[37m,[0m [93m64[0m[37m,[0m [93m81[0m[37m,[0m [93m100[0m[37m][0m
+[36mTransformed[0m ([36mx[0m*[93m3[0m+[93m1[0m)[37m:[0m [37m[[0m[93m4[0m[37m,[0m [93m7[0m[37m,[0m [93m10[0m[37m,[0m [93m13[0m[37m,[0m [93m16[0m[37m,[0m [93m19[0m[37m,[0m [93m22[0m[37m,[0m [93m25[0m[37m,[0m [93m28[0m[37m,[0m [93m31[0m[37m][0m
+
+--- [36mFILTER[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mEven[0m [36mnumbers[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m][0m
+[36mGreater[0m [36mthan[0m [93m5[0m[37m:[0m [37m[[0m[93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+[36mMultiples[0m [36mof[0m [93m3[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+
+--- [36mREDUCE[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mSum[0m[37m:[0m [93m55[0m
+[36mProduct[0m[37m:[0m [93m3628800[0m
+
+--- [36mFIND[0m/[36mSOME[0m/[36mEVERY[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mFirst[0m > [93m7[0m[37m:[0m [93m8[0m
+[36mHas[0m [36mevens[0m? [93mtrue[0m
+[36mAll[0m [36mpositive[0m? [93mtrue[0m
+
+--- [36mMETHOD[0m [36mCHAINING[0m [36mwith[0m [36marrow[0m [36mfunctions[0m ---
+[36mEvens[0m * [93m3[0m[37m,[0m > [93m10[0m[37m:[0m [37m[[0m[93m12[0m[37m,[0m [93m18[0m[37m,[0m [93m24[0m[37m,[0m [93m30[0m[37m][0m
+
+=== [36mASYNC[0m [36mFUNCTIONS[0m ===
+[36mFuture[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([36mUser_42[0m)[37m][0m
+[36mUser[0m[37m:[0m [36mUser_42[0m
+
+=== [36mASYNC[0m + [36mARROW[0m [36mFUNCTIONS[0m ===
+[36mProcessed[0m [36musers[0m[37m:[0m [37m[[0m[36mProcessed_1[0m[37m,[0m [36mProcessed_2[0m[37m,[0m [36mProcessed_3[0m[37m,[0m [36mProcessed_4[0m[37m,[0m [36mProcessed_5[0m[37m][0m
+
+=== [36mHIGHER[0m-[36mORDER[0m [36mFUNCTIONS[0m ===
+[36mOriginal[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+[36mDoubled[0m [36mwith[0m [36mfunc[0m [36mtype[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+[36mTripled[0m [36mwith[0m [36mfunc[0m [36mtype[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+[36mTripled[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+
+=== [36mALL[0m [36mTESTS[0m [36mCOMPLETED[0m ===
+Running test: .\tests\async_and_arrays.rcc
+=== [36mTESTING[0m [36mASYNC[0m [36mFUNCTIONS[0m ===
+[36mFuture[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([36mData[0m [36mfetched[0m!)[37m][0m
+[36mResult[0m [36mafter[0m [36mawait[0m[37m:[0m [36mData[0m [36mfetched[0m!
+
+=== [36mTESTING[0m [36mARRAY[0m [36mMETHODS[0m ===
+[36mOriginal[0m [36marray[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+
+--- [36mmap[0m() ---
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m,[0m [93m12[0m[37m,[0m [93m14[0m[37m,[0m [93m16[0m[37m,[0m [93m18[0m[37m,[0m [93m20[0m[37m][0m
+[36mSquared[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m4[0m[37m,[0m [93m9[0m[37m,[0m [93m16[0m[37m,[0m [93m25[0m[37m,[0m [93m36[0m[37m,[0m [93m49[0m[37m,[0m [93m64[0m[37m,[0m [93m81[0m[37m,[0m [93m100[0m[37m][0m
+
+--- [36mfilter[0m() ---
+[36mEven[0m [36mnumbers[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m][0m
+[36mGreater[0m [36mthan[0m [93m5[0m[37m:[0m [37m[[0m[93m6[0m[37m,[0m [93m7[0m[37m,[0m [93m8[0m[37m,[0m [93m9[0m[37m,[0m [93m10[0m[37m][0m
+
+--- [36mreduce[0m() ---
+[36mSum[0m [36mof[0m [36mall[0m [36mnumbers[0m[37m:[0m [93m55[0m
+[36mProduct[0m [36mof[0m [36mall[0m [36mnumbers[0m[37m:[0m [93m3628800[0m
+
+--- [36mfind[0m() ---
+[36mFirst[0m [36mnumber[0m > [93m7[0m[37m:[0m [93m8[0m
+[36mFirst[0m [36mnumber[0m > [93m100[0m[37m:[0m [93mnull[0m
+
+--- [36mfindIndex[0m() ---
+[36mIndex[0m [36mof[0m [93m5[0m[37m:[0m [93m4[0m
+[36mIndex[0m [36mof[0m > [93m100[0m[37m:[0m [93m-1[0m
+
+--- [36msome[0m() ---
+[36mHas[0m [36meven[0m [36mnumbers[0m? [93mtrue[0m
+[36mHas[0m [36mnegative[0m [36mnumbers[0m? [93mfalse[0m
+
+--- [36mevery[0m() ---
+[36mAll[0m [36mpositive[0m? [93mtrue[0m
+[36mAll[0m [36meven[0m? [93mfalse[0m
+
+=== [36mMETHOD[0m [36mCHAINING[0m ===
+[36mEven[0m [36mnumbers[0m * [93m3[0m[37m,[0m > [93m10[0m[37m:[0m [37m[[0m[93m12[0m[37m,[0m [93m18[0m[37m,[0m [93m24[0m[37m,[0m [93m30[0m[37m][0m
+
+--- [36mSmall[0m [36marray[0m [36mcomposition[0m ---
+[36mOriginal[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+[36mTripled[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m][0m
+
+=== [36mALL[0m [36mTESTS[0m [36mCOMPLETED[0m ===
+Running test: .\tests\demo_colors.rcc
+╔══════════════════════════════════════════════╗
+║   [36mDEMOSTRACIÓN[0m [36mDE[0m [36mCOLORES[0m [36mEN[0m [36mRACCOON[0m        ║
+╔══════════════════════════════════════════════╗
+
+🎨 [36mTIPOS[0m [36mDE[0m [36mDATOS[0m [36mCON[0m [36mCOLORES[0m[37m:[0m
+─────────────────────────────────────────────
+
+📝 [36mStrings[0m ([36mVerde[0m)[37m:[0m
+  → [36mHola[0m [36mMundo[0m [36mRaccoon[0m
+
+🔢 [36mNúmeros[0m ([36mAmarillo[0m)[37m:[0m
+  [36mEnteros[0m → [93m42[0m [93m100[0m [93m-5[0m
+  [36mDecimales[0m → [93m3.14[0m [93m2.71[0m [93m0.5[0m
+
+✓ [36mBooleanos[0m ([36mAmarillo[0m)[37m:[0m
+  → [93mtrue[0m [93mfalse[0m
+
+∅ [36mNull[0m ([36mGris[0m)[37m:[0m
+  → [93mnull[0m
+
+📋 [36mListas[0m ([36mMagenta[0m)[37m:[0m
+  → [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  → [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+
+
+🎯 [36mOPERACIONES[0m [36mY[0m [36mRESULTADOS[0m[37m:[0m
+─────────────────────────────────────────────
+
+[36ma[0m = [93m10[0m │ [36mb[0m = [93m20[0m
+[36ma[0m + [36mb[0m = [93m30[0m
+[36ma[0m * [36mb[0m = [93m200[0m
+[36ma[0m < [36mb[0m = [93mtrue[0m
+
+
+✨ [36mCOMPARACIÓN[0m[37m:[0m
+─────────────────────────────────────────────
+
+👤 [36mUsuario[0m[37m:[0m [36mAlice[0m
+   [36mEdad[0m[37m:[0m [93m30[0m [36maños[0m
+   [36mEstado[0m[37m:[0m [36mActivo[0m
+
+
+╚══════════════════════════════════════════════╝
+║   [36mFIN[0m [36mDE[0m [36mLA[0m [36mDEMOSTRACIÓN[0m                     ║
+╚══════════════════════════════════════════════╝
+Running test: .\tests\feature_array_destructuring.rcc
+[36ma[0m = [93m1[0m
+[36mb[0m = [93m2[0m
+[36mc[0m = [93m3[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mString[0m [36mArray[0m [36mDestructuring[0m
+[36mhello[0m [36mworld[0m [36mraccoon[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFloat[0m [36mArray[0m [36mDestructuring[0m
+[36mPi[0m[37m:[0m [93m3.14[0m
+[36mE[0m[37m:[0m [93m2.71[0m
+[36mSqrt2[0m[37m:[0m [93m1.41[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mFunction[0m [36mParameter[0m [36mDestructuring[0m
+[36mSum[0m [36mof[0m [36mfirst[0m [36mtwo[0m[37m:[0m [93m30[0m
+[36mValues[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m[37m,[0m [93m300[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mBlock[0m [36mScope[0m [36mDestructuring[0m
+[36mFirst[0m[37m:[0m [93m7[0m[37m,[0m [36mSecond[0m[37m:[0m [93m14[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mLoops[0m
+[37m[[0m[93m0[0m[37m][0m = [93m0[0m
+[37m[[0m[93m1[0m[37m][0m = [93m10[0m
+[37m[[0m[93m2[0m[37m][0m = [93m20[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mClass[0m [36mMethods[0m
+[36mAP[0m[93m-1[0m [36mprocessing[0m[37m:[0m [93m5[0m[37m,[0m [93m10[0m[37m,[0m [93m15[0m
+[36mResult[0m[37m:[0m [93m30[0m
+[36mFirst[0m [36mvalue[0m[37m:[0m [93m99[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mConditionals[0m
+[36mConditional[0m [36mvalues[0m[37m:[0m [93m50[0m[37m,[0m [93m60[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mNested[0m [36mFunction[0m [36mCalls[0m
+[36mMultiplied[0m[37m:[0m [93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mLet[0m [36mvs[0m [36mConst[0m [36mDestructuring[0m
+[36mLet[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m
+[36mConst[0m[37m:[0m [93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mFor[0m-[36min[0m [36mLoop[0m [36mwith[0m [36mArrays[0m
+[36mItem[0m[37m:[0m [93m100[0m
+[36mItem[0m[37m:[0m [93m200[0m
+[36mItem[0m[37m:[0m [93m300[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mRange[0m [36mwith[0m [36mDestructuring[0m
+[36mRange[0m [36mvalues[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mConstructor[0m [36mwith[0m [36mDestructuring[0m
+[36mVector[0m [36mcreated[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+[36mComponents[0m[37m:[0m [93m3[0m [36mitems[0m
+=== [36mALL[0m [36mARRAY[0m [36mDESTRUCTURING[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36marray[0m [36mdestructuring[0m
+✅ [36mString[0m/[36mFloat[0m [36marrays[0m
+✅ [36mFunction[0m [36mparameters[0m
+✅ [36mBlock[0m [36mscope[0m
+✅ [36mLoops[0m
+✅ [36mClass[0m [36mmethods[0m
+✅ [36mConditionals[0m
+✅ [36mNested[0m [36mcalls[0m
+✅ [36mLet[0m [36mvs[0m [36mConst[0m
+✅ [36mFor[0m-[36min[0m [36mloops[0m
+✅ [36mRanges[0m
+✅ [36mConstructors[0m
+Running test: .\tests\feature_arrow_functions.rcc
+[93m8[0m
+[93m14[0m
+[93m42[0m
+[93m42[0m
+[93mtrue[0m
+[93mfalse[0m
+[36mHello[0m[37m,[0m [36mWorld[0m!
+[93m12[0m
+[93m19[0m
+[93mtrue[0m
+[93m8[0m
+[93m15[0m
+[36mAll[0m [36marrow[0m [36mfunction[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\feature_decorators.rcc
+=== [36mDECORATORS[0m [36mFEATURE[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mSimple[0m [36mClass[0m [36mDecorator[0m
+[36mValue[0m[37m:[0m [93m42[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mDecorator[0m [36mwith[0m [36mSingle[0m [36mArgument[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mDecorator[0m [36mwith[0m [36mMultiple[0m [36mArguments[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mMultiple[0m [36mDecorators[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mDecorators[0m [36mwith[0m [36mString[0m [36mArguments[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mDecorators[0m [36mwith[0m [36mFloat[0m [36mArguments[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mDecorators[0m [36mwith[0m [36mInheritance[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mComplex[0m [36mDecorator[0m [36mLogic[0m
+[36mSize[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mBoolean[0m [36mArgument[0m [36mDecorators[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mDecorator[0m [36mOrdering[0m [36mTest[0m
+=== [36mALL[0m [36mDECORATOR[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mSimple[0m [36mdecorators[0m
+✅ [36mDecorators[0m [36mwith[0m [36marguments[0m
+✅ [36mMultiple[0m [36mdecorators[0m
+✅ [36mString[0m [36marguments[0m
+✅ [36mFloat[0m [36marguments[0m
+✅ [36mWith[0m [36minheritance[0m
+✅ [36mComplex[0m [36mlogic[0m
+✅ [36mBoolean[0m [36marguments[0m
+✅ [36mDecorator[0m [36mordering[0m
+Running test: .\tests\feature_object_destructuring.rcc
+=== [36mOBJECT[0m [36mDESTRUCTURING[0m [36mFEATURE[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGlobal[0m [36mVariable[0m [36mDestructuring[0m
+[36mx[0m = [93m10[0m
+[36my[0m = [93m20[0m
+[36mx2[0m = [93m100[0m
+[36my2[0m = [93m200[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mBlock[0m [36mScope[0m [36mDestructuring[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFunction[0m [36mParameter[0m [36mDestructuring[0m
+[36mPoint[0m([93m5[0m[37m,[0m [93m15[0m)
+[36mHello[0m [36mBob[0m[37m,[0m [36myou[0m [36mare[0m [93m25[0m [36myears[0m [36mold[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mConditionals[0m
+[36mResolution[0m[37m:[0m [93m800[0m[36mx600[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mWhile[0m [36mLoop[0m
+[36mLoop[0m [93m0[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+[36mLoop[0m [93m1[0m[37m:[0m ([93m10[0m[37m,[0m [93m20[0m)
+[36mTest[0m [93m6[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mClass[0m [36mMethods[0m
+[36mProcessor[0m[93m-1[0m [36mprocessing[0m[37m:[0m [36mx[0m=[93m7[0m[37m,[0m [36my[0m=[93m14[0m
+[36mCombined[0m [36mresult[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mMultiple[0m [36mDestructurings[0m
+[36mUser[0m [93m1[0m[37m:[0m [36muser1[0m ([36muser1[0m@[36mtest[0m.[36mcom[0m)
+[36mUser[0m [93m2[0m[37m:[0m [36muser2[0m ([36muser2[0m@[36mtest[0m.[36mcom[0m)
+[36mTest[0m [93m8[0m[37m:[0m [36mDestructuring[0m [36mwith[0m [36mFunction[0m [36mReturns[0m
+[36mCreated[0m [36mpoint[0m[37m:[0m ([93m42[0m[37m,[0m [93m84[0m)
+[36mTest[0m [93m9[0m[37m:[0m [36mNested[0m [36mFunction[0m [36mCalls[0m
+[36mOriginal[0m[37m:[0m ([93m3[0m[37m,[0m [93m4[0m)
+[36mDoubled[0m [36msum[0m[37m:[0m [93m14[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mDestructuring[0m [36min[0m [36mTry[0m-[36mCatch[0m
+[36mTry[0m [36mblock[0m[37m:[0m [36mTest[0m[37m,[0m [93m99[0m
+=== [36mALL[0m [36mOBJECT[0m [36mDESTRUCTURING[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mGlobal[0m [36mscope[0m [36mdestructuring[0m
+✅ [36mBlock[0m [36mscope[0m [36mdestructuring[0m
+✅ [36mFunction[0m [36mparameter[0m [36mdestructuring[0m
+✅ [36mConditional[0m [36mdestructuring[0m
+✅ [36mLoop[0m [36mdestructuring[0m
+✅ [36mClass[0m [36mmethod[0m [36mdestructuring[0m
+✅ [36mMultiple[0m [36mdestructurings[0m
+✅ [36mWith[0m [36mfunction[0m [36mreturns[0m
+✅ [36mNested[0m [36mcalls[0m
+✅ [36mTry[0m-[36mcatch[0m [36mblocks[0m
+Running test: .\tests\math_utils.rcc
+Running test: .\tests\REFERENCE_COMPATIBILITY_TEST.rcc
+╔════════════════════════════════════════════╗
+║  [36mRACCOON[0m [36mCOMPATIBILITY[0m [36mREFERENCE[0m [36mTEST[0m     ║
+║  [36mVersion[0m[37m:[0m [93m1.0[0m.[93m0[0m                           ║
+║  [36mDate[0m[37m:[0m [36mOctober[0m [93m2025[0m                       ║
+╚════════════════════════════════════════════╝
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m1[0m[37m:[0m [36mObject[0m [36mDestructuring[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m1.1[0m [36mBasic[0m [36mObject[0m [36mDestructuring[0m
+  ✓ [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+[93m1.2[0m [36mObject[0m [36mDestructuring[0m [36min[0m [36mFunctions[0m
+  ✓ [36msum[0m=[93m20[0m
+[93m1.3[0m [36mObject[0m [36mDestructuring[0m [36min[0m [36mClass[0m [36mMethods[0m
+  ✓ [36mresult[0m=[93m14[0m
+  ✅ [36mObject[0m [36mDestructuring[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m2[0m[37m:[0m [36mArray[0m [36mDestructuring[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m2.1[0m [36mBasic[0m [36mArray[0m [36mDestructuring[0m
+  ✓ [36ma[0m=[93m1[0m[37m,[0m [36mb[0m=[93m2[0m[37m,[0m [36mc[0m=[93m3[0m
+[93m2.2[0m [36mString[0m [36mArray[0m [36mDestructuring[0m
+  ✓ [36mw1[0m=[36mhello[0m[37m,[0m [36mw2[0m=[36mworld[0m
+[93m2.3[0m [36mArray[0m [36mDestructuring[0m [36min[0m [36mFunction[0m [36mParameters[0m
+  ✓ [36marraySum[0m=[93m60[0m
+[93m2.4[0m [36mArray[0m [36mDestructuring[0m [36min[0m [36mConstructors[0m
+  ✓ [36mmagnitude[0m=[93m7[0m
+  ✅ [36mArray[0m [36mDestructuring[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m3[0m[37m:[0m [36mDecorators[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m3.1[0m [36mSimple[0m [36mClass[0m [36mDecorator[0m
+[93m3.2[0m [36mDecorator[0m [36mwith[0m [36mArguments[0m
+[93m3.3[0m [36mMultiple[0m [36mDecorators[0m
+  ✅ [36mDecorators[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m4[0m[37m:[0m [36mFeature[0m [36mIntegration[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m4.1[0m [36mDecorators[0m + [36mObject[0m [36mDestructuring[0m
+  ✓ [36mAuthenticating[0m [36muser[0m[37m:[0m [36madmin[0m
+[93m4.2[0m [36mDecorators[0m + [36mArray[0m [36mDestructuring[0m
+  ✓ [36mProcessing[0m[37m:[0m [36mmin[0m=[93m10[0m[37m,[0m [36mmax[0m=[93m100[0m[37m,[0m [36mavg[0m=[93m55[0m
+[93m4.3[0m [36mAll[0m [36mFeatures[0m [36mCombined[0m
+  ✓ [36mQuerying[0m [36musers[0m [36mwith[0m [36mlimit[0m [93m100[0m
+  ✓ [36mBatch[0m [36minserting[0m [93m10[0m [36mrecords[0m [36mof[0m [36msize[0m [93m1024[0m
+  ✓ [36mTotal[0m [36mbytes[0m[37m:[0m [93m10240[0m
+  ✅ [36mFeature[0m [36mIntegration[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m5[0m[37m:[0m [36mEdge[0m [36mCases[0m & [36mStress[0m [36mTests[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m5.1[0m [36mNested[0m [36mObject[0m [36mAccess[0m
+  ✓ [36mLocation[0m[37m:[0m [36mNYC[0m[37m,[0m [36mUSA[0m
+[93m5.2[0m [36mDestructuring[0m [36min[0m [36mLoops[0m
+  ✓ [36mLoop[0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m0[0m
+  ✓ [36mLoop[0m[37m[[0m[93m1[0m[37m][0m[37m:[0m [93m10[0m
+[93m5.3[0m [36mDestructuring[0m [36mwith[0m [36mRanges[0m
+  ✓ [36mRange[0m [36mvalues[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[93m5.4[0m [36mMultiple[0m [36mDestructurings[0m
+  ✓ [36mP1[0m([93m1[0m[37m,[0m[93m2[0m)[37m,[0m [36mP2[0m([93m3[0m[37m,[0m[93m4[0m)
+[93m5.5[0m [36mDecorator[0m [36mwith[0m [36mComplex[0m [36mArguments[0m
+  ✓ [36mService[0m [36mcall[0m [36mexecuted[0m
+  ✅ [36mEdge[0m [36mCases[0m[37m:[0m [36mPASSED[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[36mSECTION[0m [93m6[0m[37m:[0m [36mBackward[0m [36mCompatibility[0m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[93m6.1[0m [36mRegular[0m [36mClasses[0m
+  ✓ [36mOld[0m [36mstyle[0m [36mclass[0m [36mvalue[0m[37m:[0m [93m100[0m
+[93m6.2[0m [36mRegular[0m [36mFunctions[0m
+  ✓ [36mRegular[0m [36mfunction[0m [36mresult[0m[37m:[0m [93m15[0m
+[93m6.3[0m [36mRegular[0m [36mVariables[0m
+  ✓ [36mNormal[0m [36mvar[0m[37m:[0m [93m42[0m[37m,[0m [36mconst[0m[37m:[0m [36mconstant[0m
+  ✅ [36mBackward[0m [36mCompatibility[0m[37m:[0m [36mPASSED[0m
+╔════════════════════════════════════════════╗
+║           [36mCOMPATIBILITY[0m [36mREPORT[0m            ║
+╚════════════════════════════════════════════╝
+✅ [36mSECTION[0m [93m1[0m[37m:[0m [36mObject[0m [36mDestructuring[0m ......... [36mPASSED[0m
+✅ [36mSECTION[0m [93m2[0m[37m:[0m [36mArray[0m [36mDestructuring[0m .......... [36mPASSED[0m
+✅ [36mSECTION[0m [93m3[0m[37m:[0m [36mDecorators[0m ................... [36mPASSED[0m
+✅ [36mSECTION[0m [93m4[0m[37m:[0m [36mFeature[0m [36mIntegration[0m .......... [36mPASSED[0m
+✅ [36mSECTION[0m [93m5[0m[37m:[0m [36mEdge[0m [36mCases[0m ................... [36mPASSED[0m
+✅ [36mSECTION[0m [93m6[0m[37m:[0m [36mBackward[0m [36mCompatibility[0m ....... [36mPASSED[0m
+╔════════════════════════════════════════════╗
+║    [36mALL[0m [36mCOMPATIBILITY[0m [36mTESTS[0m [36mPASSED[0m ✅      ║
+║                                           ║
+║  [36mObject[0m [36mDestructuring[0m[37m:[0m    [93m100[0m% ✅         ║
+║  [36mArray[0m [36mDestructuring[0m[37m:[0m     [93m100[0m% ✅         ║
+║  [36mDecorators[0m[37m:[0m              [93m100[0m% ✅         ║
+║  [36mFeature[0m [36mIntegration[0m[37m:[0m     [93m100[0m% ✅         ║
+║  [36mEdge[0m [36mCases[0m[37m:[0m              [93m100[0m% ✅         ║
+║  [36mBackward[0m [36mCompatibility[0m[37m:[0m  [93m100[0m% ✅         ║
+║                                           ║
+║  [36mOVERALL[0m [36mSTATUS[0m[37m:[0m          [36mEXCELLENT[0m ✅    ║
+╚════════════════════════════════════════════╝
+Running test: .\tests\syntax_arrays.rcc
+=== [36mARRAYS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mArray[0m [36mDeclaration[0m
+[36mInt[0m [36marray[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mString[0m [36marray[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mFloat[0m [36marray[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mBool[0m [36marray[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mArray[0m [36mAccess[0m
+[36mFirst[0m [36melement[0m[37m:[0m [93m10[0m
+[36mSecond[0m [36melement[0m[37m:[0m [93m20[0m
+[36mLast[0m [36melement[0m[37m:[0m [93m50[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mArray[0m [36mModification[0m
+[36mBefore[0m[37m:[0m [93m1[0m
+[36mAfter[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mEmpty[0m [36mArray[0m
+[36mEmpty[0m [36marray[0m [36mlength[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mArray[0m [36mwith[0m [36mVariables[0m
+[36mArray[0m [36mfrom[0m [36mvars[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mNested[0m [36mArrays[0m
+[36mMatrix[0m[37m[[0m[93m0[0m[37m][0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m1[0m
+[36mMatrix[0m[37m[[0m[93m1[0m[37m][0m[37m[[0m[93m1[0m[37m][0m[37m:[0m [93m4[0m
+[36mMatrix[0m[37m[[0m[93m2[0m[37m][0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m5[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mArray[0m [36mIteration[0m
+[36mFruit[0m[37m:[0m [36mapple[0m
+[36mFruit[0m[37m:[0m [36mbanana[0m
+[36mFruit[0m[37m:[0m [36mcherry[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mArray[0m [36mfrom[0m [36mRange[0m
+[36mRange[0m [93m1.[0m.[93m5[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mNumber[0m[37m:[0m [93m1[0m
+[36mNumber[0m[37m:[0m [93m2[0m
+[36mNumber[0m[37m:[0m [93m3[0m
+[36mNumber[0m[37m:[0m [93m4[0m
+[36mNumber[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mArray[0m [36mPush[0m
+[36mBefore[0m [36mpush[0m[37m:[0m [93m2[0m
+[36mAfter[0m [36mpush[0m[37m:[0m [93m3[0m
+[36mLast[0m [36melement[0m[37m:[0m [93m3[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mArray[0m [36mPop[0m
+[36mBefore[0m [36mpop[0m[37m:[0m [93m3[0m
+[36mPopped[0m [36mvalue[0m[37m:[0m [93m30[0m
+[36mAfter[0m [36mpop[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mString[0m [36mas[0m [36mCharacter[0m [36mArray[0m
+[36mString[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mFirst[0m [36mchar[0m[37m:[0m [36mh[0m
+[36mLast[0m [36mchar[0m[37m:[0m [36mo[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mArray[0m [36mOperations[0m
+[36mCombined[0m [36mlength[0m[37m:[0m [93m4[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mArrays[0m [36min[0m [36mFunctions[0m
+[36mFirst[0m[37m:[0m [93m100[0m
+[36mLast[0m[37m:[0m [93m300[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mMulti[0m-[36mdimensional[0m [36mArrays[0m
+[36mGrid[0m[37m[[0m[93m0[0m[37m][0m[37m[[0m[93m0[0m[37m][0m[37m:[0m [93m1[0m
+[36mGrid[0m[37m[[0m[93m1[0m[37m][0m[37m[[0m[93m1[0m[37m][0m[37m:[0m [93m5[0m
+[36mGrid[0m[37m[[0m[93m2[0m[37m][0m[37m[[0m[93m2[0m[37m][0m[37m:[0m [93m9[0m
+[36mTest[0m [93m15[0m[37m:[0m [36mLength[0m [36mProperty[0m
+[36mEmpty[0m[37m:[0m [93m0[0m
+[36mAfter[0m [93m1[0m [36mpush[0m[37m:[0m [93m1[0m
+[36mAfter[0m [93m3[0m [36mpushes[0m[37m:[0m [93m3[0m
+=== [36mALL[0m [36mARRAYS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mArray[0m [36mdeclaration[0m
+✅ [36mArray[0m [36maccess[0m
+✅ [36mArray[0m [36mmodification[0m
+✅ [36mEmpty[0m [36marrays[0m
+✅ [36mArrays[0m [36mfrom[0m [36mvariables[0m
+✅ [36mNested[0m [36marrays[0m
+✅ [36mArray[0m [36miteration[0m
+✅ [36mRange[0m [36mcreation[0m
+✅ [36mPush[0m [36mmethod[0m
+✅ [36mPop[0m [36mmethod[0m
+✅ [36mString[0m [36mindexing[0m
+✅ [36mArray[0m [36mconcatenation[0m
+✅ [36mArrays[0m [36min[0m [36mfunctions[0m
+✅ [36mMulti[0m-[36mdimensional[0m [36maccess[0m
+✅ [36mLength[0m [36mproperty[0m
+Running test: .\tests\syntax_arrow_functions.rcc
+[93m10[0m
+[93m30[0m
+[93m42[0m
+[93m42[0m
+[93m75[0m
+[93mtrue[0m
+[93mfalse[0m
+[36mHello[0m[37m,[0m [36mTypeScript[0m
+[93m25[0m
+[93m11[0m
+[93m13[0m
+[93mtrue[0m
+[93mfalse[0m
+[93m8[0m
+[93m15[0m
+[93m15[0m
+[93m25[0m
+[93m49[0m
+[93m103[0m
+[93m35[0m
+[93m7[0m
+[93m12[0m
+[36mAll[0m [36mTypeScript[0m-[36mstyle[0m [36marrow[0m [36mfunction[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\syntax_bitwise_operators.rcc
+[93m8[0m
+[93m14[0m
+[93m6[0m
+[93m-6[0m
+[93m20[0m
+[93m5[0m
+[93m4611686018427387902[0m
+[93m8[0m
+[93m512[0m
+[93m8[0m
+[93m14[0m
+[93m6[0m
+[93m20[0m
+[93m5[0m
+[93m8[0m
+Running test: .\tests\syntax_classes.rcc
+=== [36mCLASSES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mClass[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mClass[0m [36mMethods[0m
+[36mInitial[0m[37m:[0m [93m10[0m
+[36mAfter[0m [36madd[0m([93m5[0m)[37m:[0m [93m15[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mMultiple[0m [36mMethods[0m
+[36mAfter[0m [93m2[0m [36mincrements[0m[37m:[0m [93m2[0m
+[36mAfter[0m [93m1[0m [36mdecrement[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mString[0m [36mFields[0m
+[93m1984[0m [36mby[0m [36mOrwell[0m
+[36mPages[0m[37m:[0m [93m328[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mBoolean[0m [36mFields[0m
+[36mStatus[0m[37m:[0m [36mOFF[0m
+[36mAfter[0m [36mtoggle[0m[37m:[0m [36mON[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mArray[0m [36mFields[0m
+[36mStudent[0m [36mcount[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mMethod[0m [36mReturn[0m [36mValues[0m
+[36mArea[0m[37m:[0m [93m15[0m
+[36mPerimeter[0m[37m:[0m [93m16[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mInheritance[0m
+[36mDog[0m [36mname[0m[37m:[0m [36mRex[0m
+[36mBreed[0m[37m:[0m [36mLabrador[0m
+[36mSound[0m[37m:[0m [36mWoof[0m!
+[36mTest[0m [93m9[0m[37m:[0m [36mMethods[0m [36mwith[0m [36mParameters[0m
+[36mmax[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m20[0m
+[36mmin[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m10[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mMultiple[0m [36mInstances[0m
+[36mp1[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+[36mp2[0m[37m:[0m ([93m10[0m[37m,[0m [93m20[0m)
+=== [36mALL[0m [36mCLASSES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mclass[0m [36mcreation[0m
+✅ [36mClass[0m [36mmethods[0m
+✅ [36mMultiple[0m [36mmethods[0m
+✅ [36mString[0m [36mfields[0m
+✅ [36mBoolean[0m [36mfields[0m
+✅ [36mArray[0m [36mfields[0m
+✅ [36mMethod[0m [36mreturns[0m
+✅ [36mInheritance[0m
+✅ [36mStatic[0m [36mmethods[0m
+✅ [36mMultiple[0m [36minstances[0m
+Running test: .\tests\syntax_control_flow.rcc
+=== [36mCONTROL[0m [36mFLOW[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mIf[0m [36mStatement[0m
+[36mx[0m [36mis[0m [36mgreater[0m [36mthan[0m [93m5[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mIf[0m-[36mElse[0m [36mStatement[0m
+[36mAdult[0m
+[93m18[0m [36mor[0m [36molder[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mIf[0m-[36mElse[0m [36mChain[0m
+[36mGrade[0m[37m:[0m [36mB[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mNested[0m [36mIf[0m
+[36mPositive[0m [36mand[0m [36mgreater[0m [36mthan[0m [93m10[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mWhile[0m [36mLoop[0m
+[36mCounter[0m[37m:[0m [93m0[0m
+[36mCounter[0m[37m:[0m [93m1[0m
+[36mCounter[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mWhile[0m [36mwith[0m [36mBreak[0m
+[36mi[0m[37m:[0m [93m0[0m
+[36mi[0m[37m:[0m [93m1[0m
+[36mi[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mWhile[0m [36mwith[0m [36mContinue[0m
+[36mj[0m[37m:[0m [93m1[0m
+[36mj[0m[37m:[0m [93m2[0m
+[36mj[0m[37m:[0m [93m4[0m
+[36mj[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mFor[0m-[36mIn[0m [36mLoop[0m [36mwith[0m [36mArray[0m
+[36mNumber[0m[37m:[0m [93m10[0m
+[36mNumber[0m[37m:[0m [93m20[0m
+[36mNumber[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mFor[0m-[36mIn[0m [36mLoop[0m [36mwith[0m [36mRange[0m
+[36mRange[0m[37m:[0m [93m1[0m
+[36mRange[0m[37m:[0m [93m2[0m
+[36mRange[0m[37m:[0m [93m3[0m
+[36mRange[0m[37m:[0m [93m4[0m
+[36mRange[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mNested[0m [36mLoops[0m
+([93m0[0m[37m,[0m [93m0[0m)
+([93m0[0m[37m,[0m [93m1[0m)
+([93m1[0m[37m,[0m [93m0[0m)
+([93m1[0m[37m,[0m [93m1[0m)
+[36mTest[0m [93m11[0m[37m:[0m [36mComplex[0m [36mConditions[0m
+[36ma[0m < [36mb[0m < [36mc[0m [36mis[0m [93mtrue[0m
+[36mAt[0m [36mleast[0m [36mone[0m [36mcondition[0m [36mis[0m [93mtrue[0m
+[36ma[0m [36mis[0m [36mnot[0m [36mgreater[0m [36mthan[0m [36mb[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mEarly[0m [36mReturn[0m [36mPattern[0m
+[36mcheckValue[0m([93m-5[0m)[37m:[0m [36mnegative[0m
+[36mcheckValue[0m([93m0[0m)[37m:[0m [36mzero[0m
+[36mcheckValue[0m([93m10[0m)[37m:[0m [36mpositive[0m
+=== [36mALL[0m [36mCONTROL[0m [36mFLOW[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mIf[0m [36mstatement[0m
+✅ [36mIf[0m-[36melse[0m [36mstatement[0m
+✅ [36mIf[0m-[36melse[0m [36mchain[0m
+✅ [36mNested[0m [36mif[0m
+✅ [36mWhile[0m [36mloop[0m
+✅ [36mBreak[0m [36mstatement[0m
+✅ [36mContinue[0m [36mstatement[0m
+✅ [36mFor[0m-[36min[0m [36mwith[0m [36marrays[0m
+✅ [36mFor[0m-[36min[0m [36mwith[0m [36mranges[0m
+✅ [36mNested[0m [36mloops[0m
+✅ [36mComplex[0m [36mconditions[0m
+✅ [36mEarly[0m [36mreturns[0m
+Running test: .\tests\syntax_error_handling.rcc
+=== [36mERROR[0m [36mHANDLING[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mTry[0m-[36mCatch[0m
+[36mInside[0m [36mtry[0m [36mblock[0m
+[36mCaught[0m[37m:[0m [36mBasic[0m [36merror[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mNormal[0m [36mFlow[0m
+[36mThis[0m [36mexecutes[0m [36mnormally[0m
+[36mx[0m = [93m10[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mString[0m [36mError[0m
+[36mError[0m [36mmessage[0m[37m:[0m [36mSomething[0m [36mwent[0m [36mwrong[0m!
+[36mTest[0m [93m4[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36min[0m [36mFunction[0m
+[36mResult[0m[37m:[0m [36merror[0m[37m:[0m [36mFunction[0m [36merror[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mNested[0m [36mTry[0m-[36mCatch[0m
+[36mOuter[0m [36mtry[0m
+[36mInner[0m [36mtry[0m
+[36mInner[0m [36mcatch[0m[37m:[0m [36mInner[0m [36merror[0m
+[36mAfter[0m [36minner[0m [36mtry[0m-[36mcatch[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mMultiple[0m [36mStatements[0m
+[36mSum[0m[37m:[0m [93m3[0m
+[36mCaught[0m[37m:[0m [36mError[0m [36mafter[0m [36mcalculations[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36mwith[0m [36mReturn[0m
+[93m10[0m % [93m2[0m = [93m0[0m
+[36mError[0m[37m:[0m [36mDivision[0m [36mby[0m [36mzero[0m
+[93m10[0m % [93m0[0m = [93m0[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mVariable[0m [36mScope[0m
+[36mStatus[0m[37m:[0m [36merror[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36min[0m [36mLoop[0m
+[36mi[0m = [93m0[0m
+[36mCaught[0m[37m:[0m [36mError[0m [36mat[0m [36mi[0m=[93m1[0m
+[36mi[0m = [93m2[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mConditional[0m [36mThrow[0m
+[36mValid[0m [36mage[0m
+[36mInvalid[0m[37m:[0m [36mAge[0m [36mcannot[0m [36mbe[0m [36mnegative[0m
+[36mInvalid[0m[37m:[0m [36mAge[0m [36mtoo[0m [36mhigh[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mMultiple[0m [36mThrows[0m
+[36mValue[0m [36mis[0m [36mvalid[0m
+[36mValidation[0m [36merror[0m[37m:[0m [36mNegative[0m
+[36mValidation[0m [36merror[0m[37m:[0m [36mZero[0m
+[36mValidation[0m [36merror[0m[37m:[0m [36mToo[0m [36mlarge[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mError[0m [36mPropagation[0m
+[36mcaught[0m[37m:[0m [36mInner[0m [36mfunction[0m [36merror[0m
+=== [36mALL[0m [36mERROR[0m [36mHANDLING[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mtry[0m-[36mcatch[0m
+✅ [36mNormal[0m [36mflow[0m
+✅ [36mString[0m [36merrors[0m
+✅ [36mTry[0m-[36mcatch[0m [36min[0m [36mfunctions[0m
+✅ [36mNested[0m [36mtry[0m-[36mcatch[0m
+✅ [36mMultiple[0m [36mstatements[0m
+✅ [36mTry[0m-[36mcatch[0m [36mwith[0m [36mreturn[0m
+✅ [36mVariable[0m [36mscope[0m
+✅ [36mTry[0m-[36mcatch[0m [36min[0m [36mloops[0m
+✅ [36mConditional[0m [36mthrows[0m
+✅ [36mMultiple[0m [36mthrows[0m
+✅ [36mError[0m [36mpropagation[0m
+Running test: .\tests\syntax_functions.rcc
+=== [36mFUNCTIONS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mFunction[0m
+[36mHello[0m [36mfrom[0m [36mfunction[0m!
+[36mTest[0m [93m2[0m[37m:[0m [36mFunction[0m [36mwith[0m [36mParameters[0m
+[93m5[0m + [93m3[0m = [93m8[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mMultiple[0m [36mParameters[0m
+[36mName[0m[37m:[0m [36mAlice[0m[37m,[0m [36mAge[0m[37m:[0m [93m25[0m[37m,[0m [36mCity[0m[37m:[0m [36mNYC[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mReturn[0m [36mValues[0m
+[93m6[0m * [93m7[0m = [93m42[0m
+[93m20[0m / [93m4[0m = [93m5[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mDefault[0m [36mParameters[0m
+[36mHello[0m[37m,[0m [36mAlice[0m!
+[36mHello[0m[37m,[0m [36mGuest[0m!
+[36mTest[0m [93m6[0m[37m:[0m [36mRecursive[0m [36mFunction[0m
+[36mfactorial[0m([93m5[0m) = [93m120[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mFunction[0m [36mComposition[0m
+[36mquadruple[0m([93m5[0m) = [93m20[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mString[0m [36mReturn[0m [36mFunctions[0m
+[36mFull[0m [36mname[0m[37m:[0m [36mJohn[0m [36mDoe[0m
+[36mShouted[0m[37m:[0m [36mHELLO[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mBoolean[0m [36mReturn[0m [36mFunctions[0m
+[36misEven[0m([93m4[0m)[37m:[0m [93mtrue[0m
+[36misEven[0m([93m7[0m)[37m:[0m [93mfalse[0m
+[36misPositive[0m([93m-5[0m)[37m:[0m [93mfalse[0m
+[36misPositive[0m([93m10[0m)[37m:[0m [93mtrue[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mArray[0m [36mParameters[0m
+[36mSum[0m [36mof[0m [36marray[0m[37m:[0m [93m15[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mArray[0m [36mReturn[0m
+[36mRange[0m [36mlength[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mNested[0m [36mCalls[0m
+[36mprocess[0m([93m5[0m) = [93m8[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mFloat[0m [36mFunctions[0m
+[36maverage[0m([93m5.0[0m[37m,[0m [93m10.0[0m) = [93m7.5[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mVoid[0m [36mFunctions[0m
+[36mLOG[0m[37m:[0m [36mTest[0m [36mmessage[0m
+=== [36mALL[0m [36mFUNCTIONS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mfunctions[0m
+✅ [36mParameters[0m
+✅ [36mMultiple[0m [36mparameters[0m
+✅ [36mReturn[0m [36mvalues[0m
+✅ [36mDefault[0m [36mparameters[0m
+✅ [36mRecursion[0m
+✅ [36mFunction[0m [36mcomposition[0m
+✅ [36mString[0m [36mreturns[0m
+✅ [36mBoolean[0m [36mreturns[0m
+✅ [36mArray[0m [36mparameters[0m
+✅ [36mArray[0m [36mreturns[0m
+✅ [36mNested[0m [36mcalls[0m
+✅ [36mFloat[0m [36mfunctions[0m
+✅ [36mVoid[0m [36mfunctions[0m
+Running test: .\tests\syntax_interfaces.rcc
+=== [36mINTERFACES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mInterface[0m [36mDefinition[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mInterface[0m [36mwith[0m [36mMethods[0m
+[36mDrawing[0m [36mcircle[0m [36mwith[0m [36mradius[0m [93m5[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mMultiple[0m [36mMembers[0m
+[36mArea[0m[37m:[0m [93m20[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mMultiple[0m [36mInterfaces[0m
+[36mID[0m[37m:[0m [93m1[0m
+[36mProduct[0m[37m:[0m [36mLaptop[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mInterface[0m [36mwith[0m [36mBoolean[0m
+[36mInitial[0m[37m:[0m [93mfalse[0m
+[36mAfter[0m [36mtoggle[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mMultiple[0m [36mMethods[0m
+[36mCounter[0m [36mvalue[0m[37m:[0m [93m2[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mReturn[0m [36mTypes[0m
+[36mResult[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mEmpty[0m [36mInterface[0m
+[36mMarked[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mString[0m [36mMethods[0m
+[36mFormatted[0m[37m:[0m [93m15[0m/[93m3[0m/[93m2024[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mImplementation[0m [36mChain[0m
+[36mBob[0m[37m,[0m [93m35[0m[37m,[0m [36mDeveloper[0m
+=== [36mALL[0m [36mINTERFACES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36minterface[0m
+✅ [36mInterface[0m [36mwith[0m [36mmethods[0m
+✅ [36mMultiple[0m [36mmembers[0m
+✅ [36mMultiple[0m [36minterfaces[0m
+✅ [36mBoolean[0m [36minterfaces[0m
+✅ [36mMultiple[0m [36mmethods[0m
+✅ [36mReturn[0m [36mtypes[0m
+✅ [36mEmpty[0m [36minterfaces[0m
+✅ [36mString[0m [36mmethods[0m
+✅ [36mImplementation[0m [36mchains[0m
+Running test: .\tests\syntax_interfaces_simple.rcc
+=== [36mINTERFACES[0m [36mTEST[0m ([36mSIMPLIFIED[0m) ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mInterface[0m
+✓ [36mInterface[0m [36mPoint[0m [36mdefined[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mMultiple[0m [36mInterfaces[0m
+✓ [36mMultiple[0m [36minterfaces[0m [36mdefined[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mInterface[0m [36mwith[0m [36mDifferent[0m [36mTypes[0m
+✓ [36mInterface[0m [36mwith[0m [36mmultiple[0m [36mtypes[0m [36mdefined[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mClasses[0m [36mFollowing[0m [36mInterface[0m [36mStructure[0m
+[36mArea[0m[37m:[0m [93m50[0m
+=== [36mALL[0m [36mINTERFACE[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36minterface[0m [36mdefinitions[0m
+✅ [36mMultiple[0m [36minterfaces[0m
+✅ [36mInterfaces[0m [36mwith[0m [36mmultiple[0m [36mtypes[0m
+✅ [36mClasses[0m [36mfollowing[0m [36minterface[0m [36mstructure[0m
+[36mNote[0m[37m:[0m [36mInterfaces[0m [36monly[0m [36msupport[0m [36mproperties[0m[37m,[0m [36mnot[0m [36mmethods[0m
+[36mNote[0m[37m:[0m [92m'implements'[0m [36mkeyword[0m [36mis[0m [36mnot[0m [36mcurrently[0m [36menforced[0m
+Running test: .\tests\syntax_operators.rcc
+=== [36mOPERATORS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mArithmetic[0m [36mOperators[0m
+[36mAddition[0m[37m:[0m [93m13[0m
+[36mSubtraction[0m[37m:[0m [93m7[0m
+[36mMultiplication[0m[37m:[0m [93m30[0m
+[36mDivision[0m[37m:[0m [93m3.3333333333333335[0m
+[36mModulo[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mComparison[0m [36mOperators[0m
+[36mEqual[0m[37m:[0m [93mtrue[0m
+[36mNot[0m [36mequal[0m[37m:[0m [93mtrue[0m
+[36mLess[0m [36mthan[0m[37m:[0m [93mtrue[0m
+[36mGreater[0m [36mthan[0m[37m:[0m [93mtrue[0m
+[36mLess[0m [36mor[0m [36mequal[0m[37m:[0m [93mtrue[0m
+[36mGreater[0m [36mor[0m [36mequal[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mLogical[0m [36mOperators[0m
+[36mAND[0m ([93mtrue[0m && [93mtrue[0m)[37m:[0m [93mtrue[0m
+[36mAND[0m ([93mtrue[0m && [93mfalse[0m)[37m:[0m [93mfalse[0m
+[36mOR[0m ([93mfalse[0m || [93mtrue[0m)[37m:[0m [93mtrue[0m
+[36mOR[0m ([93mfalse[0m || [93mfalse[0m)[37m:[0m [93mfalse[0m
+[36mNOT[0m (![93mtrue[0m)[37m:[0m [93mfalse[0m
+[36mNOT[0m (![93mfalse[0m)[37m:[0m [93mtrue[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mAssignment[0m [36mOperators[0m
+[36mInitial[0m[37m:[0m [93m10[0m
+[36mAfter[0m +[93m5[0m[37m:[0m [93m15[0m
+[36mAfter[0m [93m-3[0m[37m:[0m [93m12[0m
+[36mAfter[0m *[93m2[0m[37m:[0m [93m24[0m
+[36mAfter[0m [93m-4[0m[37m:[0m [93m20[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mCompound[0m [36mAssignment[0m
+[36mnum[0m += [93m10[0m[37m:[0m [93m110[0m
+[36mnum[0m -= [93m5[0m[37m:[0m [93m105[0m
+[36mnum[0m *= [93m2[0m[37m:[0m [93m210[0m
+[36mnum[0m -= [93m10[0m[37m:[0m [93m200[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mUnary[0m [36mOperators[0m
+[36mNegation[0m[37m:[0m [93m-42[0m
+[36mLogical[0m [36mNOT[0m[37m:[0m [93mfalse[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mString[0m [36mConcatenation[0m
+[36mConcatenation[0m[37m:[0m [36mHello[0m [36mWorld[0m
+[36mMixed[0m[37m:[0m [36mRaccoon[0m [36mv1[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mOperator[0m [36mPrecedence[0m
+[93m2[0m + [93m3[0m * [93m4[0m = [93m14[0m
+([93m2[0m + [93m3[0m) * [93m4[0m = [93m20[0m
+[93m10[0m - [93m2[0m + [93m3[0m = [93m11[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mBoolean[0m [36mExpressions[0m
+[36mIs[0m [36madult[0m ([93m25[0m >= [93m18[0m)[37m:[0m [93mtrue[0m
+[36mPassed[0m ([93m85[0m [36min[0m [36mrange[0m)[37m:[0m [93mtrue[0m
+[36mCan[0m [36medit[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mNull[0m [36mComparison[0m
+[36mIs[0m [93mnull[0m[37m:[0m [93mtrue[0m
+[36mIs[0m [36mnot[0m [93mnull[0m[37m:[0m [93mtrue[0m
+=== [36mALL[0m [36mOPERATORS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mArithmetic[0m [36moperators[0m
+✅ [36mComparison[0m [36moperators[0m
+✅ [36mLogical[0m [36moperators[0m
+✅ [36mAssignment[0m [36moperators[0m
+✅ [36mCompound[0m [36massignment[0m
+✅ [36mUnary[0m [36moperators[0m
+✅ [36mString[0m [36mconcatenation[0m
+✅ [36mOperator[0m [36mprecedence[0m
+✅ [36mBoolean[0m [36mexpressions[0m
+✅ [36mNull[0m [36mcomparison[0m
+Running test: .\tests\syntax_primitive_types.rcc
+=== [36mPRIMITIVE[0m [36mTYPES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mInteger[0m [36mType[0m
+[36mPositive[0m[37m:[0m [93m42[0m
+[36mNegative[0m[37m:[0m [93m-100[0m
+[36mZero[0m[37m:[0m [93m0[0m
+[36mMax[0m[37m:[0m [93m2147483647[0m
+[36mMin[0m[37m:[0m [93m-2147483648[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mFloat[0m [36mType[0m
+[36mPi[0m[37m:[0m [93m3.14[0m
+[36mNegative[0m[37m:[0m [93m-2.71[0m
+[36mZero[0m[37m:[0m [93m0[0m
+[36mE[0m[37m:[0m [93m2.71828[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mString[0m [36mType[0m
+[36mString[0m [93m1[0m[37m:[0m [36mHello[0m [36mWorld[0m
+[36mString[0m [93m2[0m[37m:[0m [36mRaccoon[0m
+[36mEmpty[0m[37m:[0m [92m''[0m
+[36mGreeting[0m[37m:[0m ¡[36mHola[0m!
+[36mTest[0m [93m4[0m[37m:[0m [36mBoolean[0m [36mType[0m
+[36mTrue[0m[37m:[0m [93mtrue[0m
+[36mFalse[0m[37m:[0m [93mfalse[0m
+[36mConstant[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mNull[0m [36mType[0m
+[36mNull[0m [36mvalue[0m [36mcreated[0m
+[36mAssigned[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mType[0m [36mConversions[0m
+[36mInt[0m [36mto[0m [36mFloat[0m[37m:[0m [93m10[0m
+[36mInt[0m [36mto[0m [36mString[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mString[0m [36mOperations[0m
+[36mUpper[0m[37m:[0m [36mHELLO[0m
+[36mLower[0m[37m:[0m [36mhello[0m
+[36mSplit[0m [36mlength[0m[37m:[0m [93m3[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mType[0m [36mChecking[0m
+[36mtypeof[0m [36mnum[0m[37m:[0m [36mint[0m
+[36mtypeof[0m [36mmsg[0m[37m:[0m [36mstr[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mConstants[0m
+[36mPI[0m[37m:[0m [93m3.14159[0m
+[36mVersion[0m[37m:[0m [93m1[0m
+[36mApp[0m[37m:[0m [36mRaccoon[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mMixed[0m [36mType[0m [36mOperations[0m
+[36mInt[0m + [36mFloat[0m[37m:[0m [93m7.5[0m
+[36mNumber[0m[37m:[0m [93m42[0m
+=== [36mALL[0m [36mPRIMITIVE[0m [36mTYPES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mInteger[0m [36mtype[0m
+✅ [36mFloat[0m [36mtype[0m
+✅ [36mString[0m [36mtype[0m
+✅ [36mBoolean[0m [36mtype[0m
+✅ [36mNull[0m [36mtype[0m
+✅ [36mType[0m [36mconversions[0m
+✅ [36mString[0m [36moperations[0m
+✅ [36mType[0m [36mchecking[0m
+✅ [36mConstants[0m
+✅ [36mMixed[0m [36moperations[0m
+Running test: .\tests\syntax_scopes.rcc
+=== [36mSCOPES[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGlobal[0m [36mScope[0m
+[36mGlobal[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mBlock[0m [36mScope[0m
+[36mInside[0m [36mblock[0m[37m:[0m [93m2[0m
+[36mAccess[0m [36mouter[0m[37m:[0m [93m1[0m
+[36mOutside[0m [36mblock[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFunction[0m [36mScope[0m
+[36mInside[0m [36mfunction[0m[37m:[0m [93m20[0m
+[36mAccess[0m [36mouter[0m[37m:[0m [93m10[0m
+[36mOutside[0m [36mfunction[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mVariable[0m [36mShadowing[0m
+[36mOuter[0m [36mx[0m[37m:[0m [93m1[0m
+[36mInner[0m [36mx[0m[37m:[0m [93m2[0m
+[36mOuter[0m [36mx[0m [36magain[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mLoop[0m [36mScope[0m
+[36mLoop[0m [36miteration[0m [93m0[0m[37m:[0m [93m0[0m
+[36mLoop[0m [36miteration[0m [93m1[0m[37m:[0m [93m10[0m
+[36mLoop[0m [36miteration[0m [93m2[0m[37m:[0m [93m20[0m
+[36mAfter[0m [36mloop[0m[37m:[0m [93m5[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mIf[0m [36mStatement[0m [36mScope[0m
+[36mInside[0m [36mif[0m[37m:[0m [93m42[0m
+[36mAfter[0m [36mif[0m [36mblock[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mNested[0m [36mBlocks[0m
+[36mLevel[0m [93m3[0m[37m:[0m [93m3[0m
+[36mAccess[0m [36mlevel[0m [93m2[0m[37m:[0m [93m2[0m
+[36mAccess[0m [36mlevel[0m [93m1[0m[37m:[0m [93m1[0m
+[36mLevel[0m [93m2[0m[37m:[0m [93m2[0m
+[36mLevel[0m [93m1[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mReassignment[0m
+[36mInitial[0m[37m:[0m [93m10[0m
+[36mAfter[0m [36mreassignment[0m[37m:[0m [93m20[0m
+[36mAfter[0m [36mcalculation[0m[37m:[0m [93m25[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mConstants[0m
+[36mConstant[0m [36mvalue[0m[37m:[0m [93m100[0m
+[36mPI[0m[37m:[0m [93m3.14159[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mFor[0m-[36mIn[0m [36mScope[0m
+[36mNumber[0m[37m:[0m [93m10[0m
+[36mNumber[0m[37m:[0m [93m20[0m
+[36mNumber[0m[37m:[0m [93m30[0m
+[36mAfter[0m [36mfor[0m-[36min[0m [36mloop[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mClass[0m [36mField[0m [36mScope[0m
+[36mCounter[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mTry[0m-[36mCatch[0m [36mScope[0m
+[36mTry[0m [36mblock[0m[37m:[0m [93m100[0m
+[36mCatch[0m [36mblock[0m[37m:[0m [36mcaught[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mMultiple[0m [36mVariables[0m
+[36ma[0m=[93m1[0m[37m,[0m [36mb[0m=[93m2[0m[37m,[0m [36mc[0m=[93m3[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mVariable[0m [36mLifetime[0m
+[36mFirst[0m [36mcall[0m[37m:[0m [93m1[0m
+[36mSecond[0m [36mcall[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m15[0m[37m:[0m [36mScope[0m [36mChain[0m
+[36mAccess[0m [36mall[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+=== [36mALL[0m [36mSCOPES[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mGlobal[0m [36mscope[0m
+✅ [36mBlock[0m [36mscope[0m
+✅ [36mFunction[0m [36mscope[0m
+✅ [36mVariable[0m [36mshadowing[0m
+✅ [36mLoop[0m [36mscope[0m
+✅ [36mIf[0m [36mstatement[0m [36mscope[0m
+✅ [36mNested[0m [36mblocks[0m
+✅ [36mReassignment[0m
+✅ [36mConstants[0m
+✅ [36mFor[0m-[36min[0m [36mscope[0m
+✅ [36mClass[0m [36mfield[0m [36mscope[0m
+✅ [36mTry[0m-[36mcatch[0m [36mscope[0m
+✅ [36mMultiple[0m [36mvariables[0m
+✅ [36mVariable[0m [36mlifetime[0m
+✅ [36mScope[0m [36mchain[0m
+Running test: .\tests\syntax_static_methods.rcc
+=== [36mSTATIC[0m [36mMETHODS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mStatic[0m [36mMethod[0m
+[36mmax[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m20[0m
+[36mmin[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m10[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mMultiple[0m [36mParameters[0m
+[36madd[0m([93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m)[37m:[0m [93m6[0m
+[36mmultiply[0m([93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m)[37m:[0m [93m24[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mString[0m [36mReturn[0m
+[36mHelloWorld[0m
+[36mxxx[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mMix[0m [36mStatic[0m [36mand[0m [36mInstance[0m
+[36mCounter[0m [36mvalue[0m[37m:[0m [93m1[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mFactory[0m [36mPattern[0m
+[36mOrigin[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+[36mFrom[0m [36marray[0m[37m:[0m ([93m10[0m[37m,[0m [93m20[0m)
+=== [36mALL[0m [36mSTATIC[0m [36mMETHOD[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mstatic[0m [36mmethods[0m
+✅ [36mMultiple[0m [36mparameters[0m
+✅ [36mString[0m [36mreturn[0m [36mtypes[0m
+✅ [36mMixed[0m [36mstatic[0m [36mand[0m [36minstance[0m
+✅ [36mFactory[0m [36mpattern[0m
+Running test: .\tests\syntax_templates.rcc
+=== [36mTEMPLATE[0m [36mSTRINGS[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mTemplate[0m
+[36mHello[0m[37m,[0m [36mWorld[0m!
+[36mTest[0m [93m2[0m[37m:[0m [36mInteger[0m [36mInterpolation[0m
+[36mI[0m [36mam[0m [93m25[0m [36myears[0m [36mold[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mFloat[0m [36mInterpolation[0m
+[36mPrice[0m[37m:[0m $[93m19.99[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mBoolean[0m [36mInterpolation[0m
+[36mStatus[0m[37m:[0m [93mtrue[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mMultiple[0m [36mVariables[0m
+[36mName[0m[37m:[0m [36mJohn[0m [36mDoe[0m[37m,[0m [36mAge[0m[37m:[0m [93m30[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mExpression[0m [36mInterpolation[0m
+[93m5[0m + [93m3[0m = [93m8[0m
+[36mTest[0m [93m7[0m[37m:[0m [36mTemplates[0m [36min[0m [36mFunctions[0m
+[36mHello[0m [36mAlice[0m[37m,[0m [36myou[0m [36mare[0m [93m28[0m [36myears[0m [36mold[0m
+[36mTest[0m [93m8[0m[37m:[0m [36mObject[0m [36mProperties[0m
+[36mMy[0m [36mname[0m [36mis[0m [36mBob[0m [36mand[0m [36mI[0m[92m'm 35[0m
+[36mTest[0m [93m9[0m[37m:[0m [36mArray[0m [36mProperties[0m
+[36mArray[0m [36mhas[0m [93m5[0m [36mitems[0m
+[36mTest[0m [93m10[0m[37m:[0m [36mComparison[0m [36mResults[0m
+[36mx[0m < [36my[0m [36mis[0m [93mtrue[0m
+[36mTest[0m [93m11[0m[37m:[0m [36mComplex[0m [36mExpressions[0m
+[36mSum[0m [36mof[0m [93m5[0m [36mand[0m [93m10[0m [36mis[0m [93m15[0m
+[36mTest[0m [93m12[0m[37m:[0m [36mFunction[0m [36mCall[0m [36mInterpolation[0m
+[36mDouble[0m [36mof[0m [93m7[0m [36mis[0m [93m14[0m
+[36mTest[0m [93m13[0m[37m:[0m [36mTemplate[0m [36mConcatenation[0m
+[36mHello[0m [36mWorld[0m
+[36mTest[0m [93m14[0m[37m:[0m [36mEmpty[0m [36mTemplates[0m
+[36mEmpty[0m [36mstring[0m [36mlength[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m15[0m[37m:[0m [36mTemplates[0m [36min[0m [36mConditionals[0m
+[36mGrade[0m[37m:[0m [36mB[0m ([93m85[0m)
+=== [36mALL[0m [36mTEMPLATE[0m [36mSTRINGS[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mtemplates[0m
+✅ [36mInteger[0m [36minterpolation[0m
+✅ [36mFloat[0m [36minterpolation[0m
+✅ [36mBoolean[0m [36minterpolation[0m
+✅ [36mMultiple[0m [36mvariables[0m
+✅ [36mExpressions[0m
+✅ [36mFunction[0m [36mtemplates[0m
+✅ [36mObject[0m [36mproperties[0m
+✅ [36mArray[0m [36mproperties[0m
+✅ [36mComparisons[0m
+✅ [36mComplex[0m [36mexpressions[0m
+✅ [36mFunction[0m [36mcalls[0m
+✅ [36mConcatenation[0m
+✅ [36mEmpty[0m [36mtemplates[0m
+✅ [36mConditional[0m [36mtemplates[0m
+Running test: .\tests\test_advanced_inference.rcc
+[36mTodas[0m [36mlas[0m [36minferencias[0m [36mcompletadas[0m [36mexitosamente[0m!
+Running test: .\tests\test_advanced_return_inference.rcc
+[36mdouble[0m([93m5[0m) = [93m10[0m
+[36mquadruple[0m([93m3[0m) = [93m12[0m
+[36mcalculate[0m([93mtrue[0m) = [93m42[0m
+[36mcalculate[0m([93mfalse[0m) = [93m3.14[0m
+[36mgetNumbers[0m() = [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[36mcheckValue[0m([93m-5[0m) = [36mnegative[0m
+[36mcheckValue[0m([93m0[0m) = [36mzero[0m
+[36mcheckValue[0m([93m10[0m) = [36mpositive[0m
+[36mdoNothing[0m() = [93m5[0m
+Running test: .\tests\test_advanced_types.rcc
+[36mhello[0m
+[93m42[0m
+[36mAdvanced[0m [36mtype[0m [36msystem[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_array_holes.rcc
+[36mResult[0m[37m:[0m [36ma[0m=[93m1[0m[37m,[0m [36mc[0m=[93m3[0m
+[36mResult[0m[37m:[0m [36mx[0m=[93m10[0m[37m,[0m [36mz[0m=[93m40[0m
+Running test: .\tests\test_array_methods.rcc
+[36mOriginal[0m [36marray[0m[37m:[0m
+[36mDoubled[0m[37m:[0m
+[36mEvens[0m[37m:[0m
+[36mSum[0m[37m:[0m
+[36mForEach[0m[37m:[0m
+  -
+  -
+  -
+  -
+  -
+[36mFirst[0m > [93m3[0m[37m:[0m
+[36mIndex[0m [36mof[0m [36mfirst[0m > [93m3[0m[37m:[0m
+[36mHas[0m > [93m10[0m[37m:[0m
+[36mHas[0m < [93m3[0m[37m:[0m
+[36mAll[0m [36mpositive[0m[37m:[0m
+[36mAll[0m > [93m10[0m[37m:[0m
+[36mAll[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_arrow.rcc
+[37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+Running test: .\tests\test_arrow2.rcc
+[37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m][0m
+Running test: .\tests\test_arrow_complete.rcc
+=== [36mARROW[0m [36mFUNCTIONS[0m [36mTEST[0m ===
+
+[93m1.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mmap[0m[37m:[0m
+[36mDoubled[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m,[0m [93m10[0m[37m][0m
+
+[93m2.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mfilter[0m[37m:[0m
+[36mEven[0m [36mnumbers[0m[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m][0m
+
+[93m3.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mreduce[0m[37m:[0m
+[36mSum[0m[37m:[0m [93m15[0m
+
+[93m4.[0m [36mArrow[0m [36mfunction[0m [36mwith[0m [36mtype[0m [36mannotations[0m[37m:[0m
+[36mSquared[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m4[0m[37m,[0m [93m9[0m[37m,[0m [93m16[0m[37m,[0m [93m25[0m[37m][0m
+
+[93m5.[0m [36mMethod[0m [36mchaining[0m[37m:[0m
+[36mFiltered[0m > [93m2[0m[37m,[0m [36mthen[0m * [93m10[0m[37m:[0m [37m[[0m[93m30[0m[37m,[0m [93m40[0m[37m,[0m [93m50[0m[37m][0m
+
+[93m6.[0m [36mArrow[0m [36mfunction[0m [36mas[0m [36mvariable[0m[37m:[0m
+[36mTripled[0m[37m:[0m [37m[[0m[93m3[0m[37m,[0m [93m6[0m[37m,[0m [93m9[0m[37m,[0m [93m12[0m[37m,[0m [93m15[0m[37m][0m
+
+=== [36mALL[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_arrow_notype.rcc
+[93m14[0m
+Running test: .\tests\test_arrow_simple.rcc
+[93m8[0m
+Running test: .\tests\test_arrow_single.rcc
+[93m14[0m
+Running test: .\tests\test_bigint_numerics.rcc
+=== [36mTesting[0m [36mNumeric[0m [36mSeparators[0m ===
+[93m1[0m[36m_000_000[0m = [93m1000000[0m
+[93m1[0m[36m_000_000_000[0m = [93m1000000000[0m
+
+=== [36mTesting[0m [36mBinary[0m [36mLiterals[0m ===
+[93m0[0m[36mb1010[0m ([36mbinary[0m) = [93m10[0m
+[93m0[0m[36mB1111_0000[0m ([36mbinary[0m [36mwith[0m [36mseparator[0m) = [93m240[0m
+
+=== [36mTesting[0m [36mOctal[0m [36mLiterals[0m ===
+[93m0[0m[36mo755[0m ([36moctal[0m) = [93m493[0m
+[93m0[0m[36mO644[0m ([36moctal[0m) = [93m420[0m
+
+=== [36mTesting[0m [36mHexadecimal[0m [36mLiterals[0m ===
+[93m0[0m[36mxFF[0m ([36mhex[0m) = [93m255[0m
+[93m0[0m[36mx1A2B[0m ([36mhex[0m) = [93m6699[0m
+
+=== [36mTesting[0m [36mBigInt[0m ===
+[93m12345678901234567890[0m[36mn[0m
+[93m999999999999999999[0m[36mn[0m
+[93m18446744073709551615[0m[36mn[0m
+
+=== [36mTesting[0m [36mtypeof[0m ===
+[36mtypeof[0m [93m123[0m[37m:[0m [36mint[0m
+[36mtypeof[0m [93m123[0m[36mn[0m[37m:[0m [36mbigint[0m
+[36mtypeof[0m [93m0[0m[36mb1010[0m[37m:[0m [36mint[0m
+[36mtypeof[0m [93m0[0m[36mxFF[0m[37m:[0m [36mint[0m
+
+=== [36mAll[0m [36mBigInt[0m [36mand[0m [36mnumeric[0m [36mliteral[0m [36mtests[0m [36mpassed[0m! ===
+Running test: .\tests\test_builtins.rcc
+=== [36mTesting[0m [36mCore[0m [36mBuilt[0m-[36mins[0m ===
+[93m5[0m
+[93m5[0m
+
+=== [36mTesting[0m [36mMath[0m [36mBuilt[0m-[36mins[0m ===
+[93m3.141592653589793[0m
+[93m2.718281828459045[0m
+[93m3.7[0m
+[93m3.2[0m
+[93m4[0m
+[93m5[0m
+[93m4[0m
+[93m8[0m
+[93m3[0m
+[93m5[0m
+[93m0[0m
+[93m1[0m
+[93m1761927384.7802908[0m
+
+=== [36mTesting[0m [36mString[0m [36mBuilt[0m-[36mins[0m ===
+[36mHELLO[0m [36mWORLD[0m
+[36mhello[0m [36mworld[0m
+[36mspaces[0m
+[36mR[0m
+[36mRacc[0m
+[93m6[0m
+[36mHello[0m [36mRaccoon[0m
+[93m3[0m
+Running test: .\tests\test_classes_advanced.rcc
+🦝 === [36mADVANCED[0m [36mCLASSES[0m [36mTEST[0m ===
+✅ [36mTest[0m [93m1[0m[37m:[0m [36mStatic[0m [36mMethods[0m
+  [36mmax[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m20[0m
+  [36mmin[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m [93m10[0m
+  [36mabs[0m([93m-15[0m)[37m:[0m [93m15[0m
+  [36mabs[0m([93m15[0m)[37m:[0m [93m15[0m
+✅ [36mTest[0m [93m2[0m[37m:[0m [36mGetters[0m [36mand[0m [36mSetters[0m
+  [36mCelsius[0m[37m:[0m [93m25[0m
+  [36mFahrenheit[0m[37m:[0m [93m77[0m
+  [36mKelvin[0m[37m:[0m [93m298.15[0m
+  [36mAfter[0m [36msetting[0m [36mto[0m [93m68[0m°[36mF[0m[37m:[0m
+  [36mCelsius[0m[37m:[0m [93m20[0m
+✅ [36mTest[0m [93m3[0m[37m:[0m [36mMethod[0m [36mOverriding[0m
+  [36mCircle[0m [36mwith[0m [36mradius[0m [93m5[0m
+  [36mArea[0m[37m:[0m [93m78.53975[0m
+  [36mRectangle[0m [93m4[0m[36mx6[0m
+  [36mArea[0m[37m:[0m [93m24[0m
+✅ [36mTest[0m [93m4[0m[37m:[0m [36mEncapsulation[0m [36mPattern[0m
+  [36mInitial[0m[37m:[0m [93m0[0m/[93m3[0m
+  [36mAfter[0m [36mincrement[0m[37m:[0m [93m1[0m
+  [36mAfter[0m [93m2[0m [36mmore[0m [36mincrements[0m[37m:[0m [93m3[0m
+  [36mCan[0m [36mincrement[0m [36mmore[0m[37m:[0m [93mfalse[0m
+  [36mAfter[0m [36mreset[0m[37m:[0m [93m0[0m
+✅ [36mTest[0m [93m5[0m[37m:[0m [36mComplex[0m [36mConstructor[0m
+  [36mUser[0m[37m:[0m [36mjohn_doe[0m
+  [36mEmail[0m[37m:[0m [36mjohn[0m@[36mexample[0m.[36mcom[0m
+  [36mStatus[0m[37m:[0m [36mActive[0m ([93m0[0m [36mlogins[0m)
+  [36mAfter[0m [93m3[0m [36mlogins[0m[37m:[0m [36mActive[0m ([93m3[0m [36mlogins[0m)
+  [36mAfter[0m [36mdeactivation[0m[37m:[0m [36mInactive[0m
+✅ [36mTest[0m [93m6[0m[37m:[0m [36mTwo[0m-[36mLevel[0m [36mInheritance[0m
+  [36mCar[0m[37m:[0m [36mToyota[0m ([93m4[0m [36mdoors[0m)
+  [36mBrand[0m[37m:[0m [36mToyota[0m
+  [36mDoors[0m[37m:[0m [93m4[0m
+✅ [36mTest[0m [93m7[0m[37m:[0m [36mComplex[0m [36mState[0m [36mManagement[0m
+  [36mCart[0m [36mempty[0m[37m:[0m [93mtrue[0m
+  [36mItems[0m [36min[0m [36mcart[0m[37m:[0m [93m3[0m
+  [36mTotal[0m[37m:[0m $[93m12.25[0m
+✅ [36mTest[0m [93m8[0m[37m:[0m [36mMethods[0m [36mwith[0m [36mMultiple[0m [36mReturns[0m
+  [36mEmpty[0m [36mstring[0m[37m:[0m [36mError[0m[37m:[0m [36mValue[0m [36mis[0m [36mempty[0m
+  [92m'ab'[0m[37m:[0m [36mError[0m[37m:[0m [36mValue[0m [36mtoo[0m [36mshort[0m
+  [92m'hello'[0m[37m:[0m [36mValid[0m
+  [36mLong[0m [36mstring[0m[37m:[0m [36mError[0m[37m:[0m [36mValue[0m [36mtoo[0m [36mlong[0m
+✅ [36mTest[0m [93m9[0m[37m:[0m [36mInstance[0m [36mType[0m [36mChecking[0m
+  [36mAnimal[0m [36mname[0m[37m:[0m [36mGeneric[0m
+  [36mCat[0m [36mname[0m[37m:[0m [36mWhiskers[0m
+  [36mCat[0m [36msays[0m[37m:[0m [36mMeow[0m!
+✅ [36mTest[0m [93m10[0m[37m:[0m [36mMultiple[0m [36mInstances[0m [36mStress[0m [36mTest[0m
+  [36mCreated[0m [93m5[0m [36mpoints[0m
+  [36mPoint[0m [93m0[0m[37m:[0m ([93m0[0m[37m,[0m [93m0[0m)
+  [36mPoint[0m [93m1[0m[37m:[0m ([93m3[0m[37m,[0m [93m4[0m)
+  [36mPoint[0m [93m2[0m[37m:[0m ([93m5[0m[37m,[0m [93m12[0m)
+🎉 === [36mALL[0m [36mADVANCED[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mStatic[0m [36mmethods[0m
+✅ [36mGetters[0m [36mand[0m [36msetters[0m
+✅ [36mMethod[0m [36moverriding[0m [36min[0m [36minheritance[0m
+✅ [36mEncapsulation[0m [36mpatterns[0m
+✅ [36mComplex[0m [36mconstructor[0m [36mlogic[0m
+✅ [36mTwo[0m-[36mlevel[0m [36minheritance[0m
+✅ [36mComplex[0m [36mstate[0m [36mmanagement[0m
+✅ [36mMultiple[0m [36mreturn[0m [36mpoints[0m
+✅ [36mInstance[0m [36mtype[0m [36mchecking[0m
+✅ [36mMultiple[0m [36minstances[0m [36mstress[0m [36mtest[0m
+🦝 [36mRaccoon[0m [36mClasses[0m[37m:[0m [36mALL[0m [36mADVANCED[0m [36mFEATURES[0m [36mWORKING[0m!
+Running test: .\tests\test_classes_comprehensive.rcc
+🦝 === [36mCOMPREHENSIVE[0m [36mCLASSES[0m [36mTEST[0m ===
+✅ [36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mClass[0m [36mwith[0m [36mConstructor[0m
+  [36mName[0m[37m:[0m [36mAlice[0m
+  [36mAge[0m[37m:[0m [93m30[0m
+✅ [36mTest[0m [93m2[0m[37m:[0m [36mClass[0m [36mwith[0m [36mMethods[0m
+  [36mInitial[0m [36mvalue[0m[37m:[0m [93m10[0m
+  [36mAfter[0m [36madd[0m([93m5[0m)[37m:[0m [93m15[0m
+  [36mAfter[0m [36mmultiply[0m([93m2[0m)[37m:[0m [93m30[0m
+  [36mAfter[0m [36msubtract[0m([93m10[0m)[37m:[0m [93m20[0m
+  [36mAfter[0m [36mreset[0m[37m:[0m [93m0[0m
+✅ [36mTest[0m [93m3[0m[37m:[0m [36mClass[0m [36mwith[0m [36mDifferent[0m [36mData[0m [36mTypes[0m
+  [36mLaptop[0m - $[93m999.99[0m ([36mStock[0m[37m:[0m [93m5[0m)
+  [36mTotal[0m [36mvalue[0m[37m:[0m $[93m4999.95[0m
+  [36mIn[0m [36mstock[0m[37m:[0m [93mtrue[0m
+  [36mAfter[0m [36mselling[0m [93m3[0m[37m:[0m [36mLaptop[0m - $[93m999.99[0m ([36mStock[0m[37m:[0m [93m2[0m)
+  [36mAfter[0m [36mselling[0m [93m2[0m [36mmore[0m[37m:[0m [36mLaptop[0m - $[93m999.99[0m ([36mStock[0m[37m:[0m [93m0[0m)
+  [36mIn[0m [36mstock[0m[37m:[0m [93mfalse[0m
+✅ [36mTest[0m [93m4[0m[37m:[0m [36mClass[0m [36mwith[0m [36mArray[0m [36mProperties[0m
+  [36mClassroom[0m[37m:[0m [36mMath[0m [93m101[0m
+  [36mStudents[0m[37m:[0m [93m3[0m
+  [36mAverage[0m [36mgrade[0m[37m:[0m [93m91.33333333333333[0m
+✅ [36mTest[0m [93m5[0m[37m:[0m [36mClass[0m [36mInheritance[0m
+  [36mRex[0m [36mis[0m [93m3[0m [36myears[0m [36mold[0m
+  [36mRex[0m [36mis[0m [36ma[0m [36mLabrador[0m
+  [36mSound[0m[37m:[0m [36mWoof[0m! [36mWoof[0m!
+✅ [36mTest[0m [93m6[0m[37m:[0m [36mMultiple[0m [36mInstances[0m [36mIndependence[0m
+  [36mCounter[0m [36mA[0m[37m:[0m [93m3[0m
+  [36mCounter[0m [36mB[0m[37m:[0m [93m1[0m
+✅ [36mTest[0m [93m7[0m[37m:[0m [36mComplex[0m [36mMethods[0m [36mwith[0m [36mLogic[0m
+  [36mAccount[0m[37m:[0m [36mACC001[0m
+  [36mInitial[0m [36mbalance[0m[37m:[0m $[93m1000[0m
+  [36mAfter[0m [36mdeposit[0m $[93m500[0m[37m:[0m $[93m1500[0m
+  [36mAfter[0m [36mwithdraw[0m $[93m200[0m[37m:[0m $[93m1300[0m
+✅ [36mTest[0m [93m8[0m[37m:[0m [36mNested[0m [36mMethod[0m [36mCalls[0m
+  [36mInitial[0m[37m:[0m [93m5[0m
+  [36mAfter[0m [36madd[0m([93m3[0m) [36mthen[0m [36mmultiply[0m([93m2[0m)[37m:[0m [93m16[0m
+✅ [36mTest[0m [93m9[0m[37m:[0m [36mClass[0m [36mwith[0m [36mString[0m [36mOperations[0m
+  [36mOriginal[0m[37m:[0m [36mHello[0m [36mRaccoon[0m
+  [36mUppercase[0m[37m:[0m [36mHELLO[0m [36mRACCOON[0m
+  [36mLowercase[0m[37m:[0m [36mhello[0m [36mraccoon[0m
+  [36mLength[0m[37m:[0m [93m13[0m
+  [36mIs[0m [36mempty[0m[37m:[0m [93mfalse[0m
+✅ [36mTest[0m [93m10[0m[37m:[0m [36mClass[0m [36mwith[0m [36mObject[0m [36mComposition[0m
+  [36mJohn[0m [36mDoe[0m ([36mID[0m[37m:[0m [93m1001[0m)
+  [36mJohn[0m [36mDoe[0m ([36mID[0m[37m:[0m [93m1001[0m) - [93m123[0m [36mMain[0m [36mSt[0m[37m,[0m [36mSpringfield[0m [93m12345[0m
+🎉 === [36mALL[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mclass[0m [36mwith[0m [36mconstructor[0m
+✅ [36mClass[0m [36mwith[0m [36mmethods[0m
+✅ [36mDifferent[0m [36mdata[0m [36mtypes[0m ([36mstr[0m[37m,[0m [36mint[0m[37m,[0m [36mfloat[0m[37m,[0m [36mbool[0m)
+✅ [36mArray[0m [36mproperties[0m
+✅ [36mClass[0m [36minheritance[0m ([36mextends[0m[37m,[0m [36msuper[0m)
+✅ [36mMultiple[0m [36minstances[0m [36mindependence[0m
+✅ [36mComplex[0m [36mmethods[0m [36mwith[0m [36mlogic[0m
+✅ [36mNested[0m [36mmethod[0m [36mcalls[0m
+✅ [36mString[0m [36moperations[0m [36min[0m [36mclasses[0m
+✅ [36mObject[0m [36mcomposition[0m
+🦝 [36mRaccoon[0m [36mClasses[0m[37m:[0m [36mFULLY[0m [36mFUNCTIONAL[0m!
+Running test: .\tests\test_class_rest.rcc
+[36mIn[0m [36mstatic[0m [36mmethod[0m[37m,[0m [36margs[0m[37m:[0m [37m[[0m[36mhello[0m[37m,[0m [36mworld[0m[37m][0m
+[36mhello[0m [36mworld[0m
+Running test: .\tests\test_complete_syntax_semantics.rcc
+╔════════════════════════════════════════════════════════════════╗
+║     [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+[37m[[0m[93m1[0m[37m][0m [36mPRIMITIVE[0m [36mTYPES[0m & [36mLITERALS[0m
+  ✓ [36mInteger[0m [36mliterals[0m[37m:[0m [93m42[0m[37m,[0m [93m-100[0m[37m,[0m [93m999999999[0m
+  ✓ [36mFloat[0m [36mliterals[0m[37m:[0m [93m3.14159[0m[37m,[0m [93m-2.5[0m[37m,[0m [93m1.5[0m
+  ✓ [36mString[0m [36mliterals[0m[37m:[0m [36mhello[0m [36mworld[0m[37m,[0m [36mempty[0m=[92m""[0m
+  ✓ [36mBoolean[0m [36mliterals[0m[37m:[0m [93mtrue[0m[37m,[0m [93mfalse[0m
+  ✓ [36mNull[0m [36mliteral[0m[37m:[0m [93mnull[0m
+  ✓ [36mTemplate[0m [36mstrings[0m[37m:[0m [36mLanguage[0m[37m:[0m [36mRaccoon[0m[37m,[0m [36mVersion[0m[37m:[0m [93m1[0m
+
+[37m[[0m[93m2[0m[37m][0m [36mOPERATORS[0m
+  ✓ [36mArithmetic[0m[37m:[0m +=[93m13[0m[37m,[0m -=[93m7[0m[37m,[0m *=[93m30[0m[37m,[0m /=[93m3.3333333333333335[0m[37m,[0m %=[93m1[0m[37m,[0m **=[93m8[0m
+  ✓ [36mComparison[0m[37m:[0m ==[93mfalse[0m[37m,[0m !=[93mtrue[0m[37m,[0m <[93mfalse[0m[37m,[0m >[93mtrue[0m
+  ✓ [36mLogical[0m[37m:[0m &&=[93mfalse[0m[37m,[0m ||=[93mtrue[0m[37m,[0m !=[93mfalse[0m
+  ✓ [36mBitwise[0m[37m:[0m &=[93m1[0m[37m,[0m |=[93m7[0m[37m,[0m ^=[93m6[0m[37m,[0m ~=[93m-6[0m
+    [36mShifts[0m[37m:[0m <<=[93m10[0m[37m,[0m >>=[93m2[0m[37m,[0m >>>=[93m2[0m
+  ✓ [36mAssignment[0m [36moperators[0m[37m:[0m [36mresult[0m=[93m0[0m
+  ✓ [36mCompound[0m [36mbitwise[0m [36massignment[0m[37m:[0m [36mresult[0m=[93m1[0m
+  ✓ [36mInc[0m/[36mDec[0m[37m:[0m [36mpost[0m++=[93m6[0m[37m,[0m ++[36mpre[0m=[93m7[0m[37m,[0m [36mpost[0m--=[93m6[0m[37m,[0m --[36mpre[0m=[93m5[0m
+  ✓ [36mRange[0m [36moperator[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mNull[0m [36mcoalescing[0m[37m:[0m [93m42[0m
+  ✓ [36mTernary[0m [36moperator[0m[37m:[0m [93m10[0m
+
+[37m[[0m[93m3[0m[37m][0m [36mVARIABLES[0m & [36mCONSTANTS[0m
+  ✓ [36mLet[0m [36mdeclarations[0m[37m:[0m [93m100[0m[37m,[0m [36mtyped[0m[37m,[0m [93m42[0m
+  ✓ [36mConst[0m [36mdeclarations[0m[37m:[0m [93m999[0m[37m,[0m [36mimmutable[0m
+  ✓ [36mVariable[0m [36mshadowing[0m[37m:[0m [36minner[0m=[93m2[0m
+    [36mouter[0m=[93m1[0m
+
+[37m[[0m[93m4[0m[37m][0m [36mCONTROL[0m [36mFLOW[0m
+  ✓ [36mIf[0m [36mstatement[0m[37m:[0m [36mcondition[0m [93mtrue[0m
+  ✓ [36mIf[0m-[36melse[0m [36mstatement[0m[37m:[0m [36melse[0m [36mbranch[0m
+  ✓ [36mIf[0m-[36melse[0m-[36mif[0m [36mchain[0m[37m:[0m [36mgrade[0m [36mB[0m
+  ✓ [36mWhile[0m [36mloop[0m[37m:[0m [36miterations[0m=[93m3[0m
+  ✓ [36mFor[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mFor[0m-[36min[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mBreak[0m [36mstatement[0m[37m:[0m [36mstopped[0m [36mat[0m [93m3[0m
+  ✓ [36mContinue[0m [36mstatement[0m[37m:[0m [36msum[0m=[93m12[0m ([36mskipped[0m [93m3[0m)
+
+[37m[[0m[93m5[0m[37m][0m [36mFUNCTIONS[0m
+  ✓ [36mBasic[0m [36mfunction[0m[37m:[0m [93m42[0m
+  ✓ [36mFunction[0m [36mwith[0m [36mparams[0m[37m:[0m [93m30[0m
+  ✓ [36mOptional[0m [36mparameters[0m[37m:[0m [93m5[0m[37m,[0m [93m5[0m
+  ✓ [36mDefault[0m [36mparameters[0m[37m:[0m [93m15[0m[37m,[0m [93m25[0m
+  ✓ [36mRest[0m [36mparameters[0m[37m:[0m [93m15[0m
+  ✓ [36mArrow[0m [36mfunction[0m[37m:[0m [93m12[0m
+  ✓ [36mArrow[0m [36mexpression[0m[37m:[0m [93m10[0m
+  ✓ [36mArrow[0m [36mblock[0m[37m:[0m [93m11[0m
+  ✓ [36mHigher[0m-[36morder[0m [36mfunction[0m[37m:[0m [93m20[0m
+  ✓ [36mRecursive[0m [36mfunction[0m[37m:[0m [93m120[0m
+  ✓ [36mNamed[0m [36marguments[0m[37m:[0m [93m6[0m
+
+[37m[[0m[93m6[0m[37m][0m [36mARRAYS[0m & [36mCOLLECTIONS[0m
+  ✓ [36mArray[0m [36mliterals[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m[37m,[0m [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+  ✓ [36mArray[0m [36mindexing[0m[37m:[0m [93m20[0m
+  ✓ [36mArray[0m [36massignment[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mArray[0m [36mlength[0m[37m:[0m [93m3[0m
+  ✓ [36mArray[0m [36mpush[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m][0m
+  ✓ [36mArray[0m [36mpop[0m[37m:[0m [93m40[0m[37m,[0m [36mremaining[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mNested[0m [36marrays[0m[37m:[0m [93m2[0m
+  ✓ [36mArray[0m [36mspread[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m][0m
+
+[37m[[0m[93m7[0m[37m][0m [36mOBJECTS[0m & [36mMAPS[0m
+  ✓ [36mObject[0m [36mliteral[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mObject[0m [36mproperty[0m[37m:[0m [93m10[0m
+  ✓ [36mObject[0m [36massignment[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m99[0m [37m}[0m
+  ✓ [36mComputed[0m [36mproperty[0m[37m:[0m [93m20[0m
+  ✓ [36mObject[0m [36mshorthand[0m[37m:[0m [37m{[0m [36mpropY[0m[37m:[0m [93m200[0m[37m,[0m [36mpropX[0m[37m:[0m [93m100[0m [37m}[0m
+  ✓ [36mNested[0m [36mobject[0m[37m:[0m [93m42[0m
+
+[37m[[0m[93m8[0m[37m][0m [36mCLASSES[0m
+  ✓ [36mBasic[0m [36mclass[0m[37m:[0m [93m42[0m
+  ✓ [36mClass[0m [36mproperties[0m[37m:[0m [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+  ✓ [36mClass[0m [36mmethods[0m[37m:[0m [36mdoubled[0m=[93m10[0m[37m,[0m [36madded[0m=[93m15[0m
+  ✓ [36mClass[0m [36minheritance[0m[37m:[0m [93m30[0m
+  ✓ [36mStatic[0m [36mmembers[0m[37m:[0m [93m200[0m
+  ✓ [36mPrivate[0m [36mproperties[0m[37m:[0m [93m42[0m
+  ✓ [36mGetters[0m/[36mSetters[0m[37m:[0m [36mold[0m=[93m10[0m[37m,[0m [36mnew[0m=[93m20[0m
+
+[37m[[0m[93m9[0m[37m][0m [36mINTERFACES[0m & [36mTYPE[0m [36mALIASES[0m
+  ✓ [36mBasic[0m [36minterface[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mInterface[0m [36mimplementation[0m[37m:[0m [93m15[0m
+  ✓ [36mType[0m [36malias[0m[37m:[0m [36mnum[0m=[93m42[0m[37m,[0m [36mstr[0m=[36mhello[0m
+  ✓ [36mInterface[0m [36mextends[0m[37m:[0m [37m{[0m [36mage[0m[37m:[0m [93m30[0m[37m,[0m [36mname[0m[37m:[0m [36mAlice[0m [37m}[0m
+
+[37m[[0m[93m10[0m[37m][0m [36mENUMS[0m
+  ✓ [36mNumeric[0m [36menum[0m[37m:[0m [93m1[0m
+  ✓ [36mString[0m [36menum[0m[37m:[0m [36mRED[0m
+  ✓ [36mMixed[0m [36menum[0m[37m:[0m [36mthree[0m
+
+[37m[[0m[93m11[0m[37m][0m [36mGENERICS[0m
+  ✓ [36mGeneric[0m [36mfunction[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mGeneric[0m [36mclass[0m[37m:[0m [93m42[0m[37m,[0m [36mboxed[0m
+  ✓ [36mGeneric[0m [36minterface[0m[37m:[0m [37m{[0m [36mfirst[0m[37m:[0m [93m42[0m[37m,[0m [36msecond[0m[37m:[0m [36manswer[0m [37m}[0m
+  ✓ [36mGeneric[0m [36mconstraints[0m[37m:[0m [93m3[0m
+
+[37m[[0m[93m12[0m[37m][0m [36mADVANCED[0m [36mTYPES[0m
+  ✓ [36mUnion[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mIntersection[0m [36mtypes[0m[37m:[0m [37m{[0m [36mname[0m[37m:[0m [36mBob[0m[37m,[0m [36mage[0m[37m:[0m [93m25[0m [37m}[0m
+  ✓ [36mNullable[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [93mnull[0m[37m,[0m [36mcheck[0m=[93mtrue[0m
+  ✓ [36mArray[0m [36mtypes[0m[37m:[0m [36mint[0m[37m[[0m[37m][0m[37m,[0m [36mstr[0m[37m[[0m[37m][0m[37m,[0m [36mint[0m[37m[[0m[37m][0m[37m[[0m[37m][0m
+  ✓ [36mTuple[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mObject[0m [36mtypes[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mFunction[0m [36mtypes[0m[37m:[0m [93m15[0m
+  ✓ [36mReadonly[0m [36mtypes[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mKeyOf[0m [36moperator[0m[37m:[0m [36mdefined[0m
+  ✓ [36mTypeOf[0m [36moperator[0m[37m:[0m [36mint[0m
+
+[37m[[0m[93m13[0m[37m][0m [36mDESTRUCTURING[0m
+  ✓ [36mArray[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+  ✓ [36mArray[0m [36mdestructuring[0m [36mskip[0m[37m:[0m [93m10[0m[37m,[0m [93m30[0m
+  ✓ [36mArray[0m [36mdestructuring[0m [36mrest[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mObject[0m [36mdestructuring[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+  ✓ [36mObject[0m [36mdestructuring[0m [36mshorthand[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+  ✓ [36mNested[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+  ✓ [36mFunction[0m [36mparam[0m [36mdestructuring[0m[37m:[0m [93m30[0m
+
+[37m[[0m[93m14[0m[37m][0m [36mDECORATORS[0m
+  ✓ [36mMethod[0m [36mwith[0m [36mdecorator[0m
+
+[37m[[0m[93m15[0m[37m][0m [36mASYNC[0m/[36mAWAIT[0m
+  ✓ [36masync[0m [36mfn[0m [36mdeclared[0m
+  ✓ [36mAwait[0m [36mexpression[0m [36mdefined[0m
+  ✓ [36mAsync[0m [36marrow[0m [36mfunction[0m [36mdefined[0m
+
+[37m[[0m[93m16[0m[37m][0m [36mERROR[0m [36mHANDLING[0m
+  ✓ [36mTry[0m-[36mcatch[0m[37m:[0m [36mtry[0m [36mblock[0m [36mexecuted[0m
+  ✓ [36mTry[0m-[36mcatch[0m-[36mfinally[0m[37m:[0m [36mfinally[0m [36mblock[0m [36mexecuted[0m
+  ✓ [36mThrow[0m [36mstatement[0m[37m:[0m [36mcaught[0m [36merror[0m
+  ✓ [36mMultiple[0m [36mcatch[0m[37m:[0m [36mstring[0m [36merror[0m [36mcaught[0m
+
+[37m[[0m[93m17[0m[37m][0m [36mNULL[0m [36mSAFETY[0m
+  ✓ [36mNullable[0m [36mtype[0m[37m:[0m [93mnull[0m
+  ✓ [36mNull[0m [36mcoalescing[0m[37m:[0m [93m100[0m
+  ✓ [36mOptional[0m [36mchaining[0m[37m:[0m [93m42[0m
+  ✓ [36mNull[0m [36massertion[0m[37m:[0m [93m42[0m
+
+[37m[[0m[93m18[0m[37m][0m [36mMODULE[0m [36mSYSTEM[0m
+  ✓ [36mNamed[0m [36mimports[0m[37m:[0m [36madd[0m=[93m15[0m[37m,[0m [36mmultiply[0m=[93m12[0m[37m,[0m [36mPI[0m=[93m3.14159[0m
+  ✓ [36mClass[0m [36mimport[0m[37m:[0m [93m18[0m
+  ✓ [36mMultiple[0m [36mfunction[0m [36mimports[0m[37m:[0m [36mHello[0m[37m,[0m [36mRaccoon[0m![37m,[0m [36mupper[0m=[36mhello[0m
+  ✓ [36mClass[0m [36mimport[0m [36mfrom[0m [36mutils[0m[37m:[0m [36mAssistant[0m [36mis[0m [36mhelping[0m!
+
+[37m[[0m[93m19[0m[37m][0m [36mSPECIAL[0m [36mOPERATORS[0m & [36mEXPRESSIONS[0m
+  ✓ [36mInstanceof[0m[37m:[0m [93mtrue[0m
+  ✓ [36mTypeof[0m[37m:[0m [36mdefined[0m
+  ✓ [36mSpread[0m [36min[0m [36marrays[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mSpread[0m [36min[0m [36mobjects[0m[37m:[0m [37m{[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m[37m,[0m [36mc[0m[37m:[0m [93m3[0m [37m}[0m
+  ✓ [36mSpread[0m [36min[0m [36mcalls[0m[37m:[0m [93m6[0m
+
+[37m[[0m[93m20[0m[37m][0m [36mEDGE[0m [36mCASES[0m & [36mCOMPLEX[0m [36mSCENARIOS[0m
+  ✓ [36mDeeply[0m [36mnested[0m[37m:[0m [93m5.25[0m
+  ✓ [36mComplex[0m [36minference[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [37m{[0m [36mz[0m[37m:[0m [36mnested[0m [37m}[0m[37m,[0m [36mx[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m [37m}[0m
+  ✓ [36mClosure[0m[37m:[0m [93m55[0m
+  ✓ [36mMethod[0m [36mchaining[0m[37m:[0m [93m16[0m
+  ✓ [36mMixed[0m [36moperations[0m[37m:[0m [93m7.5[0m
+=== [36mTesting[0m [36mSwitch[0m/[36mCase[0m ===
+[36mWednesday[0m
+
+=== [36mTesting[0m [36mDo[0m-[36mWhile[0m ===
+[36mi[0m = [93m0[0m
+[36mi[0m = [93m1[0m
+[36mi[0m = [93m2[0m
+
+=== [36mTesting[0m [36mFor[0m-[36mOf[0m ===
+[36mItem[0m[37m:[0m [93m10[0m
+[36mItem[0m[37m:[0m [93m20[0m
+[36mItem[0m[37m:[0m [93m30[0m
+
+=== [36mTesting[0m [36mString[0m [36mMethods[0m ===
+[36mrepeat[0m([93m3[0m)[37m:[0m [36mhellohellohello[0m
+[36mpadStart[0m([93m10[0m[37m,[0m [92m'*'[0m)[37m:[0m *****[36mhello[0m
+[36mpadEnd[0m([93m10[0m[37m,[0m [92m'-'[0m)[37m:[0m [36mhello[0m-----
+[36mlastIndexOf[0m([92m'l'[0m)[37m:[0m [93m3[0m
+[36mcharCodeAt[0m([93m0[0m)[37m:[0m [93m104[0m
+
+=== [36mTesting[0m [36mArray[0m [36mMethods[0m ===
+[36mindexOf[0m([93m3[0m)[37m:[0m [93m2[0m
+[36mincludes[0m([93m4[0m)[37m:[0m [93mtrue[0m
+[36mat[0m([93m-1[0m)[37m:[0m [93m5[0m
+[36mAfter[0m [36mfill[0m([93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m)[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m0[0m[37m,[0m [93m3[0m[37m][0m
+[36mFlat[0m [36mresult[0m [36mlength[0m[37m:[0m [93m4[0m
+
+=== [36mTesting[0m [36mObject[0m [36mMethods[0m ===
+[36mObject[0m.[36mkeys[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36mvalues[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36massign[0m [36mworks[0m[37m:[0m [93m2[0m
+
+╔════════════════════════════════════════════════════════════════╗
+║                      [36mTEST[0m [36mSUMMARY[0m                             ║
+╚════════════════════════════════════════════════════════════════╝
+
+[36mTests[0m [36mPassed[0m[37m:[0m [93m117[0m
+[36mTests[0m [36mFailed[0m[37m:[0m [93m0[0m
+[36mPass[0m [36mRate[0m[37m:[0m [93m100[0m%
+
+╔════════════════════════════════════════════════════════════════╗
+║  [37m[[0m[93m1[0m[37m][0m [36mPrimitive[0m [36mTypes[0m & [36mLiterals[0m ......................... ✓   ║
+║  [37m[[0m[93m2[0m[37m][0m [36mOperators[0m .......................................... ✓   ║
+║  [37m[[0m[93m3[0m[37m][0m [36mVariables[0m & [36mConstants[0m .............................. ✓   ║
+║  [37m[[0m[93m4[0m[37m][0m [36mControl[0m [36mFlow[0m ....................................... ✓   ║
+║  [37m[[0m[93m5[0m[37m][0m [36mFunctions[0m .......................................... ✓   ║
+║  [37m[[0m[93m6[0m[37m][0m [36mArrays[0m & [36mCollections[0m ............................... ✓   ║
+║  [37m[[0m[93m7[0m[37m][0m [36mObjects[0m & [36mMaps[0m ..................................... ✓   ║
+║  [37m[[0m[93m8[0m[37m][0m [36mClasses[0m ............................................ ✓   ║
+║  [37m[[0m[93m9[0m[37m][0m [36mInterfaces[0m & [36mType[0m [36mAliases[0m .......................... ✓   ║
+║ [37m[[0m[93m10[0m[37m][0m [36mEnums[0m .............................................. ✓   ║
+║ [37m[[0m[93m11[0m[37m][0m [36mGenerics[0m ........................................... ✓   ║
+║ [37m[[0m[93m12[0m[37m][0m [36mAdvanced[0m [36mTypes[0m ..................................... ✓   ║
+║ [37m[[0m[93m13[0m[37m][0m [36mDestructuring[0m ...................................... ✓   ║
+║ [37m[[0m[93m14[0m[37m][0m [36mDecorators[0m ......................................... ✓   ║
+║ [37m[[0m[93m15[0m[37m][0m [36mAsync[0m/[36mAwait[0m ........................................ ✓   ║
+║ [37m[[0m[93m16[0m[37m][0m [36mError[0m [36mHandling[0m ..................................... ✓   ║
+║ [37m[[0m[93m17[0m[37m][0m [36mNull[0m [36mSafety[0m ........................................ ✓   ║
+║ [37m[[0m[93m18[0m[37m][0m [36mModule[0m [36mSystem[0m ...................................... ✓   ║
+║ [37m[[0m[93m19[0m[37m][0m [36mSpecial[0m [36mOperators[0m & [36mExpressions[0m .................... ✓   ║
+║ [37m[[0m[93m20[0m[37m][0m [36mEdge[0m [36mCases[0m & [36mComplex[0m [36mScenarios[0m ..................... ✓   ║
+║ [37m[[0m[93m21[0m[37m][0m [36mSwitch[0m/[36mCase[0m [36mStatements[0m ............................. ✓   ║
+╚════════════════════════════════════════════════════════════════╝
+
+🦝 [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m [36mFINISHED[0m
+Running test: .\tests\test_complete_typing_system.rcc
+=== [36mRACCOON[0m [36mTYPE[0m [36mSYSTEM[0m [36mCOMPREHENSIVE[0m [36mTEST[0m ===
+
+[93m1.[0m [36mPRIMITIVE[0m [36mTYPES[0m
+✓ [36mAll[0m [36mprimitive[0m [36mtypes[0m [36mworking[0m
+
+[93m2.[0m [36mNULLABLE[0m [36mTYPES[0m ([36mCustom[0m [36mSugar[0m [36mSyntax[0m)
+✓ [36mNullable[0m [36mtypes[0m [36mworking[0m [36mwith[0m [36mType[0m? [36msyntax[0m
+
+[93m3.[0m [36mARRAYS[0m
+✓ [36mArrays[0m [36mof[0m [36mprimitives[0m [36mand[0m [36mnullable[0m [36mtypes[0m [36mworking[0m
+
+[93m4.[0m [36mTUPLES[0m
+✓ [36mTuples[0m [36mworking[0m [36mcorrectly[0m
+
+[93m5.[0m [36mUNION[0m [36mTYPES[0m
+✓ [36mUnion[0m [36mtypes[0m [36mworking[0m
+
+[93m6.[0m [36mINTERSECTION[0m [36mTYPES[0m (&)
+✓ [36mIntersection[0m [36mtypes[0m [36mdefined[0m [36msuccessfully[0m
+
+[93m7.[0m [36mOBJECT[0m [36mTYPES[0m [36mWITH[0m [36mOPTIONAL[0m [36mPROPERTIES[0m
+✓ [36mObject[0m [36mtypes[0m [36mwith[0m [36moptional[0m [36mproperties[0m [36mworking[0m
+
+[93m8.[0m [36mREADONLY[0m [36mTYPES[0m
+✓ [36mReadonly[0m [36mtypes[0m [36mworking[0m
+
+[93m9.[0m [36mENUM[0m [36mTYPES[0m
+✓ [36mEnum[0m [36mtypes[0m [36mworking[0m
+
+[93m10.[0m [36mCLASS[0m [36mTYPES[0m
+✓ [36mClasses[0m [36mwith[0m [36minheritance[0m [36mworking[0m
+
+[93m11.[0m [36mINTERFACE[0m [36mTYPES[0m
+✓ [36mInterface[0m [36mtypes[0m [36mworking[0m
+
+[93m12.[0m [36mFUNCTION[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mtypes[0m [36mworking[0m
+
+[93m13.[0m [36mFUNCTION[0m [36mDECLARATIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mdeclarations[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m14.[0m [36mOPTIONAL[0m [36mPARAMETERS[0m ([36mparam[0m?[37m:[0m [36mType[0m)
+[36mAlice[0m
+[36mBob[0m
+[36mtest[0m
+[36mtest[0m
+[36mtest[0m
+✓ [36mOptional[0m [36mparameters[0m [36mworking[0m
+
+[93m15.[0m [36mARROW[0m [36mFUNCTIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m16.[0m [36mCOMPLEX[0m [36mNESTED[0m [36mSTRUCTURES[0m
+✓ [36mComplex[0m [36mnested[0m [36mstructures[0m [36mworking[0m
+
+[93m17.[0m [36mTYPE[0m [36mALIASES[0m
+✓ [36mType[0m [36maliases[0m [36mwith[0m [36munions[0m [36mand[0m [36mintersections[0m [36mworking[0m
+
+[93m18.[0m [36mNULLABLE[0m [36mTYPES[0m [36mIN[0m [36mDIFFERENT[0m [36mCONTEXTS[0m
+✓ [36mNullable[0m [36mtypes[0m [36min[0m [36mdifferent[0m [36mcontexts[0m [36mworking[0m
+
+[93m19.[0m [36mEXECUTION[0m [36mTEST[0m
+
+[36madd_numbers[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mgreet[0m([92m'World'[0m) = [36mHello[0m[37m,[0m [36mWorld[0m
+[36mdouble[0m([93m21[0m) = [93m42[0m
+[36mconcat[0m([92m'Hello, '[0m[37m,[0m [92m'Raccoon!'[0m) = [36mHello[0m[37m,[0m [36mRaccoon[0m!
+[36mdog[0m.[36mgetName[0m() = [36mBuddy[0m
+[36mdog[0m.[36mbreed[0m = [36mLabrador[0m
+
+=== [36mCOMPLETE[0m [36mTYPE[0m [36mSYSTEM[0m [36mTEST[0m [36mSUMMARY[0m ===
+✓ [36mAll[0m [36mTypeScript[0m-[36mstyle[0m [36mfeatures[0m [36mworking[0m
+✓ [36mNullable[0m [36msugar[0m [36msyntax[0m ([36mType[0m?) [36mworking[0m
+✓ [36mOptional[0m [36mparameters[0m [36mworking[0m
+✓ [36mOptional[0m [36mobject[0m [36mproperties[0m [36mworking[0m
+✓ [36mComplex[0m [36mnested[0m [36mtypes[0m [36mworking[0m
+✓ [36mUnions[0m [36mand[0m [36mintersections[0m [36mworking[0m
+✓ [36mReadonly[0m [36mtypes[0m [36mworking[0m
+✓ [36mClasses[0m [36mand[0m [36minheritance[0m [36mworking[0m
+✓ [36mInterfaces[0m [36mworking[0m
+✓ [36mEnums[0m [36mworking[0m
+✓ [36mArrow[0m [36mfunctions[0m [36mworking[0m
+
+[36mRaccoon[0m [36mType[0m [36mSystem[0m[37m:[0m [36mFULLY[0m [36mOPERATIONAL[0m!
+Running test: .\tests\test_debugging_features.rcc
+=== [36mTEST[0m [36mDE[0m [36mDEBUGGING[0m [36mY[0m [36mCOLORES[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mprint[0m() [36mcon[0m [36mcolores[0m [36mpara[0m [36mdiferentes[0m [36mtipos[0m
+[36mStrings[0m [36men[0m [36mverde[0m[37m:[0m [36mHello[0m [36mWorld[0m
+[36mNúmeros[0m [36men[0m [36mamarillo[0m[37m:[0m [93m42[0m [93m3.14[0m
+[36mBooleanos[0m [36men[0m [36mamarillo[0m[37m:[0m [93mtrue[0m [93mfalse[0m
+[36mNull[0m [36men[0m [36mgris[0m[37m:[0m [93mnull[0m
+[36mLista[0m [36men[0m [36mmagenta[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mfunción[0m [36mprintln[0m()
+[36mPrimera[0m [36mlínea[0m
+[36mSegunda[0m [36mlínea[0m
+[36mTercera[0m [36mlínea[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mMezcla[0m [36mde[0m [36mtipos[0m [36men[0m [36muna[0m [36msola[0m [36mllamada[0m
+[36mUsuario[0m[37m:[0m [36mBob[0m [36mEdad[0m[37m:[0m [93m25[0m [36mActivo[0m[37m:[0m [93mtrue[0m [36mScore[0m[37m:[0m [93m95.5[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mResultados[0m [36mde[0m [36moperaciones[0m
+[36mx[0m = [93m10[0m [36my[0m = [93m5[0m
+[36mx[0m + [36my[0m = [93m15[0m
+[36mx[0m * [36my[0m = [93m50[0m
+[36mx[0m > [36my[0m = [93mtrue[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mEstructuras[0m [36mde[0m [36mdatos[0m
+[36mLista[0m [36mde[0m [36mnúmeros[0m[37m:[0m [37m[[0m[93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m,[0m [93m50[0m[37m][0m
+[36mLista[0m [36mmixta[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [36mtwo[0m[37m,[0m [93m3[0m[37m,[0m [36mfour[0m[37m][0m
+
+[36mTest[0m [93m6[0m[37m:[0m [36mFunciones[0m
+[36mResultado[0m[37m:[0m [36mHello[0m[37m,[0m [36mWorld[0m
+
+=== [36mTODOS[0m [36mLOS[0m [36mTESTS[0m [36mCOMPLETADOS[0m ===
+Running test: .\tests\test_decorators.rcc
+[93m5[0m + [93m3[0m = [93m8[0m
+[93m4[0m * [93m5[0m = [93m20[0m
+[36mFirst[0m [36mcall[0m[37m:[0m [93m4950[0m
+[36mSecond[0m [36mcall[0m[37m:[0m [93m4950[0m
+[36mOld[0m [36mresult[0m[37m:[0m [93m42[0m
+Running test: .\tests\test_decorators_comprehensive.rcc
+🦝 === [36mCOMPREHENSIVE[0m [36mDECORATORS[0m [36mTEST[0m ===
+✅ [36mTest[0m [93m1[0m[37m:[0m [36mBasic[0m [36mFunction[0m [36mDecorator[0m
+  [36mResult[0m[37m:[0m [36mHello[0m[37m,[0m [36mAlice[0m
+✅ [36mTest[0m [93m2[0m[37m:[0m [36mFunction[0m [36mDecorator[0m [36mwith[0m [36mArguments[0m
+  [36mSum[0m[37m:[0m [93m8[0m
+✅ [36mTest[0m [93m3[0m[37m:[0m [36mClass[0m [36mDecorator[0m
+  [36mUser[0m [36mgreeting[0m[37m:[0m [36mHello[0m[37m,[0m [36mBob[0m
+✅ [36mTest[0m [93m4[0m[37m:[0m [36mMultiple[0m [36mDecorators[0m [36mon[0m [36mFunction[0m
+  [36mResult[0m[37m:[0m [36mFunction[0m [36mwith[0m [36mmultiple[0m [36mdecorators[0m
+✅ [36mTest[0m [93m5[0m[37m:[0m [36mDecorator[0m [36mwith[0m [36mMultiple[0m [36mArguments[0m
+  [36mPercentage[0m[37m:[0m [93m75[0m%
+✅ [36mTest[0m [93m6[0m[37m:[0m [36mClass[0m [36mDecorator[0m [36mwith[0m [36mArguments[0m
+  [36mCharlie[0m [36mis[0m [93m30[0m [36myears[0m [36mold[0m
+✅ [36mTest[0m [93m7[0m[37m:[0m [36mPerformance[0m [36mTracking[0m [36mDecorator[0m
+  [36mFibonacci[0m([93m6[0m) = [93m8[0m
+✅ [36mTest[0m [93m8[0m[37m:[0m [36mMetadata[0m [36mDecorator[0m
+  [36mProcessed[0m[37m:[0m [36mtest[0m [36mdata[0m
+✅ [36mTest[0m [93m9[0m[37m:[0m [36mAuthorization[0m [36mDecorator[0m
+  [36mDeleted[0m [36muser[0m [93m123[0m
+✅ [36mTest[0m [93m10[0m[37m:[0m [36mCaching[0m [36mDecorator[0m
+  [36mResult[0m [36mfor[0m[37m:[0m [36mquery[0m
+✅ [36mTest[0m [93m11[0m[37m:[0m [36mDecorator[0m [36mon[0m [36mInherited[0m [36mClass[0m
+  [36mDog[0m[37m:[0m [36mRex[0m[37m,[0m [36mBreed[0m[37m:[0m [36mLabrador[0m
+✅ [36mTest[0m [93m12[0m[37m:[0m [36mDeprecation[0m [36mDecorator[0m
+  [36mThis[0m [36mis[0m [36mold[0m
+✅ [36mTest[0m [93m13[0m[37m:[0m [36mRetry[0m [36mDecorator[0m
+  [36mOperation[0m [36mcompleted[0m
+✅ [36mTest[0m [93m14[0m[37m:[0m [36mType[0m [36mValidation[0m [36mDecorator[0m
+  [36mProcessed[0m[37m:[0m [36mtest[0m
+✅ [36mTest[0m [93m15[0m[37m:[0m [36mMultiple[0m [36mClass[0m [36mDecorators[0m
+  [36mGetting[0m [36musers[0m [36mfrom[0m [36mUser[0m [36mService[0m
+🎉 === [36mALL[0m [36mDECORATOR[0m [36mTESTS[0m [36mPASSED[0m ===
+✅ [36mBasic[0m [36mfunction[0m [36mdecorator[0m
+✅ [36mFunction[0m [36mdecorator[0m [36mwith[0m [36marguments[0m
+✅ [36mClass[0m [36mdecorator[0m
+✅ [36mMultiple[0m [36mdecorators[0m [36mon[0m [36mfunction[0m
+✅ [36mDecorator[0m [36mwith[0m [36mmultiple[0m [36marguments[0m
+✅ [36mClass[0m [36mdecorator[0m [36mwith[0m [36marguments[0m
+✅ [36mPerformance[0m [36mtracking[0m [36mdecorator[0m
+✅ [36mMetadata[0m [36mdecorator[0m
+✅ [36mAuthorization[0m [36mdecorator[0m
+✅ [36mCaching[0m [36mdecorator[0m
+✅ [36mDecorator[0m [36mon[0m [36minherited[0m [36mclass[0m
+✅ [36mDeprecation[0m [36mdecorator[0m
+✅ [36mRetry[0m [36mdecorator[0m
+✅ [36mType[0m [36mvalidation[0m [36mdecorator[0m
+✅ [36mMultiple[0m [36mclass[0m [36mdecorators[0m
+🦝 [36mRaccoon[0m [36mDecorators[0m[37m:[0m [36mFULLY[0m [36mFUNCTIONAL[0m!
+Running test: .\tests\test_destruct_combined.rcc
+[93m1[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[93m2[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[93m3[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+[93m4[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+[93m5[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+[93m6[0m[37m:[0m [93m30[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m
+Running test: .\tests\test_destruct_debug1.rcc
+[93m1[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+[93m2[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[93m3[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+[36mPart[0m [93m1[0m [36mdone[0m
+Running test: .\tests\test_destruct_debug2.rcc
+[93m1[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+[93m2[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+[36mDone[0m
+Running test: .\tests\test_destruct_func.rcc
+[36mResult[0m[37m:[0m [93m30[0m
+Running test: .\tests\test_destruct_nested.rcc
+[36mResult[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+Running test: .\tests\test_destruct_object.rcc
+[36mResult[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+Running test: .\tests\test_destruct_rest.rcc
+[36mResult[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+Running test: .\tests\test_destruct_step1.rcc
+[36mResult[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+Running test: .\tests\test_enum_class_as_types.rcc
+[93m0[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[36mProcessing[0m [36mstatus[0m[37m:[0m
+[93m1[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[93m2[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Admin[0m
+[36mAll[0m [36menum[0m [36mand[0m [36mclass[0m [36mtype[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_enum_type_syntax.rcc
+[36mEnum[0m [36mtype[0m [36msyntax[0m [36mtest[0m [36mcompleted[0m - [36mparsing[0m [36msuccessful[0m!
+Running test: .\tests\test_esm_advanced.rcc
+=== [36mAdvanced[0m [36mES[0m [36mModules[0m [36mTest[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mFunction[0m [36mExpression[0m [36mExports[0m
+  [36msquare[0m([93m5[0m) = [93m25[0m
+  [36mcube[0m([93m3[0m) = [93m27[0m
+  ✓ [36mFunction[0m [36mexpression[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mObject[0m [36mand[0m [36mArray[0m [36mExports[0m
+  [36mconfig[0m.[36mhost[0m = [36mlocalhost[0m
+  [36mconfig[0m.[36mport[0m = [93m8080[0m
+  [36mcolors[0m[37m[[0m[93m0[0m[37m][0m = [36mred[0m
+  [36mcolors[0m [36mlength[0m = [93m3[0m
+  ✓ [36mObject[0m [36mand[0m [36marray[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mStatic[0m [36mMember[0m [36mExports[0m
+  [36mMathUtils[0m.[36mPI[0m = [93m3.14159[0m
+  [36mMathUtils[0m.[36mE[0m = [93m2.71828[0m
+  [36mMathUtils[0m.[36madd[0m([93m10[0m[37m,[0m [93m20[0m) = [93m30[0m
+  [36mMathUtils[0m.[36mmax[0m([93m15[0m[37m,[0m [93m8[0m) = [93m15[0m
+  ✓ [36mStatic[0m [36mmember[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mTyped[0m [36mExports[0m
+  [36mtypedValue[0m = [93m42[0m
+  [36mtypedString[0m = [36mhello[0m
+  [36mtypedFloat[0m = [93m3.14[0m
+  ✓ [36mTyped[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mMultiple[0m [36mRelated[0m [36mFunctions[0m
+  [36mmin[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+  [36mabs[0m([93m-42[0m) = [93m42[0m
+  [36mclamp[0m([93m150[0m[37m,[0m [93m0[0m[37m,[0m [93m100[0m) = [93m100[0m
+  [36mclamp[0m([93m50[0m[37m,[0m [93m0[0m[37m,[0m [93m100[0m) = [93m50[0m
+  ✓ [36mMultiple[0m [36mrelated[0m [36mfunctions[0m [36mworking[0m
+
+[36mTest[0m [93m6[0m[37m:[0m [36mBarrel[0m [36mExports[0m
+  [36madd[0m([93m3[0m[37m,[0m [93m7[0m) = [93m10[0m
+  [36mCalculator[0m [36minstance[0m[37m:[0m [93m5[0m
+  [36mPoint[0m [36minstance[0m[37m:[0m [93m1[0m [93m2[0m
+  [36mAPP_NAME[0m = [36mRaccoon[0m [36mTest[0m
+  [36mbarrelSquare[0m([93m6[0m) = [93m36[0m
+  [36mBarrelMath[0m.[36mPI[0m = [93m3.14159[0m
+  [36mBARREL_VERSION[0m = [93m1.0[0m.[93m0[0m
+  [36mgreet[0m([92m'Raccoon'[0m) = [36mHello[0m[37m,[0m [36mRaccoon[0m!
+  ✓ [36mBarrel[0m [36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m7[0m[37m:[0m [36mImport[0m [36mOrder[0m [36mIndependence[0m
+  [36mmultiply[0m([93m4[0m[37m,[0m [93m5[0m) = [93m20[0m
+  [36mcalculateArea[0m([93m3.0[0m[37m,[0m [93m4.0[0m) = [93m12[0m
+  ✓ [36mImport[0m [36morder[0m [36mindependence[0m [36mworking[0m
+
+[36mTest[0m [93m8[0m[37m:[0m [36mMultiple[0m [36mImports[0m [36mfrom[0m [36mSame[0m [36mModule[0m
+  [36mStatus[0m.[36mActive[0m = [93m1[0m
+  [36mutilPI[0m = [93m3.14159[0m
+  [36mversion[0m = [93m1.0[0m.[93m0[0m
+  ✓ [36mMultiple[0m [36mimports[0m [36mfrom[0m [36msame[0m [36mmodule[0m [36mworking[0m
+
+[36mTest[0m [93m9[0m[37m:[0m [36mDeep[0m [36mImport[0m [36mChains[0m
+  [36mBarrelStatus[0m.[36mPending[0m = [93m0[0m
+  [36mBarrelStatus[0m.[36mCompleted[0m = [93m2[0m
+  ✓ [36mDeep[0m [36mimport[0m [36mchains[0m [36mworking[0m
+
+[36mTest[0m [93m10[0m[37m:[0m [36mUsing[0m [36mImported[0m [36mValues[0m [36min[0m [36mExpressions[0m
+  [36mRange[0m[37m:[0m [93m99[0m
+  [36mAverage[0m[37m:[0m [93m50.5[0m
+  ✓ [36mUsing[0m [36mimported[0m [36mvalues[0m [36min[0m [36mexpressions[0m [36mworking[0m
+
+[36mTest[0m [93m11[0m[37m:[0m [36mNamespace[0m [36mwith[0m [36mRe[0m-[36mexports[0m
+  [36mbarrel[0m.[36madd[0m([93m100[0m[37m,[0m [93m200[0m) = [93m300[0m
+  [36mbarrel[0m.[36mgreet[0m([92m'Module'[0m) = [36mHello[0m[37m,[0m [36mModule[0m!
+  [36mbarrel[0m.[36mBARREL_VERSION[0m = [93m1.0[0m.[93m0[0m
+  ✓ [36mNamespace[0m [36mwith[0m [36mre[0m-[36mexports[0m [36mworking[0m
+
+==================================================
+[36mALL[0m [36mADVANCED[0m [36mES[0m [36mMODULES[0m [36mTESTS[0m [36mPASSED[0m!
+==================================================
+
+[36mAdvanced[0m [36mFeatures[0m [36mTested[0m[37m:[0m
+  ✓ [36mFunction[0m [36mexpression[0m [36mexports[0m
+  ✓ [36mObject[0m [36mliteral[0m [36mexports[0m
+  ✓ [36mArray[0m [36mexports[0m
+  ✓ [36mStatic[0m [36mclass[0m [36mmember[0m [36mexports[0m
+  ✓ [36mTyped[0m [36mexports[0m
+  ✓ [36mBarrel[0m [36mexports[0m ([36mre[0m-[36mexport[0m [36maggregation[0m)
+  ✓ [36mImport[0m [36morder[0m [36mindependence[0m
+  ✓ [36mMultiple[0m [36mimports[0m [36mfrom[0m [36msame[0m [36mmodule[0m
+  ✓ [36mDeep[0m [36mimport[0m [36mchains[0m
+  ✓ [36mComplex[0m [36mexpressions[0m [36mwith[0m [36mimports[0m
+  ✓ [36mNamespace[0m [36mwith[0m [36mre[0m-[36mexports[0m
+Running test: .\tests\test_esm_modules_comprehensive.rcc
+=== [36mES[0m [36mModules[0m [36mComprehensive[0m [36mTest[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mNamed[0m [36mImports[0m
+  [36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+  [36mmultiply[0m([93m4[0m[37m,[0m [93m7[0m) = [93m28[0m
+  [36mversion[0m = [93m1.0[0m.[93m0[0m
+  [36mPI[0m = [93m3.14159[0m
+  ✓ [36mNamed[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mImport[0m [36mwith[0m [36mAlias[0m
+  [36msum[0m([93m10[0m[37m,[0m [93m20[0m) = [93m30[0m
+  [36mmult[0m([93m3[0m[37m,[0m [93m9[0m) = [93m27[0m
+  ✓ [36mImport[0m [36maliases[0m [36mworking[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mNamespace[0m [36mImport[0m
+  [36mutils[0m.[36madd[0m([93m15[0m[37m,[0m [93m25[0m) = [93m40[0m
+  [36mutils[0m.[36mmultiply[0m([93m6[0m[37m,[0m [93m7[0m) = [93m42[0m
+  [36mutils[0m.[36mversion[0m = [93m1.0[0m.[93m0[0m
+  ✓ [36mNamespace[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mDefault[0m [36mImport[0m + [36mNamed[0m [36mImports[0m
+  [36mShape[0m [36mdescription[0m[37m:[0m [36mShape[0m[37m:[0m [36mRectangle[0m
+  [36mDistance[0m [36mbetween[0m [36mpoints[0m[37m:[0m [93m5[0m
+  [36mArea[0m [36mof[0m [93m5[0m[36mx10[0m [36mrectangle[0m[37m:[0m [93m50[0m
+  ✓ [36mDefault[0m + [36mnamed[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mClass[0m [36mImports[0m [36mand[0m [36mInstantiation[0m
+  [36mInitial[0m [36mvalue[0m[37m:[0m [93m10[0m
+  [36mAfter[0m [36madd[0m([93m5[0m)[37m:[0m [93m15[0m
+  [36mAfter[0m [36mmultiply[0m([93m2[0m)[37m:[0m [93m30[0m
+  [36mAfter[0m [36mreset[0m()[37m:[0m [93m0[0m
+  ✓ [36mClass[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m6[0m[37m:[0m [36mEnum[0m [36mImports[0m
+  [36mStatus[0m.[36mPending[0m = [93m0[0m
+  [36mStatus[0m.[36mActive[0m = [93m1[0m
+  [36mStatus[0m.[36mCompleted[0m = [93m2[0m
+  [36mStatus[0m.[36mFailed[0m = [93m3[0m
+  ✓ [36mEnum[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m7[0m[37m:[0m [36mExport[0m [36mList[0m [36mImports[0m
+  [36mMAX_SIZE[0m = [93m100[0m
+  [36mMIN_SIZE[0m = [93m1[0m
+  [36mvalidateSize[0m([93m50[0m) = [93mtrue[0m
+  [36mvalidateSize[0m([93m200[0m) = [93mfalse[0m
+  ✓ [36mExport[0m [36mlist[0m [36mworking[0m
+
+[36mTest[0m [93m8[0m[37m:[0m [36mMultiple[0m [36mConstants[0m [36mImport[0m
+  [36mAPP_NAME[0m = [36mRaccoon[0m [36mTest[0m
+  [36mAPP_VERSION[0m = [93m2.0[0m.[93m0[0m
+  [36mMAX_RETRIES[0m = [93m3[0m
+  [36mTIMEOUT[0m = [93m5000[0m
+  [36mDEBUG[0m = [93mtrue[0m
+  [36mLogLevel[0m.[36mInfo[0m = [93m1[0m
+  [36mConfig[0m.[36mappName[0m = [36mRaccoon[0m [36mTest[0m
+  ✓ [36mMultiple[0m [36mconstants[0m [36mimport[0m [36mworking[0m
+
+[36mTest[0m [93m9[0m[37m:[0m [36mRe[0m-[36mexports[0m
+  [36mreSum[0m([93m8[0m[37m,[0m [93m12[0m) = [93m20[0m
+  [36mproduct[0m([93m5[0m[37m,[0m [93m6[0m) = [93m30[0m
+  [36mdivide[0m([93m100[0m[37m,[0m [93m5[0m) = [93m20[0m
+  [36mMODULE_NAME[0m = [36mReExport[0m [36mModule[0m
+  ✓ [36mRe[0m-[36mexports[0m [36mworking[0m
+
+[36mTest[0m [93m10[0m[37m:[0m [36mStandard[0m [36mLibrary[0m [36mImports[0m
+  [36mMath[0m.[36msqrt[0m([93m144[0m) = [93m12[0m
+  [36mMath[0m.[36mpow[0m([93m2[0m[37m,[0m [93m8[0m) = [93m256[0m
+  [36mString[0m.[36mupper[0m([36mtext[0m) =   [36mHELLO[0m [36mWORLD[0m  
+  [36mString[0m.[36mtrim[0m([36mtext[0m) = [36mhello[0m [36mworld[0m
+  ✓ [36mStandard[0m [36mlibrary[0m [36mimports[0m [36mworking[0m
+
+[36mTest[0m [93m11[0m[37m:[0m [36mMixed[0m [36mImport[0m [36mStyles[0m
+  [36mMultiple[0m [36mimport[0m [36mstyles[0m [36mcoexist[0m[37m:[0m ✓
+  - [36mNamed[0m [36mimports[0m[37m:[0m ✓
+  - [36mAliased[0m [36mimports[0m[37m:[0m ✓
+  - [36mNamespace[0m [36mimports[0m[37m:[0m ✓
+  - [36mDefault[0m [36mimports[0m[37m:[0m ✓
+  - [36mStandard[0m [36mlibrary[0m[37m:[0m ✓
+
+[36mTest[0m [93m12[0m[37m:[0m [36mUsing[0m [36mImported[0m [36mTypes[0m
+  [36mprocessCalculator[0m [36mresult[0m[37m:[0m [93m30[0m
+  ✓ [36mImported[0m [36mtypes[0m [36min[0m [36mfunction[0m [36msignatures[0m [36mworking[0m
+
+[36mTest[0m [93m13[0m[37m:[0m [36mComplex[0m [36mOperations[0m [36mwith[0m [36mImported[0m [36mClasses[0m
+  [36mTriangle[0m [36mperimeter[0m[37m:[0m [93m12[0m
+  ✓ [36mComplex[0m [36moperations[0m [36mwith[0m [36mimports[0m [36mworking[0m
+
+==================================================
+[36mALL[0m [36mES[0m [36mMODULES[0m [36mTESTS[0m [36mPASSED[0m!
+==================================================
+
+[36mFeatures[0m [36mTested[0m[37m:[0m
+  ✓ [36mNamed[0m [36mexports[0m/[36mimports[0m
+  ✓ [36mDefault[0m [36mexports[0m/[36mimports[0m
+  ✓ [36mNamespace[0m [36mimports[0m ([36mimport[0m * [36mas[0m)
+  ✓ [36mImport[0m [36maliases[0m ([36mas[0m)
+  ✓ [36mRe[0m-[36mexports[0m
+  ✓ [36mExport[0m [36mlists[0m
+  ✓ [36mClass[0m [36mexports[0m/[36mimports[0m
+  ✓ [36mEnum[0m [36mexports[0m/[36mimports[0m
+  ✓ [36mFunction[0m [36mexports[0m/[36mimports[0m
+  ✓ [36mVariable[0m/[36mconstant[0m [36mexports[0m/[36mimports[0m
+  ✓ [36mStandard[0m [36mlibrary[0m [36mimports[0m
+  ✓ [36mMixed[0m [36mimport[0m [36mstyles[0m
+  ✓ [36mType[0m [36musage[0m [36macross[0m [36mmodules[0m
+Running test: .\tests\test_explicit_generics.rcc
+[93m42[0m
+[93m100[0m
+[93m400[0m
+[93m25[0m
+[36mHello[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_export_types.rcc
+[36mTypes[0m [36mand[0m [36minterfaces[0m [36mexported[0m [36msuccessfully[0m!
+[36mConfig[0m [36mcreated[0m[37m:[0m [93mtrue[0m[37m,[0m [93m5000[0m
+Running test: .\tests\test_extended_decorators.rcc
+[36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mmultiply[0m([93m4[0m[37m,[0m [93m7[0m) = [93m28[0m
+Running test: .\tests\test_ffi_import.rcc
+[36mFFI[0m [36mimported[0m [36msuccessfully[0m!
+[36mFFI[0m[37m:[0m [36mclass[0m [36mFFI[0m
+[36mFFIType[0m[37m:[0m <[36menum[0m [36mFFIType[0m>
+Running test: .\tests\test_float_modulo.rcc
+[36mFloat[0m [36mmodulo[0m[37m:[0m [93m0.8999999999999995[0m
+[36mFloat[0m % [36mint[0m[37m:[0m [93m1[0m
+[36mInt[0m % [36mfloat[0m[37m:[0m [93m1[0m
+Running test: .\tests\test_function_params.rcc
+=== [36mTesting[0m [36mFunction[0m [36mParameters[0m ===
+
+[93m1.[0m [36mBasic[0m [36mparameters[0m
+[36mAnswer[0m[37m:[0m [93m42[0m
+
+[93m2.[0m [36mDefault[0m [36mparameters[0m
+[36mHello[0m [36mAlice[0m!
+[36mHi[0m [36mBob[0m!
+[36mHey[0m [36mCharlie[0m!
+
+[93m3.[0m [36mVariadic[0m [36mparameters[0m
+[93m15[0m
+[93m30[0m
+
+[93m4.[0m [36mMix[0m [36mregular[0m + [36mvariadic[0m
+[36mItems[0m[37m:[0m [36mapple[0m[37m,[0m [36mbanana[0m[37m,[0m [36mcherry[0m
+
+[93m5.[0m [36mDefaults[0m + [36mvariadic[0m
+[36mHi[0m [36mAlice[0m [36mBob[0m [36mCharlie[0m
+[36mWelcome[0m [36mDave[0m
+
+[93m6.[0m [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mvariadic[0m
+[93m24[0m
+
+[93m7.[0m [36mArray[0m [36mdestructuring[0m
+[36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+
+=== [36mAll[0m [36mParameter[0m [36mTests[0m [36mPassed[0m ===
+Running test: .\tests\test_func_type.rcc
+=== [36mFUNC[0m [36mTYPE[0m [36mTESTS[0m ===
+
+[37m[[0m [93m1[0m [37m][0m [36mBasic[0m [36mfunc[0m [36mtype[0m [36massignment[0m
+  [36mResult[0m[37m:[0m [36mHello[0m[37m,[0m [36mAlice[0m
+
+[37m[[0m [93m2[0m [37m][0m [36mfunc[0m [36mas[0m [36mfunction[0m [36mparameter[0m
+  [36msquare[0m([93m5[0m) = [93m25[0m
+  [36mdouble[0m([93m5[0m) = [93m10[0m
+
+[37m[[0m [93m3[0m [37m][0m [36mArrays[0m [36mof[0m [36mfunc[0m
+  [36mApplying[0m [36moperations[0m [36mto[0m [93m3[0m[37m:[0m
+    [36moperations[0m[37m[[0m[93m0[0m[37m][0m([93m3[0m) = [93m9[0m
+    [36moperations[0m[37m[[0m[93m1[0m[37m][0m([93m3[0m) = [93m6[0m
+
+[37m[[0m [93m4[0m [37m][0m [36mfunc[0m [36mwith[0m [36marrow[0m [36mfunctions[0m
+  [36madd[0m([93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+  [36msubtract[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+
+[37m[[0m [93m5[0m [37m][0m [36mfunc[0m [36mreturning[0m [36mfunc[0m
+  [36maddOp[0m([93m4[0m[37m,[0m [93m3[0m) = [93m7[0m
+  [36mmulOp[0m([93m4[0m[37m,[0m [93m3[0m) = [93m12[0m
+
+[37m[[0m [93m6[0m [37m][0m [36mfunc[0m [36mwith[0m [36mdifferent[0m [36mreturn[0m [36mtypes[0m
+  [36mtoString[0m([93m42[0m) = [93m42[0m
+  [36mtoBool[0m([93m5[0m) = [93mtrue[0m
+  [36mtoBool[0m([93m-1[0m) = [93mfalse[0m
+
+[37m[[0m [93m7[0m [37m][0m [36mfunc[0m [36mwith[0m [36mhigher[0m-[36morder[0m [36marray[0m [36mmethods[0m
+  [36mOriginal[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  [36mMapped[0m ([36mincrement[0m)[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m][0m
+  [36mFiltered[0m ([36misEven[0m)[37m:[0m [37m[[0m[93m2[0m[37m,[0m [93m4[0m[37m][0m
+  [36mReduced[0m ([36msum[0m)[37m:[0m [93m15[0m
+
+[37m[[0m [93m8[0m [37m][0m [36mMultiple[0m [36mfunc[0m [36mvariables[0m
+  [36maddFunc[0m([93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+  [36msubFunc[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+  [36mmulFunc[0m([93m10[0m[37m,[0m [93m5[0m) = [93m50[0m
+
+[37m[[0m [93m9[0m [37m][0m [36mfunc[0m [36mwith[0m [36masync[0m [36mfunctions[0m
+  [36mAsync[0m [36mresult[0m[37m:[0m [36mData_123[0m
+
+==================================================
+✅ [36mALL[0m [36mFUNC[0m [36mTYPE[0m [36mTESTS[0m [36mPASSED[0m
+==================================================
+
+[36mThe[0m [92m'func'[0m [36mtype[0m [36mworks[0m [36mas[0m [36ma[0m [36mgeneric[0m [36mfunction[0m [36mtype[0m!
+[36mIt[0m [36mcan[0m [36mrepresent[0m [36many[0m [36mfunction[0m [36msignature[0m [36mdynamically[0m.
+Running test: .\tests\test_future_api_complete.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mFuture[0m.[36mresolve[0m() ===
+[37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([93m42[0m)[37m][0m
+[36mResultado[0m [36mde[0m [36mFuture[0m.[36mresolve[0m([93m42[0m)[37m:[0m [93m42[0m
+
+=== [36mTest[0m [93m2[0m[37m:[0m [36mFuture[0m.[36mreject[0m() ===
+[37m[[0m[36mFuture[0m[37m:[0m [36mRejected[0m([36mError[0m [36mde[0m [36mprueba[0m)[37m][0m
+[36mError[0m [36mcapturado[0m[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m [36mde[0m [36mprueba[0m
+
+=== [36mTest[0m [93m3[0m[37m:[0m .[36mthen[0m() [36mcon[0m [36mcallback[0m ===
+[36mFuture1[0m [36minicial[0m[37m:[0m [93m10[0m
+[36mDentro[0m [36mde[0m .[36mthen[0m()[37m,[0m [36mvalor[0m[37m:[0m [93m10[0m
+[36mDespués[0m [36mde[0m .[36mthen[0m([36mx[0m => [36mx[0m * [93m2[0m)[37m:[0m [93m20[0m
+
+=== [36mTest[0m [93m4[0m[37m:[0m .[36mcatch[0m() [36mpara[0m [36merrores[0m ===
+[36mError[0m [36mcapturado[0m [36men[0m .[36mcatch[0m()[37m:[0m [36mAlgo[0m [36msalió[0m [36mmal[0m
+[36mValor[0m [36mdespués[0m [36mde[0m .[36mcatch[0m()[37m:[0m [36mValor[0m [36mrecuperado[0m
+
+=== [36mTest[0m [93m5[0m[37m:[0m .[36mthen[0m() [36mcon[0m [36mdos[0m [36mcallbacks[0m ===
+[36mManejado[0m [36men[0m .[36mthen[0m()[37m:[0m [36mError[0m!
+[36mResultado[0m[37m:[0m [36mManejado[0m
+
+=== [36mTest[0m [93m6[0m[37m:[0m .[36mfinally[0m() ===
+[36mEjecutando[0m [36mlimpieza[0m [36men[0m .[36mfinally[0m()
+[36mResultado[0m [36mdespués[0m [36mde[0m .[36mfinally[0m()[37m:[0m [36mOK[0m
+
+=== [36mTest[0m [93m7[0m[37m:[0m [36mFuture[0m.[36mall[0m() [36mcon[0m [36méxito[0m ===
+[36mFuture[0m.[36mall[0m() [36mresultados[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+=== [36mTest[0m [93m8[0m[37m:[0m [36mFuture[0m.[36mall[0m() [36mcon[0m [36merror[0m ===
+[36mError[0m [36men[0m [36mFuture[0m.[36mall[0m()[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m [36men[0m [36mmedio[0m
+
+=== [36mTest[0m [93m9[0m[37m:[0m [36mFuture[0m.[36mrace[0m() ===
+[36mGanador[0m [36mde[0m [36mFuture[0m.[36mrace[0m()[37m:[0m [36mPrimera[0m
+
+=== [36mTest[0m [93m10[0m[37m:[0m [36mEncadenamiento[0m [36mcomplejo[0m ===
+[36mPaso[0m [93m1[0m[37m:[0m [93m5[0m
+[36mPaso[0m [93m2[0m[37m:[0m [93m10[0m
+[36mPaso[0m [93m3[0m[37m:[0m [93m20[0m
+[36mLimpieza[0m [36mfinal[0m
+[36mValor[0m [36mfinal[0m [36mdel[0m [36mencadenamiento[0m[37m:[0m [93m17[0m
+
+=== [36mTest[0m [93m11[0m[37m:[0m .[36mthen[0m() [36mretornando[0m [36mFuture[0m ===
+[36mValor[0m [36mexterior[0m[37m:[0m [93m100[0m
+[36mResultado[0m [36manidado[0m[37m:[0m [36mResultado[0m [36manidado[0m
+
+=== [36mRESUMEN[0m ===
+✓ [36mFuture[0m.[36mresolve[0m() - [36mOK[0m
+✓ [36mFuture[0m.[36mreject[0m() - [36mOK[0m
+✓ .[36mthen[0m() - [36mOK[0m
+✓ .[36mcatch[0m() - [36mOK[0m
+✓ .[36mfinally[0m() - [36mOK[0m
+✓ [36mFuture[0m.[36mall[0m() - [36mOK[0m
+✓ [36mFuture[0m.[36mrace[0m() - [36mOK[0m
+✓ [36mEncadenamiento[0m [36mcomplejo[0m - [36mOK[0m
+
+¡[36mTodos[0m [36mlos[0m [36mtests[0m [36mde[0m [36mla[0m [36mAPI[0m [36mde[0m [36mFuture[0m [36mcompletados[0m!
+Running test: .\tests\test_future_api_simple.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mFuture[0m.[36mresolve[0m() ===
+[36mFuture[0m [36mcreado[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([93m42[0m)[37m][0m
+[36mResultado[0m[37m:[0m [93m42[0m
+
+=== [36mTest[0m [93m2[0m[37m:[0m [36mFuture[0m.[36mreject[0m() ===
+[36mFuture[0m [36mrechazado[0m[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mRejected[0m([36mError[0m [36mde[0m [36mprueba[0m)[37m][0m
+[36mError[0m [36mcapturado[0m [36mcorrectamente[0m[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m [36mde[0m [36mprueba[0m
+
+=== [36mTest[0m [93m3[0m[37m:[0m .[36mthen[0m() [36mbásico[0m ===
+[36mValor[0m [36men[0m .[36mthen[0m()[37m:[0m [93m10[0m
+[36mFuture[0m [36mdespués[0m [36mde[0m .[36mthen[0m()[37m:[0m [37m[[0m[36mFuture[0m[37m:[0m [36mResolved[0m([93m20[0m)[37m][0m
+[36mValor[0m [36mfinal[0m[37m:[0m [93m20[0m
+
+=== [36mTest[0m [93m4[0m[37m:[0m [36mFuture[0m.[36mall[0m() ===
+[36mFuture[0m.[36mall[0m() [36mresultado[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+=== [36mTest[0m [93m5[0m[37m:[0m [36mFuture[0m.[36mall[0m() [36mcon[0m [36merror[0m ===
+[36mError[0m [36men[0m [36mFuture[0m.[36mall[0m()[37m:[0m [36mFuture[0m [36mrejected[0m[37m:[0m [36mError[0m!
+
+=== [36mTest[0m [93m6[0m[37m:[0m [36mFuture[0m.[36mrace[0m() ===
+[36mGanador[0m[37m:[0m [36mPrimera[0m
+
+=== [36mTODOS[0m [36mLOS[0m [36mTESTS[0m [36mCOMPLETADOS[0m ===
+Running test: .\tests\test_future_catch_finally.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m .[36mcatch[0m() [36mfunciona[0m [36mcorrectamente[0m ===
+[36mError[0m [36mcapturado[0m [36men[0m .[36mcatch[0m()[37m:[0m [36mError[0m [36mde[0m [36mprueba[0m
+[36mValor[0m [36mdespués[0m [36mde[0m .[36mcatch[0m()[37m:[0m [36mValor[0m [36mrecuperado[0m
+
+=== [36mTest[0m [93m2[0m[37m:[0m .[36mfinally[0m() [36mfunciona[0m [36mcorrectamente[0m ===
+[36mEjecutando[0m [36mlimpieza[0m [36men[0m .[36mfinally[0m()
+[36mResultado[0m [36mdespués[0m [36mde[0m .[36mfinally[0m()[37m:[0m [36mOK[0m
+
+=== [36mTest[0m [93m3[0m[37m:[0m [36mEncadenamiento[0m .[36mthen[0m().[36mcatch[0m().[36mfinally[0m() ===
+[36mEn[0m .[36mthen[0m()[37m:[0m [93m10[0m
+[36mLimpieza[0m [36mfinal[0m [36men[0m .[36mfinally[0m()
+[36mResultado[0m [36mfinal[0m[37m:[0m [93m20[0m
+
+=== [36mTest[0m [93m4[0m[37m:[0m .[36mcatch[0m() [36mmaneja[0m [36merror[0m [36men[0m [36mcadena[0m ===
+[36mManejado[0m[37m:[0m [36mFallo[0m!
+[36mDespués[0m [36mde[0m [36mrecuperar[0m[37m:[0m [93m42[0m
+[36mResultado[0m [36mde[0m [36mcadena[0m [36mcon[0m [36merror[0m[37m:[0m [93m50[0m
+
+=== ✓ [36mTODOS[0m [36mLOS[0m [36mTESTS[0m [36mCOMPLETADOS[0m ===
+Running test: .\tests\test_future_extended_api.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mFuture[0m.[36mallSettled[0m() - [36mTodos[0m [36mresueltos[0m ===
+[36mAllSettled[0m [36mcon[0m [36méxitos[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+Running test: .\tests\test_future_object.rcc
+¿[36mExiste[0m [36mFuture[0m? <[36mtype[0m [36mFuture[0m>
+[36mTipo[0m [36mde[0m [36mFuture[0m[37m:[0m [36mtype[0m [36mFuture[0m
+Running test: .\tests\test_generics.rcc
+=== [36mGENERICS[0m [36mSYSTEM[0m [36mTEST[0m ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGeneric[0m [36mBox[0m<[36mT[0m>
+[36mInt[0m [36mbox[0m[37m:[0m [93m42[0m
+[36mString[0m [36mbox[0m[37m:[0m [36mHello[0m
+[36mUpdated[0m [36mint[0m [36mbox[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mGeneric[0m [36mPair[0m<[36mK[0m[37m,[0m [36mV[0m>
+[36mPair[0m[37m:[0m [36mage[0m = [93m25[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mGeneric[0m [36mwith[0m [36mConstraint[0m
+[36mContainer[0m [36msize[0m[37m:[0m [93m3[0m
+[36mFirst[0m [36mitem[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mOptional[0m<[36mT[0m> [36mType[0m
+[36mSome[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mtrue[0m
+[36mNone[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mfalse[0m
+[36mSome[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mNone[0m [36mdefault[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mResult[0m<[36mT[0m> [36mType[0m
+[36mGood[0m [36mresult[0m [36msuccess[0m[37m:[0m [93mtrue[0m
+[36mGood[0m [36mresult[0m [36mvalue[0m[37m:[0m [93m5[0m
+[36mBad[0m [36mresult[0m [36msuccess[0m[37m:[0m [93mfalse[0m
+[36mBad[0m [36mresult[0m [36merror[0m[37m:[0m [36mDivision[0m [36mby[0m [36mzero[0m
+[36mTest[0m [93m6[0m[37m:[0m [36mStack[0m<[36mT[0m>
+[36mTop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36msecond[0m
+[36mIs[0m [36mempty[0m[37m:[0m [93mfalse[0m
+=== [36mALL[0m [36mGENERIC[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_generics_simple.rcc
+=== [36mGENERICS[0m [36mSYSTEM[0m [36mTEST[0m ([36mSimplified[0m) ===
+[36mTest[0m [93m1[0m[37m:[0m [36mGeneric[0m [36mBox[0m<[36mT[0m>
+[36mInt[0m [36mbox[0m[37m:[0m [93m42[0m
+[36mString[0m [36mbox[0m[37m:[0m [36mHello[0m
+[36mUpdated[0m [36mint[0m [36mbox[0m[37m:[0m [93m100[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mGeneric[0m [36mPair[0m<[36mK[0m[37m,[0m [36mV[0m>
+[36mPair[0m[37m:[0m [36mage[0m = [93m25[0m
+[36mTest[0m [93m3[0m[37m:[0m [36mGeneric[0m [36mContainer[0m<[36mT[0m>
+[36mContainer[0m [36msize[0m[37m:[0m [93m3[0m
+[36mFirst[0m [36mitem[0m[37m:[0m [93m10[0m
+[36mTest[0m [93m4[0m[37m:[0m [36mOptional[0m<[36mT[0m> [36mType[0m
+[36mSome[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mtrue[0m
+[36mNone[0m [36mhas[0m [36mvalue[0m[37m:[0m [93mfalse[0m
+[36mSome[0m [36mvalue[0m[37m:[0m [93m42[0m
+[36mNone[0m [36mdefault[0m[37m:[0m [93m0[0m
+[36mTest[0m [93m5[0m[37m:[0m [36mStack[0m<[36mT[0m>
+[36mTop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36mthird[0m
+[36mPop[0m[37m:[0m [36msecond[0m
+[36mIs[0m [36mempty[0m[37m:[0m [93mfalse[0m
+=== [36mALL[0m [36mGENERIC[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_generics_vs_bitwise.rcc
+[93m42[0m
+[93m32[0m
+[93m10[0m
+[93m20[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_getters_setters.rcc
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mAfter[0m [36mupdate[0m[37m:[0m
+[36mName[0m[37m:[0m [36mBob[0m
+[36mAge[0m[37m:[0m [93m35[0m
+[36mGetters[0m/[36mSetters[0m [36mtest[0m [36mcompleted[0m!
+Running test: .\tests\test_http_diagnose.rcc
+[36mresponse[0m [36mwith[0m [36mfetch[0m[37m:[0m [37m[[0m
+  [37m{[0m
+    [92m"userId"[0m[37m:[0m [93m1[0m[37m,[0m
+    [92m"id"[0m[37m:[0m [93m1[0m[37m,[0m
+    [92m"title"[0m[37m:[0m [92m"sunt aut facere repellat provident occaecati excep...[0m
+Running test: .\tests\test_import_default.rcc
+[36mTesting[0m [36mdefault[0m [36mimport[0m...
+[36mHttp[0m[37m:[0m [36mclass[0m [36mHttp[0m
+Running test: .\tests\test_import_enum.rcc
+[36mMyEnum[0m[37m:[0m <[36menum[0m [36mMyEnum[0m>
+[36mMyClass[0m[37m:[0m [36mclass[0m [36mMyClass[0m
+Running test: .\tests\test_improved_inference.rcc
+[36mType[0m [36minference[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_index_access_assignment.rcc
+[36mTesting[0m [36mindex[0m [36maccess[0m [36mand[0m [36massignment[0m [36mfor[0m [36mobjects[0m...
+
+[36mTest[0m [93m1[0m[37m:[0m [36mReading[0m [36mproperties[0m [36mwith[0m [36mindex[0m [36mnotation[0m
+  [36mconfig[0m[37m[[0m[92m"api-key"[0m[37m][0m[37m:[0m [36msecret123[0m
+  [36mconfig[0m[37m[[0m[92m"base-url"[0m[37m][0m[37m:[0m [36mhttps[0m[37m:[0m//[36mapi[0m.[36mexample[0m.[36mcom[0m
+  [36mconfig[0m[37m[[0m[92m"timeout"[0m[37m][0m[37m:[0m [93m5000[0m
+  ✓ [36mIndex[0m [36maccess[0m [36mworks[0m!
+
+[36mTest[0m [93m2[0m[37m:[0m [36mAssigning[0m [36mproperties[0m [36mwith[0m [36mindex[0m [36mnotation[0m
+  [36mAfter[0m [36massignment[0m[37m:[0m
+    [36mconfig[0m[37m[[0m[92m"api-key"[0m[37m][0m[37m:[0m [36mnew[0m-[36msecret[0m[93m-456[0m
+    [36mconfig[0m[37m[[0m[92m"version"[0m[37m][0m[37m:[0m [36mv2[0m.[93m0[0m
+    [36mconfig[0m[37m[[0m[92m"timeout"[0m[37m][0m[37m:[0m [93m10000[0m
+  ✓ [36mIndex[0m [36massignment[0m [36mworks[0m!
+
+[36mTest[0m [93m3[0m[37m:[0m [36mMixed[0m [36maccess[0m [36mpatterns[0m
+  [36muser[0m.[36mname[0m[37m:[0m [36mCarlos[0m
+  [36muser[0m[37m[[0m[92m"user-id"[0m[37m][0m[37m:[0m [93m12345[0m
+  [36muser[0m.[36memail[0m[37m:[0m [36mcarlos[0m@[36mexample[0m.[36mcom[0m
+
+  [36mAfter[0m [36mupdates[0m[37m:[0m
+  [36muser[0m.[36mname[0m[37m:[0m [36mCarlos[0m [36mLópez[0m
+  [36muser[0m[37m[[0m[92m"user-id"[0m[37m][0m[37m:[0m [93m99999[0m
+  [36muser[0m.[36memail[0m[37m:[0m [36mnew[0m@[36mexample[0m.[36mcom[0m
+  ✓ [36mMixed[0m [36maccess[0m [36mworks[0m!
+
+[36mTest[0m [93m4[0m[37m:[0m [36mDynamic[0m [36mproperty[0m [36maccess[0m
+  [36mdata[0m[37m[[0m[36mpropName[0m[37m][0m[37m:[0m [36mvalue2[0m
+  [36mAfter[0m [36mupdate[0m[37m:[0m [36mupdated[0m-[36mvalue2[0m
+  ✓ [36mDynamic[0m [36mproperty[0m [36maccess[0m [36mworks[0m!
+
+[36mAll[0m [36mtests[0m [36mpassed[0m! [36mIndex[0m [36maccess[0m [36mand[0m [36massignment[0m [36mwork[0m [36mcorrectly[0m.
+Running test: .\tests\test_inference_simple.rcc
+[36mType[0m [36minference[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_instanceof.rcc
+[36minstanceof[0m [36mresult[0m[37m:[0m [93mtrue[0m
+Running test: .\tests\test_interface.rcc
+[93m10[0m
+Running test: .\tests\test_isolated_typeargs.rcc
+[36mResult[0m[37m:[0m [93m42[0m
+Running test: .\tests\test_issue_spread_operator.rcc
+[36mTesting[0m [36mSpread[0m [36mOperator[0m...
+[36mCombined[0m [36marray[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m][0m
+[36mSpread[0m [36mwith[0m [36mliterals[0m[37m:[0m [37m[[0m[93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m7[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m,[0m [93m6[0m[37m,[0m [93m8[0m[37m][0m
+[36mCombined[0m [36mobject[0m[37m:[0m [37m{[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m[37m,[0m [36mc[0m[37m:[0m [93m3[0m[37m,[0m [36md[0m[37m:[0m [93m4[0m [37m}[0m
+[36mOverride[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m99[0m[37m,[0m [36mx[0m[37m:[0m [93m1[0m [37m}[0m
+[36mFunction[0m [36mspread[0m [36mresult[0m[37m:[0m [93m60[0m
+✅ [36mAll[0m [36mspread[0m [36moperator[0m [36mtests[0m [36mpassed[0m
+Running test: .\tests\test_map_complete.rcc
+=== [36mMap[0m<[36mK[0m[37m,[0m[36mV[0m> [36mImplementation[0m [36mTests[0m ===
+
+[37m[[0m [93m1[0m [37m][0m [36mBasic[0m [36mMap[0m<[36mstr[0m[37m,[0m [36mint[0m> [36moperations[0m[37m:[0m
+  [36mSet[0m [93m3[0m [36mvalues[0m
+  [36mGet[0m [92m'one'[0m[37m:[0m [93m1[0m
+  [36mGet[0m [92m'two'[0m[37m:[0m [93m2[0m
+  [36mHas[0m [92m'one'[0m[37m:[0m [93mtrue[0m
+  [36mHas[0m [92m'missing'[0m[37m:[0m [93mfalse[0m
+  [36mSize[0m[37m:[0m [93m3[0m
+  ✓ [36mTest[0m [93m1[0m [36mpassed[0m
+
+[37m[[0m [93m2[0m [37m][0m [36mMap[0m [36mdelete[0m [36moperation[0m[37m:[0m
+  [36mInitial[0m [36msize[0m[37m:[0m [93m3[0m
+  [36mDeleted[0m [92m'b'[0m[37m:[0m [93mtrue[0m
+  [36mSize[0m [36mafter[0m [36mdelete[0m[37m:[0m [93m2[0m
+  [36mHas[0m [92m'b'[0m[37m:[0m [93mfalse[0m
+  [36mDeleted[0m [36mnon[0m-[36mexistent[0m [92m'xyz'[0m[37m:[0m [93mfalse[0m
+  ✓ [36mTest[0m [93m2[0m [36mpassed[0m
+
+[37m[[0m [93m3[0m [37m][0m [36mMap[0m [36mclear[0m [36moperation[0m[37m:[0m
+  [36mSize[0m [36mbefore[0m [36mclear[0m[37m:[0m [93m3[0m
+  [36mSize[0m [36mafter[0m [36mclear[0m[37m:[0m [93m0[0m
+  [36mHas[0m [92m'x'[0m[37m:[0m [93mfalse[0m
+  ✓ [36mTest[0m [93m3[0m [36mpassed[0m
+
+[37m[[0m [93m4[0m [37m][0m [36mMap[0m [36mwith[0m [36mfloat[0m [36mvalues[0m[37m:[0m
+  [36mpi[0m = [93m3.14159[0m
+  ✓ [36mTest[0m [93m4[0m [36mpassed[0m
+
+[37m[[0m [93m5[0m [37m][0m [36mMap[0m<[36mint[0m[37m,[0m [36mstr[0m> [36mwith[0m [36mint[0m [36mkeys[0m[37m:[0m
+  [93m1[0m -> [36mone[0m
+  [93m2[0m -> [36mtwo[0m
+  [36mSize[0m[37m:[0m [93m3[0m
+  ✓ [36mTest[0m [93m5[0m [36mpassed[0m
+
+[37m[[0m [93m6[0m [37m][0m [36mMap[0m [36moverwrites[0m [36mexisting[0m [36mvalues[0m[37m:[0m
+  [36mInitial[0m [36mvalue[0m[37m:[0m [93m100[0m
+  [36mAfter[0m [36moverwrite[0m[37m:[0m [93m200[0m
+  [36mSize[0m ([36mshould[0m [36mbe[0m [93m1[0m)[37m:[0m [93m1[0m
+  ✓ [36mTest[0m [93m6[0m [36mpassed[0m
+
+[37m[[0m [93m7[0m [37m][0m [36mGet[0m [36mnon[0m-[36mexistent[0m [36mkey[0m [36mreturns[0m [93mnull[0m[37m:[0m
+  [36mNon[0m-[36mexistent[0m [36mkey[0m [36mreturns[0m [93mnull[0m ✓
+  ✓ [36mTest[0m [93m7[0m [36mpassed[0m
+
+[37m[[0m [93m8[0m [37m][0m [36mMap[0m [36mtoStr[0m() [36mmethod[0m[37m:[0m
+  [36mMap[0m [36mas[0m [36mstring[0m[37m:[0m [36mMap[0m [37m{[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mb[0m[37m:[0m [93m2[0m [37m}[0m
+  ✓ [36mTest[0m [93m8[0m [36mpassed[0m
+
+[37m[[0m [93m9[0m [37m][0m [36mMap[0m [36mwith[0m [36mtyped[0m [36mintegers[0m[37m:[0m
+  [36mi32[0m [36mvalue[0m[37m:[0m [93m12345[0m
+  [36mu64[0m [36mvalue[0m[37m:[0m [93m999999[0m
+  ✓ [36mTest[0m [93m9[0m [36mpassed[0m
+
+[37m[[0m [93m10[0m [37m][0m [36mNull[0m [36mcoalescing[0m [36mwith[0m [36mMap[0m.[36mget[0m()[37m:[0m
+  [36mExisting[0m [36mkey[0m ([36mwith[0m ??)[37m:[0m [93m123[0m
+  [36mMissing[0m [36mkey[0m ([36mwith[0m ??)[37m:[0m [93m-1[0m
+  ✓ [36mTest[0m [93m10[0m [36mpassed[0m
+
+[37m[[0m [93m11[0m [37m][0m [36mComplex[0m [36moperation[0m [36msequence[0m[37m:[0m
+  [36mAdded[0m [93m5[0m [36melements[0m[37m,[0m [36msize[0m[37m:[0m [93m5[0m
+  [36mDeleted[0m [93m2[0m [36melements[0m[37m,[0m [36msize[0m[37m:[0m [93m3[0m
+  [36mAdded[0m [93m1[0m [36mmore[0m [36melement[0m[37m,[0m [36msize[0m[37m:[0m [93m4[0m
+  [36mHas[0m [92m'a'[0m[37m:[0m [93mtrue[0m
+  [36mHas[0m [92m'b'[0m[37m:[0m [93mfalse[0m
+  [36mHas[0m [92m'f'[0m[37m:[0m [93mtrue[0m
+  ✓ [36mTest[0m [93m11[0m [36mpassed[0m
+
+[37m[[0m [93m12[0m [37m][0m [36mMap[0m [36mwith[0m [36mfloat[0m [36mtypes[0m[37m:[0m
+  [36mf32[0m [36msize[0m[37m:[0m [93m2[0m
+  [36mf64[0m [36msize[0m[37m:[0m [93m2[0m
+  ✓ [36mTest[0m [93m12[0m [36mpassed[0m
+
+==================================================
+✅ [36mALL[0m [36mMAP[0m [36mTESTS[0m [36mPASSED[0m [36mSUCCESSFULLY[0m!
+==================================================
+
+[36mTypes[0m [36mtested[0m[37m:[0m
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mint[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mfloat[0m>
+  • [36mMap[0m<[36mint[0m[37m,[0m [36mstr[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mi32[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mu64[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mf32[0m>
+  • [36mMap[0m<[36mstr[0m[37m,[0m [36mf64[0m>
+
+[36mOperations[0m [36mtested[0m[37m:[0m
+  • [36mset[0m([36mkey[0m[37m,[0m [36mvalue[0m)
+  • [36mget[0m([36mkey[0m) -> [36mvalue[0m?
+  • [36mhas[0m([36mkey[0m) -> [36mbool[0m
+  • [36mdelete[0m([36mkey[0m) -> [36mbool[0m
+  • [36mclear[0m()
+  • [36msize[0m() -> [36mint[0m
+  • [36mtoStr[0m() -> [36mstr[0m
+
+🎉 [36mMap[0m<[36mK[0m[37m,[0m[36mV[0m> [36mimplementation[0m [36mworking[0m [36mperfectly[0m!
+Running test: .\tests\test_map_i32.rcc
+[36mCreating[0m [36mMap[0m<[36mstr[0m[37m,[0m [36mint[0m>...
+[36mSuccess[0m [36mwith[0m [36mint[0m!
+[36mCreating[0m [36mMap[0m<[36mstr[0m[37m,[0m [36mi32[0m>...
+[36mSuccess[0m [36mwith[0m [36mi32[0m!
+Running test: .\tests\test_map_minimal.rcc
+Running test: .\tests\test_map_no_main.rcc
+[36mTesting[0m [36mMap[0m [36mbasic[0m [36moperations[0m
+
+[36mMap[0m [36mcreated[0m
+[36mValue[0m [36mset[0m
+[36mv1[0m[37m:[0m [93m1[0m
+[36mv2[0m[37m:[0m [93m2[0m
+[36mv3[0m[37m:[0m [93m3[0m
+[36mHas[0m [92m'one'[0m[37m:[0m [93mtrue[0m
+[36mHas[0m [92m'missing'[0m[37m:[0m [93mfalse[0m
+[36mSize[0m[37m:[0m [93m3[0m
+[36mDeleted[0m [92m'two'[0m[37m:[0m [93mtrue[0m
+[36mSize[0m [36mafter[0m [36mdelete[0m[37m:[0m [93m2[0m
+[36mSize[0m [36mafter[0m [36mclear[0m[37m:[0m [93m0[0m
+
+✓ [36mAll[0m [36mMap[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_module_math.rcc
+Running test: .\tests\test_module_utils.rcc
+Running test: .\tests\test_named_args.rcc
+=== [36mTest[0m [36mde[0m [36margumentos[0m [36mnombrados[0m ===
+
+[36mLlamada[0m [36mposicional[0m[37m:[0m
+[36mName[0m[37m:[0m [36mAlice[0m
+[36mAge[0m[37m:[0m [93m30[0m
+[36mCity[0m[37m:[0m [36mMadrid[0m
+
+[36mLlamada[0m [36mcon[0m [36margumentos[0m [36mnombrados[0m[37m:[0m
+[36mName[0m[37m:[0m [36mBob[0m
+[36mAge[0m[37m:[0m [93m25[0m
+[36mCity[0m[37m:[0m [36mBarcelona[0m
+
+[36mLlamada[0m [36mmixta[0m[37m:[0m
+[36mName[0m[37m:[0m [36mCharlie[0m
+[36mAge[0m[37m:[0m [93m35[0m
+[36mCity[0m[37m:[0m [36mValencia[0m
+
+=== [36mTest[0m [36mcompletado[0m ===
+Running test: .\tests\test_named_args_comprehensive.rcc
+=== [36mTest[0m [36mCompleto[0m [36mde[0m [36mArgumentos[0m [36mNombrados[0m ===
+
+[36mTest[0m [93m1[0m[37m:[0m [36mArgumentos[0m [36mnombrados[0m [36men[0m [36morden[0m [36mdiferente[0m
+[36mHost[0m[37m:[0m [36mlocalhost[0m [36mPort[0m[37m:[0m [93m8080[0m [36mSSL[0m[37m:[0m [93mtrue[0m
+[36mHost[0m[37m:[0m [36mexample[0m.[36mcom[0m [36mPort[0m[37m:[0m [93m3000[0m [36mSSL[0m[37m:[0m [93mfalse[0m
+
+[36mTest[0m [93m2[0m[37m:[0m [36mValores[0m [36mpor[0m [36mdefecto[0m
+[36mName[0m[37m:[0m [36mAlice[0m [36mAge[0m[37m:[0m [93m18[0m [36mActive[0m[37m:[0m [93mtrue[0m
+[36mName[0m[37m:[0m [36mBob[0m [36mAge[0m[37m:[0m [93m25[0m [36mActive[0m[37m:[0m [93mtrue[0m
+[36mName[0m[37m:[0m [36mCharlie[0m [36mAge[0m[37m:[0m [93m18[0m [36mActive[0m[37m:[0m [93mfalse[0m
+[36mName[0m[37m:[0m [36mDiana[0m [36mAge[0m[37m:[0m [93m30[0m [36mActive[0m[37m:[0m [93mfalse[0m
+
+[36mTest[0m [93m3[0m[37m:[0m [36mMezcla[0m [36mde[0m [36mposicionales[0m [36my[0m [36mnombrados[0m
+[36mFrom[0m[37m:[0m [36mMadrid[0m [36mTo[0m[37m:[0m [36mBarcelona[0m [36mDate[0m[37m:[0m [93m2024[0m[93m-01[0m[93m-15[0m [36mClass[0m[37m:[0m [36meconomy[0m
+[36mFrom[0m[37m:[0m [36mMadrid[0m [36mTo[0m[37m:[0m [36mBarcelona[0m [36mDate[0m[37m:[0m [93m2024[0m[93m-01[0m[93m-15[0m [36mClass[0m[37m:[0m [36mbusiness[0m
+[36mFrom[0m[37m:[0m [36mMadrid[0m [36mTo[0m[37m:[0m [36mBarcelona[0m [36mDate[0m[37m:[0m [93m2024[0m[93m-01[0m[93m-15[0m [36mClass[0m[37m:[0m [36meconomy[0m
+
+[36mTest[0m [93m4[0m[37m:[0m [36mFunciones[0m [36mcon[0m [36mretorno[0m
+[93m5[0m + [93m3[0m = [93m8[0m
+[93m5[0m * [93m3[0m = [93m15[0m
+[93m5[0m * [93m3[0m = [93m15[0m
+
+[36mTest[0m [93m5[0m[37m:[0m [36mDiferentes[0m [36mtipos[0m [36mde[0m [36mdatos[0m
+[36mMessage[0m [93m1[0m[37m:[0m [36mHELLO[0m [36mHELLO[0m [36mHELLO[0m 
+[36mMessage[0m [93m2[0m[37m:[0m [36mworld[0m [36mworld[0m 
+
+[36mTest[0m [93m6[0m[37m:[0m [36mSolo[0m [36margumentos[0m [36mnombrados[0m
+[36mDebug[0m[37m:[0m [93mtrue[0m [36mVerbose[0m[37m:[0m [93mfalse[0m [36mLogLevel[0m[37m:[0m [36minfo[0m
+[36mDebug[0m[37m:[0m [93mfalse[0m [36mVerbose[0m[37m:[0m [93mtrue[0m [36mLogLevel[0m[37m:[0m [36mdebug[0m
+
+=== [36mTodos[0m [36mlos[0m [36mtests[0m [36mcompletados[0m [36mexitosamente[0m ===
+Running test: .\tests\test_new_features.rcc
+=== [36mTesting[0m [36mSwitch[0m/[36mCase[0m ===
+[36mWednesday[0m
+
+=== [36mTesting[0m [36mDo[0m-[36mWhile[0m ===
+[36mi[0m = [93m0[0m
+[36mi[0m = [93m1[0m
+[36mi[0m = [93m2[0m
+
+=== [36mTesting[0m [36mFor[0m-[36mOf[0m ===
+[36mItem[0m[37m:[0m [93m10[0m
+[36mItem[0m[37m:[0m [93m20[0m
+[36mItem[0m[37m:[0m [93m30[0m
+
+=== [36mTesting[0m [36mString[0m [36mMethods[0m ===
+[36mrepeat[0m([93m3[0m)[37m:[0m [36mhellohellohello[0m
+[36mpadStart[0m([93m10[0m[37m,[0m [92m'*'[0m)[37m:[0m *****[36mhello[0m
+[36mpadEnd[0m([93m10[0m[37m,[0m [92m'-'[0m)[37m:[0m [36mhello[0m-----
+[36mlastIndexOf[0m([92m'l'[0m)[37m:[0m [93m3[0m
+[36mcharCodeAt[0m([93m0[0m)[37m:[0m [93m104[0m
+
+=== [36mTesting[0m [36mArray[0m [36mMethods[0m ===
+[36mindexOf[0m([93m3[0m)[37m:[0m [93m2[0m
+[36mincludes[0m([93m4[0m)[37m:[0m [93mtrue[0m
+[36mat[0m([93m-1[0m)[37m:[0m [93m5[0m
+[36mAfter[0m [36mfill[0m([93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m)[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m0[0m[37m,[0m [93m3[0m[37m][0m
+[36mFlat[0m [36mresult[0m [36mlength[0m[37m:[0m [93m4[0m
+
+=== [36mTesting[0m [36mObject[0m [36mMethods[0m ===
+[36mObject[0m.[36mkeys[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36mvalues[0m [36mlength[0m[37m:[0m [93m2[0m
+[36mObject[0m.[36massign[0m [36mworks[0m[37m:[0m [93m2[0m
+
+=== [36mAll[0m [36mtests[0m [36mcompleted[0m! ===
+Running test: .\tests\test_new_types.rcc
+=== [36mTipos[0m [36mEnteros[0m [36mcon[0m [36mSigno[0m ===
+[36mi8[0m[37m:[0m  [93m-128[0m
+[36mi16[0m[37m:[0m [93m-32768[0m
+[36mi32[0m[37m:[0m [93m-2147483648[0m
+[36mi64[0m[37m:[0m [93m-9223372036854775807[0m
+
+=== [36mTipos[0m [36mEnteros[0m [36msin[0m [36mSigno[0m ===
+[36mu8[0m[37m:[0m  [93m255[0m
+[36mu16[0m[37m:[0m [93m65535[0m
+[36mu32[0m[37m:[0m [93m4294967295[0m
+[36mu64[0m[37m:[0m [93m9223372036854775807[0m
+
+=== [36mTipos[0m [36mPunto[0m [36mFlotante[0m ===
+[36mf32[0m[37m:[0m     [93m3.14159[0m
+[36mf64[0m[37m:[0m     [93m2.718281828459045[0m
+[36mdecimal[0m[37m:[0m [93m123.456789[0m
+
+=== [36mConversiones[0m [36mAutomáticas[0m ===
+[36mi8[0m -> [36mi64[0m[37m:[0m     [93m-128[0m
+[36mf32[0m -> [36mf64[0m[37m:[0m    [93m3.14159[0m
+[36mi32[0m -> [36mdecimal[0m[37m:[0m [93m-2147483648[0m
+
+=== [36mResultados[0m [36mde[0m [36mFunciones[0m ===
+[36maddI32[0m([93m10[0m[37m,[0m [93m20[0m)[37m:[0m     [93m30[0m
+[36mmultiplyF64[0m([93m3.14[0m[37m,[0m [93m2.0[0m)[37m:[0m [93m6.28[0m
+[36mDecimal[0m[37m:[0m [93m123.456789[0m
+
+=== [36mArrays[0m [36mcon[0m [36mNuevos[0m [36mTipos[0m ===
+[36mi32[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+[36mf64[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m1.1[0m[37m,[0m [93m2.2[0m[37m,[0m [93m3.3[0m[37m,[0m [93m4.4[0m[37m,[0m [93m5.5[0m[37m][0m
+[36mdecimal[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m10.5[0m[37m,[0m [93m20.75[0m[37m,[0m [93m30.25[0m[37m][0m
+
+✅ [36mTodos[0m [36mlos[0m [36mtipos[0m [36mfuncionan[0m [36mcorrectamente[0m!
+Running test: .\tests\test_no_conflict_generics_bitwise.rcc
+[93m16[0m
+[93m64[0m
+[93m8[0m
+[93m6[0m
+[93m40[0m
+[93m10[0m
+[36mAll[0m [36mtests[0m [36mpassed[0m!
+Running test: .\tests\test_no_recursion.rcc
+[36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mHello[0m[37m,[0m [36mAlice[0m
+Running test: .\tests\test_null_safety_operators.rcc
+====================================
+[36mNULL[0m [36mSAFETY[0m [36mOPERATORS[0m [36mTEST[0m [36mSUITE[0m
+====================================
+✓ [36mTest[0m [93m1[0m [36mpassed[0m[37m:[0m [36mNull[0m [36mcoalescing[0m [36moperator[0m [36mworks[0m
+✓ [36mTest[0m [93m2[0m [36mpassed[0m[37m:[0m [36mChained[0m [93mnull[0m [36mcoalescing[0m [36mworks[0m
+⊘ [36mTest[0m [93m3[0m [36mskipped[0m[37m:[0m [36mInline[0m [36mobject[0m [36mtypes[0m [36mnot[0m [36myet[0m [36msupported[0m
+⊘ [36mTest[0m [93m4[0m [36mskipped[0m[37m:[0m [36mInline[0m [36mobject[0m [36mtypes[0m [36mnot[0m [36myet[0m [36msupported[0m
+✓ [36mTest[0m [93m5[0m [36mpassed[0m[37m:[0m [36mNull[0m [36massertion[0m [36mon[0m [36mnon[0m-[93mnull[0m [36mvalue[0m [36mworks[0m
+✓ [36mTest[0m [93m6[0m [36mpassed[0m[37m:[0m [36mBasic[0m [36mternary[0m [36moperator[0m [36mworks[0m
+✓ [36mTest[0m [93m7[0m [36mpassed[0m[37m:[0m [36mNested[0m [36mternary[0m [36moperators[0m [36mwork[0m
+✓ [36mTest[0m [93m8[0m [36mpassed[0m[37m:[0m [36mPrefix[0m [36mincrement[0m [36mworks[0m
+✓ [36mTest[0m [93m9[0m [36mpassed[0m[37m:[0m [36mPostfix[0m [36mincrement[0m [36mworks[0m
+✓ [36mTest[0m [93m10[0m [36mpassed[0m[37m:[0m [36mPrefix[0m [36mdecrement[0m [36mworks[0m
+✓ [36mTest[0m [93m11[0m [36mpassed[0m[37m:[0m [36mPostfix[0m [36mdecrement[0m [36mworks[0m
+✓ [36mTest[0m [93m12[0m [36mpassed[0m[37m:[0m [36mIncrement[0m [36min[0m [36mfor[0m [36mloop[0m [36mworks[0m
+✓ [36mTest[0m [93m13[0m [36mpassed[0m[37m:[0m [36mCombined[0m [36moperators[0m [36mwork[0m
+✓ [36mTest[0m [93m14[0m [36mpassed[0m[37m:[0m [36mTernary[0m [36min[0m [36mcomplex[0m [36mexpression[0m [36mworks[0m
+✓ [36mTest[0m [93m15[0m [36mpassed[0m[37m:[0m [36mFloat[0m [36mincrement[0m/[36mdecrement[0m [36mworks[0m
+====================================
+[36mTEST[0m [36mSUITE[0m [36mCOMPLETE[0m
+====================================
+Running test: .\tests\test_null_safety_simple.rcc
+=== [36mTest[0m [93m1[0m[37m:[0m [36mNull[0m [36mCoalescing[0m ===
+[36mdefault[0m
+=== [36mTest[0m [93m2[0m[37m:[0m [36mConditional[0m ===
+[36madult[0m
+=== [36mTest[0m [93m3[0m[37m:[0m [36mPrefix[0m [36mIncrement[0m ===
+[93m6[0m
+[93m6[0m
+=== [36mTest[0m [93m4[0m[37m:[0m [36mPostfix[0m [36mIncrement[0m ===
+[93m6[0m
+[93m5[0m
+=== [36mTest[0m [93m5[0m[37m:[0m [36mNull[0m [36mAssertion[0m ===
+[36mhello[0m
+Running test: .\tests\test_object_spread.rcc
+[36mCombined[0m[37m:[0m [37m{[0m [36mb[0m[37m:[0m [93m2[0m[37m,[0m [36ma[0m[37m:[0m [93m1[0m[37m,[0m [36mc[0m[37m:[0m [93m3[0m[37m,[0m [36md[0m[37m:[0m [93m4[0m [37m}[0m
+[36mOverride[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m99[0m[37m,[0m [36mx[0m[37m:[0m [93m1[0m [37m}[0m
+Running test: .\tests\test_object_string_keys.rcc
+[36mTesting[0m [36mstring[0m [36mliterals[0m [36mas[0m [36mobject[0m [36mkeys[0m...
+✓ [36mCreated[0m [36mobject[0m [36mwith[0m [36mstring[0m [36mliteral[0m [36mkeys[0m
+  [36mContent[0m-[36mType[0m[37m:[0m [36mapplication[0m/[36mjson[0m
+  [36mAuthorization[0m[37m:[0m [36mBearer[0m [36mtoken123[0m
+  [36mX[0m-[36mCustom[0m-[36mHeader[0m[37m:[0m [36mcustom[0m [36mvalue[0m
+
+✓ [36mCreated[0m [36mobject[0m [36mwith[0m [36mmixed[0m [36mkey[0m [36mtypes[0m
+  [36mname[0m[37m:[0m [36mCarlos[0m
+  [36mfull[0m-[36mname[0m[37m:[0m [36mCarlos[0m [36mLópez[0m
+  [36mage[0m[37m:[0m [93m25[0m
+  [36muser[0m-[36mid[0m[37m:[0m [93m12345[0m
+
+✓ [36mCreated[0m [36mnested[0m [36mobject[0m [36mwith[0m [36mstring[0m [36mkeys[0m
+  [36mAPI[0m [36mbase[0m [36mURL[0m[37m:[0m [36mhttps[0m[37m:[0m//[36mapi[0m.[36mexample[0m.[36mcom[0m
+  [36mAPI[0m [36mtimeout[0m[37m:[0m [93m5000[0m
+  [36mContent[0m-[36mType[0m[37m:[0m [36mapplication[0m/[36mjson[0m
+
+[36mAll[0m [36mtests[0m [36mpassed[0m! [36mString[0m [36mliterals[0m [36mas[0m [36mobject[0m [36mkeys[0m [36mwork[0m [36mcorrectly[0m.
+Running test: .\tests\test_optional_params_simple.rcc
+[36mTesting[0m [36moptional[0m [36mparameters[0m...
+
+[36mName[0m[37m:[0m [36mAlice[0m
+✓ [36mCalled[0m [36mwith[0m [36mrequired[0m [36mparam[0m [36monly[0m
+
+[36mName[0m[37m:[0m [36mBob[0m
+✓ [36mCalled[0m [36mwith[0m [36mboth[0m [36mparams[0m
+
+[36mtest[0m
+[36mtest[0m
+[36mtest[0m
+✓ [36mMultiple[0m [36moptional[0m [36mparameters[0m [36mworking[0m
+
+=== [36mALL[0m [36mOPTIONAL[0m [36mPARAMETER[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_params_comprehensive.rcc
+=== [36mCOMPREHENSIVE[0m [36mFUNCTION[0m [36mPARAMETERS[0m [36mTEST[0m ===
+
+[93m1.[0m [36mBasic[0m [36mpositional[0m [36mparameters[0m
+  [36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+
+[93m2.[0m [36mNamed[0m [36marguments[0m
+  [36mPositional[0m[37m:[0m [36mlocalhost[0m[37m:[0m[93m8080[0m ([36mSSL[0m[37m:[0m [93mtrue[0m)
+  [36mNamed[0m[37m:[0m [36mexample[0m.[36mcom[0m[37m:[0m[93m3000[0m ([36mSSL[0m[37m:[0m [93mfalse[0m)
+  [36mMixed[0m[37m:[0m [36mserver[0m.[36mcom[0m[37m:[0m[93m443[0m ([36mSSL[0m[37m:[0m [93mtrue[0m)
+
+[93m3.[0m [36mDefault[0m [36mvalues[0m
+  [36mAll[0m [36mdefaults[0m[37m:[0m [36mHello[0m [36mAlice[0m!
+  [36mOne[0m [36moverride[0m[37m:[0m [36mHi[0m [36mBob[0m!
+  [36mAll[0m [36mspecified[0m[37m:[0m [36mHey[0m [36mCharlie[0m!!!
+  [36mNamed[0m [36moverride[0m[37m:[0m [36mHello[0m [36mDave[0m?
+
+[93m4.[0m [36mVariadic[0m [36mparameters[0m
+  [36msum[0m([93m1[0m[37m,[0m[93m2[0m[37m,[0m[93m3[0m[37m,[0m[93m4[0m[37m,[0m[93m5[0m) = [93m15[0m
+  [36msum[0m([93m10[0m[37m,[0m[93m20[0m[37m,[0m[93m30[0m) = [93m60[0m
+  [36msum[0m() = [93m0[0m
+
+[93m5.[0m [36mPositional[0m + [36mVariadic[0m
+  [36mItems[0m[37m:[0m [36mapple[0m [36mbanana[0m [36mcherry[0m
+  [36mEmpty[0m[37m:[0m
+  [36mSingle[0m[37m:[0m [36mitem[0m
+
+[93m6.[0m [36mDefaults[0m + [36mVariadic[0m
+  [37m[[0m[36mERROR[0m[37m][0m [36mFailed[0m [36mto[0m [36mconnect[0m
+  [37m[[0m[36mWARN[0m[37m][0m [36mLow[0m [36mmemory[0m
+  [37m[[0m[36mINFO[0m[37m][0m [36mSingle[0m [36mmessage[0m
+
+[93m7.[0m [36mNamed[0m + [36mDefaults[0m + [36mVariadic[0m
+  [36mhttps[0m[37m:[0m//[36mexample[0m.[36mcom[0m/[36mapi[0m/[36mv1[0m/[36musers[0m
+  [36mhttp[0m[37m:[0m//[36mlocalhost[0m/[36madmin[0m
+  [36mhttps[0m[37m:[0m//[36msite[0m.[36mcom[0m
+
+[93m8.[0m [36mArray[0m [36mdestructuring[0m
+  [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+  [36mx[0m=[93m100[0m[37m,[0m [36my[0m=[93m200[0m
+  [36mswapped[0m [37m[[0m[93m1[0m[37m,[0m[93m2[0m[37m][0m = [37m[[0m[93m2[0m[37m,[0m[93m1[0m[37m][0m
+
+[93m9.[0m [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mvariadic[0m
+  [36mmultiply[0m([93m2[0m[37m,[0m[93m3[0m[37m,[0m[93m4[0m) = [93m24[0m
+  [36mconcat[0m([92m'-'[0m[37m,[0m [92m'a'[0m[37m,[0m[92m'b'[0m[37m,[0m[92m'c'[0m) = [36ma[0m-[36mb[0m-[36mc[0m
+
+[93m10.[0m [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mdefaults[0m
+  [36mpower[0m([93m3[0m) = [93m9[0m
+  [36mpower[0m([93m2[0m[37m,[0m [93m5[0m) = [93m32[0m
+
+[93m11.[0m [36mComplex[0m [36mcombinations[0m
+  [37m[[0m[36mbatch[0m|[36mfast[0m|[93m0[0m[93m-10[0m[37m][0m [36mfile1[0m [36mfile2[0m [36mfile3[0m
+  [37m[[0m[36msingle[0m|[36mdata[0m|[93m5[0m[93m-15[0m[37m][0m
+
+[93m12.[0m [36mNamed[0m [36marguments[0m [36mcomprehensive[0m
+  [36mAll[0m [36mdefaults[0m[37m:[0m [36mlocalhost[0m[37m:[0m[93m8080[0m [36mtimeout[0m[37m:[0m[93m30[0m [36mretries[0m[37m:[0m[93m3[0m
+  [36mNamed[0m [36moverride[0m[37m:[0m [36mapi[0m.[36mcom[0m[37m:[0m[93m8080[0m [36mtimeout[0m[37m:[0m[93m60[0m [36mretries[0m[37m:[0m[93m3[0m
+  [36mMixed[0m [36morder[0m[37m:[0m [36mdb[0m.[36mlocal[0m[37m:[0m[93m5432[0m [36mtimeout[0m[37m:[0m[93m30[0m [36mretries[0m[37m:[0m[93m5[0m
+
+[93m13.[0m [36mVariadic[0m [36mwith[0m [36mdifferent[0m [36mtypes[0m
+  [36maverage[0m([93m10[0m[37m,[0m[93m20[0m[37m,[0m[93m30[0m[37m,[0m[93m40[0m) = [93m25[0m
+  [36maverage[0m([93m5[0m[37m,[0m[93m15[0m) = [93m10[0m
+
+[93m14.[0m [36mNested[0m [36mcalls[0m [36mwith[0m [36mvariadic[0m
+  [36mmin[0m([93m5[0m[37m,[0m[93m2[0m[37m,[0m[93m8[0m[37m,[0m[93m1[0m[37m,[0m[93m9[0m) = [93m1[0m
+  [36mmax[0m([93m5[0m[37m,[0m[93m2[0m[37m,[0m[93m8[0m[37m,[0m[93m1[0m[37m,[0m[93m9[0m) = [93m9[0m
+
+[93m15.[0m [36mEdge[0m [36mcases[0m
+  [36mEmpty[0m [36mvariadic[0m[37m:[0m [93m0[0m
+  [36mOnly[0m [36mvariadic[0m ([93m3[0m [36margs[0m)[37m:[0m [93m3[0m
+  [36mMany[0m [36mparams[0m[37m:[0m [93m36[0m
+  [36mMany[0m [36mparams[0m ([36mall[0m)[37m:[0m [93m15[0m
+
+=== [36mALL[0m [36mTESTS[0m [36mPASSED[0m ===
+Running test: .\tests\test_partial_sections_1_10.rcc
+╔════════════════════════════════════════════════════════════════╗
+║     [36mRACCOON[0m [36mCOMPLETE[0m [36mSYNTAX[0m & [36mSEMANTICS[0m [36mTEST[0m                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+[37m[[0m[93m1[0m[37m][0m [36mPRIMITIVE[0m [36mTYPES[0m & [36mLITERALS[0m
+  ✓ [36mInteger[0m [36mliterals[0m[37m:[0m [93m42[0m[37m,[0m [93m-100[0m[37m,[0m [93m999999999[0m
+  ✓ [36mFloat[0m [36mliterals[0m[37m:[0m [93m3.14159[0m[37m,[0m [93m-2.5[0m[37m,[0m [93m1.5[0m
+  ✓ [36mString[0m [36mliterals[0m[37m:[0m [36mhello[0m [36mworld[0m[37m,[0m [36mempty[0m=[92m""[0m
+  ✓ [36mBoolean[0m [36mliterals[0m[37m:[0m [93mtrue[0m[37m,[0m [93mfalse[0m
+  ✓ [36mNull[0m [36mliteral[0m[37m:[0m [93mnull[0m
+  ✓ [36mTemplate[0m [36mstrings[0m[37m:[0m [36mLanguage[0m[37m:[0m [36mRaccoon[0m[37m,[0m [36mVersion[0m[37m:[0m [93m1[0m
+
+[37m[[0m[93m2[0m[37m][0m [36mOPERATORS[0m
+  ✓ [36mArithmetic[0m[37m:[0m +=[93m13[0m[37m,[0m -=[93m7[0m[37m,[0m *=[93m30[0m[37m,[0m /=[93m3.3333333333333335[0m[37m,[0m %=[93m1[0m[37m,[0m **=[93m8[0m
+  ✓ [36mComparison[0m[37m:[0m ==[93mfalse[0m[37m,[0m !=[93mtrue[0m[37m,[0m <[93mfalse[0m[37m,[0m >[93mtrue[0m
+  ✓ [36mLogical[0m[37m:[0m &&=[93mfalse[0m[37m,[0m ||=[93mtrue[0m[37m,[0m !=[93mfalse[0m
+  ✓ [36mBitwise[0m[37m:[0m &=[93m1[0m[37m,[0m |=[93m7[0m[37m,[0m ^=[93m6[0m[37m,[0m ~=[93m-6[0m
+    [36mShifts[0m[37m:[0m <<=[93m10[0m[37m,[0m >>=[93m2[0m[37m,[0m >>>=[93m2[0m
+  ✓ [36mAssignment[0m [36moperators[0m[37m:[0m [36mresult[0m=[93m0[0m
+  ✓ [36mCompound[0m [36mbitwise[0m [36massignment[0m[37m:[0m [36mresult[0m=[93m1[0m
+  ✓ [36mInc[0m/[36mDec[0m[37m:[0m [36mpost[0m++=[93m6[0m[37m,[0m ++[36mpre[0m=[93m7[0m[37m,[0m [36mpost[0m--=[93m6[0m[37m,[0m --[36mpre[0m=[93m5[0m
+  ✓ [36mRange[0m [36moperator[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mNull[0m [36mcoalescing[0m[37m:[0m [93m42[0m
+  ✓ [36mTernary[0m [36moperator[0m[37m:[0m [93m10[0m
+
+[37m[[0m[93m3[0m[37m][0m [36mVARIABLES[0m & [36mCONSTANTS[0m
+  ✓ [36mLet[0m [36mdeclarations[0m[37m:[0m [93m100[0m[37m,[0m [36mtyped[0m[37m,[0m [93m42[0m
+  ✓ [36mConst[0m [36mdeclarations[0m[37m:[0m [93m999[0m[37m,[0m [36mimmutable[0m
+  ✓ [36mVariable[0m [36mshadowing[0m[37m:[0m [36minner[0m=[93m2[0m
+    [36mouter[0m=[93m1[0m
+
+[37m[[0m[93m4[0m[37m][0m [36mCONTROL[0m [36mFLOW[0m
+  ✓ [36mIf[0m [36mstatement[0m[37m:[0m [36mcondition[0m [93mtrue[0m
+  ✓ [36mIf[0m-[36melse[0m [36mstatement[0m[37m:[0m [36melse[0m [36mbranch[0m
+  ✓ [36mIf[0m-[36melse[0m-[36mif[0m [36mchain[0m[37m:[0m [36mgrade[0m [36mB[0m
+  ✓ [36mWhile[0m [36mloop[0m[37m:[0m [36miterations[0m=[93m3[0m
+  ✓ [36mFor[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mFor[0m-[36min[0m [36mloop[0m[37m:[0m [36msum[0m=[93m10[0m
+  ✓ [36mBreak[0m [36mstatement[0m[37m:[0m [36mstopped[0m [36mat[0m [93m3[0m
+  ✓ [36mContinue[0m [36mstatement[0m[37m:[0m [36msum[0m=[93m12[0m ([36mskipped[0m [93m3[0m)
+
+[37m[[0m[93m5[0m[37m][0m [36mFUNCTIONS[0m
+  ✓ [36mBasic[0m [36mfunction[0m[37m:[0m [93m42[0m
+  ✓ [36mFunction[0m [36mwith[0m [36mparams[0m[37m:[0m [93m30[0m
+  ✓ [36mOptional[0m [36mparameters[0m[37m:[0m [93m5[0m[37m,[0m [93m5[0m
+  ✓ [36mDefault[0m [36mparameters[0m[37m:[0m [93m15[0m[37m,[0m [93m25[0m
+  ✓ [36mRest[0m [36mparameters[0m[37m:[0m [93m15[0m
+  ✓ [36mArrow[0m [36mfunction[0m[37m:[0m [93m12[0m
+  ✓ [36mArrow[0m [36mexpression[0m[37m:[0m [93m10[0m
+  ✓ [36mArrow[0m [36mblock[0m[37m:[0m [93m11[0m
+  ✓ [36mHigher[0m-[36morder[0m [36mfunction[0m[37m:[0m [93m20[0m
+  ✓ [36mRecursive[0m [36mfunction[0m[37m:[0m [93m120[0m
+  ✓ [36mNamed[0m [36marguments[0m[37m:[0m [93m6[0m
+
+[37m[[0m[93m6[0m[37m][0m [36mARRAYS[0m & [36mCOLLECTIONS[0m
+  ✓ [36mArray[0m [36mliterals[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m[37m,[0m [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+  ✓ [36mArray[0m [36mindexing[0m[37m:[0m [93m20[0m
+  ✓ [36mArray[0m [36massignment[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mArray[0m [36mlength[0m[37m:[0m [93m3[0m
+  ✓ [36mArray[0m [36mpush[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m][0m
+  ✓ [36mArray[0m [36mpop[0m[37m:[0m [93m40[0m[37m,[0m [36mremaining[0m[37m:[0m [37m[[0m[93m99[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mNested[0m [36marrays[0m[37m:[0m [93m2[0m
+  ✓ [36mArray[0m [36mspread[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m][0m
+
+[37m[[0m[93m7[0m[37m][0m [36mOBJECTS[0m & [36mMAPS[0m
+  ✓ [36mObject[0m [36mliteral[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mObject[0m [36mproperty[0m[37m:[0m [93m10[0m
+  ✓ [36mObject[0m [36massignment[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m99[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mComputed[0m [36mproperty[0m[37m:[0m [93m20[0m
+  ✓ [36mObject[0m [36mshorthand[0m[37m:[0m [37m{[0m [36mpropX[0m[37m:[0m [93m100[0m[37m,[0m [36mpropY[0m[37m:[0m [93m200[0m [37m}[0m
+  ✓ [36mNested[0m [36mobject[0m[37m:[0m [93m42[0m
+
+[37m[[0m[93m8[0m[37m][0m [36mCLASSES[0m
+  ✓ [36mBasic[0m [36mclass[0m[37m:[0m [93m42[0m
+  ✓ [36mClass[0m [36mproperties[0m[37m:[0m [36mx[0m=[93m10[0m[37m,[0m [36my[0m=[93m20[0m
+  ✓ [36mClass[0m [36mmethods[0m[37m:[0m [36mdoubled[0m=[93m10[0m[37m,[0m [36madded[0m=[93m15[0m
+  ✓ [36mClass[0m [36minheritance[0m[37m:[0m [93m30[0m
+  ✓ [36mStatic[0m [36mmembers[0m[37m:[0m [93m200[0m
+  ✓ [36mPrivate[0m [36mproperties[0m[37m:[0m [93m42[0m
+  ✓ [36mGetters[0m/[36mSetters[0m[37m:[0m [36mold[0m=[93m10[0m[37m,[0m [36mnew[0m=[93m20[0m
+
+[37m[[0m[93m9[0m[37m][0m [36mINTERFACES[0m & [36mTYPE[0m [36mALIASES[0m
+  ✓ [36mBasic[0m [36minterface[0m[37m:[0m [37m{[0m [36my[0m[37m:[0m [93m20[0m[37m,[0m [36mx[0m[37m:[0m [93m10[0m [37m}[0m
+  ✓ [36mInterface[0m [36mimplementation[0m[37m:[0m [93m15[0m
+  ✓ [36mType[0m [36malias[0m[37m:[0m [36mnum[0m=[93m42[0m[37m,[0m [36mstr[0m=[36mhello[0m
+  ✓ [36mInterface[0m [36mextends[0m[37m:[0m [37m{[0m [36mage[0m[37m:[0m [93m30[0m[37m,[0m [36mname[0m[37m:[0m [36mAlice[0m [37m}[0m
+
+[37m[[0m[93m10[0m[37m][0m [36mENUMS[0m
+  ✓ [36mNumeric[0m [36menum[0m[37m:[0m [93m1[0m
+  ✓ [36mString[0m [36menum[0m[37m:[0m [36mRED[0m
+  ✓ [36mMixed[0m [36menum[0m[37m:[0m [36mthree[0m
+
+[37m[[0m[93m11[0m[37m][0m [36mGENERICS[0m
+  ✓ [36mGeneric[0m [36mfunction[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+Running test: .\tests\test_raccoon_modules.rcc
+Running test: .\tests\test_recursion_debug.rcc
+Running test: .\tests\test_recursion_limit.rcc
+[36mCall[0m[37m:[0m [93m0[0m
+[36mCall[0m[37m:[0m [93m1[0m
+[36mCall[0m[37m:[0m [93m2[0m
+[36mCall[0m[37m:[0m [93m3[0m
+[36mCall[0m[37m:[0m [93m4[0m
+[36mCall[0m[37m:[0m [93m5[0m
+[36mCall[0m[37m:[0m [93m6[0m
+[36mCall[0m[37m:[0m [93m7[0m
+Running test: .\tests\test_rest_params.rcc
+[36mGot[0m [93m3[0m [36marguments[0m
+[36mArgs[0m[37m:[0m [37m[[0m[36ma[0m[37m,[0m [36mb[0m[37m,[0m [36mc[0m[37m][0m
+[36ma[0m [36mb[0m [36mc[0m
+Running test: .\tests\test_return_type_inference.rcc
+[36madd[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mmax[0m([93m10[0m[37m,[0m [93m20[0m) = [93m20[0m
+[36mgetName[0m() = [36mAlice[0m
+[36misPositive[0m([93m5[0m) = [93mtrue[0m
+[36mmultiply[0m([93m4[0m[37m,[0m [93m5[0m) = [93m20[0m
+[36msubtract[0m([93m10[0m[37m,[0m [93m3[0m) = [93m7[0m
+[36mHello[0m[37m,[0m [36mBob[0m
+Running test: .\tests\test_section_11_generics.rcc
+[36mTesting[0m [36mGenerics[0m...
+  ✓ [36mGeneric[0m [36mfunction[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mGeneric[0m [36mclass[0m[37m:[0m [93m42[0m[37m,[0m [36mboxed[0m
+  ✓ [36mGeneric[0m [36minterface[0m[37m:[0m [37m{[0m [36msecond[0m[37m:[0m [36manswer[0m[37m,[0m [36mfirst[0m[37m:[0m [93m42[0m [37m}[0m
+  ✓ [36mGeneric[0m [36mconstraints[0m[37m:[0m [93m3[0m
+✅ [36mGenerics[0m [36mtests[0m [36mcompleted[0m
+Running test: .\tests\test_section_12_advanced_types.rcc
+[36mTesting[0m [36mAdvanced[0m [36mTypes[0m...
+  ✓ [36mUnion[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mIntersection[0m [36mtypes[0m[37m:[0m [37m{[0m [36mname[0m[37m:[0m [36mBob[0m[37m,[0m [36mage[0m[37m:[0m [93m25[0m [37m}[0m
+  ✓ [36mNullable[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [93mnull[0m[37m,[0m [36mcheck[0m=[93mtrue[0m
+  ✓ [36mArray[0m [36mtypes[0m[37m:[0m [36mint[0m[37m[[0m[37m][0m[37m,[0m [36mstr[0m[37m[[0m[37m][0m[37m,[0m [36mint[0m[37m[[0m[37m][0m[37m[[0m[37m][0m
+  ✓ [36mTuple[0m [36mtypes[0m[37m:[0m [93m42[0m[37m,[0m [36mhello[0m
+  ✓ [36mObject[0m [36mtypes[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mFunction[0m [36mtypes[0m[37m:[0m [93m15[0m
+  ✓ [36mReadonly[0m [36mtypes[0m[37m:[0m [37m{[0m [36mx[0m[37m:[0m [93m10[0m[37m,[0m [36my[0m[37m:[0m [93m20[0m [37m}[0m
+  ✓ [36mKeyOf[0m [36moperator[0m[37m:[0m [36mdefined[0m
+  ✓ [36mTypeOf[0m [36moperator[0m[37m:[0m [36mint[0m
+✅ [36mAdvanced[0m [36mTypes[0m [36mtests[0m [36mcompleted[0m
+Running test: .\tests\test_section_13_destructuring.rcc
+[36mTesting[0m [36mDestructuring[0m...
+  ✓ [36mArray[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m
+  ⊗ [36mArray[0m [36mdestructuring[0m [36mskip[0m[37m:[0m [36mNOT[0m [36mIMPLEMENTED[0m
+  ✓ [36mArray[0m [36mdestructuring[0m [36mrest[0m[37m:[0m [93m1[0m[37m,[0m [37m[[0m[93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mObject[0m [36mdestructuring[0m[37m:[0m [93m100[0m[37m,[0m [93m200[0m
+  ✓ [36mObject[0m [36mdestructuring[0m [36mshorthand[0m[37m:[0m [93m50[0m[37m,[0m [93m75[0m
+  ✓ [36mNested[0m [36mdestructuring[0m[37m:[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m
+  ✓ [36mFunction[0m [36mparam[0m [36mdestructuring[0m[37m:[0m [93m30[0m
+✅ [36mDestructuring[0m [36mtests[0m [36mcompleted[0m
+Running test: .\tests\test_simple_advanced_types.rcc
+[36mAdvanced[0m [36mtype[0m [36msystem[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_simple_array.rcc
+Running test: .\tests\test_simple_enum_class_types.rcc
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Alice[0m
+[36mHello[0m[37m,[0m [36mI[0m[92m'm Admin[0m
+[36mOptional[0m [36muser[0m [36mcreated[0m
+[36mClass[0m [36mas[0m [36mtype[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_simple_enum_export.rcc
+Running test: .\tests\test_simple_modules.rcc
+[36mTest[0m [93m1[0m[37m:[0m [36mprint[0m [36msimple[0m
+[36mTest[0m [93m2[0m[37m:[0m [36mprint[0m [36mcon[0m [36mmúltiples[0m [36margs[0m [93m123[0m [93m456[0m
+[36mPI[0m = [93m3.141592653589793[0m
+[36mMath[0m.[36mE[0m = [93m2.718281828459045[0m
+[36mMath[0m.[36msqrt[0m([93m16[0m) = [93m4[0m
+Running test: .\tests\test_simple_recursion.rcc
+[36mTesting[0m [36mrecursion[0m[37m:[0m
+[36mfactorial[0m([93m5[0m) = [93m120[0m
+Running test: .\tests\test_spread_operator.rcc
+[36msum[0m(...[37m[[0m[93m1[0m[37m,[0m[93m2[0m[37m,[0m[93m3[0m[37m][0m) = [93m6[0m
+[36mHello[0m [36mAlice[0m!
+[36mCombined[0m[37m:[0m [36mABCD[0m
+[93m1[0m
+[36mtwo[0m
+[93m3[0m
+[93mtrue[0m
+[36mAll[0m [36mspread[0m [36moperator[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\test_static_prop.rcc
+[36mPI[0m = [93m3.14[0m
+[36mNAME[0m = [36mTest[0m
+Running test: .\tests\test_stdlib_complete.rcc
+=== [36mArray[0m [36mTests[0m ===
+Running test: .\tests\test_stdlib_demo.rcc
+Running test: .\tests\test_sugar_types.rcc
+=== [36mSugar[0m [36mTypes[0m [36mTest[0m ===
+
+✓ [36mint[0m [36mse[0m [36masigna[0m [36mcorrectamente[0m [36ma[0m [36mi8[0m[37m,[0m [36mi16[0m[37m,[0m [36mi32[0m[37m,[0m [36mi64[0m[37m,[0m [36mu8[0m[37m,[0m [36mu16[0m[37m,[0m [36mu32[0m[37m,[0m [36mu64[0m
+✓ [36mfloat[0m [36mse[0m [36masigna[0m [36mcorrectamente[0m [36ma[0m [36mf32[0m[37m,[0m [36mf64[0m[37m,[0m [36mdecimal[0m
+✓ [36mOperaciones[0m [36maritméticas[0m [36mfuncionan[0m[37m:[0m [93m1010[0m[37m,[0m [93m8.53452[0m
+[36mValor[0m [36mi32[0m[37m:[0m [93m42[0m
+[36mValor[0m [36mf64[0m[37m:[0m [93m3.14159[0m
+✓ [36mConversión[0m [36mwidening[0m [36mautomática[0m[37m:[0m [36mi8[0m -> [36mi32[0m -> [36mi64[0m -> [36mf64[0m = [93m50[0m
+✓ [36mArrays[0m [36mtipados[0m[37m:[0m [36mi8[0m[37m[[0m[37m][0m[37m,[0m [36mi32[0m[37m[[0m[37m][0m[37m,[0m [36mf64[0m[37m[[0m[37m][0m [36mfuncionan[0m [36mcorrectamente[0m
+
+✅ [36mTodos[0m [36mlos[0m [36msugar[0m [36mtypes[0m [36my[0m [36mconversiones[0m [36mfuncionan[0m [36mperfectamente[0m!
+Running test: .\tests\test_toStr.rcc
+[93m42[0m
+[36mSuccess[0m!
+Running test: .\tests\test_types_edge_cases.rcc
+=== [36mEDGE[0m [36mCASES[0m[37m:[0m [36mSistema[0m [36mde[0m [36mTipos[0m ===
+
+[37m[[0m [93m1[0m [37m][0m [36mValores[0m [36mlímite[0m [36mde[0m [36mtipos[0m [36menteros[0m [36mcon[0m [36msigno[0m[37m:[0m
+  ✓ [36mi8[0m[37m:[0m  [93m-128[0m [36ma[0m [93m127[0m
+  ✓ [36mi16[0m[37m:[0m [93m-32768[0m [36ma[0m [93m32767[0m
+  ✓ [36mi32[0m[37m:[0m [93m-2147483648[0m [36ma[0m [93m2147483647[0m
+  ✓ [36mi64[0m[37m:[0m [93m-9223372036854775807[0m [36ma[0m [93m9223372036854775807[0m
+
+[37m[[0m [93m2[0m [37m][0m [36mValores[0m [36mlímite[0m [36mde[0m [36mtipos[0m [36msin[0m [36msigno[0m[37m:[0m
+  ✓ [36mu8[0m[37m:[0m  [93m0[0m [36ma[0m [93m255[0m
+  ✓ [36mu16[0m[37m:[0m [93m0[0m [36ma[0m [93m65535[0m
+  ✓ [36mu32[0m[37m:[0m [93m0[0m [36ma[0m [93m4294967295[0m
+  ✓ [36mu64[0m[37m:[0m [93m0[0m [36ma[0m [93m9223372036854775807[0m
+
+[37m[[0m [93m3[0m [37m][0m [36mCadenas[0m [36mde[0m [36mconversión[0m [36mwidening[0m[37m:[0m
+  ✓ [36mi8[0m -> [36mi16[0m -> [36mi32[0m -> [36mi64[0m -> [36mf64[0m -> [36mdecimal[0m[37m:[0m [93m42[0m
+  ✓ [36mu8[0m -> [36mu16[0m -> [36mu32[0m -> [36mu64[0m -> [36mf64[0m[37m:[0m [93m200[0m
+  ✓ [36mu8[0m -> [36mi16[0m -> [36mi64[0m -> [36mdecimal[0m[37m:[0m [93m100[0m
+
+[37m[[0m [93m4[0m [37m][0m [36mOperaciones[0m [36maritméticas[0m [36mentre[0m [36mdiferentes[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m10[0m) + [36mi32[0m([93m20[0m) = [36mi32[0m([93m30[0m)
+  ✓ [36mi16[0m([93m5[0m) * [36mi64[0m([93m15[0m) = [36mi64[0m([93m75[0m)
+  ✓ [36mu8[0m([93m8[0m) - [36mu32[0m([93m4[0m) = [36mu32[0m([93m4[0m)
+  ✓ [36mf32[0m([93m3.5[0m) * [36mf64[0m([93m2.0[0m) = [36mf64[0m([93m7[0m)
+  ✓ [36mi32[0m([93m100[0m) + [36mf32[0m([93m2.5[0m) = [36mf32[0m([93m102.5[0m)
+
+[37m[[0m [93m5[0m [37m][0m [36mOperaciones[0m [36mbitwise[0m [36mentre[0m [36mtipos[0m [36menteros[0m[37m:[0m
+  ✓ [36mi8[0m([93m15[0m) & [36mi32[0m([93m240[0m) = [36mi32[0m([93m0[0m)
+  ✓ [36mu8[0m([93m12[0m) | [36mu16[0m([93m10[0m) = [36mu16[0m([93m14[0m)
+  ✓ [36mi16[0m([93m5[0m) ^ [36mi32[0m([93m3[0m) = [36mi32[0m([93m6[0m)
+  ✓ [36mi8[0m([93m4[0m) << [36mi32[0m([93m2[0m) = [36mi32[0m([93m16[0m)
+  ✓ [36mi32[0m([93m16[0m) >> [36mi8[0m([93m2[0m) = [36mi32[0m([93m4[0m)
+
+[37m[[0m [93m6[0m [37m][0m [36mFunciones[0m [36mcon[0m [36mmúltiples[0m [36mtipos[0m [36mde[0m [36mparámetros[0m[37m:[0m
+  ✓ [36mi8[0m[37m:[0m [93m50[0m
+  ✓ [36mi32[0m[37m:[0m [93m5000[0m
+  ✓ [36mf64[0m[37m:[0m [93m50.5[0m
+  ✓ [36mdecimal[0m[37m:[0m [93m50.123456[0m
+  ✓ [36mSugar[0m [36mtype[0m [36men[0m [36mi8[0m[37m:[0m [36mi8[0m[37m:[0m [93m25[0m
+  ✓ [36mSugar[0m [36mtype[0m [36men[0m [36mi32[0m[37m:[0m [36mi32[0m[37m:[0m [93m2500[0m
+  ✓ [36mSugar[0m [36mtype[0m [36men[0m [36mf64[0m[37m:[0m [36mf64[0m[37m:[0m [93m25.5[0m
+
+[37m[[0m [93m7[0m [37m][0m [36mArrays[0m [36mcon[0m [36mdiferentes[0m [36mtipos[0m [36mnuméricos[0m[37m:[0m
+  ✓ [36mi8[0m[37m[[0m[37m][0m[37m:[0m  [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mi32[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m100[0m[37m,[0m [93m200[0m[37m,[0m [93m300[0m[37m][0m
+  ✓ [36mu8[0m[37m[[0m[37m][0m[37m:[0m  [37m[[0m[93m255[0m[37m,[0m [93m128[0m[37m,[0m [93m64[0m[37m][0m
+  ✓ [36mf32[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m1.1[0m[37m,[0m [93m2.2[0m[37m,[0m [93m3.3[0m[37m][0m
+  ✓ [36mf64[0m[37m[[0m[37m][0m[37m:[0m [37m[[0m[93m10.5[0m[37m,[0m [93m20.5[0m[37m,[0m [93m30.5[0m[37m][0m
+
+[37m[[0m [93m8[0m [37m][0m [36mOperaciones[0m [36mcon[0m [36mcero[0m [36my[0m [36mnúmeros[0m [36mnegativos[0m[37m:[0m
+  ✓ [36mi8[0m([93m0[0m) + [36mi8[0m([93m-128[0m) = [93m-128[0m
+  ✓ [36mi32[0m([93m-1000000[0m) + [36mi32[0m([93m1000000[0m) = [93m0[0m
+  ✓ [36mf64[0m([93m-3.14159[0m) * [93m-1[0m = [93m3.14159[0m
+  ✓ [36mNegación[0m [36munaria[0m[37m:[0m [93m-42[0m = [93m-42[0m
+
+[37m[[0m [93m9[0m [37m][0m [36mConversiones[0m [36mexplícitas[0m [36mentre[0m [36mtipos[0m[37m:[0m
+  [36mOriginal[0m [36mi32[0m[37m:[0m [93m256[0m
+  ✓ [36mtoI8[0m()[37m:[0m  [93m0[0m
+  ✓ [36mtoI16[0m()[37m:[0m [93m256[0m
+  ✓ [36mtoI64[0m()[37m:[0m [93m256[0m
+  ✓ [36mtoF32[0m()[37m:[0m [93m256[0m
+  ✓ [36mtoF64[0m()[37m:[0m [93m256[0m
+  [36mOriginal[0m [36mf64[0m[37m:[0m [93m123.456[0m
+  ✓ [36mtoInt[0m()[37m:[0m     [93m123[0m
+  ✓ [36mtoDecimal[0m()[37m:[0m [93m123.456[0m
+
+[37m[[0m [93m10[0m [37m][0m [36mComparaciones[0m [36mentre[0m [36mdiferentes[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m10[0m) == [36mi32[0m([93m10[0m)[37m:[0m [93mtrue[0m
+  ✓ [36mu8[0m([93m50[0m) == [36mi16[0m([93m50[0m)[37m:[0m [93mtrue[0m
+  ✓ [36mf32[0m([93m3.14[0m) == [36mf64[0m([93m3.14[0m)[37m:[0m [93mtrue[0m
+  ✓ [36mi32[0m([93m100[0m) < [36mi64[0m([93m200[0m)[37m:[0m [93mtrue[0m
+
+[37m[[0m [93m11[0m [37m][0m [36mExpresiones[0m [36mcomplejas[0m [36mcon[0m [36mmúltiples[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m2[0m) + [36mi16[0m([93m3[0m) * [36mi32[0m([93m4[0m) - [36mi64[0m([93m5[0m) = [36mi64[0m([93m9[0m)
+  ✓ [36mu8[0m([93m10[0m) * [36mu16[0m([93m20[0m) + [36mu32[0m([93m30[0m) = [36mu32[0m([93m230[0m)
+  ✓ [36mf32[0m([93m2.5[0m) * [36mf64[0m([93m3.0[0m) + [36mdecimal[0m([93m1.5[0m) = [36mdecimal[0m([93m9[0m)
+
+[37m[[0m [93m12[0m [37m][0m [36mOperaciones[0m [36mcon[0m [36marrays[0m [36mde[0m [36mtipos[0m [36mmixtos[0m[37m:[0m
+  ✓ [36mArray[0m [36mi8[0m [36mlength[0m[37m:[0m [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+  ✓ [36mArray[0m [36mi32[0m [36mlength[0m[37m:[0m [37m[[0m[93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m][0m
+  ✓ [36mArray[0m [36mf64[0m [36mlength[0m[37m:[0m [37m[[0m[93m1.5[0m[37m,[0m [93m2.5[0m[37m,[0m [93m3.5[0m[37m][0m
+  ✓ [36mDespués[0m [36mde[0m [36mpush[0m[37m:[0m [36mi8[0m[37m[[0m[37m][0m = [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m][0m
+  ✓ [36mDespués[0m [36mde[0m [36mpush[0m[37m:[0m [36mi32[0m[37m[[0m[37m][0m = [37m[[0m[93m10[0m[37m,[0m [93m20[0m[37m,[0m [93m30[0m[37m,[0m [93m40[0m[37m][0m
+  ✓ [36mDespués[0m [36mde[0m [36mpush[0m[37m:[0m [36mf64[0m[37m[[0m[37m][0m = [37m[[0m[93m1.5[0m[37m,[0m [93m2.5[0m[37m,[0m [93m3.5[0m[37m,[0m [93m4.5[0m[37m][0m
+
+[37m[[0m [93m13[0m [37m][0m [36mValores[0m [36mdecimales[0m [36mde[0m [36malta[0m [36mprecisión[0m[37m:[0m
+  ✓ [36mdecimal[0m([93m0.1[0m) + [36mdecimal[0m([93m0.2[0m) = [93m0.30000000000000004[0m
+  ✓ [36mSuma[0m [36mde[0m [36malta[0m [36mprecisión[0m[37m:[0m [93m999999999.1234568[0m
+
+[37m[[0m [93m14[0m [37m][0m [36mFunciones[0m [36mrecursivas[0m [36mcon[0m [36mtipos[0m [36mespecíficos[0m[37m:[0m
+  ⚠ [36mSkipped[0m - [36mrecursive[0m [36mfunctions[0m [36mcause[0m [36mstack[0m [36moverflow[0m [36min[0m [36mcurrent[0m [36minterpreter[0m
+
+[37m[[0m [93m15[0m [37m][0m [36mRanges[0m [36mcon[0m [36mtipos[0m [36menteros[0m [36mespecíficos[0m[37m:[0m
+  ✓ [36mRange[0m [36mi8[0m([93m1.[0m.[93m5[0m)[37m:[0m   [37m[[0m[93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m,[0m [93m4[0m[37m,[0m [93m5[0m[37m][0m
+  ✓ [36mRange[0m [36mi32[0m([93m10.[0m.[93m15[0m)[37m:[0m [37m[[0m[93m10[0m[37m,[0m [93m11[0m[37m,[0m [93m12[0m[37m,[0m [93m13[0m[37m,[0m [93m14[0m[37m,[0m [93m15[0m[37m][0m
+  ✓ [36mRange[0m [36mu8[0m([93m0.[0m.[93m3[0m)[37m:[0m    [37m[[0m[93m0[0m[37m,[0m [93m1[0m[37m,[0m [93m2[0m[37m,[0m [93m3[0m[37m][0m
+
+[37m[[0m [93m16[0m [37m][0m [36mOperador[0m [36mmódulo[0m [36mcon[0m [36mdiferentes[0m [36mtipos[0m[37m:[0m
+  ✓ [36mi8[0m([93m10[0m) % [36mi32[0m([93m3[0m) = [36mi32[0m([93m1[0m)
+  ✓ [36mu16[0m([93m100[0m) % [36mu32[0m([93m7[0m) = [36mu32[0m([93m2[0m)
+
+==================================================
+✅ [36mTODOS[0m [36mLOS[0m [36mEDGE[0m [36mCASES[0m [36mPASARON[0m [36mEXITOSAMENTE[0m
+==================================================
+
+[36mTipos[0m [36mprobados[0m[37m:[0m
+  • [36mSigned[0m [36mintegers[0m[37m:[0m [36mi8[0m[37m,[0m [36mi16[0m[37m,[0m [36mi32[0m[37m,[0m [36mi64[0m
+  • [36mUnsigned[0m [36mintegers[0m[37m:[0m [36mu8[0m[37m,[0m [36mu16[0m[37m,[0m [36mu32[0m[37m,[0m [36mu64[0m
+  • [36mFloating[0m [36mpoint[0m[37m:[0m [36mf32[0m[37m,[0m [36mf64[0m[37m,[0m [36mdecimal[0m
+  • [36mSugar[0m [36mtypes[0m[37m:[0m [36mint[0m[37m,[0m [36mfloat[0m
+
+[36mOperaciones[0m [36mprobadas[0m[37m:[0m
+  • [36mAritméticas[0m[37m:[0m +[37m,[0m -[37m,[0m *[37m,[0m /[37m,[0m %
+  • [36mBitwise[0m[37m:[0m &[37m,[0m |[37m,[0m ^[37m,[0m <<[37m,[0m >>
+  • [36mComparación[0m[37m:[0m ==[37m,[0m !=[37m,[0m <[37m,[0m >[37m,[0m <=[37m,[0m >=
+  • [36mWidening[0m [36mautomático[0m
+  • [36mConversiones[0m [36mexplícitas[0m
+  • [36mArrays[0m [36mtipados[0m
+  • [36mFunciones[0m [36mrecursivas[0m
+  • [36mRanges[0m
+
+🎉 [36mSistema[0m [36mde[0m [36mtipos[0m [36mfuncionando[0m [36mperfectamente[0m!
+Running test: .\tests\test_type_inference.rcc
+Running test: .\tests\test_type_system_comprehensive.rcc
+[36mhello[0m
+[93m42[0m
+[36mTest[0m [36mUser[0m
+[36mtext[0m
+[93mnull[0m
+[36mAll[0m [36madvanced[0m [36mtype[0m [36msystem[0m [36mtests[0m [36mcompleted[0m [36msuccessfully[0m!
+Running test: .\tests\test_typing_system_implemented.rcc
+=== [36mSTARTING[0m [36mTYPE[0m [36mSYSTEM[0m [36mTESTS[0m ===
+
+[93m1.[0m [36mPRIMITIVE[0m [36mTYPES[0m
+✓ [36mPrimitive[0m [36mtypes[0m [36mworking[0m
+
+[93m2.[0m [36mNULLABLE[0m [36mTYPES[0m ([36mCustom[0m [36mSugar[0m)
+✓ [36mNullable[0m [36mtypes[0m [36mworking[0m
+
+[93m3.[0m [36mARRAYS[0m
+✓ [36mArrays[0m [36mworking[0m
+
+[93m4.[0m [36mTUPLES[0m
+✓ [36mTuples[0m [36mworking[0m
+
+[93m5.[0m [36mUNION[0m [36mTYPES[0m
+✓ [36mUnion[0m [36mtypes[0m [36mworking[0m
+
+[93m6.[0m [36mINTERSECTION[0m [36mTYPES[0m
+✓ [36mIntersection[0m [36mtypes[0m [36mworking[0m
+
+[93m7.[0m [36mOBJECT[0m [36mTYPES[0m [36mWITH[0m [36mOPTIONAL[0m [36mPROPERTIES[0m
+✓ [36mObject[0m [36mtypes[0m [36mwith[0m [36moptional[0m [36mproperties[0m [36mworking[0m
+
+[93m8.[0m [36mREADONLY[0m [36mTYPES[0m
+✓ [36mReadonly[0m [36mtypes[0m [36mworking[0m
+
+[93m9.[0m [36mGENERICS[0m
+✓ [36mGeneric[0m [36mtypes[0m [36mworking[0m [36min[0m [36mclasses[0m [36mand[0m [36minterfaces[0m
+
+[93m10.[0m [36mENUM[0m [36mTYPES[0m
+✓ [36mEnum[0m [36mtypes[0m [36mworking[0m
+
+[93m11.[0m [36mCLASS[0m [36mTYPES[0m
+✓ [36mClass[0m [36mtypes[0m [36mand[0m [36minheritance[0m [36mworking[0m
+
+[93m12.[0m [36mINTERFACE[0m [36mTYPES[0m
+✓ [36mInterface[0m [36mtypes[0m [36mworking[0m
+
+[93m13.[0m [36mFUNCTION[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mtypes[0m [36mworking[0m
+
+[93m14.[0m [36mFUNCTION[0m [36mDECLARATIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mFunction[0m [36mdeclarations[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m15.[0m [36mOPTIONAL[0m [36mPARAMETERS[0m ([36mNEW[0m [36mFEATURE[0m)
+[36mAlice[0m
+[36mBob[0m
+✓ [36mOptional[0m [36mparameters[0m [36mworking[0m
+
+[93m16.[0m [36mARROW[0m [36mFUNCTIONS[0m [36mWITH[0m [36mTYPES[0m
+✓ [36mArrow[0m [36mfunctions[0m [36mwith[0m [36mtype[0m [36mannotations[0m [36mworking[0m
+
+[93m17.[0m [36mCOMPLEX[0m [36mNESTED[0m [36mSTRUCTURES[0m
+✓ [36mComplex[0m [36mnested[0m [36mstructures[0m [36mworking[0m
+
+[93m18.[0m [36mTYPE[0m [36mALIASES[0m
+✓ [36mType[0m [36maliases[0m [36mwith[0m [36munions[0m [36mworking[0m
+
+[93m19.[0m [36mTESTING[0m [36mFUNCTIONALITY[0m
+
+[36madd_numbers[0m([93m5[0m[37m,[0m [93m3[0m) = [93m8[0m
+[36mgreet[0m([92m'World'[0m) = [36mHello[0m[37m,[0m [36mWorld[0m
+[36mdouble[0m([93m21[0m) = [93m42[0m
+[36mconcat[0m([92m'Hello, '[0m[37m,[0m [92m'World!'[0m) = [36mHello[0m[37m,[0m [36mWorld[0m!
+[36mdog[0m.[36mgetName[0m() = [36mBuddy[0m
+[36mdog[0m.[36mbreed[0m = [36mLabrador[0m
+
+=== [36mALL[0m [36mTYPE[0m [36mSYSTEM[0m [36mTESTS[0m [36mPASSED[0m ===
+[36mAll[0m [36mimplemented[0m [36mfeatures[0m [36mare[0m [36mworking[0m [36mcorrectly[0m!
+Running test: .\tests\test_union_in_functions.rcc
+[36mhello[0m
+[93m42[0m
+[36mtest[0m
+[93m123[0m
+[93m456[0m
+[36mworld[0m
+[36mUnion[0m [36mtype[0m [36mfunction[0m [36mtests[0m [36mcompleted[0m!
+Running test: .\tests\use_math_utils.rcc
+=== [36mPrueba[0m [36mde[0m [36mSistema[0m [36mde[0m [36mMódulos[0m ===
+
+[36mcalculate[0m([92m'add'[0m[37m,[0m [93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+[36madd[0m([93m10[0m[37m,[0m [93m5[0m) = [93m15[0m
+[36msubtract[0m([93m10[0m[37m,[0m [93m5[0m) = [93m5[0m
+[36mmultiply[0m([93m10[0m[37m,[0m [93m5[0m) = [93m50[0m
+[36mdivide[0m([93m10[0m[37m,[0m [93m2[0m) = [93m5[0m
+
+[36mPI[0m = [93m3.14159[0m
+
+=== [36mPrueba[0m [36mde[0m [36mCalculator[0m ===
+(([93m0[0m + [93m10[0m) * [93m2[0m) - [93m5[0m = [93m15[0m
+
+=== [36mPrueba[0m [36mde[0m [36mNamespace[0m [36mImport[0m ===
+[36mMathUtils[0m.[36madd[0m([93m100[0m[37m,[0m [93m50[0m) = [93m150[0m
+
+[36mMathUtils[0m.[36mPI[0m = [93m3.14159[0m

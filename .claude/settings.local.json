@@ -31,7 +31,8 @@
       "Bash(Select-Object -First 50)",
       "Bash(mkdir:*)",
       "Bash(git add:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(cargo new:*)"
     ],
     "deny": [],
     "ask": []

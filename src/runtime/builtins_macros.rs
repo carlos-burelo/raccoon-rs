@@ -98,7 +98,10 @@ macro_rules! str_value {
 #[macro_export]
 macro_rules! list_value {
     ($elements:expr, $element_type:expr) => {
-        $crate::runtime::RuntimeValue::List($crate::runtime::ListValue::new($elements, $element_type))
+        $crate::runtime::RuntimeValue::List($crate::runtime::ListValue::new(
+            $elements,
+            $element_type,
+        ))
     };
 }
 
@@ -114,7 +117,7 @@ macro_rules! declare_builtin {
         let _ = $env.declare(
             $name.to_string(),
             $crate::runtime::RuntimeValue::NativeFunction(
-                $crate::runtime::NativeFunctionValue::new($impl, $type)
+                $crate::runtime::NativeFunctionValue::new($impl, $type),
             ),
         );
     };
