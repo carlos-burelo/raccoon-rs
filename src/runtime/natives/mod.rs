@@ -1,12 +1,13 @@
 pub mod array;
 pub mod ffi;
 pub mod http;
-/// Native function modules
+/// Native function modules (LEGACY)
 ///
-/// This module organizes native functions by category to keep the codebase modular
-/// and prevent native_bridge.rs from growing indefinitely.
+/// NOTE: This module is deprecated in favor of the plugin-based system.
+/// See src/runtime/plugin_system.rs and src/runtime/native_bridge_v2.rs
 ///
-/// Each submodule provides functions to register its category of natives.
+/// This module organizes native functions by category. Each submodule provides
+/// a register() function for the legacy registration system.
 pub mod io;
 pub mod json;
 pub mod math;
