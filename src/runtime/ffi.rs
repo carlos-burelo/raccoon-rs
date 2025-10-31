@@ -1,3 +1,11 @@
+/// FFI Module - DEPRECATED
+///
+/// This module is deprecated and will be refactored with the new plugin system.
+/// The match statement explosion here (lines 100-200) is a perfect example of
+/// code that the plugin system eliminates.
+///
+/// See: src/runtime/plugin_system.rs and src/runtime/builtin_plugins.rs
+
 use crate::error::RaccoonError;
 use crate::runtime::values::{BoolValue, FloatValue, IntValue, NullValue, RuntimeValue, StrValue};
 use libloading::{Library, Symbol};
@@ -97,8 +105,6 @@ impl FFIHost {
                 )
             })?;
 
-        // Usamos extern "Rust" para llamar a funciones Rust dinámicamente
-        // o extern "C" para compatibilidad con bibliotecas C/C++
         match (args.len(), return_type) {
             (0, FFIType::Int) => {
                 let result = unsafe {
@@ -134,18 +140,16 @@ impl FFIHost {
 
             (1, FFIType::Int) if args[0].is_int() => {
                 let result = unsafe {
-                    let func = mem::transmute::<*mut c_void, unsafe extern "Rust" fn(i64) -> i64>(
-                        *symbol,
-                    );
+                    let func =
+                        mem::transmute::<*mut c_void, unsafe extern "Rust" fn(i64) -> i64>(*symbol);
                     func(args[0].as_int())
                 };
                 Ok(RuntimeValue::Int(IntValue::new(result)))
             }
             (1, FFIType::Float) if args[0].is_float() => {
                 let result = unsafe {
-                    let func = mem::transmute::<*mut c_void, unsafe extern "Rust" fn(f64) -> f64>(
-                        *symbol,
-                    );
+                    let func =
+                        mem::transmute::<*mut c_void, unsafe extern "Rust" fn(f64) -> f64>(*symbol);
                     func(args[0].as_float())
                 };
                 Ok(RuntimeValue::Float(FloatValue::new(result)))

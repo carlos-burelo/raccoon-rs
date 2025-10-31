@@ -1,9 +1,14 @@
-/// NativeBridge - Orchestrator for native functions
+/// NativeBridge - Orchestrator for native functions (DEPRECATED)
 ///
-/// This module is now modular: each category of native functions lives in
-/// src/runtime/natives/*.rs files. This keeps native_bridge.rs small and
-/// maintains a clean architecture.
-
+/// This is the legacy implementation. Use NativeBridgeV2 instead.
+///
+/// DEPRECATED: See src/runtime/native_bridge_v2.rs for the new plugin-based architecture.
+/// The old system uses NativeRegistry which is now considered legacy.
+///
+/// Remaining usage:
+/// - Still used in some parts of the codebase
+/// - Being gradually replaced by NativeBridgeV2
+/// - Will be removed once all code is migrated to plugin system
 use crate::runtime::natives::NativeRegistry;
 use crate::runtime::values::{NativeAsyncFunctionValue, NativeFunctionValue, RuntimeValue};
 use std::collections::HashMap;
@@ -55,7 +60,7 @@ impl NativeBridge {
         self.functions.keys().cloned().collect()
     }
 
-    /// Get all registered async function names
+    /// Get all registered async fn names
     pub fn async_function_names(&self) -> Vec<String> {
         self.async_functions.keys().cloned().collect()
     }
