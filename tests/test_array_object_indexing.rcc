@@ -1,0 +1,101 @@
+// Test: Array and object indexing operations
+// Verify array element access, modification, and operations on indexed elements
+
+// Test 1: Simple array indexing
+let arr = [1, 2, 3, 4, 5];
+print("Test 1: Simple array indexing");
+print(`arr[0] = ${arr[0]}`);        // Should print 1
+print(`arr[2] = ${arr[2]}`);        // Should print 3
+print(`arr[4] = ${arr[4]}`);        // Should print 5
+
+// Test 2: Array element modification
+print("\nTest 2: Array element modification");
+arr[0] = 10;
+arr[2] = 30;
+print(`Modified arr[0] = ${arr[0]}`);  // Should print 10
+print(`Modified arr[2] = ${arr[2]}`);  // Should print 30
+
+// Test 3: Operations on indexed array elements
+print("\nTest 3: Operations on indexed array elements");
+let result1 = arr[0] + arr[1];      // 10 + 2 = 12
+print(`arr[0] + arr[1] = ${result1}`);
+
+let result2 = arr[4] * 2;           // 5 * 2 = 10
+print(`arr[4] * 2 = ${result2}`);
+
+let result3 = arr[2] - arr[1];      // 30 - 2 = 28
+print(`arr[2] - arr[1] = ${result3}`);
+
+// Test 4: String concatenation with indexed elements
+print("\nTest 4: String concatenation with indexed elements");
+let strArr = ["Hello", "World", "Raccoon"];
+print(`strArr[0] = ${strArr[0]}`);
+print(`strArr[0] + " " + strArr[1] = ${strArr[0]} ${strArr[1]}`);
+
+// Test 5: Simple object indexing with bracket notation
+print("\nTest 5: Simple object indexing");
+let obj = {name: "Alice", age: 30, city: "NYC"};
+print(`obj["name"] = ${obj["name"]}`);
+print(`obj["age"] = ${obj["age"]}`);
+print(`obj["city"] = ${obj["city"]}`);
+
+// Test 6: Object property modification
+print("\nTest 6: Object property modification");
+obj["name"] = "Bob";
+obj["age"] = 25;
+print(`Modified obj["name"] = ${obj["name"]}`);
+print(`Modified obj["age"] = ${obj["age"]}`);
+
+// Test 7: Operations on indexed object properties
+print("\nTest 7: Operations on indexed object properties");
+let person = {x: 10, y: 20, z: 5};
+let sum = person["x"] + person["y"];
+print(`person["x"] + person["y"] = ${sum}`);
+
+let product = person["y"] * person["z"];
+print(`person["y"] * person["z"] = ${product}`);
+
+// Test 8: Nested array indexing
+print("\nTest 8: Nested array indexing");
+let matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+print(`matrix[0][0] = ${matrix[0][0]}`);  // Should print 1
+print(`matrix[1][1] = ${matrix[1][1]}`);  // Should print 5
+print(`matrix[2][2] = ${matrix[2][2]}`);  // Should print 9
+
+// Test 9: Nested object indexing
+print("\nTest 9: Nested object indexing");
+let config = {
+    server: {host: "localhost", port: 8080},
+    database: {name: "raccoon_db", user: "admin"}
+};
+print(`config["server"]["host"] = ${config["server"]["host"]}`);
+print(`config["database"]["name"] = ${config["database"]["name"]}`);
+
+// Test 10: Mixed nested structures
+print("\nTest 10: Mixed nested structures");
+let users = [
+    {id: 1, name: "Alice"},
+    {id: 2, name: "Bob"},
+    {id: 3, name: "Charlie"}
+];
+print(`users[0]["name"] = ${users[0]["name"]}`);
+print(`users[1]["id"] = ${users[1]["id"]}`);
+print(`users[2]["name"] = ${users[2]["name"]}`);
+
+// Test 11: Float arrays
+print("\nTest 11: Float arrays");
+let floats = [1.5, 2.5, 3.5, 4.5];
+let fSum = floats[0] + floats[1];
+print(`floats[0] + floats[1] = ${fSum}`);  // Should be 4.0
+
+let fMod = floats[2] % floats[0];
+print(`floats[2] % floats[0] = ${fMod}`);  // 3.5 % 1.5
+
+// Test 12: Type coercion with indexed elements
+print("\nTest 12: Type coercion with indexed elements");
+let mixed = [5, "text", true, 10.5];
+print(`mixed[0] + mixed[3] = ${mixed[0] + mixed[3]}`);  // 5 + 10.5 = 15.5
+print(`"Value: " + mixed[0] = ${"Value: " + mixed[0]}`);  // String concatenation
+print(`mixed[1] + " is cool" = ${mixed[1]} is cool`);  // String concatenation
+
+print("\nAll indexing tests completed!");

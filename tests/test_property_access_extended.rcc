@@ -1,0 +1,402 @@
+// Test: Extended property access with inheritance, computed properties, and complex patterns
+// Comprehensive test covering advanced property access scenarios
+
+// ============================================================================
+// Part 1: Class Inheritance and Property Access
+// ============================================================================
+
+print("=== Test 1: Class Inheritance and Property Access ===");
+
+class Animal {
+    name: str;
+    age: int;
+
+    constructor(n: str, a: int) {
+        this.name = n;
+        this.age = a;
+    }
+
+    getInfo() {
+        return this.name + " is " + this.age + " years old";
+    }
+}
+
+class Dog extends Animal {
+    breed: str;
+
+    constructor(n: str, a: int, b: str) {
+        super(n, a);
+        this.breed = b;
+    }
+
+    getFullInfo() {
+        return this.getInfo() + " and is a " + this.breed;
+    }
+}
+
+let dog = new Dog("Buddy", 5, "Golden Retriever");
+print(`Dog name: ${dog.name}`);
+print(`Dog age: ${dog.age}`);
+print(`Dog breed: ${dog.breed}`);
+print(`Full info: ${dog.getFullInfo()}`);
+
+// ============================================================================
+// Part 2: Property Access with Computed Values
+// ============================================================================
+
+print("\n=== Test 2: Property Access with Computed Values ===");
+
+class Rectangle {
+    width: float;
+    height: float;
+
+    constructor(w: float, h: float) {
+        this.width = w;
+        this.height = h;
+    }
+
+    get area(): float {
+        return this.width * this.height;
+    }
+
+    get perimeter(): float {
+        return (this.width + this.height) * 2;
+    }
+
+    get aspectRatio(): float {
+        if (this.height == 0) {
+            return 0;
+        }
+        return this.width / this.height;
+    }
+}
+
+let rect = new Rectangle(10.0, 5.0);
+print(`Width: ${rect.width}, Height: ${rect.height}`);
+print(`Area: ${rect.area}`);
+print(`Perimeter: ${rect.perimeter}`);
+print(`Aspect Ratio: ${rect.aspectRatio}`);
+
+// ============================================================================
+// Part 3: Nested Object Property Access
+// ============================================================================
+
+print("\n=== Test 3: Nested Object Property Access ===");
+
+class Address {
+    street: str;
+    city: str;
+    zipcode: str;
+
+    constructor(s: str, c: str, z: str) {
+        this.street = s;
+        this.city = c;
+        this.zipcode = z;
+    }
+}
+
+class Person {
+    name: str;
+    address: object;
+
+    constructor(n: str, a: object) {
+        this.name = n;
+        this.address = a;
+    }
+
+    getAddressString() {
+        return this.address["street"] + ", " + this.address["city"];
+    }
+}
+
+let addr = new Address("123 Main St", "Springfield", "12345");
+let person = new Person("John", {street: "456 Elm St", city: "Shelbyville", zipcode: "54321"});
+print(`Person: ${person.name}`);
+print(`Address: ${person.getAddressString()}`);
+
+// ============================================================================
+// Part 4: Array of Objects with Property Operations
+// ============================================================================
+
+print("\n=== Test 4: Array of Objects with Property Operations ===");
+
+class Product {
+    name: str;
+    price: float;
+    quantity: int;
+
+    constructor(n: str, p: float, q: int) {
+        this.name = n;
+        this.price = p;
+        this.quantity = q;
+    }
+
+    getTotalValue() {
+        return this.price * this.quantity;
+    }
+}
+
+let inventory = [
+    new Product("Apple", 0.5, 100),
+    new Product("Banana", 0.3, 150),
+    new Product("Orange", 0.6, 80)
+];
+
+print("Inventory:");
+let totalValue = 0;
+for (let product of inventory) {
+    let value = product.getTotalValue();
+    print(`  ${product.name}: $${product.price} x ${product.quantity} = $${value}`);
+    totalValue = totalValue + value;
+}
+print(`Total inventory value: $${totalValue}`);
+
+// ============================================================================
+// Part 5: Property Access in Conditional Logic
+// ============================================================================
+
+print("\n=== Test 5: Property Access in Conditional Logic ===");
+
+class Student {
+    name: str;
+    gpa: float;
+
+    constructor(n: str, g: float) {
+        this.name = n;
+        this.gpa = g;
+    }
+
+    getGrade() {
+        if (this.gpa >= 4.0) {
+            return "A+";
+        } else if (this.gpa >= 3.5) {
+            return "A";
+        } else if (this.gpa >= 3.0) {
+            return "B+";
+        } else if (this.gpa >= 2.5) {
+            return "B";
+        } else {
+            return "C";
+        }
+    }
+}
+
+let student1 = new Student("Alice", 3.8);
+let student2 = new Student("Bob", 3.1);
+let student3 = new Student("Charlie", 2.9);
+
+print(`${student1.name}: GPA ${student1.gpa} -> Grade ${student1.getGrade()}`);
+print(`${student2.name}: GPA ${student2.gpa} -> Grade ${student2.getGrade()}`);
+print(`${student3.name}: GPA ${student3.gpa} -> Grade ${student3.getGrade()}`);
+
+// ============================================================================
+// Part 6: Property Mutation Through Methods
+// ============================================================================
+
+print("\n=== Test 6: Property Mutation Through Methods ===");
+
+class Counter {
+    _count: int;
+
+    constructor(initial: int) {
+        this._count = initial;
+    }
+
+    get count(): int {
+        return this._count;
+    }
+
+    increment() {
+        this._count = this._count + 1;
+        return this._count;
+    }
+
+    decrement() {
+        this._count = this._count - 1;
+        return this._count;
+    }
+
+    reset() {
+        this._count = 0;
+        return this._count;
+    }
+}
+
+let counter = new Counter(10);
+print(`Initial: ${counter.count}`);
+print(`After increment: ${counter.increment()}`);
+print(`After increment: ${counter.increment()}`);
+print(`After decrement: ${counter.decrement()}`);
+print(`After reset: ${counter.reset()}`);
+
+// ============================================================================
+// Part 7: Property Access with Mixed Types
+// ============================================================================
+
+print("\n=== Test 7: Property Access with Mixed Types ===");
+
+class DataSet {
+    values: list;
+
+    constructor() {
+        this.values = [1, 2.5, 3, 4.5, 5];
+    }
+
+    getSum() {
+        let sum = 0;
+        for (let v of this.values) {
+            sum = sum + v;
+        }
+        return sum;
+    }
+
+    getAverage() {
+        if (this.values.length == 0) {
+            return 0;
+        }
+        return this.getSum() / this.values.length;
+    }
+}
+
+let dataset = new DataSet();
+print(`Values: ${dataset.values}`);
+print(`Sum: ${dataset.getSum()}`);
+print(`Average: ${dataset.getAverage()}`);
+
+// ============================================================================
+// Part 8: Method Chaining with Property Access
+// ============================================================================
+
+print("\n=== Test 8: Method Chaining with Property Access ===");
+
+class StringBuilder {
+    _content: str;
+
+    constructor() {
+        this._content = "";
+    }
+
+    append(text: str) {
+        this._content = this._content + text;
+        return this;
+    }
+
+    appendLine(text: str) {
+        this._content = this._content + text + "\n";
+        return this;
+    }
+
+    prepend(text: str) {
+        this._content = text + this._content;
+        return this;
+    }
+
+    build() {
+        return this._content;
+    }
+
+    get length(): int {
+        return this._content.length;
+    }
+}
+
+let sb = new StringBuilder();
+let result = sb.append("Hello").append(" ").append("World").appendLine("!").build();
+print(`Built string: ${result}`);
+print(`Length: ${sb.length}`);
+
+// ============================================================================
+// Part 9: Property Access in Aggregation Scenarios
+// ============================================================================
+
+print("\n=== Test 9: Property Access in Aggregation Scenarios ===");
+
+class Transaction {
+    amount: float;
+    transactionType: str;
+
+    constructor(amt: float, t: str) {
+        this.amount = amt;
+        this.transactionType = t;
+    }
+}
+
+class Account {
+    balance: float;
+    transactions: list;
+
+    constructor(initial: float) {
+        this.balance = initial;
+        this.transactions = [];
+    }
+
+    record(transaction: object) {
+        this.transactions.push(transaction);
+        if (transaction["transactionType"] == "deposit") {
+            this.balance = this.balance + transaction["amount"];
+        } else {
+            this.balance = this.balance - transaction["amount"];
+        }
+    }
+
+    getTransactionCount() {
+        return this.transactions.length;
+    }
+}
+
+let account = new Account(1000.0);
+account.record({amount: 500.0, transactionType: "deposit"});
+account.record({amount: 200.0, transactionType: "withdrawal"});
+account.record({amount: 300.0, transactionType: "deposit"});
+
+print(`Final balance: ${account.balance}`);
+print(`Transaction count: ${account.getTransactionCount()}`);
+
+// ============================================================================
+// Part 10: Complex Property Access Patterns
+// ============================================================================
+
+print("\n=== Test 10: Complex Property Access Patterns ===");
+
+class Config {
+    settings: object;
+
+    constructor() {
+        this.settings = {
+            debug: true,
+            maxRetries: 3,
+            timeout: 5000,
+            nested: {
+                enabled: true,
+                level: 2
+            }
+        };
+    }
+
+    getSetting(key: str) {
+        return this.settings[key];
+    }
+
+    getNestedSetting(key: str) {
+        return this.settings["nested"][key];
+    }
+
+    updateSetting(key: str, value: object) {
+        this.settings[key] = value;
+    }
+}
+
+let config = new Config();
+print(`Debug mode: ${config.getSetting("debug")}`);
+print(`Max retries: ${config.getSetting("maxRetries")}`);
+print(`Nested enabled: ${config.getNestedSetting("enabled")}`);
+print(`Nested level: ${config.getNestedSetting("level")}`);
+
+config.updateSetting("debug", false);
+print(`After update - Debug mode: ${config.getSetting("debug")}`);
+
+// ============================================================================
+// Final Summary
+// ============================================================================
+
+print("\n=== All Extended Property Access Tests Completed Successfully! ===");

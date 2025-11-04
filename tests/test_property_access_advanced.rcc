@@ -1,0 +1,357 @@
+// Test: Advanced property access with getters, setters, async, and scope
+// Comprehensive test covering property access in different contexts
+
+// ============================================================================
+// Part 1: Getters and Setters
+// ============================================================================
+
+print("=== Test 1: Getters and Setters ===");
+
+class Circle {
+    _radius: float;
+
+    constructor(r: float) {
+        this._radius = r;
+    }
+
+    get radius(): float {
+        return this._radius;
+    }
+
+    set radius(r: float): void {
+        if (r > 0) {
+            this._radius = r;
+        }
+    }
+
+    get diameter(): float {
+        return this._radius * 2;
+    }
+
+    get area(): float {
+        return this._radius * this._radius * 3.14159;
+    }
+}
+
+let circle = new Circle(5.0);
+print(`Circle radius: ${circle.radius}`);
+print(`Circle diameter (via getter): ${circle.diameter}`);
+print(`Circle area (via getter): ${circle.area}`);
+
+circle.radius = 10.0;
+print(`After setter - radius: ${circle.radius}`);
+print(`After setter - diameter: ${circle.diameter}`);
+
+// ============================================================================
+// Part 2: Property Access in Nested Scopes
+// ============================================================================
+
+print("\n=== Test 2: Property Access in Nested Scopes ===");
+
+let outer = {
+    value: 42,
+    nested: {
+        inner: 100
+    }
+};
+
+print(`outer.value = ${outer.value}`);
+print(`outer.nested.inner = ${outer.nested.inner}`);
+
+// Nested function accessing parent object properties
+fn processObject(obj: object) {
+    let sum = obj.value + obj.nested.inner;
+    return sum;
+}
+
+print(`Sum via nested function: ${processObject(outer)}`);
+
+// ============================================================================
+// Part 3: Property Access with Array of Objects
+// ============================================================================
+
+print("\n=== Test 3: Property Access with Array of Objects ===");
+
+let users = [
+    {id: 1, name: "Alice", age: 30, email: "alice@example.com"},
+    {id: 2, name: "Bob", age: 25, email: "bob@example.com"},
+    {id: 3, name: "Charlie", age: 35, email: "charlie@example.com"}
+];
+
+// Accessing properties of array elements
+for (let i = 0; i < 3; i = i + 1) {
+    let user = users[i];
+    print(`User ${user.id}: ${user.name} (age ${user.age})`);
+}
+
+// Accessing nested properties
+print(`First user's name: ${users[0]["name"]}`);
+print(`Second user's email: ${users[1]["email"]}`);
+
+// ============================================================================
+// Part 4: Dynamic Property Access
+// ============================================================================
+
+print("\n=== Test 4: Dynamic Property Access ===");
+
+let config = {
+    host: "localhost",
+    port: 8080,
+    database: {
+        name: "mydb",
+        user: "admin",
+        password: "secret"
+    }
+};
+
+// Dynamic key access
+let keys = ["host", "port"];
+for (let key of keys) {
+    let val = config[key];
+    print(`config[${key}] = ${val}`);
+}
+
+// Nested dynamic access
+let dbConfig = config["database"];
+print(`Database name: ${dbConfig["name"]}`);
+print(`Database user: ${dbConfig["user"]}`);
+
+// ============================================================================
+// Part 5: This Binding in Methods
+// ============================================================================
+
+print("\n=== Test 5: This Binding in Methods ===");
+
+class BankAccount {
+    balance: float;
+    transactions: list;
+
+    constructor(initialBalance: float) {
+        this.balance = initialBalance;
+        this.transactions = [];
+    }
+
+    deposit(amount: float) {
+        this.balance = this.balance + amount;
+        this.transactions.push(amount);
+        return this.balance;
+    }
+
+    withdraw(amount: float) {
+        if (this.balance >= amount) {
+            this.balance = this.balance - amount;
+            this.transactions.push(-amount);
+            return this.balance;
+        }
+        return -1;
+    }
+
+    getBalance() {
+        return this.balance;
+    }
+
+    getTransactionCount() {
+        return this.transactions.length;
+    }
+}
+
+let account = new BankAccount(1000.0);
+print(`Initial balance: ${account.getBalance()}`);
+
+let newBalance1 = account.deposit(500.0);
+print(`After deposit 500: ${newBalance1}`);
+
+let newBalance2 = account.withdraw(200.0);
+print(`After withdraw 200: ${newBalance2}`);
+
+print(`Total transactions: ${account.getTransactionCount()}`);
+
+// ============================================================================
+// Part 6: Method Chaining (returns this)
+// ============================================================================
+
+print("\n=== Test 6: Method Chaining ===");
+
+class Builder {
+    name: str;
+    value: int;
+
+    constructor() {
+        this.name = "";
+        this.value = 0;
+    }
+
+    setName(n: str) {
+        this.name = n;
+        return this;
+    }
+
+    setValue(v: int) {
+        this.value = v;
+        return this;
+    }
+
+    build() {
+        return {name: this.name, value: this.value};
+    }
+}
+
+let builder = new Builder();
+let result = builder.setName("Test").setValue(42).build();
+print(`Built object: name=${result["name"]}, value=${result["value"]}`);
+
+// ============================================================================
+// Part 7: Property Access in Function Returns
+// ============================================================================
+
+print("\n=== Test 7: Property Access in Function Returns ===");
+
+fn createConfig(host: str, port: int) {
+    return {
+        host: host,
+        port: port,
+        url: host + ":" + port
+    };
+}
+
+let config1 = createConfig("localhost", 8080);
+print(`Config host: ${config1["host"]}`);
+print(`Config port: ${config1["port"]}`);
+print(`Config url: ${config1["url"]}`);
+
+// ============================================================================
+// Part 8: Property Modification in Loops
+// ============================================================================
+
+print("\n=== Test 8: Property Modification in Loops ===");
+
+class Task {
+    id: int;
+    processed: bool;
+
+    constructor(taskId: int) {
+        this.id = taskId;
+        this.processed = false;
+    }
+}
+
+let tasks = [new Task(1), new Task(2), new Task(3)];
+
+print("Before processing:");
+for (let task of tasks) {
+    print(`Task ${task.id}: processed=${task.processed}`);
+}
+
+for (let i = 0; i < 3; i = i + 1) {
+    tasks[i].processed = true;
+}
+
+print("After processing:");
+for (let task of tasks) {
+    print(`Task ${task.id}: processed=${task.processed}`);
+}
+
+// ============================================================================
+// Part 9: Mixed Array and Object Operations with Class
+// ============================================================================
+
+print("\n=== Test 9: Mixed Array and Object Operations ===");
+
+class DataHolder {
+    metrics: list;
+    labels: list;
+
+    constructor() {
+        this.metrics = [10, 20, 30, 40, 50];
+        this.labels = ["A", "B", "C", "D", "E"];
+    }
+
+    getMetric(index: int) {
+        return this.metrics[index];
+    }
+
+    getLabel(index: int) {
+        return this.labels[index];
+    }
+
+    getSum() {
+        let sum = 0;
+        for (let m of this.metrics) {
+            sum = sum + m;
+        }
+        return sum;
+    }
+}
+
+let data = new DataHolder();
+print(`First metric: ${data.getMetric(0)}`);
+print(`Third label: ${data.getLabel(2)}`);
+print(`Total sum: ${data.getSum()}`);
+
+// ============================================================================
+// Part 10: Property Access with Type Coercion
+// ============================================================================
+
+print("\n=== Test 10: Property Access with Type Coercion ===");
+
+let mixed = {
+    stringKey: "value1",
+    numericValue: 42,
+    floatValue: 3.14,
+    boolValue: true
+};
+
+// Access and concatenate
+print(`string: ${mixed["stringKey"]}`);
+print(`numeric: ${mixed["numericValue"]}`);
+print(`float: ${mixed["floatValue"]}`);
+print(`bool: ${mixed["boolValue"]}`);
+
+// Type coercion in operations
+let sum = mixed["numericValue"] + mixed["floatValue"];
+print(`${mixed["numericValue"]} + ${mixed["floatValue"]} = ${sum}`);
+
+let concat = mixed["stringKey"] + " and " + mixed["numericValue"];
+print(`Concatenation: ${concat}`);
+
+// ============================================================================
+// Part 11: Undefined/Null Property Access
+// ============================================================================
+
+print("\n=== Test 11: Property Access Behavior ===");
+
+let sparse = {
+    existing: "here"
+};
+
+// Accessing existing property
+print(`Existing property: ${sparse["existing"]}`);
+
+// Access array with valid index
+let arr = [1, 2, 3];
+print(`Valid array index: ${arr[1]}`);
+
+// ============================================================================
+// Part 12: Object as Parameter and Property Access
+// ============================================================================
+
+print("\n=== Test 12: Object Parameters and Property Access ===");
+
+fn processUser(user: object) {
+    let fullInfo = user["name"] + " is " + user["age"] + " years old";
+    return fullInfo;
+}
+
+fn getProperty(obj: object, prop: str) {
+    return obj[prop];
+}
+
+let person = {name: "Diana", age: 28, city: "SF"};
+print(processUser(person));
+print(`City via getProperty: ${getProperty(person, "city")}`);
+
+// ============================================================================
+// Final Summary
+// ============================================================================
+
+print("\n=== All Property Access Tests Completed Successfully! ===");
