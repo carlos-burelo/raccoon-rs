@@ -4,7 +4,6 @@ use crate::error::RaccoonError;
 use crate::interpreter::Interpreter;
 use crate::lexer::Lexer;
 use crate::parser::Parser;
-use crate::runtime::NativeBridgeV2;
 use crate::runtime::values::{NullValue, ObjectValue, RuntimeValue};
 use std::collections::HashMap;
 use std::fs;
@@ -14,7 +13,6 @@ use std::sync::{Arc, RwLock};
 pub struct StdLibLoader {
     stdlib_path: PathBuf,
     module_cache: Arc<RwLock<HashMap<String, RuntimeValue>>>,
-    native_bridge: Arc<NativeBridgeV2>,
 }
 
 impl StdLibLoader {
@@ -22,7 +20,6 @@ impl StdLibLoader {
         Self {
             stdlib_path,
             module_cache: Arc::new(RwLock::new(HashMap::new())),
-            native_bridge: Arc::new(NativeBridgeV2::new()),
         }
     }
 
@@ -222,8 +219,9 @@ impl StdLibLoader {
         }
     }
 
-    fn setup_native_functions_in_interpreter(&self, interp: &mut Interpreter) {
-        self.native_bridge.register_all_in_env(interp);
+    fn setup_native_functions_in_interpreter(&self, _interp: &mut Interpreter) {
+        // Native functions are now registered via builtin_plugins.rs
+        // No additional setup needed here
     }
 
     pub fn available_modules(&self) -> Vec<String> {

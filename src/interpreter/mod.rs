@@ -39,22 +39,9 @@ impl Interpreter {
         let mut env = Environment::new(file.clone());
         let type_registry = TypeRegistry::new();
         setup_builtins(&mut env);
-        let native_bridge = crate::runtime::NativeBridgeV2::new();
 
         let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
         let decorator_registry = DecoratorRegistry::new();
-
-        for name in native_bridge.function_names() {
-            if let Some(f) = native_bridge.get(&name) {
-                let _ = env.declare(name, f);
-            }
-        }
-
-        for name in native_bridge.async_function_names() {
-            if let Some(f) = native_bridge.get_async(&name) {
-                let _ = env.declare(name, f);
-            }
-        }
 
         Self {
             environment: env,
