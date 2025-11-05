@@ -2554,11 +2554,49 @@ impl Expressions {
                 Ok(Some(bindings))
             }
 
-            Pattern::Literal(_expr) => {
-                // For now, we can't evaluate expressions in patterns at this level
-                // TODO: Properly handle literal patterns by evaluating them as constants
-                // For now, just match any value
-                Ok(Some(HashMap::new()))
+            Pattern::Literal(expr) => {
+                // Compare literal pattern with value using == operator
+                // For literals, we match if values are equal
+                match (expr.as_ref(), value) {
+                    // Integer literals
+                    (Expr::IntLiteral(lit), RuntimeValue::Int(val)) => {
+                        if lit.value as i64 == val.value {
+                            Ok(Some(HashMap::new()))
+                        } else {
+                            Ok(None)
+                        }
+                    }
+                    // String literals
+                    (Expr::StrLiteral(lit), RuntimeValue::Str(val)) => {
+                        if lit.value == val.value {
+                            Ok(Some(HashMap::new()))
+                        } else {
+                            Ok(None)
+                        }
+                    }
+                    // Float literals
+                    (Expr::FloatLiteral(lit), RuntimeValue::Float(val)) => {
+                        if (lit.value - val.value).abs() < f64::EPSILON {
+                            Ok(Some(HashMap::new()))
+                        } else {
+                            Ok(None)
+                        }
+                    }
+                    // Boolean literals
+                    (Expr::BoolLiteral(lit), RuntimeValue::Bool(val)) => {
+                        if lit.value == val.value {
+                            Ok(Some(HashMap::new()))
+                        } else {
+                            Ok(None)
+                        }
+                    }
+                    // Null literal
+                    (Expr::NullLiteral(_), RuntimeValue::Null(_)) => {
+                        Ok(Some(HashMap::new()))
+                    }
+                    // Type mismatch or unsupported literal pattern
+                    _ => Ok(None),
+                }
             }
 
             Pattern::List(patterns) => {
