@@ -1,0 +1,315 @@
+// EXHAUSTIVE PATTERN MATCHING TESTS
+// Testing all pattern variants with multiple arms
+
+println("=== EXHAUSTIVE PATTERN MATCHING TESTS ===\n");
+
+// ============================================
+// TEST 1: INTEGER LITERALS
+// ============================================
+println("TEST 1: Integer Literals");
+fn test_int_literals() {
+    let test1 = match 1 { 1 => "one", _ => "other" };
+    let test2 = match 2 { 1 => "one", 2 => "two", _ => "other" };
+    let test3 = match 3 { 1 => "one", 2 => "two", 3 => "three", _ => "other" };
+    let test4 = match 5 { 1 => "one", 2 => "two", 3 => "three", _ => "many" };
+    let test5 = match 100 { 1 => "one", 2 => "two", _ => "many" };
+
+    println("  1 => " + test1);
+    println("  2 => " + test2);
+    println("  3 => " + test3);
+    println("  5 => " + test4);
+    println("  100 => " + test5);
+}
+test_int_literals();
+
+// ============================================
+// TEST 2: STRING LITERALS
+// ============================================
+println("\nTEST 2: String Literals");
+fn test_string_literals() {
+    let test1 = match "hello" { "hello" => "found", _ => "not found" };
+    let test2 = match "world" { "hello" => "hello", "world" => "world", _ => "other" };
+    let test3 = match "foo" { "hello" => "hello", "world" => "world", "foo" => "foo", _ => "other" };
+    let test4 = match "bar" { "hello" => "hello", "world" => "world", "foo" => "foo", _ => "unknown" };
+
+    println("  \"hello\" => " + test1);
+    println("  \"world\" => " + test2);
+    println("  \"foo\" => " + test3);
+    println("  \"bar\" => " + test4);
+}
+test_string_literals();
+
+// ============================================
+// TEST 3: WILDCARDS WITH MULTIPLE ARMS
+// ============================================
+println("\nTEST 3: Wildcards (must be last)");
+fn test_wildcards() {
+    let test1 = match 42 { _ => "any" };
+    let test2 = match 99 { 1 => "one", _ => "any" };
+    let test3 = match 77 { 1 => "one", 2 => "two", _ => "any" };
+    let test4 = match 55 { 1 => "one", 2 => "two", 3 => "three", _ => "any" };
+
+    println("  42 with single wildcard => " + test1);
+    println("  99 with one literal and wildcard => " + test2);
+    println("  77 with two literals and wildcard => " + test3);
+    println("  55 with three literals and wildcard => " + test4);
+}
+test_wildcards();
+
+// ============================================
+// TEST 4: VARIABLE PATTERNS
+// ============================================
+println("\nTEST 4: Variable Patterns (bind value)");
+fn test_variable_patterns() {
+    let test1 = match 10 { x => x * 2 };
+    let test2 = match 5 { x => x + x + x };
+    let test3 = match 7 { x => x * x };
+
+    println("  10 => 10 * 2 = " + test1);
+    println("  5 => 5 + 5 + 5 = " + test2);
+    println("  7 => 7 * 7 = " + test3);
+}
+test_variable_patterns();
+
+// ============================================
+// TEST 5: LIST PATTERNS - EXACT LENGTH
+// ============================================
+println("\nTEST 5: List Patterns - Exact Length Match");
+fn test_list_patterns_length() {
+    let test1 = match [1] { [a] => a, _ => 0 };
+    let test2 = match [1, 2] { [a, b] => a + b, _ => 0 };
+    let test3 = match [1, 2, 3] { [a, b, c] => a + b + c, _ => 0 };
+    let test4 = match [1, 2, 3, 4] { [a, b, c, d] => a + b + c + d, _ => 0 };
+    let test5 = match [10, 20] { [a, b] => a * b, _ => 0 };
+
+    println("  [1] => " + test1);
+    println("  [1, 2] => " + test2);
+    println("  [1, 2, 3] => " + test3);
+    println("  [1, 2, 3, 4] => " + test4);
+    println("  [10, 20] => " + test5);
+}
+test_list_patterns_length();
+
+// ============================================
+// TEST 6: LIST PATTERNS - WRONG LENGTH (fallthrough)
+// ============================================
+println("\nTEST 6: List Patterns - Wrong Length Falls Through");
+fn test_list_patterns_fallthrough() {
+    // Wrong length should not match
+    let test1 = match [1, 2] { [a] => a, _ => 999 };
+    let test2 = match [1] { [a, b] => a + b, _ => 888 };
+    let test3 = match [1, 2, 3] { [a, b] => a + b, _ => 777 };
+
+    println("  [1, 2] does not match [a] => " + test1);
+    println("  [1] does not match [a, b] => " + test2);
+    println("  [1, 2, 3] does not match [a, b] => " + test3);
+}
+test_list_patterns_fallthrough();
+
+// ============================================
+// TEST 7: LIST PATTERNS - WILDCARDS IN LISTS
+// ============================================
+println("\nTEST 7: List Patterns - Wildcards Inside");
+fn test_list_wildcards() {
+    let test1 = match [1, 2, 3] { [a, _, c] => a + c, _ => 0 };
+    let test2 = match [5, 6, 7, 8] { [a, _, c, _] => a + c, _ => 0 };
+    let test3 = match [10, 20, 30] { [_, b, _] => b, _ => 0 };
+    let test4 = match [1, 2, 3, 4, 5] { [a, _, _, _, e] => a + e, _ => 0 };
+
+    println("  [1, 2, 3] with [a, _, c] => " + test1);
+    println("  [5, 6, 7, 8] with [a, _, c, _] => " + test2);
+    println("  [10, 20, 30] with [_, b, _] => " + test3);
+    println("  [1, 2, 3, 4, 5] with [a, _, _, _, e] => " + test4);
+}
+test_list_wildcards();
+
+// ============================================
+// TEST 8: EMPTY LISTS
+// ============================================
+println("\nTEST 8: Empty Lists");
+fn test_empty_lists() {
+    let test1 = match [] { [] => "empty", _ => "not empty" };
+    let test2 = match [1] { [] => "empty", _ => "not empty" };
+    let test3 = match [] { [a] => "has element", _ => "no element" };
+
+    println("  [] matches [] => " + test1);
+    println("  [1] does not match [] => " + test2);
+    println("  [] does not match [a] => " + test3);
+}
+test_empty_lists();
+
+// ============================================
+// TEST 9: OBJECT PATTERNS - BASIC
+// ============================================
+println("\nTEST 9: Object Patterns - Basic");
+fn test_object_basic() {
+    let test1 = match {x: 5} { {x} => x, _ => 0 };
+    let test2 = match {x: 10, y: 20} { {x, y} => x + y, _ => 0 };
+    let test3 = match {a: 1, b: 2, c: 3} { {a, b, c} => a + b + c, _ => 0 };
+
+    println("  {x: 5} => " + test1);
+    println("  {x: 10, y: 20} => " + test2);
+    println("  {a: 1, b: 2, c: 3} => " + test3);
+}
+test_object_basic();
+
+// ============================================
+// TEST 10: OBJECT PATTERNS - BINDING NAMES
+// ============================================
+println("\nTEST 10: Object Patterns - Custom Binding Names");
+fn test_object_bindings() {
+    let test1 = match {name: "Alice"} { {name: n} => n, _ => "" };
+    let test2 = match {first: "John", last: "Doe"} { {first: f, last: l} => f + " " + l, _ => "" };
+    let test3 = match {x: 100, y: 200} { {x: a, y: b} => a - b, _ => 0 };
+
+    println("  {name: \"Alice\"} with {name: n} => " + test1);
+    println("  {first: \"John\", last: \"Doe\"} => " + test2);
+    println("  {x: 100, y: 200} with {x: a, y: b} => " + test3);
+}
+test_object_bindings();
+
+// ============================================
+// TEST 11: NESTED PATTERNS - LIST OF LISTS
+// ============================================
+println("\nTEST 11: Nested Patterns - List of Lists");
+fn test_nested_lists() {
+    let test1 = match [[1, 2], [3, 4]] { [[a, b], [c, d]] => a + b + c + d, _ => 0 };
+    let test2 = match [[10], [20]] { [[a], [b]] => a + b, _ => 0 };
+    let test3 = match [[1, 2, 3], [4, 5, 6]] { [[a, b, c], [d, e, f]] => a + d, _ => 0 };
+
+    println("  [[1, 2], [3, 4]] => " + test1);
+    println("  [[10], [20]] => " + test2);
+    println("  [[1, 2, 3], [4, 5, 6]] => " + test3);
+}
+test_nested_lists();
+
+// ============================================
+// TEST 12: NESTED PATTERNS - OBJECT WITH LISTS
+// ============================================
+println("\nTEST 12: Nested Patterns - Object with Lists");
+fn test_nested_obj_list() {
+    let test1 = match {items: [1, 2, 3]} { {items: [a, b, c]} => a + b + c, _ => 0 };
+    let test2 = match {data: [10, 20], count: 2} { {data: [x, y], count: n} => x + y + n, _ => 0 };
+    let test3 = match {matrix: [[1, 2], [3, 4]]} { {matrix: [[a, b], [c, d]]} => a + d, _ => 0 };
+
+    println("  {items: [1, 2, 3]} => " + test1);
+    println("  {data: [10, 20], count: 2} => " + test2);
+    println("  {matrix: [[1, 2], [3, 4]]} => " + test3);
+}
+test_nested_obj_list();
+
+// ============================================
+// TEST 13: MULTIPLE ARMS - LITERAL PRIORITY
+// ============================================
+println("\nTEST 13: Multiple Arms - Literal Priority (first match wins)");
+fn test_multiple_arms_priority() {
+    // Multiple literals - first match should win
+    let test1 = match 2 { 1 => "one", 2 => "two", 2 => "two-again", _ => "other" };
+    let test2 = match 3 { 1 => "one", 2 => "two", 3 => "three", _ => "other" };
+    let test3 = match 5 { 1 => "one", 2 => "two", 3 => "three", _ => "default" };
+
+    println("  2 matches first 2 => " + test1);
+    println("  3 matches 3 => " + test2);
+    println("  5 matches default => " + test3);
+}
+test_multiple_arms_priority();
+
+// ============================================
+// TEST 14: COMPLEX NESTED - MIXED PATTERNS
+// ============================================
+println("\nTEST 14: Complex Nested - Mixed Patterns");
+fn test_complex_mixed() {
+    let test1 = match {users: [{name: "Alice"}, {name: "Bob"}], count: 2} {
+        {users: [x, y], count: n} => n,
+        _ => 0
+    };
+
+    let test2 = match {data: [1, 2, 3], meta: {size: 3}} {
+        {data: [a, b, c], meta: {size: s}} => a + c + s,
+        _ => 0
+    };
+
+    println("  Complex object with users list => " + test1);
+    println("  Data list with meta object => " + test2);
+}
+test_complex_mixed();
+
+// ============================================
+// TEST 15: ALL ARMS LITERALS (no wildcard)
+// ============================================
+println("\nTEST 15: All Literal Arms (must match or error)");
+fn test_all_literals() {
+    let test1 = match 1 { 1 => "match", 2 => "no" };
+    let test2 = match 2 { 1 => "no", 2 => "match" };
+    let test3 = match 3 { 1 => "no", 2 => "no", 3 => "match" };
+
+    println("  1 with literals only => " + test1);
+    println("  2 with literals only => " + test2);
+    println("  3 with literals only => " + test3);
+}
+test_all_literals();
+
+// ============================================
+// TEST 16: MIXED LITERALS AND VARIABLES
+// ============================================
+println("\nTEST 16: Mixed Literals and Variables");
+fn test_mixed_literals_vars() {
+    let test1 = match 5 { 1 => "one", x => x * 2 };
+    let test2 = match 10 { 1 => "one", 2 => "two", x => x + 100 };
+
+    println("  5 does not match 1 => " + test1);
+    println("  10 does not match 1 or 2, matches variable => " + test2);
+}
+test_mixed_literals_vars();
+
+// ============================================
+// TEST 17: FLOAT LITERALS (if supported)
+// ============================================
+println("\nTEST 17: Float Literals");
+fn test_float_literals() {
+    let test1 = match 3.14 { 3.14 => "pi", _ => "other" };
+    let test2 = match 2.71 { 3.14 => "pi", 2.71 => "e", _ => "other" };
+    let test3 = match 1.0 { 1.0 => "one", _ => "other" };
+
+    println("  3.14 => " + test1);
+    println("  2.71 => " + test2);
+    println("  1.0 => " + test3);
+}
+test_float_literals();
+
+// ============================================
+// TEST 18: BOOLEAN LITERALS
+// ============================================
+println("\nTEST 18: Boolean Literals");
+fn test_boolean_literals() {
+    let test1 = match true { true => "yes", false => "no" };
+    let test2 = match false { true => "yes", false => "no" };
+
+    println("  true => " + test1);
+    println("  false => " + test2);
+}
+test_boolean_literals();
+
+// ============================================
+// FINAL SUMMARY
+// ============================================
+println("\n=== ALL EXHAUSTIVE TESTS COMPLETED ===");
+println("Pattern types tested:");
+println("  ✓ Integer literals");
+println("  ✓ String literals");
+println("  ✓ Float literals");
+println("  ✓ Boolean literals");
+println("  ✓ Wildcards");
+println("  ✓ Variables");
+println("  ✓ List patterns (exact length)");
+println("  ✓ List patterns (wrong length fallthrough)");
+println("  ✓ Wildcards inside lists");
+println("  ✓ Empty lists");
+println("  ✓ Object patterns");
+println("  ✓ Object binding names");
+println("  ✓ Nested lists");
+println("  ✓ Nested objects with lists");
+println("  ✓ Multiple arms with priority");
+println("  ✓ Complex mixed patterns");
+println("  ✓ All literal arms");
+println("  ✓ Mixed literals and variables");
