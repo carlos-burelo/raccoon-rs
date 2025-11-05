@@ -1,18 +1,7 @@
-/// Rust Native Functions Registry - Clean consolidated system
-///
-/// This module provides all native Rust functions that can be called from Raccoon code.
-/// Functions are decorated with @native in source code, but here they're registered
-/// in a centralized, maintainable way.
-
 use crate::ast::types::{PrimitiveType, Type};
 use crate::runtime::native::{FromRaccoon, NativeRegistry, ToRaccoon};
 use crate::runtime::values::RuntimeValue;
 
-// ============================================================================
-// MATH FUNCTIONS
-// ============================================================================
-
-/// Add two integers
 fn native_add(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 2 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -24,7 +13,6 @@ fn native_add(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-/// Subtract two integers
 fn native_subtract(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 2 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -36,7 +24,6 @@ fn native_subtract(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-/// Multiply two integers
 fn native_multiply(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 2 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -48,7 +35,6 @@ fn native_multiply(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-/// Divide two integers
 fn native_divide(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 2 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -66,7 +52,6 @@ fn native_divide(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-/// Modulo operation
 fn native_modulo(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 2 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -84,11 +69,6 @@ fn native_modulo(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-// ============================================================================
-// STRING FUNCTIONS
-// ============================================================================
-
-/// Get string length
 fn native_string_length(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 1 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -100,7 +80,6 @@ fn native_string_length(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-/// Convert to uppercase
 fn native_string_uppercase(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 1 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -112,7 +91,6 @@ fn native_string_uppercase(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-/// Convert to lowercase
 fn native_string_lowercase(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 1 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -124,7 +102,6 @@ fn native_string_lowercase(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-/// String concatenation
 fn native_string_concat(args: Vec<RuntimeValue>) -> RuntimeValue {
     let mut result = String::new();
 
@@ -138,23 +115,20 @@ fn native_string_concat(args: Vec<RuntimeValue>) -> RuntimeValue {
     result.to_runtime()
 }
 
-/// Check if string contains substring
 fn native_string_contains(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 2 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
     }
 
-    match (String::from_runtime(&args[0]), String::from_runtime(&args[1])) {
+    match (
+        String::from_runtime(&args[0]),
+        String::from_runtime(&args[1]),
+    ) {
         (Ok(s), Ok(substr)) => s.contains(&substr).to_runtime(),
         _ => RuntimeValue::Null(crate::runtime::values::NullValue::new()),
     }
 }
 
-// ============================================================================
-// LIST FUNCTIONS
-// ============================================================================
-
-/// Get list length
 fn native_list_length(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 1 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -166,7 +140,6 @@ fn native_list_length(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-/// Push element to list
 fn native_list_push(args: Vec<RuntimeValue>) -> RuntimeValue {
     if args.len() != 2 {
         return RuntimeValue::Null(crate::runtime::values::NullValue::new());
@@ -185,36 +158,95 @@ fn native_list_push(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-// ============================================================================
-// REGISTRY INITIALIZATION
-// ============================================================================
-
-/// Register all native Rust functions
 pub fn register_all_native_functions(registry: &NativeRegistry) {
-    // Math functions
-    register_native_fn(registry, "add", native_add, vec![PrimitiveType::int(), PrimitiveType::int()], PrimitiveType::int());
-    register_native_fn(registry, "subtract", native_subtract, vec![PrimitiveType::int(), PrimitiveType::int()], PrimitiveType::int());
-    register_native_fn(registry, "multiply", native_multiply, vec![PrimitiveType::int(), PrimitiveType::int()], PrimitiveType::int());
-    register_native_fn(registry, "divide", native_divide, vec![PrimitiveType::int(), PrimitiveType::int()], PrimitiveType::int());
-    register_native_fn(registry, "modulo", native_modulo, vec![PrimitiveType::int(), PrimitiveType::int()], PrimitiveType::int());
+    register_native_fn(
+        registry,
+        "add",
+        native_add,
+        vec![PrimitiveType::int(), PrimitiveType::int()],
+        PrimitiveType::int(),
+    );
+    register_native_fn(
+        registry,
+        "subtract",
+        native_subtract,
+        vec![PrimitiveType::int(), PrimitiveType::int()],
+        PrimitiveType::int(),
+    );
+    register_native_fn(
+        registry,
+        "multiply",
+        native_multiply,
+        vec![PrimitiveType::int(), PrimitiveType::int()],
+        PrimitiveType::int(),
+    );
+    register_native_fn(
+        registry,
+        "divide",
+        native_divide,
+        vec![PrimitiveType::int(), PrimitiveType::int()],
+        PrimitiveType::int(),
+    );
+    register_native_fn(
+        registry,
+        "modulo",
+        native_modulo,
+        vec![PrimitiveType::int(), PrimitiveType::int()],
+        PrimitiveType::int(),
+    );
 
-    // String functions
-    register_native_fn(registry, "string_length", native_string_length, vec![PrimitiveType::str()], PrimitiveType::int());
-    register_native_fn(registry, "string_uppercase", native_string_uppercase, vec![PrimitiveType::str()], PrimitiveType::str());
-    register_native_fn(registry, "string_lowercase", native_string_lowercase, vec![PrimitiveType::str()], PrimitiveType::str());
-    register_native_fn(registry, "string_concat", native_string_concat, vec![], PrimitiveType::str());
-    register_native_fn(registry, "string_contains", native_string_contains, vec![PrimitiveType::str(), PrimitiveType::str()], PrimitiveType::bool());
+    register_native_fn(
+        registry,
+        "string_length",
+        native_string_length,
+        vec![PrimitiveType::str()],
+        PrimitiveType::int(),
+    );
+    register_native_fn(
+        registry,
+        "string_uppercase",
+        native_string_uppercase,
+        vec![PrimitiveType::str()],
+        PrimitiveType::str(),
+    );
+    register_native_fn(
+        registry,
+        "string_lowercase",
+        native_string_lowercase,
+        vec![PrimitiveType::str()],
+        PrimitiveType::str(),
+    );
+    register_native_fn(
+        registry,
+        "string_concat",
+        native_string_concat,
+        vec![],
+        PrimitiveType::str(),
+    );
+    register_native_fn(
+        registry,
+        "string_contains",
+        native_string_contains,
+        vec![PrimitiveType::str(), PrimitiveType::str()],
+        PrimitiveType::bool(),
+    );
 
-    // List functions
-    register_native_fn(registry, "list_length", native_list_length, vec![PrimitiveType::any()], PrimitiveType::int());
-    register_native_fn(registry, "list_push", native_list_push, vec![PrimitiveType::any(), PrimitiveType::any()], PrimitiveType::any());
+    register_native_fn(
+        registry,
+        "list_length",
+        native_list_length,
+        vec![PrimitiveType::any()],
+        PrimitiveType::int(),
+    );
+    register_native_fn(
+        registry,
+        "list_push",
+        native_list_push,
+        vec![PrimitiveType::any(), PrimitiveType::any()],
+        PrimitiveType::any(),
+    );
 }
 
-// ============================================================================
-// HELPER FUNCTION
-// ============================================================================
-
-/// Helper to register a native function
 fn register_native_fn(
     registry: &NativeRegistry,
     name: &str,

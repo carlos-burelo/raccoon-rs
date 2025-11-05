@@ -103,10 +103,10 @@ impl RuntimeValue {
                 if f.is_async {
                     "[async fn]".to_string()
                 } else {
-                    "[Function]".to_string()
+                    "[fn]".to_string()
                 }
             }
-            RuntimeValue::NativeFunction(_) => "[Native Function]".to_string(),
+            RuntimeValue::NativeFunction(_) => "[Native fn]".to_string(),
             RuntimeValue::NativeAsyncFunction(_) => "[Native async fn]".to_string(),
             RuntimeValue::Future(_) => "future".to_string(),
             RuntimeValue::PrimitiveTypeObject(p) => p.type_name.clone(),

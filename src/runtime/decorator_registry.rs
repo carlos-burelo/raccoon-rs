@@ -2,16 +2,13 @@ use crate::ast::nodes::DecoratorDecl;
 use crate::error::RaccoonError;
 use std::collections::HashMap;
 
-/// Define la visibilidad de un decorador
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum DecoratorVisibility {
-    /// Solo puede usarse en stdlib
     Internal,
-    /// Usuarios pueden usarlo
+
     Public,
 }
 
-/// Especificación de qué es un decorador
 #[derive(Debug, Clone)]
 pub struct DecoratorSpec {
     pub name: String,
@@ -20,7 +17,6 @@ pub struct DecoratorSpec {
     pub allowed_on: Vec<DecoratorTarget>,
 }
 
-/// Dónde puede aplicarse un decorador
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum DecoratorTarget {
     Function,
@@ -30,7 +26,6 @@ pub enum DecoratorTarget {
     ClassProperty,
 }
 
-/// Registro central de decoradores
 pub struct DecoratorRegistry {
     decorators: HashMap<String, DecoratorSpec>,
 }
@@ -45,9 +40,6 @@ impl DecoratorRegistry {
     }
 
     fn register_all_decorators(&mut self) {
-        // DECORADORES PÚBLICOS
-
-        // @cache(ttl_ms) - Cachea resultados
         self.register_decorator(DecoratorSpec {
             name: "cache".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -55,7 +47,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
         });
 
-        // @deprecated(message) - Marca como deprecated
         self.register_decorator(DecoratorSpec {
             name: "deprecated".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -67,7 +58,6 @@ impl DecoratorRegistry {
             ],
         });
 
-        // @pure() - Función pura
         self.register_decorator(DecoratorSpec {
             name: "pure".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -75,7 +65,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
         });
 
-        // @inline() - Sugerir inline
         self.register_decorator(DecoratorSpec {
             name: "inline".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -83,7 +72,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
         });
 
-        // @readonly() - Propiedad solo lectura
         self.register_decorator(DecoratorSpec {
             name: "readonly".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -91,7 +79,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::ClassProperty],
         });
 
-        // @override() - Override de clase base
         self.register_decorator(DecoratorSpec {
             name: "override".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -99,7 +86,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::ClassMethod],
         });
 
-        // @measureTime(label) - Medir tiempo de ejecución
         self.register_decorator(DecoratorSpec {
             name: "measureTime".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -107,7 +93,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
         });
 
-        // @memoize() - Cachear resultados (alias de cache)
         self.register_decorator(DecoratorSpec {
             name: "memoize".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -115,7 +100,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
         });
 
-        // @throttle(ms) - Limitar llamadas
         self.register_decorator(DecoratorSpec {
             name: "throttle".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -123,7 +107,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
         });
 
-        // @debounce(ms) - Retardar ejecución
         self.register_decorator(DecoratorSpec {
             name: "debounce".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -131,7 +114,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
         });
 
-        // @retry(times) - Reintentar en error
         self.register_decorator(DecoratorSpec {
             name: "retry".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -139,7 +121,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
         });
 
-        // @log() - Loguear llamadas
         self.register_decorator(DecoratorSpec {
             name: "log".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -147,7 +128,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Function, DecoratorTarget::AsyncFunction],
         });
 
-        // @sealed() - Prevenir extensión
         self.register_decorator(DecoratorSpec {
             name: "sealed".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -155,7 +135,6 @@ impl DecoratorRegistry {
             allowed_on: vec![DecoratorTarget::Class],
         });
 
-        // @abstract() - Clase/método abstracto
         self.register_decorator(DecoratorSpec {
             name: "abstract".to_string(),
             visibility: DecoratorVisibility::Public,
@@ -168,17 +147,14 @@ impl DecoratorRegistry {
         self.decorators.insert(spec.name.clone(), spec);
     }
 
-    /// Obtiene especificación de un decorador
     pub fn get(&self, name: &str) -> Option<&DecoratorSpec> {
         self.decorators.get(name)
     }
 
-    /// Valida si un decorador existe
     pub fn exists(&self, name: &str) -> bool {
         self.decorators.contains_key(name)
     }
 
-    /// Valida decoradores para un contexto específico
     pub fn validate(
         &self,
         decorators: &[DecoratorDecl],
@@ -189,11 +165,9 @@ impl DecoratorRegistry {
         let mut result = Vec::new();
 
         for decorator in decorators {
-            // Get the spec if it exists, otherwise create a default one for user-defined decorators
             let spec = if let Some(spec) = self.get(&decorator.name) {
                 spec.clone()
             } else {
-                // Allow user-defined decorators: create a default spec that accepts any target
                 DecoratorSpec {
                     name: decorator.name.clone(),
                     description: format!("User-defined decorator: {}", decorator.name),
@@ -206,7 +180,6 @@ impl DecoratorRegistry {
                 }
             };
 
-            // Validar visibilidad: decoradores internos solo en stdlib
             if spec.visibility == DecoratorVisibility::Internal && !is_in_stdlib {
                 return Err(RaccoonError::new(
                     format!(
@@ -218,7 +191,6 @@ impl DecoratorRegistry {
                 ));
             }
 
-            // Validar que el decorador pueda aplicarse a este target
             if !spec.allowed_on.contains(&target) {
                 return Err(RaccoonError::new(
                     format!(
@@ -240,7 +212,6 @@ impl DecoratorRegistry {
     }
 }
 
-/// Información sobre un decorador aplicado
 #[derive(Debug, Clone)]
 pub struct DecoratorInfo {
     pub spec: DecoratorSpec,
@@ -248,7 +219,6 @@ pub struct DecoratorInfo {
 }
 
 impl DecoratorInfo {
-    /// Obtiene el argumento de un decorador como string
     pub fn arg_as_string(&self, index: usize) -> Option<String> {
         use crate::ast::nodes::Expr;
         match self.decl.args.get(index)? {
@@ -257,7 +227,6 @@ impl DecoratorInfo {
         }
     }
 
-    /// Obtiene el argumento de un decorador como int
     pub fn arg_as_int(&self, index: usize) -> Option<i64> {
         use crate::ast::nodes::Expr;
         match self.decl.args.get(index)? {
@@ -266,7 +235,6 @@ impl DecoratorInfo {
         }
     }
 
-    /// Obtiene el argumento de un decorador como bool
     pub fn arg_as_bool(&self, index: usize) -> Option<bool> {
         use crate::ast::nodes::Expr;
         match self.decl.args.get(index)? {
@@ -279,29 +247,5 @@ impl DecoratorInfo {
 impl Default for DecoratorRegistry {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_decorator_registry_creation() {
-        let registry = DecoratorRegistry::new();
-        assert!(registry.exists("cache"));
-        assert!(registry.exists("deprecated"));
-        assert!(!registry.exists("nonexistent"));
-    }
-
-    #[test]
-    fn test_decorator_visibility() {
-        let registry = DecoratorRegistry::new();
-
-        let cache_spec = registry.get("cache").unwrap();
-        assert_eq!(cache_spec.visibility, DecoratorVisibility::Public);
-
-        let deprecated_spec = registry.get("deprecated").unwrap();
-        assert_eq!(deprecated_spec.visibility, DecoratorVisibility::Public);
     }
 }

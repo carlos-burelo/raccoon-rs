@@ -1627,6 +1627,12 @@ impl Parser {
     }
 
     fn assignment(&mut self) -> Result<Expr, RaccoonError> {
+        // Check for match expression
+        if self.check(&TokenType::Match) {
+            self.advance();
+            return self.parse_match_expr();
+        }
+
         if self.check(&TokenType::Async) {
             let saved_pos = self.current;
             self.advance();
@@ -2873,6 +2879,125 @@ impl Parser {
         self.consume(TokenType::Gt, "Expected '>' after type arguments")?;
         Ok(type_args)
     }
+
+    fn parse_match_expr(&mut self) -> Result<Expr, RaccoonError> {
+        let position = self.previous().position;
+
+        // Parse scrutinee (the expression being matched)
+        let scrutinee = Box::new(self.conditional()?);
+
+        // Consume opening brace
+        self.consume(TokenType::LeftBrace, "Expected '{' after match scrutinee")?;
+
+        let mut arms = Vec::new();
+
+        // Parse match arms: pattern => expr
+        while !self.check(&TokenType::RightBrace) && !self.is_at_end() {
+            let pattern = self.parse_pattern()?;
+            let pos = pattern.position();
+
+            // Consume arrow
+            self.consume(TokenType::Arrow, "Expected '=>' after pattern")?;
+
+            // Parse body expression
+            let body = Box::new(self.conditional()?);
+
+            arms.push(MatchArm {
+                pattern,
+                guard: None,
+                body,
+                position: pos,
+            });
+
+            // Consume comma if not at closing brace
+            if !self.check(&TokenType::RightBrace) {
+                self.consume(TokenType::Comma, "Expected ',' after match arm")?;
+            }
+        }
+
+        self.consume(TokenType::RightBrace, "Expected '}' after match arms")?;
+
+        Ok(Expr::Match(MatchExpr {
+            scrutinee,
+            arms,
+            position,
+        }))
+    }
+
+    fn parse_pattern(&mut self) -> Result<Pattern, RaccoonError> {
+        if self.match_token(&[TokenType::Underscore]) {
+            return Ok(Pattern::Wildcard(self.previous().position));
+        }
+
+        if self.match_token(&[TokenType::Identifier]) {
+            let name = self.previous().value.clone();
+            return Ok(Pattern::Variable(name));
+        }
+
+        if self.match_token(&[TokenType::LeftBracket]) {
+            // List pattern: [pat1, pat2, ...rest]
+            let mut patterns = Vec::new();
+
+            if !self.check(&TokenType::RightBracket) {
+                loop {
+                    patterns.push(self.parse_pattern()?);
+                    if !self.match_token(&[TokenType::Comma]) {
+                        break;
+                    }
+                }
+            }
+
+            self.consume(TokenType::RightBracket, "Expected ']' after list pattern")?;
+            return Ok(Pattern::List(patterns));
+        }
+
+        if self.match_token(&[TokenType::LeftBrace]) {
+            // Object pattern: { x, y: pat }
+            let mut properties = Vec::new();
+
+            if !self.check(&TokenType::RightBrace) {
+                loop {
+                    let key = self
+                        .consume(TokenType::Identifier, "Expected property name in object pattern")?
+                        .value
+                        .clone();
+
+                    let pattern = if self.match_token(&[TokenType::Colon]) {
+                        self.parse_pattern()?
+                    } else {
+                        Pattern::Variable(key.clone())
+                    };
+
+                    properties.push((key, pattern));
+
+                    if !self.match_token(&[TokenType::Comma]) {
+                        break;
+                    }
+                }
+            }
+
+            self.consume(TokenType::RightBrace, "Expected '}' after object pattern")?;
+            return Ok(Pattern::Object(properties));
+        }
+
+        // Literal pattern
+        if self.check(&TokenType::IntLiteral)
+            || self.check(&TokenType::FloatLiteral)
+            || self.check(&TokenType::StrLiteral)
+            || self.check(&TokenType::True)
+            || self.check(&TokenType::False)
+            || self.check(&TokenType::NullLiteral)
+        {
+            let expr = self.primary()?;
+            return Ok(Pattern::Literal(Box::new(expr)));
+        }
+
+        Err(RaccoonError::new(
+            "Expected pattern".to_string(),
+            self.peek().position,
+            self.file.clone(),
+        ))
+    }
 }
 
 impl Stmt {
@@ -2940,6 +3065,7 @@ impl Expr {
             Expr::ListLiteral(e) => e.position,
             Expr::ObjectLiteral(e) => e.position,
             Expr::Spread(e) => e.position,
+            Expr::Match(e) => e.position,
         }
     }
 }

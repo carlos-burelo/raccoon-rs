@@ -1,14 +1,14 @@
 use crate::ast::types::PrimitiveType;
-use crate::runtime::{
-    Environment, IntValue, NativeFunctionValue, NullValue, RuntimeValue, StrValue,
-    FutureValue, FutureState, ListValue, ObjectValue,
-    builtins_builders::{collect_futures, FutureCollectionStrategy, TypeMethodBuilder},
-};
-use crate::output_style;
 use crate::fn_type;
+
+use crate::runtime::{
+    builtins_builders::{collect_futures, FutureCollectionStrategy, TypeMethodBuilder},
+    Environment, FutureState, FutureValue, IntValue, ListValue, NativeFunctionValue, NullValue,
+    ObjectValue, RuntimeValue, StrValue,
+};
 use colored::Colorize;
-use std::io::{self, Write};
 use std::collections::HashMap;
+use std::io::{self, Write};
 
 pub fn setup_builtins(env: &mut Environment) {
     register_builtin_functions(env);
@@ -28,8 +28,7 @@ fn register_builtin_constants(_env: &mut Environment) {}
 
 fn format_colored_value(value: &RuntimeValue) -> String {
     let plain = value.to_string();
-    // Use syntax-aware colorization through the output_style module
-    output_style::format_value(&plain)
+    plain
 }
 
 fn register_print_function(env: &mut Environment) {
@@ -56,8 +55,8 @@ fn register_println_function(env: &mut Environment) {
                 println!();
             } else {
                 let msg = args[0].to_string();
-                let colored = output_style::format_value(&msg);
-                println!("{}", colored);
+
+                println!("{}", msg);
             }
             RuntimeValue::Null(NullValue::new())
         },
@@ -134,7 +133,6 @@ fn register_len_function(env: &mut Environment) {
 fn register_future_object(env: &mut Environment) {
     let mut builder = TypeMethodBuilder::new("Future");
 
-    // Future.resolve(value) - Creates a resolved future
     let resolve_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         let value = if args.is_empty() {
             RuntimeValue::Null(NullValue::new())
@@ -144,9 +142,12 @@ fn register_future_object(env: &mut Environment) {
         let value_type = value.get_type();
         RuntimeValue::Future(FutureValue::new_resolved(value, value_type))
     };
-    builder.add_method("resolve", fn_type!(PrimitiveType::any(), PrimitiveType::any()), resolve_impl);
+    builder.add_method(
+        "resolve",
+        fn_type!(PrimitiveType::any(), PrimitiveType::any()),
+        resolve_impl,
+    );
 
-    // Future.reject(error) - Creates a rejected future
     let reject_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         let error = if args.is_empty() {
             "Unknown error".to_string()
@@ -155,9 +156,12 @@ fn register_future_object(env: &mut Environment) {
         };
         RuntimeValue::Future(FutureValue::new_rejected(error, PrimitiveType::any()))
     };
-    builder.add_method("reject", fn_type!(PrimitiveType::any(), PrimitiveType::any()), reject_impl);
+    builder.add_method(
+        "reject",
+        fn_type!(PrimitiveType::any(), PrimitiveType::any()),
+        reject_impl,
+    );
 
-    // Future.all(futures) - Waits for all futures to resolve
     let all_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         if args.is_empty() {
             return RuntimeValue::Future(FutureValue::new_resolved(
@@ -176,11 +180,13 @@ fn register_future_object(env: &mut Environment) {
             }
         };
 
-        let (results, has_pending, first_error) = collect_futures(&futures_list, FutureCollectionStrategy::All);
+        let (results, has_pending, first_error) =
+            collect_futures(&futures_list, FutureCollectionStrategy::All);
 
         if has_pending {
             RuntimeValue::Future(FutureValue::new_rejected(
-                "Cannot call Future.all() on pending futures. Use 'await' on all futures first.".to_string(),
+                "Cannot call Future.all() on pending futures. Use 'await' on all futures first."
+                    .to_string(),
                 PrimitiveType::any(),
             ))
         } else if let Some(error) = first_error {
@@ -192,9 +198,12 @@ fn register_future_object(env: &mut Environment) {
             ))
         }
     };
-    builder.add_method("all", fn_type!(PrimitiveType::any(), PrimitiveType::any()), all_impl);
+    builder.add_method(
+        "all",
+        fn_type!(PrimitiveType::any(), PrimitiveType::any()),
+        all_impl,
+    );
 
-    // Future.race(futures) - Returns the first resolved or rejected future
     let race_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         if args.is_empty() {
             return RuntimeValue::Future(FutureValue::new_rejected(
@@ -220,7 +229,6 @@ fn register_future_object(env: &mut Environment) {
             ));
         }
 
-        // Find the first resolved or rejected future
         for future_value in &futures_list.elements {
             match future_value {
                 RuntimeValue::Future(future) => {
@@ -238,9 +246,7 @@ fn register_future_object(env: &mut Environment) {
                                 PrimitiveType::any(),
                             ));
                         }
-                        FutureState::Pending => {
-                            // Continue to next future
-                        }
+                        FutureState::Pending => {}
                     }
                 }
                 _ => {
@@ -252,15 +258,17 @@ fn register_future_object(env: &mut Environment) {
             }
         }
 
-        // All futures are pending
         RuntimeValue::Future(FutureValue::new_rejected(
             "Cannot call Future.race() when all futures are pending. Use 'await' on at least one future first.".to_string(),
             PrimitiveType::any(),
         ))
     };
-    builder.add_method("race", fn_type!(PrimitiveType::any(), PrimitiveType::any()), race_impl);
+    builder.add_method(
+        "race",
+        fn_type!(PrimitiveType::any(), PrimitiveType::any()),
+        race_impl,
+    );
 
-    // Future.allSettled(futures) - Waits for all futures to settle (resolve or reject)
     let all_settled_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         if args.is_empty() {
             return RuntimeValue::Future(FutureValue::new_resolved(
@@ -279,7 +287,8 @@ fn register_future_object(env: &mut Environment) {
             }
         };
 
-        let (results, has_pending, _) = collect_futures(&futures_list, FutureCollectionStrategy::AllSettled);
+        let (results, has_pending, _) =
+            collect_futures(&futures_list, FutureCollectionStrategy::AllSettled);
 
         if has_pending {
             RuntimeValue::Future(FutureValue::new_rejected(
@@ -293,9 +302,12 @@ fn register_future_object(env: &mut Environment) {
             ))
         }
     };
-    builder.add_method("allSettled", fn_type!(PrimitiveType::any(), PrimitiveType::any()), all_settled_impl);
+    builder.add_method(
+        "allSettled",
+        fn_type!(PrimitiveType::any(), PrimitiveType::any()),
+        all_settled_impl,
+    );
 
-    // Future.any(futures) - Returns the first resolved future (ignores rejections)
     let any_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         if args.is_empty() {
             return RuntimeValue::Future(FutureValue::new_rejected(
@@ -321,30 +333,31 @@ fn register_future_object(env: &mut Environment) {
             ));
         }
 
-        // Find the first resolved future (ignore rejected ones)
-        let (results, has_pending, _) = collect_futures(&futures_list, FutureCollectionStrategy::Any);
+        let (results, has_pending, _) =
+            collect_futures(&futures_list, FutureCollectionStrategy::Any);
 
         if !results.is_empty() {
-            // Found a resolved future
             RuntimeValue::Future(FutureValue::new_resolved(
                 results[0].clone(),
                 PrimitiveType::any(),
             ))
         } else if has_pending {
-            // Some futures are still pending
             RuntimeValue::Future(FutureValue::new_rejected(
                 "Cannot call Future.any() when all resolved futures are rejected and some are pending. Use 'await' on futures first.".to_string(),
                 PrimitiveType::any(),
             ))
         } else {
-            // All futures rejected
             RuntimeValue::Future(FutureValue::new_rejected(
                 "All futures were rejected".to_string(),
                 PrimitiveType::any(),
             ))
         }
     };
-    builder.add_method("any", fn_type!(PrimitiveType::any(), PrimitiveType::any()), any_impl);
+    builder.add_method(
+        "any",
+        fn_type!(PrimitiveType::any(), PrimitiveType::any()),
+        any_impl,
+    );
 
     builder.build(env);
 }
@@ -352,7 +365,6 @@ fn register_future_object(env: &mut Environment) {
 fn register_object_object(env: &mut Environment) {
     let mut builder = TypeMethodBuilder::new("Object");
 
-    // Object.keys(obj) - Returns an array of object's own property names
     let keys_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         if args.is_empty() {
             return RuntimeValue::List(ListValue::new(vec![], PrimitiveType::str()));
@@ -380,9 +392,12 @@ fn register_object_object(env: &mut Environment) {
             _ => RuntimeValue::List(ListValue::new(vec![], PrimitiveType::str())),
         }
     };
-    builder.add_method("keys", fn_type!(PrimitiveType::any(), PrimitiveType::any()), keys_impl);
+    builder.add_method(
+        "keys",
+        fn_type!(PrimitiveType::any(), PrimitiveType::any()),
+        keys_impl,
+    );
 
-    // Object.values(obj) - Returns an array of object's own property values
     let values_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         if args.is_empty() {
             return RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
@@ -390,11 +405,7 @@ fn register_object_object(env: &mut Environment) {
 
         match &args[0] {
             RuntimeValue::Object(obj) => {
-                let values: Vec<RuntimeValue> = obj
-                    .properties
-                    .values()
-                    .cloned()
-                    .collect();
+                let values: Vec<RuntimeValue> = obj.properties.values().cloned().collect();
                 RuntimeValue::List(ListValue::new(values, PrimitiveType::any()))
             }
             RuntimeValue::ClassInstance(instance) => {
@@ -410,9 +421,12 @@ fn register_object_object(env: &mut Environment) {
             _ => RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any())),
         }
     };
-    builder.add_method("values", fn_type!(PrimitiveType::any(), PrimitiveType::any()), values_impl);
+    builder.add_method(
+        "values",
+        fn_type!(PrimitiveType::any(), PrimitiveType::any()),
+        values_impl,
+    );
 
-    // Object.entries(obj) - Returns an array of [key, value] pairs
     let entries_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         if args.is_empty() {
             return RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
@@ -425,10 +439,7 @@ fn register_object_object(env: &mut Environment) {
                     .iter()
                     .map(|(k, v)| {
                         RuntimeValue::List(ListValue::new(
-                            vec![
-                                RuntimeValue::Str(StrValue::new(k.clone())),
-                                v.clone(),
-                            ],
+                            vec![RuntimeValue::Str(StrValue::new(k.clone())), v.clone()],
                             PrimitiveType::any(),
                         ))
                     })
@@ -443,10 +454,7 @@ fn register_object_object(env: &mut Environment) {
                     .iter()
                     .map(|(k, v)| {
                         RuntimeValue::List(ListValue::new(
-                            vec![
-                                RuntimeValue::Str(StrValue::new(k.clone())),
-                                v.clone(),
-                            ],
+                            vec![RuntimeValue::Str(StrValue::new(k.clone())), v.clone()],
                             PrimitiveType::any(),
                         ))
                     })
@@ -456,9 +464,12 @@ fn register_object_object(env: &mut Environment) {
             _ => RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any())),
         }
     };
-    builder.add_method("entries", fn_type!(PrimitiveType::any(), PrimitiveType::any()), entries_impl);
+    builder.add_method(
+        "entries",
+        fn_type!(PrimitiveType::any(), PrimitiveType::any()),
+        entries_impl,
+    );
 
-    // Object.assign(target, ...sources) - Copies properties from sources to target
     let assign_impl: fn(Vec<RuntimeValue>) -> RuntimeValue = |args: Vec<RuntimeValue>| {
         if args.is_empty() {
             return RuntimeValue::Object(ObjectValue::new(HashMap::new(), PrimitiveType::any()));
@@ -480,7 +491,11 @@ fn register_object_object(env: &mut Environment) {
             _ => target,
         }
     };
-    builder.add_method("assign", fn_type!(variadic, PrimitiveType::any()), assign_impl);
+    builder.add_method(
+        "assign",
+        fn_type!(variadic, PrimitiveType::any()),
+        assign_impl,
+    );
 
     builder.build(env);
 }

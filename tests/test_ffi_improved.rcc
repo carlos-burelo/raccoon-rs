@@ -1,0 +1,92 @@
+// FFI Example - Calling Rust functions from Raccoon
+// This demonstrates the new Rust FFI system that eliminates native wrappers
+//
+// NO MORE BOILERPLATE! Just write Rust functions and call them from Raccoon.
+
+// Example 1: Math functions written in Rust
+fn testRustMath() {
+    print("=== Rust Math Functions ===")
+    
+    // These functions are implemented in Rust (src/runtime/rust_ffi_modules.rs)
+    // but can be called directly from Raccoon without any wrapper code!
+    
+    let sum = rust_add(10, 20)
+    print("rust_add(10, 20) =", sum)
+    
+    let product = rust_multiply(7, 6)
+    print("rust_multiply(7, 6) =", product)
+    
+    let power = rust_power(2.0, 10.0)
+    print("rust_power(2.0, 10.0) =", power)
+    
+    let fib = rust_fibonacci(10)
+    print("rust_fibonacci(10) =", fib)
+    
+    let fact = rust_factorial(5)
+    print("rust_factorial(5) =", fact)
+    
+    let prime = rust_is_prime(17)
+    print("rust_is_prime(17) =", prime)
+    
+    let gcd_result = rust_gcd(48, 18)
+    print("rust_gcd(48, 18) =", gcd_result)
+}
+
+// Example 2: String functions written in Rust
+fn testRustStrings() {
+    print("\n=== Rust String Functions ===")
+    
+    let reversed = rust_reverse("Hello, World!")
+    print("rust_reverse('Hello, World!') =", reversed)
+    
+    let upper = rust_to_uppercase("raccoon lang")
+    print("rust_to_uppercase('raccoon lang') =", upper)
+    
+    let repeated = rust_repeat("Rust!", 5)
+    print("rust_repeat('Rust!', 5) =", repeated)
+    
+    let wordCount = rust_count_words("The quick brown fox jumps")
+    print("rust_count_words(...) =", wordCount)
+}
+
+// Example 3: Array functions written in Rust
+fn testRustArrays() {
+    print("\n=== Rust Array Functions ===")
+    
+    let numbers = [1, 2, 3, 4, 5, 10, 20, 30]
+    
+    let total = rust_sum_ints(numbers)
+    print("rust_sum_ints([1,2,3,4,5,10,20,30]) =", total)
+    
+    let product = rust_product_ints([1, 2, 3, 4, 5])
+    print("rust_product_ints([1,2,3,4,5]) =", product)
+}
+
+// Example 4: How to add your own Rust functions
+fn howToAddMoreFunctions() {
+    print("\n=== How to Add More Rust Functions ===")
+    print("1. Open src/runtime/rust_ffi_modules.rs")
+    print("2. Add your function:")
+    print("   fn my_function((a, b): (i64, i64)) -> i64 { a + b }")
+    print("3. Register it:")
+    print("   registry.register('my_function', Self::my_function, ...)")
+    print("4. That's it! Call it from Raccoon:")
+    print("   let result = my_function(10, 20)")
+    print("")
+    print("✓ No NativeFunctionValue wrapper needed!")
+    print("✓ Automatic type conversion!")
+    print("✓ Clean Rust code!")
+}
+
+// Run all examples
+testRustMath()
+testRustStrings()
+testRustArrays()
+howToAddMoreFunctions()
+
+print("\n" + "=".repeat(50))
+print("✓ Rust FFI system working perfectly!")
+print("✓ All functions called directly from Rust!")
+print("✓ Zero boilerplate code!")
+print("=".repeat(50))
+

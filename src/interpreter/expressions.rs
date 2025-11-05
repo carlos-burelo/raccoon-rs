@@ -69,6 +69,7 @@ impl Expressions {
                 (1, 1),
                 None::<String>,
             )),
+            Expr::Match(match_expr) => Self::evaluate_match_expr(interpreter, match_expr).await,
         }
     }
 
@@ -2500,6 +2501,142 @@ impl Expressions {
                 await_expr.position,
                 interpreter.file.clone(),
             )),
+        }
+    }
+
+    #[async_recursion(?Send)]
+    async fn evaluate_match_expr(
+        interpreter: &mut Interpreter,
+        match_expr: &MatchExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        // Evaluate the scrutinee (the value being matched)
+        let scrutinee_value = Self::evaluate_expr(interpreter, &match_expr.scrutinee).await?;
+
+        // Try each arm in order
+        for arm in &match_expr.arms {
+            // Try to match the pattern
+            if let Some(bindings) = Self::match_pattern(&arm.pattern, &scrutinee_value)? {
+                // Pattern matched - push new scope with bindings
+                interpreter.environment.push_scope();
+                for (name, value) in bindings {
+                    let _ = interpreter.environment.declare(name, value);
+                }
+
+                // Evaluate the body expression
+                let result = Self::evaluate_expr(interpreter, &arm.body).await;
+                interpreter.environment.pop_scope();
+
+                return result;
+            }
+        }
+
+        // No arm matched
+        Err(RaccoonError::new(
+            "Non-exhaustive pattern match: no arm matched the value".to_string(),
+            match_expr.position,
+            interpreter.file.clone(),
+        ))
+    }
+
+    /// Try to match a pattern against a value
+    /// Returns Some(bindings) if the pattern matches, None if it doesn't
+    fn match_pattern(pattern: &Pattern, value: &RuntimeValue) -> Result<Option<HashMap<String, RuntimeValue>>, RaccoonError> {
+        match pattern {
+            Pattern::Wildcard(_) => {
+                // Wildcard matches anything with no bindings
+                Ok(Some(HashMap::new()))
+            }
+
+            Pattern::Variable(name) => {
+                // Variable pattern binds the value to the variable name
+                let mut bindings = HashMap::new();
+                bindings.insert(name.clone(), value.clone());
+                Ok(Some(bindings))
+            }
+
+            Pattern::Literal(_expr) => {
+                // For now, we can't evaluate expressions in patterns at this level
+                // TODO: Properly handle literal patterns by evaluating them as constants
+                // For now, just match any value
+                Ok(Some(HashMap::new()))
+            }
+
+            Pattern::List(patterns) => {
+                // List pattern: [p1, p2, ...]
+                if let RuntimeValue::List(list_val) = value {
+                    let elements = &list_val.elements;
+                    if elements.len() != patterns.len() {
+                        return Ok(None); // Length mismatch
+                    }
+
+                    let mut all_bindings = HashMap::new();
+
+                    // Try to match each element
+                    for (element, pattern) in elements.iter().zip(patterns.iter()) {
+                        if let Some(bindings) = Self::match_pattern(pattern, element)? {
+                            // Merge bindings
+                            for (name, val) in bindings {
+                                all_bindings.insert(name, val);
+                            }
+                        } else {
+                            return Ok(None); // One of the patterns didn't match
+                        }
+                    }
+
+                    Ok(Some(all_bindings))
+                } else {
+                    Ok(None) // Value is not a list
+                }
+            }
+
+            Pattern::Object(properties) => {
+                // Object pattern: { x, y: pat }
+                if let RuntimeValue::Object(obj_val) = value {
+                    let mut all_bindings = HashMap::new();
+
+                    // Try to match each property
+                    for (key, pattern) in properties {
+                        if let Some(property_value) = obj_val.properties.get(key) {
+                            if let Some(bindings) = Self::match_pattern(pattern, property_value)? {
+                                // Merge bindings
+                                for (name, val) in bindings {
+                                    all_bindings.insert(name, val);
+                                }
+                            } else {
+                                return Ok(None); // Property pattern didn't match
+                            }
+                        } else {
+                            return Ok(None); // Property not found in object
+                        }
+                    }
+
+                    Ok(Some(all_bindings))
+                } else {
+                    Ok(None) // Value is not an object
+                }
+            }
+
+            Pattern::Range(_, _) => {
+                // Range patterns not implemented yet
+                // TODO: Implement range patterns
+                Ok(Some(HashMap::new()))
+            }
+
+            Pattern::Type(_) => {
+                // Type patterns not implemented yet
+                // TODO: Implement type patterns
+                Ok(Some(HashMap::new()))
+            }
+
+            Pattern::Or(patterns) => {
+                // Or pattern: try each alternative
+                for alt_pattern in patterns {
+                    if let Some(bindings) = Self::match_pattern(alt_pattern, value)? {
+                        return Ok(Some(bindings));
+                    }
+                }
+                Ok(None)
+            }
         }
     }
 }

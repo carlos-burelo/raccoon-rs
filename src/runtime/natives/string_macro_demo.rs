@@ -1,3 +1,4 @@
+use crate::runtime::values::*;
 /// DEMO: String functions refactored with #[native_fn] procedural macro
 /// This shows how much boilerplate can be eliminated
 ///
@@ -6,9 +7,7 @@
 ///
 /// This file demonstrates the transformation but is NOT compiled yet.
 /// It's here to show the comparison.
-
 use raccoon_macros::native_fn;
-use crate::runtime::values::*;
 use std::collections::HashMap;
 
 // ============================================================================
@@ -64,9 +63,7 @@ pub fn str_char_at(s: &str, index: i64) -> String {
 /// Find index of substring
 #[native_fn]
 pub fn str_index_of(s: &str, substr: &str) -> i64 {
-    s.find(substr)
-        .map(|i| i as i64)
-        .unwrap_or(-1i64)
+    s.find(substr).map(|i| i as i64).unwrap_or(-1i64)
 }
 
 /// Replace string
@@ -113,10 +110,7 @@ fn register_native_fn<T: NativeFnMetadata>(functions: &mut HashMap<String, Nativ
     let fn_type = T::get_function_type();
     let invoke = T::invoke;
 
-    functions.insert(
-        name.to_string(),
-        NativeFunctionValue::new(invoke, fn_type),
-    );
+    functions.insert(name.to_string(), NativeFunctionValue::new(invoke, fn_type));
 }
 
 /// Trait that the macro will implement for each function

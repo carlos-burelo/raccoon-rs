@@ -5,6 +5,7 @@ pub mod objects;
 pub mod async_control;
 pub mod special;
 pub mod registry;
+pub mod operations;
 
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;

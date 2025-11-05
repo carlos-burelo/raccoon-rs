@@ -1,0 +1,171 @@
+ARQUITECTURA DECORADORES FFI EN RACCOON
+========================================
+
+RESUMEN: 4 capas desacopladas sin converger
+PROBLEMA: Solo @deprecated funciona, @native no existe
+SOLUCION: Crear DecoratorExecutor que unifique todo
+
+UBICACION DEL CODIGO
+====================
+
+1. decorator_registry.rs (251 lineas)
+   - Almacena metadata de decoradores
+   - Lista: @cache, @deprecated, @pure, @inline, @readonly, @override, @log, @sealed
+   - Valida aplicacion correcta
+   - PERO: Solo @deprecated es procesado en runtime
+
+2. parser/declarations.rs (500-530)
+   - parse_decorator() tiene TODO comentario
+   - Argumentos no se parsean correctamente
+   - @cache(5000) falla
+
+3. interpreter/declarations.rs (50-104)
+   - execute_fn_decl() valida decoradores
+   - Procesa SOLO @deprecated
+   - Otros decoradores son ignorados
+
+4. runtime/native.rs (215)
+   - NativeDecoratorProcessor::has_native_decorator() retorna siempre false
+   - NUNCA implementado
+
+5. runtime/rust_ffi.rs (256 lineas)
+   - RustFFIRegistry: registry de funciones Rust
+   - Traits FromRaccoon/ToRaccoon para conversion de tipos
+   - Bien implementado pero desconectado de decoradores
+
+6. runtime/rust_ffi_modules.rs (325 lineas)
+   - RustMathFFI: rust_add, rust_multiply, rust_fibonacci
+   - RustStringFFI: rust_reverse, rust_uppercase
+   - Registran funciones programaticamente
+   - NO usan @native decorator
+
+PROBLEMAS ENCONTRADOS
+======================
+
+CRITICOS:
+1. Parser roto: argumentos de decoradores son TODO
+2. NativeDecoratorProcessor vacio: retorna siempre false
+3. Procesamiento trivial: solo @deprecated funciona
+4. @native no existe: funciones Rust se registran fuera del AST
+5. 4 sistemas paralelos: Plugin, Native, FFI, FFIModules
+
+ALTOS:
+6. Argumentos en parse_decorator no se evaluan
+7. Decoradores validados pero no ejecutados
+8. No existe mecanismo para ejecutar logica de decoradores
+
+ARQUITECTURA ACTUAL
+===================
+
+Parser
+  @deprecated   ← Tokenizado y parseado
+  @cache(5000)  ← Argumentos son TODO
+
+       ↓
+
+DecoratorDecl
+  name: "cache"
+  args: [Expr::Identifier("TODO")]  ← BUG
+
+       ↓
+
+DecoratorRegistry.validate()
+  Verifica: existe? aplicable? permitido?
+       ↓
+  RetornaDecoratorInfo
+
+       ↓
+
+Interpreter.execute_fn_decl()
+  Para @deprecated: eprintln warning
+  Para otros: NOP
+
+       ↓
+
+RuntimeValue::Function almacena decoradores pero no los usa
+
+FLUJO FFI PARALELO (SIN USAR DECORADORES)
+==========================================
+
+Rust FFI Modules
+  RustMathFFI::register()
+  RustStringFFI::register()
+
+       ↓
+
+RustFFIRegistry.register_raw()
+  Registra directamente con nombre
+
+No hay @native decorator, no hay vinculacion al AST
+
+SOLUCION PROPUESTA
+==================
+
+1. ARREGLAR PARSER
+   Cambiar: args.push(Expr::Identifier("TODO"))
+   Por: args.push(Expressions::expression(state)?)
+
+2. IMPLEMENTAR @native DECORATOR
+   En decorator_registry.rs:
+   self.register_decorator(DecoratorSpec {
+       name: "native".to_string(),
+       allowed_on: vec![DecoratorTarget::Function],
+       ...
+   });
+
+3. CREAR DecoratorExecutor (nueva clase)
+   pub async fn execute_for_function(
+       interpreter: &Interpreter,
+       decorator_info: &DecoratorInfo,
+       function: RuntimeValue,
+   ) -> Result<RuntimeValue, RaccoonError>
+
+   Ejecuta logica segun tipo:
+   - @deprecated: wrapper que advierte
+   - @cache: wrapper con cache
+   - @native: vincula a funcion Rust
+   - etc.
+
+4. CONECTAR EN INTERPRETER
+   En execute_fn_decl():
+   for decorator_info in &decorators {
+       function = DecoratorExecutor::execute(...)
+   }
+
+5. USAR @native EN STDLIB
+   @native("rust_add")
+   fn rust_add(a: int, b: int): int
+
+BENEFICIOS
+==========
+
+- Sistema unificado de decoradores
+- Extensible: agregar nuevos decoradores es trivial
+- Type safe: validacion en compile-time
+- Performance: aplicar decoradores una sola vez
+- Codigo Raccoon mas limpio y legible
+
+ARCHIVOS A CAMBIAR
+==================
+
+1. src/parser/declarations.rs:507 - Arreglar parse_decorator
+2. src/runtime/decorator_registry.rs - Agregar @native
+3. src/interpreter/decorator_executor.rs - NUEVO
+4. src/interpreter/declarations.rs - Conectar executor
+5. stdlib/ffi.rcc - Usar @native
+
+CONCLUSIONES
+============
+
+La arquitectura actual tiene componentes bien hechos pero desconectados:
+- DecoratorRegistry: Bien estruturado
+- Plugin System: Flexible y completo
+- Rust FFI: Robusto con FromRaccoon/ToRaccoon
+
+PERO:
+- Parser roto (TODO en argumentos)
+- Decoradores no se ejecutan
+- @native no existe
+- 4 sistemas paralelos en lugar de 1 uniforme
+
+Solucion simple: Crear DecoratorExecutor que unifique todo

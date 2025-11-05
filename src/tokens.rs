@@ -29,6 +29,7 @@ pub enum TokenType {
     While,
     For,
     Do,
+    Match,
     Switch,
     Case,
     Break,
@@ -62,6 +63,7 @@ pub enum TokenType {
     Default,
     Declare,
     At,
+    Underscore,
     Identifier,
     IntLiteral,
     BigIntLiteral,
@@ -137,19 +139,15 @@ pub enum TokenType {
 pub struct Token {
     pub token_type: TokenType,
     pub value: String,
-    pub lexeme: String,
     pub position: Position,
-    pub range: Range,
 }
 
 impl Token {
-    pub fn new(token_type: TokenType, value: String, lexeme: String, position: Position, range: Range) -> Self {
+    pub fn new(token_type: TokenType, value: String, position: Position) -> Self {
         Self {
             token_type,
             value,
-            lexeme,
             position,
-            range,
         }
     }
 }

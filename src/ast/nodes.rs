@@ -140,6 +140,7 @@ pub enum Expr {
     ListLiteral(ListLiteral),
     ObjectLiteral(ObjectLiteral),
     Spread(SpreadExpr),
+    Match(MatchExpr),
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -712,4 +713,50 @@ pub struct RestElement {
 pub struct SpreadExpr {
     pub argument: Box<Expr>,
     pub position: Position,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct MatchExpr {
+    pub scrutinee: Box<Expr>,
+    pub arms: Vec<MatchArm>,
+    pub position: Position,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct MatchArm {
+    pub pattern: Pattern,
+    pub guard: Option<Box<Expr>>,
+    pub body: Box<Expr>,
+    pub position: Position,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Pattern {
+    Wildcard(Position),
+    Literal(Box<Expr>),
+    Range(Box<Expr>, Box<Expr>),
+    Type(Type),
+    List(Vec<Pattern>),
+    Object(Vec<(String, Pattern)>),
+    Variable(String),
+    Or(Vec<Pattern>),
+}
+
+impl Pattern {
+    pub fn position(&self) -> Position {
+        match self {
+            Pattern::Wildcard(pos) => *pos,
+            Pattern::Literal(expr) => expr.position(),
+            Pattern::Range(start, _) => start.position(),
+            Pattern::Type(_) => (1, 1), // Types don't have position info
+            Pattern::List(patterns) => {
+                patterns.first().map(|p| p.position()).unwrap_or((1, 1))
+            }
+            Pattern::Object(_) => (1, 1), // Objects don't have position info
+            Pattern::Variable(_) => (1, 1), // Variables don't have position info
+            Pattern::Or(patterns) => {
+                patterns.first().map(|p| p.position()).unwrap_or((1, 1))
+            }
+        }
+    }
 }
