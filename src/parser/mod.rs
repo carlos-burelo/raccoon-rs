@@ -6,6 +6,13 @@ use crate::{
     tokens::{AccessModifier, BinaryOperator, UnaryOperator},
 };
 
+pub mod state;
+pub mod utilities;
+pub mod declarations;
+pub mod statements;
+pub mod expressions;
+pub mod types;
+
 pub struct Parser {
     tokens: Vec<Token>,
     file: Option<String>,
@@ -2287,6 +2294,11 @@ impl Parser {
             }));
         }
 
+        // Función anónima: fn { ... } o fn(params) { ... } o fn(params) => expr
+        if self.check(&TokenType::Fn) {
+            return self.parse_anonymous_function(false);
+        }
+
         if self.check(&TokenType::LeftParen) {
             let saved_pos = self.current;
 
@@ -2601,6 +2613,55 @@ impl Parser {
             is_async,
             position,
         })
+    }
+
+    /// Parse anonymous function expression: fn { } or fn(params) { } or fn(params) => expr
+    fn parse_anonymous_function(&mut self, is_async: bool) -> Result<Expr, RaccoonError> {
+        let position = self.peek().position.clone();
+        self.consume(TokenType::Fn, "Expected 'fn'")?;
+
+        // Parse parameters (optional, can be empty or in parens)
+        let parameters = if self.check(&TokenType::LeftParen) {
+            self.advance();
+            let params = self.arrow_function_parameters()?;
+            self.consume(TokenType::RightParen, "Expected ')' after parameters")?;
+            params
+        } else {
+            Vec::new()
+        };
+
+        // Parse return type (optional)
+        let return_type = if self.match_token(&[TokenType::Colon]) {
+            Some(self.parse_type()?)
+        } else {
+            None
+        };
+
+        // Parse body: either { stmts } or => expr
+        let body = if self.check(&TokenType::LeftBrace) {
+            // Block body: fn { stmts }
+            self.advance();
+            let stmts = self.block_statements()?;
+            ArrowFnBody::Block(stmts)
+        } else if self.match_token(&[TokenType::Arrow]) {
+            // Arrow body: fn => expr
+            let expr = self.conditional()?;
+            ArrowFnBody::Expr(Box::new(expr))
+        } else {
+            return Err(RaccoonError::new(
+                "Expected '{ }' or '=>' for function body".to_string(),
+                self.peek().position.clone(),
+                self.file.clone(),
+            ));
+        };
+
+        Ok(Expr::ArrowFn(ArrowFnExpr {
+            parameters,
+            return_type,
+            body,
+            is_async,
+            position,
+        }))
     }
 
     fn arrow_function_parameters(&mut self) -> Result<Vec<FnParam>, RaccoonError> {

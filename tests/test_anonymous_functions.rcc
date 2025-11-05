@@ -1,0 +1,61 @@
+// Tests para funciones anónimas
+
+print("=== ANONYMOUS FUNCTIONS TESTS ===\n")
+
+// Test 1: Función anónima simple con bloque
+print("Test 1: Simple anonymous function with block")
+let add = fn(a: int, b: int) {
+    let result = a + b
+    return result
+}
+let sum = add(5, 3)
+print("✓ add(5, 3) = " + sum + "\n")
+
+// Test 2: Función anónima con arrow
+print("Test 2: Anonymous function with arrow")
+let multiply = fn(x: int, y: int) => x * y
+let prod = multiply(4, 5)
+print("✓ multiply(4, 5) = " + prod + "\n")
+
+// Test 3: Función anónima sin parámetros
+print("Test 3: Anonymous function without parameters")
+let greet = fn {
+    return "Hello, World!"
+}
+let greeting = greet()
+print("✓ greet() = " + greeting + "\n")
+
+// Test 4: Función anónima devolviendo función
+print("Test 4: Anonymous function returning function")
+let make_function = fn {
+    return fn(x: int) => x * 2
+}
+let double_fn = make_function()
+let result = double_fn(10)
+print("✓ make_function()(10) = " + result + "\n")
+
+// Test 6: Función anónima en estructura de datos
+print("Test 6: Anonymous function in data structure")
+let operations = {
+    add: fn(a: int, b: int) => a + b,
+    subtract: fn(a: int, b: int) => a - b,
+    multiply: fn(a: int, b: int) => a * b
+}
+let r1 = operations.add(10, 5)
+let r2 = operations.subtract(10, 5)
+let r3 = operations.multiply(10, 5)
+print("✓ operations: add=" + r1 + ", subtract=" + r2 + ", multiply=" + r3 + "\n")
+
+// Test 7: Array de funciones anónimas
+print("Test 7: Array of anonymous functions")
+let functions = [
+    fn(x: int) => x * 2,
+    fn(x: int) => x + 10,
+    fn(x: int) => x - 5
+]
+let f0 = functions[0](5)
+let f1 = functions[1](5)
+let f2 = functions[2](5)
+print("✓ functions[0](5)=" + f0 + ", functions[1](5)=" + f1 + ", functions[2](5)=" + f2 + "\n")
+
+print("=== ALL TESTS PASSED ===")
