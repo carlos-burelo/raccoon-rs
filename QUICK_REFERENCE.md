@@ -93,17 +93,17 @@ decorator observable {
 
 | # | Feature | Status | Tiempo | Notas |
 |---|---------|--------|--------|-------|
-| 1 | Funciones Anónimas | TODO | 2-3h | `fn { stmts }` o `fn => expr` |
+| 1 | Funciones Anónimas | ✅ DONE | 2-3h | `fn(params) { stmts }` con return explícito |
 | 2 | Pattern Matching | TODO | 4-6h | `match expr { pattern => expr }` |
 | 3 | Clases Anónimas | TODO | 2-3h | `class { ... }` sin nombre |
 
 ## Plan de Implementación
 
 ```
-1. Funciones Anónimas (2-3h)
-   ├─ Parser: fn { stmts }
-   ├─ AST: AnonymousFnExpr
-   └─ Interpreter: evaluate_anonymous_fn()
+1. Funciones Anónimas (2-3h) ✅ COMPLETADO
+   ├─ Parser: fn(params) { stmts }
+   ├─ Paréntesis requeridos incluso sin argumentos
+   └─ Return explícito (no arrow syntax)
 
 2. Pattern Matching (4-6h)
    ├─ Parser: match expr { arms }
@@ -288,13 +288,19 @@ class Service {
 
 ## Tests a Implementar
 
-### Funciones Anónimas
+### Funciones Anónimas (IMPLEMENTADO ✅)
 ```raccoon
-fn add = fn(a: int, b: int) { return a + b }
-assert(add(2, 3) == 5)
+// Sintaxis: fn(params) { stmts } con return explícito
+let add = fn(a: int, b: int) {
+    return a + b
+}
 
-fn greet = fn { return "Hello" }
-assert(greet() == "Hello")
+let greet = fn() {
+    return "Hello"
+}
+
+// Nota: Arrow functions siguen siendo válidas: fn(x) => x * 2
+// Pero fn { ... } REQUIERE paréntesis y return explícito
 ```
 
 ### Pattern Matching
