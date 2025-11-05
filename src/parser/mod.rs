@@ -2615,7 +2615,9 @@ impl Parser {
         })
     }
 
-    /// Parse anonymous function expression: fn { } or fn(params) { } or fn(params) => expr
+    /// Parse anonymous function expression: fn { ... } with explicit return
+    /// Anonymous functions MUST have block body with explicit return statements
+    /// For concise syntax, use arrow functions: fn(params) => expr
     fn parse_anonymous_function(&mut self, is_async: bool) -> Result<Expr, RaccoonError> {
         let position = self.peek().position.clone();
         self.consume(TokenType::Fn, "Expected 'fn'")?;
@@ -2637,23 +2639,18 @@ impl Parser {
             None
         };
 
-        // Parse body: either { stmts } or => expr
-        let body = if self.check(&TokenType::LeftBrace) {
-            // Block body: fn { stmts }
-            self.advance();
-            let stmts = self.block_statements()?;
-            ArrowFnBody::Block(stmts)
-        } else if self.match_token(&[TokenType::Arrow]) {
-            // Arrow body: fn => expr
-            let expr = self.conditional()?;
-            ArrowFnBody::Expr(Box::new(expr))
-        } else {
+        // Anonymous functions MUST have block body with explicit return
+        if !self.check(&TokenType::LeftBrace) {
             return Err(RaccoonError::new(
-                "Expected '{ }' or '=>' for function body".to_string(),
+                "Anonymous function must have explicit block body { ... }. Use arrow function syntax (=>) for concise expressions".to_string(),
                 self.peek().position.clone(),
                 self.file.clone(),
             ));
-        };
+        }
+
+        self.advance();
+        let stmts = self.block_statements()?;
+        let body = ArrowFnBody::Block(stmts);
 
         Ok(Expr::ArrowFn(ArrowFnExpr {
             parameters,
