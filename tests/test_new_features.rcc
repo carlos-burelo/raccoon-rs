@@ -31,12 +31,12 @@ for (let item of arr) {
 }
 
 println("\n=== Testing String Methods ===");
-let str = "hello";
-println("repeat(3): " + str.repeat(3));
-println("padStart(10, '*'): " + str.padStart(10, "*"));
-println("padEnd(10, '-'): " + str.padEnd(10, "-"));
-println("lastIndexOf('l'): " + str.lastIndexOf("l").toStr());
-println("charCodeAt(0): " + str.charCodeAt(0).toStr());
+let text = "hello";
+println("repeat(3): " + text.repeat(3));
+println("padStart(10, '*'): " + text.padStart(10, "*"));
+println("padEnd(10, '-'): " + text.padEnd(10, "-"));
+println("lastIndexOf('l'): " + text.lastIndexOf("l").toStr());
+println("charCodeAt(0): " + text.charCodeAt(0).toStr());
 
 println("\n=== Testing Array Methods ===");
 let numbers = [1, 2, 3, 4, 5];

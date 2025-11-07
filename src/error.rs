@@ -200,6 +200,7 @@ impl RaccoonError {
         call_stack: CallStack,
     ) -> Self {
         Self {
+            kind: ErrorKind::RuntimeError,
             message: message.into(),
             position,
             range: None,

@@ -223,7 +223,7 @@ export fn zip<T, U>(arr1: T[], arr2: U[]): [T, U][] {
     return result;
 }
 
-export fn compact<T>(arr: (T | null)[]): T[] {
+export fn compact<T>(arr: T[]): T[] {
     let result: T[] = [];
     for (let i = 0; i < length(arr); i = i + 1) {
         if (arr[i] != null) {
