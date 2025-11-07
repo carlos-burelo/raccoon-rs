@@ -41,6 +41,7 @@ pub fn narrow_type(value: &RuntimeValue) -> NarrowedType {
         RuntimeValue::Enum(_) => NarrowedType::Unknown,
         RuntimeValue::PrimitiveTypeObject(_) => NarrowedType::Unknown,
         RuntimeValue::EnumObject(_) => NarrowedType::Unknown,
+        RuntimeValue::Dynamic(_) => NarrowedType::Unknown,
     }
 }
 

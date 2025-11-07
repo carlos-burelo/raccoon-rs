@@ -73,6 +73,7 @@ pub fn get_type_name(value: &RuntimeValue) -> &'static str {
         RuntimeValue::Enum(_) => "enum",
         RuntimeValue::PrimitiveTypeObject(_) => "type",
         RuntimeValue::EnumObject(_) => "enum_object",
+        RuntimeValue::Dynamic(_) => "dynamic",
     }
 }
 

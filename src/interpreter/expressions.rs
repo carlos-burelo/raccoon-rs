@@ -1042,6 +1042,9 @@ impl Expressions {
                     p.type_name
                 ))));
             }
+            RuntimeValue::Dynamic(d) => {
+                return Ok(RuntimeValue::Str(StrValue::new(d.type_name().to_string())));
+            }
         };
 
         Ok(RuntimeValue::Str(StrValue::new(type_name.to_string())))

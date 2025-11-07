@@ -1,4 +1,5 @@
 use crate::ast::{nodes::*, types::*};
+use crate::runtime::dynamic::DynamicRuntimeValue;
 use std::collections::HashMap;
 use std::fmt;
 use std::future::Future;
@@ -26,6 +27,7 @@ pub enum RuntimeValue {
     Enum(EnumValue),
     PrimitiveTypeObject(PrimitiveTypeObject),
     EnumObject(EnumObject),
+    Dynamic(DynamicRuntimeValue),
 }
 
 impl RuntimeValue {
@@ -57,6 +59,7 @@ impl RuntimeValue {
             RuntimeValue::Enum(e) => e.enum_type.clone(),
             RuntimeValue::PrimitiveTypeObject(p) => p.type_obj.clone(),
             RuntimeValue::EnumObject(e) => e.enum_type.clone(),
+            RuntimeValue::Dynamic(d) => d.get_type(),
         }
     }
 
@@ -81,6 +84,7 @@ impl RuntimeValue {
             RuntimeValue::Enum(v) => v.to_string(),
             RuntimeValue::PrimitiveTypeObject(v) => v.to_string(),
             RuntimeValue::EnumObject(v) => v.to_string(),
+            RuntimeValue::Dynamic(d) => d.to_string(),
         }
     }
 
@@ -122,6 +126,7 @@ impl RuntimeValue {
             RuntimeValue::List(_) => "list".to_string(),
             RuntimeValue::Map(_) => "map".to_string(),
             RuntimeValue::Object(_) => "object".to_string(),
+            RuntimeValue::Dynamic(d) => d.type_name().to_string(),
         }
     }
 }
@@ -419,6 +424,28 @@ impl FunctionValue {
     }
 }
 
+impl crate::runtime::dynamic::DynamicValue for FunctionValue {
+    fn get_type(&self) -> Type {
+        self.fn_type.clone()
+    }
+
+    fn to_string(&self) -> String {
+        FunctionValue::to_string(self)
+    }
+
+    fn clone_boxed(&self) -> Box<dyn crate::runtime::dynamic::DynamicValue> {
+        Box::new(self.clone())
+    }
+
+    fn type_name(&self) -> &str {
+        if self.is_async {
+            "async function"
+        } else {
+            "function"
+        }
+    }
+}
+
 pub type NativeFn = fn(Vec<RuntimeValue>) -> RuntimeValue;
 
 #[derive(Clone)]
@@ -479,6 +506,24 @@ impl fmt::Debug for NativeAsyncFunctionValue {
         f.debug_struct("NativeAsyncFunctionValue")
             .field("fn_type", &self.fn_type)
             .finish()
+    }
+}
+
+impl crate::runtime::dynamic::DynamicValue for NativeAsyncFunctionValue {
+    fn get_type(&self) -> Type {
+        self.fn_type.clone()
+    }
+
+    fn to_string(&self) -> String {
+        NativeAsyncFunctionValue::to_string(self)
+    }
+
+    fn clone_boxed(&self) -> Box<dyn crate::runtime::dynamic::DynamicValue> {
+        Box::new(self.clone())
+    }
+
+    fn type_name(&self) -> &str {
+        "native async function"
     }
 }
 
@@ -633,5 +678,25 @@ impl FutureValue {
             FutureState::Resolved(value) => format!("[Future: Resolved({})]", value.to_string()),
             FutureState::Rejected(error) => format!("[Future: Rejected({})]", error),
         }
+    }
+}
+
+impl crate::runtime::dynamic::DynamicValue for FutureValue {
+    fn get_type(&self) -> Type {
+        Type::Future(Box::new(FutureType {
+            inner_type: self.value_type.clone(),
+        }))
+    }
+
+    fn to_string(&self) -> String {
+        FutureValue::to_string(self)
+    }
+
+    fn clone_boxed(&self) -> Box<dyn crate::runtime::dynamic::DynamicValue> {
+        Box::new(self.clone())
+    }
+
+    fn type_name(&self) -> &str {
+        "future"
     }
 }
