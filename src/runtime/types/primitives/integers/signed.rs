@@ -20,7 +20,7 @@ impl TypeHandler for IntType {
         &self,
         value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
@@ -51,6 +51,83 @@ impl TypeHandler for IntType {
             "toDecimal" => Ok(RuntimeValue::Decimal(DecimalValue::new(num as f64))),
             "toFloat" => Ok(RuntimeValue::Float(FloatValue::new(num as f64))),
             "abs" => Ok(RuntimeValue::Int(IntValue::new(num.abs()))),
+            "sign" => Ok(RuntimeValue::Int(IntValue::new(
+                if num > 0 {
+                    1
+                } else if num < 0 {
+                    -1
+                } else {
+                    0
+                },
+            ))),
+            "isEven" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
+                num % 2 == 0,
+            ))),
+            "isOdd" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
+                num % 2 != 0,
+            ))),
+            "isPositive" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(num > 0))),
+            "isNegative" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(num < 0))),
+            "isZero" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(num == 0))),
+            "clamp" => {
+                if args.len() != 2 {
+                    return Err(RaccoonError::new(
+                        "clamp requires 2 arguments (min, max)".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                let min_val = match &args[0] {
+                    RuntimeValue::Int(i) => i.value,
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "clamp requires integer arguments".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
+                };
+                let max_val = match &args[1] {
+                    RuntimeValue::Int(i) => i.value,
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "clamp requires integer arguments".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
+                };
+                Ok(RuntimeValue::Int(IntValue::new(num.max(min_val).min(max_val))))
+            }
+            "pow" => {
+                if args.len() != 1 {
+                    return Err(RaccoonError::new(
+                        "pow requires 1 argument (exponent)".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                let exp = match &args[0] {
+                    RuntimeValue::Int(i) => {
+                        if i.value < 0 {
+                            return Err(RaccoonError::new(
+                                "pow exponent must be non-negative".to_string(),
+                                position,
+                                file,
+                            ));
+                        }
+                        i.value as u32
+                    }
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "pow requires integer argument".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
+                };
+                Ok(RuntimeValue::Int(IntValue::new(num.pow(exp))))
+            }
             _ => Err(RaccoonError::new(
                 format!("Method '{}' not found on int", method),
                 position,
@@ -186,6 +263,14 @@ impl TypeHandler for IntType {
                 | "toDecimal"
                 | "toFloat"
                 | "abs"
+                | "sign"
+                | "isEven"
+                | "isOdd"
+                | "isPositive"
+                | "isNegative"
+                | "isZero"
+                | "clamp"
+                | "pow"
         )
     }
 

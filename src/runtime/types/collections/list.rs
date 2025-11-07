@@ -306,6 +306,145 @@ impl TypeHandler for ListType {
                 )))
             }
 
+            "slice" => {
+                if args.is_empty() || args.len() > 2 {
+                    return Err(RaccoonError::new(
+                        "slice requires 1 or 2 arguments".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                let start = match &args[0] {
+                    RuntimeValue::Int(i) => i.value as isize,
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "slice requires integer arguments".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
+                };
+                let end = if args.len() == 2 {
+                    match &args[1] {
+                        RuntimeValue::Int(i) => Some(i.value as isize),
+                        _ => {
+                            return Err(RaccoonError::new(
+                                "slice requires integer arguments".to_string(),
+                                position,
+                                file,
+                            ));
+                        }
+                    }
+                } else {
+                    None
+                };
+
+                let len = list.elements.len() as isize;
+                let real_start = if start < 0 {
+                    (len + start).max(0) as usize
+                } else {
+                    (start as usize).min(list.elements.len())
+                };
+                let real_end = match end {
+                    Some(e) => {
+                        if e < 0 {
+                            (len + e).max(0) as usize
+                        } else {
+                            (e as usize).min(list.elements.len())
+                        }
+                    }
+                    None => list.elements.len(),
+                };
+
+                if real_start <= real_end {
+                    Ok(RuntimeValue::List(ListValue::new(
+                        list.elements[real_start..real_end].to_vec(),
+                        list.element_type.clone(),
+                    )))
+                } else {
+                    Ok(RuntimeValue::List(ListValue::new(
+                        vec![],
+                        list.element_type.clone(),
+                    )))
+                }
+            }
+
+            "join" => {
+                if args.len() != 1 {
+                    return Err(RaccoonError::new(
+                        "join requires 1 argument (separator)".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                let separator = match &args[0] {
+                    RuntimeValue::Str(s) => &s.value,
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "join requires string argument".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
+                };
+                let parts: Vec<String> = list.elements.iter().map(|v| v.to_string()).collect();
+                Ok(RuntimeValue::Str(StrValue::new(parts.join(separator))))
+            }
+
+            "isEmpty" => Ok(RuntimeValue::Bool(BoolValue::new(list.elements.is_empty()))),
+
+            "first" => {
+                if let Some(elem) = list.elements.first() {
+                    Ok(elem.clone())
+                } else {
+                    Ok(RuntimeValue::Null(NullValue::new()))
+                }
+            }
+
+            "last" => {
+                if let Some(elem) = list.elements.last() {
+                    Ok(elem.clone())
+                } else {
+                    Ok(RuntimeValue::Null(NullValue::new()))
+                }
+            }
+
+            "lastIndexOf" => {
+                if args.is_empty() {
+                    return Err(RaccoonError::new(
+                        "lastIndexOf requires 1 argument".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                for (i, elem) in list.elements.iter().enumerate().rev() {
+                    if elem.equals(&args[0]) {
+                        return Ok(RuntimeValue::Int(IntValue::new(i as i64)));
+                    }
+                }
+                Ok(RuntimeValue::Int(IntValue::new(-1)))
+            }
+
+            "unique" => {
+                let mut unique_elements = Vec::new();
+                for elem in &list.elements {
+                    let mut is_unique = true;
+                    for unique_elem in &unique_elements {
+                        if elem.equals(unique_elem) {
+                            is_unique = false;
+                            break;
+                        }
+                    }
+                    if is_unique {
+                        unique_elements.push(elem.clone());
+                    }
+                }
+                Ok(RuntimeValue::List(ListValue::new(
+                    unique_elements,
+                    list.element_type.clone(),
+                )))
+            }
+
             _ => Err(RaccoonError::new(
                 format!("Method '{}' not found on list", method),
                 position,
@@ -348,6 +487,7 @@ impl TypeHandler for ListType {
                 | "some"
                 | "every"
                 | "indexOf"
+                | "lastIndexOf"
                 | "includes"
                 | "shift"
                 | "unshift"
@@ -356,6 +496,12 @@ impl TypeHandler for ListType {
                 | "fill"
                 | "flat"
                 | "flatMap"
+                | "slice"
+                | "join"
+                | "isEmpty"
+                | "first"
+                | "last"
+                | "unique"
         )
     }
 

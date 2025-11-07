@@ -129,6 +129,110 @@ export fn join<T>(arr: T[], separator: str): str {
     return result;
 }
 
+export fn first<T>(arr: T[]): T | null {
+    if (length(arr) == 0) {
+        return null;
+    }
+    return arr[0];
+}
+
+export fn last<T>(arr: T[]): T | null {
+    let len = length(arr);
+    if (len == 0) {
+        return null;
+    }
+    return arr[len - 1];
+}
+
+export fn isEmpty<T>(arr: T[]): bool {
+    return length(arr) == 0;
+}
+
+export fn take<T>(arr: T[], n: int): T[] {
+    return slice(arr, 0, n);
+}
+
+export fn drop<T>(arr: T[], n: int): T[] {
+    return slice(arr, n, length(arr));
+}
+
+export fn chunk<T>(arr: T[], size: int): T[][] {
+    let result: T[][] = [];
+    let len = length(arr);
+
+    for (let i = 0; i < len; i = i + size) {
+        let end = i + size;
+        if (end > len) {
+            end = len;
+        }
+        push(result, slice(arr, i, end));
+    }
+
+    return result;
+}
+
+export fn flatten<T>(arr: T[][]): T[] {
+    let result: T[] = [];
+    for (let i = 0; i < length(arr); i = i + 1) {
+        let inner = arr[i];
+        for (let j = 0; j < length(inner); j = j + 1) {
+            push(result, inner[j]);
+        }
+    }
+    return result;
+}
+
+export fn unique<T>(arr: T[]): T[] {
+    let result: T[] = [];
+    for (let i = 0; i < length(arr); i = i + 1) {
+        if (!includes(result, arr[i])) {
+            push(result, arr[i]);
+        }
+    }
+    return result;
+}
+
+export fn partition<T>(arr: T[], predicate: (item: T, index: int) => bool): [T[], T[]] {
+    let truthy: T[] = [];
+    let falsy: T[] = [];
+
+    for (let i = 0; i < length(arr); i = i + 1) {
+        if (predicate(arr[i], i)) {
+            push(truthy, arr[i]);
+        } else {
+            push(falsy, arr[i]);
+        }
+    }
+
+    return [truthy, falsy];
+}
+
+export fn zip<T, U>(arr1: T[], arr2: U[]): [T, U][] {
+    let result: [T, U][] = [];
+    let minLen = length(arr1);
+    let len2 = length(arr2);
+
+    if (len2 < minLen) {
+        minLen = len2;
+    }
+
+    for (let i = 0; i < minLen; i = i + 1) {
+        push(result, [arr1[i], arr2[i]]);
+    }
+
+    return result;
+}
+
+export fn compact<T>(arr: (T | null)[]): T[] {
+    let result: T[] = [];
+    for (let i = 0; i < length(arr); i = i + 1) {
+        if (arr[i] != null) {
+            push(result, arr[i]);
+        }
+    }
+    return result;
+}
+
 export default {
     length,
     push,
@@ -146,5 +250,16 @@ export default {
     find,
     findIndex,
     includes,
-    join
+    join,
+    first,
+    last,
+    isEmpty,
+    take,
+    drop,
+    chunk,
+    flatten,
+    unique,
+    partition,
+    zip,
+    compact
 }
