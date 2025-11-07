@@ -166,11 +166,15 @@ impl StdLibLoader {
 
         // Inject native module functions as exports if they're not already present
         if let Some(path_str) = &file_path {
-            let module_name = if path_str.contains("stdlib/math.rcc") || path_str.contains("stdlib\\math.rcc") {
+            let module_name = if path_str.contains("stdlib/math.rcc")
+                || path_str.contains("stdlib\\math.rcc")
+            {
                 Some("math")
-            } else if path_str.contains("stdlib/json.rcc") || path_str.contains("stdlib\\json.rcc") {
+            } else if path_str.contains("stdlib/json.rcc") || path_str.contains("stdlib\\json.rcc")
+            {
                 Some("json")
-            } else if path_str.contains("stdlib/http.rcc") || path_str.contains("stdlib\\http.rcc") {
+            } else if path_str.contains("stdlib/http.rcc") || path_str.contains("stdlib\\http.rcc")
+            {
                 Some("http")
             } else {
                 None
@@ -182,12 +186,12 @@ impl StdLibLoader {
                     loader(&mut registrar);
 
                     // Add native functions to exports if not already present
-                    for (full_name, sig) in &registrar.functions {
+                    for (_full_name, sig) in &registrar.functions {
                         if sig.namespace.as_ref() == Some(&module.to_string()) {
                             let func_name = &sig.name;
                             if !exports.contains_key(func_name) {
                                 // Create a simple wrapper that will be called at runtime
-                                let handler = sig.handler.clone();
+                                let _handler = sig.handler.clone();
 
                                 // We need to store this handler in a way that can be called
                                 // Since we can't convert it to a function pointer, we'll use
@@ -257,9 +261,16 @@ impl StdLibLoader {
         }
     }
 
-    fn setup_native_functions_in_interpreter(&self, interp: &mut Interpreter, _file_path: &Option<String>) {
+    fn setup_native_functions_in_interpreter(
+        &self,
+        interp: &mut Interpreter,
+        _file_path: &Option<String>,
+    ) {
         // Register wrapper functions that stdlib modules can use
-        crate::runtime::stdlib_wrappers::register_stdlib_wrappers(&mut interp.environment, interp.registrar.clone());
+        crate::runtime::stdlib_wrappers::register_stdlib_wrappers(
+            &mut interp.environment,
+            interp.registrar.clone(),
+        );
     }
 
     pub fn available_modules(&self) -> Vec<String> {

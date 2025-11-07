@@ -1,10 +1,9 @@
+use crate::ast::types::{FunctionType, PrimitiveType, Type};
+use crate::runtime::Registrar;
 /// Wrapper functions that expose native module functions to stdlib .rcc files
 /// These are registered with simple names that can be called from within the stdlib modules
-
-use crate::runtime::{Environment, RuntimeValue, NativeFunctionValue};
-use crate::ast::types::{Type, FunctionType, PrimitiveType};
+use crate::runtime::{Environment, NativeFunctionValue, RuntimeValue};
 use std::sync::{Arc, Mutex};
-use crate::runtime::Registrar;
 
 pub fn register_stdlib_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>>) {
     // Math wrappers
@@ -15,7 +14,7 @@ pub fn register_stdlib_wrappers(env: &mut Environment, registrar: Arc<Mutex<Regi
     register_http_wrappers(env, registrar);
 }
 
-fn register_math_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>>) {
+fn register_math_wrappers(env: &mut Environment, _registrar: Arc<Mutex<Registrar>>) {
     // sqrt wrapper
     let sqrt_fn = NativeFunctionValue::new(
         |args| {
@@ -29,16 +28,25 @@ fn register_math_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>
                 RuntimeValue::Int(i) => {
                     RuntimeValue::Float(crate::runtime::FloatValue::new((i.value as f64).sqrt()))
                 }
-                _ => RuntimeValue::Null(crate::runtime::NullValue::new())
+                _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
             }
         },
         Type::Function(Box::new(FunctionType {
-            params: vec![Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float"))],
-            return_type: Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float")),
+            params: vec![Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            ))],
+            return_type: Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            )),
             is_variadic: false,
-        }))
+        })),
     );
-    let _ = env.declare("_native_sqrt".to_string(), RuntimeValue::NativeFunction(sqrt_fn));
+    let _ = env.declare(
+        "_native_sqrt".to_string(),
+        RuntimeValue::NativeFunction(sqrt_fn),
+    );
 
     // pow wrapper
     let pow_fn = NativeFunctionValue::new(
@@ -49,25 +57,37 @@ fn register_math_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>
             let base = match &args[0] {
                 RuntimeValue::Float(f) => f.value,
                 RuntimeValue::Int(i) => i.value as f64,
-                _ => return RuntimeValue::Null(crate::runtime::NullValue::new())
+                _ => return RuntimeValue::Null(crate::runtime::NullValue::new()),
             };
             let exp = match &args[1] {
                 RuntimeValue::Float(f) => f.value,
                 RuntimeValue::Int(i) => i.value as f64,
-                _ => return RuntimeValue::Null(crate::runtime::NullValue::new())
+                _ => return RuntimeValue::Null(crate::runtime::NullValue::new()),
             };
             RuntimeValue::Float(crate::runtime::FloatValue::new(base.powf(exp)))
         },
         Type::Function(Box::new(FunctionType {
             params: vec![
-                Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float")),
-                Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float")),
+                Type::Primitive(PrimitiveType::new(
+                    crate::ast::types::TypeKind::Float,
+                    "float",
+                )),
+                Type::Primitive(PrimitiveType::new(
+                    crate::ast::types::TypeKind::Float,
+                    "float",
+                )),
             ],
-            return_type: Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float")),
+            return_type: Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            )),
             is_variadic: false,
-        }))
+        })),
     );
-    let _ = env.declare("_native_pow".to_string(), RuntimeValue::NativeFunction(pow_fn));
+    let _ = env.declare(
+        "_native_pow".to_string(),
+        RuntimeValue::NativeFunction(pow_fn),
+    );
 
     // sin, cos, tan wrappers
     let sin_fn = NativeFunctionValue::new(
@@ -76,18 +96,31 @@ fn register_math_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>
                 return RuntimeValue::Null(crate::runtime::NullValue::new());
             }
             match &args[0] {
-                RuntimeValue::Float(f) => RuntimeValue::Float(crate::runtime::FloatValue::new(f.value.sin())),
-                RuntimeValue::Int(i) => RuntimeValue::Float(crate::runtime::FloatValue::new((i.value as f64).sin())),
-                _ => RuntimeValue::Null(crate::runtime::NullValue::new())
+                RuntimeValue::Float(f) => {
+                    RuntimeValue::Float(crate::runtime::FloatValue::new(f.value.sin()))
+                }
+                RuntimeValue::Int(i) => {
+                    RuntimeValue::Float(crate::runtime::FloatValue::new((i.value as f64).sin()))
+                }
+                _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
             }
         },
         Type::Function(Box::new(FunctionType {
-            params: vec![Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float"))],
-            return_type: Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float")),
+            params: vec![Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            ))],
+            return_type: Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            )),
             is_variadic: false,
-        }))
+        })),
     );
-    let _ = env.declare("_native_sin".to_string(), RuntimeValue::NativeFunction(sin_fn));
+    let _ = env.declare(
+        "_native_sin".to_string(),
+        RuntimeValue::NativeFunction(sin_fn),
+    );
 
     let cos_fn = NativeFunctionValue::new(
         |args| {
@@ -95,18 +128,31 @@ fn register_math_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>
                 return RuntimeValue::Null(crate::runtime::NullValue::new());
             }
             match &args[0] {
-                RuntimeValue::Float(f) => RuntimeValue::Float(crate::runtime::FloatValue::new(f.value.cos())),
-                RuntimeValue::Int(i) => RuntimeValue::Float(crate::runtime::FloatValue::new((i.value as f64).cos())),
-                _ => RuntimeValue::Null(crate::runtime::NullValue::new())
+                RuntimeValue::Float(f) => {
+                    RuntimeValue::Float(crate::runtime::FloatValue::new(f.value.cos()))
+                }
+                RuntimeValue::Int(i) => {
+                    RuntimeValue::Float(crate::runtime::FloatValue::new((i.value as f64).cos()))
+                }
+                _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
             }
         },
         Type::Function(Box::new(FunctionType {
-            params: vec![Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float"))],
-            return_type: Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float")),
+            params: vec![Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            ))],
+            return_type: Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            )),
             is_variadic: false,
-        }))
+        })),
     );
-    let _ = env.declare("_native_cos".to_string(), RuntimeValue::NativeFunction(cos_fn));
+    let _ = env.declare(
+        "_native_cos".to_string(),
+        RuntimeValue::NativeFunction(cos_fn),
+    );
 
     let tan_fn = NativeFunctionValue::new(
         |args| {
@@ -114,18 +160,31 @@ fn register_math_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>
                 return RuntimeValue::Null(crate::runtime::NullValue::new());
             }
             match &args[0] {
-                RuntimeValue::Float(f) => RuntimeValue::Float(crate::runtime::FloatValue::new(f.value.tan())),
-                RuntimeValue::Int(i) => RuntimeValue::Float(crate::runtime::FloatValue::new((i.value as f64).tan())),
-                _ => RuntimeValue::Null(crate::runtime::NullValue::new())
+                RuntimeValue::Float(f) => {
+                    RuntimeValue::Float(crate::runtime::FloatValue::new(f.value.tan()))
+                }
+                RuntimeValue::Int(i) => {
+                    RuntimeValue::Float(crate::runtime::FloatValue::new((i.value as f64).tan()))
+                }
+                _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
             }
         },
         Type::Function(Box::new(FunctionType {
-            params: vec![Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float"))],
-            return_type: Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float")),
+            params: vec![Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            ))],
+            return_type: Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            )),
             is_variadic: false,
-        }))
+        })),
     );
-    let _ = env.declare("_native_tan".to_string(), RuntimeValue::NativeFunction(tan_fn));
+    let _ = env.declare(
+        "_native_tan".to_string(),
+        RuntimeValue::NativeFunction(tan_fn),
+    );
 
     let log_fn = NativeFunctionValue::new(
         |args| {
@@ -135,13 +194,13 @@ fn register_math_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>
             let x = match &args[0] {
                 RuntimeValue::Float(f) => f.value,
                 RuntimeValue::Int(i) => i.value as f64,
-                _ => return RuntimeValue::Null(crate::runtime::NullValue::new())
+                _ => return RuntimeValue::Null(crate::runtime::NullValue::new()),
             };
             let base = if args.len() > 1 {
                 match &args[1] {
                     RuntimeValue::Float(f) => f.value,
                     RuntimeValue::Int(i) => i.value as f64,
-                    _ => std::f64::consts::E
+                    _ => std::f64::consts::E,
                 }
             } else {
                 std::f64::consts::E
@@ -149,12 +208,21 @@ fn register_math_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>
             RuntimeValue::Float(crate::runtime::FloatValue::new(x.log(base)))
         },
         Type::Function(Box::new(FunctionType {
-            params: vec![Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float"))],
-            return_type: Type::Primitive(PrimitiveType::new(crate::ast::types::TypeKind::Float, "float")),
+            params: vec![Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            ))],
+            return_type: Type::Primitive(PrimitiveType::new(
+                crate::ast::types::TypeKind::Float,
+                "float",
+            )),
             is_variadic: false,
-        }))
+        })),
     );
-    let _ = env.declare("_native_log".to_string(), RuntimeValue::NativeFunction(log_fn));
+    let _ = env.declare(
+        "_native_log".to_string(),
+        RuntimeValue::NativeFunction(log_fn),
+    );
 }
 
 fn register_json_wrappers(_env: &mut Environment, _registrar: Arc<Mutex<Registrar>>) {

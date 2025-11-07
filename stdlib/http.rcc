@@ -33,17 +33,8 @@ export fn fetch(url: str, options: any): any {
     return null;
 }
 
-export fn get(url: str): any {
-    // Placeholder - needs native implementation
-    return null;
-}
-
-export fn post(url: str, body: str): any {
-    // Placeholder - needs native implementation
-    return null;
-}
 
 // Re-export classes and functions
-export { Http, HttpResponse };
+export { Http, HttpResponse, fetch };
 
 export default Http;
