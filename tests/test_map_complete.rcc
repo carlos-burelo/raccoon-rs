@@ -91,8 +91,8 @@ print("[ 8 ] Map toStr() method:");
 let m8: Map<str, int> = new Map<str, int>();
 m8.set("a", 1);
 m8.set("b", 2);
-let str = m8.toStr();
-print("  Map as string: " + str);
+let str1 = m8.toStr();
+print("  Map as string: " + str1);
 print("  ✓ Test 8 passed\n");
 
 

@@ -1,5 +1,5 @@
 use crate::ast::types::{PrimitiveType, Type};
-use crate::runtime::type_object::{TypeKind, PrimitiveKind};
+use crate::runtime::type_object::TypeKind;
 use crate::runtime::type_object_builder::TypeObjectBuilder;
 use crate::runtime::values::*;
 use crate::runtime::{FutureState, FutureValue};
@@ -144,10 +144,7 @@ impl TypeMethodBuilder {
                     name: "Object".to_string(),
                 },
             ),
-            _ => (
-                PrimitiveType::any(),
-                TypeKind::Unknown,
-            ),
+            _ => (PrimitiveType::any(), TypeKind::Unknown),
         };
 
         let type_obj = TypeObjectBuilder::new(type_def, type_kind)

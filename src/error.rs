@@ -1,5 +1,5 @@
-use crate::tokens::{Position, Range};
 use crate::runtime::CallStack;
+use crate::tokens::{Position, Range};
 use colored::*;
 use std::fmt;
 use std::fs;
@@ -128,9 +128,7 @@ impl ErrorKind {
     pub fn is_recoverable(&self) -> bool {
         !matches!(
             self,
-            Self::StackOverflowError
-                | Self::OutOfMemoryError
-                | Self::InternalError
+            Self::StackOverflowError | Self::OutOfMemoryError | Self::InternalError
         )
     }
 
@@ -138,10 +136,7 @@ impl ErrorKind {
     pub fn is_compile_time(&self) -> bool {
         matches!(
             self,
-            Self::SyntaxError
-                | Self::SemanticError
-                | Self::TypeError
-                | Self::ImportError
+            Self::SyntaxError | Self::SemanticError | Self::TypeError | Self::ImportError
         )
     }
 
@@ -200,6 +195,7 @@ impl RaccoonError {
         call_stack: CallStack,
     ) -> Self {
         Self {
+            kind: ErrorKind::RuntimeError,
             message: message.into(),
             position,
             range: None,
@@ -499,12 +495,7 @@ impl RaccoonError {
                             let start_col = range.start.1.saturating_sub(1);
                             let end_col = range.end.1.saturating_sub(1);
                             let length = end_col.saturating_sub(start_col).max(1);
-                            output.push_str(
-                                &"^".repeat(length)
-                                    .bright_red()
-                                    .bold()
-                                    .to_string(),
-                            );
+                            output.push_str(&"^".repeat(length).bright_red().bold().to_string());
                         } else {
                             // Multi-line range or no range, show single caret
                             output.push_str(&"^".bright_red().bold().to_string());

@@ -8,7 +8,11 @@
       "Bash(cargo clean:*)",
       "Bash(git log:*)",
       "Bash(cargo check:*)",
-      "Bash(cargo build:*)"
+      "Bash(cargo build:*)",
+      "Bash(./target/debug/raccoon.exe run:*)",
+      "Bash(git checkout:*)",
+      "Bash(cargo run:*)",
+      "Bash(cd:*)"
     ],
     "deny": [],
     "ask": []
