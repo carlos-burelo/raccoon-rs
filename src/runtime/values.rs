@@ -108,11 +108,13 @@ impl RuntimeValue {
             RuntimeValue::Class(c) => c.class_name.clone(),
             RuntimeValue::ClassInstance(c) => c.class_name.clone(),
             RuntimeValue::Function(f) => {
-                if f.is_async {
-                    "[async fn]".to_string()
-                } else {
-                    "[fn]".to_string()
-                }
+                f.name.clone().unwrap_or_else(|| {
+                    if f.is_async {
+                        "[async fn]".to_string()
+                    } else {
+                        "[fn]".to_string()
+                    }
+                })
             }
             RuntimeValue::NativeFunction(_) => "[Native fn]".to_string(),
             RuntimeValue::NativeAsyncFunction(_) => "[Native async fn]".to_string(),
@@ -397,6 +399,7 @@ impl ClassInstance {
 
 #[derive(Debug, Clone)]
 pub struct FunctionValue {
+    pub name: Option<String>,
     pub parameters: Vec<FnParam>,
     pub body: Vec<Stmt>,
     pub is_async: bool,
@@ -407,6 +410,7 @@ pub struct FunctionValue {
 impl FunctionValue {
     pub fn new(parameters: Vec<FnParam>, body: Vec<Stmt>, is_async: bool, fn_type: Type) -> Self {
         Self {
+            name: None,
             parameters,
             body,
             is_async,
@@ -415,16 +419,32 @@ impl FunctionValue {
         }
     }
 
+    pub fn with_name(mut self, name: String) -> Self {
+        self.name = Some(name);
+        self
+    }
+
     pub fn with_decorators(mut self, decorators: Vec<DecoratorDecl>) -> Self {
         self.decorators = decorators;
         self
     }
 
     pub fn to_string(&self) -> String {
-        if self.is_async {
-            "[async fn]".to_string()
-        } else {
-            "[Function]".to_string()
+        match &self.name {
+            Some(name) => {
+                if self.is_async {
+                    format!("[async fn {}]", name)
+                } else {
+                    format!("[Function {}]", name)
+                }
+            }
+            None => {
+                if self.is_async {
+                    "[async fn]".to_string()
+                } else {
+                    "[Function]".to_string()
+                }
+            }
         }
     }
 }

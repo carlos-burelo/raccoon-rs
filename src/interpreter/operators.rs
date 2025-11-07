@@ -3,7 +3,7 @@
 /// This module now serves as a thin wrapper for backward compatibility
 
 use crate::error::RaccoonError;
-use crate::runtime::{BoolValue, FloatValue, IntValue, ListValue, RuntimeValue, StrValue};
+use crate::runtime::{BoolValue, CallStack, FloatValue, IntValue, ListValue, RuntimeValue, StrValue};
 use crate::runtime::types::operations;
 use crate::tokens::{BinaryOperator, Position, UnaryOperator};
 use crate::ast::types::PrimitiveType;
@@ -29,6 +29,7 @@ pub async fn apply_binary_op(
     operator: BinaryOperator,
     position: Position,
     file: &Option<String>,
+    call_stack: &CallStack,
 ) -> Result<RuntimeValue, RaccoonError> {
     // Operations that are delegated to the centralized module
     match operator {
@@ -45,7 +46,7 @@ pub async fn apply_binary_op(
         | BinaryOperator::LeftShift
         | BinaryOperator::RightShift
         | BinaryOperator::UnsignedRightShift => {
-            operations::apply_binary_operation(left, right, operator, position, file).await
+            operations::apply_binary_operation(left, right, operator, position, file, call_stack).await
         }
 
         // Operations that need special handling in the interpreter
@@ -60,10 +61,11 @@ pub async fn apply_binary_op(
                     PrimitiveType::int(),
                 )))
             }
-            _ => Err(RaccoonError::new(
+            _ => Err(RaccoonError::with_call_stack(
                 "Range operator requires integer operands".to_string(),
                 position,
                 file.clone(),
+                call_stack.clone(),
             )),
         },
 
@@ -92,6 +94,7 @@ pub fn apply_binary_operation<F>(
     operator: BinaryOperator,
     position: Position,
     file: &Option<String>,
+    call_stack: &CallStack,
     _is_truthy_fn: F,
 ) -> Result<RuntimeValue, RaccoonError>
 where
@@ -172,40 +175,44 @@ where
         BinaryOperator::Divide => match (left, right) {
             (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
                 if r.value == 0 {
-                    return Err(RaccoonError::new(
+                    return Err(RaccoonError::with_call_stack(
                         "Division by zero".to_string(),
                         position,
                         file.clone(),
+                        call_stack.clone(),
                     ));
                 }
                 Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 / r.value as f64)))
             }
             (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
                 if r.value == 0.0 {
-                    return Err(RaccoonError::new(
+                    return Err(RaccoonError::with_call_stack(
                         "Division by zero".to_string(),
                         position,
                         file.clone(),
+                        call_stack.clone(),
                     ));
                 }
                 Ok(RuntimeValue::Float(FloatValue::new(l.value / r.value)))
             }
             (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
                 if r.value == 0.0 {
-                    return Err(RaccoonError::new(
+                    return Err(RaccoonError::with_call_stack(
                         "Division by zero".to_string(),
                         position,
                         file.clone(),
+                        call_stack.clone(),
                     ));
                 }
                 Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 / r.value)))
             }
             (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
                 if r.value == 0 {
-                    return Err(RaccoonError::new(
+                    return Err(RaccoonError::with_call_stack(
                         "Division by zero".to_string(),
                         position,
                         file.clone(),
+                        call_stack.clone(),
                     ));
                 }
                 Ok(RuntimeValue::Float(FloatValue::new(l.value / r.value as f64)))
@@ -493,10 +500,11 @@ where
                     PrimitiveType::int(),
                 )))
             }
-            _ => Err(RaccoonError::new(
+            _ => Err(RaccoonError::with_call_stack(
                 "Range operator requires integer operands".to_string(),
                 position,
                 file.clone(),
+                call_stack.clone(),
             )),
         },
 

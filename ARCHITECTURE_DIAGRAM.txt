@@ -1,0 +1,351 @@
+================================================================================
+                    RACCOON INTERPRETER ARCHITECTURE
+================================================================================
+
+INPUT FLOW (Compilation Pipeline)
+────────────────────────────────────────────────────────────────────────────
+
+  Source Code (.rcc file)
+        │
+        ▼
+  ┌─────────────┐
+  │ LEXER       │  (src/lexer.rs)
+  │ Tokenize    │  Converts text → tokens with Position(line, col)
+  └─────────────┘
+        │
+        ▼
+    Tokens: Vec<Token>
+    - Each token has position and file info
+        │
+        ▼
+  ┌─────────────┐
+  │ PARSER      │  (src/parser/)
+  │ Parse       │  Converts tokens → AST
+  └─────────────┘
+        │
+        ▼
+    AST: Program
+    - Every Stmt, Expr has .position
+    - FnDecl contains function name
+    - CallExpr has call position
+        │
+        ▼
+  ┌─────────────┐
+  │ ANALYZER    │  (src/analyzer/)
+  │ Semantic    │  Type checking, symbol resolution
+  │ Analysis    │  (Not fully integrated)
+  └─────────────┘
+        │
+        ▼
+    Enhanced AST (with type info)
+        │
+        ▼
+  ┌──────────────────────────────────────┐
+  │ INTERPRETER (EXECUTION)              │
+  │ (src/interpreter/mod.rs)             │
+  │                                      │
+  │  struct Interpreter {                │
+  │    file: Option<String>              │
+  │    environment: Environment          │
+  │    recursion_depth: usize            │
+  │    call_stack: CallStack  ◄─── NEW   │
+  │    ...                               │
+  │  }                                   │
+  └──────────────────────────────────────┘
+
+
+EXECUTION FLOW (Tree-Walking Interpreter)
+────────────────────────────────────────────────────────────────────────────
+
+  interpret(&program)
+        │
+        ▼
+  execute_stmt_internal(&stmt)  ─────────┐
+        │                                 │
+        ├─ VarDecl ──► declarations.rs    │
+        ├─ FnDecl  ──► declarations.rs    │  STATEMENT
+        ├─ Block   ──► control_flow.rs    │  EXECUTION
+        ├─ IfStmt  ──► control_flow.rs    │
+        ├─ ForStmt ──► control_flow.rs    │
+        ├─ ExprStmt◄──────┐               │
+        └─────────────────┤───────────────┘
+                          │
+                          ▼
+                  evaluate_expr(&expr)  ────────┐
+                          │                     │
+                   ┌──────┴──────┬───────────┐   │
+                   │             │           │   │ EXPRESSION
+                   ▼             ▼           ▼   │ EVALUATION
+               Binary      Identifier    Call ◄──┤
+              Operations     Lookup    (Function)│
+                                                 │
+                                    ◄────────────┘
+                                    │
+                        ┌───────────┴───────────┐
+                        │                       │
+                        ▼                       ▼
+                  evaluate_call_expr()  [expressions.rs]
+                        │
+                        ├─ Check recursion_depth < 500  (line 399)
+                        │
+                        ├─ Evaluate callee ──► Get RuntimeValue::Function
+                        │
+                        ├─ Evaluate arguments
+                        │
+                        ├─ Push new scope: environment.push_scope()
+                        │
+                        ├─ Bind parameters
+                        │
+                        ├─ INCREMENT recursion_depth += 1  (line 527)
+                        │                 ▲
+                        │                 │ ◄─── PUSH CALL STACK HERE (NEW)
+                        │
+                        ├─ EXECUTE FUNCTION BODY:
+                        │    for stmt in func.body:
+                        │        execute_stmt_internal(stmt) ◄─ Recursive
+                        │
+                        ├─ DECREMENT recursion_depth -= 1  (line 561)
+                        │                 │
+                        │                 └──► POP CALL STACK HERE (NEW)
+                        │
+                        ├─ Pop scope: environment.pop_scope()
+                        │
+                        └─ Return Ok(value) or Err(RaccoonError)
+
+
+ERROR HANDLING & STACK TRACES
+────────────────────────────────────────────────────────────────────────────
+
+  CURRENT ERROR FLOW:
+  
+    ┌─────────────────────────────────────┐
+    │ Some operation fails (e.g.)         │
+    │ undefined variable, type mismatch   │
+    └─────────────────────────────────────┘
+                    │
+                    ▼
+    ┌─────────────────────────────────────┐
+    │ Create RaccoonError {               │
+    │   message: "...",                   │
+    │   position: (line, col),            │
+    │   file: Some("path.rcc"),           │
+    │   range: Some((start, end))         │
+    │ }                                   │
+    └─────────────────────────────────────┘
+                    │
+                    ▼
+    ┌─────────────────────────────────────┐
+    │ Error propagates up call stack      │
+    │ No context about HOW we got here    │ ◄─── PROBLEM
+    └─────────────────────────────────────┘
+                    │
+                    ▼
+    ┌─────────────────────────────────────┐
+    │ format_with_context()               │
+    │ Shows error location + 2 lines      │
+    └─────────────────────────────────────┘
+                    │
+                    ▼
+    ┌─────────────────────────────────────┐
+    │ Display error to user               │
+    └─────────────────────────────────────┘
+
+
+  NEW ERROR FLOW WITH STACK TRACES:
+  
+    [Same as above until error creation...]
+                    │
+                    ▼
+    ┌─────────────────────────────────────┐
+    │ Create RaccoonError {               │
+    │   message: "...",                   │
+    │   position: (line, col),            │
+    │   file: Some("path.rcc"),           │
+    │   call_stack: Some(vec![            │◄─── NEW FIELD
+    │     StackFrame {                    │
+    │       function_name: "foo",         │
+    │       file: Some("path.rcc"),       │
+    │       call_position: (15, 5),       │
+    │     },                              │
+    │     StackFrame {                    │
+    │       function_name: "bar",         │
+    │       file: Some("path.rcc"),       │
+    │       call_position: (20, 10),      │
+    │     },                              │
+    │   ])                                │
+    │ }                                   │
+    └─────────────────────────────────────┘
+                    │
+                    ▼
+    ┌─────────────────────────────────────┐
+    │ format_with_stack_trace()           │◄─── NEW METHOD
+    │ Shows:                              │
+    │ 1. Error + context                  │
+    │ 2. Call stack (reversed order)      │
+    │    "at foo (path.rcc:15)"           │
+    │    "at bar (path.rcc:20)"           │
+    └─────────────────────────────────────┘
+                    │
+                    ▼
+    ┌─────────────────────────────────────┐
+    │ Display error to user               │
+    │ NOW WITH FULL CONTEXT!              │
+    └─────────────────────────────────────┘
+
+
+RUNTIME STATE DURING EXECUTION
+────────────────────────────────────────────────────────────────────────────
+
+  At function call:
+
+    INTERPRETER STATE:
+    ┌─────────────────────────────────────┐
+    │ recursion_depth: 2                  │
+    │ max_recursion_depth: 500            │
+    │ environment {                       │
+    │   scopes: [                         │
+    │     { /* global scope */ },         │
+    │     { /* foo's scope */ },          │
+    │     { /* bar's scope */ },  ◄── current
+    │   ]                                 │
+    │ }                                   │
+    │ call_stack {                        │◄─── NEW
+    │   frames: [                         │
+    │     StackFrame {                    │
+    │       function_name: "foo",         │
+    │       call_position: (10, 5),       │
+    │     },                              │
+    │     StackFrame {                    │
+    │       function_name: "bar",         │
+    │       call_position: (20, 10),      │
+    │     },                              │
+    │   ]                                 │
+    │ }                                   │
+    └─────────────────────────────────────┘
+
+
+DATA STRUCTURES
+────────────────────────────────────────────────────────────────────────────
+
+  BEFORE (Current):
+
+    src/error.rs:
+    ┌──────────────────────────────────┐
+    │ struct RaccoonError {            │
+    │   message: String,               │
+    │   position: Position,            │
+    │   range: Option<Range>,          │
+    │   file: Option<String>,          │
+    │ }                                │
+    └──────────────────────────────────┘
+
+    src/interpreter/mod.rs:
+    ┌──────────────────────────────────┐
+    │ struct Interpreter {             │
+    │   file: Option<String>,          │
+    │   environment: Environment,      │
+    │   recursion_depth: usize,        │
+    │   ...                            │
+    │ }                                │
+    └──────────────────────────────────┘
+
+
+  AFTER (With Stack Traces):
+
+    src/runtime/call_stack.rs (NEW):
+    ┌──────────────────────────────────┐
+    │ struct StackFrame {              │
+    │   function_name: String,         │
+    │   file: Option<String>,          │
+    │   call_position: Position,       │
+    │ }                                │
+    │                                  │
+    │ struct CallStack {               │
+    │   frames: Vec<StackFrame>,       │
+    │ }                                │
+    └──────────────────────────────────┘
+
+    src/error.rs (updated):
+    ┌──────────────────────────────────┐
+    │ struct RaccoonError {            │
+    │   message: String,               │
+    │   position: Position,            │
+    │   range: Option<Range>,          │
+    │   file: Option<String>,          │
+    │   call_stack: Option<Vec<..>>◄─ NEW
+    │ }                                │
+    └──────────────────────────────────┘
+
+    src/interpreter/mod.rs (updated):
+    ┌──────────────────────────────────┐
+    │ struct Interpreter {             │
+    │   file: Option<String>,          │
+    │   environment: Environment,      │
+    │   recursion_depth: usize,        │
+    │   call_stack: CallStack,    ◄─ NEW
+    │   ...                            │
+    │ }                                │
+    └──────────────────────────────────┘
+
+
+KEY FILES & THEIR ROLES
+────────────────────────────────────────────────────────────────────────────
+
+  src/main.rs
+  ├─ Entry point
+  └─ Orchestrates: Lexer → Parser → Interpreter
+
+  src/lexer.rs
+  ├─ Tokenization
+  └─ Each token gets Position(line, col)
+
+  src/parser/
+  ├─ AST construction
+  └─ Every node has .position field
+
+  src/analyzer/
+  ├─ Semantic analysis (incomplete)
+  └─ Type checking & symbol resolution
+
+  src/interpreter/
+  ├─ mod.rs          - Main interpreter, recursion tracking
+  ├─ expressions.rs  - Expression evaluation, FUNCTION CALLS HERE
+  ├─ statements.rs   - Statement execution
+  ├─ declarations.rs - Variable/function/class declarations
+  ├─ helpers.rs      - Helper functions for execution
+  └─ operators.rs    - Binary/unary operations
+
+  src/runtime/
+  ├─ mod.rs             - Runtime exports
+  ├─ environment.rs     - Variable scoping
+  ├─ values.rs          - RuntimeValue types (Function, etc.)
+  ├─ control_flow.rs    - Return/Break/Continue values
+  ├─ call_stack.rs ◄─── NEW FILE (to be created)
+  └─ builtins.rs        - Built-in functions
+
+  src/error.rs
+  ├─ RaccoonError definition
+  ├─ Error formatting & display
+  └─ format_with_context() method
+
+
+CALL STACK LIFECYCLE
+────────────────────────────────────────────────────────────────────────────
+
+  Time    | Event                        | Stack State
+  ────────┼──────────────────────────────┼─────────────────────
+  t0      | main() called                | []
+  t1      | execute function body        | []
+  t2      | call foo()                   | [foo]
+  t3      | inside foo, call bar()       | [foo, bar]
+  t4      | inside bar, ERROR occurs     | [foo, bar] ◄─ Capture!
+  t5      | foo returns                  | [foo]
+  t6      | main ends                    | []
+  ────────┴──────────────────────────────┴─────────────────────
+
+  When error occurs at t4:
+  - Call stack = [foo, bar]
+  - Error message shows: "at bar" → "at foo"
+  - Shows where each function was called from
+
+================================================================================

@@ -17,7 +17,7 @@ pub mod type_narrowing;
 pub mod conversion;
 
 use crate::error::RaccoonError;
-use crate::runtime::RuntimeValue;
+use crate::runtime::{CallStack, RuntimeValue};
 use crate::tokens::{BinaryOperator, Position};
 
 /// Applies a binary operation to two runtime values
@@ -29,13 +29,14 @@ pub async fn apply_binary_operation(
     operator: BinaryOperator,
     position: Position,
     file: &Option<String>,
+    call_stack: &CallStack,
 ) -> Result<RuntimeValue, RaccoonError> {
     match operator {
         // Arithmetic operations
         BinaryOperator::Add => arithmetic::add(left, right, position, file),
         BinaryOperator::Subtract => arithmetic::subtract(left, right, position, file),
         BinaryOperator::Multiply => arithmetic::multiply(left, right, position, file),
-        BinaryOperator::Divide => arithmetic::divide(left, right, position, file),
+        BinaryOperator::Divide => arithmetic::divide(left, right, position, file, call_stack),
         BinaryOperator::Modulo => arithmetic::modulo(left, right, position, file),
         BinaryOperator::Exponent => arithmetic::exponent(left, right, position, file),
 

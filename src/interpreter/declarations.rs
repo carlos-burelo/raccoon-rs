@@ -82,6 +82,7 @@ impl Declarations {
                 decl.is_async,
                 fn_type.clone(),
             )
+            .with_name(decl.name.clone())
             .with_decorators(decl.decorators.clone()),
         );
 

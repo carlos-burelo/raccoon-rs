@@ -1,4 +1,5 @@
 use crate::tokens::{Position, Range};
+use crate::runtime::CallStack;
 use colored::*;
 use std::fmt;
 use std::fs;
@@ -9,6 +10,7 @@ pub struct RaccoonError {
     pub position: Position,
     pub range: Option<Range>,
     pub file: Option<String>,
+    pub call_stack: Option<CallStack>,
 }
 
 impl RaccoonError {
@@ -22,6 +24,22 @@ impl RaccoonError {
             position,
             range: None,
             file: file.map(|f| f.into()),
+            call_stack: None,
+        }
+    }
+
+    pub fn with_call_stack(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+        call_stack: CallStack,
+    ) -> Self {
+        Self {
+            message: message.into(),
+            position,
+            range: None,
+            file: file.map(|f| f.into()),
+            call_stack: Some(call_stack),
         }
     }
 
@@ -35,6 +53,7 @@ impl RaccoonError {
             position: range.start,
             range: Some(range),
             file: file.map(|f| f.into()),
+            call_stack: None,
         }
     }
 
@@ -141,6 +160,13 @@ impl RaccoonError {
                     output.push_str(&line_content.bright_black().to_string());
                     output.push_str("\n");
                 }
+            }
+        }
+
+        // Add stack trace if available
+        if let Some(ref stack) = self.call_stack {
+            if stack.depth() > 0 {
+                output.push_str(&stack.format_stack_trace());
             }
         }
 

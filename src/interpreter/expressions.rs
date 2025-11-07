@@ -95,6 +95,7 @@ impl Expressions {
             binary.operator,
             binary.position,
             &interpreter.file,
+            &interpreter.call_stack,
             |v| interpreter.is_truthy(v),
         )
     }
@@ -130,6 +131,7 @@ impl Expressions {
                         BinaryOperator::Add,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -140,6 +142,7 @@ impl Expressions {
                         BinaryOperator::Subtract,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -150,6 +153,7 @@ impl Expressions {
                         BinaryOperator::Multiply,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -160,6 +164,7 @@ impl Expressions {
                         BinaryOperator::Divide,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -170,6 +175,7 @@ impl Expressions {
                         BinaryOperator::Modulo,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -180,6 +186,7 @@ impl Expressions {
                         BinaryOperator::BitwiseAnd,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -190,6 +197,7 @@ impl Expressions {
                         BinaryOperator::BitwiseOr,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -200,6 +208,7 @@ impl Expressions {
                         BinaryOperator::BitwiseXor,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -210,6 +219,7 @@ impl Expressions {
                         BinaryOperator::LeftShift,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -220,6 +230,7 @@ impl Expressions {
                         BinaryOperator::RightShift,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -230,6 +241,7 @@ impl Expressions {
                         BinaryOperator::UnsignedRightShift,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -240,6 +252,7 @@ impl Expressions {
                         BinaryOperator::Exponent,
                         assign.position,
                         &interpreter.file,
+                        &interpreter.call_stack,
                     )
                     .await?
                 }
@@ -397,13 +410,14 @@ impl Expressions {
         call: &CallExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
         if interpreter.recursion_depth >= interpreter.max_recursion_depth {
-            return Err(RaccoonError::new(
+            return Err(RaccoonError::with_call_stack(
                 format!(
                     "Maximum recursion depth exceeded ({})",
                     interpreter.max_recursion_depth
                 ),
                 call.position,
                 interpreter.file.clone(),
+                interpreter.call_stack.clone(),
             ));
         }
 
@@ -524,6 +538,14 @@ impl Expressions {
                 let is_async = func.is_async;
                 let fn_type = func.fn_type.clone();
 
+                // Push stack frame for tracking
+                let function_name = func.name.clone().unwrap_or_else(|| "<anonymous>".to_string());
+                let stack_frame = crate::runtime::StackFrame::new(
+                    function_name,
+                    call.position,
+                    interpreter.file.clone(),
+                );
+                interpreter.call_stack.push(stack_frame);
                 interpreter.recursion_depth += 1;
 
                 let mut result = RuntimeValue::Null(NullValue::new());
@@ -531,6 +553,7 @@ impl Expressions {
                     match interpreter.execute_stmt_internal(stmt).await? {
                         InterpreterResult::Value(v) => result = v,
                         InterpreterResult::Return(v) => {
+                            interpreter.call_stack.pop();
                             interpreter.recursion_depth -= 1;
                             interpreter.environment.pop_scope();
 
@@ -547,17 +570,21 @@ impl Expressions {
                             return Ok(v);
                         }
                         _ => {
+                            let stack = interpreter.call_stack.clone();
+                            interpreter.call_stack.pop();
                             interpreter.recursion_depth -= 1;
                             interpreter.environment.pop_scope();
-                            return Err(RaccoonError::new(
+                            return Err(RaccoonError::with_call_stack(
                                 "Unexpected break/continue in function".to_string(),
                                 (0, 0),
                                 interpreter.file.clone(),
+                                stack,
                             ));
                         }
                     }
                 }
 
+                interpreter.call_stack.pop();
                 interpreter.recursion_depth -= 1;
                 interpreter.environment.pop_scope();
 

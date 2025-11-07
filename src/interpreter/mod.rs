@@ -9,7 +9,7 @@ pub mod builtins;
 use crate::ast::nodes::*;
 use crate::error::RaccoonError;
 use crate::runtime::{
-    DecoratorRegistry, Environment, NullValue, RuntimeValue,
+    CallStack, DecoratorRegistry, Environment, NullValue, RuntimeValue,
     TypeRegistry, Registrar, ModuleRegistry, FutureValue, ListValue, StrValue,
 };
 use crate::tokens::{BinaryOperator, Position};
@@ -34,6 +34,7 @@ pub struct Interpreter {
     pub decorator_registry: DecoratorRegistry,
     pub registrar: std::sync::Arc<std::sync::Mutex<Registrar>>,
     pub module_registry: std::sync::Arc<ModuleRegistry>,
+    pub call_stack: CallStack,
 }
 
 impl Interpreter {
@@ -69,6 +70,7 @@ impl Interpreter {
             decorator_registry,
             registrar,
             module_registry: std::sync::Arc::new(module_registry),
+            call_stack: CallStack::new(),
         }
     }
 
@@ -224,7 +226,7 @@ impl Interpreter {
         operator: BinaryOperator,
         position: Position,
     ) -> Result<RuntimeValue, RaccoonError> {
-        operators::apply_binary_op(left, right, operator, position, &self.file).await
+        operators::apply_binary_op(left, right, operator, position, &self.file, &self.call_stack).await
     }
 
     pub fn is_truthy(&self, value: &RuntimeValue) -> bool {
