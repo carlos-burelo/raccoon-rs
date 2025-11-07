@@ -1,0 +1,326 @@
+// COMPREHENSIVE RACCOON LANGUAGE TEST
+// Tests all major features and syntax
+
+print("╔════════════════════════════════════════════════╗");
+print("║  COMPREHENSIVE RACCOON LANGUAGE TEST          ║");
+print("╚════════════════════════════════════════════════╝\n");
+
+// =============================================================================
+// TEST 1: PRIMITIVE TYPES
+// =============================================================================
+print("═══ TEST 1: PRIMITIVE TYPES ═══");
+
+// Integers
+const testInt: int = 42;
+print("✓ Int: " + testInt);
+
+// Floats
+const testFloat: float = 3.14;
+print("✓ Float: " + testFloat);
+
+// Strings
+const testStr: str = "Hello, Raccoon!";
+print("✓ String: " + testStr);
+
+// Booleans
+const testBool: bool = true;
+print("✓ Boolean: " + testBool);
+
+// Null
+const testNull = null;
+print("✓ Null: " + testNull);
+
+// =============================================================================
+// TEST 2: TYPE OBJECTS AND TYPEOF
+// =============================================================================
+print("\n═══ TEST 2: TYPE OBJECTS AND TYPEOF ═══");
+
+print("typeof 42: " + typeof 42);
+print("typeof 3.14: " + typeof 3.14);
+print("typeof \"hello\": " + typeof "hello");
+print("typeof true: " + typeof true);
+print("typeof null: " + typeof null);
+
+// =============================================================================
+// TEST 3: ARRAYS/LISTS
+// =============================================================================
+print("\n═══ TEST 3: ARRAYS/LISTS ═══");
+
+const numbers = [1, 2, 3, 4, 5];
+print("✓ Array creation: " + numbers);
+print("✓ Array length: " + len(numbers));
+print("✓ Array access: " + numbers[0]);
+
+// =============================================================================
+// TEST 4: OBJECTS/MAPS
+// =============================================================================
+print("\n═══ TEST 4: OBJECTS/MAPS ═══");
+
+const person = {
+    name: "Alice",
+    age: 30,
+    active: true
+};
+print("✓ Object creation: " + person);
+print("✓ Object member access: " + person.name);
+
+// =============================================================================
+// TEST 5: FUNCTIONS
+// =============================================================================
+print("\n═══ TEST 5: FUNCTIONS ═══");
+
+fn add(a: int, b: int): int {
+    return a + b;
+}
+print("✓ Function call: add(5, 3) = " + add(5, 3));
+
+// Arrow functions
+const multiply = (x: int, y: int): int => x * y;
+print("✓ Arrow function: multiply(4, 7) = " + multiply(4, 7));
+
+// =============================================================================
+// TEST 6: ENUMS
+// =============================================================================
+print("\n═══ TEST 6: ENUMS ═══");
+
+enum Status {
+    Pending = 0,
+    Active = 1,
+    Completed = 2
+}
+
+print("✓ Enum typeof: " + typeof Status);
+print("✓ Enum member: Status.Active = " + Status.Active);
+const currentStatus = Status.Pending;
+print("✓ Enum variable: " + currentStatus);
+
+// =============================================================================
+// TEST 7: CLASSES - BASIC
+// =============================================================================
+print("\n═══ TEST 7: CLASSES - BASIC ═══");
+
+class Counter {
+    value: int;
+
+    constructor(initial: int) {
+        this.value = initial;
+    }
+
+    increment(): void {
+        this.value = this.value + 1;
+    }
+
+    getValue(): int {
+        return this.value;
+    }
+}
+
+print("✓ Class typeof: " + typeof Counter);
+const counter = new Counter(10);
+print("✓ Instance creation: Counter(10)");
+print("✓ Initial value: " + counter.getValue());
+counter.increment();
+print("✓ After increment: " + counter.getValue());
+
+// =============================================================================
+// TEST 8: CLASSES - STATIC METHODS
+// =============================================================================
+print("\n═══ TEST 8: CLASSES - STATIC METHODS ═══");
+
+class MathUtils {
+    static max(a: int, b: int): int {
+        if (a > b) {
+            return a;
+        }
+        return b;
+    }
+
+    static min(a: int, b: int): int {
+        if (a < b) {
+            return a;
+        }
+        return b;
+    }
+}
+
+print("✓ Static method: MathUtils.max(10, 20) = " + MathUtils.max(10, 20));
+print("✓ Static method: MathUtils.min(10, 20) = " + MathUtils.min(10, 20));
+
+// =============================================================================
+// TEST 9: CONTROL FLOW - IF/ELSE
+// =============================================================================
+print("\n═══ TEST 9: CONTROL FLOW - IF/ELSE ═══");
+
+const testValue = 15;
+if (testValue > 10) {
+    print("✓ If condition: value > 10");
+} else {
+    print("✗ If condition failed");
+}
+
+// =============================================================================
+// TEST 10: CONTROL FLOW - LOOPS
+// =============================================================================
+print("\n═══ TEST 10: CONTROL FLOW - LOOPS ═══");
+
+// For loop
+let sum = 0;
+for (let i = 1; i <= 5; i = i + 1) {
+    sum = sum + i;
+}
+print("✓ For loop: sum(1..5) = " + sum);
+
+// While loop
+let count = 0;
+while (count < 3) {
+    count = count + 1;
+}
+print("✓ While loop: count = " + count);
+
+// =============================================================================
+// TEST 11: OPERATORS
+// =============================================================================
+print("\n═══ TEST 11: OPERATORS ═══");
+
+print("✓ Addition: 5 + 3 = " + (5 + 3));
+print("✓ Subtraction: 10 - 4 = " + (10 - 4));
+print("✓ Multiplication: 6 * 7 = " + (6 * 7));
+print("✓ Division: 20 / 4 = " + (20 / 4));
+print("✓ Modulo: 17 % 5 = " + (17 % 5));
+
+// Comparison
+print("✓ Greater than: 10 > 5 = " + (10 > 5));
+print("✓ Less than: 3 < 7 = " + (3 < 7));
+print("✓ Equals: 5 == 5 = " + (5 == 5));
+print("✓ Not equals: 5 != 3 = " + (5 != 3));
+
+// Logical
+print("✓ AND: true && true = " + (true && true));
+print("✓ OR: false || true = " + (false || true));
+print("✓ NOT: !false = " + (!false));
+
+// =============================================================================
+// TEST 12: BUILTIN TYPES - Future
+// =============================================================================
+print("\n═══ TEST 12: BUILTIN TYPES - Future ═══");
+
+print("✓ Future typeof: " + typeof Future);
+const f1 = Future.resolve(42);
+print("✓ Future.resolve: " + typeof f1);
+
+const f2 = Future.reject("error");
+print("✓ Future.reject: " + typeof f2);
+
+const futures = [Future.resolve(1), Future.resolve(2)];
+const allResult = Future.all(futures);
+print("✓ Future.all: " + typeof allResult);
+
+// =============================================================================
+// TEST 13: BUILTIN TYPES - Object
+// =============================================================================
+print("\n═══ TEST 13: BUILTIN TYPES - Object ═══");
+
+const testObj = { a: 1, b: 2, c: 3 };
+const keys = Object.keys(testObj);
+print("✓ Object.keys: " + keys);
+
+const values = Object.values(testObj);
+print("✓ Object.values: " + values);
+
+// =============================================================================
+// TEST 14: VARIABLE DECLARATIONS
+// =============================================================================
+print("\n═══ TEST 14: VARIABLE DECLARATIONS ═══");
+
+let mutableVar = 10;
+print("✓ Let declaration: " + mutableVar);
+mutableVar = 20;
+print("✓ Let reassignment: " + mutableVar);
+
+const immutableVar = 30;
+print("✓ Const declaration: " + immutableVar);
+
+// =============================================================================
+// TEST 15: TEMPLATE STRINGS
+// =============================================================================
+print("\n═══ TEST 15: TEMPLATE STRINGS ═══");
+
+const name = "World";
+const greeting = `Hello, ${name}!`;
+print("✓ Template string: " + greeting);
+
+// =============================================================================
+// TEST 16: ARRAY METHODS
+// =============================================================================
+print("\n═══ TEST 16: ARRAY METHODS ═══");
+
+const nums = [1, 2, 3, 4, 5];
+
+// Map
+const doubled = nums.map((x: int): int => x * 2);
+print("✓ Array.map: " + doubled);
+
+// Filter
+const evens = nums.filter((x: int): bool => x % 2 == 0);
+print("✓ Array.filter: " + evens);
+
+// Reduce
+const total = nums.reduce((acc: int, x: int): int => acc + x, 0);
+print("✓ Array.reduce: " + total);
+
+// =============================================================================
+// TEST 17: DESTRUCTURING
+// =============================================================================
+print("\n═══ TEST 17: DESTRUCTURING ═══");
+
+// Array destructuring
+const [first, second, third] = [10, 20, 30];
+print("✓ Array destructuring: first=" + first + ", second=" + second);
+
+// Object destructuring
+const { name: userName, age: userAge } = { name: "Bob", age: 25 };
+print("✓ Object destructuring: name=" + userName + ", age=" + userAge);
+
+// =============================================================================
+// TEST 18: REST/SPREAD OPERATOR
+// =============================================================================
+print("\n═══ TEST 18: REST/SPREAD OPERATOR ═══");
+
+fn sumAll(...numbers: int[]): int {
+    let result = 0;
+    for (let i = 0; i < len(numbers); i = i + 1) {
+        result = result + numbers[i];
+    }
+    return result;
+}
+
+print("✓ Rest parameter: sumAll(1,2,3,4,5) = " + sumAll(1, 2, 3, 4, 5));
+
+// =============================================================================
+// TEST 19: TYPE ANNOTATIONS
+// =============================================================================
+print("\n═══ TEST 19: TYPE ANNOTATIONS ═══");
+
+const annotatedInt: int = 100;
+const annotatedStr: str = "typed";
+const annotatedBool: bool = false;
+print("✓ Type annotation: int=" + annotatedInt + ", str=" + annotatedStr + ", bool=" + annotatedBool);
+
+// =============================================================================
+// TEST 20: ERROR HANDLING
+// =============================================================================
+print("\n═══ TEST 20: ERROR HANDLING ═══");
+
+try {
+    const risky = 10 / 2;
+    print("✓ Try block: division = " + risky);
+} catch (e) {
+    print("✗ Catch block (should not reach)");
+}
+
+// =============================================================================
+// SUMMARY
+// =============================================================================
+print("\n╔════════════════════════════════════════════════╗");
+print("║  TEST SUITE COMPLETED                          ║");
+print("╚════════════════════════════════════════════════╝");

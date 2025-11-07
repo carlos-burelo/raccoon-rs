@@ -796,6 +796,22 @@ impl Expressions {
                     ))
                 }
             }
+            RuntimeValue::Type(type_obj) => {
+                if let Some(static_method) = type_obj.get_static_method(&member.property) {
+                    Ok(static_method.clone())
+                } else if let Some(static_prop) = type_obj.get_static_property(&member.property) {
+                    Ok(static_prop.clone())
+                } else {
+                    Err(RaccoonError::new(
+                        format!(
+                            "Static member '{}' not found on type '{}'",
+                            member.property, type_obj.name()
+                        ),
+                        member.position,
+                        interpreter.file.clone(),
+                    ))
+                }
+            }
             _ => Err(RaccoonError::new(
                 format!("Cannot access property '{}' on type", member.property),
                 member.position,
@@ -1047,6 +1063,12 @@ impl Expressions {
                 return Ok(RuntimeValue::Str(StrValue::new(format!(
                     "type {}",
                     p.type_name
+                ))));
+            }
+            RuntimeValue::Type(ref t) => {
+                return Ok(RuntimeValue::Str(StrValue::new(format!(
+                    "type {}",
+                    t.name()
                 ))));
             }
             RuntimeValue::Dynamic(d) => {
@@ -1318,15 +1340,55 @@ impl Expressions {
             .environment
             .get(&new_expr.class_name, new_expr.position)?;
 
-        match class_value {
-            RuntimeValue::Class(class) => {
+        // Extract ClassValue from either RuntimeValue::Class or RuntimeValue::Type
+        let class = match &class_value {
+            RuntimeValue::Class(c) => c.clone(),
+            RuntimeValue::Type(type_obj) => {
+                if let Some(RuntimeValue::Class(c)) = type_obj.get_constructor() {
+                    c.clone()
+                } else {
+                    return Err(RaccoonError::new(
+                        format!(
+                            "Type '{}' does not have a valid constructor",
+                            new_expr.class_name
+                        ),
+                        new_expr.position,
+                        interpreter.file.clone(),
+                    ));
+                }
+            }
+            _ => {
+                return Err(RaccoonError::new(
+                    format!(
+                        "Class '{}' not found or not yet implemented",
+                        new_expr.class_name
+                    ),
+                    new_expr.position,
+                    interpreter.file.clone(),
+                ));
+            }
+        };
+
+        // Now proceed with class instantiation
+        {
                 let mut properties = HashMap::new();
                 let mut methods = HashMap::new();
 
                 if let Some(ref superclass_name) = class.declaration.superclass {
-                    if let Ok(RuntimeValue::Class(superclass)) =
-                        interpreter.environment.get(superclass_name, new_expr.position)
-                    {
+                    let superclass_value = interpreter.environment.get(superclass_name, new_expr.position).ok();
+                    let superclass = match superclass_value {
+                        Some(RuntimeValue::Class(sc)) => Some(sc),
+                        Some(RuntimeValue::Type(type_obj)) => {
+                            if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
+                                Some(sc.clone())
+                            } else {
+                                None
+                            }
+                        }
+                        _ => None
+                    };
+
+                    if let Some(superclass) = superclass {
                         for prop in &superclass.declaration.properties {
                             let value = if let Some(init) = &prop.initializer {
                                 Self::evaluate_expr(interpreter, init).await?
@@ -1403,9 +1465,20 @@ impl Expressions {
                 let mut accessors = Vec::new();
 
                 if let Some(ref superclass_name) = class.declaration.superclass {
-                    if let Ok(RuntimeValue::Class(superclass)) =
-                        interpreter.environment.get(superclass_name, new_expr.position)
-                    {
+                    let superclass_value = interpreter.environment.get(superclass_name, new_expr.position).ok();
+                    let superclass = match superclass_value {
+                        Some(RuntimeValue::Class(sc)) => Some(sc),
+                        Some(RuntimeValue::Type(type_obj)) => {
+                            if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
+                                Some(sc.clone())
+                            } else {
+                                None
+                            }
+                        }
+                        _ => None
+                    };
+
+                    if let Some(superclass) = superclass {
                         accessors.extend(superclass.declaration.accessors.clone());
                     }
                 }
@@ -1513,15 +1586,6 @@ impl Expressions {
                 }
 
                 Ok(RuntimeValue::ClassInstance(instance))
-            }
-            _ => Err(RaccoonError::new(
-                format!(
-                    "Class '{}' not found or not yet implemented",
-                    new_expr.class_name
-                ),
-                new_expr.position,
-                interpreter.file.clone(),
-            )),
         }
     }
 
@@ -1810,6 +1874,44 @@ impl Expressions {
                         format!(
                             "Static method '{}' not found on type '{}'",
                             method_call.method, type_obj.type_name
+                        ),
+                        method_call.position,
+                        interpreter.file.clone(),
+                    ))
+                }
+            }
+
+            RuntimeValue::Type(type_obj) => {
+                if let Some(static_method) = type_obj.get_static_method(&method_call.method) {
+                    // Call the static method (supports both native and user-defined functions)
+                    match static_method {
+                        RuntimeValue::NativeFunction(native_fn) => {
+                            Ok((native_fn.implementation)(args))
+                        }
+                        RuntimeValue::Function(_) => {
+                            // Call user-defined static method
+                            Helpers::call_function(
+                                interpreter,
+                                static_method,
+                                args,
+                                method_call.position,
+                            )
+                            .await
+                        }
+                        _ => Err(RaccoonError::new(
+                            format!(
+                                "Static method '{}' on type '{}' is not callable",
+                                method_call.method, type_obj.name()
+                            ),
+                            method_call.position,
+                            interpreter.file.clone(),
+                        )),
+                    }
+                } else {
+                    Err(RaccoonError::new(
+                        format!(
+                            "Static method '{}' not found on type '{}'",
+                            method_call.method, type_obj.name()
                         ),
                         method_call.position,
                         interpreter.file.clone(),

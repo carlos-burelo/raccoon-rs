@@ -1,4 +1,6 @@
 use crate::ast::types::{PrimitiveType, Type};
+use crate::runtime::type_object::{TypeKind, PrimitiveKind};
+use crate::runtime::type_object_builder::TypeObjectBuilder;
 use crate::runtime::values::*;
 use crate::runtime::{FutureState, FutureValue};
 use std::collections::HashMap;
@@ -121,20 +123,39 @@ impl TypeMethodBuilder {
     }
 
     pub fn build(self, env: &mut crate::runtime::Environment) {
-        let mut static_methods = HashMap::new();
+        let mut static_methods_map = HashMap::new();
 
         for (name, method) in self.methods {
-            static_methods.insert(name, method);
+            static_methods_map.insert(name, RuntimeValue::NativeFunction(*method));
         }
 
-        let type_obj = RuntimeValue::PrimitiveTypeObject(PrimitiveTypeObject::new(
-            self.type_name.clone(),
-            static_methods,
-            HashMap::new(),
-            PrimitiveType::any(),
-        ));
+        // Determine the TypeKind and Type based on the type name
+        let (type_def, type_kind) = match self.type_name.as_str() {
+            "Future" => (
+                PrimitiveType::any(), // Future is generic, but we use any for now
+                TypeKind::Generic {
+                    name: "Future".to_string(),
+                    constraints: vec![],
+                },
+            ),
+            "Object" => (
+                PrimitiveType::any(),
+                TypeKind::Module {
+                    name: "Object".to_string(),
+                },
+            ),
+            _ => (
+                PrimitiveType::any(),
+                TypeKind::Unknown,
+            ),
+        };
 
-        let _ = env.declare(self.type_name, type_obj);
+        let type_obj = TypeObjectBuilder::new(type_def, type_kind)
+            .static_methods(static_methods_map)
+            .documentation(format!("Built-in {} type", self.type_name))
+            .build();
+
+        let _ = env.declare(self.type_name, RuntimeValue::Type(type_obj));
     }
 }
 

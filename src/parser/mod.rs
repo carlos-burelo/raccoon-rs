@@ -1642,12 +1642,32 @@ impl Parser {
         if self.check(&TokenType::Async) {
             let saved_pos = self.current;
             self.advance();
+
+            // Check for async with parentheses: async () => ...
             if self.check(&TokenType::LeftParen) {
                 if let Ok(arrow) = self.try_parse_arrow_function(true) {
                     return Ok(Expr::ArrowFn(arrow));
                 }
+                self.current = saved_pos;
             }
-            self.current = saved_pos;
+            // Check for async with single identifier: async x => ...
+            else if self.check(&TokenType::Identifier) {
+                self.advance(); // consume identifier
+                if self.check(&TokenType::Arrow) {
+                    self.current = saved_pos; // restore
+                    self.advance(); // skip async
+                    match self.try_parse_single_param_arrow(true) {
+                        Ok(arrow) => return Ok(Expr::ArrowFn(arrow)),
+                        Err(_) => {
+                            self.current = saved_pos;
+                        }
+                    }
+                } else {
+                    self.current = saved_pos;
+                }
+            } else {
+                self.current = saved_pos;
+            }
         }
 
         if self.check(&TokenType::LeftParen) {
@@ -1656,6 +1676,23 @@ impl Parser {
                 return Ok(Expr::ArrowFn(arrow));
             }
             self.current = saved_pos;
+        }
+
+        // Check for single-parameter arrow function without parentheses: x => ...
+        if self.check(&TokenType::Identifier) {
+            let saved_pos = self.current;
+            self.advance(); // consume identifier
+            if self.check(&TokenType::Arrow) {
+                self.current = saved_pos; // restore position
+                match self.try_parse_single_param_arrow(false) {
+                    Ok(arrow) => return Ok(Expr::ArrowFn(arrow)),
+                    Err(_) => {
+                        self.current = saved_pos;
+                    }
+                }
+            } else {
+                self.current = saved_pos;
+            }
         }
 
         let expr = self.conditional()?;
@@ -2621,6 +2658,51 @@ impl Parser {
         Ok(ArrowFnExpr {
             parameters,
             return_type,
+            body,
+            is_async,
+            position,
+        })
+    }
+
+    /// Try to parse single-parameter arrow function without parentheses: x => expr
+    fn try_parse_single_param_arrow(&mut self, is_async: bool) -> Result<ArrowFnExpr, RaccoonError> {
+        let position = self.peek().position;
+
+        // Parse the single parameter (must be an identifier)
+        let param_token = self.consume(TokenType::Identifier, "Expected parameter name")?;
+        let param_name = param_token.value.clone();
+
+        // Create parameter with inferred type
+        let parameter = FnParam {
+            pattern: VarPattern::Identifier(param_name),
+            param_type: PrimitiveType::any(), // Inferred type
+            default_value: None,
+            is_rest: false,
+            is_optional: false,
+        };
+
+        // Expect arrow: =>
+        if !self.match_token(&[TokenType::Arrow]) {
+            return Err(RaccoonError::new(
+                "Expected '=>' for arrow function",
+                self.peek().position,
+                self.file.clone(),
+            ));
+        }
+
+        // Parse body (expression or block)
+        let body = if self.check(&TokenType::LeftBrace) {
+            self.advance();
+            let stmts = self.block_statements()?;
+            ArrowFnBody::Block(stmts)
+        } else {
+            let expr = self.assignment()?;
+            ArrowFnBody::Expr(Box::new(expr))
+        };
+
+        Ok(ArrowFnExpr {
+            parameters: vec![parameter],
+            return_type: None,
             body,
             is_async,
             position,

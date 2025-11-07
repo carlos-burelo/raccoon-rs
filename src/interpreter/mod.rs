@@ -73,8 +73,11 @@ impl Interpreter {
     }
 
     fn register_builtins(env: &mut Environment, _registrar: std::sync::Arc<std::sync::Mutex<Registrar>>) {
-        use crate::runtime::{NativeFunctionValue, StrValue, IntValue};
+        use crate::runtime::{NativeFunctionValue, StrValue, IntValue, setup_builtins};
         use crate::ast::types::PrimitiveType;
+
+        // Call the main setup_builtins to register Future, Object, and primitive types
+        setup_builtins(env);
 
         let print_fn = NativeFunctionValue::new(
             |args: Vec<RuntimeValue>| {
