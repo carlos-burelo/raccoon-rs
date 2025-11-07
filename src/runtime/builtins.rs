@@ -12,7 +12,6 @@ use crate::runtime::{
     Environment, FloatValue, FutureState, FutureValue, IntValue, ListValue, NativeFunctionValue,
     NullValue, ObjectValue, RuntimeValue, StrValue,
 };
-use colored::Colorize;
 use std::collections::HashMap;
 use std::io::{self, Write};
 
@@ -123,9 +122,9 @@ fn register_input_function(env: &mut Environment) {
 
             if !prompt.is_empty() {
                 if breakline {
-                    println!("{}", prompt.cyan());
+                    println!("{}", prompt);
                 } else {
-                    print!("{}", prompt.cyan());
+                    print!("{}", prompt);
                     io::stdout().flush().unwrap();
                 }
             }
