@@ -3,8 +3,170 @@ use colored::*;
 use std::fmt;
 use std::fs;
 
+/// Categorías de error para el lenguaje Raccoon
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ErrorKind {
+    // === Errores de Compilación ===
+    /// Error de sintaxis en el código fuente
+    SyntaxError,
+    /// Error semántico (lógica del programa)
+    SemanticError,
+    /// Error de tipo (incompatibilidad de tipos)
+    TypeError,
+    /// Referencia no definida
+    ReferenceError,
+    /// Error al importar módulos
+    ImportError,
+
+    // === Errores de Runtime ===
+    /// Error general de ejecución
+    RuntimeError,
+    /// Acceso a valor null o undefined
+    NullReferenceError,
+    /// División por cero
+    DivisionByZeroError,
+    /// Índice fuera de rango
+    IndexOutOfRangeError,
+    /// Operación inválida
+    InvalidOperationError,
+
+    // === Errores de Recursos ===
+    /// Archivo no encontrado
+    FileNotFoundError,
+    /// Permiso denegado
+    PermissionDeniedError,
+    /// Error de entrada/salida
+    IOError,
+    /// Error al leer
+    ReadError,
+    /// Error al escribir
+    WriteError,
+
+    // === Errores de Sistema ===
+    /// Stack overflow
+    StackOverflowError,
+    /// Sin memoria disponible
+    OutOfMemoryError,
+    /// Error interno del sistema
+    InternalError,
+
+    // === Errores de Concurrencia ===
+    /// Deadlock detectado
+    DeadlockError,
+    /// Condición de carrera
+    RaceConditionError,
+    /// Error de sincronización
+    SynchronizationError,
+
+    // === Errores Numéricos ===
+    /// Overflow numérico
+    OverflowError,
+    /// Underflow numérico
+    UnderflowError,
+    /// Pérdida de precisión
+    PrecisionLossError,
+
+    // === Errores de Configuración ===
+    /// Error de validación
+    ValidationError,
+    /// Error de configuración
+    ConfigurationError,
+    /// Error de variable de entorno
+    EnvironmentVariableError,
+
+    // === Otros ===
+    /// Error de lógica
+    LogicError,
+    /// Error de flujo de control
+    ControlFlowError,
+    /// Error de timeout
+    TimeoutError,
+    /// Error de red
+    NetworkError,
+}
+
+impl ErrorKind {
+    /// Obtiene el nombre del tipo de error
+    pub fn name(&self) -> &str {
+        match self {
+            Self::SyntaxError => "SyntaxError",
+            Self::SemanticError => "SemanticError",
+            Self::TypeError => "TypeError",
+            Self::ReferenceError => "ReferenceError",
+            Self::ImportError => "ImportError",
+            Self::RuntimeError => "RuntimeError",
+            Self::NullReferenceError => "NullReferenceError",
+            Self::DivisionByZeroError => "DivisionByZeroError",
+            Self::IndexOutOfRangeError => "IndexOutOfRangeError",
+            Self::InvalidOperationError => "InvalidOperationError",
+            Self::FileNotFoundError => "FileNotFoundError",
+            Self::PermissionDeniedError => "PermissionDeniedError",
+            Self::IOError => "IOError",
+            Self::ReadError => "ReadError",
+            Self::WriteError => "WriteError",
+            Self::StackOverflowError => "StackOverflowError",
+            Self::OutOfMemoryError => "OutOfMemoryError",
+            Self::InternalError => "InternalError",
+            Self::DeadlockError => "DeadlockError",
+            Self::RaceConditionError => "RaceConditionError",
+            Self::SynchronizationError => "SynchronizationError",
+            Self::OverflowError => "OverflowError",
+            Self::UnderflowError => "UnderflowError",
+            Self::PrecisionLossError => "PrecisionLossError",
+            Self::ValidationError => "ValidationError",
+            Self::ConfigurationError => "ConfigurationError",
+            Self::EnvironmentVariableError => "EnvironmentVariableError",
+            Self::LogicError => "LogicError",
+            Self::ControlFlowError => "ControlFlowError",
+            Self::TimeoutError => "TimeoutError",
+            Self::NetworkError => "NetworkError",
+        }
+    }
+
+    /// Indica si el error es recuperable
+    pub fn is_recoverable(&self) -> bool {
+        !matches!(
+            self,
+            Self::StackOverflowError
+                | Self::OutOfMemoryError
+                | Self::InternalError
+        )
+    }
+
+    /// Indica si el error es de compilación
+    pub fn is_compile_time(&self) -> bool {
+        matches!(
+            self,
+            Self::SyntaxError
+                | Self::SemanticError
+                | Self::TypeError
+                | Self::ImportError
+        )
+    }
+
+    /// Indica si el error es de runtime
+    pub fn is_runtime(&self) -> bool {
+        matches!(
+            self,
+            Self::RuntimeError
+                | Self::NullReferenceError
+                | Self::DivisionByZeroError
+                | Self::IndexOutOfRangeError
+                | Self::InvalidOperationError
+                | Self::ReferenceError
+        )
+    }
+}
+
+impl fmt::Display for ErrorKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.name())
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct RaccoonError {
+    pub kind: ErrorKind,
     pub message: String,
     pub position: Position,
     pub range: Option<Range>,
@@ -12,12 +174,15 @@ pub struct RaccoonError {
 }
 
 impl RaccoonError {
-    pub fn new(
+    /// Crea un nuevo error con un tipo específico
+    pub fn with_kind(
+        kind: ErrorKind,
         message: impl Into<String>,
         position: Position,
         file: Option<impl Into<String>>,
     ) -> Self {
         Self {
+            kind,
             message: message.into(),
             position,
             range: None,
@@ -25,17 +190,38 @@ impl RaccoonError {
         }
     }
 
-    pub fn with_range(
+    /// Crea un nuevo error (por defecto RuntimeError para compatibilidad)
+    pub fn new(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::RuntimeError, message, position, file)
+    }
+
+    /// Crea un error con rango y tipo específico
+    pub fn with_kind_and_range(
+        kind: ErrorKind,
         message: impl Into<String>,
         range: Range,
         file: Option<impl Into<String>>,
     ) -> Self {
         Self {
+            kind,
             message: message.into(),
             position: range.start,
             range: Some(range),
             file: file.map(|f| f.into()),
         }
+    }
+
+    /// Crea un error con rango (por defecto RuntimeError)
+    pub fn with_range(
+        message: impl Into<String>,
+        range: Range,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind_and_range(ErrorKind::RuntimeError, message, range, file)
     }
 
     pub fn at_position(
@@ -44,6 +230,178 @@ impl RaccoonError {
         file: Option<impl Into<String>>,
     ) -> Self {
         Self::new(message, position, file)
+    }
+
+    // === Métodos de conveniencia para errores de compilación ===
+
+    pub fn syntax_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::SyntaxError, message, position, file)
+    }
+
+    pub fn semantic_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::SemanticError, message, position, file)
+    }
+
+    pub fn type_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::TypeError, message, position, file)
+    }
+
+    pub fn reference_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::ReferenceError, message, position, file)
+    }
+
+    pub fn import_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::ImportError, message, position, file)
+    }
+
+    // === Métodos de conveniencia para errores de runtime ===
+
+    pub fn runtime_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::RuntimeError, message, position, file)
+    }
+
+    pub fn null_reference_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::NullReferenceError, message, position, file)
+    }
+
+    pub fn division_by_zero_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::DivisionByZeroError, message, position, file)
+    }
+
+    pub fn index_out_of_range_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::IndexOutOfRangeError, message, position, file)
+    }
+
+    pub fn invalid_operation_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::InvalidOperationError, message, position, file)
+    }
+
+    // === Métodos de conveniencia para errores de recursos ===
+
+    pub fn file_not_found_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::FileNotFoundError, message, position, file)
+    }
+
+    pub fn permission_denied_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::PermissionDeniedError, message, position, file)
+    }
+
+    pub fn io_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::IOError, message, position, file)
+    }
+
+    // === Métodos de conveniencia para errores de sistema ===
+
+    pub fn stack_overflow_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::StackOverflowError, message, position, file)
+    }
+
+    pub fn out_of_memory_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::OutOfMemoryError, message, position, file)
+    }
+
+    pub fn internal_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::InternalError, message, position, file)
+    }
+
+    // === Métodos de conveniencia para errores numéricos ===
+
+    pub fn overflow_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::OverflowError, message, position, file)
+    }
+
+    pub fn underflow_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::UnderflowError, message, position, file)
+    }
+
+    // === Métodos de conveniencia para errores de configuración ===
+
+    pub fn validation_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::ValidationError, message, position, file)
+    }
+
+    pub fn configuration_error(
+        message: impl Into<String>,
+        position: Position,
+        file: Option<impl Into<String>>,
+    ) -> Self {
+        Self::with_kind(ErrorKind::ConfigurationError, message, position, file)
     }
 
     fn get_code_context(&self, context_lines: usize) -> Option<Vec<(usize, String)>> {
@@ -72,7 +430,7 @@ impl RaccoonError {
     pub fn format_with_context(&self) -> String {
         let mut output = String::new();
 
-        let header = "Error".red().bold();
+        let header = self.kind.name().red().bold();
         let file_name = self
             .file
             .as_ref()
@@ -154,7 +512,7 @@ impl fmt::Display for RaccoonError {
         if self.file.is_some() {
             write!(f, "{}", self.format_with_context())
         } else {
-            let header = "RaccoonError".red().bold();
+            let header = self.kind.name().red().bold();
             let message = self.message.bright_yellow();
             let line = self.position.0.to_string().bright_cyan();
             let column = self.position.1.to_string().bright_cyan();
