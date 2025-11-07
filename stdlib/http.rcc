@@ -1,2 +1,49 @@
-// HTTP operations are provided by the native module
-// Use native_http_fetch_with_options() directly
+// HTTP operations provided by native module
+// TODO: Implement HTTP wrapper functions
+
+// HTTP Response type (for type hints)
+interface HttpResponse {
+    status: int;
+    statusText: str;
+    body: str;
+    headers: Map<str, str>;
+    json: any;
+}
+
+// HTTP Client class (placeholder)
+class Http {
+    static async get(url: str): HttpResponse {
+        // Placeholder - needs native implementation
+        return null;
+    }
+
+    static async post(url: str, body: str): HttpResponse {
+        // Placeholder - needs native implementation
+        return null;
+    }
+
+    static async fetch(url: str, options: any): HttpResponse {
+        // Placeholder - needs native implementation
+        return null;
+    }
+}
+
+export fn fetch(url: str, options: any): any {
+    // Placeholder - needs native implementation
+    return null;
+}
+
+export fn get(url: str): any {
+    // Placeholder - needs native implementation
+    return null;
+}
+
+export fn post(url: str, body: str): any {
+    // Placeholder - needs native implementation
+    return null;
+}
+
+// Re-export classes and functions
+export { Http, HttpResponse };
+
+export default Http;

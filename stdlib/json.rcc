@@ -1,2 +1,23 @@
-// JSON operations are provided by the native module
-// Use native_json_parse(), native_json_stringify(), and native_json_stringify_pretty() directly
+// JSON operations provided by native module
+// TODO: Implement JSON wrapper functions
+
+export fn parse(json: str): any {
+    // Placeholder - needs native implementation
+    return null;
+}
+
+export fn stringify(value: any): str {
+    // Placeholder - needs native implementation
+    return "null";
+}
+
+export fn stringify_pretty(value: any): str {
+    // Placeholder - needs native implementation
+    return "null";
+}
+
+export default {
+    parse,
+    stringify,
+    stringify_pretty
+};
