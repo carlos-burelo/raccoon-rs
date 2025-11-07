@@ -8,13 +8,11 @@
  * Example: capitalize("hello") => "Hello"
  */
 export fn capitalize(s: str): str {
-    if (native_str_length(s) == 0) {
-        return s;
-    }
+    if (s.length == 0) return s;
 
-    let first = native_str_char_at(s, 0);
-    let rest = native_str_substring(s, 1, native_str_length(s));
-    return native_str_upper(first) + native_str_lower(rest);
+    let first = s.slice(0, 1).toUpper();
+    let rest = s.slice(1).toLower();
+    return first + rest;
 }
 
 /**
