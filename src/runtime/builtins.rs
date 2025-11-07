@@ -1,11 +1,15 @@
 use crate::ast::types::PrimitiveType;
 use crate::fn_type;
+use crate::native_fn_variadic;
+use crate::native_fn;
+use crate::native_functions;
+use crate::null_return;
 
 use crate::runtime::{
     builtins_builders::{collect_futures, FutureCollectionStrategy, TypeMethodBuilder},
     type_object::{TypeKind, PrimitiveKind},
     type_object_builder::TypeObjectBuilder,
-    Environment, FutureState, FutureValue, IntValue, ListValue, NativeFunctionValue, NullValue,
+    Environment, FloatValue, FutureState, FutureValue, IntValue, ListValue, NativeFunctionValue, NullValue,
     ObjectValue, RuntimeValue, StrValue,
 };
 use colored::Colorize;
@@ -18,6 +22,9 @@ pub fn setup_builtins(env: &mut Environment) {
     register_primitive_types(env);
     register_future_object(env);
     register_object_object(env);
+
+    // Register all stdlib native functions
+    crate::runtime::stdlib_natives::register_all_stdlib_natives(env);
 }
 
 fn register_builtin_functions(env: &mut Environment) {
@@ -25,6 +32,35 @@ fn register_builtin_functions(env: &mut Environment) {
     register_println_function(env);
     register_input_function(env);
     register_len_function(env);
+
+    // Register additional native functions using macros
+    native_functions! {
+        env,
+
+        // native_print: Prints arguments with spread operator support
+        "native_print" => native_fn_variadic!(|args: Vec<RuntimeValue>| {
+            for (i, arg) in args.iter().enumerate() {
+                if i > 0 { print!(" "); }
+                print!("{}", arg.to_string());
+            }
+            println!();
+            null_return!()
+        }),
+
+        // native_sqrt: Square root function supporting both int and float
+        "native_sqrt" => native_fn!(|args: Vec<RuntimeValue>| {
+            if args.is_empty() { return null_return!(); }
+            match &args[0] {
+                RuntimeValue::Float(f) => {
+                    RuntimeValue::Float(FloatValue::new(f.value.sqrt()))
+                }
+                RuntimeValue::Int(i) => {
+                    RuntimeValue::Float(FloatValue::new((i.value as f64).sqrt()))
+                }
+                _ => null_return!()
+            }
+        }, PrimitiveType::float() => PrimitiveType::float())
+    }
 }
 
 fn register_builtin_constants(_env: &mut Environment) {}
