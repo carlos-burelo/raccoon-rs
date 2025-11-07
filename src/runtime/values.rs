@@ -452,18 +452,39 @@ impl crate::runtime::dynamic::DynamicValue for FunctionValue {
 }
 
 pub type NativeFn = fn(Vec<RuntimeValue>) -> RuntimeValue;
+pub type NativeFnDynamic = Arc<dyn Fn(Vec<RuntimeValue>) -> RuntimeValue + Send + Sync>;
+
+#[derive(Clone)]
+pub enum NativeFunctionImpl {
+    Static(NativeFn),
+    Dynamic(NativeFnDynamic),
+}
 
 #[derive(Clone)]
 pub struct NativeFunctionValue {
-    pub implementation: NativeFn,
+    pub implementation: NativeFunctionImpl,
     pub fn_type: Type,
 }
 
 impl NativeFunctionValue {
     pub fn new(implementation: NativeFn, fn_type: Type) -> Self {
         Self {
-            implementation,
+            implementation: NativeFunctionImpl::Static(implementation),
             fn_type,
+        }
+    }
+
+    pub fn new_dynamic(implementation: NativeFnDynamic, fn_type: Type) -> Self {
+        Self {
+            implementation: NativeFunctionImpl::Dynamic(implementation),
+            fn_type,
+        }
+    }
+
+    pub fn call(&self, args: Vec<RuntimeValue>) -> RuntimeValue {
+        match &self.implementation {
+            NativeFunctionImpl::Static(f) => f(args),
+            NativeFunctionImpl::Dynamic(f) => f(args),
         }
     }
 

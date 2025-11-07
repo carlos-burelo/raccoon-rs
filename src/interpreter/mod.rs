@@ -7,6 +7,7 @@ pub mod module_loader;
 pub mod builtins;
 
 use crate::ast::nodes::*;
+use crate::ast::ObjectType;
 use crate::error::RaccoonError;
 use crate::runtime::{
     DecoratorRegistry, Environment, NullValue, RuntimeValue,
@@ -56,6 +57,9 @@ impl Interpreter {
         // Initialize builtins only (print, println, input, len)
         Self::register_builtins(&mut env, registrar.clone());
 
+        // Load native modules as global namespace objects
+        Self::load_native_modules(&mut env, registrar.clone());
+
         let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
         let decorator_registry = DecoratorRegistry::new();
 
@@ -69,6 +73,58 @@ impl Interpreter {
             decorator_registry,
             registrar,
             module_registry: std::sync::Arc::new(module_registry),
+        }
+    }
+
+    /// Load native modules as global namespace objects (string, array, math, etc.)
+    fn load_native_modules(env: &mut Environment, registrar: std::sync::Arc<std::sync::Mutex<Registrar>>) {
+        use crate::runtime::{NativeFunctionValue, ObjectValue};
+        use crate::ast::types::PrimitiveType;
+        use std::collections::HashMap;
+
+        // Module loaders
+        let modules: Vec<(&str, fn(&mut Registrar))> = vec![
+            ("string", crate::runtime::natives::register_string_module),
+            ("array", crate::runtime::natives::register_array_module),
+            ("math", crate::runtime::natives::register_math_module),
+            ("json", crate::runtime::natives::register_json_module),
+            ("time", crate::runtime::natives::register_time_module),
+            ("random", crate::runtime::natives::register_random_module),
+            ("io", crate::runtime::natives::register_io_module),
+            ("http", crate::runtime::natives::register_http_module),
+        ];
+
+        for (module_name, loader) in modules {
+            // Execute loader to register functions in Registrar
+            {
+                let mut reg = registrar.lock().unwrap();
+                loader(&mut reg);
+            }
+
+            // Create namespace object with all functions from this module
+            let reg = registrar.lock().unwrap();
+            let mut namespace_props = HashMap::new();
+
+            for (_full_name, signature) in &reg.functions {
+                if let Some(ns) = &signature.namespace {
+                    if ns == module_name {
+                        // Create a native function with the handler
+                        let handler = signature.handler.clone();
+                        let func = NativeFunctionValue::new_dynamic(
+                            handler,
+                            crate::fn_type!(variadic, PrimitiveType::any()),
+                        );
+                        namespace_props.insert(
+                            signature.name.clone(),
+                            RuntimeValue::NativeFunction(func),
+                        );
+                    }
+                }
+            }
+
+            // Declare the namespace object globally
+            let namespace_obj = ObjectValue::new(namespace_props, crate::ast::types::Type::Object(Box::new(ObjectType::new(std::collections::HashMap::new()))));
+            let _ = env.declare(module_name.to_string(), RuntimeValue::Object(namespace_obj));
         }
     }
 

@@ -1,0 +1,27 @@
+// Test global namespace functions
+println("Testing global namespace functions...");
+
+// Test string namespace
+let s = "hello world";
+let upper = string.upper(s);
+println("string.upper(\"hello world\") = " + upper);
+
+let lower = string.lower("HELLO WORLD");
+println("string.lower(\"HELLO WORLD\") = " + lower);
+
+// Test array namespace
+let arr = [1, 2, 3, 4, 5];
+let arr_len = array.length(arr);
+println("array.length([1, 2, 3, 4, 5]) = " + arr_len);
+
+let pushed = array.push(arr, 6);
+println("array.push([1, 2, 3, 4, 5], 6) = " + pushed);
+
+// Test math namespace
+let sqrt_val = math.sqrt(16);
+println("math.sqrt(16) = " + sqrt_val);
+
+let abs_val = math.abs(-42);
+println("math.abs(-42) = " + abs_val);
+
+println("All global namespace functions work!");

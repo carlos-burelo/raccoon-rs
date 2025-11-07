@@ -234,7 +234,7 @@ impl Helpers {
                 interpreter.environment.pop_scope();
                 Ok(result)
             }
-            RuntimeValue::NativeFunction(fn_val) => Ok((fn_val.implementation)(args)),
+            RuntimeValue::NativeFunction(fn_val) => Ok(fn_val.call(args)),
             RuntimeValue::NativeAsyncFunction(fn_val) => {
                 let result = (fn_val.implementation)(args).await;
                 let return_type = match &fn_val.fn_type {

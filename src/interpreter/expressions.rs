@@ -574,7 +574,7 @@ impl Expressions {
                     Ok(result)
                 }
             }
-            RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
+            RuntimeValue::NativeFunction(func) => Ok(func.call(args)),
             RuntimeValue::NativeAsyncFunction(func) => {
                 let result = (func.implementation)(args).await;
                 let return_type = match &func.fn_type {
@@ -1729,7 +1729,7 @@ impl Expressions {
                 interpreter.environment.pop_scope();
                 Ok(result)
             }
-            RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
+            RuntimeValue::NativeFunction(func) => Ok(func.call(args)),
             RuntimeValue::NativeAsyncFunction(func) => {
                 let result = (func.implementation)(args).await;
                 let return_type = match &func.fn_type {
@@ -1898,7 +1898,7 @@ impl Expressions {
             RuntimeValue::PrimitiveTypeObject(type_obj) => {
                 if let Some(static_method) = type_obj.static_methods.get(&method_call.method) {
                     // Call native static method
-                    Ok((static_method.implementation)(args))
+                    Ok(static_method.call(args))
                 } else {
                     Err(RaccoonError::new(
                         format!(
@@ -1916,7 +1916,7 @@ impl Expressions {
                     // Call the static method (supports both native and user-defined functions)
                     match static_method {
                         RuntimeValue::NativeFunction(native_fn) => {
-                            Ok((native_fn.implementation)(args))
+                            Ok(native_fn.call(args))
                         }
                         RuntimeValue::Function(_) => {
                             // Call user-defined static method
@@ -2101,7 +2101,7 @@ impl Expressions {
                                 Ok(result)
                             }
                         }
-                        RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
+                        RuntimeValue::NativeFunction(func) => Ok(func.call(args)),
                         RuntimeValue::NativeAsyncFunction(func) => {
                             let result = (func.implementation)(args).await;
 
