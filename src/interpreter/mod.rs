@@ -10,7 +10,7 @@ use crate::ast::nodes::*;
 use crate::error::RaccoonError;
 use crate::runtime::{
     DecoratorRegistry, Environment, NullValue, RuntimeValue,
-    TypeRegistry, Registrar, ModuleRegistry,
+    TypeRegistry, Registrar, ModuleRegistry, FutureValue, ListValue, StrValue,
 };
 use crate::tokens::{BinaryOperator, Position};
 use async_recursion::async_recursion;
@@ -288,5 +288,276 @@ impl Interpreter {
             }
         }
         None
+    }
+
+    /// Get a builtin type by name (e.g., "Future", "Promise")
+    /// Returns a PrimitiveTypeObject with static methods, not a global object instance
+    pub fn get_builtin_type(&self, name: &str) -> Option<RuntimeValue> {
+        use crate::runtime::{PrimitiveTypeObject, NativeFunctionValue};
+        use crate::ast::types::PrimitiveType;
+        use std::collections::HashMap;
+
+        match name {
+            "Future" => {
+                let mut static_methods = HashMap::new();
+
+                // Future.resolve(value)
+                let resolve_fn = NativeFunctionValue::new(
+                    |args: Vec<RuntimeValue>| {
+                        let value = if args.is_empty() {
+                            RuntimeValue::Null(NullValue::new())
+                        } else {
+                            args[0].clone()
+                        };
+                        let value_type = value.get_type();
+                        RuntimeValue::Future(FutureValue::new_resolved(value, value_type))
+                    },
+                    crate::fn_type!(variadic, PrimitiveType::any()),
+                );
+                static_methods.insert("resolve".to_string(), Box::new(resolve_fn));
+
+                // Future.reject(reason)
+                let reject_fn = NativeFunctionValue::new(
+                    |args: Vec<RuntimeValue>| {
+                        let reason_str = if args.is_empty() {
+                            "Unknown error".to_string()
+                        } else {
+                            args[0].to_string()
+                        };
+                        RuntimeValue::Future(FutureValue::new_rejected(reason_str, PrimitiveType::any()))
+                    },
+                    crate::fn_type!(variadic, PrimitiveType::any()),
+                );
+                static_methods.insert("reject".to_string(), Box::new(reject_fn));
+
+                // Future.all(futures) - combines multiple futures
+                let all_fn = NativeFunctionValue::new(
+                    |args: Vec<RuntimeValue>| {
+                        if args.is_empty() {
+                            let list = RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
+                            return RuntimeValue::Future(FutureValue::new_resolved(
+                                list,
+                                PrimitiveType::any()
+                            ));
+                        }
+
+                        match &args[0] {
+                            RuntimeValue::List(list) => {
+                                // Check if any future is rejected
+                                for element in &list.elements {
+                                    if let RuntimeValue::Future(fut) = element {
+                                        if fut.is_rejected() {
+                                            let state = fut.state.read().unwrap();
+                                            if let crate::runtime::values::FutureState::Rejected(err) = &*state {
+                                                return RuntimeValue::Future(
+                                                    FutureValue::new_rejected(err.clone(), PrimitiveType::any())
+                                                );
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Collect resolved values
+                                let mut results = Vec::new();
+                                for element in &list.elements {
+                                    if let RuntimeValue::Future(fut) = element {
+                                        let state = fut.state.read().unwrap();
+                                        if let crate::runtime::values::FutureState::Resolved(val) = &*state {
+                                            results.push((**val).clone());
+                                        } else {
+                                            results.push(RuntimeValue::Null(NullValue::new()));
+                                        }
+                                    } else {
+                                        results.push(element.clone());
+                                    }
+                                }
+
+                                let result_list = RuntimeValue::List(ListValue::new(results, PrimitiveType::any()));
+                                RuntimeValue::Future(FutureValue::new_resolved(
+                                    result_list,
+                                    PrimitiveType::any()
+                                ))
+                            }
+                            _ => RuntimeValue::Future(FutureValue::new_rejected(
+                                "Future.all requires an array".to_string(),
+                                PrimitiveType::any()
+                            )),
+                        }
+                    },
+                    crate::fn_type!(variadic, PrimitiveType::any()),
+                );
+                static_methods.insert("all".to_string(), Box::new(all_fn));
+
+                // Future.race(futures) - returns first resolved/rejected
+                let race_fn = NativeFunctionValue::new(
+                    |args: Vec<RuntimeValue>| {
+                        if args.is_empty() {
+                            return RuntimeValue::Future(FutureValue::new_resolved(
+                                RuntimeValue::Null(NullValue::new()),
+                                PrimitiveType::any()
+                            ));
+                        }
+
+                        match &args[0] {
+                            RuntimeValue::List(list) => {
+                                if list.elements.is_empty() {
+                                    return RuntimeValue::Future(FutureValue::new_resolved(
+                                        RuntimeValue::Null(NullValue::new()),
+                                        PrimitiveType::any()
+                                    ));
+                                }
+
+                                // Return first future (which could be resolved or rejected)
+                                list.elements[0].clone()
+                            }
+                            _ => RuntimeValue::Future(FutureValue::new_rejected(
+                                "Future.race requires an array".to_string(),
+                                PrimitiveType::any()
+                            )),
+                        }
+                    },
+                    crate::fn_type!(variadic, PrimitiveType::any()),
+                );
+                static_methods.insert("race".to_string(), Box::new(race_fn));
+
+                // Future.allSettled(futures) - waits for all, returns status objects
+                let all_settled_fn = NativeFunctionValue::new(
+                    |args: Vec<RuntimeValue>| {
+                        if args.is_empty() {
+                            let list = RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
+                            return RuntimeValue::Future(FutureValue::new_resolved(
+                                list,
+                                PrimitiveType::any()
+                            ));
+                        }
+
+                        match &args[0] {
+                            RuntimeValue::List(list) => {
+                                let mut results = Vec::new();
+
+                                for element in &list.elements {
+                                    if let RuntimeValue::Future(fut) = element {
+                                        let state = fut.state.read().unwrap();
+                                        let result_obj = match &*state {
+                                            crate::runtime::values::FutureState::Resolved(val) => {
+                                                let mut obj_props = std::collections::HashMap::new();
+                                                obj_props.insert("status".to_string(), RuntimeValue::Str(StrValue::new("fulfilled".to_string())));
+                                                obj_props.insert("value".to_string(), (**val).clone());
+                                                RuntimeValue::Object(crate::runtime::ObjectValue::new(obj_props, PrimitiveType::any()))
+                                            }
+                                            crate::runtime::values::FutureState::Rejected(err) => {
+                                                let mut obj_props = std::collections::HashMap::new();
+                                                obj_props.insert("status".to_string(), RuntimeValue::Str(StrValue::new("rejected".to_string())));
+                                                obj_props.insert("reason".to_string(), RuntimeValue::Str(StrValue::new(err.clone())));
+                                                RuntimeValue::Object(crate::runtime::ObjectValue::new(obj_props, PrimitiveType::any()))
+                                            }
+                                            crate::runtime::values::FutureState::Pending => {
+                                                let mut obj_props = std::collections::HashMap::new();
+                                                obj_props.insert("status".to_string(), RuntimeValue::Str(StrValue::new("pending".to_string())));
+                                                RuntimeValue::Object(crate::runtime::ObjectValue::new(obj_props, PrimitiveType::any()))
+                                            }
+                                        };
+                                        results.push(result_obj);
+                                    } else {
+                                        let mut obj_props = std::collections::HashMap::new();
+                                        obj_props.insert("status".to_string(), RuntimeValue::Str(StrValue::new("fulfilled".to_string())));
+                                        obj_props.insert("value".to_string(), element.clone());
+                                        results.push(RuntimeValue::Object(crate::runtime::ObjectValue::new(obj_props, PrimitiveType::any())));
+                                    }
+                                }
+
+                                let result_list = RuntimeValue::List(ListValue::new(results, PrimitiveType::any()));
+                                RuntimeValue::Future(FutureValue::new_resolved(
+                                    result_list,
+                                    PrimitiveType::any()
+                                ))
+                            }
+                            _ => RuntimeValue::Future(FutureValue::new_rejected(
+                                "Future.allSettled requires an array".to_string(),
+                                PrimitiveType::any()
+                            )),
+                        }
+                    },
+                    crate::fn_type!(variadic, PrimitiveType::any()),
+                );
+                static_methods.insert("allSettled".to_string(), Box::new(all_settled_fn));
+
+                // Future.any(futures) - returns first resolved, rejects if all reject
+                let any_fn = NativeFunctionValue::new(
+                    |args: Vec<RuntimeValue>| {
+                        if args.is_empty() {
+                            return RuntimeValue::Future(FutureValue::new_rejected(
+                                "All futures rejected".to_string(),
+                                PrimitiveType::any()
+                            ));
+                        }
+
+                        match &args[0] {
+                            RuntimeValue::List(list) => {
+                                // Find first resolved future
+                                for element in &list.elements {
+                                    if let RuntimeValue::Future(fut) = element {
+                                        let state = fut.state.read().unwrap();
+                                        if let crate::runtime::values::FutureState::Resolved(val) = &*state {
+                                            return RuntimeValue::Future(FutureValue::new_resolved(
+                                                (**val).clone(),
+                                                PrimitiveType::any()
+                                            ));
+                                        }
+                                    } else {
+                                        // Non-future values are treated as resolved
+                                        return RuntimeValue::Future(FutureValue::new_resolved(
+                                            element.clone(),
+                                            PrimitiveType::any()
+                                        ));
+                                    }
+                                }
+
+                                // All are rejected, return the first rejection
+                                for element in &list.elements {
+                                    if let RuntimeValue::Future(fut) = element {
+                                        let state = fut.state.read().unwrap();
+                                        if let crate::runtime::values::FutureState::Rejected(err) = &*state {
+                                            return RuntimeValue::Future(FutureValue::new_rejected(
+                                                err.clone(),
+                                                PrimitiveType::any()
+                                            ));
+                                        }
+                                    }
+                                }
+
+                                RuntimeValue::Future(FutureValue::new_rejected(
+                                    "All futures rejected".to_string(),
+                                    PrimitiveType::any()
+                                ))
+                            }
+                            _ => RuntimeValue::Future(FutureValue::new_rejected(
+                                "Future.any requires an array".to_string(),
+                                PrimitiveType::any()
+                            )),
+                        }
+                    },
+                    crate::fn_type!(variadic, PrimitiveType::any()),
+                );
+                static_methods.insert("any".to_string(), Box::new(any_fn));
+
+                let static_properties = HashMap::new();
+
+                // Create a Future type: Future<any>
+                use crate::ast::types::{Type, FutureType};
+                let any_type = PrimitiveType::any();
+                let future_type = Type::Future(Box::new(FutureType {
+                    inner_type: any_type,
+                }));
+
+                Some(RuntimeValue::PrimitiveTypeObject(PrimitiveTypeObject::new(
+                    "Future".to_string(),
+                    static_methods,
+                    static_properties,
+                    future_type,
+                )))
+            }
+            _ => None,
+        }
     }
 }

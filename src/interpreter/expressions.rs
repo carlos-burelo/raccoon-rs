@@ -39,7 +39,14 @@ impl Expressions {
             Expr::StrLiteral(lit) => Ok(RuntimeValue::Str(StrValue::new(lit.value.clone()))),
             Expr::BoolLiteral(lit) => Ok(RuntimeValue::Bool(BoolValue::new(lit.value))),
             Expr::NullLiteral(_) => Ok(RuntimeValue::Null(NullValue::new())),
-            Expr::Identifier(ident) => interpreter.environment.get(&ident.name, ident.position),
+            Expr::Identifier(ident) => {
+                // First check for builtin types (like Future, Promise)
+                if let Some(builtin_type) = interpreter.get_builtin_type(&ident.name) {
+                    return Ok(builtin_type);
+                }
+                // Otherwise look up in environment
+                interpreter.environment.get(&ident.name, ident.position)
+            },
             Expr::Binary(binary) => Self::evaluate_binary_expr(interpreter, binary).await,
             Expr::Unary(unary) => Self::evaluate_unary_expr(interpreter, unary).await,
             Expr::Assignment(assign) => Self::evaluate_assignment(interpreter, assign).await,
