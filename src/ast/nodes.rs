@@ -141,6 +141,7 @@ pub enum Expr {
     ObjectLiteral(ObjectLiteral),
     Spread(SpreadExpr),
     Match(MatchExpr),
+    Class(ClassExpr),
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -759,4 +760,15 @@ impl Pattern {
             }
         }
     }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ClassExpr {
+    pub type_parameters: Vec<super::types::TypeParameter>,
+    pub superclass: Option<String>,
+    pub properties: Vec<ClassProperty>,
+    pub constructor: Option<ConstructorDecl>,
+    pub methods: Vec<ClassMethod>,
+    pub accessors: Vec<PropertyAccessor>,
+    pub position: Position,
 }

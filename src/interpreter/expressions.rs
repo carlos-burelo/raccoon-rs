@@ -70,6 +70,7 @@ impl Expressions {
                 None::<String>,
             )),
             Expr::Match(match_expr) => Self::evaluate_match_expr(interpreter, match_expr).await,
+            Expr::Class(class_expr) => Self::evaluate_class_expr(interpreter, class_expr).await,
         }
     }
 
@@ -2676,5 +2677,85 @@ impl Expressions {
                 Ok(None)
             }
         }
+    }
+
+    /// Evaluate anonymous class expression
+    /// Returns a ClassValue that can be instantiated with 'new'
+    #[async_recursion(?Send)]
+    async fn evaluate_class_expr(
+        interpreter: &mut Interpreter,
+        class_expr: &ClassExpr,
+    ) -> Result<RuntimeValue, RaccoonError> {
+        // Generate a synthetic name for the anonymous class
+        let synthetic_name = format!("__AnonymousClass_{:?}", class_expr.position);
+
+        // Extract static methods into a HashMap
+        let mut static_methods = HashMap::new();
+        for method in &class_expr.methods {
+            if method.is_static {
+                let return_type = method.return_type.clone().unwrap_or(Type::Primitive(
+                    crate::ast::types::PrimitiveType::new(
+                        crate::ast::types::TypeKind::Void,
+                        "void",
+                    ),
+                ));
+
+                let fn_type = Type::Function(Box::new(crate::ast::types::FunctionType {
+                    params: method
+                        .parameters
+                        .iter()
+                        .map(|p| p.param_type.clone())
+                        .collect(),
+                    return_type,
+                    is_variadic: method.parameters.iter().any(|p| p.is_rest),
+                }));
+
+                let function = FunctionValue::new(
+                    method.parameters.clone(),
+                    method.body.clone(),
+                    method.is_async,
+                    fn_type,
+                );
+                static_methods.insert(method.name.clone(), Box::new(function));
+            }
+        }
+
+        // Extract static properties into a HashMap
+        let mut static_properties = HashMap::new();
+        for prop in &class_expr.properties {
+            if let Some(init) = &prop.initializer {
+                let value = Self::evaluate_expr(interpreter, init).await?;
+                static_properties.insert(prop.name.clone(), value);
+            } else {
+                static_properties.insert(prop.name.clone(), RuntimeValue::Null(NullValue::new()));
+            }
+        }
+
+        // Create a ClassDecl from the ClassExpr for storage
+        let class_decl = ClassDecl {
+            name: synthetic_name.clone(),
+            type_parameters: class_expr.type_parameters.clone(),
+            superclass: class_expr.superclass.clone(),
+            properties: class_expr.properties.clone(),
+            constructor: class_expr.constructor.clone(),
+            methods: class_expr.methods.clone(),
+            accessors: class_expr.accessors.clone(),
+            decorators: Vec::new(),
+            position: class_expr.position,
+        };
+
+        let class_type = Type::Primitive(crate::ast::types::PrimitiveType::new(
+            crate::ast::types::TypeKind::Class,
+            &synthetic_name,
+        ));
+
+        // Create and return the ClassValue
+        Ok(RuntimeValue::Class(ClassValue::with_properties(
+            synthetic_name,
+            static_methods,
+            static_properties,
+            class_type,
+            class_decl,
+        )))
     }
 }

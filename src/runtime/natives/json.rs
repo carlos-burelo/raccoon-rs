@@ -1,78 +1,51 @@
-/// JSON functions: native_json_parse, native_json_stringify, native_json_stringify_pretty
-use crate::ast::types::{FunctionType, PrimitiveType, Type};
-use crate::runtime::values::*;
+use crate::runtime::{Registrar, RuntimeValue, FromRaccoon, ToRaccoon, NullValue, BoolValue, IntValue, FloatValue, StrValue, ListValue, ObjectValue};
+use crate::ast::types::PrimitiveType;
 use serde_json::Value as JsonValue;
-use std::collections::HashMap;
 
-pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
-    functions.insert(
-        "native_json_parse".to_string(),
-        NativeFunctionValue::new(
-            |args: Vec<RuntimeValue>| {
-                if args.is_empty() {
-                    return RuntimeValue::Null(NullValue::new());
-                }
-
-                let json_str = match &args[0] {
-                    RuntimeValue::Str(s) => s.value.clone(),
-                    _ => return RuntimeValue::Null(NullValue::new()),
-                };
-
-                match serde_json::from_str::<JsonValue>(&json_str) {
-                    Ok(json) => convert_serde_to_runtime(&json),
-                    Err(_) => RuntimeValue::Null(NullValue::new()),
-                }
-            },
-            Type::Function(Box::new(FunctionType {
-                params: vec![PrimitiveType::str()],
-                return_type: PrimitiveType::any(),
-                is_variadic: false,
-            })),
-        ),
+pub fn register_json_module(registrar: &mut Registrar) {
+    // parse(json_str: string) -> any
+    registrar.register_fn(
+        "parse",
+        Some("json"),
+        |args| {
+            let json_str = String::from_raccoon(&args[0]).unwrap_or_default();
+            match serde_json::from_str::<JsonValue>(&json_str) {
+                Ok(json) => convert_serde_to_runtime(&json),
+                Err(_) => RuntimeValue::Null(crate::runtime::NullValue::new()),
+            }
+        },
+        1,
+        Some(1),
     );
 
-    functions.insert(
-        "native_json_stringify".to_string(),
-        NativeFunctionValue::new(
-            |args: Vec<RuntimeValue>| {
-                if args.is_empty() {
-                    return RuntimeValue::Str(StrValue::new("null".to_string()));
-                }
-
-                let json = convert_runtime_to_serde(&args[0]);
-                match serde_json::to_string(&json) {
-                    Ok(s) => RuntimeValue::Str(StrValue::new(s)),
-                    Err(_) => RuntimeValue::Str(StrValue::new("null".to_string())),
-                }
-            },
-            Type::Function(Box::new(FunctionType {
-                params: vec![PrimitiveType::any()],
-                return_type: PrimitiveType::str(),
-                is_variadic: false,
-            })),
-        ),
+    // stringify(value: any) -> string
+    registrar.register_fn(
+        "stringify",
+        Some("json"),
+        |args| {
+            let json = convert_runtime_to_serde(&args[0]);
+            match serde_json::to_string(&json) {
+                Ok(s) => s.to_raccoon(),
+                Err(_) => "null".to_string().to_raccoon(),
+            }
+        },
+        1,
+        Some(1),
     );
 
-    functions.insert(
-        "native_json_stringify_pretty".to_string(),
-        NativeFunctionValue::new(
-            |args: Vec<RuntimeValue>| {
-                if args.is_empty() {
-                    return RuntimeValue::Str(StrValue::new("null".to_string()));
-                }
-
-                let json = convert_runtime_to_serde(&args[0]);
-                match serde_json::to_string_pretty(&json) {
-                    Ok(s) => RuntimeValue::Str(StrValue::new(s)),
-                    Err(_) => RuntimeValue::Str(StrValue::new("null".to_string())),
-                }
-            },
-            Type::Function(Box::new(FunctionType {
-                params: vec![PrimitiveType::any(), PrimitiveType::int()],
-                return_type: PrimitiveType::str(),
-                is_variadic: false,
-            })),
-        ),
+    // stringify_pretty(value: any) -> string
+    registrar.register_fn(
+        "stringify_pretty",
+        Some("json"),
+        |args| {
+            let json = convert_runtime_to_serde(&args[0]);
+            match serde_json::to_string_pretty(&json) {
+                Ok(s) => s.to_raccoon(),
+                Err(_) => "null".to_string().to_raccoon(),
+            }
+        },
+        1,
+        Some(1),
     );
 }
 

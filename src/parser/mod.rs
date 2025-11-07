@@ -1633,6 +1633,12 @@ impl Parser {
             return self.parse_match_expr();
         }
 
+        // Check for class expression (anonymous class)
+        if self.check(&TokenType::Class) {
+            self.advance();
+            return self.parse_class_expr();
+        }
+
         if self.check(&TokenType::Async) {
             let saved_pos = self.current;
             self.advance();
@@ -2924,6 +2930,140 @@ impl Parser {
         }))
     }
 
+    fn parse_class_expr(&mut self) -> Result<Expr, RaccoonError> {
+        let position = self.previous().position;
+
+        // Parse optional type parameters
+        let mut type_params = Vec::new();
+        if self.match_token(&[TokenType::Lt]) {
+            loop {
+                let name = self.consume(TokenType::Identifier, "Expected type parameter name")?
+                    .value
+                    .clone();
+                type_params.push(crate::ast::types::TypeParameter {
+                    name,
+                    constraint: None,
+                });
+                if !self.match_token(&[TokenType::Comma]) {
+                    break;
+                }
+            }
+            self.consume(TokenType::Gt, "Expected '>' after type parameters")?;
+        }
+
+        // Parse optional extends clause
+        let mut superclass = None;
+        if self.match_token(&[TokenType::Extends]) {
+            superclass = Some(
+                self.consume(TokenType::Identifier, "Expected superclass name")?
+                    .value
+                    .clone(),
+            );
+        }
+
+        // Parse optional implements clause
+        if self.match_token(&[TokenType::Implements]) {
+            loop {
+                self.consume(TokenType::Identifier, "Expected interface name")?;
+                if !self.match_token(&[TokenType::Comma]) {
+                    break;
+                }
+            }
+        }
+
+        self.consume(TokenType::LeftBrace, "Expected '{' for class body")?;
+
+        let mut properties = Vec::new();
+        let mut methods = Vec::new();
+        let mut accessors = Vec::new();
+        let mut constructor = None;
+
+        while !self.check(&TokenType::RightBrace) && !self.is_at_end() {
+            let mut member_decorators = Vec::new();
+            while self.match_token(&[TokenType::At]) {
+                member_decorators.push(self.parse_decorator()?);
+            }
+
+            let mut is_static = false;
+            let mut access_modifier = crate::tokens::AccessModifier::Public;
+
+            if self.match_token(&[TokenType::Static]) {
+                is_static = true;
+            }
+
+            if self.match_token(&[TokenType::Public]) {
+                access_modifier = crate::tokens::AccessModifier::Public;
+            } else if self.match_token(&[TokenType::Private]) {
+                access_modifier = crate::tokens::AccessModifier::Private;
+            } else if self.match_token(&[TokenType::Protected]) {
+                access_modifier = crate::tokens::AccessModifier::Protected;
+            }
+
+            if !is_static && self.match_token(&[TokenType::Static]) {
+                is_static = true;
+            }
+
+            let mut is_async = false;
+            if self.match_token(&[TokenType::Async]) {
+                is_async = true;
+            }
+
+            if self.match_token(&[TokenType::Constructor]) {
+                if constructor.is_some() {
+                    return Err(RaccoonError::new(
+                        "Class cannot have multiple constructors".to_string(),
+                        self.previous().position,
+                        self.file.clone(),
+                    ));
+                }
+                constructor = Some(self.parse_constructor()?);
+            } else if !is_static && !is_async && self.check(&TokenType::Get)
+                && self.check_next(&[TokenType::Identifier])
+                && self.check_next_next(&[TokenType::LeftParen])
+            {
+                accessors.push(self.parse_accessor(
+                    crate::ast::nodes::AccessorKind::Get,
+                    member_decorators,
+                    access_modifier,
+                )?);
+            } else if !is_static && !is_async && self.check(&TokenType::Set)
+                && self.check_next(&[TokenType::Identifier])
+                && self.check_next_next(&[TokenType::LeftParen])
+            {
+                accessors.push(self.parse_accessor(
+                    crate::ast::nodes::AccessorKind::Set,
+                    member_decorators,
+                    access_modifier,
+                )?);
+            } else if (self.check(&TokenType::Identifier)
+                || (is_static || is_async)
+                    && (self.check(&TokenType::Get) || self.check(&TokenType::Set)))
+                && self.check_next(&[TokenType::LeftParen])
+            {
+                methods.push(self.parse_method(
+                    member_decorators,
+                    access_modifier,
+                    is_static,
+                    is_async,
+                )?);
+            } else {
+                properties.push(self.parse_class_property(member_decorators, access_modifier)?);
+            }
+        }
+
+        self.consume(TokenType::RightBrace, "Expected '}' after class body")?;
+
+        Ok(Expr::Class(ClassExpr {
+            type_parameters: type_params,
+            superclass,
+            properties,
+            constructor,
+            methods,
+            accessors,
+            position,
+        }))
+    }
+
     fn parse_pattern(&mut self) -> Result<Pattern, RaccoonError> {
         if self.match_token(&[TokenType::Underscore]) {
             return Ok(Pattern::Wildcard(self.previous().position));
@@ -3066,6 +3206,7 @@ impl Expr {
             Expr::ObjectLiteral(e) => e.position,
             Expr::Spread(e) => e.position,
             Expr::Match(e) => e.position,
+            Expr::Class(e) => e.position,
         }
     }
 }

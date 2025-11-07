@@ -1,251 +1,204 @@
-/// String functions: length, upper, lower, trim, substring, etc.
-///
-/// Uses declarative macros to reduce registration boilerplate by ~60%
-use crate::ast::types::{FunctionType, PrimitiveType, Type};
-use crate::runtime::values::*;
-use std::collections::HashMap;
+use crate::runtime::{Registrar, RuntimeValue, FromRaccoon, ToRaccoon};
 
-// Macro to eliminate repetitive registration code
-macro_rules! register_string_fn {
-    (
-        $functions:expr,
-        $name:expr,
-        $invoke:expr,
-        $params:expr,
-        $return_type:expr
-    ) => {
-        $functions.insert(
-            $name.to_string(),
-            NativeFunctionValue::new(
-                $invoke,
-                Type::Function(Box::new(FunctionType {
-                    params: $params,
-                    return_type: $return_type,
-                    is_variadic: false,
-                })),
-            ),
-        );
-    };
-}
-
-pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
-    // String length
-    register_string_fn!(
-        functions,
-        "native_str_length",
-        |args: Vec<RuntimeValue>| {
-            if let Some(RuntimeValue::Str(s)) = args.first() {
-                RuntimeValue::Int(IntValue::new(s.value.len() as i64))
-            } else {
-                RuntimeValue::Int(IntValue::new(0))
-            }
+pub fn register_string_module(registrar: &mut Registrar) {
+    // length(s: string) -> i32
+    registrar.register_fn(
+        "length",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            (s.len() as i32).to_raccoon()
         },
-        vec![PrimitiveType::str()],
-        PrimitiveType::int()
+        1,
+        Some(1),
     );
 
-    // String upper
-    register_string_fn!(
-        functions,
-        "native_str_upper",
-        |args: Vec<RuntimeValue>| {
-            if let Some(RuntimeValue::Str(s)) = args.first() {
-                RuntimeValue::Str(StrValue::new(s.value.to_uppercase()))
-            } else {
-                RuntimeValue::Str(StrValue::new(String::new()))
-            }
+    // upper(s: string) -> string
+    registrar.register_fn(
+        "upper",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            s.to_uppercase().to_raccoon()
         },
-        vec![PrimitiveType::str()],
-        PrimitiveType::str()
+        1,
+        Some(1),
     );
 
-    // String lower
-    register_string_fn!(
-        functions,
-        "native_str_lower",
-        |args: Vec<RuntimeValue>| {
-            if let Some(RuntimeValue::Str(s)) = args.first() {
-                RuntimeValue::Str(StrValue::new(s.value.to_lowercase()))
-            } else {
-                RuntimeValue::Str(StrValue::new(String::new()))
-            }
+    // lower(s: string) -> string
+    registrar.register_fn(
+        "lower",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            s.to_lowercase().to_raccoon()
         },
-        vec![PrimitiveType::str()],
-        PrimitiveType::str()
+        1,
+        Some(1),
     );
 
-    // String trim
-    register_string_fn!(
-        functions,
-        "native_str_trim",
-        |args: Vec<RuntimeValue>| {
-            if let Some(RuntimeValue::Str(s)) = args.first() {
-                RuntimeValue::Str(StrValue::new(s.value.trim().to_string()))
-            } else {
-                RuntimeValue::Str(StrValue::new(String::new()))
-            }
+    // trim(s: string) -> string
+    registrar.register_fn(
+        "trim",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            s.trim().to_string().to_raccoon()
         },
-        vec![PrimitiveType::str()],
-        PrimitiveType::str()
+        1,
+        Some(1),
     );
 
-    // String substring
-    register_string_fn!(
-        functions,
-        "native_str_substring",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 3 {
-                return RuntimeValue::Str(StrValue::new(String::new()));
-            }
+    // substring(s: string, start: i32, end: i32) -> string
+    registrar.register_fn(
+        "substring",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            let start = i32::from_raccoon(&args[1]).unwrap_or(0) as usize;
+            let end = i32::from_raccoon(&args[2]).unwrap_or(s.len() as i32) as usize;
 
-            if let (RuntimeValue::Str(s), RuntimeValue::Int(start), RuntimeValue::Int(end)) =
-                (&args[0], &args[1], &args[2])
-            {
-                let start = (start.value as usize).min(s.value.len());
-                let end = (end.value as usize).min(s.value.len());
-                if start <= end {
-                    let substr = s.value[start..end].to_string();
-                    RuntimeValue::Str(StrValue::new(substr))
-                } else {
-                    RuntimeValue::Str(StrValue::new(String::new()))
-                }
+            let start = start.min(s.len());
+            let end = end.min(s.len());
+
+            if start <= end {
+                s[start..end].to_string().to_raccoon()
             } else {
-                RuntimeValue::Str(StrValue::new(String::new()))
+                String::new().to_raccoon()
             }
         },
-        vec![PrimitiveType::str(), PrimitiveType::int(), PrimitiveType::int()],
-        PrimitiveType::str()
+        3,
+        Some(3),
     );
 
-    // String charAt
-    register_string_fn!(
-        functions,
-        "native_str_char_at",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 2 {
-                return RuntimeValue::Str(StrValue::new(String::new()));
-            }
+    // split(s: string, delimiter: string) -> list<string>
+    registrar.register_fn(
+        "split",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            let delimiter = String::from_raccoon(&args[1]).unwrap_or_default();
 
-            if let (RuntimeValue::Str(s), RuntimeValue::Int(index)) = (&args[0], &args[1]) {
-                if index.value >= 0 && (index.value as usize) < s.value.len() {
-                    let ch = s.value.chars().nth(index.value as usize).unwrap_or(' ');
-                    RuntimeValue::Str(StrValue::new(ch.to_string()))
-                } else {
-                    RuntimeValue::Str(StrValue::new(String::new()))
-                }
-            } else {
-                RuntimeValue::Str(StrValue::new(String::new()))
-            }
+            let parts: Vec<RuntimeValue> = s
+                .split(&delimiter)
+                .map(|part| part.to_string().to_raccoon())
+                .collect();
+
+            RuntimeValue::List(crate::runtime::ListValue::new(parts, crate::ast::types::PrimitiveType::str()))
         },
-        vec![PrimitiveType::str(), PrimitiveType::int()],
-        PrimitiveType::str()
+        2,
+        Some(2),
     );
 
-    // String indexOf
-    register_string_fn!(
-        functions,
-        "native_str_index_of",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 2 {
-                return RuntimeValue::Int(IntValue::new(-1));
-            }
-
-            if let (RuntimeValue::Str(s), RuntimeValue::Str(substr)) = (&args[0], &args[1]) {
-                match s.value.find(&substr.value) {
-                    Some(index) => RuntimeValue::Int(IntValue::new(index as i64)),
-                    None => RuntimeValue::Int(IntValue::new(-1)),
-                }
-            } else {
-                RuntimeValue::Int(IntValue::new(-1))
-            }
+    // replace(s: string, from: string, to: string) -> string
+    registrar.register_fn(
+        "replace",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            let from = String::from_raccoon(&args[1]).unwrap_or_default();
+            let to = String::from_raccoon(&args[2]).unwrap_or_default();
+            s.replace(&from, &to).to_raccoon()
         },
-        vec![PrimitiveType::str(), PrimitiveType::str()],
-        PrimitiveType::int()
+        3,
+        Some(3),
     );
 
-    // String replace
-    register_string_fn!(
-        functions,
-        "native_str_replace",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 3 {
-                return RuntimeValue::Str(StrValue::new(String::new()));
-            }
-
-            if let (RuntimeValue::Str(s), RuntimeValue::Str(from), RuntimeValue::Str(to)) =
-                (&args[0], &args[1], &args[2])
-            {
-                let result = s.value.replace(&from.value, &to.value);
-                RuntimeValue::Str(StrValue::new(result))
-            } else {
-                RuntimeValue::Str(StrValue::new(String::new()))
-            }
+    // contains(s: string, needle: string) -> bool
+    registrar.register_fn(
+        "contains",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            let needle = String::from_raccoon(&args[1]).unwrap_or_default();
+            s.contains(&needle).to_raccoon()
         },
-        vec![PrimitiveType::str(), PrimitiveType::str(), PrimitiveType::str()],
-        PrimitiveType::str()
+        2,
+        Some(2),
     );
 
-    // String split
-    register_string_fn!(
-        functions,
-        "native_str_split",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 2 {
-                return RuntimeValue::List(ListValue::new(vec![], PrimitiveType::str()));
-            }
-
-            if let (RuntimeValue::Str(s), RuntimeValue::Str(delimiter)) = (&args[0], &args[1]) {
-                let parts: Vec<RuntimeValue> = s
-                    .value
-                    .split(&delimiter.value)
-                    .map(|part| RuntimeValue::Str(StrValue::new(part.to_string())))
-                    .collect();
-                RuntimeValue::List(ListValue::new(parts, PrimitiveType::str()))
-            } else {
-                RuntimeValue::List(ListValue::new(vec![], PrimitiveType::str()))
-            }
+    // starts_with(s: string, prefix: string) -> bool
+    registrar.register_fn(
+        "starts_with",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            let prefix = String::from_raccoon(&args[1]).unwrap_or_default();
+            s.starts_with(&prefix).to_raccoon()
         },
-        vec![PrimitiveType::str(), PrimitiveType::str()],
-        Type::List(Box::new(crate::ast::types::ListType {
-            element_type: PrimitiveType::str(),
-        }))
+        2,
+        Some(2),
     );
 
-    // String startsWith
-    register_string_fn!(
-        functions,
-        "native_str_starts_with",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 2 {
-                return RuntimeValue::Bool(BoolValue::new(false));
-            }
-
-            if let (RuntimeValue::Str(s), RuntimeValue::Str(prefix)) = (&args[0], &args[1]) {
-                RuntimeValue::Bool(BoolValue::new(s.value.starts_with(&prefix.value)))
-            } else {
-                RuntimeValue::Bool(BoolValue::new(false))
-            }
+    // ends_with(s: string, suffix: string) -> bool
+    registrar.register_fn(
+        "ends_with",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            let suffix = String::from_raccoon(&args[1]).unwrap_or_default();
+            s.ends_with(&suffix).to_raccoon()
         },
-        vec![PrimitiveType::str(), PrimitiveType::str()],
-        PrimitiveType::bool()
+        2,
+        Some(2),
     );
 
-    // String endsWith
-    register_string_fn!(
-        functions,
-        "native_str_ends_with",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 2 {
-                return RuntimeValue::Bool(BoolValue::new(false));
-            }
+    // reverse(s: string) -> string
+    registrar.register_fn(
+        "reverse",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            s.chars().rev().collect::<String>().to_raccoon()
+        },
+        1,
+        Some(1),
+    );
 
-            if let (RuntimeValue::Str(s), RuntimeValue::Str(suffix)) = (&args[0], &args[1]) {
-                RuntimeValue::Bool(BoolValue::new(s.value.ends_with(&suffix.value)))
-            } else {
-                RuntimeValue::Bool(BoolValue::new(false))
+    // repeat(s: string, count: i32) -> string
+    registrar.register_fn(
+        "repeat",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            let count = i32::from_raccoon(&args[1]).unwrap_or(0) as usize;
+            s.repeat(count).to_raccoon()
+        },
+        2,
+        Some(2),
+    );
+
+    // char_at(s: string, index: i32) -> string
+    registrar.register_fn(
+        "char_at",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            let index = i32::from_raccoon(&args[1]).unwrap_or(0) as usize;
+
+            match s.chars().nth(index) {
+                Some(ch) => ch.to_string().to_raccoon(),
+                None => String::new().to_raccoon(),
             }
         },
-        vec![PrimitiveType::str(), PrimitiveType::str()],
-        PrimitiveType::bool()
+        2,
+        Some(2),
+    );
+
+    // index_of(s: string, needle: string) -> i32
+    registrar.register_fn(
+        "index_of",
+        Some("string"),
+        |args| {
+            let s = String::from_raccoon(&args[0]).unwrap_or_default();
+            let needle = String::from_raccoon(&args[1]).unwrap_or_default();
+
+            match s.find(&needle) {
+                Some(idx) => (idx as i32).to_raccoon(),
+                None => (-1i32).to_raccoon(),
+            }
+        },
+        2,
+        Some(2),
     );
 }

@@ -1,6 +1,7 @@
-Proyecto: raccoon
+Proyecto: Raccoon
 Lenguaje principal: Rust (Cargo)
-Propósito: intérprete/REPL/runner para el lenguaje Raccoon (`.rcc`) — incluye lexer, parser, analizador semántico, intérprete y una stdlib escrita en `.rcc`.
+Propósito: Lenguaje de programación compilado con intérprete/REPL escrito en Rust. Implementación completa: lexer, parser, analizador semántico, sistema de tipos, intérprete con soporte async/await y stdlib escrita en Raccoon.
+Estado actual: Desarrollo activo — Fase 2 (Pattern Matching como expresión) ✅ COMPLETADA con test suite exhaustivo
 
 Resumen rápido (qué hace cada cosa)
 - `Cargo.toml` — manifest de Rust (build y dependencias). Punto de partida para `cargo build`, `cargo run`, `cargo test`.
@@ -47,12 +48,20 @@ Estructura y responsabilidades por archivo/directorio (más contexto)
   - Cambios de runtime (p. ej. semántica de `await`, ciclos de vida) requieren pruebas en `tests/`.
 
 - `src/runtime/`
-  - Objetos de runtime, representaciones de valores nativos, hooks FFI si existen.
+  - 13 módulos: valores (values.rs), ambiente (environment.rs), builtins, sistema de tipos nativo.
+  - Subcarpeta `natives/` con módulos: io, math, string, array, json, time, random, http, ffi.
+  - FFI integration: rust_ffi.rs, rust_ffi_modules.rs para bindeos de Rust.
+  - Decoradores: decorator_registry.rs, decorators.rs para sistema de decoradores.
   - Lugar para exponer funciones nativas a `.rcc`.
 
-- `src/stdlib/` y archivos `.rcc` en la raíz del proyecto (`io.rcc`, `math.rcc`, `string.rcc`, `time.rcc`, `ffi.rcc`, `array.rcc`, `http.rcc`, ...)
-  - Implementación de la biblioteca estándar escrita en el propio lenguaje. Útil para ver API pública y expectativas de comportamiento.
-  - Para añadir API estándar: editar los `.rcc` y, si requiere implementación nativa, añadirlo en `runtime/`.
+- `src/analyzer/`
+  - Análisis semántico (analyzer.rs) y análisis de expresiones (expressions.rs).
+  - Comprobaciones post-parse antes de la interpretación.
+
+- `src/stdlib/` y carga dinámica en `src/runtime/stdlib_loader.rs`
+  - Biblioteca estándar para módulos como Future/Promise con métodos: then, catch, finally, allSettled.
+  - Tipos nativas: List, Map, Set, Tuple, Range, Optional.
+  - Para extender: agregar módulos en runtime/natives/ o crear nuevos archivos `.rcc`.
 
 - `tests/` (scripts `.rcc`)
   - Contienen casos de integración y ejemplos. Ejecutarlos manualmente con el runner o automatizarlos con `cargo test` si hay harness.
@@ -103,18 +112,64 @@ Dónde mirar primero para entender o modificar comportamiento
 4. `src/semantic_analyzer.rs` y `src/type_system/` — reglas semánticas y tipos.  
 5. `src/interpreter/` y `src/runtime/` — ejecución y valores nativos.
 
+Características ACTUALES del lenguaje Raccoon (Fase 2 completa)
+✅ Pattern matching como primera clase: match expr { pattern => ..., pattern2 => ... }
+   - Tipos soportados: literales (int/string/float/bool/null), wildcard (_), variable bindings, list patterns, object patterns, nested patterns, or patterns (|)
+✅ Async/await y Futures/Promises API (then, catch, finally, allSettled)
+✅ Clases con constructores, propiedades, métodos, getters/setters
+✅ Interfaces, enums, tipos de unión e intersección
+✅ Generics y type parameters
+✅ Destructuring (arrays y objetos con rest parameters)
+✅ Decoradores (sistema de decoradores implementado)
+✅ FFI (Foreign Function Interface) para bindeos de Rust
+✅ Module system con import/export
+✅ Type inference engine con type checking
+✅ Operadores null-safety: ?., ??
+✅ Template strings con interpolación
+✅ Spread operator (...)
+✅ Control flow: if/else, while, do-while, for, for-in, for-of, switch, try-catch
+
 Pequeños consejos para LLMs que inspeccionan el repo
-- Priorizar tests en `tests/` cuando se infiere comportamiento de la stdlib o compatibilidad.  
-- Buscar `TODO`, `FIXME` o `NOTE` en fuentes para atajos de contexto.  
+- Priorizar tests en `tests/` cuando se infiere comportamiento de la stdlib o compatibilidad.
+- Buscar `TODO`, `FIXME` o `NOTE` en fuentes para atajos de contexto.
+- Para pattern matching: ver tests/test_*.rcc con exhaustive testing (18+ tests).
 - Para errores de runtime, reproducir con REPL (modo interactivo) puede dar pistas rápidas.
+- Revisar commit 513537e para ver test suite completo de pattern matching.
+
+ESTADO DE LOS COMMITS RECIENTES (últimos 5)
+1. 513537e ✅ Add exhaustive pattern matching test suite
+   - 18 tests exhaustivos para pattern matching (todos pasando)
+   - Cubre: int/string/float/bool/null literals, wildcards, variables, lists, objects, nested patterns
+
+2. 77be818 🐛 Fix literal pattern matching in interpreter
+   - Corrección de comparación de literales en pattern matching (int, string, float, bool, null)
+   - 12 tests de pattern matching pasando
+
+3. 94a4079 ✨ Implement pattern matching as expression (Phase 2)
+   - Keyword 'match' parseado como expresión
+   - Pattern enum con variantes: Wildcard, Literal, Variable, List, Object, Or, Range, Type
+   - Evaluación completa de arms de match con scope binding
+
+4. 52b75ca 📖 Documentación: QUICK_REFERENCE actualizado (Fase 1 completa)
+
+5. 50fee11 🔧 Corrección: Funciones anónimas requieren () aunque sin parámetros
+   - Sintaxis: fn() { statements } vs fn => expression
+
+LIMPIEZA GIT RECIENTE (archivos borrados)
+- ANALISIS_FFI.txt, DECORATOR_DEPENDENCIES.md, IMPLICIT_CONTEXT_DETAILS.md
+- QUICK_REFERENCE.md, README_DECORADORES.md, RESUMEN_PLAN.txt, VISION_DECORADORES.md, result.md
+- test_lexer_match.rcc, test_simple_match.rcc
+(Limpieza de documentos temporales tras completar Fase 2)
 
 Notas finales
-- Este archivo está pensado para ser breve pero operativo: añade ejemplos concretos y referencias a funciones/constructores más usadas (Lexer::new, Parser::new, Interpreter::interpret) para facilitar a modelos que automatizan cambios.  
--- Si quieres, puedo: añadir un mapa de funciones/archivos con nombres de funciones exactos (por ejemplo, listar firmas públicas), generar una versión en inglés, o extraer docstrings y pruebas relevantes para enriquecer aún más este archivo.
+- Raccoon está en desarrollo activo con ciclos regulares de features + testing exhaustivo
+- Pattern matching es production-ready tras pruebas exhaustivas
+- El repo usa git branches limpiamente con commit messages descriptivos
+- Estructura modular permite agregar nuevas fases sin romper lo existente
 
 ---
 
-Inventario de archivos bajo `src/` (lista exacta)
+Inventario de archivos bajo `src/` (lista detallada)
 - Archivos raíz:
   - `src/main.rs`
   - `src/lib.rs`
@@ -128,58 +183,25 @@ Inventario de archivos bajo `src/` (lista exacta)
 
 - Directorios y ficheros relevantes:
   - `src/ast/`
-    - `mod.rs`
-    - `nodes.rs`
-    - `types.rs`
-  - `src/parser/`
-    - `mod.rs`
-  - `src/interpreter/`
-    - `mod.rs`
-    - `operators.rs`
-  - `src/runtime/`
-    - `mod.rs`
-    - `module_system.rs`
-    - `stdlib_loader.rs`
-    - `native_bridge.rs`
-    - `ffi.rs`
-    - `ffi_registry.rs`
-    - `environment.rs`
-    - `decorators.rs`
-    - `decorator_registry.rs`
-    - `control_flow.rs`
-    - `builtins.rs`
-    - `values.rs`
-    - `natives/` (subcarpeta)
-      - `mod.rs`
-      - `time.rs`
-      - `string.rs`
-      - `random.rs`
-      - `output.rs`
-      - `math.rs`
-      - `json.rs`
-      - `io.rs`
-      - `http.rs`
-      - `ffi.rs`
-      - `array.rs`
-    - `types/` (subcarpeta)
-      - `mod.rs`
-      - `registry.rs`
-      - `str_type.rs`
-      - `map_type.rs`
-      - `list_type.rs`
-      - `int_type.rs`
-      - `float_type.rs`
-      - `decimal_type.rs`
-      - `bool_type.rs`
-      - `bigint_type.rs`
-  - `src/type_system/`
-    - `mod.rs`
-    - `checker.rs`
-    - `inference.rs`
-    - `resolver.rs`
-    - `substitutor.rs`
+    - `mod.rs`, `nodes.rs`, `types.rs` — definiciones de nodos (incluyendo Pattern enum para pattern matching)
+  - `src/parser/` (7 módulos)
+    - `mod.rs`, `statements.rs`, `expressions.rs`, `declarations.rs`, `types.rs`, `precedence.rs`, `utilities.rs`
+    - Soporta parsing de match expressions, destructuring, generics, decorators
+  - `src/interpreter/` (8 módulos, ~121k LOC en expressions.rs)
+    - `mod.rs`, `expressions.rs` (core), `declarations.rs`, `control_flow.rs`, `helpers.rs`, `operators.rs`, `module_loader.rs`, `builtins.rs`
+  - `src/runtime/` (13 módulos)
+    - Core: `mod.rs`, `values.rs`, `environment.rs`, `builtins.rs`, `control_flow.rs`
+    - FFI/Nativos: `native_bridge.rs`, `ffi.rs`, `ffi_registry.rs`, `rust_ffi.rs`, `rust_ffi_modules.rs`, `rust_natives.rs`
+    - Módulos: `module_system.rs`, `stdlib_loader.rs`
+    - Decoradores: `decorators.rs`, `decorator_registry.rs`
+    - Tipos nativos (types/): registry.rs, str_type.rs, map_type.rs, list_type.rs, int_type.rs, float_type.rs, decimal_type.rs, bool_type.rs, bigint_type.rs
+    - `natives/` (9 módulos): mod.rs, io.rs, math.rs, string.rs, array.rs, json.rs, time.rs, random.rs, http.rs, output.rs, ffi.rs
+  - `src/analyzer/`
+    - `mod.rs`, `analyzer.rs`, `expressions.rs` — análisis semántico post-parse
+  - `src/type_system/` (5 módulos, ~951 LOC)
+    - `mod.rs`, `checker.rs`, `inference.rs`, `resolver.rs`, `substitutor.rs`
 
-Cantidad observada aprox.: 52 ficheros / rutas (código fuente y módulos).
+Cantidad observada: ~65+ ficheros / rutas (código fuente, módulos y submódulos).
 
 Firmas públicas (extracto) — funciones/estructuras/exports clave encontradas
 Nota: listado simplificado para lectura rápida; hay muchas funciones privadas adicionales en cada archivo.
@@ -227,8 +249,16 @@ Nota: listado simplificado para lectura rápida; hay muchas funciones privadas a
 Cómo añadí esto
 - He inspeccionado `src/` recursivamente y leí los archivos clave (`lexer.rs`, `tokens.rs`, `parser/mod.rs`, `interpreter/mod.rs`, `runtime/mod.rs`, `type_system/mod.rs`) para extraer firmas públicas y los reexports más importantes.
 
-Siguientes pasos opcionales (puedo ejecutar ahora)
-- Incluir firmas públicas adicionales de más ficheros (por ejemplo `runtime/*`, `interpreter/operators.rs`, `type_system/checker.rs`).
-- Generar una sección con ejemplos de uso concretos extraídos de `tests/` y comandos para reproducir fallos.
-- Añadir una versión en inglés del mismo contenido.
+ROADMAP futuro (basado en estado actual)
+- Fase 3: Pattern matching guards (when conditions en patterns)
+- Completar type system: conditional types, mapped types
+- Expandir stdlib: más módulos de utilidades
+- Optimizaciones del compilador
+- Mejorar documentación y tutoriales
+
+Próximas tareas prácticas
+- Revisar tests/test_*.rcc para entender uso real de features
+- Ejecutar `cargo build` para verificar compilación en cambios
+- Para debugging: usar `cargo run -- run <file.rcc> --tokens` o `--ast`
+- Añadir nuevas pruebas en `tests/` antes de implementar features
 

@@ -1,235 +1,184 @@
-/// Array functions: length, push, slice, reverse
-///
-/// Uses declarative macros to reduce registration boilerplate by ~50%
-use crate::ast::types::{FunctionType, ListType, PrimitiveType, Type};
-use crate::runtime::values::*;
-use std::collections::HashMap;
+use crate::runtime::{Registrar, RuntimeValue, FromRaccoon, ToRaccoon, ListValue};
 
-// Macro to eliminate repetitive registration code
-macro_rules! register_array_fn {
-    (
-        $functions:expr,
-        $name:expr,
-        $invoke:expr,
-        $params:expr,
-        $return_type:expr
-    ) => {
-        $functions.insert(
-            $name.to_string(),
-            NativeFunctionValue::new(
-                $invoke,
-                Type::Function(Box::new(FunctionType {
-                    params: $params,
-                    return_type: $return_type,
-                    is_variadic: false,
-                })),
-            ),
-        );
-    };
-}
-
-pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
-    // Array length
-    register_array_fn!(
-        functions,
-        "native_array_length",
-        |args: Vec<RuntimeValue>| {
-            if let Some(RuntimeValue::List(list)) = args.first() {
-                RuntimeValue::Int(IntValue::new(list.elements.len() as i64))
-            } else {
-                RuntimeValue::Int(IntValue::new(0))
+pub fn register_array_module(registrar: &mut Registrar) {
+    // length(arr: list) -> i32
+    registrar.register_fn(
+        "length",
+        Some("array"),
+        |args| {
+            match &args[0] {
+                RuntimeValue::List(list) => (list.elements.len() as i32).to_raccoon(),
+                _ => (0i32).to_raccoon(),
             }
         },
-        vec![Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))],
-        PrimitiveType::int()
+        1,
+        Some(1),
     );
 
-    // Array push
-    register_array_fn!(
-        functions,
-        "native_array_push",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 2 {
-                return RuntimeValue::Null(NullValue::new());
-            }
-            if let RuntimeValue::List(mut list) = args[0].clone() {
-                list.elements.push(args[1].clone());
-                RuntimeValue::List(list)
-            } else {
-                RuntimeValue::Null(NullValue::new())
-            }
-        },
-        vec![
-            Type::List(Box::new(ListType {
-                element_type: PrimitiveType::any(),
-            })),
-            PrimitiveType::any(),
-        ],
-        Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))
-    );
-
-    // Array slice
-    register_array_fn!(
-        functions,
-        "native_array_slice",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 3 {
-                return RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
-            }
-
-            let list = match &args[0] {
-                RuntimeValue::List(l) => l.clone(),
-                _ => return RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any())),
-            };
-
-            let start = match &args[1] {
-                RuntimeValue::Int(i) => i.value.max(0) as usize,
-                _ => 0,
-            };
-
-            let end = match &args[2] {
-                RuntimeValue::Int(i) => i.value.max(0) as usize,
-                _ => list.elements.len(),
-            };
-
-            let end = end.min(list.elements.len());
-            let start = start.min(end);
-
-            let sliced = list.elements[start..end].to_vec();
-            RuntimeValue::List(ListValue::new(sliced, list.element_type))
-        },
-        vec![
-            Type::List(Box::new(ListType {
-                element_type: PrimitiveType::any(),
-            })),
-            PrimitiveType::int(),
-            PrimitiveType::int(),
-        ],
-        Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))
-    );
-
-    // Array reverse
-    register_array_fn!(
-        functions,
-        "native_array_reverse",
-        |args: Vec<RuntimeValue>| {
-            if let Some(RuntimeValue::List(list)) = args.first() {
-                let mut reversed = list.clone();
-                reversed.elements.reverse();
-                RuntimeValue::List(reversed)
-            } else {
-                RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()))
-            }
-        },
-        vec![Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))],
-        Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))
-    );
-
-    // Array pop
-    register_array_fn!(
-        functions,
-        "native_array_pop",
-        |args: Vec<RuntimeValue>| {
-            if let Some(RuntimeValue::List(mut list)) = args.first().cloned() {
-                if !list.elements.is_empty() {
-                    list.elements.pop().unwrap()
-                } else {
-                    RuntimeValue::Null(NullValue::new())
-                }
-            } else {
-                RuntimeValue::Null(NullValue::new())
-            }
-        },
-        vec![Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))],
-        PrimitiveType::any()
-    );
-
-    // Array shift
-    register_array_fn!(
-        functions,
-        "native_array_shift",
-        |args: Vec<RuntimeValue>| {
-            if let Some(RuntimeValue::List(mut list)) = args.first().cloned() {
-                if !list.elements.is_empty() {
-                    list.elements.remove(0)
-                } else {
-                    RuntimeValue::Null(NullValue::new())
-                }
-            } else {
-                RuntimeValue::Null(NullValue::new())
-            }
-        },
-        vec![Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))],
-        PrimitiveType::any()
-    );
-
-    // Array unshift
-    register_array_fn!(
-        functions,
-        "native_array_unshift",
-        |args: Vec<RuntimeValue>| {
-            if args.len() < 2 {
-                return RuntimeValue::Null(NullValue::new());
-            }
-            if let RuntimeValue::List(mut list) = args[0].clone() {
-                list.elements.insert(0, args[1].clone());
-                RuntimeValue::List(list)
-            } else {
-                RuntimeValue::Null(NullValue::new())
-            }
-        },
-        vec![
-            Type::List(Box::new(ListType {
-                element_type: PrimitiveType::any(),
-            })),
-            PrimitiveType::any(),
-        ],
-        Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))
-    );
-
-    // Array sort
-    register_array_fn!(
-        functions,
-        "native_array_sort",
-        |args: Vec<RuntimeValue>| {
-            if let Some(RuntimeValue::List(mut list)) = args.first().cloned() {
-                // Simple numeric/string sort for basic types
-                list.elements.sort_by(|a, b| {
-                    match (a, b) {
-                        (RuntimeValue::Int(x), RuntimeValue::Int(y)) => x.value.cmp(&y.value),
-                        (RuntimeValue::Float(x), RuntimeValue::Float(y)) => {
-                            x.value.partial_cmp(&y.value).unwrap_or(std::cmp::Ordering::Equal)
-                        }
-                        (RuntimeValue::Str(x), RuntimeValue::Str(y)) => x.value.cmp(&y.value),
-                        _ => std::cmp::Ordering::Equal,
+    // push(arr: list, element: any) -> list
+    registrar.register_fn(
+        "push",
+        Some("array"),
+        |args| {
+            match &args[0] {
+                RuntimeValue::List(list) => {
+                    let mut new_elements = list.elements.clone();
+                    if args.len() > 1 {
+                        new_elements.push(args[1].clone());
                     }
-                });
-                RuntimeValue::List(list)
-            } else {
-                RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()))
+                    RuntimeValue::List(ListValue::new(new_elements, list.element_type.clone()))
+                }
+                _ => args[0].clone(),
             }
         },
-        vec![Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))],
-        Type::List(Box::new(ListType {
-            element_type: PrimitiveType::any(),
-        }))
+        2,
+        Some(2),
+    );
+
+    // pop(arr: list) -> any
+    registrar.register_fn(
+        "pop",
+        Some("array"),
+        |args| {
+            match &args[0] {
+                RuntimeValue::List(list) => {
+                    if list.elements.is_empty() {
+                        RuntimeValue::Null(crate::runtime::NullValue::new())
+                    } else {
+                        list.elements.last().cloned().unwrap_or(RuntimeValue::Null(crate::runtime::NullValue::new()))
+                    }
+                }
+                _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
+            }
+        },
+        1,
+        Some(1),
+    );
+
+    // shift(arr: list) -> any
+    registrar.register_fn(
+        "shift",
+        Some("array"),
+        |args| {
+            match &args[0] {
+                RuntimeValue::List(list) => {
+                    if list.elements.is_empty() {
+                        RuntimeValue::Null(crate::runtime::NullValue::new())
+                    } else {
+                        list.elements.first().cloned().unwrap_or(RuntimeValue::Null(crate::runtime::NullValue::new()))
+                    }
+                }
+                _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
+            }
+        },
+        1,
+        Some(1),
+    );
+
+    // slice(arr: list, start: i32, end: i32) -> list
+    registrar.register_fn(
+        "slice",
+        Some("array"),
+        |args| {
+            match &args[0] {
+                RuntimeValue::List(list) => {
+                    let start = i32::from_raccoon(&args[1]).unwrap_or(0) as usize;
+                    let end = i32::from_raccoon(&args[2]).unwrap_or(list.elements.len() as i32) as usize;
+
+                    let start = start.min(list.elements.len());
+                    let end = end.min(list.elements.len());
+
+                    if start <= end {
+                        let sliced = list.elements[start..end].to_vec();
+                        RuntimeValue::List(ListValue::new(sliced, list.element_type.clone()))
+                    } else {
+                        RuntimeValue::List(ListValue::new(vec![], list.element_type.clone()))
+                    }
+                }
+                _ => RuntimeValue::List(ListValue::new(vec![], crate::ast::types::PrimitiveType::any())),
+            }
+        },
+        3,
+        Some(3),
+    );
+
+    // reverse(arr: list) -> list
+    registrar.register_fn(
+        "reverse",
+        Some("array"),
+        |args| {
+            match &args[0] {
+                RuntimeValue::List(list) => {
+                    let mut reversed = list.elements.clone();
+                    reversed.reverse();
+                    RuntimeValue::List(ListValue::new(reversed, list.element_type.clone()))
+                }
+                _ => args[0].clone(),
+            }
+        },
+        1,
+        Some(1),
+    );
+
+    // contains(arr: list, element: any) -> bool
+    registrar.register_fn(
+        "contains",
+        Some("array"),
+        |args| {
+            match &args[0] {
+                RuntimeValue::List(list) => {
+                    let found = list.elements.iter().any(|elem| {
+                        elem.to_string() == args[1].to_string()
+                    });
+                    found.to_raccoon()
+                }
+                _ => false.to_raccoon(),
+            }
+        },
+        2,
+        Some(2),
+    );
+
+    // index_of(arr: list, element: any) -> i32
+    registrar.register_fn(
+        "index_of",
+        Some("array"),
+        |args| {
+            match &args[0] {
+                RuntimeValue::List(list) => {
+                    for (i, elem) in list.elements.iter().enumerate() {
+                        if elem.to_string() == args[1].to_string() {
+                            return (i as i32).to_raccoon();
+                        }
+                    }
+                    (-1i32).to_raccoon()
+                }
+                _ => (-1i32).to_raccoon(),
+            }
+        },
+        2,
+        Some(2),
+    );
+
+    // join(arr: list, separator: string) -> string
+    registrar.register_fn(
+        "join",
+        Some("array"),
+        |args| {
+            match &args[0] {
+                RuntimeValue::List(list) => {
+                    let sep = String::from_raccoon(&args[1]).unwrap_or_default();
+                    let joined = list.elements
+                        .iter()
+                        .map(|e| e.to_string())
+                        .collect::<Vec<_>>()
+                        .join(&sep);
+                    joined.to_raccoon()
+                }
+                _ => String::new().to_raccoon(),
+            }
+        },
+        2,
+        Some(2),
     );
 }

@@ -5,7 +5,10 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(./target/release/raccoon.exe:*)",
-      "Bash(cargo clean:*)"
+      "Bash(cargo clean:*)",
+      "Bash(git log:*)",
+      "Bash(cargo check:*)",
+      "Bash(cargo build:*)"
     ],
     "deny": [],
     "ask": []

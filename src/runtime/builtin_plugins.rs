@@ -81,13 +81,6 @@ pub fn load_builtin_plugins(registry: &mut PluginRegistry) {
         registry.sync_functions.insert(name, func);
     }
 
-    crate::runtime::natives::output::register(&mut registry.sync_functions);
-    crate::runtime::natives::time::register(&mut registry.sync_functions);
-    crate::runtime::natives::random::register(&mut registry.sync_functions);
-    crate::runtime::natives::json::register(&mut registry.sync_functions);
-    crate::runtime::natives::string::register(&mut registry.sync_functions);
-    crate::runtime::natives::array::register(&mut registry.sync_functions);
-    crate::runtime::natives::math::register(&mut registry.sync_functions);
-    crate::runtime::natives::ffi::register(&mut registry.sync_functions);
-    crate::runtime::natives::http::register_async(&mut registry.async_functions);
+    // NOTE: Native modules are now lazily loaded via ModuleRegistry in Interpreter
+    // This plugin system is kept for backward compatibility but is deprecated
 }

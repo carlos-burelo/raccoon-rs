@@ -10,7 +10,7 @@ use crate::ast::nodes::*;
 use crate::error::RaccoonError;
 use crate::runtime::{
     DecoratorRegistry, Environment, NullValue, RuntimeValue,
-    TypeRegistry, setup_builtins,
+    TypeRegistry, Registrar, ModuleRegistry,
 };
 use crate::tokens::{BinaryOperator, Position};
 use async_recursion::async_recursion;
@@ -32,13 +32,29 @@ pub struct Interpreter {
     pub recursion_depth: usize,
     pub max_recursion_depth: usize,
     pub decorator_registry: DecoratorRegistry,
+    pub registrar: std::sync::Arc<std::sync::Mutex<Registrar>>,
+    pub module_registry: std::sync::Arc<ModuleRegistry>,
 }
 
 impl Interpreter {
     pub fn new(file: Option<String>) -> Self {
         let mut env = Environment::new(file.clone());
         let type_registry = TypeRegistry::new();
-        setup_builtins(&mut env);
+        let registrar = std::sync::Arc::new(std::sync::Mutex::new(Registrar::new()));
+        let mut module_registry = ModuleRegistry::new();
+
+        // Register all native modules (lazy-loaded, not yet initialized)
+        module_registry.register("math", |registrar| crate::runtime::natives::register_math_module(registrar));
+        module_registry.register("string", |registrar| crate::runtime::natives::register_string_module(registrar));
+        module_registry.register("array", |registrar| crate::runtime::natives::register_array_module(registrar));
+        module_registry.register("json", |registrar| crate::runtime::natives::register_json_module(registrar));
+        module_registry.register("time", |registrar| crate::runtime::natives::register_time_module(registrar));
+        module_registry.register("random", |registrar| crate::runtime::natives::register_random_module(registrar));
+        module_registry.register("io", |registrar| crate::runtime::natives::register_io_module(registrar));
+        module_registry.register("http", |registrar| crate::runtime::natives::register_http_module(registrar));
+
+        // Initialize builtins only (print, println, input, len)
+        Self::register_builtins(&mut env, registrar.clone());
 
         let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
         let decorator_registry = DecoratorRegistry::new();
@@ -51,7 +67,78 @@ impl Interpreter {
             recursion_depth: 0,
             max_recursion_depth: 500,
             decorator_registry,
+            registrar,
+            module_registry: std::sync::Arc::new(module_registry),
         }
+    }
+
+    fn register_builtins(env: &mut Environment, _registrar: std::sync::Arc<std::sync::Mutex<Registrar>>) {
+        use crate::runtime::{NativeFunctionValue, StrValue, IntValue};
+        use crate::ast::types::PrimitiveType;
+
+        let print_fn = NativeFunctionValue::new(
+            |args: Vec<RuntimeValue>| {
+                for (i, arg) in args.iter().enumerate() {
+                    if i > 0 {
+                        print!(" ");
+                    }
+                    print!("{}", arg.to_string());
+                }
+                println!();
+                RuntimeValue::Null(NullValue::new())
+            },
+            crate::fn_type!(variadic, PrimitiveType::void()),
+        );
+        let _ = env.declare("print".to_string(), RuntimeValue::NativeFunction(print_fn));
+
+        let println_fn = NativeFunctionValue::new(
+            |args: Vec<RuntimeValue>| {
+                if args.is_empty() {
+                    println!();
+                } else {
+                    println!("{}", args[0].to_string());
+                }
+                RuntimeValue::Null(NullValue::new())
+            },
+            crate::fn_type!(PrimitiveType::str(), PrimitiveType::void()),
+        );
+        let _ = env.declare("println".to_string(), RuntimeValue::NativeFunction(println_fn));
+
+        let input_fn = NativeFunctionValue::new(
+            |args: Vec<RuntimeValue>| {
+                let prompt = if !args.is_empty() {
+                    args[0].to_string()
+                } else {
+                    String::new()
+                };
+
+                if !prompt.is_empty() {
+                    print!("{}", prompt);
+                    let _ = std::io::Write::flush(&mut std::io::stdout());
+                }
+
+                let mut input = String::new();
+                let _ = std::io::stdin().read_line(&mut input);
+                RuntimeValue::Str(StrValue::new(input.trim_end().to_string()))
+            },
+            crate::fn_type!(variadic, PrimitiveType::str()),
+        );
+        let _ = env.declare("input".to_string(), RuntimeValue::NativeFunction(input_fn));
+
+        let len_fn = NativeFunctionValue::new(
+            |args: Vec<RuntimeValue>| {
+                if args.is_empty() {
+                    return RuntimeValue::Null(NullValue::new());
+                }
+                match &args[0] {
+                    RuntimeValue::Str(s) => RuntimeValue::Int(IntValue::new(s.value.len() as i64)),
+                    RuntimeValue::List(l) => RuntimeValue::Int(IntValue::new(l.elements.len() as i64)),
+                    _ => RuntimeValue::Null(NullValue::new()),
+                }
+            },
+            crate::fn_type!(variadic, PrimitiveType::int()),
+        );
+        let _ = env.declare("len".to_string(), RuntimeValue::NativeFunction(len_fn));
     }
 
     #[async_recursion(?Send)]
@@ -175,5 +262,31 @@ impl Interpreter {
         } else {
             false
         }
+    }
+
+    pub fn try_load_native_function(&mut self, name: &str) -> Option<RuntimeValue> {
+        // Check if this is a module.function pattern
+        if let Some(dot_pos) = name.find('.') {
+            let module_name = &name[..dot_pos];
+
+            // Try to load the module if not already loaded
+            if let Some(loader) = self.module_registry.get_loader(module_name) {
+                // Load the module
+                let mut registrar = self.registrar.lock().unwrap();
+                if !registrar.functions.contains_key(name) {
+                    loader(&mut registrar);
+                }
+                drop(registrar);
+
+                // Try to get the function from registrar
+                let registrar = self.registrar.lock().unwrap();
+                if let Some(_handler) = registrar.get_function(name) {
+                    // Handler is available in registrar
+                    // Return None for now - will handle this in expressions module
+                    return None;
+                }
+            }
+        }
+        None
     }
 }

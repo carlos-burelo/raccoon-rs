@@ -48,6 +48,7 @@ pub fn check_expr(analyzer: &mut SemanticAnalyzer, expr: &Expr) -> Result<Type, 
             analyzer.file.clone(),
         )),
         Expr::Match(e) => check_match_expr(analyzer, e),
+        Expr::Class(e) => check_class_expr(analyzer, e),
     }
 }
 
@@ -607,4 +608,10 @@ pub fn check_match_expr(_analyzer: &mut SemanticAnalyzer, _expr: &MatchExpr) -> 
     // TODO: Implement pattern matching type checking
     // For now, return any type
     Ok(Type::Primitive(PrimitiveType::new(TypeKind::Any, "any")))
+}
+
+pub fn check_class_expr(_analyzer: &mut SemanticAnalyzer, _expr: &ClassExpr) -> Result<Type, RaccoonError> {
+    // Class expressions return a class type
+    // The type is the class itself (can be instantiated with new)
+    Ok(Type::Primitive(PrimitiveType::new(TypeKind::Class, "class")))
 }

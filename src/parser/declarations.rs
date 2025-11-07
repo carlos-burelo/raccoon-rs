@@ -1071,7 +1071,7 @@ impl Declarations {
     }
 
     /// Helper: Check if next two tokens match types (used in class member detection)
-    fn check_next_next(state: &ParserState, types: &[TokenType]) -> bool {
+    pub fn check_next_next(state: &ParserState, types: &[TokenType]) -> bool {
         if state.current + 2 >= state.tokens.len() {
             return false;
         }

@@ -8,6 +8,8 @@ use crate::{
 };
 use super::state::ParserState;
 use super::utilities::Parser;
+use super::declarations::Declarations;
+use crate::tokens::AccessModifier;
 
 pub struct Expressions;
 
@@ -23,6 +25,12 @@ impl Expressions {
         if state.check(&TokenType::Match) {
             state.advance();
             return Self::match_expr(state);
+        }
+
+        // Check for class expression (anonymous class)
+        if state.check(&TokenType::Class) {
+            state.advance();
+            return Self::class_expr(state);
         }
 
         if state.check(&TokenType::Async) {
@@ -1141,5 +1149,156 @@ impl Expressions {
             state.peek().unwrap().position,
             state.file.clone(),
         ))
+    }
+
+    /// Parse anonymous class expression: class { properties, methods, constructor }
+    pub fn class_expr(state: &mut ParserState) -> Result<Expr, RaccoonError> {
+        let position = state.previous().unwrap().position;
+
+        // Parse optional type parameters
+        let type_parameters = Self::parse_type_parameters(state)?;
+
+        // Parse optional extends clause
+        let mut superclass = None;
+        if Parser::match_token(state, &[TokenType::Extends]) {
+            superclass = Some(
+                Parser::consume(state, TokenType::Identifier, "Expected superclass name")?
+                    .value
+                    .clone(),
+            );
+        }
+
+        // Parse optional implements clause (we ignore the implements list for now)
+        if Parser::match_token(state, &[TokenType::Implements]) {
+            loop {
+                Parser::consume(state, TokenType::Identifier, "Expected interface name")?;
+                if !Parser::match_token(state, &[TokenType::Comma]) {
+                    break;
+                }
+            }
+        }
+
+        Parser::consume(state, TokenType::LeftBrace, "Expected '{' for class body")?;
+
+        let mut properties = Vec::new();
+        let mut methods = Vec::new();
+        let mut accessors = Vec::new();
+        let mut constructor = None;
+
+        while !state.check(&TokenType::RightBrace) && !state.is_at_end() {
+            let mut member_decorators = Vec::new();
+            while Parser::match_token(state, &[TokenType::At]) {
+                member_decorators.push(Declarations::parse_decorator(state)?);
+            }
+
+            let mut is_static = false;
+            let mut access_modifier = AccessModifier::Public;
+
+            if Parser::match_token(state, &[TokenType::Static]) {
+                is_static = true;
+            }
+
+            if Parser::match_token(state, &[TokenType::Public]) {
+                access_modifier = AccessModifier::Public;
+            } else if Parser::match_token(state, &[TokenType::Private]) {
+                access_modifier = AccessModifier::Private;
+            } else if Parser::match_token(state, &[TokenType::Protected]) {
+                access_modifier = AccessModifier::Protected;
+            }
+
+            if !is_static && Parser::match_token(state, &[TokenType::Static]) {
+                is_static = true;
+            }
+
+            let mut is_async = false;
+            if Parser::match_token(state, &[TokenType::Async]) {
+                is_async = true;
+            }
+
+            if Parser::match_token(state, &[TokenType::Constructor]) {
+                if constructor.is_some() {
+                    return Err(RaccoonError::new(
+                        "Class cannot have multiple constructors",
+                        state.previous().unwrap().position,
+                        state.file.clone(),
+                    ));
+                }
+                constructor = Some(Declarations::parse_constructor(state)?);
+            } else if !is_static
+                && !is_async
+                && state.check(&TokenType::Get)
+                && Parser::check_next(state, &[TokenType::Identifier])
+                && Declarations::check_next_next(state, &[TokenType::LeftParen])
+            {
+                accessors.push(Declarations::parse_accessor(
+                    state,
+                    crate::ast::nodes::AccessorKind::Get,
+                    member_decorators,
+                    access_modifier,
+                )?);
+            } else if !is_static
+                && !is_async
+                && state.check(&TokenType::Set)
+                && Parser::check_next(state, &[TokenType::Identifier])
+                && Declarations::check_next_next(state, &[TokenType::LeftParen])
+            {
+                accessors.push(Declarations::parse_accessor(
+                    state,
+                    crate::ast::nodes::AccessorKind::Set,
+                    member_decorators,
+                    access_modifier,
+                )?);
+            } else if (state.check(&TokenType::Identifier)
+                || (is_static || is_async)
+                    && (state.check(&TokenType::Get) || state.check(&TokenType::Set)))
+                && Parser::check_next(state, &[TokenType::LeftParen])
+            {
+                methods.push(Declarations::parse_method(
+                    state,
+                    member_decorators,
+                    access_modifier,
+                    is_static,
+                    is_async,
+                )?);
+            } else {
+                properties.push(Declarations::parse_class_property(state, member_decorators, access_modifier)?);
+            }
+        }
+
+        Parser::consume(state, TokenType::RightBrace, "Expected '}' after class body")?;
+
+        Ok(Expr::Class(ClassExpr {
+            type_parameters,
+            superclass,
+            properties,
+            constructor,
+            methods,
+            accessors,
+            position,
+        }))
+    }
+
+    /// Parse type parameters: <T, U, V>
+    fn parse_type_parameters(state: &mut ParserState) -> Result<Vec<crate::ast::types::TypeParameter>, RaccoonError> {
+        let mut type_params = Vec::new();
+        if Parser::match_token(state, &[TokenType::Lt]) {
+            loop {
+                let name = Parser::consume(state, TokenType::Identifier, "Expected type parameter name")?
+                    .value
+                    .clone();
+
+                // TODO: Parse constraint if present (extends Type)
+                type_params.push(crate::ast::types::TypeParameter {
+                    name,
+                    constraint: None,
+                });
+
+                if !Parser::match_token(state, &[TokenType::Comma]) {
+                    break;
+                }
+            }
+            Parser::consume(state, TokenType::Gt, "Expected '>' after type parameters")?;
+        }
+        Ok(type_params)
     }
 }
