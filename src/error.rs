@@ -1,6 +1,5 @@
 use crate::runtime::CallStack;
 use crate::tokens::{Position, Range};
-use colored::*;
 use std::fmt;
 use std::fs;
 
@@ -445,20 +444,20 @@ impl RaccoonError {
     pub fn format_with_context(&self) -> String {
         let mut output = String::new();
 
-        let header = self.kind.name().red().bold();
+        let header = self.kind.name();
         let file_name = self
             .file
             .as_ref()
             .map(|f| f.as_str())
             .unwrap_or("<unknown file>");
 
-        let line = self.position.0.to_string().bright_cyan();
-        let column = self.position.1.to_string().bright_cyan();
-        let msg = self.message.bright_yellow();
+        let line = self.position.0.to_string();
+        let column = self.position.1.to_string();
+        let msg = &self.message;
         output.push_str(&format!(
             "\n{} {} {}:{} -> {}",
             header,
-            file_name.bright_white(),
+            file_name,
             line,
             column,
             msg
@@ -474,15 +473,15 @@ impl RaccoonError {
 
                 let line_num_str = format!("{:4} ", line_num);
                 if is_error_line {
-                    output.push_str(&format!("{} ", line_num_str.bright_red().bold()));
-                    output.push_str(&"│ ".bright_red().bold().to_string());
+                    output.push_str(&format!("{} ", line_num_str));
+                    output.push_str("│ ");
                 } else {
-                    output.push_str(&format!("{} ", line_num_str.bright_black()));
-                    output.push_str(&"│ ".bright_black().to_string());
+                    output.push_str(&format!("{} ", line_num_str));
+                    output.push_str("│ ");
                 }
 
                 if is_error_line {
-                    output.push_str(&line_content.bright_white().to_string());
+                    output.push_str(&line_content);
                     output.push_str("\n");
 
                     // Padding: 6 chars for line number + space + "│ " + (column - 1) since columns start at 1
@@ -495,18 +494,18 @@ impl RaccoonError {
                             let start_col = range.start.1.saturating_sub(1);
                             let end_col = range.end.1.saturating_sub(1);
                             let length = end_col.saturating_sub(start_col).max(1);
-                            output.push_str(&"^".repeat(length).bright_red().bold().to_string());
+                            output.push_str(&"^".repeat(length));
                         } else {
                             // Multi-line range or no range, show single caret
-                            output.push_str(&"^".bright_red().bold().to_string());
+                            output.push_str("^");
                         }
                     } else {
                         // No range, show single caret
-                        output.push_str(&"^".bright_red().bold().to_string());
+                        output.push_str("^");
                     }
                     output.push_str("\n");
                 } else {
-                    output.push_str(&line_content.bright_black().to_string());
+                    output.push_str(&line_content);
                     output.push_str("\n");
                 }
             }
@@ -529,10 +528,10 @@ impl fmt::Display for RaccoonError {
         if self.file.is_some() {
             write!(f, "{}", self.format_with_context())
         } else {
-            let header = self.kind.name().red().bold();
-            let message = self.message.bright_yellow();
-            let line = self.position.0.to_string().bright_cyan();
-            let column = self.position.1.to_string().bright_cyan();
+            let header = self.kind.name();
+            let message = &self.message;
+            let line = self.position.0.to_string();
+            let column = self.position.1.to_string();
 
             write!(f, "{} {}:{} → {}", header, line, column, message)
         }
