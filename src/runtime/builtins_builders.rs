@@ -1,5 +1,5 @@
 use crate::ast::types::{PrimitiveType, Type};
-use crate::runtime::type_object::{TypeKind, PrimitiveKind};
+use crate::runtime::type_object::TypeKind;
 use crate::runtime::type_object_builder::TypeObjectBuilder;
 use crate::runtime::values::*;
 use crate::runtime::{FutureState, FutureValue};

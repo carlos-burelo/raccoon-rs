@@ -481,7 +481,7 @@ impl fmt::Debug for NativeFunctionValue {
 }
 
 pub type NativeAsyncFn = Arc<
-    dyn Fn(Vec<RuntimeValue>) -> Pin<Box<(dyn Future<Output = RuntimeValue> + 'static)>>
+    dyn Fn(Vec<RuntimeValue>) -> Pin<Box<dyn Future<Output = RuntimeValue> + 'static>>
         + Send
         + Sync
         + 'static,

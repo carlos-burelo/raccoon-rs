@@ -74,13 +74,6 @@ pub fn load_builtin_plugins(registry: &mut PluginRegistry) {
     let output = OutputPlugin;
     output.register(registry);
 
-    let native_registry = crate::runtime::native::NativeRegistry::new();
-    crate::runtime::rust_natives::register_all_native_functions(&native_registry);
-
-    for (name, func) in native_registry.export_all() {
-        registry.sync_functions.insert(name, func);
-    }
-
     // NOTE: Native modules are now lazily loaded via ModuleRegistry in Interpreter
     // This plugin system is kept for backward compatibility but is deprecated
 }

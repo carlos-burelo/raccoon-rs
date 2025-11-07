@@ -1,7 +1,7 @@
 /// Stdlib native functions - inmutable operations only for now
 /// Mutable array operations require architectural changes to ListValue
 
-use crate::ast::types::{PrimitiveType, Type};
+use crate::ast::types::PrimitiveType;
 use crate::runtime::{BoolValue, Environment, FloatValue, IntValue, ListValue, StrValue};
 use crate::runtime::RuntimeValue;
 use crate::{fn_type, native_fn, native_fn_variadic, native_functions, null_return};

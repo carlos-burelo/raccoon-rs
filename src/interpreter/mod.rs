@@ -10,7 +10,7 @@ use crate::ast::nodes::*;
 use crate::error::RaccoonError;
 use crate::runtime::{
     DecoratorRegistry, Environment, NullValue, RuntimeValue,
-    TypeRegistry, Registrar, ModuleRegistry, FutureValue, ListValue, StrValue,
+    TypeRegistry, FutureValue, ListValue, StrValue,
 };
 use crate::tokens::{BinaryOperator, Position};
 use async_recursion::async_recursion;
@@ -32,29 +32,15 @@ pub struct Interpreter {
     pub recursion_depth: usize,
     pub max_recursion_depth: usize,
     pub decorator_registry: DecoratorRegistry,
-    pub registrar: std::sync::Arc<std::sync::Mutex<Registrar>>,
-    pub module_registry: std::sync::Arc<ModuleRegistry>,
 }
 
 impl Interpreter {
     pub fn new(file: Option<String>) -> Self {
         let mut env = Environment::new(file.clone());
         let type_registry = TypeRegistry::new();
-        let registrar = std::sync::Arc::new(std::sync::Mutex::new(Registrar::new()));
-        let mut module_registry = ModuleRegistry::new();
 
-        // Register all native modules (lazy-loaded, not yet initialized)
-        module_registry.register("math", |registrar| crate::runtime::natives::register_math_module(registrar));
-        module_registry.register("string", |registrar| crate::runtime::natives::register_string_module(registrar));
-        module_registry.register("array", |registrar| crate::runtime::natives::register_array_module(registrar));
-        module_registry.register("json", |registrar| crate::runtime::natives::register_json_module(registrar));
-        module_registry.register("time", |registrar| crate::runtime::natives::register_time_module(registrar));
-        module_registry.register("random", |registrar| crate::runtime::natives::register_random_module(registrar));
-        module_registry.register("io", |registrar| crate::runtime::natives::register_io_module(registrar));
-        module_registry.register("http", |registrar| crate::runtime::natives::register_http_module(registrar));
-
-        // Initialize builtins only (print, println, input, len)
-        Self::register_builtins(&mut env, registrar.clone());
+        // Initialize builtins (print, println, input, len, and stdlib native functions)
+        Self::register_builtins(&mut env);
 
         let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
         let decorator_registry = DecoratorRegistry::new();
@@ -67,12 +53,10 @@ impl Interpreter {
             recursion_depth: 0,
             max_recursion_depth: 500,
             decorator_registry,
-            registrar,
-            module_registry: std::sync::Arc::new(module_registry),
         }
     }
 
-    fn register_builtins(env: &mut Environment, _registrar: std::sync::Arc<std::sync::Mutex<Registrar>>) {
+    fn register_builtins(env: &mut Environment) {
         use crate::runtime::{NativeFunctionValue, StrValue, IntValue, setup_builtins};
         use crate::ast::types::PrimitiveType;
 
@@ -267,31 +251,6 @@ impl Interpreter {
         }
     }
 
-    pub fn try_load_native_function(&mut self, name: &str) -> Option<RuntimeValue> {
-        // Check if this is a module.function pattern
-        if let Some(dot_pos) = name.find('.') {
-            let module_name = &name[..dot_pos];
-
-            // Try to load the module if not already loaded
-            if let Some(loader) = self.module_registry.get_loader(module_name) {
-                // Load the module
-                let mut registrar = self.registrar.lock().unwrap();
-                if !registrar.functions.contains_key(name) {
-                    loader(&mut registrar);
-                }
-                drop(registrar);
-
-                // Try to get the function from registrar
-                let registrar = self.registrar.lock().unwrap();
-                if let Some(_handler) = registrar.get_function(name) {
-                    // Handler is available in registrar
-                    // Return None for now - will handle this in expressions module
-                    return None;
-                }
-            }
-        }
-        None
-    }
 
     /// Get a builtin type by name (e.g., "Future", "Promise")
     /// Returns a PrimitiveTypeObject with static methods, not a global object instance
