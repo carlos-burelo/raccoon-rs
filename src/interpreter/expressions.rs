@@ -1174,12 +1174,56 @@ impl Expressions {
 
             let class_value = interpreter.environment.get(&class_name, (0, 0))?;
 
-            if let RuntimeValue::Class(class) = class_value {
-                if let Some(ref superclass_name) = class.declaration.superclass {
+            // Extract ClassValue from either RuntimeValue::Class or RuntimeValue::Type
+            let class = match &class_value {
+                RuntimeValue::Class(c) => c.clone(),
+                RuntimeValue::Type(type_obj) => {
+                    if let Some(RuntimeValue::Class(c)) = type_obj.get_constructor() {
+                        c.clone()
+                    } else {
+                        return Err(RaccoonError::new(
+                            format!("Type '{}' does not have a valid constructor", class_name),
+                            (0, 0),
+                            interpreter.file.clone(),
+                        ));
+                    }
+                }
+                _ => {
+                    return Err(RaccoonError::new(
+                        format!("Class '{}' not found", class_name),
+                        (0, 0),
+                        interpreter.file.clone(),
+                    ));
+                }
+            };
+
+            if let Some(ref superclass_name) = class.declaration.superclass {
                     let superclass_value = interpreter.environment.get(superclass_name, (0, 0))?;
 
-                    if let RuntimeValue::Class(superclass) = superclass_value {
-                        if let Some(ref super_constructor) = superclass.declaration.constructor {
+                    // Extract superclass ClassValue from either RuntimeValue::Class or RuntimeValue::Type
+                    let superclass = match &superclass_value {
+                        RuntimeValue::Class(sc) => sc.clone(),
+                        RuntimeValue::Type(type_obj) => {
+                            if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
+                                sc.clone()
+                            } else {
+                                return Err(RaccoonError::new(
+                                    format!("Superclass '{}' does not have a valid constructor", superclass_name),
+                                    (0, 0),
+                                    interpreter.file.clone(),
+                                ));
+                            }
+                        }
+                        _ => {
+                            return Err(RaccoonError::new(
+                                format!("'{}' is not a class", superclass_name),
+                                (0, 0),
+                                interpreter.file.clone(),
+                            ));
+                        }
+                    };
+
+                    if let Some(ref super_constructor) = superclass.declaration.constructor {
                             let mut arg_values = Vec::new();
                             for arg in args {
                                 arg_values.push(Self::evaluate_expr(interpreter, arg).await?);
@@ -1244,13 +1288,6 @@ impl Expressions {
                                 interpreter.file.clone(),
                             ));
                         }
-                    } else {
-                        return Err(RaccoonError::new(
-                            format!("'{}' is not a class", superclass_name),
-                            (0, 0),
-                            interpreter.file.clone(),
-                        ));
-                    }
                 } else {
                     return Err(RaccoonError::new(
                         "Cannot use 'super' in class without superclass".to_string(),
@@ -1258,13 +1295,6 @@ impl Expressions {
                         interpreter.file.clone(),
                     ));
                 }
-            } else {
-                return Err(RaccoonError::new(
-                    format!("Class '{}' not found", class_name),
-                    (0, 0),
-                    interpreter.file.clone(),
-                ));
-            }
         } else {
             return Err(RaccoonError::new(
                 "Cannot use 'super' outside of a class constructor".to_string(),
