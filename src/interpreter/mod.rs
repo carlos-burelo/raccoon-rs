@@ -66,7 +66,7 @@ impl Interpreter {
             type_registry,
             stdlib_loader,
             recursion_depth: 0,
-            max_recursion_depth: 500,
+            max_recursion_depth: 200,
             decorator_registry,
             registrar,
             module_registry: std::sync::Arc::new(module_registry),

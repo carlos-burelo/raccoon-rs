@@ -1,5 +1,0 @@
-import { FFI, FFIType } from "std:ffi";
-
-print("FFI imported successfully!");
-print("FFI:", FFI);
-print("FFIType:", FFIType);
