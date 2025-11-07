@@ -1,5 +1,6 @@
 use crate::ast::{nodes::*, types::*};
 use crate::runtime::dynamic::DynamicRuntimeValue;
+use crate::runtime::type_object::TypeObject;
 use std::collections::HashMap;
 use std::fmt;
 use std::future::Future;
@@ -27,6 +28,7 @@ pub enum RuntimeValue {
     Enum(EnumValue),
     PrimitiveTypeObject(PrimitiveTypeObject),
     EnumObject(EnumObject),
+    Type(TypeObject),
     Dynamic(DynamicRuntimeValue),
 }
 
@@ -59,6 +61,7 @@ impl RuntimeValue {
             RuntimeValue::Enum(e) => e.enum_type.clone(),
             RuntimeValue::PrimitiveTypeObject(p) => p.type_obj.clone(),
             RuntimeValue::EnumObject(e) => e.enum_type.clone(),
+            RuntimeValue::Type(t) => t.type_def.clone(),
             RuntimeValue::Dynamic(d) => d.get_type(),
         }
     }
@@ -84,6 +87,7 @@ impl RuntimeValue {
             RuntimeValue::Enum(v) => v.to_string(),
             RuntimeValue::PrimitiveTypeObject(v) => v.to_string(),
             RuntimeValue::EnumObject(v) => v.to_string(),
+            RuntimeValue::Type(t) => format!("[type {}]", t.name()),
             RuntimeValue::Dynamic(d) => d.to_string(),
         }
     }
@@ -116,6 +120,7 @@ impl RuntimeValue {
             RuntimeValue::PrimitiveTypeObject(p) => p.type_name.clone(),
             RuntimeValue::EnumObject(e) => e.enum_name.clone(),
             RuntimeValue::Enum(e) => e.enum_name.clone(),
+            RuntimeValue::Type(t) => t.name(),
             RuntimeValue::Int(_) => "int".to_string(),
             RuntimeValue::BigInt(_) => "bigint".to_string(),
             RuntimeValue::Float(_) => "float".to_string(),

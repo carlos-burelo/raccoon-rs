@@ -796,6 +796,22 @@ impl Expressions {
                     ))
                 }
             }
+            RuntimeValue::Type(type_obj) => {
+                if let Some(static_method) = type_obj.get_static_method(&member.property) {
+                    Ok(static_method.clone())
+                } else if let Some(static_prop) = type_obj.get_static_property(&member.property) {
+                    Ok(static_prop.clone())
+                } else {
+                    Err(RaccoonError::new(
+                        format!(
+                            "Static member '{}' not found on type '{}'",
+                            member.property, type_obj.name()
+                        ),
+                        member.position,
+                        interpreter.file.clone(),
+                    ))
+                }
+            }
             _ => Err(RaccoonError::new(
                 format!("Cannot access property '{}' on type", member.property),
                 member.position,
@@ -1047,6 +1063,12 @@ impl Expressions {
                 return Ok(RuntimeValue::Str(StrValue::new(format!(
                     "type {}",
                     p.type_name
+                ))));
+            }
+            RuntimeValue::Type(ref t) => {
+                return Ok(RuntimeValue::Str(StrValue::new(format!(
+                    "type {}",
+                    t.name()
                 ))));
             }
             RuntimeValue::Dynamic(d) => {
@@ -1810,6 +1832,34 @@ impl Expressions {
                         format!(
                             "Static method '{}' not found on type '{}'",
                             method_call.method, type_obj.type_name
+                        ),
+                        method_call.position,
+                        interpreter.file.clone(),
+                    ))
+                }
+            }
+
+            RuntimeValue::Type(type_obj) => {
+                if let Some(static_method) = type_obj.get_static_method(&method_call.method) {
+                    // Call the static method (currently only NativeFunction is supported)
+                    match static_method {
+                        RuntimeValue::NativeFunction(native_fn) => {
+                            Ok((native_fn.implementation)(args))
+                        }
+                        _ => Err(RaccoonError::new(
+                            format!(
+                                "Static method '{}' on type '{}' is not a native function",
+                                method_call.method, type_obj.name()
+                            ),
+                            method_call.position,
+                            interpreter.file.clone(),
+                        )),
+                    }
+                } else {
+                    Err(RaccoonError::new(
+                        format!(
+                            "Static method '{}' not found on type '{}'",
+                            method_call.method, type_obj.name()
                         ),
                         method_call.position,
                         interpreter.file.clone(),

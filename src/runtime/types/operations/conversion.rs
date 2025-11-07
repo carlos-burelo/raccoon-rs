@@ -88,6 +88,7 @@ pub fn to_string(value: &RuntimeValue) -> String {
         RuntimeValue::Enum(e) => format!("enum {}", e.enum_name),
         RuntimeValue::PrimitiveTypeObject(p) => format!("type {}", p.type_name),
         RuntimeValue::EnumObject(e) => format!("enum {}", e.enum_name),
+        RuntimeValue::Type(t) => format!("type {}", t.name()),
         RuntimeValue::Dynamic(d) => d.to_string(),
     }
 }

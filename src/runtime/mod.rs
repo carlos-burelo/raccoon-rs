@@ -17,6 +17,8 @@ pub mod rust_ffi;
 pub mod rust_ffi_modules;
 pub mod rust_natives;
 pub mod stdlib_loader;
+pub mod type_object;
+pub mod type_object_builder;
 pub mod types;
 pub mod values;
 
@@ -32,5 +34,7 @@ pub use native::{NativeRegistry, NativeDecoratorProcessor};
 pub use plugin_system::{NativePlugin, PluginManager, PluginRegistry};
 pub use registrar::Registrar;
 pub use stdlib_loader::StdLibLoader;
+pub use type_object::{TypeObject, TypeKind, PrimitiveKind, TypeMetadata, SourceLocation};
+pub use type_object_builder::TypeObjectBuilder;
 pub use types::registry::TypeRegistry;
 pub use values::*;
