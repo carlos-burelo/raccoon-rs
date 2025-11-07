@@ -1,7 +1,6 @@
 class TestClass {
     static testMethod(...args: any[]): void {
         print("In static method, args:", args);
-        native_print(...args);
     }
 }
 
