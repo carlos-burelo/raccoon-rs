@@ -1,16 +1,16 @@
 use crate::ast::types::PrimitiveType;
 use crate::fn_type;
-use crate::native_fn_variadic;
 use crate::native_fn;
+use crate::native_fn_variadic;
 use crate::native_functions;
 use crate::null_return;
 
 use crate::runtime::{
     builtins_builders::{collect_futures, FutureCollectionStrategy, TypeMethodBuilder},
-    type_object::{TypeKind, PrimitiveKind},
+    type_object::{PrimitiveKind, TypeKind},
     type_object_builder::TypeObjectBuilder,
-    Environment, FloatValue, FutureState, FutureValue, IntValue, ListValue, NativeFunctionValue, NullValue,
-    ObjectValue, RuntimeValue, StrValue,
+    Environment, FloatValue, FutureState, FutureValue, IntValue, ListValue, NativeFunctionValue,
+    NullValue, ObjectValue, RuntimeValue, StrValue,
 };
 use colored::Colorize;
 use std::collections::HashMap;
@@ -22,9 +22,6 @@ pub fn setup_builtins(env: &mut Environment) {
     register_primitive_types(env);
     register_future_object(env);
     register_object_object(env);
-
-    // Register all stdlib native functions
-    crate::runtime::stdlib_natives::register_all_stdlib_natives(env);
 }
 
 fn register_builtin_functions(env: &mut Environment) {
@@ -258,11 +255,26 @@ fn register_primitive_types(env: &mut Environment) {
             fn_type!(PrimitiveType::str(), PrimitiveType::float()),
         )),
     )
-    .static_property("MAX_VALUE", RuntimeValue::Float(crate::runtime::FloatValue::new(f64::MAX)))
-    .static_property("MIN_VALUE", RuntimeValue::Float(crate::runtime::FloatValue::new(f64::MIN)))
-    .static_property("POSITIVE_INFINITY", RuntimeValue::Float(crate::runtime::FloatValue::new(f64::INFINITY)))
-    .static_property("NEGATIVE_INFINITY", RuntimeValue::Float(crate::runtime::FloatValue::new(f64::NEG_INFINITY)))
-    .static_property("NaN", RuntimeValue::Float(crate::runtime::FloatValue::new(f64::NAN)))
+    .static_property(
+        "MAX_VALUE",
+        RuntimeValue::Float(crate::runtime::FloatValue::new(f64::MAX)),
+    )
+    .static_property(
+        "MIN_VALUE",
+        RuntimeValue::Float(crate::runtime::FloatValue::new(f64::MIN)),
+    )
+    .static_property(
+        "POSITIVE_INFINITY",
+        RuntimeValue::Float(crate::runtime::FloatValue::new(f64::INFINITY)),
+    )
+    .static_property(
+        "NEGATIVE_INFINITY",
+        RuntimeValue::Float(crate::runtime::FloatValue::new(f64::NEG_INFINITY)),
+    )
+    .static_property(
+        "NaN",
+        RuntimeValue::Float(crate::runtime::FloatValue::new(f64::NAN)),
+    )
     .documentation("Floating point type (f64)")
     .build();
     let _ = env.declare("float".to_string(), RuntimeValue::Type(float_type));
