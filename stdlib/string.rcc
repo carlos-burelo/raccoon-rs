@@ -292,6 +292,124 @@ export fn ends_with_any(s: str, suffixes: str[]): bool {
     return false;
 }
 
+/**
+ * Converts string to camelCase
+ * Example: to_camel_case("hello world") => "helloWorld"
+ */
+export fn to_camel_case(s: str): str {
+    let words = native_str_split(s, " ");
+    if (native_array_length(words) == 0) {
+        return s;
+    }
+
+    let result = native_str_lower(words[0]);
+    for (let i = 1; i < native_array_length(words); i = i + 1) {
+        result = result + capitalize(words[i]);
+    }
+    return result;
+}
+
+/**
+ * Converts string to PascalCase
+ * Example: to_pascal_case("hello world") => "HelloWorld"
+ */
+export fn to_pascal_case(s: str): str {
+    let words = native_str_split(s, " ");
+    let result = "";
+    for (let i = 0; i < native_array_length(words); i = i + 1) {
+        result = result + capitalize(words[i]);
+    }
+    return result;
+}
+
+/**
+ * Converts string to snake_case
+ * Example: to_snake_case("hello world") => "hello_world"
+ */
+export fn to_snake_case(s: str): str {
+    let words = native_str_split(s, " ");
+    let lower_words: str[] = [];
+    for (let i = 0; i < native_array_length(words); i = i + 1) {
+        native_array_push(lower_words, native_str_lower(words[i]));
+    }
+    return native_str_join(lower_words, "_");
+}
+
+/**
+ * Converts string to kebab-case
+ * Example: to_kebab_case("hello world") => "hello-world"
+ */
+export fn to_kebab_case(s: str): str {
+    let words = native_str_split(s, " ");
+    let lower_words: str[] = [];
+    for (let i = 0; i < native_array_length(words); i = i + 1) {
+        native_array_push(lower_words, native_str_lower(words[i]));
+    }
+    return native_str_join(lower_words, "-");
+}
+
+/**
+ * Extracts words from a string (splits by whitespace)
+ */
+export fn words(s: str): str[] {
+    return native_str_split(s, " ");
+}
+
+/**
+ * Swaps case of all characters
+ * Example: swap_case("Hello World") => "hELLO wORLD"
+ */
+export fn swap_case(s: str): str {
+    let result = "";
+    let len = native_str_length(s);
+    for (let i = 0; i < len; i = i + 1) {
+        let c = native_str_char_at(s, i);
+        let lower = native_str_lower(c);
+        if (c == lower) {
+            result = result + native_str_upper(c);
+        } else {
+            result = result + lower;
+        }
+    }
+    return result;
+}
+
+/**
+ * Left justify string in field of width
+ * Example: ljust("hi", 5, ".") => "hi..."
+ */
+export fn ljust(s: str, width: int, fill: str): str {
+    return pad_right(s, width, fill);
+}
+
+/**
+ * Right justify string in field of width
+ * Example: rjust("hi", 5, ".") => "...hi"
+ */
+export fn rjust(s: str, width: int, fill: str): str {
+    return pad_left(s, width, fill);
+}
+
+/**
+ * Checks if all characters are uppercase
+ */
+export fn is_upper(s: str): bool {
+    if (is_empty(s)) {
+        return false;
+    }
+    return native_str_upper(s) == s;
+}
+
+/**
+ * Checks if all characters are lowercase
+ */
+export fn is_lower(s: str): bool {
+    if (is_empty(s)) {
+        return false;
+    }
+    return native_str_lower(s) == s;
+}
+
 // Export default object with all functions
 export default {
     capitalize,
@@ -311,5 +429,15 @@ export default {
     repeat_with_sep,
     lines,
     starts_with_any,
-    ends_with_any
+    ends_with_any,
+    to_camel_case,
+    to_pascal_case,
+    to_snake_case,
+    to_kebab_case,
+    words,
+    swap_case,
+    ljust,
+    rjust,
+    is_upper,
+    is_lower
 };

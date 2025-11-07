@@ -432,6 +432,132 @@ impl TypeHandler for StrType {
                 }
             }
 
+            "charAt" => {
+                if args.len() != 1 {
+                    return Err(RaccoonError::new(
+                        "charAt requires 1 argument".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                if let RuntimeValue::Int(index) = &args[0] {
+                    let idx = index.value as usize;
+                    if let Some(ch) = s.chars().nth(idx) {
+                        Ok(RuntimeValue::Str(StrValue::new(ch.to_string())))
+                    } else {
+                        Ok(RuntimeValue::Str(StrValue::new(String::new())))
+                    }
+                } else {
+                    Err(RaccoonError::new(
+                        "charAt requires integer argument".to_string(),
+                        position,
+                        file,
+                    ))
+                }
+            }
+
+            "substring" => {
+                if args.is_empty() || args.len() > 2 {
+                    return Err(RaccoonError::new(
+                        "substring requires 1 or 2 arguments".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                let start = match &args[0] {
+                    RuntimeValue::Int(i) => i.value.max(0) as usize,
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "substring requires integer arguments".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
+                };
+                let end = if args.len() == 2 {
+                    match &args[1] {
+                        RuntimeValue::Int(i) => Some(i.value.max(0) as usize),
+                        _ => {
+                            return Err(RaccoonError::new(
+                                "substring requires integer arguments".to_string(),
+                                position,
+                                file,
+                            ));
+                        }
+                    }
+                } else {
+                    None
+                };
+
+                let len = s.len();
+                let real_start = start.min(len);
+                let real_end = end.unwrap_or(len).min(len);
+
+                if real_start <= real_end {
+                    Ok(RuntimeValue::Str(StrValue::new(
+                        s[real_start..real_end].to_string(),
+                    )))
+                } else {
+                    Ok(RuntimeValue::Str(StrValue::new(
+                        s[real_end..real_start].to_string(),
+                    )))
+                }
+            }
+
+            "reverse" => {
+                Ok(RuntimeValue::Str(StrValue::new(
+                    s.chars().rev().collect::<String>(),
+                )))
+            }
+
+            "replaceAll" => {
+                if args.len() != 2 {
+                    return Err(RaccoonError::new(
+                        "replaceAll requires 2 arguments (search, replacement)".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                match (&args[0], &args[1]) {
+                    (RuntimeValue::Str(search), RuntimeValue::Str(replacement)) => {
+                        Ok(RuntimeValue::Str(StrValue::new(
+                            s.replace(&search.value, &replacement.value),
+                        )))
+                    }
+                    _ => Err(RaccoonError::new(
+                        "replaceAll requires two string arguments".to_string(),
+                        position,
+                        file,
+                    )),
+                }
+            }
+
+            "match" => {
+                if args.len() != 1 {
+                    return Err(RaccoonError::new(
+                        "match requires 1 argument".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                if let RuntimeValue::Str(pattern) = &args[0] {
+                    let matches: Vec<RuntimeValue> = s
+                        .match_indices(&pattern.value)
+                        .map(|(_, m)| RuntimeValue::Str(StrValue::new(m.to_string())))
+                        .collect();
+                    Ok(RuntimeValue::List(ListValue::new(
+                        matches,
+                        PrimitiveType::str(),
+                    )))
+                } else {
+                    Err(RaccoonError::new(
+                        "match requires string argument".to_string(),
+                        position,
+                        file,
+                    ))
+                }
+            }
+
             _ => Err(RaccoonError::new(
                 format!("Method '{}' not found on string", method),
                 position,
@@ -598,13 +724,23 @@ impl TypeHandler for StrType {
                 | "trimRight"
                 | "split"
                 | "replace"
+                | "replaceAll"
                 | "startsWith"
                 | "endsWith"
                 | "contains"
                 | "indexOf"
+                | "lastIndexOf"
                 | "slice"
+                | "substring"
+                | "charAt"
+                | "charCodeAt"
                 | "join"
                 | "toStr"
+                | "repeat"
+                | "padStart"
+                | "padEnd"
+                | "reverse"
+                | "match"
         )
     }
 

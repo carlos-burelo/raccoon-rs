@@ -55,6 +55,84 @@ impl TypeHandler for Float64Type {
             "round" => Ok(RuntimeValue::Int(IntValue::new(num.round() as i64))),
             "abs" => Ok(RuntimeValue::Float(FloatValue::new(num.abs()))),
             "sqrt" => Ok(RuntimeValue::Float(FloatValue::new(num.sqrt()))),
+            "sign" => Ok(RuntimeValue::Int(IntValue::new(
+                if num > 0.0 {
+                    1
+                } else if num < 0.0 {
+                    -1
+                } else {
+                    0
+                },
+            ))),
+            "isNaN" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(num.is_nan()))),
+            "isInfinite" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(num.is_infinite()))),
+            "isFinite" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(num.is_finite()))),
+            "isPositive" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(num > 0.0))),
+            "isNegative" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(num < 0.0))),
+            "isZero" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(num == 0.0))),
+            "clamp" => {
+                if _args.len() != 2 {
+                    return Err(RaccoonError::new(
+                        "clamp requires 2 arguments (min, max)".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                let min_val = match &_args[0] {
+                    RuntimeValue::Float(f) => f.value,
+                    RuntimeValue::Int(i) => i.value as f64,
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "clamp requires numeric arguments".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
+                };
+                let max_val = match &_args[1] {
+                    RuntimeValue::Float(f) => f.value,
+                    RuntimeValue::Int(i) => i.value as f64,
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "clamp requires numeric arguments".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
+                };
+                Ok(RuntimeValue::Float(FloatValue::new(num.max(min_val).min(max_val))))
+            }
+            "pow" => {
+                if _args.len() != 1 {
+                    return Err(RaccoonError::new(
+                        "pow requires 1 argument (exponent)".to_string(),
+                        position,
+                        file,
+                    ));
+                }
+                let exp = match &_args[0] {
+                    RuntimeValue::Float(f) => f.value,
+                    RuntimeValue::Int(i) => i.value as f64,
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "pow requires numeric argument".to_string(),
+                            position,
+                            file,
+                        ));
+                    }
+                };
+                Ok(RuntimeValue::Float(FloatValue::new(num.powf(exp))))
+            }
+            "sin" => Ok(RuntimeValue::Float(FloatValue::new(num.sin()))),
+            "cos" => Ok(RuntimeValue::Float(FloatValue::new(num.cos()))),
+            "tan" => Ok(RuntimeValue::Float(FloatValue::new(num.tan()))),
+            "asin" => Ok(RuntimeValue::Float(FloatValue::new(num.asin()))),
+            "acos" => Ok(RuntimeValue::Float(FloatValue::new(num.acos()))),
+            "atan" => Ok(RuntimeValue::Float(FloatValue::new(num.atan()))),
+            "exp" => Ok(RuntimeValue::Float(FloatValue::new(num.exp()))),
+            "ln" => Ok(RuntimeValue::Float(FloatValue::new(num.ln()))),
+            "log10" => Ok(RuntimeValue::Float(FloatValue::new(num.log10()))),
+            "log2" => Ok(RuntimeValue::Float(FloatValue::new(num.log2()))),
             _ => Err(RaccoonError::new(
                 format!("Method '{}' not found on float", method),
                 position,
@@ -207,6 +285,25 @@ impl TypeHandler for Float64Type {
                 | "round"
                 | "abs"
                 | "sqrt"
+                | "sign"
+                | "isNaN"
+                | "isInfinite"
+                | "isFinite"
+                | "isPositive"
+                | "isNegative"
+                | "isZero"
+                | "clamp"
+                | "pow"
+                | "sin"
+                | "cos"
+                | "tan"
+                | "asin"
+                | "acos"
+                | "atan"
+                | "exp"
+                | "ln"
+                | "log10"
+                | "log2"
         )
     }
 
