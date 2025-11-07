@@ -101,7 +101,7 @@ print("Testing lines:");
 let text = "line1\nline2\nline3";
 let text_lines = lines(text);
 print("  lines('line1\\nline2\\nline3'):");
-for (let i = 0; i < native_array_length(text_lines); i = i + 1) {
+for (let i = 0; i < len(text_lines); i = i + 1) {
     print("    ", text_lines[i]);
 }
 print("");
