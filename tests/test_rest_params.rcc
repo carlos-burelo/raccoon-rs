@@ -1,7 +1,6 @@
 fn testRest(...args: any[]): void {
     print("Got", len(args), "arguments");
     print("Args:", args);
-    native_print(...args);
 }
 
 testRest("a", "b", "c");
