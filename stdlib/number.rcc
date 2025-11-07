@@ -131,11 +131,11 @@ export fn range(start: int, end: int): int[] {
 
     if (start <= end) {
         for (let i = start; i <= end; i = i + 1) {
-            native_array_push(result, i);
+            result.push(i);
         }
     } else {
         for (let i = start; i >= end; i = i - 1) {
-            native_array_push(result, i);
+            result.push(i);
         }
     }
 
@@ -154,13 +154,13 @@ export fn range_step(start: int, end: int, step: int): int[] {
     if (step > 0) {
         let i = start;
         while (i <= end) {
-            native_array_push(result, i);
+            result.push(i);
             i = i + step;
         }
     } else {
         let i = start;
         while (i >= end) {
-            native_array_push(result, i);
+            result.push(i);
             i = i + step;
         }
     }
@@ -169,43 +169,31 @@ export fn range_step(start: int, end: int, step: int): int[] {
 }
 
 /**
- * Rounds a number to specified decimal places
- */
-export fn round_to(value: float, decimals: int): float {
-    let multiplier = 1.0;
-    for (let i = 0; i < decimals; i = i + 1) {
-        multiplier = multiplier * 10.0;
-    }
-
-    return native_math_round(value * multiplier) / multiplier;
-}
-
-/**
  * Calculates average of numbers in array
  */
 export fn average(numbers: float[]): float {
-    if (native_array_length(numbers) == 0) {
+    if (numbers.length == 0) {
         return 0.0;
     }
 
     let sum = 0.0;
-    for (let i = 0; i < native_array_length(numbers); i = i + 1) {
+    for (let i = 0; i < numbers.length; i = i + 1) {
         sum = sum + numbers[i];
     }
 
-    return sum / native_array_length(numbers);
+    return sum / numbers.length;
 }
 
 /**
  * Finds the median value in an array
  */
 export fn median(numbers: float[]): float {
-    let len = native_array_length(numbers);
+    let len = numbers.length;
     if (len == 0) {
         return 0.0;
     }
 
-    let sorted = native_array_sort(numbers);
+    let sorted = numbers.sort();
     let mid = len / 2;
 
     if (len % 2 == 0) {
@@ -220,7 +208,7 @@ export fn median(numbers: float[]): float {
  */
 export fn sum(numbers: float[]): float {
     let total = 0.0;
-    for (let i = 0; i < native_array_length(numbers); i = i + 1) {
+    for (let i = 0; i < numbers.length; i = i + 1) {
         total = total + numbers[i];
     }
     return total;
@@ -230,12 +218,12 @@ export fn sum(numbers: float[]): float {
  * Finds minimum value in array
  */
 export fn min(numbers: float[]): float {
-    if (native_array_length(numbers) == 0) {
+    if (numbers.length == 0) {
         return 0.0;
     }
 
     let minimum = numbers[0];
-    for (let i = 1; i < native_array_length(numbers); i = i + 1) {
+    for (let i = 1; i < numbers.length; i = i + 1) {
         if (numbers[i] < minimum) {
             minimum = numbers[i];
         }
@@ -248,12 +236,12 @@ export fn min(numbers: float[]): float {
  * Finds maximum value in array
  */
 export fn max(numbers: float[]): float {
-    if (native_array_length(numbers) == 0) {
+    if (numbers.length == 0) {
         return 0.0;
     }
 
     let maximum = numbers[0];
-    for (let i = 1; i < native_array_length(numbers); i = i + 1) {
+    for (let i = 1; i < numbers.length; i = i + 1) {
         if (numbers[i] > maximum) {
             maximum = numbers[i];
         }
@@ -274,7 +262,6 @@ export default {
     fibonacci,
     range,
     range_step,
-    round_to,
     average,
     median,
     sum,

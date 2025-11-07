@@ -139,30 +139,6 @@ class Math {
     }
 
 
-    static sqrt(x: float): float {
-        return native_sqrt(x);
-    }
-
-    static pow(base: float, exp: float): float {
-        return native_pow(base, exp);
-    }
-
-    static sin(x: float): float {
-        return native_sin(x);
-    }
-
-    static cos(x: float): float {
-        return native_cos(x);
-    }
-
-    static random(): float {
-        return native_random();
-    }
-
-    static tan(x: float): float {
-        return native_tan(x);
-    }
-
     static isEven(n: int): bool {
         return n % 2 == 0;
     }

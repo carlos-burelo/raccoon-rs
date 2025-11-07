@@ -2,7 +2,7 @@
 // Verifies all main stdlib modules work correctly
 
 // Array operations
-import { map, filter, reduce, length } from "std:array";
+import { map, filter, reduce, length, push } from "std:array";
 
 // String operations
 import String from "std:string";
