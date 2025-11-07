@@ -2,7 +2,7 @@
 /// Centralizes all arithmetic operations: add, subtract, multiply, divide, modulo, exponent
 
 use crate::error::RaccoonError;
-use crate::runtime::{FloatValue, IntValue, RuntimeValue, StrValue};
+use crate::runtime::{CallStack, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 
 /// Addition operation: handles Int+Int, Float+Float, Int+Float, Float+Int, Str+Any
@@ -106,44 +106,49 @@ pub fn divide(
     right: RuntimeValue,
     position: Position,
     file: &Option<String>,
+    call_stack: &CallStack,
 ) -> Result<RuntimeValue, RaccoonError> {
     match (left, right) {
         (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
             if r.value == 0 {
-                return Err(RaccoonError::new(
+                return Err(RaccoonError::with_call_stack(
                     "Division by zero".to_string(),
                     position,
                     file.clone(),
+                    call_stack.clone(),
                 ));
             }
             Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 / r.value as f64)))
         }
         (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
             if r.value == 0.0 {
-                return Err(RaccoonError::new(
+                return Err(RaccoonError::with_call_stack(
                     "Division by zero".to_string(),
                     position,
                     file.clone(),
+                    call_stack.clone(),
                 ));
             }
             Ok(RuntimeValue::Float(FloatValue::new(l.value / r.value)))
         }
         (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
             if r.value == 0.0 {
-                return Err(RaccoonError::new(
+                return Err(RaccoonError::with_call_stack(
                     "Division by zero".to_string(),
                     position,
                     file.clone(),
+                    call_stack.clone(),
                 ));
             }
             Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 / r.value)))
         }
         (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
             if r.value == 0 {
-                return Err(RaccoonError::new(
+                return Err(RaccoonError::with_call_stack(
                     "Division by zero".to_string(),
                     position,
                     file.clone(),
+                    call_stack.clone(),
                 ));
             }
             Ok(RuntimeValue::Float(FloatValue::new(l.value / r.value as f64)))

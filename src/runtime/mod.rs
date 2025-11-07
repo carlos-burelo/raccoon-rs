@@ -2,6 +2,7 @@ pub mod builtin_plugins;
 pub mod builtins;
 pub mod builtins_builders;
 pub mod builtins_macros;
+pub mod call_stack;
 pub mod control_flow;
 pub mod conversion;
 pub mod decorator_registry;
@@ -24,6 +25,7 @@ pub mod types;
 pub mod values;
 
 pub use builtins::setup_builtins;
+pub use call_stack::{CallStack, StackFrame};
 pub use control_flow::{BreakValue, ContinueValue, ReturnValue, ThrownValue};
 pub use conversion::{FromRaccoon, ToRaccoon};
 pub use decorator_registry::{DecoratorRegistry, DecoratorTarget, DecoratorVisibility};

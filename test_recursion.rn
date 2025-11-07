@@ -1,0 +1,10 @@
+fn recursiveFunction(n: int): int {
+    if (n < 500) {
+        return recursiveFunction(n + 1);
+    }
+    return n;
+}
+
+print("Iniciando test de recursión");
+let result = recursiveFunction(1);
+print(`Resultado: ${result}`);
