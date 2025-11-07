@@ -6,57 +6,73 @@
 
 ## Capas del Sistema
 
-### Capa 1: Primitivas en Rust (src/runtime/natives/*.rs)
+### Capa 1: Métodos de Instancia en Rust (src/runtime/types/primitives/*.rs)
 
-Operaciones que REQUIEREN implementación en Rust:
-- Acceso directo a memoria/estructuras de datos
-- Operaciones matemáticas complejas (trigonometría, raíces, etc.)
-- Operaciones que requieren librerías del sistema
-- Operaciones de performance crítica
+Los tipos primitivos implementan métodos de instancia usando el trait `TypeHandler`:
 
-**Ejemplos:**
+**Ubicación:** `src/runtime/types/primitives/string.rs`, `array.rs`, etc.
+
+**Ejemplos de métodos implementados:**
 ```rust
-// ✅ CORRECTO: Operación imposible en Raccoon
-registrar.register_fn("upper", Some("string"), |args| {
-    let s = String::from_raccoon(&args[0]).unwrap_or_default();
-    s.to_uppercase().to_raccoon()
-}, 1, Some(1));
-
-// ✅ CORRECTO: Requiere libm
-registrar.register_fn("sqrt", Some("math"), |args| {
-    let x = f64::from_raccoon(&args[0]).unwrap_or(0.0);
-    x.sqrt().to_raccoon()
-}, 1, Some(1));
+impl TypeHandler for StrType {
+    fn call_instance_method(&self, value: &mut RuntimeValue, method: &str, args: Vec<RuntimeValue>) {
+        match method {
+            "toUpper" => Ok(RuntimeValue::Str(StrValue::new(s.to_uppercase()))),
+            "split" => // implementación de split
+            "slice" => // implementación de slice
+            // ... más métodos
+        }
+    }
+}
 ```
+
+**Métodos disponibles en string:**
+- `toUpper()`, `toLower()`, `trim()`
+- `split(sep)`, `replace(from, to)`
+- `slice(start, end)`, `indexOf(substr)`
+- `startsWith(prefix)`, `endsWith(suffix)`
+- `padStart(len, char)`, `padEnd(len, char)`
+- `repeat(count)`, `contains(substr)`
+- Y más... (ver src/runtime/types/primitives/string.rs)
 
 ### Capa 2: Stdlib en Raccoon (stdlib/*.rcc)
 
-Funciones de alto nivel construidas usando las primitivas:
+Funciones de alto nivel construidas usando los métodos de instancia:
 
-#### ❌ INCORRECTO - Wrappers Inútiles
+#### ✅ CORRECTO - Usando Métodos de Instancia
 ```typescript
-// NO HAGAS ESTO
-export fn upper(s: str): str {
-    return native_str_upper(s);  // ← Sin valor agregado
-}
-```
-
-#### ✅ CORRECTO - Funciones Útiles
-```typescript
-// HAZ ESTO
+// Combina métodos de instancia para crear funcionalidad nueva
 export fn capitalize(s: str): str {
-    if (string.length(s) == 0) return s;
-    return string.upper(string.char_at(s, 0)) +
-           string.lower(string.substring(s, 1, string.length(s)));
+    if (s.length == 0) return s;
+
+    let first = s.slice(0, 1).toUpper();
+    let rest = s.slice(1).toLower();
+    return first + rest;
 }
 
 export fn title_case(s: str): str {
-    let words = string.split(s, " ");
-    let result: str[] = [];
-    for (let word in words) {
-        array.push(result, capitalize(word));
+    let words = s.split(" ");
+    let result = "";
+
+    for (let i = 0; i < words.length; i = i + 1) {
+        if (i > 0) result = result + " ";
+        result = result + capitalize(words[i]);
     }
-    return array.join(result, " ");
+
+    return result;
+}
+
+export fn is_palindrome(s: str): bool {
+    let clean = s.toLower();
+    let len = clean.length;
+
+    for (let i = 0; i < len / 2; i = i + 1) {
+        let left = clean.slice(i, i + 1);
+        let right = clean.slice(len - i - 1, len - i);
+        if (left != right) return false;
+    }
+
+    return true;
 }
 ```
 
