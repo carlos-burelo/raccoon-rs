@@ -1340,15 +1340,55 @@ impl Expressions {
             .environment
             .get(&new_expr.class_name, new_expr.position)?;
 
-        match class_value {
-            RuntimeValue::Class(class) => {
+        // Extract ClassValue from either RuntimeValue::Class or RuntimeValue::Type
+        let class = match &class_value {
+            RuntimeValue::Class(c) => c.clone(),
+            RuntimeValue::Type(type_obj) => {
+                if let Some(RuntimeValue::Class(c)) = type_obj.get_constructor() {
+                    c.clone()
+                } else {
+                    return Err(RaccoonError::new(
+                        format!(
+                            "Type '{}' does not have a valid constructor",
+                            new_expr.class_name
+                        ),
+                        new_expr.position,
+                        interpreter.file.clone(),
+                    ));
+                }
+            }
+            _ => {
+                return Err(RaccoonError::new(
+                    format!(
+                        "Class '{}' not found or not yet implemented",
+                        new_expr.class_name
+                    ),
+                    new_expr.position,
+                    interpreter.file.clone(),
+                ));
+            }
+        };
+
+        // Now proceed with class instantiation
+        {
                 let mut properties = HashMap::new();
                 let mut methods = HashMap::new();
 
                 if let Some(ref superclass_name) = class.declaration.superclass {
-                    if let Ok(RuntimeValue::Class(superclass)) =
-                        interpreter.environment.get(superclass_name, new_expr.position)
-                    {
+                    let superclass_value = interpreter.environment.get(superclass_name, new_expr.position).ok();
+                    let superclass = match superclass_value {
+                        Some(RuntimeValue::Class(sc)) => Some(sc),
+                        Some(RuntimeValue::Type(type_obj)) => {
+                            if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
+                                Some(sc.clone())
+                            } else {
+                                None
+                            }
+                        }
+                        _ => None
+                    };
+
+                    if let Some(superclass) = superclass {
                         for prop in &superclass.declaration.properties {
                             let value = if let Some(init) = &prop.initializer {
                                 Self::evaluate_expr(interpreter, init).await?
@@ -1425,9 +1465,20 @@ impl Expressions {
                 let mut accessors = Vec::new();
 
                 if let Some(ref superclass_name) = class.declaration.superclass {
-                    if let Ok(RuntimeValue::Class(superclass)) =
-                        interpreter.environment.get(superclass_name, new_expr.position)
-                    {
+                    let superclass_value = interpreter.environment.get(superclass_name, new_expr.position).ok();
+                    let superclass = match superclass_value {
+                        Some(RuntimeValue::Class(sc)) => Some(sc),
+                        Some(RuntimeValue::Type(type_obj)) => {
+                            if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
+                                Some(sc.clone())
+                            } else {
+                                None
+                            }
+                        }
+                        _ => None
+                    };
+
+                    if let Some(superclass) = superclass {
                         accessors.extend(superclass.declaration.accessors.clone());
                     }
                 }
@@ -1535,15 +1586,6 @@ impl Expressions {
                 }
 
                 Ok(RuntimeValue::ClassInstance(instance))
-            }
-            _ => Err(RaccoonError::new(
-                format!(
-                    "Class '{}' not found or not yet implemented",
-                    new_expr.class_name
-                ),
-                new_expr.position,
-                interpreter.file.clone(),
-            )),
         }
     }
 
