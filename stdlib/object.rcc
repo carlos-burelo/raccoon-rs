@@ -1,41 +1,15 @@
 // Object stdlib - High-level object utilities
-
-/**
- * Gets all keys from an object
- */
-export fn keys(obj: object): str[] {
-    return native_object_keys(obj);
-}
-
-/**
- * Gets all values from an object
- */
-export fn values(obj: object): any[] {
-    return native_object_values(obj);
-}
-
-/**
- * Gets all entries from an object as [key, value] pairs
- */
-export fn entries(obj: object): [str, any][] {
-    return native_object_entries(obj);
-}
-
-/**
- * Checks if object has a specific key
- */
-export fn has_key(obj: object, key: str): bool {
-    return native_object_has(obj, key);
-}
+// Native operations (keys, values, entries, has) are provided by the native module
+// Use native_object_keys(), native_object_values(), native_object_entries(), and native_object_has() directly
 
 /**
  * Creates a shallow copy of an object
  */
 export fn clone(obj: object): object {
     let result = {};
-    let obj_keys = keys(obj);
+    let obj_keys = native_object_keys(obj);
 
-    for (let i = 0; i < native_array_length(obj_keys); i = i + 1) {
+    for (let i = 0; i < obj_keys.length; i = i + 1) {
         let key = obj_keys[i];
         result[key] = obj[key];
     }
@@ -49,11 +23,11 @@ export fn clone(obj: object): object {
 export fn merge(objects: object[]): object {
     let result = {};
 
-    for (let i = 0; i < native_array_length(objects); i = i + 1) {
+    for (let i = 0; i < objects.length; i = i + 1) {
         let obj = objects[i];
-        let obj_keys = keys(obj);
+        let obj_keys = native_object_keys(obj);
 
-        for (let j = 0; j < native_array_length(obj_keys); j = j + 1) {
+        for (let j = 0; j < obj_keys.length; j = j + 1) {
             let key = obj_keys[j];
             result[key] = obj[key];
         }
@@ -68,9 +42,9 @@ export fn merge(objects: object[]): object {
 export fn pick(obj: object, pick_keys: str[]): object {
     let result = {};
 
-    for (let i = 0; i < native_array_length(pick_keys); i = i + 1) {
+    for (let i = 0; i < pick_keys.length; i = i + 1) {
         let key = pick_keys[i];
-        if (has_key(obj, key)) {
+        if (native_object_has(obj, key)) {
             result[key] = obj[key];
         }
     }
@@ -83,13 +57,13 @@ export fn pick(obj: object, pick_keys: str[]): object {
  */
 export fn omit(obj: object, omit_keys: str[]): object {
     let result = {};
-    let obj_keys = keys(obj);
+    let obj_keys = native_object_keys(obj);
 
-    for (let i = 0; i < native_array_length(obj_keys); i = i + 1) {
+    for (let i = 0; i < obj_keys.length; i = i + 1) {
         let key = obj_keys[i];
         let should_omit = false;
 
-        for (let j = 0; j < native_array_length(omit_keys); j = j + 1) {
+        for (let j = 0; j < omit_keys.length; j = j + 1) {
             if (key == omit_keys[j]) {
                 should_omit = true;
                 break;
@@ -108,7 +82,7 @@ export fn omit(obj: object, omit_keys: str[]): object {
  * Checks if object is empty (has no keys)
  */
 export fn is_empty(obj: object): bool {
-    return native_array_length(keys(obj)) == 0;
+    return native_object_keys(obj).length == 0;
 }
 
 /**
@@ -116,9 +90,9 @@ export fn is_empty(obj: object): bool {
  */
 export fn map_values(obj: object, mapper: (value: any, key: str) => any): object {
     let result = {};
-    let obj_keys = keys(obj);
+    let obj_keys = native_object_keys(obj);
 
-    for (let i = 0; i < native_array_length(obj_keys); i = i + 1) {
+    for (let i = 0; i < obj_keys.length; i = i + 1) {
         let key = obj_keys[i];
         result[key] = mapper(obj[key], key);
     }
@@ -131,9 +105,9 @@ export fn map_values(obj: object, mapper: (value: any, key: str) => any): object
  */
 export fn map_keys(obj: object, mapper: (key: str, value: any) => str): object {
     let result = {};
-    let obj_keys = keys(obj);
+    let obj_keys = native_object_keys(obj);
 
-    for (let i = 0; i < native_array_length(obj_keys); i = i + 1) {
+    for (let i = 0; i < obj_keys.length; i = i + 1) {
         let key = obj_keys[i];
         let new_key = mapper(key, obj[key]);
         result[new_key] = obj[key];
@@ -147,9 +121,9 @@ export fn map_keys(obj: object, mapper: (key: str, value: any) => str): object {
  */
 export fn filter(obj: object, predicate: (value: any, key: str) => bool): object {
     let result = {};
-    let obj_keys = keys(obj);
+    let obj_keys = native_object_keys(obj);
 
-    for (let i = 0; i < native_array_length(obj_keys); i = i + 1) {
+    for (let i = 0; i < obj_keys.length; i = i + 1) {
         let key = obj_keys[i];
         if (predicate(obj[key], key)) {
             result[key] = obj[key];
@@ -164,9 +138,9 @@ export fn filter(obj: object, predicate: (value: any, key: str) => bool): object
  */
 export fn invert(obj: object): object {
     let result = {};
-    let obj_keys = keys(obj);
+    let obj_keys = native_object_keys(obj);
 
-    for (let i = 0; i < native_array_length(obj_keys); i = i + 1) {
+    for (let i = 0; i < obj_keys.length; i = i + 1) {
         let key = obj_keys[i];
         let value = obj[key];
         result[value] = key;
@@ -176,10 +150,6 @@ export fn invert(obj: object): object {
 }
 
 export default {
-    keys,
-    values,
-    entries,
-    has_key,
     clone,
     merge,
     pick,

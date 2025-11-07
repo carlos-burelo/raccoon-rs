@@ -1,7 +1,5 @@
-// String stdlib - High-level functions built on top of native primitives
-// Native primitives: native_str_upper, native_str_lower, native_str_length,
-// native_str_char_at, native_str_substring, native_str_split, native_str_replace,
-// native_str_trim, native_str_index_of, native_str_starts_with, native_str_ends_with, native_str_join
+// String stdlib - High-level functions built on primitives
+// All string operations use instance methods: s.toUpper(), s.length, s.split(), etc.
 
 /**
  * Capitalizes the first character of a string
@@ -20,21 +18,21 @@ export fn capitalize(s: str): str {
  * Example: title_case("hello world") => "Hello World"
  */
 export fn title_case(s: str): str {
-    let words = native_str_split(s, " ");
+    let words = s.split(" ");
     let result: str[] = [];
 
-    for (let i = 0; i < native_array_length(words); i = i + 1) {
-        native_array_push(result, capitalize(words[i]));
+    for (let i = 0; i < words.length; i = i + 1) {
+        result.push(capitalize(words[i]));
     }
 
-    return native_str_join(result, " ");
+    return result.join(" ");
 }
 
 /**
  * Checks if a string is empty (length == 0)
  */
 export fn is_empty(s: str): bool {
-    return native_str_length(s) == 0;
+    return s.length == 0;
 }
 
 /**
@@ -42,11 +40,11 @@ export fn is_empty(s: str): bool {
  * Example: truncate("Hello World", 5, "...") => "Hello..."
  */
 export fn truncate(s: str, max_len: int, suffix: str): str {
-    if (native_str_length(s) <= max_len) {
+    if (s.length <= max_len) {
         return s;
     }
 
-    let truncated = native_str_substring(s, 0, max_len);
+    let truncated = s.slice(0, max_len);
     return truncated + suffix;
 }
 
@@ -55,7 +53,7 @@ export fn truncate(s: str, max_len: int, suffix: str): str {
  * Example: pad_left("42", 5, "0") => "00042"
  */
 export fn pad_left(s: str, target_len: int, pad_char: str): str {
-    let current_len = native_str_length(s);
+    let current_len = s.length;
     if (current_len >= target_len) {
         return s;
     }
@@ -76,7 +74,7 @@ export fn pad_left(s: str, target_len: int, pad_char: str): str {
  * Example: pad_right("42", 5, "0") => "42000"
  */
 export fn pad_right(s: str, target_len: int, pad_char: str): str {
-    let current_len = native_str_length(s);
+    let current_len = s.length;
     if (current_len >= target_len) {
         return s;
     }
@@ -97,7 +95,7 @@ export fn pad_right(s: str, target_len: int, pad_char: str): str {
  * Example: center("hi", 6, " ") => "  hi  "
  */
 export fn center(s: str, target_len: int, pad_char: str): str {
-    let current_len = native_str_length(s);
+    let current_len = s.length;
     if (current_len >= target_len) {
         return s;
     }
@@ -126,12 +124,12 @@ export fn center(s: str, target_len: int, pad_char: str): str {
  * Example: is_palindrome("racecar") => true
  */
 export fn is_palindrome(s: str): bool {
-    let clean = native_str_lower(s);
-    let len = native_str_length(clean);
+    let clean = s.toLower();
+    let len = clean.length;
 
     for (let i = 0; i < len / 2; i = i + 1) {
-        let left = native_str_char_at(clean, i);
-        let right = native_str_char_at(clean, len - i - 1);
+        let left = clean.charAt(i);
+        let right = clean.charAt(len - i - 1);
         if (left != right) {
             return false;
         }
@@ -151,12 +149,12 @@ export fn count(s: str, substr: str): int {
 
     let counter = 0;
     let pos = 0;
-    let substr_len = native_str_length(substr);
-    let s_len = native_str_length(s);
+    let substr_len = substr.length;
+    let s_len = s.length;
 
     while (pos < s_len) {
-        let rest = native_str_substring(s, pos, s_len);
-        let found = native_str_index_of(rest, substr);
+        let rest = s.slice(pos, s_len);
+        let found = rest.indexOf(substr);
         if (found == -1) {
             break;
         }
@@ -172,7 +170,7 @@ export fn count(s: str, substr: str): int {
  * Example: remove("hello world", "l") => "heo word"
  */
 export fn remove(s: str, substr: str): str {
-    return native_str_replace(s, substr, "");
+    return s.replace(substr, "");
 }
 
 /**
@@ -183,11 +181,11 @@ export fn is_alpha(s: str): bool {
         return false;
     }
 
-    let len = native_str_length(s);
+    let len = s.length;
     for (let i = 0; i < len; i = i + 1) {
-        let c = native_str_char_at(s, i);
-        let lower = native_str_lower(c);
-        if (native_str_index_of("abcdefghijklmnopqrstuvwxyz", lower) == -1) {
+        let c = s.charAt(i);
+        let lower = c.toLower();
+        if ("abcdefghijklmnopqrstuvwxyz".indexOf(lower) == -1) {
             return false;
         }
     }
@@ -203,10 +201,10 @@ export fn is_numeric(s: str): bool {
         return false;
     }
 
-    let len = native_str_length(s);
+    let len = s.length;
     for (let i = 0; i < len; i = i + 1) {
-        let c = native_str_char_at(s, i);
-        if (native_str_index_of("0123456789", c) == -1) {
+        let c = s.charAt(i);
+        if ("0123456789".indexOf(c) == -1) {
             return false;
         }
     }
@@ -222,11 +220,11 @@ export fn is_alphanumeric(s: str): bool {
         return false;
     }
 
-    let len = native_str_length(s);
+    let len = s.length;
     for (let i = 0; i < len; i = i + 1) {
-        let c = native_str_char_at(s, i);
-        let lower = native_str_lower(c);
-        if (native_str_index_of("abcdefghijklmnopqrstuvwxyz0123456789", lower) == -1) {
+        let c = s.charAt(i);
+        let lower = c.toLower();
+        if ("abcdefghijklmnopqrstuvwxyz0123456789".indexOf(lower) == -1) {
             return false;
         }
     }
@@ -239,9 +237,9 @@ export fn is_alphanumeric(s: str): bool {
  * Example: reverse_words("hello world") => "world hello"
  */
 export fn reverse_words(s: str): str {
-    let words = native_str_split(s, " ");
-    let reversed_words = native_array_reverse(words);
-    return native_str_join(reversed_words, " ");
+    let words = s.split(" ");
+    let reversed_words = words.reverse();
+    return reversed_words.join(" ");
 }
 
 /**
@@ -255,25 +253,25 @@ export fn repeat_with_sep(s: str, count: int, separator: str): str {
 
     let parts: str[] = [];
     for (let i = 0; i < count; i = i + 1) {
-        native_array_push(parts, s);
+        parts.push(s);
     }
 
-    return native_str_join(parts, separator);
+    return parts.join(separator);
 }
 
 /**
  * Extracts all lines from a string
  */
 export fn lines(s: str): str[] {
-    return native_str_split(s, "\n");
+    return s.split("\n");
 }
 
 /**
  * Checks if string starts with any of the given prefixes
  */
 export fn starts_with_any(s: str, prefixes: str[]): bool {
-    for (let i = 0; i < native_array_length(prefixes); i = i + 1) {
-        if (native_str_starts_with(s, prefixes[i])) {
+    for (let i = 0; i < prefixes.length; i = i + 1) {
+        if (s.startsWith(prefixes[i])) {
             return true;
         }
     }
@@ -284,8 +282,8 @@ export fn starts_with_any(s: str, prefixes: str[]): bool {
  * Checks if string ends with any of the given suffixes
  */
 export fn ends_with_any(s: str, suffixes: str[]): bool {
-    for (let i = 0; i < native_array_length(suffixes); i = i + 1) {
-        if (native_str_ends_with(s, suffixes[i])) {
+    for (let i = 0; i < suffixes.length; i = i + 1) {
+        if (s.endsWith(suffixes[i])) {
             return true;
         }
     }
@@ -297,13 +295,13 @@ export fn ends_with_any(s: str, suffixes: str[]): bool {
  * Example: to_camel_case("hello world") => "helloWorld"
  */
 export fn to_camel_case(s: str): str {
-    let words = native_str_split(s, " ");
-    if (native_array_length(words) == 0) {
+    let words = s.split(" ");
+    if (words.length == 0) {
         return s;
     }
 
-    let result = native_str_lower(words[0]);
-    for (let i = 1; i < native_array_length(words); i = i + 1) {
+    let result = words[0].toLower();
+    for (let i = 1; i < words.length; i = i + 1) {
         result = result + capitalize(words[i]);
     }
     return result;
@@ -314,9 +312,9 @@ export fn to_camel_case(s: str): str {
  * Example: to_pascal_case("hello world") => "HelloWorld"
  */
 export fn to_pascal_case(s: str): str {
-    let words = native_str_split(s, " ");
+    let words = s.split(" ");
     let result = "";
-    for (let i = 0; i < native_array_length(words); i = i + 1) {
+    for (let i = 0; i < words.length; i = i + 1) {
         result = result + capitalize(words[i]);
     }
     return result;
@@ -327,12 +325,12 @@ export fn to_pascal_case(s: str): str {
  * Example: to_snake_case("hello world") => "hello_world"
  */
 export fn to_snake_case(s: str): str {
-    let words = native_str_split(s, " ");
+    let words = s.split(" ");
     let lower_words: str[] = [];
-    for (let i = 0; i < native_array_length(words); i = i + 1) {
-        native_array_push(lower_words, native_str_lower(words[i]));
+    for (let i = 0; i < words.length; i = i + 1) {
+        lower_words.push(words[i].toLower());
     }
-    return native_str_join(lower_words, "_");
+    return lower_words.join("_");
 }
 
 /**
@@ -340,19 +338,19 @@ export fn to_snake_case(s: str): str {
  * Example: to_kebab_case("hello world") => "hello-world"
  */
 export fn to_kebab_case(s: str): str {
-    let words = native_str_split(s, " ");
+    let words = s.split(" ");
     let lower_words: str[] = [];
-    for (let i = 0; i < native_array_length(words); i = i + 1) {
-        native_array_push(lower_words, native_str_lower(words[i]));
+    for (let i = 0; i < words.length; i = i + 1) {
+        lower_words.push(words[i].toLower());
     }
-    return native_str_join(lower_words, "-");
+    return lower_words.join("-");
 }
 
 /**
  * Extracts words from a string (splits by whitespace)
  */
 export fn words(s: str): str[] {
-    return native_str_split(s, " ");
+    return s.split(" ");
 }
 
 /**
@@ -361,12 +359,12 @@ export fn words(s: str): str[] {
  */
 export fn swap_case(s: str): str {
     let result = "";
-    let len = native_str_length(s);
+    let len = s.length;
     for (let i = 0; i < len; i = i + 1) {
-        let c = native_str_char_at(s, i);
-        let lower = native_str_lower(c);
+        let c = s.charAt(i);
+        let lower = c.toLower();
         if (c == lower) {
-            result = result + native_str_upper(c);
+            result = result + c.toUpper();
         } else {
             result = result + lower;
         }
@@ -397,7 +395,7 @@ export fn is_upper(s: str): bool {
     if (is_empty(s)) {
         return false;
     }
-    return native_str_upper(s) == s;
+    return s.toUpper() == s;
 }
 
 /**
@@ -407,7 +405,7 @@ export fn is_lower(s: str): bool {
     if (is_empty(s)) {
         return false;
     }
-    return native_str_lower(s) == s;
+    return s.toLower() == s;
 }
 
 // Export default object with all functions
