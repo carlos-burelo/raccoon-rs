@@ -1,0 +1,13 @@
+// Simple test for string primitives
+fn main() {
+    // Test string primitives directly
+    let s = "hello";
+    print("Testing string primitives:");
+    print("Original:", s);
+    print("Upper:", string.upper(s));
+    print("Lower:", string.lower(string.upper(s)));
+    print("Length:", string.length(s));
+    print("CharAt 0:", string.char_at(s, 0));
+    print("Substring 1-3:", string.substring(s, 1, 3));
+    print("Done!");
+}

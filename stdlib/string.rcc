@@ -1,51 +1,317 @@
-export class String {
-    static length(s: str): int {
-        return native_str_length(s);
+// String stdlib - High-level functions built on top of native primitives
+// Native primitives: native_str_upper, native_str_lower, native_str_length,
+// native_str_char_at, native_str_substring, native_str_split, native_str_replace,
+// native_str_trim, native_str_index_of, native_str_starts_with, native_str_ends_with, native_str_join
+
+/**
+ * Capitalizes the first character of a string
+ * Example: capitalize("hello") => "Hello"
+ */
+export fn capitalize(s: str): str {
+    if (native_str_length(s) == 0) {
+        return s;
     }
 
-    static upper(s: str): str {
-        return native_str_upper(s);
-    }
-
-    static lower(s: str): str {
-        return native_str_lower(s);
-    }
-
-    static trim(s: str): str {
-        return native_str_trim(s);
-    }
-
-    static substring(s: str, start: int, end: int): str {
-        return native_str_substring(s, start, end);
-    }
-
-    static charAt(s: str, index: int): str {
-        return native_str_char_at(s, index);
-    }
-
-    static indexOf(s: str, substr: str): int {
-        return native_str_index_of(s, substr);
-    }
-
-    static replace(s: str, _from: str, to: str): str {
-        return native_str_replace(s, _from, to);
-    }
-
-    static split(s: str, delimiter: str): str[] {
-        return native_str_split(s, delimiter);
-    }
-
-    static startsWith(s: str, prefix: str): bool {
-        return native_str_starts_with(s, prefix);
-    }
-
-    static endsWith(s: str, suffix: str): bool {
-        return native_str_ends_with(s, suffix);
-    }
-
-    static join(parts: str[], delimiter: str): str {
-        return native_str_join(parts, delimiter);
-    }
+    let first = native_str_char_at(s, 0);
+    let rest = native_str_substring(s, 1, native_str_length(s));
+    return native_str_upper(first) + native_str_lower(rest);
 }
 
-export default String;
+/**
+ * Converts a string to title case (capitalizes each word)
+ * Example: title_case("hello world") => "Hello World"
+ */
+export fn title_case(s: str): str {
+    let words = native_str_split(s, " ");
+    let result: str[] = [];
+
+    for (let i = 0; i < native_array_length(words); i = i + 1) {
+        native_array_push(result, capitalize(words[i]));
+    }
+
+    return native_str_join(result, " ");
+}
+
+/**
+ * Checks if a string is empty (length == 0)
+ */
+export fn is_empty(s: str): bool {
+    return native_str_length(s) == 0;
+}
+
+/**
+ * Truncates a string to a maximum length and adds a suffix
+ * Example: truncate("Hello World", 5, "...") => "Hello..."
+ */
+export fn truncate(s: str, max_len: int, suffix: str): str {
+    if (native_str_length(s) <= max_len) {
+        return s;
+    }
+
+    let truncated = native_str_substring(s, 0, max_len);
+    return truncated + suffix;
+}
+
+/**
+ * Pads a string on the left with a character until it reaches the target length
+ * Example: pad_left("42", 5, "0") => "00042"
+ */
+export fn pad_left(s: str, target_len: int, pad_char: str): str {
+    let current_len = native_str_length(s);
+    if (current_len >= target_len) {
+        return s;
+    }
+
+    let padding_needed = target_len - current_len;
+
+    // Build padding string
+    let padding = "";
+    for (let i = 0; i < padding_needed; i = i + 1) {
+        padding = padding + pad_char;
+    }
+
+    return padding + s;
+}
+
+/**
+ * Pads a string on the right with a character until it reaches the target length
+ * Example: pad_right("42", 5, "0") => "42000"
+ */
+export fn pad_right(s: str, target_len: int, pad_char: str): str {
+    let current_len = native_str_length(s);
+    if (current_len >= target_len) {
+        return s;
+    }
+
+    let padding_needed = target_len - current_len;
+
+    // Build padding string
+    let padding = "";
+    for (let i = 0; i < padding_needed; i = i + 1) {
+        padding = padding + pad_char;
+    }
+
+    return s + padding;
+}
+
+/**
+ * Centers a string by padding both sides
+ * Example: center("hi", 6, " ") => "  hi  "
+ */
+export fn center(s: str, target_len: int, pad_char: str): str {
+    let current_len = native_str_length(s);
+    if (current_len >= target_len) {
+        return s;
+    }
+
+    let padding_needed = target_len - current_len;
+    let left_padding = padding_needed / 2;
+    let right_padding = padding_needed - left_padding;
+
+    // Build left padding
+    let left = "";
+    for (let i = 0; i < left_padding; i = i + 1) {
+        left = left + pad_char;
+    }
+
+    // Build right padding
+    let right = "";
+    for (let i = 0; i < right_padding; i = i + 1) {
+        right = right + pad_char;
+    }
+
+    return left + s + right;
+}
+
+/**
+ * Checks if a string is a palindrome
+ * Example: is_palindrome("racecar") => true
+ */
+export fn is_palindrome(s: str): bool {
+    let clean = native_str_lower(s);
+    let len = native_str_length(clean);
+
+    for (let i = 0; i < len / 2; i = i + 1) {
+        let left = native_str_char_at(clean, i);
+        let right = native_str_char_at(clean, len - i - 1);
+        if (left != right) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Counts occurrences of a substring in a string
+ * Example: count("hello hello", "ll") => 2
+ */
+export fn count(s: str, substr: str): int {
+    if (is_empty(substr)) {
+        return 0;
+    }
+
+    let counter = 0;
+    let pos = 0;
+    let substr_len = native_str_length(substr);
+    let s_len = native_str_length(s);
+
+    while (pos < s_len) {
+        let rest = native_str_substring(s, pos, s_len);
+        let found = native_str_index_of(rest, substr);
+        if (found == -1) {
+            break;
+        }
+        counter = counter + 1;
+        pos = pos + found + substr_len;
+    }
+
+    return counter;
+}
+
+/**
+ * Removes all occurrences of a substring
+ * Example: remove("hello world", "l") => "heo word"
+ */
+export fn remove(s: str, substr: str): str {
+    return native_str_replace(s, substr, "");
+}
+
+/**
+ * Checks if string contains only alphabetic characters
+ */
+export fn is_alpha(s: str): bool {
+    if (is_empty(s)) {
+        return false;
+    }
+
+    let len = native_str_length(s);
+    for (let i = 0; i < len; i = i + 1) {
+        let c = native_str_char_at(s, i);
+        let lower = native_str_lower(c);
+        if (native_str_index_of("abcdefghijklmnopqrstuvwxyz", lower) == -1) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Checks if string contains only numeric characters
+ */
+export fn is_numeric(s: str): bool {
+    if (is_empty(s)) {
+        return false;
+    }
+
+    let len = native_str_length(s);
+    for (let i = 0; i < len; i = i + 1) {
+        let c = native_str_char_at(s, i);
+        if (native_str_index_of("0123456789", c) == -1) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Checks if string contains only alphanumeric characters
+ */
+export fn is_alphanumeric(s: str): bool {
+    if (is_empty(s)) {
+        return false;
+    }
+
+    let len = native_str_length(s);
+    for (let i = 0; i < len; i = i + 1) {
+        let c = native_str_char_at(s, i);
+        let lower = native_str_lower(c);
+        if (native_str_index_of("abcdefghijklmnopqrstuvwxyz0123456789", lower) == -1) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Reverses the words in a string
+ * Example: reverse_words("hello world") => "world hello"
+ */
+export fn reverse_words(s: str): str {
+    let words = native_str_split(s, " ");
+    let reversed_words = native_array_reverse(words);
+    return native_str_join(reversed_words, " ");
+}
+
+/**
+ * Repeats a string n times with a separator
+ * Example: repeat_with_sep("ha", 3, "-") => "ha-ha-ha"
+ */
+export fn repeat_with_sep(s: str, count: int, separator: str): str {
+    if (count <= 0) {
+        return "";
+    }
+
+    let parts: str[] = [];
+    for (let i = 0; i < count; i = i + 1) {
+        native_array_push(parts, s);
+    }
+
+    return native_str_join(parts, separator);
+}
+
+/**
+ * Extracts all lines from a string
+ */
+export fn lines(s: str): str[] {
+    return native_str_split(s, "\n");
+}
+
+/**
+ * Checks if string starts with any of the given prefixes
+ */
+export fn starts_with_any(s: str, prefixes: str[]): bool {
+    for (let i = 0; i < native_array_length(prefixes); i = i + 1) {
+        if (native_str_starts_with(s, prefixes[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Checks if string ends with any of the given suffixes
+ */
+export fn ends_with_any(s: str, suffixes: str[]): bool {
+    for (let i = 0; i < native_array_length(suffixes); i = i + 1) {
+        if (native_str_ends_with(s, suffixes[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Export default object with all functions
+export default {
+    capitalize,
+    title_case,
+    is_empty,
+    truncate,
+    pad_left,
+    pad_right,
+    center,
+    is_palindrome,
+    count,
+    remove,
+    is_alpha,
+    is_numeric,
+    is_alphanumeric,
+    reverse_words,
+    repeat_with_sep,
+    lines,
+    starts_with_any,
+    ends_with_any
+};
