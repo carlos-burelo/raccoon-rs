@@ -6,7 +6,7 @@ use std::process;
 fn main() {
     let runtime = tokio::runtime::Builder::new_current_thread()
         .thread_stack_size(256 * 1024 * 1024)
-        .enable_all()
+        .enable_time()
         .build()
         .expect("Failed to create Tokio runtime");
 
