@@ -1841,14 +1841,24 @@ impl Expressions {
 
             RuntimeValue::Type(type_obj) => {
                 if let Some(static_method) = type_obj.get_static_method(&method_call.method) {
-                    // Call the static method (currently only NativeFunction is supported)
+                    // Call the static method (supports both native and user-defined functions)
                     match static_method {
                         RuntimeValue::NativeFunction(native_fn) => {
                             Ok((native_fn.implementation)(args))
                         }
+                        RuntimeValue::Function(_) => {
+                            // Call user-defined static method
+                            Helpers::call_function(
+                                interpreter,
+                                static_method,
+                                args,
+                                method_call.position,
+                            )
+                            .await
+                        }
                         _ => Err(RaccoonError::new(
                             format!(
-                                "Static method '{}' on type '{}' is not a native function",
+                                "Static method '{}' on type '{}' is not callable",
                                 method_call.method, type_obj.name()
                             ),
                             method_call.position,

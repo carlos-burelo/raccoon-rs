@@ -4,6 +4,7 @@ use crate::error::RaccoonError;
 use crate::runtime::{
     DecoratorTarget, FunctionValue,
     NullValue, RuntimeValue,
+    TypeKind, TypeObjectBuilder,
 };
 use async_recursion::async_recursion;
 use std::collections::HashMap;
@@ -111,10 +112,31 @@ impl Declarations {
         interpreter: &mut Interpreter,
         decl: &ClassDecl,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let class_type = PrimitiveType::any();
+        let class_type = Type::Class(Box::new(crate::ast::types::ClassType {
+            name: decl.name.clone(),
+            superclass: decl.superclass.as_ref().map(|_s| {
+                Box::new(crate::ast::types::ClassType {
+                    name: "Object".to_string(),
+                    superclass: None,
+                    properties: HashMap::new(),
+                    methods: HashMap::new(),
+                    constructor: None,
+                    type_parameters: vec![],
+                })
+            }),
+            properties: HashMap::new(),
+            methods: HashMap::new(),
+            constructor: None,
+            type_parameters: decl.type_parameters.clone(),
+        }));
 
-        let mut static_methods = HashMap::new();
-        let mut static_properties = HashMap::new();
+        // Collect static methods and properties for ClassValue (legacy)
+        let mut class_static_methods = HashMap::new();
+        let mut class_static_properties = HashMap::new();
+
+        // Collect static methods and properties for TypeObject (new)
+        let mut type_static_methods = HashMap::new();
+        let mut type_static_properties = HashMap::new();
 
         for method in &decl.methods {
             if method.is_static {
@@ -131,33 +153,63 @@ impl Declarations {
                     is_variadic: method.parameters.iter().any(|p| p.is_rest),
                 }));
 
-                let function = Box::new(FunctionValue::new(
+                let function_value = RuntimeValue::Function(FunctionValue::new(
                     method.parameters.clone(),
                     method.body.clone(),
                     method.is_async,
-                    fn_type,
+                    fn_type.clone(),
                 ));
 
-                static_methods.insert(method.name.clone(), function);
+                // For ClassValue (legacy)
+                class_static_methods.insert(
+                    method.name.clone(),
+                    Box::new(FunctionValue::new(
+                        method.parameters.clone(),
+                        method.body.clone(),
+                        method.is_async,
+                        fn_type,
+                    ))
+                );
+
+                // For TypeObject (new)
+                type_static_methods.insert(method.name.clone(), function_value);
             }
         }
 
         for property in &decl.properties {
             if let Some(initializer) = &property.initializer {
                 let value = interpreter.evaluate_expr(initializer).await?;
-                static_properties.insert(property.name.clone(), value);
+                class_static_properties.insert(property.name.clone(), value.clone());
+                type_static_properties.insert(property.name.clone(), value);
             }
         }
 
+        // Create ClassValue for backward compatibility
         let class_value = RuntimeValue::Class(crate::runtime::ClassValue::with_properties(
             decl.name.clone(),
-            static_methods,
-            static_properties,
-            class_type,
+            class_static_methods,
+            class_static_properties,
+            class_type.clone(),
             decl.clone(),
         ));
 
-        interpreter.environment.declare(decl.name.clone(), class_value)?;
+        // Create TypeObject representing the class as a type
+        let type_object = TypeObjectBuilder::new(
+            class_type,
+            TypeKind::Class {
+                name: decl.name.clone(),
+                superclass: decl.superclass.clone(),
+            },
+        )
+        .static_methods(type_static_methods)
+        .static_properties(type_static_properties)
+        .constructor(class_value.clone())  // The class value acts as constructor
+        .documentation(extract_doc_from_decorators(&decl.decorators))
+        .decorators(decl.decorators.iter().map(|d| d.name.clone()).collect())
+        .build();
+
+        // Declare the TypeObject in the environment
+        interpreter.environment.declare(decl.name.clone(), RuntimeValue::Type(type_object))?;
 
         Ok(RuntimeValue::Null(NullValue::new()))
     }
@@ -169,8 +221,11 @@ impl Declarations {
     ) -> Result<InterpreterResult, RaccoonError> {
         let mut members = HashMap::new();
         let mut current_value: i64 = 0;
+        let mut variant_names = Vec::new();
 
         for member in &decl.members {
+            variant_names.push(member.name.clone());
+
             if let Some(init_val) = &member.value {
                 if let Expr::IntLiteral(int_lit) = init_val {
                     current_value = int_lit.value;
@@ -193,10 +248,34 @@ impl Declarations {
             members: HashMap::new(),
         }));
 
-        let enum_obj =
-            RuntimeValue::EnumObject(EnumObject::new(decl.name.clone(), members, enum_type));
+        // Create EnumObject for backward compatibility (legacy)
+        let enum_obj = EnumObject::new(decl.name.clone(), members.clone(), enum_type.clone());
 
-        interpreter.environment.declare(decl.name.clone(), enum_obj)?;
+        // Create static properties for each enum member
+        let mut static_properties = HashMap::new();
+        for (member_name, member_data) in &members {
+            let member_value = match member_data {
+                EnumValueData::Int(i) => RuntimeValue::Int(crate::runtime::IntValue::new(*i)),
+                EnumValueData::Str(s) => RuntimeValue::Str(crate::runtime::StrValue::new(s.clone())),
+            };
+            static_properties.insert(member_name.clone(), member_value);
+        }
+
+        // Create TypeObject representing the enum as a type
+        let type_object = TypeObjectBuilder::new(
+            enum_type,
+            TypeKind::Enum {
+                name: decl.name.clone(),
+                variants: variant_names,
+            },
+        )
+        .static_properties(static_properties)
+        .constructor(RuntimeValue::EnumObject(enum_obj))  // EnumObject acts as constructor/namespace
+        .documentation(format!("Enum {}", decl.name))
+        .build();
+
+        // Declare the TypeObject in the environment
+        interpreter.environment.declare(decl.name.clone(), RuntimeValue::Type(type_object))?;
 
         Ok(InterpreterResult::Value(RuntimeValue::Null(
             NullValue::new(),
@@ -214,4 +293,18 @@ impl Declarations {
             interpreter.file.clone(),
         ))
     }
+}
+
+/// Extract documentation from decorators (e.g., @doc("..."))
+fn extract_doc_from_decorators(decorators: &[DecoratorDecl]) -> String {
+    for decorator in decorators {
+        if decorator.name == "doc" {
+            if let Some(first_arg) = decorator.args.first() {
+                if let Expr::StrLiteral(str_lit) = first_arg {
+                    return str_lit.value.clone();
+                }
+            }
+        }
+    }
+    String::new()
 }
