@@ -57,6 +57,9 @@ impl Interpreter {
         // Initialize builtins only (print, println, input, len)
         Self::register_builtins(&mut env, registrar.clone());
 
+        // Register stdlib wrapper functions
+        crate::runtime::stdlib_wrappers::register_stdlib_wrappers(&mut env, registrar.clone());
+
         let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
         let decorator_registry = DecoratorRegistry::new();
 

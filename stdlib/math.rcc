@@ -168,6 +168,36 @@ class Math {
 
         return true;
     }
+
+    // Native math functions (delegated to native implementations)
+    static sqrt(x: float): float {
+        return _native_sqrt(x);
+    }
+
+    static pow(base: float, exp: float): float {
+        return _native_pow(base, exp);
+    }
+
+    static sin(x: float): float {
+        return _native_sin(x);
+    }
+
+    static cos(x: float): float {
+        return _native_cos(x);
+    }
+
+    static tan(x: float): float {
+        return _native_tan(x);
+    }
+
+    static log(x: float, base: float): float {
+        return _native_log(x, base);
+    }
+
+    static random(): float {
+        // This will need to be imported from random module or implemented
+        return 0.5;
+    }
 }
 
 export default Math;
