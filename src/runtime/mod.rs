@@ -14,8 +14,6 @@ pub mod native;
 pub mod natives;
 pub mod plugin_system;
 pub mod registrar;
-pub mod rust_ffi;
-pub mod rust_ffi_modules;
 pub mod rust_natives;
 pub mod stdlib_loader;
 pub mod stdlib_natives;

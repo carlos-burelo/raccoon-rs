@@ -1,5 +1,4 @@
 pub mod array;
-pub mod ffi;
 pub mod http;
 pub mod io;
 pub mod json;
