@@ -22,6 +22,9 @@ pub fn setup_builtins(env: &mut Environment) {
     register_primitive_types(env);
     register_future_object(env);
     register_object_object(env);
+
+    // Register all stdlib native functions
+    crate::runtime::stdlib_natives::register_all_stdlib_natives(env);
 }
 
 fn register_builtin_functions(env: &mut Environment) {
