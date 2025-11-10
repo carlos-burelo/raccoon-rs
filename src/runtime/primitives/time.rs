@@ -1,11 +1,7 @@
-//! Time context primitives
-//! System time operations
-
 use crate::primitive;
 use crate::register_context_primitives;
 use crate::runtime::Registrar;
 
-// Get current time in milliseconds since UNIX epoch
 primitive! {
     time::core_time_now() -> i64 {
         std::time::SystemTime::now()
@@ -15,7 +11,6 @@ primitive! {
     }
 }
 
-// Get current time in microseconds since UNIX epoch
 primitive! {
     time::core_time_now_micros() -> i64 {
         std::time::SystemTime::now()
@@ -25,7 +20,6 @@ primitive! {
     }
 }
 
-// Sleep for specified milliseconds
 primitive! {
     system::core_sleep(ms: i64) -> () {
         if ms > 0 {
@@ -34,7 +28,6 @@ primitive! {
     }
 }
 
-/// Register all time primitives
 pub fn register_time_primitives(registrar: &mut Registrar) {
     register_context_primitives!(registrar, time, {
         core_time_now: 0..=0,

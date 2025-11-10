@@ -4,7 +4,6 @@ use std::time::Duration;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub fn register_time_module(registrar: &mut Registrar) {
-    // now() -> i64 (milliseconds since epoch)
     registrar.register_fn(
         "now",
         Some("time"),
@@ -18,7 +17,6 @@ pub fn register_time_module(registrar: &mut Registrar) {
         Some(0),
     );
 
-    // now_secs() -> i64 (seconds since epoch)
     registrar.register_fn(
         "now_secs",
         Some("time"),
@@ -32,7 +30,6 @@ pub fn register_time_module(registrar: &mut Registrar) {
         Some(0),
     );
 
-    // sleep(ms: i32) -> null
     registrar.register_fn(
         "sleep",
         Some("time"),

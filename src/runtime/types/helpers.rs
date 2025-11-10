@@ -1,10 +1,7 @@
-/// Helper functions for type system operations
-/// Provides reusable utilities for argument validation, type extraction, and error handling
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
 
-/// Validates that the number of arguments matches the expected count
 pub fn require_args(
     args: &[RuntimeValue],
     expected: usize,
@@ -27,7 +24,6 @@ pub fn require_args(
     Ok(())
 }
 
-/// Validates that the number of arguments is within a range
 pub fn require_args_range(
     args: &[RuntimeValue],
     min: usize,
@@ -50,7 +46,6 @@ pub fn require_args_range(
     Ok(())
 }
 
-/// Validates minimum number of arguments
 pub fn require_min_args(
     args: &[RuntimeValue],
     min: usize,
@@ -73,7 +68,6 @@ pub fn require_min_args(
     Ok(())
 }
 
-/// Extracts a string value from a RuntimeValue
 pub fn extract_str<'a>(
     value: &'a RuntimeValue,
     arg_name: &str,
@@ -90,7 +84,6 @@ pub fn extract_str<'a>(
     }
 }
 
-/// Extracts an integer value from a RuntimeValue
 pub fn extract_int(
     value: &RuntimeValue,
     arg_name: &str,
@@ -107,7 +100,6 @@ pub fn extract_int(
     }
 }
 
-/// Extracts a float value from a RuntimeValue
 pub fn extract_float(
     value: &RuntimeValue,
     arg_name: &str,
@@ -124,7 +116,6 @@ pub fn extract_float(
     }
 }
 
-/// Extracts a decimal value from a RuntimeValue
 pub fn extract_decimal(
     value: &RuntimeValue,
     arg_name: &str,
@@ -141,7 +132,6 @@ pub fn extract_decimal(
     }
 }
 
-/// Extracts a bigint value from a RuntimeValue
 pub fn extract_bigint(
     value: &RuntimeValue,
     arg_name: &str,
@@ -158,7 +148,6 @@ pub fn extract_bigint(
     }
 }
 
-/// Extracts a boolean value from a RuntimeValue
 pub fn extract_bool(
     value: &RuntimeValue,
     arg_name: &str,
@@ -175,7 +164,6 @@ pub fn extract_bool(
     }
 }
 
-/// Extracts a numeric value (int or float) as f64
 pub fn extract_numeric(
     value: &RuntimeValue,
     arg_name: &str,
@@ -193,7 +181,6 @@ pub fn extract_numeric(
     }
 }
 
-/// Extracts a list value from a RuntimeValue
 pub fn extract_array<'a>(
     value: &'a RuntimeValue,
     arg_name: &str,
@@ -210,7 +197,6 @@ pub fn extract_array<'a>(
     }
 }
 
-/// Converts a value to boolean (truthy/falsy)
 pub fn to_truthy(value: &RuntimeValue) -> bool {
     match value {
         RuntimeValue::Bool(b) => b.value,
@@ -223,7 +209,6 @@ pub fn to_truthy(value: &RuntimeValue) -> bool {
     }
 }
 
-/// Creates a method not found error
 pub fn method_not_found_error(
     type_name: &str,
     method: &str,
@@ -237,7 +222,6 @@ pub fn method_not_found_error(
     )
 }
 
-/// Creates a static method not found error
 pub fn static_method_not_found_error(
     type_name: &str,
     method: &str,
@@ -254,7 +238,6 @@ pub fn static_method_not_found_error(
     )
 }
 
-/// Creates a property not found error
 pub fn property_not_found_error(
     type_name: &str,
     property: &str,

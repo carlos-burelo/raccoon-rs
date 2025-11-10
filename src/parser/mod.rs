@@ -1630,13 +1630,11 @@ impl Parser {
     }
 
     fn assignment(&mut self) -> Result<Expr, RaccoonError> {
-        // Check for match expression
         if self.check(&TokenType::Match) {
             self.advance();
             return self.parse_match_expr();
         }
 
-        // Check for class expression (anonymous class)
         if self.check(&TokenType::Class) {
             self.advance();
             return self.parse_class_expr();
@@ -1646,19 +1644,16 @@ impl Parser {
             let saved_pos = self.current;
             self.advance();
 
-            // Check for async with parentheses: async () => ...
             if self.check(&TokenType::LeftParen) {
                 if let Ok(arrow) = self.try_parse_arrow_function(true) {
                     return Ok(Expr::ArrowFn(arrow));
                 }
                 self.current = saved_pos;
-            }
-            // Check for async with single identifier: async x => ...
-            else if self.check(&TokenType::Identifier) {
-                self.advance(); // consume identifier
+            } else if self.check(&TokenType::Identifier) {
+                self.advance();
                 if self.check(&TokenType::Arrow) {
-                    self.current = saved_pos; // restore
-                    self.advance(); // skip async
+                    self.current = saved_pos;
+                    self.advance();
                     match self.try_parse_single_param_arrow(true) {
                         Ok(arrow) => return Ok(Expr::ArrowFn(arrow)),
                         Err(_) => {
@@ -1681,12 +1676,11 @@ impl Parser {
             self.current = saved_pos;
         }
 
-        // Check for single-parameter arrow function without parentheses: x => ...
         if self.check(&TokenType::Identifier) {
             let saved_pos = self.current;
-            self.advance(); // consume identifier
+            self.advance();
             if self.check(&TokenType::Arrow) {
-                self.current = saved_pos; // restore position
+                self.current = saved_pos;
                 match self.try_parse_single_param_arrow(false) {
                     Ok(arrow) => return Ok(Expr::ArrowFn(arrow)),
                     Err(_) => {
@@ -2286,7 +2280,7 @@ impl Parser {
 
         if self.match_token(&[TokenType::IntLiteral]) {
             let token_value = &self.previous().value;
-            // Parse with different bases and remove separators
+
             let clean_value = token_value.replace('_', "");
             let value = if clean_value.starts_with("0b") || clean_value.starts_with("0B") {
                 i64::from_str_radix(&clean_value[2..], 2).unwrap_or(0)
@@ -2346,7 +2340,6 @@ impl Parser {
             }));
         }
 
-        // Función anónima: fn { ... } o fn(params) { ... } o fn(params) => expr
         if self.check(&TokenType::Fn) {
             return self.parse_anonymous_function(false);
         }
@@ -2667,27 +2660,23 @@ impl Parser {
         })
     }
 
-    /// Try to parse single-parameter arrow function without parentheses: x => expr
     fn try_parse_single_param_arrow(
         &mut self,
         is_async: bool,
     ) -> Result<ArrowFnExpr, RaccoonError> {
         let position = self.peek().position;
 
-        // Parse the single parameter (must be an identifier)
         let param_token = self.consume(TokenType::Identifier, "Expected parameter name")?;
         let param_name = param_token.value.clone();
 
-        // Create parameter with inferred type
         let parameter = FnParam {
             pattern: VarPattern::Identifier(param_name),
-            param_type: PrimitiveType::any(), // Inferred type
+            param_type: PrimitiveType::any(),
             default_value: None,
             is_rest: false,
             is_optional: false,
         };
 
-        // Expect arrow: =>
         if !self.match_token(&[TokenType::Arrow]) {
             return Err(RaccoonError::new(
                 "Expected '=>' for arrow function",
@@ -2696,7 +2685,6 @@ impl Parser {
             ));
         }
 
-        // Parse body (expression or block)
         let body = if self.check(&TokenType::LeftBrace) {
             self.advance();
             let stmts = self.block_statements()?;
@@ -2715,14 +2703,10 @@ impl Parser {
         })
     }
 
-    /// Parse anonymous function expression: fn { ... } with explicit return
-    /// Anonymous functions MUST have block body with explicit return statements
-    /// For concise syntax, use arrow functions: fn(params) => expr
     fn parse_anonymous_function(&mut self, is_async: bool) -> Result<Expr, RaccoonError> {
         let position = self.peek().position.clone();
         self.consume(TokenType::Fn, "Expected 'fn'")?;
 
-        // Parse parameters (optional, can be empty or in parens)
         let parameters = if self.check(&TokenType::LeftParen) {
             self.advance();
             let params = self.arrow_function_parameters()?;
@@ -2732,14 +2716,12 @@ impl Parser {
             Vec::new()
         };
 
-        // Parse return type (optional)
         let return_type = if self.match_token(&[TokenType::Colon]) {
             Some(self.parse_type()?)
         } else {
             None
         };
 
-        // Anonymous functions MUST have block body with explicit return
         if !self.check(&TokenType::LeftBrace) {
             return Err(RaccoonError::new(
                 "Anonymous function must have explicit block body { ... }. Use arrow function syntax (=>) for concise expressions".to_string(),
@@ -2977,23 +2959,18 @@ impl Parser {
     fn parse_match_expr(&mut self) -> Result<Expr, RaccoonError> {
         let position = self.previous().position;
 
-        // Parse scrutinee (the expression being matched)
         let scrutinee = Box::new(self.conditional()?);
 
-        // Consume opening brace
         self.consume(TokenType::LeftBrace, "Expected '{' after match scrutinee")?;
 
         let mut arms = Vec::new();
 
-        // Parse match arms: pattern => expr
         while !self.check(&TokenType::RightBrace) && !self.is_at_end() {
             let pattern = self.parse_pattern()?;
             let pos = pattern.position();
 
-            // Consume arrow
             self.consume(TokenType::Arrow, "Expected '=>' after pattern")?;
 
-            // Parse body expression
             let body = Box::new(self.conditional()?);
 
             arms.push(MatchArm {
@@ -3003,7 +2980,6 @@ impl Parser {
                 position: pos,
             });
 
-            // Consume comma if not at closing brace
             if !self.check(&TokenType::RightBrace) {
                 self.consume(TokenType::Comma, "Expected ',' after match arm")?;
             }
@@ -3021,7 +2997,6 @@ impl Parser {
     fn parse_class_expr(&mut self) -> Result<Expr, RaccoonError> {
         let position = self.previous().position;
 
-        // Parse optional type parameters
         let mut type_params = Vec::new();
         if self.match_token(&[TokenType::Lt]) {
             loop {
@@ -3040,7 +3015,6 @@ impl Parser {
             self.consume(TokenType::Gt, "Expected '>' after type parameters")?;
         }
 
-        // Parse optional extends clause
         let mut superclass = None;
         if self.match_token(&[TokenType::Extends]) {
             superclass = Some(
@@ -3050,7 +3024,6 @@ impl Parser {
             );
         }
 
-        // Parse optional implements clause
         if self.match_token(&[TokenType::Implements]) {
             loop {
                 self.consume(TokenType::Identifier, "Expected interface name")?;
@@ -3168,7 +3141,6 @@ impl Parser {
         }
 
         if self.match_token(&[TokenType::LeftBracket]) {
-            // array pattern: [pat1, pat2, ...rest]
             let mut patterns = Vec::new();
 
             if !self.check(&TokenType::RightBracket) {
@@ -3185,7 +3157,6 @@ impl Parser {
         }
 
         if self.match_token(&[TokenType::LeftBrace]) {
-            // Object pattern: { x, y: pat }
             let mut properties = Vec::new();
 
             if !self.check(&TokenType::RightBrace) {
@@ -3216,7 +3187,6 @@ impl Parser {
             return Ok(Pattern::Object(properties));
         }
 
-        // Literal pattern
         if self.check(&TokenType::IntLiteral)
             || self.check(&TokenType::FloatLiteral)
             || self.check(&TokenType::StrLiteral)

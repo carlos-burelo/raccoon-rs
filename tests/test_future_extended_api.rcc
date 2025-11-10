@@ -1,4 +1,4 @@
-// Test de métodos extendidos de Future API
+
 
 print("=== Test 1: Future.allSettled() - Todos resueltos ===")
 let allResolved = [
@@ -36,7 +36,6 @@ let anyFutures = [
 
 let anyResult = await Future.any(anyFutures)
 print("Future.any() resultado:", anyResult)
-// Esperado: "¡Éxito!"
 
 
 print("\n=== Test 4: Future.any() - Todas rechazadas ===")
@@ -66,7 +65,7 @@ let tapValue = Future.resolve(42)
 
 let tapResult = await tapValue
 print("Resultado final con .tap():", tapResult)
-// Esperado: 84
+
 
 
 print("\n=== Test 6: .map() - Transformación simple ===")
@@ -78,7 +77,7 @@ let mapValue = Future.resolve(10)
 
 let mapResult = await mapValue
 print("Resultado de .map():", mapResult)
-// Esperado: 15
+
 
 
 print("\n=== Test 7: Encadenamiento complejo ===")
@@ -97,7 +96,7 @@ let complex = Future.resolve(5)
 
 let complexResult = await complex
 print("Resultado complejo:", complexResult)
-// Esperado: (5 * 2) + 10 = 20
+
 
 
 print("\n=== Test 8: .map() con error propagado ===")
@@ -113,7 +112,7 @@ let mapError = Future.reject("Fallo")
 
 let mapErrorResult = await mapError
 print("Resultado después de error:", mapErrorResult)
-// Esperado: 99
+
 
 
 print("\n=== ✅ TODOS LOS TESTS EXTENDIDOS COMPLETADOS ===")

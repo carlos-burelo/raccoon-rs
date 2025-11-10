@@ -1,17 +1,6 @@
-//! Built-in functions and types for Raccoon runtime
-//!
-//! Organized into logical modules:
-//! - `global`: Global functions (print, println, eprint, input, len)
-//! - `primitives`: Primitive types (int, str, float, bool)
-//! - `objects`: Built-in objects (Future, Object, Type)
-//! - `array`: Array functional methods
-//! - `builders`: Utilities for Future collection and TypeMethodBuilder
-//! - `macros`: Macros for function type definitions
-//! - `builtin_macros`: Macros for defining builtins
-
 pub mod array;
-pub mod builtin_macros;
 pub mod builders;
+pub mod builtin_macros;
 pub mod global;
 pub mod macros;
 pub mod objects;
@@ -25,7 +14,6 @@ pub use builders::{
 
 use crate::runtime::Environment;
 
-/// Sets up all built-in functions, types, and methods in the environment
 pub fn setup_builtins(env: &mut Environment) {
     global::register(env);
     primitives::register(env);

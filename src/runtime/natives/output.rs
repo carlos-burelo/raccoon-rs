@@ -1,7 +1,6 @@
-/// Output functions: print, eprint
 use crate::ast::types::{FunctionType, PrimitiveType, Type};
 use crate::runtime::values::{NativeFunctionValue, NullValue, RuntimeValue};
-// use crate::output_style;
+
 use std::collections::HashMap;
 
 pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
@@ -11,8 +10,7 @@ pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
                 .iter()
                 .map(|arg| {
                     let plain = arg.to_string();
-                    // Apply syntax highlighting to all output
-                    // output_style::format_value(&plain)
+
                     plain
                 })
                 .collect::<Vec<String>>()
@@ -34,12 +32,6 @@ pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
                 .map(|arg| {
                     let plain = arg.to_string();
                     plain
-                    // // Apply syntax highlighting if the output looks like JSON/objects/arrays
-                    // if plain.contains('{') || plain.contains('[') || plain.starts_with('"') {
-                    //     output_style::format_value(&plain)
-                    // } else {
-                    //     plain
-                    // }
                 })
                 .collect::<Vec<String>>()
                 .join(" ");
@@ -53,8 +45,6 @@ pub fn register(functions: &mut HashMap<String, NativeFunctionValue>) {
         })),
     );
 
-    // Single convention: native_*
-    // No more duplication with native_* aliases
     functions.insert("native_print".to_string(), print_fn);
     functions.insert("native_eprint".to_string(), eprint_fn);
 }

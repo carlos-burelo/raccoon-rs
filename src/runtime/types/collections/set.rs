@@ -1,4 +1,3 @@
-/// Refactored SetType using helpers and metadata system
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
@@ -7,14 +6,9 @@ use crate::runtime::{ArrayValue, BoolValue, IntValue, NullValue, RuntimeValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// SetType - Unique collection (Set<T>)
-// ============================================================================
-
 pub struct SetType;
 
 impl SetType {
-    /// Helper to extract set (list) from RuntimeValue
     fn extract_set_mut<'a>(
         value: &'a mut RuntimeValue,
         position: Position,
@@ -51,7 +45,7 @@ impl TypeHandler for SetType {
             "add" => {
                 require_args(&args, 1, method, position, file)?;
                 let item = &args[0];
-                // Check if item already exists
+
                 let exists = set.elements.iter().any(|e| e.equals(item));
                 if !exists {
                     set.elements.push(item.clone());

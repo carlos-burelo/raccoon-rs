@@ -1,5 +1,5 @@
-// Math module - Complete implementation using core primitives
-// All logic is implemented in Raccoon, only atomic operations are delegated to Rust
+
+
 
 import {
     sqrt as core_sqrt,
@@ -27,7 +27,7 @@ import {
 } from "std:runtime";
 
 class Math {
-    // Mathematical constants
+    
     static PI: float = 3.141592653589793;
     static E: float = 2.718281828459045;
     static TAU: float = 6.283185307179586;
@@ -39,9 +39,9 @@ class Math {
     static LOG10E: float = 0.4342944819032518;
     static EPSILON: float = 0.0000001;
 
-    // ========================================================================
-    // Basic Math Functions (delegate to primitives)
-    // ========================================================================
+    
+    
+    
 
     static abs(x: float): float {
         return core_abs(x);
@@ -75,22 +75,22 @@ class Math {
         return core_cbrt(x);
     }
 
-    // ========================================================================
-    // Power and Exponential Functions
-    // ========================================================================
+    
+    
+    
 
     static pow(base: float, exp: float): float {
-        // Handle special cases
+        
         if (exp == 0.0) return 1.0;
         if (base == 0.0) return 0.0;
         if (exp == 1.0) return base;
 
-        // Use exp(exp * ln(base)) for general case
+        
         if (base > 0.0) {
             return core_exp(exp * core_ln(base));
         }
 
-        // For negative base with integer exponent
+        
         let isNegative: bool = false;
         let absBase: float = base;
         if (base < 0.0) {
@@ -100,7 +100,7 @@ class Math {
 
         let result: float = core_exp(exp * core_ln(absBase));
 
-        // If base is negative and exp is odd integer, result is negative
+        
         if (isNegative) {
             let expInt: int = exp;
             if (exp == expInt && expInt % 2 == 1) {
@@ -131,9 +131,9 @@ class Math {
         return core_log(x, base);
     }
 
-    // ========================================================================
-    // Trigonometric Functions
-    // ========================================================================
+    
+    
+    
 
     static sin(x: float): float {
         return core_sin(x);
@@ -163,9 +163,9 @@ class Math {
         return core_atan2(y, x);
     }
 
-    // ========================================================================
-    // Hyperbolic Functions
-    // ========================================================================
+    
+    
+    
 
     static sinh(x: float): float {
         return core_sinh(x);
@@ -180,23 +180,23 @@ class Math {
     }
 
     static asinh(x: float): float {
-        // asinh(x) = ln(x + sqrt(x^2 + 1))
+        
         return core_ln(x + core_sqrt(x * x + 1.0));
     }
 
     static acosh(x: float): float {
-        // acosh(x) = ln(x + sqrt(x^2 - 1))
+        
         return core_ln(x + core_sqrt(x * x - 1.0));
     }
 
     static atanh(x: float): float {
-        // atanh(x) = 0.5 * ln((1 + x) / (1 - x))
+        
         return 0.5 * core_ln((1.0 + x) / (1.0 - x));
     }
 
-    // ========================================================================
-    // Angle Conversion
-    // ========================================================================
+    
+    
+    
 
     static toRadians(degrees: float): float {
         return degrees * (Math.PI / 180.0);
@@ -206,9 +206,9 @@ class Math {
         return radians * (180.0 / Math.PI);
     }
 
-    // ========================================================================
-    // Min/Max and Clamping
-    // ========================================================================
+    
+    
+    
 
     static min(...values: float[]): float {
         if (values.length == 0) {
@@ -244,9 +244,9 @@ class Math {
         return value;
     }
 
-    // ========================================================================
-    // Interpolation and Utilities
-    // ========================================================================
+    
+    
+    
 
     static lerp(a: float, b: float, t: float): float {
         return a + (b - a) * t;
@@ -260,9 +260,9 @@ class Math {
         return x - core_floor(x);
     }
 
-    // ========================================================================
-    // Integer Math Functions
-    // ========================================================================
+    
+    
+    
 
     static factorial(n: int): int {
         if (n <= 1) {
@@ -326,9 +326,9 @@ class Math {
         return true;
     }
 
-    // ========================================================================
-    // Floating Point Utilities
-    // ========================================================================
+    
+    
+    
 
     static isNaN(x: float): bool {
         return x != x;

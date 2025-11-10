@@ -1,8 +1,8 @@
-// TEST: Section 11 - Generics only
+
 
 print("Testing Generics...")
 
-// 11.1 Generic function
+
 fn identity<T>(x: T): T {
     return x
 }
@@ -10,7 +10,7 @@ let idInt: int = identity<int>(42)
 let idStr: str = identity<str>("hello")
 print(`  ✓ Generic function: ${idInt}, ${idStr}`)
 
-// 11.2 Generic class
+
 class Box<T> {
     value: T
 
@@ -28,7 +28,7 @@ let boxedInt: int = intBox.getValue()
 let boxedStr: str = strBox.getValue()
 print(`  ✓ Generic class: ${boxedInt}, ${boxedStr}`)
 
-// 11.3 Generic interface
+
 interface IPair<T, U> {
     first: T
     second: U
@@ -36,7 +36,7 @@ interface IPair<T, U> {
 let pair: IPair<int, str> = { first: 42, second: "answer" }
 print(`  ✓ Generic interface: ${pair}`)
 
-// 11.4 Generic constraints
+
 fn getLength<T extends { length(): int }>(x: T): int {
     return x.length()
 }

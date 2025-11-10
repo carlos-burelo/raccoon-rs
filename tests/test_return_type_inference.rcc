@@ -1,16 +1,16 @@
-// Test: Return type inference for functions
 
-// Test 1: Simple return type inference
+
+
 fn add(x: int, y: int) {
     return x + y;
 }
 
-// Test 2: No explicit return (void inference)
+
 fn greet(name: str) {
     print("Hello, " + name);
 }
 
-// Test 3: Multiple returns with same type
+
 fn max(a: int, b: int) {
     if (a > b) {
         return a;
@@ -19,31 +19,31 @@ fn max(a: int, b: int) {
     }
 }
 
-// Test 4: String return type inference
+
 fn getName() {
     return "Alice";
 }
 
-// Test 5: Boolean return type inference
+
 fn isPositive(x: int) {
     return x > 0;
 }
 
-// Test 6: Explicit type still works
+
 fn multiply(x: int, y: int): int {
     return x * y;
 }
 
-// Test 7: Arrow function inference
+
 let subtract = (x: int, y: int) => x - y;
 
-// Testing the functions
-let result1 = add(5, 3);           // Should infer int
-let result2 = max(10, 20);         // Should infer int
-let result3 = getName();           // Should infer str
-let result4 = isPositive(5);       // Should infer bool
-let result5 = multiply(4, 5);      // Explicit type int
-let result6 = subtract(10, 3);     // Should infer int from arrow fn
+
+let result1 = add(5, 3);           
+let result2 = max(10, 20);         
+let result3 = getName();           
+let result4 = isPositive(5);       
+let result5 = multiply(4, 5);      
+let result6 = subtract(10, 3);     
 
 print("add(5, 3) = " + result1);
 print("max(10, 20) = " + result2);

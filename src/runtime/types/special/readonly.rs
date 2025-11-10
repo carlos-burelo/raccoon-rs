@@ -4,11 +4,6 @@ use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// ReadonlyType - Readonly type (readonly T)
-// ============================================================================
-// Note: Readonly types are typically compile-time only
-
 pub struct ReadonlyType;
 
 #[async_trait]

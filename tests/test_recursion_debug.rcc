@@ -1,4 +1,4 @@
-// Simple recursion test
+
 fn factorial(n: int): int {
   if (n <= 1) {
     return 1;

@@ -101,9 +101,7 @@ impl Declarations {
                         decl.name, msg
                     );
                 }
-                _ => {
-                    // Other decorators are registered but not actively implemented yet
-                }
+                _ => {}
             }
         }
 
@@ -133,11 +131,9 @@ impl Declarations {
             type_parameters: decl.type_parameters.clone(),
         }));
 
-        // Collect static methods and properties for ClassValue (legacy)
         let mut class_static_methods = HashMap::new();
         let mut class_static_properties = HashMap::new();
 
-        // Collect static methods and properties for TypeObject (new)
         let mut type_static_methods = HashMap::new();
         let mut type_static_properties = HashMap::new();
 
@@ -163,7 +159,6 @@ impl Declarations {
                     fn_type.clone(),
                 ));
 
-                // For ClassValue (legacy)
                 class_static_methods.insert(
                     method.name.clone(),
                     Box::new(FunctionValue::new(
@@ -174,7 +169,6 @@ impl Declarations {
                     )),
                 );
 
-                // For TypeObject (new)
                 type_static_methods.insert(method.name.clone(), function_value);
             }
         }
@@ -187,7 +181,6 @@ impl Declarations {
             }
         }
 
-        // Create ClassValue for backward compatibility
         let class_value = RuntimeValue::Class(crate::runtime::ClassValue::with_properties(
             decl.name.clone(),
             class_static_methods,
@@ -196,7 +189,6 @@ impl Declarations {
             decl.clone(),
         ));
 
-        // Create TypeObject representing the class as a type
         let type_object = TypeObjectBuilder::new(
             class_type,
             TypeKind::Class {
@@ -206,12 +198,11 @@ impl Declarations {
         )
         .static_methods(type_static_methods)
         .static_properties(type_static_properties)
-        .constructor(class_value.clone()) // The class value acts as constructor
+        .constructor(class_value.clone())
         .documentation(extract_doc_from_decorators(&decl.decorators))
         .decorators(decl.decorators.iter().map(|d| d.name.clone()).collect())
         .build();
 
-        // Declare the TypeObject in the environment
         interpreter
             .environment
             .declare(decl.name.clone(), RuntimeValue::Type(type_object))?;
@@ -253,10 +244,8 @@ impl Declarations {
             members: HashMap::new(),
         }));
 
-        // Create EnumObject for backward compatibility (legacy)
         let enum_obj = EnumObject::new(decl.name.clone(), members.clone(), enum_type.clone());
 
-        // Create static properties for each enum member
         let mut static_properties = HashMap::new();
         for (member_name, member_data) in &members {
             let member_value = match member_data {
@@ -268,7 +257,6 @@ impl Declarations {
             static_properties.insert(member_name.clone(), member_value);
         }
 
-        // Create TypeObject representing the enum as a type
         let type_object = TypeObjectBuilder::new(
             enum_type,
             TypeKind::Enum {
@@ -277,11 +265,10 @@ impl Declarations {
             },
         )
         .static_properties(static_properties)
-        .constructor(RuntimeValue::EnumObject(enum_obj)) // EnumObject acts as constructor/namespace
+        .constructor(RuntimeValue::EnumObject(enum_obj))
         .documentation(format!("Enum {}", decl.name))
         .build();
 
-        // Declare the TypeObject in the environment
         interpreter
             .environment
             .declare(decl.name.clone(), RuntimeValue::Type(type_object))?;
@@ -304,7 +291,6 @@ impl Declarations {
     }
 }
 
-/// Extract documentation from decorators (e.g., @doc("..."))
 fn extract_doc_from_decorators(decorators: &[DecoratorDecl]) -> String {
     for decorator in decorators {
         if decorator.name == "doc" {

@@ -1,9 +1,9 @@
-// Test: Extended property access with inheritance, computed properties, and complex patterns
-// Comprehensive test covering advanced property access scenarios
 
-// ============================================================================
-// Part 1: Class Inheritance and Property Access
-// ============================================================================
+
+
+
+
+
 
 print("=== Test 1: Class Inheritance and Property Access ===");
 
@@ -40,9 +40,9 @@ print(`Dog age: ${dog.age}`);
 print(`Dog breed: ${dog.breed}`);
 print(`Full info: ${dog.getFullInfo()}`);
 
-// ============================================================================
-// Part 2: Property Access with Computed Values
-// ============================================================================
+
+
+
 
 print("\n=== Test 2: Property Access with Computed Values ===");
 
@@ -77,9 +77,9 @@ print(`Area: ${rect.area}`);
 print(`Perimeter: ${rect.perimeter}`);
 print(`Aspect Ratio: ${rect.aspectRatio}`);
 
-// ============================================================================
-// Part 3: Nested Object Property Access
-// ============================================================================
+
+
+
 
 print("\n=== Test 3: Nested Object Property Access ===");
 
@@ -114,9 +114,9 @@ let person = new Person("John", {street: "456 Elm St", city: "Shelbyville", zipc
 print(`Person: ${person.name}`);
 print(`Address: ${person.getAddressString()}`);
 
-// ============================================================================
-// Part 4: Array of Objects with Property Operations
-// ============================================================================
+
+
+
 
 print("\n=== Test 4: Array of Objects with Property Operations ===");
 
@@ -151,9 +151,9 @@ for (let product of inventory) {
 }
 print(`Total inventory value: $${totalValue}`);
 
-// ============================================================================
-// Part 5: Property Access in Conditional Logic
-// ============================================================================
+
+
+
 
 print("\n=== Test 5: Property Access in Conditional Logic ===");
 
@@ -189,9 +189,9 @@ print(`${student1.name}: GPA ${student1.gpa} -> Grade ${student1.getGrade()}`);
 print(`${student2.name}: GPA ${student2.gpa} -> Grade ${student2.getGrade()}`);
 print(`${student3.name}: GPA ${student3.gpa} -> Grade ${student3.getGrade()}`);
 
-// ============================================================================
-// Part 6: Property Mutation Through Methods
-// ============================================================================
+
+
+
 
 print("\n=== Test 6: Property Mutation Through Methods ===");
 
@@ -229,9 +229,9 @@ print(`After increment: ${counter.increment()}`);
 print(`After decrement: ${counter.decrement()}`);
 print(`After reset: ${counter.reset()}`);
 
-// ============================================================================
-// Part 7: Property Access with Mixed Types
-// ============================================================================
+
+
+
 
 print("\n=== Test 7: Property Access with Mixed Types ===");
 
@@ -263,9 +263,9 @@ print(`Values: ${dataset.values}`);
 print(`Sum: ${dataset.getSum()}`);
 print(`Average: ${dataset.getAverage()}`);
 
-// ============================================================================
-// Part 8: Method Chaining with Property Access
-// ============================================================================
+
+
+
 
 print("\n=== Test 8: Method Chaining with Property Access ===");
 
@@ -305,9 +305,9 @@ let result = sb.append("Hello").append(" ").append("World").appendLine("!").buil
 print(`Built string: ${result}`);
 print(`Length: ${sb.length}`);
 
-// ============================================================================
-// Part 9: Property Access in Aggregation Scenarios
-// ============================================================================
+
+
+
 
 print("\n=== Test 9: Property Access in Aggregation Scenarios ===");
 
@@ -352,9 +352,9 @@ account.record({amount: 300.0, transactionType: "deposit"});
 print(`Final balance: ${account.balance}`);
 print(`Transaction count: ${account.getTransactionCount()}`);
 
-// ============================================================================
-// Part 10: Complex Property Access Patterns
-// ============================================================================
+
+
+
 
 print("\n=== Test 10: Complex Property Access Patterns ===");
 
@@ -395,8 +395,8 @@ print(`Nested level: ${config.getNestedSetting("level")}`);
 config.updateSetting("debug", false);
 print(`After update - Debug mode: ${config.getSetting("debug")}`);
 
-// ============================================================================
-// Final Summary
-// ============================================================================
+
+
+
 
 print("\n=== All Extended Property Access Tests Completed Successfully! ===");

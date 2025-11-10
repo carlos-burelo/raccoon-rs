@@ -1,6 +1,3 @@
-//! Global built-in functions
-//! - print, println, eprint, input, len
-
 use crate::ast::types::{FunctionType, PrimitiveType, Type};
 use crate::fn_type;
 use crate::runtime::{Environment, IntValue, NullValue, RuntimeValue, StrValue};

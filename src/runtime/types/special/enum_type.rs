@@ -4,10 +4,6 @@ use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// EnumType - Enumeration type handler
-// ============================================================================
-
 pub struct EnumType;
 
 #[async_trait]

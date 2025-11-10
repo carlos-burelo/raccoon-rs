@@ -1,14 +1,9 @@
-/// Refactored OptionalType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, NullValue, RuntimeValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// OptionalType - Optional value (Option<T> / Maybe<T>)
-// ============================================================================
 
 pub struct OptionalType;
 
@@ -97,7 +92,10 @@ impl TypeHandler for OptionalType {
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(method, "isSome" | "isNone" | "unwrap" | "unwrapOr" | "expect")
+        matches!(
+            method,
+            "isSome" | "isNone" | "unwrap" | "unwrapOr" | "expect"
+        )
     }
 
     fn has_static_method(&self, method: &str) -> bool {

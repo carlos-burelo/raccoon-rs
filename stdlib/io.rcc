@@ -1,5 +1,5 @@
-// IO module - File system operations using core primitives
-// All logic is implemented in Raccoon, only atomic operations are delegated to Rust
+
+
 
 import {
     file_read as core_file_read,
@@ -43,7 +43,7 @@ class File {
         if (content == "") {
             return [];
         }
-        // Split by newline
+        
         return content.split("\n");
     }
 
@@ -70,7 +70,7 @@ class Directory {
 
     list(): string[] {
         let result: string = core_dir_list(this.path);
-        // Parse JSON array
+        
         return JSON.parse(result);
     }
 

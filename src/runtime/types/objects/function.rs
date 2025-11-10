@@ -4,10 +4,6 @@ use crate::runtime::{IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// FunctionType - Function type handler
-// ============================================================================
-
 pub struct FunctionType;
 
 #[async_trait]

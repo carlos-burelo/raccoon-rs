@@ -1,14 +1,9 @@
-//! Built-in global objects
-//! - Future: Promise-like async computation
-//! - Object: Utilities for object manipulation
-//! - Type: Type system introspection
-
+use super::builders::{collect_futures, FutureCollectionStrategy, TypeMethodBuilder};
 use crate::ast::types::PrimitiveType;
 use crate::fn_type;
 use crate::runtime::{
     ArrayValue, Environment, FutureState, FutureValue, NullValue, RuntimeValue, StrValue,
 };
-use super::builders::{collect_futures, FutureCollectionStrategy, TypeMethodBuilder};
 
 pub fn register(env: &mut Environment) {
     register_future(env);
@@ -19,7 +14,6 @@ pub fn register(env: &mut Environment) {
 fn register_future(env: &mut Environment) {
     let mut builder = TypeMethodBuilder::new("Future");
 
-    // Future.resolve(value)
     builder.add_method(
         "resolve",
         fn_type!(PrimitiveType::any(), PrimitiveType::any()),
@@ -34,7 +28,6 @@ fn register_future(env: &mut Environment) {
         },
     );
 
-    // Future.reject(error)
     builder.add_method(
         "reject",
         fn_type!(PrimitiveType::any(), PrimitiveType::any()),
@@ -48,7 +41,6 @@ fn register_future(env: &mut Environment) {
         },
     );
 
-    // Future.all(futures)
     builder.add_method(
         "all",
         fn_type!(PrimitiveType::any(), PrimitiveType::any()),
@@ -90,7 +82,6 @@ fn register_future(env: &mut Environment) {
         },
     );
 
-    // Future.race(futures)
     builder.add_method(
         "race",
         fn_type!(PrimitiveType::any(), PrimitiveType::any()),
@@ -155,7 +146,6 @@ fn register_future(env: &mut Environment) {
         },
     );
 
-    // Future.allSettled(futures)
     builder.add_method(
         "allSettled",
         fn_type!(PrimitiveType::any(), PrimitiveType::any()),
@@ -194,7 +184,6 @@ fn register_future(env: &mut Environment) {
         },
     );
 
-    // Future.any(futures)
     builder.add_method(
         "any",
         fn_type!(PrimitiveType::any(), PrimitiveType::any()),
@@ -251,7 +240,6 @@ fn register_future(env: &mut Environment) {
 fn register_object(env: &mut Environment) {
     let mut builder = TypeMethodBuilder::new("Object");
 
-    // Object.keys(obj)
     builder.add_method(
         "keys",
         fn_type!(PrimitiveType::any(), PrimitiveType::any()),
@@ -284,7 +272,6 @@ fn register_object(env: &mut Environment) {
         },
     );
 
-    // Object.values(obj)
     builder.add_method(
         "values",
         fn_type!(PrimitiveType::any(), PrimitiveType::any()),
@@ -313,7 +300,6 @@ fn register_object(env: &mut Environment) {
         },
     );
 
-    // Object.entries(obj)
     builder.add_method(
         "entries",
         fn_type!(PrimitiveType::any(), PrimitiveType::any()),
@@ -355,6 +341,4 @@ fn register_object(env: &mut Environment) {
     builder.build(env);
 }
 
-fn register_type(_env: &mut Environment) {
-    // TODO: Implement Type.typeOf, Type.name, Type.isInstance, etc.
-}
+fn register_type(_env: &mut Environment) {}

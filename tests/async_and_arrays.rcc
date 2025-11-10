@@ -1,35 +1,35 @@
-// Demo de funciones asíncronas y métodos de arreglos funcionales
 
-// ===== FUNCIONES ASÍNCRONAS =====
+
+
 print("=== TESTING ASYNC FUNCTIONS ===");
 
-// Función asíncrona simple
+
 async fn fetchData(): str {
     return "Data fetched!";
 }
 
-// Llamar función async (retorna un Future)
+
 let future = fetchData();
 print("Future:", future);
 
-// Await para obtener el valor
+
 let result = await future;
 print("Result after await:", result);
 
 print("");
 
-// ===== MÉTODOS DE ARREGLOS FUNCIONALES =====
+
 print("=== TESTING ARRAY METHODS ===");
 
-// Array de prueba
+
 let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 print("Original array:", numbers);
 print("");
 
-// MAP: transformar cada elemento
+
 print("--- map() ---");
 
-// Helper functions
+
 fn double(n: int): int {
     return n * 2;
 }
@@ -45,7 +45,7 @@ let squared = numbers.map(square);
 print("Squared:", squared);
 print("");
 
-// FILTER: filtrar elementos
+
 print("--- filter() ---");
 
 fn isEven(n: int): bool {
@@ -63,7 +63,7 @@ let gt5 = numbers.filter(greaterThan5);
 print("Greater than 5:", gt5);
 print("");
 
-// REDUCE: reducir a un solo valor
+
 print("--- reduce() ---");
 
 fn add(acc: int, n: int): int {
@@ -81,7 +81,7 @@ let product = numbers.reduce(multiply, 1);
 print("Product of all numbers:", product);
 print("");
 
-// FIND: encontrar primer elemento que cumple condición
+
 print("--- find() ---");
 
 fn greaterThan7(n: int): bool {
@@ -99,7 +99,7 @@ let notFound = numbers.find(greaterThan100);
 print("First number > 100:", notFound);
 print("");
 
-// FINDINDEX: encontrar índice del primer elemento
+
 print("--- findIndex() ---");
 
 fn equals5(n: int): bool {
@@ -113,7 +113,7 @@ let noIndex = numbers.findIndex(greaterThan100);
 print("Index of > 100:", noIndex);
 print("");
 
-// SOME: verificar si alguno cumple la condición
+
 print("--- some() ---");
 
 fn isNegative(n: int): bool {
@@ -127,7 +127,7 @@ let hasNegative = numbers.some(isNegative);
 print("Has negative numbers?", hasNegative);
 print("");
 
-// EVERY: verificar si todos cumplen la condición
+
 print("--- every() ---");
 
 fn isPositive(n: int): bool {
@@ -141,7 +141,7 @@ let allEven = numbers.every(isEven);
 print("All even?", allEven);
 print("");
 
-// ===== COMPOSICIÓN DE MÉTODOS =====
+
 print("=== METHOD CHAINING ===");
 
 fn triple(n: int): int {
@@ -158,7 +158,7 @@ let result2 = chained2.filter(greaterThan10);
 print("Even numbers * 3, > 10:", result2);
 print("");
 
-// Composición de funciones map
+
 let small = [1, 2, 3];
 print("--- Small array composition ---");
 print("Original:", small);

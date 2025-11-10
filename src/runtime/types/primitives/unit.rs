@@ -1,14 +1,9 @@
-/// Refactored UnitType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// UnitType - Unit type (void value, represents absence of value)
-// ============================================================================
 
 pub struct UnitType;
 
@@ -26,7 +21,6 @@ impl TypeHandler for UnitType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // Unit type typically maps to Null in runtime (represents absence of value)
         match value {
             RuntimeValue::Null(_) => {}
             _ => {

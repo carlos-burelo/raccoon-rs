@@ -1,6 +1,6 @@
-// Test Anonymous Classes - Phase 3 Implementation
 
-// Test 1: Simple anonymous class assignment
+
+
 fn test_simple_anonymous_class() {
     let Point = class {
         x: int
@@ -14,10 +14,10 @@ fn test_simple_anonymous_class() {
     let p = new Point();
     p.x = 3;
     p.y = 4;
-    println(p.sum());  // Should print 7
+    println(p.sum());  
 }
 
-// Test 2: Anonymous class with constructor
+
 fn test_anonymous_class_with_constructor() {
     let Person = class {
         name: str
@@ -34,10 +34,10 @@ fn test_anonymous_class_with_constructor() {
     };
 
     let alice = new Person("Alice", 30);
-    println(alice.describe());  // Should print "Alice is 30"
+    println(alice.describe());  
 }
 
-// Test 3: Anonymous class with multiple methods
+
 fn test_anonymous_class_multiple_methods() {
     let Calculator = class {
         add(a: int, b: int): int {
@@ -60,12 +60,12 @@ fn test_anonymous_class_multiple_methods() {
     };
 
     let calc = new Calculator();
-    println(calc.add(5, 3));        // Should print 8
-    println(calc.multiply(4, 6));   // Should print 24
-    println(calc.power(2, 8));      // Should print 256
+    println(calc.add(5, 3));        
+    println(calc.multiply(4, 6));   
+    println(calc.power(2, 8));      
 }
 
-// Test 4: Anonymous class in variable
+
 fn test_anonymous_class_reusable() {
     let Rectangle = class {
         width: int
@@ -83,17 +83,17 @@ fn test_anonymous_class_reusable() {
     let rect1 = new Rectangle();
     rect1.width = 5;
     rect1.height = 10;
-    println(rect1.area());      // Should print 50
-    println(rect1.perimeter()); // Should print 30
+    println(rect1.area());      
+    println(rect1.perimeter()); 
 
     let rect2 = new Rectangle();
     rect2.width = 3;
     rect2.height = 4;
-    println(rect2.area());      // Should print 12
-    println(rect2.perimeter()); // Should print 14
+    println(rect2.area());      
+    println(rect2.perimeter()); 
 }
 
-// Test 5: Anonymous class with property initialization
+
 fn test_anonymous_class_property_init() {
     let Config = class {
         debugMode: bool = true
@@ -106,13 +106,13 @@ fn test_anonymous_class_property_init() {
     };
 
     let config = new Config();
-    println(config.debugMode);     // Should print true
-    println(config.maxRetries);    // Should print 3
-    println(config.timeout);       // Should print 5000
-    println(config.getDebugStatus()); // Should print true
+    println(config.debugMode);     
+    println(config.maxRetries);    
+    println(config.timeout);       
+    println(config.getDebugStatus()); 
 }
 
-// Test 6: Anonymous class with all features
+
 fn test_anonymous_class_complex() {
     let BankAccount = class {
         accountNumber: str
@@ -147,13 +147,13 @@ fn test_anonymous_class_complex() {
     };
 
     let myAccount = new BankAccount("12345", "John Doe");
-    println(myAccount.getInfo());          // Should print "John Doe - Account: 12345"
-    println(myAccount.deposit(1000));      // Should print 1000
-    println(myAccount.withdraw(300));      // Should print 700
-    println(myAccount.getBalance());       // Should print 700
+    println(myAccount.getInfo());          
+    println(myAccount.deposit(1000));      
+    println(myAccount.withdraw(300));      
+    println(myAccount.getBalance());       
 }
 
-// Run all tests
+
 println("=== ANONYMOUS CLASSES TESTS ===");
 
 println("Test 1: Simple anonymous class");

@@ -124,39 +124,9 @@ macro_rules! extract_value {
     };
 }
 
-/// Macro para declarar múltiples funciones nativas de forma concisa
-///
-/// # Ejemplos
-/// ```
-/// native_functions! {
-///     env,
-///
-///     "native_print" (variadic) -> void => |args| {
-///         for (i, arg) in args.iter().enumerate() {
-///             if i > 0 { print!(" "); }
-///             print!("{}", arg);
-///         }
-///         println!();
-///         null_return!()
-///     },
-///
-///     "native_sqrt" (float) -> float => |args| {
-///         if args.is_empty() { return null_return!(); }
-///         match &args[0] {
-///             RuntimeValue::Float(f) => {
-///                 RuntimeValue::Float(FloatValue::new(f.value.sqrt()))
-///             }
-///             RuntimeValue::Int(i) => {
-///                 RuntimeValue::Float(FloatValue::new((i.value as f64).sqrt()))
-///             }
-///             _ => null_return!()
-///         }
-///     }
-/// }
-/// ```
 #[macro_export]
 macro_rules! native_functions {
-    // Entry point: procesa el environment y las funciones
+
     ($env:expr, $( $name:expr => $body:expr ),* $(,)?) => {
         $(
             let _ = $env.declare(
@@ -167,7 +137,6 @@ macro_rules! native_functions {
     };
 }
 
-/// Macro para crear una función nativa con tipo variadic
 #[macro_export]
 macro_rules! native_fn_variadic {
     ($impl:expr) => {
@@ -184,10 +153,9 @@ macro_rules! native_fn_variadic {
     };
 }
 
-/// Macro para crear una función nativa con parámetros específicos
 #[macro_export]
 macro_rules! native_fn {
-    // Sin parámetros, retorna void
+
     ($impl:expr) => {
         $crate::runtime::RuntimeValue::NativeFunction(
             $crate::runtime::NativeFunctionValue::new(
@@ -197,7 +165,7 @@ macro_rules! native_fn {
         )
     };
 
-    // Un parámetro
+
     ($impl:expr, $param:expr => $return:expr) => {
         $crate::runtime::RuntimeValue::NativeFunction(
             $crate::runtime::NativeFunctionValue::new(
@@ -207,7 +175,7 @@ macro_rules! native_fn {
         )
     };
 
-    // Múltiples parámetros
+
     ($impl:expr, [$($param:expr),+] => $return:expr) => {
         $crate::runtime::RuntimeValue::NativeFunction(
             $crate::runtime::NativeFunctionValue::new(

@@ -15,12 +15,10 @@ impl ParserState {
         }
     }
 
-    /// Retorna el token actual sin avanzar
     pub fn peek(&self) -> Option<&Token> {
         self.tokens.get(self.current)
     }
 
-    /// Retorna el token anterior
     pub fn previous(&self) -> Option<&Token> {
         if self.current > 0 {
             self.tokens.get(self.current - 1)
@@ -29,7 +27,6 @@ impl ParserState {
         }
     }
 
-    /// Avanza al siguiente token
     pub fn advance(&mut self) -> Option<&Token> {
         if !self.is_at_end() {
             self.current += 1;
@@ -37,21 +34,18 @@ impl ParserState {
         self.previous()
     }
 
-    /// Verifica si está al final
     pub fn is_at_end(&self) -> bool {
         self.peek()
             .map(|t| t.token_type == TokenType::Eof)
             .unwrap_or(true)
     }
 
-    /// Verifica si el token actual es del tipo especificado
     pub fn check(&self, token_type: &TokenType) -> bool {
         self.peek()
             .map(|t| std::mem::discriminant(&t.token_type) == std::mem::discriminant(token_type))
             .unwrap_or(false)
     }
 
-    /// Retorna la posición actual
     pub fn current_position(&self) -> Position {
         self.peek()
             .map(|t| t.position)

@@ -1,4 +1,4 @@
-// Test simplificado de la API de Future/Promise en Raccoon
+
 
 print("=== Test 1: Future.resolve() ===")
 let resolved = Future.resolve(42)

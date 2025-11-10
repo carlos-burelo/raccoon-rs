@@ -1,6 +1,3 @@
-// Test: Advanced return type inference
-
-// Test 1: Nested function calls
 fn double(x: int) {
     return x * 2;
 }
@@ -9,7 +6,7 @@ fn quadruple(x: int) {
     return double(double(x));
 }
 
-// Test 2: Conditional returns with different numeric types
+
 fn calculate(flag: bool) {
     if (flag) {
         return 42;
@@ -18,18 +15,18 @@ fn calculate(flag: bool) {
     }
 }
 
-// Test 3: List return type inference
+
 fn getNumbers() {
     return [1, 2, 3, 4, 5];
 }
 
-// Test 4: Empty return (void)
+
 fn doNothing() {
     let x = 5;
-    // no return statement
+    
 }
 
-// Test 5: Early returns
+
 fn checkValue(x: int) {
     if (x < 0) {
         return "negative";
@@ -40,7 +37,7 @@ fn checkValue(x: int) {
     return "positive";
 }
 
-// Testing
+
 print("double(5) = " + double(5));
 print("quadruple(3) = " + quadruple(3));
 print("calculate(true) = " + calculate(true));

@@ -1,13 +1,9 @@
 use crate::tokens::Position;
 
-/// Represents a single frame in the call stack
 #[derive(Debug, Clone)]
 pub struct StackFrame {
-    /// Name of the function being called
     pub function_name: String,
-    /// Position in source code where the function was called
     pub call_position: Position,
-    /// Optional file path where the call occurred
     pub file: Option<String>,
 }
 
@@ -20,7 +16,6 @@ impl StackFrame {
         }
     }
 
-    /// Format this stack frame for display
     pub fn format(&self) -> String {
         let file_info = self
             .file
@@ -37,7 +32,6 @@ impl StackFrame {
     }
 }
 
-/// Manages the call stack for tracking function calls
 #[derive(Debug, Clone)]
 pub struct CallStack {
     frames: Vec<StackFrame>,
@@ -52,37 +46,30 @@ impl CallStack {
         }
     }
 
-    /// Push a new stack frame
     pub fn push(&mut self, frame: StackFrame) {
         self.frames.push(frame);
     }
 
-    /// Pop the top stack frame
     pub fn pop(&mut self) -> Option<StackFrame> {
         self.frames.pop()
     }
 
-    /// Get the current depth of the call stack
     pub fn depth(&self) -> usize {
         self.frames.len()
     }
 
-    /// Get a reference to all frames
     pub fn frames(&self) -> &[StackFrame] {
         &self.frames
     }
 
-    /// Clear all frames from the stack
     pub fn clear(&mut self) {
         self.frames.clear();
     }
 
-    /// Get the current function name (top of stack)
     pub fn current_function(&self) -> Option<&str> {
         self.frames.last().map(|f| f.function_name.as_str())
     }
 
-    /// Format the call stack for display
     pub fn format_stack_trace(&self) -> String {
         if self.frames.is_empty() {
             return String::new();
@@ -90,7 +77,6 @@ impl CallStack {
 
         let mut output = String::from("\nCall stack:\n");
 
-        // Display frames in reverse order (most recent first)
         let frames_to_show = self.frames.len().min(self.max_display_depth);
         let start_index = self.frames.len().saturating_sub(frames_to_show);
 
@@ -99,7 +85,6 @@ impl CallStack {
             output.push('\n');
         }
 
-        // If there are more frames than we're showing, add a note
         if self.frames.len() > self.max_display_depth {
             let hidden_count = self.frames.len() - self.max_display_depth;
             output.push_str(&format!("  ... ({} more frames)\n", hidden_count));

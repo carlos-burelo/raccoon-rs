@@ -1,5 +1,5 @@
 #[macro_use]
-pub mod macros; // Macro system for defining native primitives
+pub mod macros;
 
 pub mod array;
 pub mod http;
@@ -7,12 +7,11 @@ pub mod io;
 pub mod json;
 pub mod math;
 pub mod output;
-pub mod primitives; // Core primitives for std:runtime module
+pub mod primitives;
 pub mod random;
 pub mod string;
 pub mod time;
 
-// Export registration functions
 pub use array::register_array_module;
 pub use http::register_http_module;
 pub use io::register_io_module;

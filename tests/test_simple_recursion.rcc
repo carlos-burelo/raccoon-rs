@@ -1,6 +1,6 @@
-// Test: Simple recursion with type inference
 
-// Factorial with explicit type
+
+
 fn factorial(n: int): int {
   if (n <= 1) {
     return 1;
@@ -8,7 +8,7 @@ fn factorial(n: int): int {
   return n * factorial(n - 1);
 }
 
-// Sum with inferred type
+
 fn sum(n: int) {
   if (n <= 0) {
     return 0;
@@ -16,7 +16,7 @@ fn sum(n: int) {
   return n + sum(n - 1);
 }
 
-// Countdown with inferred void
+
 fn countdown(n: int) {
   if (n <= 0) {
     print("Blast off!");

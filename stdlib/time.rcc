@@ -1,2 +1,0 @@
-// Time operations are provided by the native module
-// Use native_time_now(), native_time_sleep(), and native_time_format() directly

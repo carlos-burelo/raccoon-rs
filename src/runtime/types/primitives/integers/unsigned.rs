@@ -1,14 +1,9 @@
-/// Refactored unsigned integer types using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// U8Type - 8-bit unsigned integer
-// ============================================================================
 
 pub struct U8Type;
 
@@ -87,10 +82,6 @@ impl TypeHandler for U8Type {
     }
 }
 
-// ============================================================================
-// U16Type - 16-bit unsigned integer
-// ============================================================================
-
 pub struct U16Type;
 
 #[async_trait]
@@ -168,10 +159,6 @@ impl TypeHandler for U16Type {
     }
 }
 
-// ============================================================================
-// U32Type - 32-bit unsigned integer
-// ============================================================================
-
 pub struct U32Type;
 
 #[async_trait]
@@ -248,10 +235,6 @@ impl TypeHandler for U32Type {
         matches!(method, "parse")
     }
 }
-
-// ============================================================================
-// U64Type - 64-bit unsigned integer
-// ============================================================================
 
 pub struct U64Type;
 

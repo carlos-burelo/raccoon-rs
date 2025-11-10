@@ -1,10 +1,7 @@
-/// Arithmetic operations module
-/// Centralizes all arithmetic operations: add, subtract, multiply, divide, modulo, exponent
 use crate::error::RaccoonError;
 use crate::runtime::{CallStack, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 
-/// Addition operation: handles Int+Int, Float+Float, Int+Float, Float+Int, Str+Any
 pub fn add(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -27,7 +24,7 @@ pub fn add(
         (RuntimeValue::Str(l), RuntimeValue::Str(r)) => Ok(RuntimeValue::Str(StrValue::new(
             format!("{}{}", l.value, r.value),
         ))),
-        // String concatenation with any type on either side
+
         (RuntimeValue::Str(l), r) => Ok(RuntimeValue::Str(StrValue::new(format!(
             "{}{}",
             l.value,
@@ -46,7 +43,6 @@ pub fn add(
     }
 }
 
-/// Subtraction operation: handles Int-Int, Float-Float, Int-Float, Float-Int
 pub fn subtract(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -74,7 +70,6 @@ pub fn subtract(
     }
 }
 
-/// Multiplication operation: handles Int*Int, Float*Float, Int*Float, Float*Int
 pub fn multiply(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -102,8 +97,6 @@ pub fn multiply(
     }
 }
 
-/// Division operation: handles Int/Int, Float/Float, Int/Float, Float/Int
-/// Returns Float, checks for division by zero
 pub fn divide(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -170,8 +163,6 @@ pub fn divide(
     }
 }
 
-/// Modulo operation: Int % Int, Float % Float, Int % Float, Float % Int
-/// Checks for modulo by zero
 pub fn modulo(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -231,8 +222,6 @@ pub fn modulo(
     }
 }
 
-/// Exponentiation operation: x^y
-/// Supports Int^Int, Float^Float, Int^Float, Float^Int
 pub fn exponent(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -242,7 +231,6 @@ pub fn exponent(
     match (left, right) {
         (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
             if r.value < 0 {
-                // Negative exponent returns float
                 Ok(RuntimeValue::Float(FloatValue::new(
                     (l.value as f64).powf(r.value as f64),
                 )))

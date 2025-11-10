@@ -1,9 +1,9 @@
-// Test: Advanced property access with getters, setters, async, and scope
-// Comprehensive test covering property access in different contexts
 
-// ============================================================================
-// Part 1: Getters and Setters
-// ============================================================================
+
+
+
+
+
 
 print("=== Test 1: Getters and Setters ===");
 
@@ -42,9 +42,9 @@ circle.radius = 10.0;
 print(`After setter - radius: ${circle.radius}`);
 print(`After setter - diameter: ${circle.diameter}`);
 
-// ============================================================================
-// Part 2: Property Access in Nested Scopes
-// ============================================================================
+
+
+
 
 print("\n=== Test 2: Property Access in Nested Scopes ===");
 
@@ -58,7 +58,7 @@ let outer = {
 print(`outer.value = ${outer.value}`);
 print(`outer.nested.inner = ${outer.nested.inner}`);
 
-// Nested function accessing parent object properties
+
 fn processObject(obj: object) {
     let sum = obj.value + obj.nested.inner;
     return sum;
@@ -66,9 +66,9 @@ fn processObject(obj: object) {
 
 print(`Sum via nested function: ${processObject(outer)}`);
 
-// ============================================================================
-// Part 3: Property Access with Array of Objects
-// ============================================================================
+
+
+
 
 print("\n=== Test 3: Property Access with Array of Objects ===");
 
@@ -78,19 +78,19 @@ let users = [
     {id: 3, name: "Charlie", age: 35, email: "charlie@example.com"}
 ];
 
-// Accessing properties of array elements
+
 for (let i = 0; i < 3; i = i + 1) {
     let user = users[i];
     print(`User ${user.id}: ${user.name} (age ${user.age})`);
 }
 
-// Accessing nested properties
+
 print(`First user's name: ${users[0]["name"]}`);
 print(`Second user's email: ${users[1]["email"]}`);
 
-// ============================================================================
-// Part 4: Dynamic Property Access
-// ============================================================================
+
+
+
 
 print("\n=== Test 4: Dynamic Property Access ===");
 
@@ -104,21 +104,21 @@ let config = {
     }
 };
 
-// Dynamic key access
+
 let keys = ["host", "port"];
 for (let key of keys) {
     let val = config[key];
     print(`config[${key}] = ${val}`);
 }
 
-// Nested dynamic access
+
 let dbConfig = config["database"];
 print(`Database name: ${dbConfig["name"]}`);
 print(`Database user: ${dbConfig["user"]}`);
 
-// ============================================================================
-// Part 5: This Binding in Methods
-// ============================================================================
+
+
+
 
 print("\n=== Test 5: This Binding in Methods ===");
 
@@ -166,9 +166,9 @@ print(`After withdraw 200: ${newBalance2}`);
 
 print(`Total transactions: ${account.getTransactionCount()}`);
 
-// ============================================================================
-// Part 6: Method Chaining (returns this)
-// ============================================================================
+
+
+
 
 print("\n=== Test 6: Method Chaining ===");
 
@@ -200,9 +200,9 @@ let builder = new Builder();
 let result = builder.setName("Test").setValue(42).build();
 print(`Built object: name=${result["name"]}, value=${result["value"]}`);
 
-// ============================================================================
-// Part 7: Property Access in Function Returns
-// ============================================================================
+
+
+
 
 print("\n=== Test 7: Property Access in Function Returns ===");
 
@@ -219,9 +219,9 @@ print(`Config host: ${config1["host"]}`);
 print(`Config port: ${config1["port"]}`);
 print(`Config url: ${config1["url"]}`);
 
-// ============================================================================
-// Part 8: Property Modification in Loops
-// ============================================================================
+
+
+
 
 print("\n=== Test 8: Property Modification in Loops ===");
 
@@ -251,9 +251,9 @@ for (let task of tasks) {
     print(`Task ${task.id}: processed=${task.processed}`);
 }
 
-// ============================================================================
-// Part 9: Mixed Array and Object Operations with Class
-// ============================================================================
+
+
+
 
 print("\n=== Test 9: Mixed Array and Object Operations ===");
 
@@ -288,9 +288,9 @@ print(`First metric: ${data.getMetric(0)}`);
 print(`Third label: ${data.getLabel(2)}`);
 print(`Total sum: ${data.getSum()}`);
 
-// ============================================================================
-// Part 10: Property Access with Type Coercion
-// ============================================================================
+
+
+
 
 print("\n=== Test 10: Property Access with Type Coercion ===");
 
@@ -301,22 +301,22 @@ let mixed = {
     boolValue: true
 };
 
-// Access and concatenate
+
 print(`string: ${mixed["stringKey"]}`);
 print(`numeric: ${mixed["numericValue"]}`);
 print(`float: ${mixed["floatValue"]}`);
 print(`bool: ${mixed["boolValue"]}`);
 
-// Type coercion in operations
+
 let sum = mixed["numericValue"] + mixed["floatValue"];
 print(`${mixed["numericValue"]} + ${mixed["floatValue"]} = ${sum}`);
 
 let concat = mixed["stringKey"] + " and " + mixed["numericValue"];
 print(`Concatenation: ${concat}`);
 
-// ============================================================================
-// Part 11: Undefined/Null Property Access
-// ============================================================================
+
+
+
 
 print("\n=== Test 11: Property Access Behavior ===");
 
@@ -324,16 +324,16 @@ let sparse = {
     existing: "here"
 };
 
-// Accessing existing property
+
 print(`Existing property: ${sparse["existing"]}`);
 
-// Access array with valid index
+
 let arr = [1, 2, 3];
 print(`Valid array index: ${arr[1]}`);
 
-// ============================================================================
-// Part 12: Object as Parameter and Property Access
-// ============================================================================
+
+
+
 
 print("\n=== Test 12: Object Parameters and Property Access ===");
 
@@ -350,8 +350,8 @@ let person = {name: "Diana", age: 28, city: "SF"};
 print(processUser(person));
 print(`City via getProperty: ${getProperty(person, "city")}`);
 
-// ============================================================================
-// Final Summary
-// ============================================================================
+
+
+
 
 print("\n=== All Property Access Tests Completed Successfully! ===");

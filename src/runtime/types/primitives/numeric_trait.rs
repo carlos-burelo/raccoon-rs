@@ -1,5 +1,3 @@
-/// Generic numeric type handler
-/// Unifies behavior for all numeric types (i8, i16, i32, i64, u8, u16, u32, u64, f32, f64)
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
@@ -10,7 +8,6 @@ use std::fmt::Display;
 use std::marker::PhantomData;
 use std::str::FromStr;
 
-/// Trait for numeric type bounds
 pub trait NumericBounds: Copy + Display + FromStr + Send + Sync + 'static {
     const TYPE_NAME: &'static str;
     const DESCRIPTION: &'static str;
@@ -23,7 +20,6 @@ pub trait NumericBounds: Copy + Display + FromStr + Send + Sync + 'static {
     fn abs_value(self) -> Self;
 }
 
-// Implement for signed integers
 macro_rules! impl_numeric_bounds_signed {
     ($($t:ty => $name:expr, $desc:expr),*) => {
         $(
@@ -53,7 +49,6 @@ macro_rules! impl_numeric_bounds_signed {
     };
 }
 
-// Implement for unsigned integers
 macro_rules! impl_numeric_bounds_unsigned {
     ($($t:ty => $name:expr, $desc:expr),*) => {
         $(
@@ -83,7 +78,6 @@ macro_rules! impl_numeric_bounds_unsigned {
     };
 }
 
-// Implement for floats
 macro_rules! impl_numeric_bounds_float {
     ($($t:ty => $name:expr, $desc:expr),*) => {
         $(
@@ -132,7 +126,6 @@ impl_numeric_bounds_float! {
     f64 => "f64", "64-bit floating point number"
 }
 
-/// Generic numeric type handler
 pub struct NumericHandler<T: NumericBounds> {
     _phantom: PhantomData<T>,
 }
@@ -251,7 +244,6 @@ where
     }
 }
 
-// Type aliases for each numeric type
 pub type I8Handler = NumericHandler<i8>;
 pub type I16Handler = NumericHandler<i16>;
 pub type I32Handler = NumericHandler<i32>;

@@ -1,7 +1,6 @@
-use crate::runtime::{FromRaccoon, ArrayValue, Registrar, RuntimeValue, ToRaccoon};
+use crate::runtime::{ArrayValue, FromRaccoon, Registrar, RuntimeValue, ToRaccoon};
 
 pub fn register_array_module(registrar: &mut Registrar) {
-    // length(arr: list) -> i32
     registrar.register_fn(
         "length",
         Some("array"),
@@ -13,7 +12,6 @@ pub fn register_array_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // push(arr: list, element: any) -> list
     registrar.register_fn(
         "push",
         Some("array"),
@@ -31,7 +29,6 @@ pub fn register_array_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // pop(arr: list) -> any
     registrar.register_fn(
         "pop",
         Some("array"),
@@ -52,7 +49,6 @@ pub fn register_array_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // shift(arr: list) -> any
     registrar.register_fn(
         "shift",
         Some("array"),
@@ -73,7 +69,6 @@ pub fn register_array_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // slice(arr: list, start: i32, end: i32) -> list
     registrar.register_fn(
         "slice",
         Some("array"),
@@ -102,7 +97,6 @@ pub fn register_array_module(registrar: &mut Registrar) {
         Some(3),
     );
 
-    // reverse(arr: list) -> list
     registrar.register_fn(
         "reverse",
         Some("array"),
@@ -118,7 +112,6 @@ pub fn register_array_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // contains(arr: list, element: any) -> bool
     registrar.register_fn(
         "contains",
         Some("array"),
@@ -136,7 +129,6 @@ pub fn register_array_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // index_of(arr: list, element: any) -> i32
     registrar.register_fn(
         "index_of",
         Some("array"),
@@ -155,7 +147,6 @@ pub fn register_array_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // join(arr: list, separator: string) -> string
     registrar.register_fn(
         "join",
         Some("array"),

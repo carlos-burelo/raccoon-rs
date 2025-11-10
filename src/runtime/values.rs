@@ -253,7 +253,7 @@ impl IntValue {
 
 #[derive(Debug, Clone)]
 pub struct BigIntValue {
-    pub value: i128, // Using i128 for simplicity instead of external bigint library
+    pub value: i128,
 }
 
 impl BigIntValue {
@@ -774,7 +774,7 @@ impl FutureValue {
 
     pub fn new_resolved(value: RuntimeValue, value_type: Type) -> Self {
         let notifier = Arc::new(Notify::new());
-        notifier.notify_waiters(); // Notify immediately since it's already resolved
+        notifier.notify_waiters();
         Self {
             state: Arc::new(RwLock::new(FutureState::Resolved(Box::new(value)))),
             value_type,
@@ -784,7 +784,7 @@ impl FutureValue {
 
     pub fn new_rejected(error: String, value_type: Type) -> Self {
         let notifier = Arc::new(Notify::new());
-        notifier.notify_waiters(); // Notify immediately since it's already rejected
+        notifier.notify_waiters();
         Self {
             state: Arc::new(RwLock::new(FutureState::Rejected(error))),
             value_type,
@@ -809,11 +809,9 @@ impl FutureValue {
                 match &*state {
                     FutureState::Resolved(value) => return Ok((**value).clone()),
                     FutureState::Rejected(error) => return Err(error.clone()),
-                    FutureState::Pending => {
-                        // Continue waiting
-                    }
+                    FutureState::Pending => {}
                 }
-            } // Release lock before awaiting
+            }
 
             self.notifier.notified().await;
         }

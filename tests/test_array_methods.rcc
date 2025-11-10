@@ -1,44 +1,23 @@
-// Test de los métodos funcionales de array
-
 let numbers = [1, 2, 3, 4, 5];
 println("Original array:", numbers);
-
-// Test map
-let doubled = numbers.map((x) => x * 2);
+let doubled = numbers.map(x => x * 2);
 println("Doubled:", doubled);
-
-// Test filter
-let evens = numbers.filter((x) => x % 2 == 0);
+let evens = numbers.filter(x => x % 2 == 0);
 println("Evens:", evens);
-
-// Test reduce
 let sum = numbers.reduce((acc, x) => acc + x, 0);
 println("Sum:", sum);
-
-// Test forEach
 println("ForEach:");
-numbers.forEach((x) => println("  -", x));
-
-// Test find
-let found = numbers.find((x) => x > 3);
+numbers.forEach(x => println("  -", x));
+let found = numbers.find(x => x > 3);
 println("First > 3:", found);
-
-// Test findIndex
-let index = numbers.findIndex((x) => x > 3);
+let index = numbers.findIndex(x => x > 3);
 println("Index of first > 3:", index);
-
-// Test some
-let hasLarge = numbers.some((x) => x > 10);
+let hasLarge = numbers.some(x => x > 10);
 println("Has > 10:", hasLarge);
-
-let hasSmall = numbers.some((x) => x < 3);
+let hasSmall = numbers.some(x => x < 3);
 println("Has < 3:", hasSmall);
-
-// Test every
-let allPositive = numbers.every((x) => x > 0);
+let allPositive = numbers.every(x => x > 0);
 println("All positive:", allPositive);
-
-let allLarge = numbers.every((x) => x > 10);
+let allLarge = numbers.every(x => x > 10);
 println("All > 10:", allLarge);
-
 println("All tests completed!");

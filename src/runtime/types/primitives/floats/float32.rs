@@ -1,14 +1,9 @@
-/// Refactored Float32Type using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// Float32Type - 32-bit floating point
-// ============================================================================
 
 pub struct Float32Type;
 
@@ -29,7 +24,6 @@ impl TypeHandler for Float32Type {
         let num = extract_float(value, "this", position, file.clone())? as f32;
 
         match method {
-            // Conversion methods
             "toStr" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(num.to_string())))
@@ -43,7 +37,6 @@ impl TypeHandler for Float32Type {
                 Ok(RuntimeValue::Float(FloatValue::new(num as f64)))
             }
 
-            // Rounding methods
             "floor" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Int(IntValue::new(num.floor() as i64)))
@@ -57,7 +50,6 @@ impl TypeHandler for Float32Type {
                 Ok(RuntimeValue::Int(IntValue::new(num.round() as i64)))
             }
 
-            // Mathematical methods
             "abs" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Float(FloatValue::new(num.abs() as f64)))

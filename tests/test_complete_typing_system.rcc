@@ -1,13 +1,5 @@
-// ============================================================
-// COMPREHENSIVE TYPE SYSTEM TEST - TYPESCRIPT STYLE + NULLABLE SUGAR
-// Raccoon Type System: ? goes AFTER the type, not the identifier
-// ============================================================
-
 print("=== RACCOON TYPE SYSTEM COMPREHENSIVE TEST ===\n");
 
-// ============================================================
-// 1. PRIMITIVE TYPES
-// ============================================================
 print("1. PRIMITIVE TYPES");
 let num: int = 42;
 let text: str = "hello";
@@ -17,11 +9,6 @@ let decimal_num: decimal = 123.45;
 let nothing: void;
 print("✓ All primitive types working\n");
 
-// ============================================================
-// 2. NULLABLE TYPES (SUGAR SYNTAX: Type?)
-// Syntax: let x: Type? = value
-// The ? comes AFTER the type name, not after the identifier
-// ============================================================
 print("2. NULLABLE TYPES (Custom Sugar Syntax)");
 let nullable_string: str? = null;
 let nullable_int: int? = 42;
@@ -30,9 +17,7 @@ let nullable_bool: bool? = true;
 let nullable_decimal: decimal? = 99.99;
 print("✓ Nullable types working with Type? syntax\n");
 
-// ============================================================
-// 3. ARRAYS
-// ============================================================
+
 print("3. ARRAYS");
 let numbers: int[] = [1, 2, 3];
 let strings: str[] = ["a", "b", "c"];
@@ -40,9 +25,9 @@ let nullable_strings: str?[] = ["hello", null, "world"];
 let empty_array: int[] = [];
 print("✓ Arrays of primitives and nullable types working\n");
 
-// ============================================================
-// 4. TUPLES
-// ============================================================
+
+
+
 print("4. TUPLES");
 type Coordinate = [int, int];
 type RGB = [int, int, int];
@@ -55,9 +40,9 @@ let person: PersonData = ["Alice", 30];
 let mixed: MixedTuple = ["test", 42, true];
 print("✓ Tuples working correctly\n");
 
-// ============================================================
-// 5. UNION TYPES
-// ============================================================
+
+
+
 print("5. UNION TYPES");
 type StringOrNumber = str | int;
 type Status = str | int | bool;
@@ -71,9 +56,9 @@ let maybe: MaybeString = null;
 let multi: MultiType = 3.14;
 print("✓ Union types working\n");
 
-// ============================================================
-// 6. INTERSECTION TYPES
-// ============================================================
+
+
+
 print("6. INTERSECTION TYPES (&)");
 type HasName = { name: str };
 type HasAge = { age: int };
@@ -82,9 +67,9 @@ type FullPerson = HasName & HasAge;
 type SuperPerson = HasName & HasAge & HasEmail;
 print("✓ Intersection types defined successfully\n");
 
-// ============================================================
-// 7. OBJECT INLINE TYPES WITH OPTIONAL PROPERTIES
-// ============================================================
+
+
+
 print("7. OBJECT TYPES WITH OPTIONAL PROPERTIES");
 type User = {
     id: int,
@@ -122,9 +107,9 @@ let config: Config = {
 
 print("✓ Object types with optional properties working\n");
 
-// ============================================================
-// 8. READONLY TYPES
-// ============================================================
+
+
+
 print("8. READONLY TYPES");
 type ReadonlyString = readonly str;
 type ReadonlyNumber = readonly int;
@@ -136,9 +121,9 @@ let immutable_num: ReadonlyNumber = 42;
 let immutable_array: ReadonlyArray = [1, 2, 3];
 print("✓ Readonly types working\n");
 
-// ============================================================
-// 9. ENUMERATIONS
-// ============================================================
+
+
+
 print("9. ENUM TYPES");
 enum Color {
     Red = 0,
@@ -157,9 +142,9 @@ let my_color: Color = Color.Red;
 let my_direction: Direction = Direction.Up;
 print("✓ Enum types working\n");
 
-// ============================================================
-// 10. CLASS TYPES WITH INHERITANCE
-// ============================================================
+
+
+
 print("10. CLASS TYPES");
 class Animal {
     public name: str;
@@ -191,9 +176,9 @@ class Dog extends Animal {
 let dog: Dog = new Dog("Buddy", 5, "Labrador");
 print("✓ Classes with inheritance working\n");
 
-// ============================================================
-// 11. INTERFACE TYPES
-// ============================================================
+
+
+
 print("11. INTERFACE TYPES");
 interface Drawable {
     draw(): void;
@@ -206,9 +191,9 @@ interface Resizable {
 }
 print("✓ Interface types working\n");
 
-// ============================================================
-// 12. FUNCTION TYPES (Type Declarations)
-// ============================================================
+
+
+
 print("12. FUNCTION TYPES");
 type MathOp = (a: int, b: int) => int;
 type StringTransform = (input: str) => str;
@@ -218,9 +203,9 @@ let add: MathOp = (a, b) => a + b;
 let upper: StringTransform = (s) => s;
 print("✓ Function types working\n");
 
-// ============================================================
-// 13. FUNCTION DECLARATIONS WITH TYPE ANNOTATIONS
-// ============================================================
+
+
+
 print("13. FUNCTION DECLARATIONS WITH TYPES");
 fn add_numbers(a: int, b: int): int {
     return a + b;
@@ -235,9 +220,9 @@ fn process_data(value: str): void {
 }
 print("✓ Function declarations with type annotations working\n");
 
-// ============================================================
-// 14. OPTIONAL PARAMETERS (NEW FEATURE - Type? in params)
-// ============================================================
+
+
+
 print("14. OPTIONAL PARAMETERS (param?: Type)");
 fn optional_param(name: str, age?: int): void {
     print(name);
@@ -262,18 +247,18 @@ multiple_optional("test", 42);
 multiple_optional("test", 42, "extra");
 print("✓ Optional parameters working\n");
 
-// ============================================================
-// 15. ARROW FUNCTIONS WITH TYPE ANNOTATIONS
-// ============================================================
+
+
+
 print("15. ARROW FUNCTIONS WITH TYPES");
 let double = (x: int): int => x * 2;
 let concat = (a: str, b: str): str => a + b;
 let process = (value: int): int => value + 1;
 print("✓ Arrow functions with type annotations working\n");
 
-// ============================================================
-// 16. COMPLEX NESTED OBJECT STRUCTURES
-// ============================================================
+
+
+
 print("16. COMPLEX NESTED STRUCTURES");
 type ApiResponse = {
     status: int,
@@ -306,9 +291,9 @@ type NestedConfig = {
 };
 print("✓ Complex nested structures working\n");
 
-// ============================================================
-// 17. TYPE ALIASES WITH UNIONS AND INTERSECTIONS
-// ============================================================
+
+
+
 print("17. TYPE ALIASES");
 type Response = User | str | int | null;
 type OptionalUser = User | null;
@@ -316,9 +301,9 @@ type RequiredFields = HasName & HasAge;
 type FlexibleValue = str | int | bool;
 print("✓ Type aliases with unions and intersections working\n");
 
-// ============================================================
-// 18. NULLABLE IN DIFFERENT CONTEXTS
-// ============================================================
+
+
+
 print("18. NULLABLE TYPES IN DIFFERENT CONTEXTS");
 let nullable_in_union: str? = null;
 let nullable_in_array: str?[] = ["a", null, "b"];
@@ -326,9 +311,9 @@ let nullable_in_object: { value: str? } = { value: null };
 let nullable_return: str? = null;
 print("✓ Nullable types in different contexts working\n");
 
-// ============================================================
-// 19. EXECUTION AND FUNCTIONALITY TEST
-// ============================================================
+
+
+
 print("19. EXECUTION TEST\n");
 
 let result = add_numbers(5, 3);

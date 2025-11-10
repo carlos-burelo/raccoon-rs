@@ -153,7 +153,6 @@ impl Lexer {
             let next = self.peek_next();
 
             if char == '_' && (self.is_at_end() || !self.is_alpha_numeric(self.peek_next())) {
-                // Underscore as wildcard pattern
                 self.add_token(
                     TokenType::Underscore,
                     "_".to_string(),
@@ -248,7 +247,6 @@ impl Lexer {
         let mut is_float = false;
         let mut is_bigint = false;
 
-        // Check for binary (0b), octal (0o), or hex (0x) prefix
         if self.source[start] == '0' && self.position + 1 < self.source.len() {
             let next = self.source[self.position + 1];
             if next == 'b'
@@ -258,14 +256,13 @@ impl Lexer {
                 || next == 'x'
                 || next == 'X'
             {
-                self.advance(); // consume '0'
-                self.advance(); // consume 'b', 'o', or 'x'
+                self.advance();
+                self.advance();
 
-                // Scan binary, octal, or hex digits
                 while self.position < self.source.len() {
                     let ch = self.peek();
                     if ch == '_' {
-                        self.advance(); // skip numeric separator
+                        self.advance();
                         continue;
                     }
                     if (next == 'b' || next == 'B') && (ch == '0' || ch == '1') {
@@ -279,7 +276,6 @@ impl Lexer {
                     }
                 }
 
-                // Check for BigInt suffix
                 if self.peek() == 'n' {
                     is_bigint = true;
                     self.advance();
@@ -297,12 +293,11 @@ impl Lexer {
             }
         }
 
-        // Regular decimal number with optional numeric separators
         while self.is_digit(self.peek()) || self.peek() == '_' {
             if self.peek() != '_' {
                 self.advance();
             } else {
-                self.advance(); // consume separator but it won't be in the final value
+                self.advance();
             }
         }
 
@@ -319,7 +314,6 @@ impl Lexer {
             }
         }
 
-        // Check for BigInt suffix 'n'
         if self.peek() == 'n' && !is_float {
             is_bigint = true;
             self.advance();

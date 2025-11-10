@@ -1,9 +1,3 @@
-//! Primitive operations organized by context
-//!
-//! This module provides a lazy-loading system for primitives.
-//! Primitives are organized by their operational context and are only
-//! loaded when requested.
-
 #[macro_use]
 pub mod macros;
 
@@ -21,7 +15,6 @@ pub mod time;
 pub use contexts::PrimitiveContext;
 pub use registry::LazyPrimitiveRegistry;
 
-// Re-export registration functions
 pub use array::register_array_primitives;
 pub use http::register_http_primitives;
 pub use io::register_io_primitives;

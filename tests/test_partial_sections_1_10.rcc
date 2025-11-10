@@ -1,7 +1,7 @@
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// RACCOON COMPLETE SYNTAX & SEMANTICS TEST
-// Purpose: Exhaustive test to identify missing features and bugs
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
+
 
 print("╔════════════════════════════════════════════════════════════════╗")
 print("║     RACCOON COMPLETE SYNTAX & SEMANTICS TEST                  ║")
@@ -10,39 +10,39 @@ print("╚═══════════════════════�
 let testsPassed: int = 0
 let testsFailed: int = 0
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 1: PRIMITIVE TYPES & LITERALS
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[1] PRIMITIVE TYPES & LITERALS")
 
-// 1.1 Integer types
+
 let testInt: int = 42
 let testNegative: int = -100
 let testLargeInt: int = 999999999
 print(`  ✓ Integer literals: ${testInt}, ${testNegative}, ${testLargeInt}`)
 
-// 1.2 Float types
+
 let testFloat: float = 3.14159
 let testNegFloat: float = -2.5
 let testScientific: float = 1.5
 print(`  ✓ Float literals: ${testFloat}, ${testNegFloat}, ${testScientific}`)
 
-// 1.3 String types
+
 let testStr: str = "hello world"
 let testEmptyStr: str = ""
 let testEscaped: str = "line1\nline2"
 print(`  ✓ String literals: ${testStr}, empty="${testEmptyStr}"`)
 
-// 1.4 Boolean types
+
 let testTrue: bool = true
 let testFalse: bool = false
 print(`  ✓ Boolean literals: ${testTrue}, ${testFalse}`)
 
-// 1.5 Null type
+
 let testNull: int? = null
 print(`  ✓ Null literal: ${testNull}`)
 
-// 1.6 Template strings
+
 let name: str = "Raccoon"
 let version: int = 1
 let testTemplate: str = `Language: ${name}, Version: ${version}`
@@ -50,12 +50,12 @@ print(`  ✓ Template strings: ${testTemplate}`)
 
 testsPassed = testsPassed + 6
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 2: OPERATORS
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[2] OPERATORS")
 
-// 2.1 Arithmetic operators
+
 let a: int = 10
 let b: int = 3
 let add: int = a + b
@@ -66,7 +66,7 @@ let mod: int = a % b
 let exp: int = 2 ** 3
 print(`  ✓ Arithmetic: +=${add}, -=${sub}, *=${mul}, /=${div}, %=${mod}, **=${exp}`)
 
-// 2.2 Comparison operators
+
 let cmpEq: bool = a == b
 let cmpNeq: bool = a != b
 let cmpLt: bool = a < b
@@ -75,13 +75,13 @@ let cmpLte: bool = a <= b
 let cmpGte: bool = a >= b
 print(`  ✓ Comparison: ==${cmpEq}, !=${cmpNeq}, <${cmpLt}, >${cmpGt}`)
 
-// 2.3 Logical operators
+
 let logAnd: bool = true && false
 let logOr: bool = true || false
 let logNot: bool = !true
 print(`  ✓ Logical: &&=${logAnd}, ||=${logOr}, !=${logNot}`)
 
-// 2.4 Bitwise operators
+
 let bit1: int = 5
 let bit2: int = 3
 let bitAnd: int = bit1 & bit2
@@ -94,7 +94,7 @@ let bitURight: int = bit1 >>> 1
 print(`  ✓ Bitwise: &=${bitAnd}, |=${bitOr}, ^=${bitXor}, ~=${bitNot}`)
 print(`    Shifts: <<=${bitLeft}, >>=${bitRight}, >>>=${bitURight}`)
 
-// 2.5 Assignment operators
+
 let asgnVal: int = 10
 asgnVal += 5
 asgnVal -= 3
@@ -103,7 +103,7 @@ asgnVal /= 4
 asgnVal %= 3
 print(`  ✓ Assignment operators: result=${asgnVal}`)
 
-// 2.6 Compound bitwise assignment
+
 let bitVal: int = 10
 bitVal &= 7
 bitVal |= 2
@@ -114,7 +114,7 @@ bitVal >>>= 1
 bitVal **= 2
 print(`  ✓ Compound bitwise assignment: result=${bitVal}`)
 
-// 2.7 Increment/Decrement operators
+
 let incVal: int = 5
 incVal++
 let postInc: int = incVal
@@ -126,38 +126,38 @@ let postDec: int = incVal
 let preDec: int = incVal
 print(`  ✓ Inc/Dec: post++=${postInc}, ++pre=${preInc}, post--=${postDec}, --pre=${preDec}`)
 
-// 2.8 Range operator
+
 let rangeVals: int[] = 1..5
 print(`  ✓ Range operator: ${rangeVals}`)
 
-// 2.9 Null coalescing operator
+
 let nullVal: int? = null
 let coalescedVal: int = nullVal ?? 42
 print(`  ✓ Null coalescing: ${coalescedVal}`)
 
-// 2.10 Ternary operator
+
 let ternaryResult: int = true ? 10 : 20
 print(`  ✓ Ternary operator: ${ternaryResult}`)
 
 testsPassed = testsPassed + 10
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 3: VARIABLES & CONSTANTS
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[3] VARIABLES & CONSTANTS")
 
-// 3.1 Let declarations
+
 let varLet: int = 100
 let varWithType: str = "typed"
 let varInferred: int = 42
 print(`  ✓ Let declarations: ${varLet}, ${varWithType}, ${varInferred}`)
 
-// 3.2 Const declarations
+
 const constVal: int = 999
 const constStr: str = "immutable"
 print(`  ✓ Const declarations: ${constVal}, ${constStr}`)
 
-// 3.3 Variable shadowing
+
 let shadowVar: int = 1
 {
     let shadowVar: int = 2
@@ -167,25 +167,25 @@ print(`    outer=${shadowVar}`)
 
 testsPassed = testsPassed + 3
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 4: CONTROL FLOW
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[4] CONTROL FLOW")
 
-// 4.1 If statements
+
 let ifVal: int = 10
 if (ifVal > 5) {
     print("  ✓ If statement: condition true")
 }
 
-// 4.2 If-else statements
+
 if (ifVal < 5) {
     print("  ✗ If-else: wrong branch")
 } else {
     print("  ✓ If-else statement: else branch")
 }
 
-// 4.3 If-else-if chains
+
 let grade: int = 85
 if (grade >= 90) {
     print("  Grade: A")
@@ -197,28 +197,28 @@ if (grade >= 90) {
     print("  Grade: F")
 }
 
-// 4.4 While loops
+
 let whileCount: int = 0
 while (whileCount < 3) {
     whileCount = whileCount + 1
 }
 print(`  ✓ While loop: iterations=${whileCount}`)
 
-// 4.5 For loops with initialization
+
 let forSum: int = 0
 for (let i: int = 0; i < 5; i = i + 1) {
     forSum = forSum + i
 }
 print(`  ✓ For loop: sum=${forSum}`)
 
-// 4.6 For-in loops
+
 let forInSum: int = 0
 for (let val: int in 1..4) {
     forInSum = forInSum + val
 }
 print(`  ✓ For-in loop: sum=${forInSum}`)
 
-// 4.7 Break statement
+
 let breakCount: int = 0
 while (breakCount < 10) {
     breakCount = breakCount + 1
@@ -228,7 +228,7 @@ while (breakCount < 10) {
 }
 print(`  ✓ Break statement: stopped at ${breakCount}`)
 
-// 4.8 Continue statement
+
 let continueSum: int = 0
 let continueIdx: int = 0
 while (continueIdx < 5) {
@@ -242,26 +242,26 @@ print(`  ✓ Continue statement: sum=${continueSum} (skipped 3)`)
 
 testsPassed = testsPassed + 8
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 5: FUNCTIONS
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[5] FUNCTIONS")
 
-// 5.1 Basic function declaration
+
 fn basicFunc(): int {
     return 42
 }
 let basicResult: int = basicFunc()
 print(`  ✓ Basic function: ${basicResult}`)
 
-// 5.2 Function with parameters
+
 fn addFunc(x: int, y: int): int {
     return x + y
 }
 let addResult: int = addFunc(10, 20)
 print(`  ✓ Function with params: ${addResult}`)
 
-// 5.3 Function with optional parameters
+
 fn optionalFunc(x: int, y?: int): int {
     return x
 }
@@ -269,7 +269,7 @@ let optResult1: int = optionalFunc(5)
 let optResult2: int = optionalFunc(5, 10)
 print(`  ✓ Optional parameters: ${optResult1}, ${optResult2}`)
 
-// 5.4 Function with default parameters
+
 fn defaultFunc(x: int, y: int = 10): int {
     return x + y
 }
@@ -277,7 +277,7 @@ let defResult1: int = defaultFunc(5)
 let defResult2: int = defaultFunc(5, 20)
 print(`  ✓ Default parameters: ${defResult1}, ${defResult2}`)
 
-// 5.5 Function with rest parameters
+
 fn restFunc(...args: int[]): int {
     let sum: int = 0
     for (let val: int in args) {
@@ -288,17 +288,17 @@ fn restFunc(...args: int[]): int {
 let restResult: int = restFunc(1, 2, 3, 4, 5)
 print(`  ✓ Rest parameters: ${restResult}`)
 
-// 5.6 Arrow functions
+
 let arrowBasic: (int, int) => int = (x: int, y: int): int => x + y
 let arrowResult: int = arrowBasic(5, 7)
 print(`  ✓ Arrow function: ${arrowResult}`)
 
-// 5.7 Arrow function with expression body
+
 let arrowExpr: (int) => int = (x: int): int => x * 2
 let arrowExprResult: int = arrowExpr(5)
 print(`  ✓ Arrow expression: ${arrowExprResult}`)
 
-// 5.8 Arrow function with block body
+
 let arrowBlock: (int) => int = (x: int): int => {
     let temp: int = x * 2
     return temp + 1
@@ -306,14 +306,14 @@ let arrowBlock: (int) => int = (x: int): int => {
 let arrowBlockResult: int = arrowBlock(5)
 print(`  ✓ Arrow block: ${arrowBlockResult}`)
 
-// 5.9 Higher-order functions
+
 fn higherOrder(f: (int) => int, x: int): int {
     return f(x)
 }
 let hoResult: int = higherOrder(arrowExpr, 10)
 print(`  ✓ Higher-order function: ${hoResult}`)
 
-// 5.10 Recursive functions
+
 fn factorial(n: int): int {
     if (n <= 1) {
         return 1
@@ -323,7 +323,7 @@ fn factorial(n: int): int {
 let factResult: int = factorial(5)
 print(`  ✓ Recursive function: ${factResult}`)
 
-// 5.11 Named arguments (if supported)
+
 fn namedArgsFunc(x: int, y: int, z: int): int {
     return x + y + z
 }
@@ -332,44 +332,44 @@ print(`  ✓ Named arguments: ${namedResult}`)
 
 testsPassed = testsPassed + 11
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 6: ARRAYS & COLLECTIONS
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[6] ARRAYS & COLLECTIONS")
 
-// 6.1 Array literals
+
 let intArray: int[] = [1, 2, 3, 4, 5]
 let strArray: str[] = ["a", "b", "c"]
 let emptyArray: int[] = []
 print(`  ✓ Array literals: ${intArray}, ${strArray}`)
 
-// 6.2 Array indexing
+
 let arr: int[] = [10, 20, 30]
 let arrElem: int = arr[1]
 print(`  ✓ Array indexing: ${arrElem}`)
 
-// 6.3 Array assignment
+
 arr[0] = 99
 print(`  ✓ Array assignment: ${arr}`)
 
-// 6.4 Array methods
+
 let arrLen: int = arr.length()
 print(`  ✓ Array length: ${arrLen}`)
 
-// 6.5 Array push
+
 arr.push(40)
 print(`  ✓ Array push: ${arr}`)
 
-// 6.6 Array pop
+
 let popped: int = arr.pop()
 print(`  ✓ Array pop: ${popped}, remaining: ${arr}`)
 
-// 6.7 Nested arrays
+
 let nested: int[][] = [[1, 2], [3, 4]]
 let nestedElem: int = nested[0][1]
 print(`  ✓ Nested arrays: ${nestedElem}`)
 
-// 6.8 Array spread
+
 let spread1: int[] = [1, 2]
 let spread2: int[] = [3, 4]
 let spreadResult: int[] = [...spread1, ...spread2]
@@ -377,46 +377,46 @@ print(`  ✓ Array spread: ${spreadResult}`)
 
 testsPassed = testsPassed + 8
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 7: OBJECTS & MAPS
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[7] OBJECTS & MAPS")
 
-// 7.1 Object literals
+
 let obj: any = { x: 10, y: 20 }
 print(`  ✓ Object literal: ${obj}`)
 
-// 7.2 Object property access
+
 let objX: any = obj.x
 print(`  ✓ Object property: ${objX}`)
 
-// 7.3 Object property assignment
+
 obj.x = 99
 print(`  ✓ Object assignment: ${obj}`)
 
-// 7.4 Object computed property access
+
 let objY: any = obj["y"]
 print(`  ✓ Computed property: ${objY}`)
 
-// 7.5 Object shorthand properties
+
 let propX: int = 100
 let propY: int = 200
 let shorthand: any = { propX, propY }
 print(`  ✓ Object shorthand: ${shorthand}`)
 
-// 7.6 Nested objects
+
 let nestedObj: any = { a: { b: { c: 42 } } }
 let nestedVal: any = nestedObj.a.b.c
 print(`  ✓ Nested object: ${nestedVal}`)
 
 testsPassed = testsPassed + 6
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 8: CLASSES
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[8] CLASSES")
 
-// 8.1 Basic class
+
 class BasicClass {
     value: int
 
@@ -432,7 +432,7 @@ let basicObj: BasicClass = new BasicClass(42)
 let classVal: int = basicObj.getValue()
 print(`  ✓ Basic class: ${classVal}`)
 
-// 8.2 Class with properties
+
 class PropsClass {
     x: int
     y: int
@@ -445,7 +445,7 @@ class PropsClass {
 let propsObj: PropsClass = new PropsClass(10, 20)
 print(`  ✓ Class properties: x=${propsObj.x}, y=${propsObj.y}`)
 
-// 8.3 Class with methods
+
 class MethodsClass {
     value: int
 
@@ -466,7 +466,7 @@ let doubled: int = methodsObj.double()
 let added: int = methodsObj.add(10)
 print(`  ✓ Class methods: doubled=${doubled}, added=${added}`)
 
-// 8.4 Class inheritance
+
 class ParentClass {
     parentValue: int
 
@@ -495,7 +495,7 @@ let childObj: ChildClass = new ChildClass(10, 20)
 let inheritVal: int = childObj.childMethod()
 print(`  ✓ Class inheritance: ${inheritVal}`)
 
-// 8.5 Static properties and methods
+
 class StaticClass {
     static staticValue: int = 100
 
@@ -506,7 +506,7 @@ class StaticClass {
 let staticResult: int = StaticClass.staticMethod()
 print(`  ✓ Static members: ${staticResult}`)
 
-// 8.6 Private properties
+
 class PrivateClass {
     private secret: int
     public visible: int
@@ -524,7 +524,7 @@ let privateObj: PrivateClass = new PrivateClass(42, 99)
 let secretVal: int = privateObj.getSecret()
 print(`  ✓ Private properties: ${secretVal}`)
 
-// 8.7 Getters and setters
+
 class AccessorClass {
     private _value: int
 
@@ -547,12 +547,12 @@ print(`  ✓ Getters/Setters: old=${getterVal}, new=${accessorObj.value}`)
 
 testsPassed = testsPassed + 7
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 9: INTERFACES & TYPE ALIASES
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[9] INTERFACES & TYPE ALIASES")
 
-// 9.1 Basic interface
+
 interface IPoint {
     x: int
     y: int
@@ -560,13 +560,13 @@ interface IPoint {
 let point: IPoint = { x: 10, y: 20 }
 print(`  ✓ Basic interface: ${point}`)
 
-// 9.2 Interface with methods
+
 interface ICalculator {
     add(a: int, b: int): int
     multiply(a: int, b: int): int
 }
 
-// 9.3 Interface implementation
+
 class Calculator {
     add(a: int, b: int): int {
         return a + b
@@ -580,13 +580,13 @@ let calc: Calculator = new Calculator()
 let calcResult: int = calc.add(5, 10)
 print(`  ✓ Interface implementation: ${calcResult}`)
 
-// 9.4 Type alias
+
 type NumberOrString = int | str
 let typeAliasNum: NumberOrString = 42
 let typeAliasStr: NumberOrString = "hello"
 print(`  ✓ Type alias: num=${typeAliasNum}, str=${typeAliasStr}`)
 
-// 9.5 Interface extending interface
+
 interface INameable {
     name: str
 }
@@ -598,12 +598,12 @@ print(`  ✓ Interface extends: ${person}`)
 
 testsPassed = testsPassed + 5
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 10: ENUMS
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[10] ENUMS")
 
-// 10.1 Numeric enum
+
 enum Status {
     Pending,
     Active,
@@ -612,7 +612,7 @@ enum Status {
 let status: Status = Status.Active
 print(`  ✓ Numeric enum: ${status}`)
 
-// 10.2 String enum
+
 enum Color {
     Red = "RED",
     Green = "GREEN",
@@ -621,7 +621,7 @@ enum Color {
 let color: Color = Color.Red
 print(`  ✓ String enum: ${color}`)
 
-// 10.3 Mixed enum
+
 enum Mixed {
     First = 1,
     Second = 2,
@@ -632,12 +632,12 @@ print(`  ✓ Mixed enum: ${mixed}`)
 
 testsPassed = testsPassed + 3
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SECTION 11: GENERICS
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
 print("\n[11] GENERICS")
 
-// 11.1 Generic function
+
 fn identity<T>(x: T): T {
     return x
 }

@@ -1,19 +1,3 @@
-/// Macros for reducing boilerplate in type system
-/// Provides declarative syntax for defining types and operations
-
-/// Macro for defining binary operations with multiple type combinations
-/// Reduces code duplication in arithmetic, comparison, and logical operations
-///
-/// # Example
-/// ```ignore
-/// binary_op! {
-///     fn add(left, right) -> RuntimeValue {
-///         (Int, Int) => Int(left.value + right.value),
-///         (Float, Float) => Float(left.value + right.value),
-///         (Int, Float) => Float(left.value as f64 + right.value),
-///     }
-/// }
-/// ```
 #[macro_export]
 macro_rules! binary_op {
     (
@@ -50,25 +34,6 @@ macro_rules! binary_op {
     };
 }
 
-/// Macro for defining a method map for TypeHandler implementations
-/// Automatically generates call_instance_method and has_instance_method
-///
-/// # Example
-/// ```ignore
-/// instance_methods! {
-///     type_name: "str",
-///     value_type: Str,
-///     methods: {
-///         "toUpper" => |s: &StrValue, args, pos, file| {
-///             require_args(&args, 0, "toUpper", pos, file.clone())?;
-///             Ok(RuntimeValue::Str(StrValue::new(s.value.to_uppercase())))
-///         },
-///         "toLower" => |s: &StrValue, args, pos, file| {
-///             // ...
-///         }
-///     }
-/// }
-/// ```
 #[macro_export]
 macro_rules! instance_methods {
     (
@@ -120,7 +85,6 @@ macro_rules! instance_methods {
     };
 }
 
-/// Macro for defining static methods
 #[macro_export]
 macro_rules! static_methods {
     (
@@ -157,7 +121,6 @@ macro_rules! static_methods {
     };
 }
 
-/// Macro for creating method metadata
 #[macro_export]
 macro_rules! method_meta {
     ($name:expr => $ret:expr, $desc:expr) => {
@@ -175,7 +138,6 @@ macro_rules! method_meta {
     };
 }
 
-/// Macro for creating property metadata
 #[macro_export]
 macro_rules! prop_meta {
     ($name:expr => $type:expr, $desc:expr) => {
@@ -186,32 +148,6 @@ macro_rules! prop_meta {
     };
 }
 
-/// Macro to define a complete type declaratively
-/// Combines structure definition, TypeHandler implementation, and metadata
-///
-/// # Example
-/// ```ignore
-/// define_type! {
-///     struct MyType {
-///         type_name: "mytype",
-///         description: "My custom type",
-///
-///         instance_methods: {
-///             "myMethod" => |value, args, pos, file| {
-///                 // Implementation
-///                 Ok(RuntimeValue::Null(NullValue::new()))
-///             }
-///         },
-///
-///         static_methods: {
-///             "create" => |args, pos, file| {
-///                 // Implementation
-///                 Ok(RuntimeValue::Null(NullValue::new()))
-///             }
-///         }
-///     }
-/// }
-/// ```
 #[macro_export]
 macro_rules! define_type {
     (
@@ -286,8 +222,5 @@ macro_rules! define_type {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn test_macros_compile() {
-        // This test just ensures the macros compile correctly
-        // Actual functionality is tested in the modules that use them
-    }
+    fn test_macros_compile() {}
 }

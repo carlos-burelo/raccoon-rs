@@ -3,90 +3,72 @@ use crate::tokens::{Position, Range};
 use std::fmt;
 use std::fs;
 
-/// Categorías de error para el lenguaje Raccoon
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErrorKind {
-    // === Errores de Compilación ===
-    /// Error de sintaxis en el código fuente
     SyntaxError,
-    /// Error semántico (lógica del programa)
+
     SemanticError,
-    /// Error de tipo (incompatibilidad de tipos)
+
     TypeError,
-    /// Referencia no definida
+
     ReferenceError,
-    /// Error al importar módulos
+
     ImportError,
 
-    // === Errores de Runtime ===
-    /// Error general de ejecución
     RuntimeError,
-    /// Acceso a valor null o undefined
+
     NullReferenceError,
-    /// División por cero
+
     DivisionByZeroError,
-    /// Índice fuera de rango
+
     IndexOutOfRangeError,
-    /// Operación inválida
+
     InvalidOperationError,
 
-    // === Errores de Recursos ===
-    /// Archivo no encontrado
     FileNotFoundError,
-    /// Permiso denegado
+
     PermissionDeniedError,
-    /// Error de entrada/salida
+
     IOError,
-    /// Error al leer
+
     ReadError,
-    /// Error al escribir
+
     WriteError,
 
-    // === Errores de Sistema ===
-    /// Stack overflow
     StackOverflowError,
-    /// Sin memoria disponible
+
     OutOfMemoryError,
-    /// Error interno del sistema
+
     InternalError,
 
-    // === Errores de Concurrencia ===
-    /// Deadlock detectado
     DeadlockError,
-    /// Condición de carrera
+
     RaceConditionError,
-    /// Error de sincronización
+
     SynchronizationError,
 
-    // === Errores Numéricos ===
-    /// Overflow numérico
     OverflowError,
-    /// Underflow numérico
+
     UnderflowError,
-    /// Pérdida de precisión
+
     PrecisionLossError,
 
-    // === Errores de Configuración ===
-    /// Error de validación
     ValidationError,
-    /// Error de configuración
+
     ConfigurationError,
-    /// Error de variable de entorno
+
     EnvironmentVariableError,
 
-    // === Otros ===
-    /// Error de lógica
     LogicError,
-    /// Error de flujo de control
+
     ControlFlowError,
-    /// Error de timeout
+
     TimeoutError,
-    /// Error de red
+
     NetworkError,
 }
 
 impl ErrorKind {
-    /// Obtiene el nombre del tipo de error
     pub fn name(&self) -> &str {
         match self {
             Self::SyntaxError => "SyntaxError",
@@ -123,7 +105,6 @@ impl ErrorKind {
         }
     }
 
-    /// Indica si el error es recuperable
     pub fn is_recoverable(&self) -> bool {
         !matches!(
             self,
@@ -131,7 +112,6 @@ impl ErrorKind {
         )
     }
 
-    /// Indica si el error es de compilación
     pub fn is_compile_time(&self) -> bool {
         matches!(
             self,
@@ -139,7 +119,6 @@ impl ErrorKind {
         )
     }
 
-    /// Indica si el error es de runtime
     pub fn is_runtime(&self) -> bool {
         matches!(
             self,
@@ -170,7 +149,6 @@ pub struct RaccoonError {
 }
 
 impl RaccoonError {
-    /// Crea un nuevo error con un tipo específico
     pub fn with_kind(
         kind: ErrorKind,
         message: impl Into<String>,
@@ -203,7 +181,6 @@ impl RaccoonError {
         }
     }
 
-    /// Crea un nuevo error (por defecto RuntimeError para compatibilidad)
     pub fn new(
         message: impl Into<String>,
         position: Position,
@@ -212,7 +189,6 @@ impl RaccoonError {
         Self::with_kind(ErrorKind::RuntimeError, message, position, file)
     }
 
-    /// Crea un error con rango y tipo específico
     pub fn with_kind_and_range(
         kind: ErrorKind,
         message: impl Into<String>,
@@ -229,7 +205,6 @@ impl RaccoonError {
         }
     }
 
-    /// Crea un error con rango (por defecto RuntimeError)
     pub fn with_range(
         message: impl Into<String>,
         range: Range,
@@ -245,8 +220,6 @@ impl RaccoonError {
     ) -> Self {
         Self::new(message, position, file)
     }
-
-    // === Métodos de conveniencia para errores de compilación ===
 
     pub fn syntax_error(
         message: impl Into<String>,
@@ -288,8 +261,6 @@ impl RaccoonError {
         Self::with_kind(ErrorKind::ImportError, message, position, file)
     }
 
-    // === Métodos de conveniencia para errores de runtime ===
-
     pub fn runtime_error(
         message: impl Into<String>,
         position: Position,
@@ -330,8 +301,6 @@ impl RaccoonError {
         Self::with_kind(ErrorKind::InvalidOperationError, message, position, file)
     }
 
-    // === Métodos de conveniencia para errores de recursos ===
-
     pub fn file_not_found_error(
         message: impl Into<String>,
         position: Position,
@@ -355,8 +324,6 @@ impl RaccoonError {
     ) -> Self {
         Self::with_kind(ErrorKind::IOError, message, position, file)
     }
-
-    // === Métodos de conveniencia para errores de sistema ===
 
     pub fn stack_overflow_error(
         message: impl Into<String>,
@@ -382,8 +349,6 @@ impl RaccoonError {
         Self::with_kind(ErrorKind::InternalError, message, position, file)
     }
 
-    // === Métodos de conveniencia para errores numéricos ===
-
     pub fn overflow_error(
         message: impl Into<String>,
         position: Position,
@@ -399,8 +364,6 @@ impl RaccoonError {
     ) -> Self {
         Self::with_kind(ErrorKind::UnderflowError, message, position, file)
     }
-
-    // === Métodos de conveniencia para errores de configuración ===
 
     pub fn validation_error(
         message: impl Into<String>,
@@ -480,11 +443,9 @@ impl RaccoonError {
                     output.push_str(&line_content);
                     output.push_str("\n");
 
-                    // Padding: 6 chars for line number + space + "│ " + (column - 1) since columns start at 1
                     let padding = " ".repeat(7 + error_col.saturating_sub(1));
                     output.push_str(&padding);
 
-                    // If we have a range and it's on the same line, show the full range
                     if let Some(range) = &self.range {
                         if range.start.0 == range.end.0 && range.start.0 == error_line {
                             let start_col = range.start.1.saturating_sub(1);
@@ -492,11 +453,9 @@ impl RaccoonError {
                             let length = end_col.saturating_sub(start_col).max(1);
                             output.push_str(&"^".repeat(length));
                         } else {
-                            // Multi-line range or no range, show single caret
                             output.push_str("^");
                         }
                     } else {
-                        // No range, show single caret
                         output.push_str("^");
                     }
                     output.push_str("\n");
@@ -507,7 +466,6 @@ impl RaccoonError {
             }
         }
 
-        // Add stack trace if available
         if let Some(ref stack) = self.call_stack {
             if stack.depth() > 0 {
                 output.push_str(&stack.format_stack_trace());

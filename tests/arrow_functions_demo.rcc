@@ -1,77 +1,77 @@
-// Demo de funciones flecha como parámetros y async completo
+
 
 print("=== ARROW FUNCTIONS AS PARAMETERS ===");
 print("");
 
-// Array para las pruebas
+
 let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 print("Original array:", numbers);
 print("");
 
-// ==== MAP con arrow functions ====
+
 print("--- MAP with arrow functions ---");
 
-// Arrow function simple: duplicar
+
 let doubled = numbers.map((x) => x * 2);
 print("Doubled (arrow):", doubled);
 
-// Arrow function: al cuadrado
+
 let squared = numbers.map((n) => n * n);
 print("Squared (arrow):", squared);
 
-// Arrow function con múltiples operaciones
+
 let transformed = numbers.map((x) => x * 3 + 1);
 print("Transformed (x*3+1):", transformed);
 print("");
 
-// ==== FILTER con arrow functions ====
+
 print("--- FILTER with arrow functions ---");
 
-// Filtrar pares
+
 let evens = numbers.filter((n) => n % 2 == 0);
 print("Even numbers:", evens);
 
-// Filtrar mayores que 5
+
 let greaterThan5 = numbers.filter((x) => x > 5);
 print("Greater than 5:", greaterThan5);
 
-// Filtrar múltiplos de 3
+
 let multiplesOf3 = numbers.filter((n) => n % 3 == 0);
 print("Multiples of 3:", multiplesOf3);
 print("");
 
-// ==== REDUCE con arrow functions ====
+
 print("--- REDUCE with arrow functions ---");
 
-// Suma total
+
 let sum = numbers.reduce((acc, n) => acc + n, 0);
 print("Sum:", sum);
 
-// Producto total
+
 let product = numbers.reduce((acc, n) => acc * n, 1);
 print("Product:", product);
 print("");
 
-// ==== FIND/SOME/EVERY con arrow functions ====
+
 print("--- FIND/SOME/EVERY with arrow functions ---");
 
-// Encontrar primer número > 7
+
 let found = numbers.find((n) => n > 7);
 print("First > 7:", found);
 
-// Verificar si tiene pares
+
 let hasEvens = numbers.some((n) => n % 2 == 0);
 print("Has evens?", hasEvens);
 
-// Verificar si todos son positivos
+
 let allPositive = numbers.every((n) => n > 0);
 print("All positive?", allPositive);
 print("");
 
-// ==== COMPOSICIÓN DE MÉTODOS ====
+
 print("--- METHOD CHAINING with arrow functions ---");
 
-// Encadenar: filtrar pares, multiplicar por 3, filtrar > 10
+
 let chained = numbers
     .filter((n) => n % 2 == 0)
     .map((n) => n * 3)
@@ -79,15 +79,15 @@ let chained = numbers
 print("Evens * 3, > 10:", chained);
 print("");
 
-// ==== FUNCIONES ASÍNCRONAS ====
+
 print("=== ASYNC FUNCTIONS ===");
 
-// Función async simple
+
 async fn fetchUser(id: int): str {
     return "User_" + id;
 }
 
-// Llamar y await
+
 let userFuture = fetchUser(42);
 print("Future:", userFuture);
 
@@ -95,10 +95,10 @@ let user = await userFuture;
 print("User:", user);
 print("");
 
-// ==== ASYNC + ARROW FUNCTIONS ====
+
 print("=== ASYNC + ARROW FUNCTIONS ===");
 
-// Función que procesa cada usuario de forma async
+
 async fn processUsers(ids: list): list {
     return ids.map((id) => "Processed_" + id);
 }
@@ -109,10 +109,10 @@ let processed = await resultFuture;
 print("Processed users:", processed);
 print("");
 
-// ==== FUNCIONES DE ORDEN SUPERIOR ====
+
 print("=== HIGHER-ORDER FUNCTIONS ===");
 
-// Funciones simples para usar como parámetros
+
 fn double(x: int): int {
     return x * 2;
 }
@@ -121,7 +121,7 @@ fn triple(x: int): int {
     return x * 3;
 }
 
-// Demostración del tipo func
+
 let myFunc: func = double;
 let anotherFunc: func = triple;
 

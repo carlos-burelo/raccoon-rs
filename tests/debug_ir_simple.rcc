@@ -1,19 +1,12 @@
-// Test 1: Object property
-let obj = { a: 10 };
+let obj = {
+  a: 10
+};
 println("Test 1 passed");
-
-// Test 2: Array
 let arr = [1, 2, 3];
 println("Test 2 passed");
-
-// Test 3: Variable
 let x = 5;
 println("Test 3 passed");
-
-// Test 4: Array length
 let length_val = arr.length;
 println("Array length: " + length_val);
-
-// Test 5: Object property access
 let prop_val = obj.a;
 println("Object property: " + prop_val);

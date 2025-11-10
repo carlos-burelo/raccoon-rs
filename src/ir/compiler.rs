@@ -7,7 +7,6 @@ use super::instruction::{
     TemplatePart,
 };
 
-/// Compiler from AST to IR
 pub struct IRCompiler {
     program: IRProgram,
     temp_counter: usize,
@@ -25,7 +24,6 @@ impl IRCompiler {
         }
     }
 
-    /// Compile a program to IR
     pub fn compile(mut self, program: &Program) -> Result<IRProgram, RaccoonError> {
         for stmt in &program.stmts {
             self.compile_stmt(stmt)?;
@@ -33,21 +31,18 @@ impl IRCompiler {
         Ok(self.program)
     }
 
-    /// Generate a new temporary register
     fn next_temp(&mut self) -> Register {
         let reg = Register::Temp(self.temp_counter);
         self.temp_counter += 1;
         reg
     }
 
-    /// Generate a new label name
     fn next_label(&mut self, prefix: &str) -> String {
         let label = format!("{}_{}", prefix, self.label_counter);
         self.label_counter += 1;
         label
     }
 
-    /// Compile a statement
     fn compile_stmt(&mut self, stmt: &Stmt) -> Result<(), RaccoonError> {
         match stmt {
             Stmt::Program(program) => {
@@ -59,11 +54,11 @@ impl IRCompiler {
             Stmt::VarDecl(decl) => self.compile_var_decl(decl),
             Stmt::FnDecl(decl) => self.compile_fn_decl(decl),
             Stmt::ClassDecl(decl) => self.compile_class_decl(decl),
-            Stmt::InterfaceDecl(_) => Ok(()), // Interfaces are type-level only
+            Stmt::InterfaceDecl(_) => Ok(()),
             Stmt::EnumDecl(decl) => self.compile_enum_decl(decl),
-            Stmt::TypeAliasDecl(_) => Ok(()), // Type aliases are type-level only
-            Stmt::ImportDecl(_) => Ok(()),    // Handled separately
-            Stmt::ExportDecl(_) => Ok(()),    // Handled separately
+            Stmt::TypeAliasDecl(_) => Ok(()),
+            Stmt::ImportDecl(_) => Ok(()),
+            Stmt::ExportDecl(_) => Ok(()),
             Stmt::Block(block) => self.compile_block(block),
             Stmt::IfStmt(if_stmt) => self.compile_if_stmt(if_stmt),
             Stmt::WhileStmt(while_stmt) => self.compile_while_stmt(while_stmt),
@@ -94,17 +89,14 @@ impl IRCompiler {
         }
     }
 
-    /// Compile a variable declaration
     fn compile_var_decl(&mut self, decl: &VarDecl) -> Result<(), RaccoonError> {
         match &decl.pattern {
             VarPattern::Identifier(name) => {
-                // Declare variable
                 self.program.emit(Instruction::Declare {
                     name: name.clone(),
                     is_const: decl.is_constant,
                 });
 
-                // Initialize if there's an initializer
                 if let Some(init) = &decl.initializer {
                     let value_reg = self.compile_expr(init)?;
                     self.program.emit(Instruction::Store {
@@ -123,7 +115,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile destructuring pattern
     fn compile_destructuring_pattern(
         &mut self,
         pattern: &DestructuringPattern,
@@ -183,7 +174,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a function declaration
     fn compile_fn_decl(&mut self, decl: &FnDecl) -> Result<(), RaccoonError> {
         let mut params = Vec::new();
         for param in &decl.parameters {
@@ -192,7 +182,6 @@ impl IRCompiler {
             }
         }
 
-        // Compile function body in a new compiler context
         let mut body_compiler = IRCompiler::new();
         for stmt in &decl.body {
             body_compiler.compile_stmt(stmt)?;
@@ -210,13 +199,11 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a class declaration
     fn compile_class_decl(&mut self, decl: &ClassDecl) -> Result<(), RaccoonError> {
         let mut constructor = None;
         let mut methods = Vec::new();
         let mut properties = Vec::new();
 
-        // Compile constructor
         if let Some(ctor) = &decl.constructor {
             let mut params = Vec::new();
             for param in &ctor.parameters {
@@ -233,7 +220,6 @@ impl IRCompiler {
             constructor = Some((params, body_compiler.program.instructions));
         }
 
-        // Compile methods
         for method in &decl.methods {
             let mut params = Vec::new();
             for param in &method.parameters {
@@ -255,7 +241,6 @@ impl IRCompiler {
             ));
         }
 
-        // Compile properties
         for prop in &decl.properties {
             if let Some(init) = &prop.initializer {
                 let reg = self.compile_expr(init)?;
@@ -273,9 +258,7 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile an enum declaration
     fn compile_enum_decl(&mut self, decl: &EnumDecl) -> Result<(), RaccoonError> {
-        // Create an object with enum members
         let mut properties = Vec::new();
         let mut value = 0i64;
 
@@ -308,7 +291,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a block statement
     fn compile_block(&mut self, block: &Block) -> Result<(), RaccoonError> {
         self.program.emit(Instruction::PushScope);
         self.scope_depth += 1;
@@ -322,26 +304,22 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile an if statement
     fn compile_if_stmt(&mut self, if_stmt: &IfStmt) -> Result<(), RaccoonError> {
         let condition_reg = self.compile_expr(&if_stmt.condition)?;
 
         let else_label = self.next_label("else");
         let end_label = self.next_label("endif");
 
-        // Jump to else if condition is false
         self.program.emit(Instruction::JumpIfFalse {
             condition: condition_reg,
             label: else_label.clone(),
         });
 
-        // Then branch
         self.compile_stmt(&if_stmt.then_branch)?;
         self.program.emit(Instruction::Jump {
             label: end_label.clone(),
         });
 
-        // Else branch
         self.program.emit_label(else_label);
         if let Some(else_branch) = &if_stmt.else_branch {
             self.compile_stmt(else_branch)?;
@@ -351,7 +329,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a while statement
     fn compile_while_stmt(&mut self, while_stmt: &WhileStmt) -> Result<(), RaccoonError> {
         let start_label = self.next_label("while_start");
         let end_label = self.next_label("while_end");
@@ -372,7 +349,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a do-while statement
     fn compile_do_while_stmt(&mut self, do_while: &DoWhileStmt) -> Result<(), RaccoonError> {
         let start_label = self.next_label("do_start");
 
@@ -389,11 +365,9 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a for statement
     fn compile_for_stmt(&mut self, for_stmt: &ForStmt) -> Result<(), RaccoonError> {
         self.program.emit(Instruction::PushScope);
 
-        // Initialize
         if let Some(init) = &for_stmt.initializer {
             self.compile_stmt(init)?;
         }
@@ -404,7 +378,6 @@ impl IRCompiler {
 
         self.program.emit_label(start_label.clone());
 
-        // Condition
         if let Some(condition) = &for_stmt.condition {
             let condition_reg = self.compile_expr(condition)?;
             self.program.emit(Instruction::JumpIfFalse {
@@ -413,13 +386,10 @@ impl IRCompiler {
             });
         }
 
-        // Body
         self.compile_stmt(&for_stmt.body)?;
 
-        // Continue point
         self.program.emit_label(continue_label);
 
-        // Increment
         if let Some(increment) = &for_stmt.increment {
             self.compile_expr(increment)?;
         }
@@ -431,7 +401,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a for-in statement
     fn compile_for_in_stmt(&mut self, for_in: &ForInStmt) -> Result<(), RaccoonError> {
         let object_reg = self.compile_expr(&for_in.iterable)?;
 
@@ -449,7 +418,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a for-of statement
     fn compile_for_of_stmt(&mut self, for_of: &ForOfStmt) -> Result<(), RaccoonError> {
         let iterable_reg = self.compile_expr(&for_of.iterable)?;
 
@@ -467,7 +435,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a switch statement
     fn compile_switch_stmt(&mut self, switch_stmt: &SwitchStmt) -> Result<(), RaccoonError> {
         let discriminant_reg = self.compile_expr(&switch_stmt.discriminant)?;
         let end_label = self.next_label("switch_end");
@@ -477,7 +444,6 @@ impl IRCompiler {
                 let test_reg = self.compile_expr(test)?;
                 let temp = self.next_temp();
 
-                // Compare discriminant with test
                 self.program.emit(Instruction::BinaryOp {
                     dest: temp.clone(),
                     left: discriminant_reg.clone(),
@@ -491,7 +457,6 @@ impl IRCompiler {
                     label: next_case_label.clone(),
                 });
 
-                // Case consequent
                 for stmt in &case.consequent {
                     self.compile_stmt(stmt)?;
                 }
@@ -502,7 +467,6 @@ impl IRCompiler {
 
                 self.program.emit_label(next_case_label);
             } else {
-                // Default case
                 for stmt in &case.consequent {
                     self.compile_stmt(stmt)?;
                 }
@@ -513,7 +477,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a return statement
     fn compile_return_stmt(&mut self, ret: &ReturnStmt) -> Result<(), RaccoonError> {
         let value = if let Some(val_expr) = &ret.value {
             Some(self.compile_expr(val_expr)?)
@@ -525,7 +488,6 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a try statement
     fn compile_try_stmt(&mut self, try_stmt: &TryStmt) -> Result<(), RaccoonError> {
         let mut try_compiler = IRCompiler::new();
         for stmt in &try_stmt.try_block.statements {
@@ -564,14 +526,12 @@ impl IRCompiler {
         Ok(())
     }
 
-    /// Compile a throw statement
     fn compile_throw_stmt(&mut self, throw: &ThrowStmt) -> Result<(), RaccoonError> {
         let value_reg = self.compile_expr(&throw.value)?;
         self.program.emit(Instruction::Throw { value: value_reg });
         Ok(())
     }
 
-    /// Compile an expression and return the register containing the result
     fn compile_expr(&mut self, expr: &Expr) -> Result<Register, RaccoonError> {
         match expr {
             Expr::IntLiteral(lit) => {
@@ -644,7 +604,6 @@ impl IRCompiler {
             Expr::Await(await_expr) => self.compile_await_expr(await_expr),
             Expr::Match(match_expr) => self.compile_match_expr(match_expr),
             _ => {
-                // For unimplemented expressions, return a placeholder
                 let dest = self.next_temp();
                 self.program.emit(Instruction::Comment {
                     text: format!("Unimplemented expression: {:?}", expr),
@@ -654,7 +613,6 @@ impl IRCompiler {
         }
     }
 
-    /// Compile a binary expression
     fn compile_binary_expr(&mut self, binary: &BinaryExpr) -> Result<Register, RaccoonError> {
         let left = self.compile_expr(&binary.left)?;
         let right = self.compile_expr(&binary.right)?;
@@ -670,7 +628,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a unary expression
     fn compile_unary_expr(&mut self, unary: &UnaryExpr) -> Result<Register, RaccoonError> {
         let operand = self.compile_expr(&unary.operand)?;
         let dest = self.next_temp();
@@ -684,7 +641,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile an assignment
     fn compile_assignment(&mut self, assign: &Assignment) -> Result<Register, RaccoonError> {
         let value_reg = self.compile_expr(&assign.value)?;
 
@@ -724,7 +680,6 @@ impl IRCompiler {
         Ok(value_reg)
     }
 
-    /// Compile a call expression
     fn compile_call_expr(&mut self, call: &CallExpr) -> Result<Register, RaccoonError> {
         let callee = self.compile_expr(&call.callee)?;
 
@@ -743,15 +698,12 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile an array literal
     fn compile_array_literal(&mut self, array: &ArrayLiteral) -> Result<Register, RaccoonError> {
         let mut elements = Vec::new();
         for elem in &array.elements {
-            // Check if element is a spread
             if let Expr::Spread(spread) = elem {
-                // Handle spread - compile the expression and add special marker
                 let spread_reg = self.compile_expr(&spread.argument)?;
-                // Create a temporary to hold the spread result
+
                 let spread_dest = self.next_temp();
                 self.program.emit(Instruction::SpreadArray {
                     dest: spread_dest.clone(),
@@ -772,7 +724,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile an object literal
     fn compile_object_literal(&mut self, obj: &ObjectLiteral) -> Result<Register, RaccoonError> {
         let mut properties = Vec::new();
 
@@ -783,14 +734,13 @@ impl IRCompiler {
                     properties.push((key.clone(), value_reg));
                 }
                 ObjectLiteralProperty::Spread(spread_expr) => {
-                    // Handle spread in object - compile to special instruction
                     let spread_reg = self.compile_expr(spread_expr)?;
                     let spread_dest = self.next_temp();
                     self.program.emit(Instruction::SpreadObject {
                         dest: spread_dest.clone(),
                         operand: spread_reg,
                     });
-                    // Add as special property (will be expanded by VM)
+
                     properties.push(("...".to_string(), spread_dest));
                 }
             }
@@ -805,7 +755,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a member expression
     fn compile_member_expr(&mut self, member: &MemberExpr) -> Result<Register, RaccoonError> {
         let object = self.compile_expr(&member.object)?;
         let dest = self.next_temp();
@@ -819,7 +768,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile an index expression
     fn compile_index_expr(&mut self, index: &IndexExpr) -> Result<Register, RaccoonError> {
         let array = self.compile_expr(&index.object)?;
         let index_reg = self.compile_expr(&index.index)?;
@@ -834,7 +782,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a conditional expression
     fn compile_conditional_expr(
         &mut self,
         cond: &ConditionalExpr,
@@ -854,7 +801,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a unary update expression (++/--)
     fn compile_unary_update(&mut self, update: &UnaryUpdateExpr) -> Result<Register, RaccoonError> {
         let operand = self.compile_expr(&update.operand)?;
         let dest = self.next_temp();
@@ -879,7 +825,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a template string
     fn compile_template_str(
         &mut self,
         template: &TemplateStrExpr,
@@ -907,7 +852,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile an arrow function
     fn compile_arrow_fn(&mut self, arrow: &ArrowFnExpr) -> Result<Register, RaccoonError> {
         let mut params = Vec::new();
         for param in &arrow.parameters {
@@ -946,7 +890,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a typeof expression
     fn compile_typeof_expr(&mut self, typeof_expr: &TypeOfExpr) -> Result<Register, RaccoonError> {
         let operand = self.compile_expr(&typeof_expr.operand)?;
         let dest = self.next_temp();
@@ -959,7 +902,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile an instanceof expression
     fn compile_instanceof_expr(
         &mut self,
         instanceof: &InstanceOfExpr,
@@ -976,7 +918,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile optional chaining
     fn compile_optional_chaining(
         &mut self,
         opt_chain: &OptionalChainingExpr,
@@ -993,7 +934,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a method call
     fn compile_method_call(
         &mut self,
         method_call: &MethodCallExpr,
@@ -1016,7 +956,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a new expression
     fn compile_new_expr(&mut self, new_expr: &NewExpr) -> Result<Register, RaccoonError> {
         let mut args = Vec::new();
         for arg in &new_expr.args {
@@ -1033,7 +972,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a range expression
     fn compile_range_expr(&mut self, range: &RangeExpr) -> Result<Register, RaccoonError> {
         let start = self.compile_expr(&range.start)?;
         let end = self.compile_expr(&range.end)?;
@@ -1048,7 +986,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile null coalescing
     fn compile_null_coalescing(
         &mut self,
         null_coal: &NullCoalescingExpr,
@@ -1066,7 +1003,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile an await expression
     fn compile_await_expr(&mut self, await_expr: &AwaitExpr) -> Result<Register, RaccoonError> {
         let future = self.compile_expr(&await_expr.expression)?;
         let dest = self.next_temp();
@@ -1079,7 +1015,6 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a match expression
     fn compile_match_expr(&mut self, match_expr: &MatchExpr) -> Result<Register, RaccoonError> {
         let scrutinee = self.compile_expr(&match_expr.scrutinee)?;
         let dest = self.next_temp();
@@ -1115,24 +1050,16 @@ impl IRCompiler {
         Ok(dest)
     }
 
-    /// Compile a pattern for matching
     fn compile_pattern(&mut self, pattern: &Pattern) -> Result<IRMatchPattern, RaccoonError> {
         match pattern {
             Pattern::Wildcard(_) => Ok(IRMatchPattern::Wildcard),
-            Pattern::Literal(_expr) => {
-                // For literals, we need to extract the runtime value
-                // This is a simplification; in reality, we'd need to evaluate constant expressions
-                Ok(IRMatchPattern::Literal(RuntimeValue::Null(
-                    crate::runtime::NullValue::new(),
-                )))
-            }
-            Pattern::Range(_start, _end) => {
-                // Similar simplification for ranges
-                Ok(IRMatchPattern::Range(
-                    RuntimeValue::Null(crate::runtime::NullValue::new()),
-                    RuntimeValue::Null(crate::runtime::NullValue::new()),
-                ))
-            }
+            Pattern::Literal(_expr) => Ok(IRMatchPattern::Literal(RuntimeValue::Null(
+                crate::runtime::NullValue::new(),
+            ))),
+            Pattern::Range(_start, _end) => Ok(IRMatchPattern::Range(
+                RuntimeValue::Null(crate::runtime::NullValue::new()),
+                RuntimeValue::Null(crate::runtime::NullValue::new()),
+            )),
             Pattern::Variable(name) => Ok(IRMatchPattern::Variable(name.clone())),
             Pattern::Array(patterns) => {
                 let mut compiled_patterns = Vec::new();
@@ -1158,7 +1085,6 @@ impl IRCompiler {
             _ => Ok(IRMatchPattern::Wildcard),
         }
     }
-
 }
 
 impl Default for IRCompiler {

@@ -1,21 +1,14 @@
-/// Refactored TupleType using helpers and metadata system
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{IntValue, ArrayValue, RuntimeValue, StrValue};
+use crate::runtime::{ArrayValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// TupleType - Fixed-size heterogeneous collection (Tuple<T1, T2, ...>)
-// ============================================================================
 
 pub struct TupleType;
 
 impl TupleType {
-
-    /// Helper to extract tuple (list) from RuntimeValue
     fn extract_tuple<'a>(
         value: &'a RuntimeValue,
         position: Position,
@@ -123,13 +116,10 @@ impl TypeHandler for TupleType {
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
-            "of" => {
-                // Creates a tuple from the provided arguments
-                Ok(RuntimeValue::Array(ArrayValue::new(
-                    args,
-                    PrimitiveType::any(),
-                )))
-            }
+            "of" => Ok(RuntimeValue::Array(ArrayValue::new(
+                args,
+                PrimitiveType::any(),
+            ))),
             _ => Err(static_method_not_found_error(
                 "tuple", method, position, file,
             )),

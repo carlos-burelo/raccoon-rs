@@ -1,4 +1,3 @@
-// Type system - modular organization
 pub mod async_control;
 pub mod auto_register;
 pub mod collections;

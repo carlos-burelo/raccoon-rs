@@ -1,42 +1,29 @@
-// Number stdlib - High-level number utilities
 
-/**
- * Checks if a number is within a range (inclusive)
- * Example: in_range(5, 1, 10) => true
- */
+
+
 export fn in_range(n: int, min: int, max: int): bool {
     return n >= min && n <= max;
 }
 
-/**
- * Linear interpolation between two numbers
- * Example: lerp(0, 100, 0.5) => 50
- */
+
 export fn lerp(start: float, end: float, t: float): float {
     return start + (end - start) * t;
 }
 
-/**
- * Clamps a float value between min and max
- */
+
 export fn clamp_float(value: float, min: float, max: float): float {
     if (value < min) return min;
     if (value > max) return max;
     return value;
 }
 
-/**
- * Maps a value from one range to another
- * Example: map_range(5, 0, 10, 0, 100) => 50
- */
+
 export fn map_range(value: float, in_min: float, in_max: float, out_min: float, out_max: float): float {
     let normalized = (value - in_min) / (in_max - in_min);
     return out_min + normalized * (out_max - out_min);
 }
 
-/**
- * Calculates the greatest common divisor (GCD)
- */
+
 export fn gcd(a: int, b: int): int {
     let abs_a = a;
     if (abs_a < 0) abs_a = -abs_a;
@@ -53,9 +40,7 @@ export fn gcd(a: int, b: int): int {
     return abs_a;
 }
 
-/**
- * Calculates the least common multiple (LCM)
- */
+
 export fn lcm(a: int, b: int): int {
     if (a == 0 || b == 0) {
         return 0;
@@ -69,9 +54,7 @@ export fn lcm(a: int, b: int): int {
     return (abs_a * abs_b) / gcd(a, b);
 }
 
-/**
- * Checks if a number is prime
- */
+
 export fn is_prime(n: int): bool {
     if (n <= 1) return false;
     if (n <= 3) return true;
@@ -88,9 +71,7 @@ export fn is_prime(n: int): bool {
     return true;
 }
 
-/**
- * Calculates factorial of a number
- */
+
 export fn factorial(n: int): int {
     if (n < 0) return 0;
     if (n == 0 || n == 1) return 1;
@@ -103,9 +84,7 @@ export fn factorial(n: int): int {
     return result;
 }
 
-/**
- * Calculates Fibonacci number at position n
- */
+
 export fn fibonacci(n: int): int {
     if (n <= 0) return 0;
     if (n == 1) return 1;
@@ -122,10 +101,7 @@ export fn fibonacci(n: int): int {
     return b;
 }
 
-/**
- * Generates a range of numbers
- * Example: range(1, 5) => [1, 2, 3, 4, 5]
- */
+
 export fn range(start: int, end: int): int[] {
     let result: int[] = [];
 
@@ -142,10 +118,7 @@ export fn range(start: int, end: int): int[] {
     return result;
 }
 
-/**
- * Generates a range with a step
- * Example: range_step(0, 10, 2) => [0, 2, 4, 6, 8, 10]
- */
+
 export fn range_step(start: int, end: int, step: int): int[] {
     let result: int[] = [];
 
@@ -168,9 +141,7 @@ export fn range_step(start: int, end: int, step: int): int[] {
     return result;
 }
 
-/**
- * Calculates average of numbers in array
- */
+
 export fn average(numbers: float[]): float {
     if (numbers.length == 0) {
         return 0.0;
@@ -184,9 +155,7 @@ export fn average(numbers: float[]): float {
     return sum / numbers.length;
 }
 
-/**
- * Finds the median value in an array
- */
+
 export fn median(numbers: float[]): float {
     let len = numbers.length;
     if (len == 0) {
@@ -203,9 +172,7 @@ export fn median(numbers: float[]): float {
     }
 }
 
-/**
- * Calculates sum of numbers in array
- */
+
 export fn sum(numbers: float[]): float {
     let total = 0.0;
     for (let i = 0; i < numbers.length; i = i + 1) {
@@ -214,9 +181,7 @@ export fn sum(numbers: float[]): float {
     return total;
 }
 
-/**
- * Finds minimum value in array
- */
+
 export fn min(numbers: float[]): float {
     if (numbers.length == 0) {
         return 0.0;
@@ -232,9 +197,7 @@ export fn min(numbers: float[]): float {
     return minimum;
 }
 
-/**
- * Finds maximum value in array
- */
+
 export fn max(numbers: float[]): float {
     if (numbers.length == 0) {
         return 0.0;

@@ -44,7 +44,6 @@ impl Interpreter {
         let type_registry = std::sync::Arc::new(TypeRegistry::new());
         let registrar = std::sync::Arc::new(std::sync::Mutex::new(Registrar::new()));
 
-        // Register core primitives immediately (needed for std:runtime module)
         {
             let mut reg = registrar.lock().unwrap();
             crate::runtime::natives::register_core_primitives(&mut reg);
@@ -52,7 +51,6 @@ impl Interpreter {
 
         let mut module_registry = ModuleRegistry::new();
 
-        // Register all native modules (lazy-loaded, not yet initialized)
         module_registry.register("math", |registrar| {
             crate::runtime::natives::register_math_module(registrar)
         });
@@ -78,10 +76,8 @@ impl Interpreter {
             crate::runtime::natives::register_http_module(registrar)
         });
 
-        // Initialize builtins only (print, println, input, len)
         Self::register_builtins(&mut env, registrar.clone());
 
-        // Register stdlib wrapper functions
         crate::runtime::register_stdlib_wrappers(&mut env, registrar.clone());
 
         let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
@@ -98,7 +94,7 @@ impl Interpreter {
             registrar,
             module_registry: std::sync::Arc::new(module_registry),
             call_stack: CallStack::new(),
-            use_ir: true,
+            use_ir: false,
         }
     }
 
@@ -108,24 +104,16 @@ impl Interpreter {
     ) {
         use crate::runtime::setup_builtins;
 
-        // Call the main setup_builtins to register all builtins:
-        // - Global functions: print, println, eprint, input, len
-        // - Primitive types: int, str, float, bool with static methods/properties
-        // - Built-in objects: Future, Object, Type
         setup_builtins(env);
     }
 
-    /// Load std:core module and inject its exports into the global scope
     async fn load_std_core_if_needed(&mut self) -> Result<(), RaccoonError> {
-        // Check if std:core is already loaded by looking for 'print' in the environment
         if self.environment.exists("print") {
             return Ok(());
         }
 
-        // Load the std:core module
         let core_module = self.stdlib_loader.load_module("std:core").await?;
 
-        // Inject all exports from std:core into the global scope
         if let RuntimeValue::Object(obj) = core_module {
             for (name, value) in obj.properties.iter() {
                 let _ = self.environment.declare(name.clone(), value.clone());
@@ -135,33 +123,29 @@ impl Interpreter {
         Ok(())
     }
 
-    /// Enable IR mode for optimized execution
     pub fn enable_ir_mode(&mut self) {
         self.use_ir = true;
     }
 
-    /// Disable IR mode (use direct AST interpretation)
     pub fn disable_ir_mode(&mut self) {
         self.use_ir = false;
     }
 
-    /// Interpret a program using IR compilation and VM execution
     #[async_recursion(?Send)]
-    pub async fn interpret_with_ir(&mut self, program: &Program) -> Result<RuntimeValue, RaccoonError> {
-        // Load std:core module on first interpret call
+    pub async fn interpret_with_ir(
+        &mut self,
+        program: &Program,
+    ) -> Result<RuntimeValue, RaccoonError> {
         if self.file.is_none() || self.file.as_ref().map_or(false, |f| f == "<root>") {
             self.load_std_core_if_needed().await?;
         }
 
-        // Compile AST to IR
         let compiler = crate::ir::IRCompiler::new();
         let ir_program = compiler.compile(program)?;
 
-        // Optimize IR
         let optimizer = crate::ir::IROptimizer::new(ir_program);
         let optimized_program = optimizer.optimize();
 
-        // Execute IR with VM
         let mut vm = crate::ir::VM::new(self.environment.clone());
         let result = vm.execute(optimized_program).await?;
 
@@ -170,11 +154,10 @@ impl Interpreter {
 
     #[async_recursion(?Send)]
     pub async fn interpret(&mut self, program: &Program) -> Result<RuntimeValue, RaccoonError> {
-        // If IR mode is enabled, use IR interpretation
         if self.use_ir {
             return self.interpret_with_ir(program).await;
         }
-        // Load std:core module on first interpret call (only once per interpreter instance)
+
         if self.file.is_none() || self.file.as_ref().map_or(false, |f| f == "<root>") {
             self.load_std_core_if_needed().await?;
         }
@@ -335,24 +318,18 @@ impl Interpreter {
     }
 
     pub fn try_load_native_function(&mut self, name: &str) -> Option<RuntimeValue> {
-        // Check if this is a module.function pattern
         if let Some(dot_pos) = name.find('.') {
             let module_name = &name[..dot_pos];
 
-            // Try to load the module if not already loaded
             if let Some(loader) = self.module_registry.get_loader(module_name) {
-                // Load the module
                 let mut registrar = self.registrar.lock().unwrap();
                 if !registrar.functions.contains_key(name) {
                     loader(&mut registrar);
                 }
                 drop(registrar);
 
-                // Try to get the function from registrar
                 let registrar = self.registrar.lock().unwrap();
                 if let Some(_handler) = registrar.get_function(name) {
-                    // Handler is available in registrar
-                    // Return None for now - will handle this in expressions module
                     return None;
                 }
             }
@@ -360,8 +337,6 @@ impl Interpreter {
         None
     }
 
-    /// Get a builtin type by name (e.g., "Future", "Promise")
-    /// Returns a PrimitiveTypeObject with static methods, not a global object instance
     pub fn get_builtin_type(&self, name: &str) -> Option<RuntimeValue> {
         use crate::ast::types::PrimitiveType;
         use crate::runtime::{NativeFunctionValue, PrimitiveTypeObject};
@@ -371,7 +346,6 @@ impl Interpreter {
             "Future" => {
                 let mut static_methods = HashMap::new();
 
-                // Future.resolve(value)
                 let resolve_fn = NativeFunctionValue::new(
                     |args: Vec<RuntimeValue>| {
                         let value = if args.is_empty() {
@@ -386,7 +360,6 @@ impl Interpreter {
                 );
                 static_methods.insert("resolve".to_string(), Box::new(resolve_fn));
 
-                // Future.reject(reason)
                 let reject_fn = NativeFunctionValue::new(
                     |args: Vec<RuntimeValue>| {
                         let reason_str = if args.is_empty() {
@@ -403,7 +376,6 @@ impl Interpreter {
                 );
                 static_methods.insert("reject".to_string(), Box::new(reject_fn));
 
-                // Future.all(futures) - combines multiple futures and waits for all
                 let all_fn = NativeFunctionValue::new(
                     |args: Vec<RuntimeValue>| {
                         if args.is_empty() {
@@ -421,11 +393,9 @@ impl Interpreter {
                                 let result_future = FutureValue::new(PrimitiveType::any());
                                 let result_clone = result_future.clone();
 
-                                // Spawn async task to wait for all futures
                                 tokio::task::spawn_local(async move {
                                     let mut results = Vec::new();
 
-                                    // Wait for all futures sequentially (can be optimized with tokio::join!)
                                     for element in &futures {
                                         if let RuntimeValue::Future(fut) = element {
                                             match fut.wait_for_completion().await {
@@ -459,7 +429,6 @@ impl Interpreter {
                 );
                 static_methods.insert("all".to_string(), Box::new(all_fn));
 
-                // Future.race(futures) - returns first resolved/rejected
                 let race_fn = NativeFunctionValue::new(
                     |args: Vec<RuntimeValue>| {
                         if args.is_empty() {
@@ -482,9 +451,7 @@ impl Interpreter {
                                 let result_future = FutureValue::new(PrimitiveType::any());
                                 let result_clone = result_future.clone();
 
-                                // Spawn async task to race all futures
                                 tokio::task::spawn_local(async move {
-                                    // Create a vector of async tasks to race
                                     let mut tasks = Vec::new();
 
                                     for element in &futures {
@@ -496,9 +463,7 @@ impl Interpreter {
                                         }
                                     }
 
-                                    // Wait for first to complete
                                     if !tasks.is_empty() {
-                                        // Use select to wait for first completion
                                         for task in tasks {
                                             if let Ok(result) = task.await {
                                                 match result {
@@ -530,7 +495,6 @@ impl Interpreter {
                 );
                 static_methods.insert("race".to_string(), Box::new(race_fn));
 
-                // Future.allSettled(futures) - waits for all, returns status objects
                 let all_settled_fn = NativeFunctionValue::new(
                     |args: Vec<RuntimeValue>| {
                         if args.is_empty() {
@@ -643,7 +607,6 @@ impl Interpreter {
                 );
                 static_methods.insert("allSettled".to_string(), Box::new(all_settled_fn));
 
-                // Future.any(futures) - returns first resolved, rejects if all reject
                 let any_fn = NativeFunctionValue::new(
                     |args: Vec<RuntimeValue>| {
                         if args.is_empty() {
@@ -655,7 +618,6 @@ impl Interpreter {
 
                         match &args[0] {
                             RuntimeValue::Array(list) => {
-                                // Find first resolved future
                                 for element in &list.elements {
                                     if let RuntimeValue::Future(fut) = element {
                                         let state = fut.state.read().unwrap();
@@ -670,7 +632,6 @@ impl Interpreter {
                                             );
                                         }
                                     } else {
-                                        // Non-future values are treated as resolved
                                         return RuntimeValue::Future(FutureValue::new_resolved(
                                             element.clone(),
                                             PrimitiveType::any(),
@@ -678,7 +639,6 @@ impl Interpreter {
                                     }
                                 }
 
-                                // All are rejected, return the first rejection
                                 for element in &list.elements {
                                     if let RuntimeValue::Future(fut) = element {
                                         let state = fut.state.read().unwrap();
@@ -712,7 +672,6 @@ impl Interpreter {
 
                 let static_properties = HashMap::new();
 
-                // Create a Future type: Future<any>
                 use crate::ast::types::{FutureType, Type};
                 let any_type = PrimitiveType::any();
                 let future_type = Type::Future(Box::new(FutureType {

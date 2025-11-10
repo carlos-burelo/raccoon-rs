@@ -1,4 +1,4 @@
-// Test union types in function parameters using type aliases
+
 
 type StringOrNumber = str | int;
 
@@ -9,7 +9,7 @@ fn processValue(value: StringOrNumber): void {
 processValue("hello");
 processValue(42);
 
-// Test with multiple parameters
+
 fn combine(first: StringOrNumber, second: StringOrNumber): void {
     print(first);
     print(second);

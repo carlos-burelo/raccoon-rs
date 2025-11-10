@@ -1,18 +1,15 @@
 use crate::runtime::{
-    BoolValue, FloatValue, IntValue, ArrayValue, NullValue, RuntimeValue, StrValue,
+    ArrayValue, BoolValue, FloatValue, IntValue, NullValue, RuntimeValue, StrValue,
 };
 
-/// Trait for converting Raccoon RuntimeValue to Rust types
 pub trait FromRaccoon: Sized {
     fn from_raccoon(val: &RuntimeValue) -> Result<Self, String>;
 }
 
-/// Trait for converting Rust types to Raccoon RuntimeValue
 pub trait ToRaccoon {
     fn to_raccoon(self) -> RuntimeValue;
 }
 
-// ========== f64 ==========
 impl FromRaccoon for f64 {
     fn from_raccoon(val: &RuntimeValue) -> Result<Self, String> {
         match val {
@@ -30,7 +27,6 @@ impl ToRaccoon for f64 {
     }
 }
 
-// ========== i32 ==========
 impl FromRaccoon for i32 {
     fn from_raccoon(val: &RuntimeValue) -> Result<Self, String> {
         match val {
@@ -48,7 +44,6 @@ impl ToRaccoon for i32 {
     }
 }
 
-// ========== i64 ==========
 impl FromRaccoon for i64 {
     fn from_raccoon(val: &RuntimeValue) -> Result<Self, String> {
         match val {
@@ -66,7 +61,6 @@ impl ToRaccoon for i64 {
     }
 }
 
-// ========== bool ==========
 impl FromRaccoon for bool {
     fn from_raccoon(val: &RuntimeValue) -> Result<Self, String> {
         match val {
@@ -84,7 +78,6 @@ impl ToRaccoon for bool {
     }
 }
 
-// ========== String ==========
 impl FromRaccoon for String {
     fn from_raccoon(val: &RuntimeValue) -> Result<Self, String> {
         match val {
@@ -100,7 +93,6 @@ impl ToRaccoon for String {
     }
 }
 
-// ========== Vec<T> ==========
 impl<T: FromRaccoon> FromRaccoon for Vec<T> {
     fn from_raccoon(val: &RuntimeValue) -> Result<Self, String> {
         match val {
@@ -120,7 +112,6 @@ impl<T: ToRaccoon> ToRaccoon for Vec<T> {
     }
 }
 
-// ========== Option<T> ==========
 impl<T: FromRaccoon> FromRaccoon for Option<T> {
     fn from_raccoon(val: &RuntimeValue) -> Result<Self, String> {
         match val {

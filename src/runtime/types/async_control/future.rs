@@ -4,10 +4,6 @@ use crate::runtime::{BoolValue, FutureState, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// FutureType - Asynchronous computation result (Future<T>)
-// ============================================================================
-
 pub struct FutureType;
 
 #[async_trait]
@@ -139,7 +135,6 @@ impl TypeHandler for FutureType {
 
                 let callback = args[0].clone();
 
-                // Wait for the future to resolve
                 loop {
                     let state_result = {
                         let state = future.state.read().unwrap();
@@ -148,7 +143,7 @@ impl TypeHandler for FutureType {
                             FutureState::Rejected(err) => Some(Err(err.clone())),
                             FutureState::Pending => None,
                         }
-                    }; // Lock is dropped here
+                    };
 
                     match state_result {
                         Some(Ok(val)) => {
@@ -178,7 +173,6 @@ impl TypeHandler for FutureType {
 
                 let callback = args[0].clone();
 
-                // Wait for the future to complete
                 loop {
                     let state_result = {
                         let state = future.state.read().unwrap();
@@ -187,7 +181,7 @@ impl TypeHandler for FutureType {
                             FutureState::Rejected(err) => Some(Err(err.clone())),
                             FutureState::Pending => None,
                         }
-                    }; // Lock is dropped here
+                    };
 
                     match state_result {
                         Some(Ok(val)) => {

@@ -602,10 +602,9 @@ pub fn check_array_literal(
 
     let mut element_types = Vec::new();
     for element in &list.elements {
-        // Handle spread expressions in array literals
         if let Expr::Spread(spread) = element {
             let spread_type = analyzer.check_expr(&spread.argument)?;
-            // If it's a list, get its element type
+
             if let Type::Array(list_type) = spread_type {
                 element_types.push(list_type.element_type.clone());
             }
@@ -642,9 +641,8 @@ pub fn check_object_literal(
                 );
             }
             ObjectLiteralProperty::Spread(expr) => {
-                // Type check the spread expression
                 let spread_type = analyzer.check_expr(expr)?;
-                // If it's an object-like type, merge its properties
+
                 if let Type::Interface(ref iface) = spread_type {
                     for (k, v) in &iface.properties {
                         properties.insert(k.clone(), v.clone());
@@ -665,8 +663,6 @@ pub fn check_match_expr(
     _analyzer: &mut SemanticAnalyzer,
     _expr: &MatchExpr,
 ) -> Result<Type, RaccoonError> {
-    // TODO: Implement pattern matching type checking
-    // For now, return any type
     Ok(Type::Primitive(PrimitiveType::new(TypeKind::Any, "any")))
 }
 
@@ -674,8 +670,6 @@ pub fn check_class_expr(
     _analyzer: &mut SemanticAnalyzer,
     _expr: &ClassExpr,
 ) -> Result<Type, RaccoonError> {
-    // Class expressions return a class type
-    // The type is the class itself (can be instantiated with new)
     Ok(Type::Primitive(PrimitiveType::new(
         TypeKind::Class,
         "class",

@@ -1,9 +1,8 @@
-// Test: Index access and assignment for objects
+
 
 async fn main(): void {
     print("Testing index access and assignment for objects...\n")
 
-    // Test 1: Reading with index notation
     let config = {
         "api-key": "secret123",
         "base-url": "https://api.example.com",
@@ -16,7 +15,6 @@ async fn main(): void {
     print("  config[\"timeout\"]:", config["timeout"])
     print("  ✓ Index access works!\n")
 
-    // Test 2: Assigning with index notation
     print("Test 2: Assigning properties with index notation")
     config["api-key"] = "new-secret-456"
     config["version"] = "v2.0"
@@ -28,7 +26,6 @@ async fn main(): void {
     print("    config[\"timeout\"]:", config["timeout"])
     print("  ✓ Index assignment works!\n")
 
-    // Test 3: Mixed access - dot notation and index notation
     print("Test 3: Mixed access patterns")
     let user = {
         name: "Carlos",
@@ -50,7 +47,6 @@ async fn main(): void {
     print("  user.email:", user.email)
     print("  ✓ Mixed access works!\n")
 
-    // Test 4: Dynamic property names
     print("Test 4: Dynamic property access")
     let data = {
         "prop-1": "value1",

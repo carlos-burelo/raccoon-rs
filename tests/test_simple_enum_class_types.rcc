@@ -1,6 +1,6 @@
-// Simple test for enum and class types
 
-// Define a class
+
+
 class User {
     name: str;
     age: int;
@@ -15,27 +15,27 @@ class User {
     }
 }
 
-// Use class as type in variable declaration
+
 let user: User = new User("Alice", 30);
 user.greet();
 
-// Use class as type in function parameter
+
 fn greetUser(u: User): void {
     u.greet();
 }
 
 greetUser(user);
 
-// Use class in another variable
+
 let admin: User = new User("Admin", 99);
 admin.greet();
 
-// Test with type alias combining class
+
 type MaybeUser = User?;
 let optionalUser: MaybeUser = user;
 print("Optional user created");
 
-// Test in object types
+
 type UserInfo = {
     user: User,
     active: bool

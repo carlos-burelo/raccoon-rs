@@ -5,15 +5,10 @@ use std::collections::HashMap;
 
 use super::instruction::{IRProgram, Instruction, MatchPattern, Register, TemplatePart};
 
-/// Virtual Machine for executing IR bytecode
 pub struct VM {
-    /// Register file - maps registers to runtime values
     registers: HashMap<String, RuntimeValue>,
-    /// Environment for variable storage
     environment: Environment,
-    /// Program counter
     pc: usize,
-    /// Current executing program
     program: Option<IRProgram>,
 }
 
@@ -27,7 +22,6 @@ impl VM {
         }
     }
 
-    /// Execute an IR program
     #[async_recursion(?Send)]
     pub async fn execute(&mut self, program: IRProgram) -> Result<RuntimeValue, RaccoonError> {
         self.program = Some(program);
@@ -62,7 +56,6 @@ impl VM {
         Ok(last_value)
     }
 
-    /// Execute a single instruction
     #[async_recursion(?Send)]
     async fn execute_instruction(
         &mut self,
@@ -109,7 +102,6 @@ impl VM {
                 let left_val = self.get_register(left)?;
                 let right_val = self.get_register(right)?;
 
-                // Use the existing binary operator logic from the interpreter
                 let result = crate::interpreter::operators::apply_binary_op(
                     left_val,
                     right_val,
@@ -127,7 +119,6 @@ impl VM {
             Instruction::UnaryOp { dest, operand, op } => {
                 let operand_val = self.get_register(operand)?;
 
-                // Apply unary operator
                 let result = match op {
                     crate::tokens::UnaryOperator::Not => {
                         let is_truthy = crate::interpreter::operators::is_truthy(&operand_val);
@@ -148,21 +139,18 @@ impl VM {
                             ))
                         }
                     },
-                    crate::tokens::UnaryOperator::BitwiseNot => {
-                        // Simplified bitwise not
-                        match operand_val {
-                            RuntimeValue::Int(i) => {
-                                RuntimeValue::Int(crate::runtime::IntValue::new(!i.value))
-                            }
-                            _ => {
-                                return Err(RaccoonError::new(
-                                    "Cannot apply bitwise not to non-integer value",
-                                    (0, 0),
-                                    None::<String>,
-                                ))
-                            }
+                    crate::tokens::UnaryOperator::BitwiseNot => match operand_val {
+                        RuntimeValue::Int(i) => {
+                            RuntimeValue::Int(crate::runtime::IntValue::new(!i.value))
                         }
-                    }
+                        _ => {
+                            return Err(RaccoonError::new(
+                                "Cannot apply bitwise not to non-integer value",
+                                (0, 0),
+                                None::<String>,
+                            ))
+                        }
+                    },
                 };
 
                 self.set_register(dest, result);
@@ -193,10 +181,7 @@ impl VM {
                 }
             }
 
-            Instruction::Label { .. } => {
-                // Labels are just markers, no execution needed
-                Ok(ExecutionResult::Continue)
-            }
+            Instruction::Label { .. } => Ok(ExecutionResult::Continue),
 
             Instruction::Call { dest, callee, args } => {
                 let callee_val = self.get_register(callee)?;
@@ -206,7 +191,6 @@ impl VM {
                     arg_values.push(self.get_register(arg)?);
                 }
 
-                // Execute function call
                 let result = self.call_function(callee_val, arg_values).await?;
                 self.set_register(dest, result);
                 Ok(ExecutionResult::Continue)
@@ -228,8 +212,6 @@ impl VM {
                 body: _,
                 is_async: _,
             } => {
-                // Create a closure/function value (simplified - storing as a native function for now)
-                // In a full implementation, we would store the IR body and execute it later
                 let function = RuntimeValue::Null(crate::runtime::NullValue::new());
                 self.set_register(dest, function);
                 Ok(ExecutionResult::Continue)
@@ -342,7 +324,9 @@ impl VM {
                         .cloned()
                         .unwrap_or(RuntimeValue::Null(crate::runtime::NullValue::new())),
                     RuntimeValue::Array(arr) => match property.as_str() {
-                        "length" => RuntimeValue::Int(crate::runtime::IntValue::new(arr.elements.len() as i64)),
+                        "length" => RuntimeValue::Int(crate::runtime::IntValue::new(
+                            arr.elements.len() as i64,
+                        )),
                         "first" => {
                             if arr.elements.is_empty() {
                                 RuntimeValue::Null(crate::runtime::NullValue::new())
@@ -353,12 +337,15 @@ impl VM {
                         _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
                     },
                     RuntimeValue::Str(s) => match property.as_str() {
-                        "length" => RuntimeValue::Int(crate::runtime::IntValue::new(s.value.len() as i64)),
-                        "isEmpty" => RuntimeValue::Bool(crate::runtime::BoolValue::new(s.value.is_empty())),
+                        "length" => {
+                            RuntimeValue::Int(crate::runtime::IntValue::new(s.value.len() as i64))
+                        }
+                        "isEmpty" => {
+                            RuntimeValue::Bool(crate::runtime::BoolValue::new(s.value.is_empty()))
+                        }
                         _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
                     },
                     RuntimeValue::ClassInstance(instance) => {
-                        // Try to get property from instance
                         if let Some(value) = instance.properties.read().unwrap().get(property) {
                             value.clone()
                         } else {
@@ -415,7 +402,6 @@ impl VM {
                     arg_values.push(self.get_register(arg)?);
                 }
 
-                // Call method on object
                 let result = self.call_method(object_val, method, arg_values).await?;
                 self.set_register(dest, result);
                 Ok(ExecutionResult::Continue)
@@ -431,7 +417,6 @@ impl VM {
                     arg_values.push(self.get_register(arg)?);
                 }
 
-                // Create new instance (simplified)
                 let instance = RuntimeValue::Object(crate::runtime::ObjectValue::new(
                     HashMap::new(),
                     crate::ast::types::PrimitiveType::any(),
@@ -468,7 +453,7 @@ impl VM {
                 type_name,
             } => {
                 let operand_val = self.get_register(operand)?;
-                // Simplified instanceof check
+
                 let is_instance = Self::get_type_name(&operand_val) == *type_name;
                 let result = RuntimeValue::Bool(crate::runtime::BoolValue::new(is_instance));
                 self.set_register(dest, result);
@@ -574,7 +559,6 @@ impl VM {
                         if *is_prefix {
                             RuntimeValue::Int(crate::runtime::IntValue::new(new_val))
                         } else {
-                            // Post-increment returns old value
                             self.set_register(
                                 operand,
                                 RuntimeValue::Int(crate::runtime::IntValue::new(new_val)),
@@ -608,7 +592,6 @@ impl VM {
                         if *is_prefix {
                             RuntimeValue::Int(crate::runtime::IntValue::new(new_val))
                         } else {
-                            // Post-decrement returns old value
                             self.set_register(
                                 operand,
                                 RuntimeValue::Int(crate::runtime::IntValue::new(new_val)),
@@ -654,10 +637,8 @@ impl VM {
             } => {
                 let scrutinee_val = self.get_register(scrutinee)?;
 
-                // Try each arm in order
                 for arm in arms {
                     if self.matches_pattern(&scrutinee_val, &arm.pattern)? {
-                        // Check guard if present
                         if let Some(guard_reg) = &arm.guard {
                             let guard_val = self.get_register(guard_reg)?;
                             if !crate::interpreter::operators::is_truthy(&guard_val) {
@@ -665,7 +646,6 @@ impl VM {
                             }
                         }
 
-                        // Execute arm body
                         let mut arm_vm = VM::new(self.environment.clone());
                         let arm_program = IRProgram {
                             instructions: arm.body.clone(),
@@ -678,7 +658,6 @@ impl VM {
                     }
                 }
 
-                // No match found
                 return Err(RaccoonError::new(
                     "No matching pattern in match expression",
                     (0, 0),
@@ -690,7 +669,6 @@ impl VM {
                 let start_val = self.get_register(start)?;
                 let end_val = self.get_register(end)?;
 
-                // Create a range object (simplified)
                 let mut props = HashMap::new();
                 props.insert("start".to_string(), start_val);
                 props.insert("end".to_string(), end_val);
@@ -771,15 +749,9 @@ impl VM {
                 Ok(ExecutionResult::Continue)
             }
 
-            Instruction::Break => {
-                // Break is handled by loop instructions
-                Ok(ExecutionResult::Continue)
-            }
+            Instruction::Break => Ok(ExecutionResult::Continue),
 
-            Instruction::Continue => {
-                // Continue is handled by loop instructions
-                Ok(ExecutionResult::Continue)
-            }
+            Instruction::Continue => Ok(ExecutionResult::Continue),
 
             Instruction::ForIn {
                 variable,
@@ -791,7 +763,6 @@ impl VM {
                 match obj_val {
                     RuntimeValue::Object(obj) => {
                         for key in obj.properties.keys() {
-                            // Create a new scope for each iteration
                             let mut loop_env = self.environment.clone();
                             loop_env.push_scope();
                             loop_env.declare(
@@ -810,7 +781,6 @@ impl VM {
                     }
                     RuntimeValue::Array(arr) => {
                         for (i, _) in arr.elements.iter().enumerate() {
-                            // Create a new scope for each iteration
                             let mut loop_env = self.environment.clone();
                             loop_env.push_scope();
                             loop_env.declare(
@@ -849,7 +819,6 @@ impl VM {
                 match iter_val {
                     RuntimeValue::Array(arr) => {
                         for elem in arr.elements {
-                            // Create a new scope for each iteration
                             let mut loop_env = self.environment.clone();
                             loop_env.push_scope();
                             loop_env.declare(variable.clone(), elem)?;
@@ -923,7 +892,6 @@ impl VM {
             }
 
             Instruction::LoadThis { dest } => {
-                // Simplified: load 'this' (in a full implementation, track current 'this')
                 let this_val = RuntimeValue::Object(crate::runtime::ObjectValue::new(
                     HashMap::new(),
                     crate::ast::types::PrimitiveType::any(),
@@ -937,7 +905,6 @@ impl VM {
                 method: _,
                 args: _,
             } => {
-                // Simplified: super call (full implementation would require inheritance tracking)
                 self.set_register(dest, RuntimeValue::Null(crate::runtime::NullValue::new()));
                 Ok(ExecutionResult::Continue)
             }
@@ -948,7 +915,6 @@ impl VM {
                 methods: _,
                 properties: _,
             } => {
-                // Create a class value
                 let class = RuntimeValue::Object(crate::runtime::ObjectValue::new(
                     HashMap::new(),
                     crate::ast::types::PrimitiveType::any(),
@@ -959,24 +925,21 @@ impl VM {
 
             Instruction::SpreadArray { dest, operand } => {
                 let val = self.get_register(operand)?;
-                // For now, just pass through the value
-                // In a full implementation, this would be handled by CreateArray
+
                 self.set_register(dest, val);
                 Ok(ExecutionResult::Continue)
             }
 
             Instruction::SpreadObject { dest, operand } => {
                 let val = self.get_register(operand)?;
-                // For now, just pass through the value
-                // In a full implementation, this would be handled by CreateObject
+
                 self.set_register(dest, val);
                 Ok(ExecutionResult::Continue)
             }
 
             Instruction::SpreadCall { dest, operand } => {
                 let val = self.get_register(operand)?;
-                // For now, just pass through the value
-                // In a full implementation, this would expand arguments in a call
+
                 self.set_register(dest, val);
                 Ok(ExecutionResult::Continue)
             }
@@ -986,7 +949,6 @@ impl VM {
                 path: _,
                 items: _,
             } => {
-                // Simplified: return a module object
                 let module = RuntimeValue::Object(crate::runtime::ObjectValue::new(
                     HashMap::new(),
                     crate::ast::types::PrimitiveType::any(),
@@ -995,10 +957,7 @@ impl VM {
                 Ok(ExecutionResult::Continue)
             }
 
-            Instruction::Export { name: _, value: _ } => {
-                // Export is handled at compile time mostly
-                Ok(ExecutionResult::Continue)
-            }
+            Instruction::Export { name: _, value: _ } => Ok(ExecutionResult::Continue),
 
             Instruction::CompoundAssign { dest, src, op } => {
                 let dest_val = self.get_register(dest)?;
@@ -1020,14 +979,14 @@ impl VM {
 
             Instruction::GetIterator { dest, iterable } => {
                 let iter_val = self.get_register(iterable)?;
-                // Simplified: return the iterable itself
+
                 self.set_register(dest, iter_val);
                 Ok(ExecutionResult::Continue)
             }
 
             Instruction::IteratorNext { dest, iterator } => {
                 let _iter = self.get_register(iterator)?;
-                // Simplified: return done=true
+
                 let mut result = HashMap::new();
                 result.insert(
                     "done".to_string(),
@@ -1047,14 +1006,12 @@ impl VM {
                 params: _,
                 body: _,
             } => {
-                // Simplified: create a generator function as null for now
                 let gen = RuntimeValue::Null(crate::runtime::NullValue::new());
                 self.set_register(dest, gen);
                 Ok(ExecutionResult::Continue)
             }
 
             Instruction::Yield { value } => {
-                // Simplified: just return the value
                 let val = if let Some(v) = value {
                     self.get_register(v)?
                 } else {
@@ -1067,15 +1024,9 @@ impl VM {
                 dest: _,
                 promise: _,
                 handler: _,
-            } => {
-                // Promise catch - simplified implementation
-                Ok(ExecutionResult::Continue)
-            }
+            } => Ok(ExecutionResult::Continue),
 
-            Instruction::Finally { block: _ } => {
-                // Finally block - already handled in TryCatch
-                Ok(ExecutionResult::Continue)
-            }
+            Instruction::Finally { block: _ } => Ok(ExecutionResult::Continue),
 
             Instruction::TaggedTemplate {
                 dest,
@@ -1092,8 +1043,6 @@ impl VM {
                     values.push(self.get_register(expr_reg)?);
                 }
 
-                // Call the tag function with strings and values
-                // Simplified: just concatenate for now
                 let mut result = String::new();
                 for (i, part) in strings.iter().enumerate() {
                     result.push_str(part);
@@ -1109,7 +1058,7 @@ impl VM {
 
             Instruction::NullAssert { dest, value } => {
                 let val = self.get_register(value)?;
-                // Check if null and throw if so
+
                 if matches!(val, RuntimeValue::Null(_)) {
                     return Err(RaccoonError::new(
                         "Null assertion failed",
@@ -1164,7 +1113,6 @@ impl VM {
         }
     }
 
-    /// Get the type name of a runtime value
     fn get_type_name(value: &RuntimeValue) -> String {
         match value {
             RuntimeValue::Int(_) => "int".to_string(),
@@ -1191,7 +1139,6 @@ impl VM {
         }
     }
 
-    /// Check if a value matches a pattern
     fn matches_pattern(
         &self,
         value: &RuntimeValue,
@@ -1199,19 +1146,10 @@ impl VM {
     ) -> Result<bool, RaccoonError> {
         match pattern {
             MatchPattern::Wildcard => Ok(true),
-            MatchPattern::Literal(lit) => {
-                // Simplified comparison
-                Ok(value.to_string() == lit.to_string())
-            }
-            MatchPattern::Variable(_) => Ok(true), // Variable patterns always match
-            MatchPattern::Array(_) => {
-                // Simplified array pattern matching
-                Ok(matches!(value, RuntimeValue::Array(_)))
-            }
-            MatchPattern::Object(_) => {
-                // Simplified object pattern matching
-                Ok(matches!(value, RuntimeValue::Object(_)))
-            }
+            MatchPattern::Literal(lit) => Ok(value.to_string() == lit.to_string()),
+            MatchPattern::Variable(_) => Ok(true),
+            MatchPattern::Array(_) => Ok(matches!(value, RuntimeValue::Array(_))),
+            MatchPattern::Object(_) => Ok(matches!(value, RuntimeValue::Object(_))),
             MatchPattern::Or(patterns) => {
                 for p in patterns {
                     if self.matches_pattern(value, p)? {
@@ -1224,39 +1162,23 @@ impl VM {
         }
     }
 
-    /// Call a function
     async fn call_function(
         &mut self,
         callee: RuntimeValue,
         args: Vec<RuntimeValue>,
     ) -> Result<RuntimeValue, RaccoonError> {
         match callee {
-            RuntimeValue::NativeFunction(func) => {
-                Ok((func.implementation)(args))
-            }
-            RuntimeValue::NativeAsyncFunction(func) => {
-                Ok((func.implementation)(args).await)
-            }
-            RuntimeValue::Function(_) => {
-                // TODO: Implement user-defined function calls
-                // This would require:
-                // 1. Setting up a new scope
-                // 2. Binding parameters
-                // 3. Executing the function body
-                // 4. Managing the call stack
-                Ok(RuntimeValue::Null(crate::runtime::NullValue::new()))
-            }
-            _ => {
-                Err(RaccoonError::new(
-                    "Cannot call non-function value",
-                    (0, 0),
-                    None::<String>,
-                ))
-            }
+            RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
+            RuntimeValue::NativeAsyncFunction(func) => Ok((func.implementation)(args).await),
+            RuntimeValue::Function(_) => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
+            _ => Err(RaccoonError::new(
+                "Cannot call non-function value",
+                (0, 0),
+                None::<String>,
+            )),
         }
     }
 
-    /// Call a method on an object
     async fn call_method(
         &mut self,
         object: RuntimeValue,
@@ -1265,7 +1187,6 @@ impl VM {
     ) -> Result<RuntimeValue, RaccoonError> {
         match object {
             RuntimeValue::Object(obj) => {
-                // Try to get the method from the object
                 if let Some(method_val) = obj.properties.get(method) {
                     self.call_function(method_val.clone(), args).await
                 } else {
@@ -1277,19 +1198,12 @@ impl VM {
                 }
             }
             RuntimeValue::ClassInstance(_) => {
-                // For class instances, call the method from the class
-                // In a full implementation, would look up the method in the class definition
                 Ok(RuntimeValue::Null(crate::runtime::NullValue::new()))
             }
-            _ => {
-                // For other types, try to use the type handler
-                // This would use the runtime type system to find the method
-                Ok(RuntimeValue::Null(crate::runtime::NullValue::new()))
-            }
+            _ => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
         }
     }
 
-    /// Get a register value
     fn get_register(&self, reg: &Register) -> Result<RuntimeValue, RaccoonError> {
         let key = reg.to_string();
         self.registers.get(&key).cloned().ok_or_else(|| {
@@ -1301,20 +1215,17 @@ impl VM {
         })
     }
 
-    /// Set a register value
     fn set_register(&mut self, reg: &Register, value: RuntimeValue) {
         let key = reg.to_string();
         self.registers.insert(key, value);
     }
 
-    /// Resolve a label to an instruction position
     fn resolve_label(&self, label: &str) -> Option<usize> {
         self.program
             .as_ref()
             .and_then(|p| p.labels.get(label).copied())
     }
 
-    /// Get the current program length
     fn get_program_len(&self) -> usize {
         self.program
             .as_ref()
@@ -1322,13 +1233,11 @@ impl VM {
             .unwrap_or(0)
     }
 
-    /// Get an instruction at a specific position
     fn get_instruction(&self, pos: usize) -> &Instruction {
         &self.program.as_ref().unwrap().instructions[pos]
     }
 }
 
-/// Result of executing an instruction
 enum ExecutionResult {
     Continue,
     Return(RuntimeValue),

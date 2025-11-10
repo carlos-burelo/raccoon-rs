@@ -1,9 +1,9 @@
-// Test: String literals as object keys (comillas en nombres de propiedades)
+
 
 async fn main(): void {
     print("Testing string literals as object keys...")
 
-    // Test 1: Object with string keys including special characters
+    
     let headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer token123",
@@ -15,7 +15,7 @@ async fn main(): void {
     print("  Authorization:", headers["Authorization"])
     print("  X-Custom-Header:", headers["X-Custom-Header"])
 
-    // Test 2: Mixed identifiers and string keys
+    
     let data = {
         name: "Carlos",
         "full-name": "Carlos López",
@@ -29,7 +29,7 @@ async fn main(): void {
     print("  age:", data.age)
     print("  user-id:", data["user-id"])
 
-    // Test 3: Nested objects with string keys
+    
     let config = {
         "api": {
             "base-url": "https://api.example.com",

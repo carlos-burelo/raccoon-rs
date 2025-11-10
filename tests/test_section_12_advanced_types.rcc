@@ -1,14 +1,14 @@
-// TEST: Section 12 - Advanced Types
+
 
 print("Testing Advanced Types...")
 
-// 12.1 Union types
+
 type IntOrStr = int | str
 let unionInt: IntOrStr = 42
 let unionStr: IntOrStr = "hello"
 print(`  ✓ Union types: ${unionInt}, ${unionStr}`)
 
-// 12.2 Intersection types
+
 interface IHasName {
     name: str
 }
@@ -19,39 +19,39 @@ type NameAndAge = IHasName & IHasAge
 let intersection: NameAndAge = { name: "Bob", age: 25 }
 print(`  ✓ Intersection types: ${intersection}`)
 
-// 12.3 Nullable types
+
 let nullable1: int? = 42
 let nullable2: int? = null
 let nullCheck: bool = nullable1 != null
 print(`  ✓ Nullable types: ${nullable1}, ${nullable2}, check=${nullCheck}`)
 
-// 12.4 Array types
+
 let intArr: int[] = [1, 2, 3]
 let strArr: str[] = ["a", "b"]
 let nestedArr: int[][] = [[1, 2], [3, 4]]
 print(`  ✓ Array types: int[], str[], int[][]`)
 
-// 12.5 Tuple types
+
 let tuple: [int, str, bool] = [42, "hello", true]
 let tupleFirst: int = tuple[0]
 let tupleSecond: str = tuple[1]
 print(`  ✓ Tuple types: ${tupleFirst}, ${tupleSecond}`)
 
-// 12.6 Object types
+
 let objType: { x: int, y: int } = { x: 10, y: 20 }
 print(`  ✓ Object types: ${objType}`)
 
-// 12.7 Function types
+
 let funcType: (int, int) => int = (a: int, b: int): int => a + b
 let funcTypeResult: int = funcType(5, 10)
 print(`  ✓ Function types: ${funcTypeResult}`)
 
-// 12.8 Readonly types
+
 type ReadonlyPoint = readonly { x: int, y: int }
 let readonlyObj: ReadonlyPoint = { x: 10, y: 20 }
 print(`  ✓ Readonly types: ${readonlyObj}`)
 
-// 12.9 KeyOf type operator
+
 interface IUser {
     name: str
     age: int
@@ -59,7 +59,7 @@ interface IUser {
 type UserKeys = keyof IUser
 print(`  ✓ KeyOf operator: defined`)
 
-// 12.10 TypeOf operator
+
 let someValue: int = 42
 let typeofVal: any = typeof someValue
 print(`  ✓ TypeOf operator: ${typeofVal}`)

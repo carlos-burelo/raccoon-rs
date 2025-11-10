@@ -1,4 +1,3 @@
-// Special types module - meta-types and special constructs
 pub mod enum_type;
 pub mod intersection;
 pub mod never;
@@ -8,7 +7,6 @@ pub mod symbol;
 pub mod union;
 pub mod void;
 
-// Re-export for convenience
 pub use enum_type::EnumType;
 pub use intersection::IntersectionType;
 pub use never::NeverType;

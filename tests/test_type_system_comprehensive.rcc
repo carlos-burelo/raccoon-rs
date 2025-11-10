@@ -1,19 +1,14 @@
-// Comprehensive test for the new type system features
-
-// ============================================================
-// 1. TUPLE TYPES
-// ============================================================
 type Coordinate = [int, int];
 type RGB = [int, int, int];
-type Person = [str, int]; // name, age
+type Person = [str, int]; 
 
 let coord: Coordinate;
 let color: RGB;
 let alice: Person;
 
-// ============================================================
-// 2. OBJECT INLINE TYPES WITH OPTIONAL AND READONLY
-// ============================================================
+
+
+
 type User = {
     readonly id: int,
     name: str,
@@ -33,9 +28,9 @@ let user2: User = {
     age: 30
 };
 
-// ============================================================
-// 3. UNION TYPES
-// ============================================================
+
+
+
 type StringOrNumber = str | int;
 type Status = str | int | bool;
 type MaybeString = str | null;
@@ -45,30 +40,30 @@ let value2: StringOrNumber = 42;
 let status: Status = true;
 let maybeText: MaybeString = null;
 
-// ============================================================
-// 4. INTERSECTION TYPES
-// ============================================================
+
+
+
 type HasName = { name: str };
 type HasAge = { age: int };
 type PersonInfo = HasName & HasAge;
 
-// ============================================================
-// 5. NEVER TYPE
-// ============================================================
+
+
+
 type NeverOrString = never | str;
 let result: NeverOrString = "success";
 
-// ============================================================
-// 6. READONLY TYPE
-// ============================================================
+
+
+
 type ReadonlyString = readonly str;
 type ReadonlyConfig = readonly { host: str, port: int };
 
 let immutableText: ReadonlyString = "cannot change";
 
-// ============================================================
-// 7. COMPLEX NESTED TYPES
-// ============================================================
+
+
+
 type ApiResponse = {
     readonly status: int,
     data: {
@@ -90,26 +85,26 @@ let config: Config = {
     headers: {}
 };
 
-// ============================================================
-// 8. ARRAYS OF COMPLEX TYPES
-// ============================================================
+
+
+
 type UserArray = User[];
 type CoordinateArray = Coordinate[];
 
 let users: UserArray = [];
 let coordinates: CoordinateArray = [];
 
-// ============================================================
-// 9. NULLABLE COMPLEX TYPES
-// ============================================================
+
+
+
 type NullableUser = User?;
 type NullableCoordinate = Coordinate?;
 
 let optionalUser: NullableUser = null;
 
-// ============================================================
-// 10. COMBINATION OF FEATURES
-// ============================================================
+
+
+
 type ComplexType = {
     readonly id: int,
     data: StringOrNumber[],
@@ -118,9 +113,9 @@ type ComplexType = {
     users: User[]
 };
 
-// ============================================================
-// 11. FUNCTIONS WITH ADVANCED TYPES
-// ============================================================
+
+
+
 fn processString(value: StringOrNumber): void {
     print(value);
 }
@@ -137,9 +132,9 @@ fn processOptional(value: MaybeString): void {
     print(value);
 }
 
-// ============================================================
-// 12. TESTING THE FUNCTIONS
-// ============================================================
+
+
+
 processString("hello");
 processString(42);
 
@@ -149,9 +144,9 @@ print(testUser.name);
 processOptional("text");
 processOptional(null);
 
-// ============================================================
-// 13. NESTED OBJECT TYPES
-// ============================================================
+
+
+
 type NestedType = {
     level1: {
         level2: {
@@ -160,7 +155,7 @@ type NestedType = {
     }
 };
 
-// ============================================================
-// FINAL OUTPUT
-// ============================================================
+
+
+
 print("All advanced type system tests completed successfully!");

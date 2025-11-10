@@ -1,14 +1,9 @@
-/// Refactored CharType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// CharType - Single character
-// ============================================================================
 
 pub struct CharType;
 
@@ -38,7 +33,6 @@ impl TypeHandler for CharType {
         };
 
         match method {
-            // Conversion methods
             "toString" | "toStr" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(ch.to_string())))
@@ -48,7 +42,6 @@ impl TypeHandler for CharType {
                 Ok(RuntimeValue::Int(IntValue::new(ch as i64)))
             }
 
-            // Predicate methods
             "isDigit" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Bool(BoolValue::new(ch.is_numeric())))
@@ -62,7 +55,6 @@ impl TypeHandler for CharType {
                 Ok(RuntimeValue::Bool(BoolValue::new(ch.is_whitespace())))
             }
 
-            // Case conversion methods
             "toUpperCase" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(

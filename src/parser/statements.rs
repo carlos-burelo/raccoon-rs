@@ -5,7 +5,6 @@ use crate::{ast::nodes::*, RaccoonError, TokenType};
 pub struct Statements;
 
 impl Statements {
-    /// Parse a statement: block, if, while, for, switch, return, try, throw, break, continue, or expression statement
     pub fn statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         if Parser::match_token(state, &[TokenType::LeftBrace]) {
             return Ok(Stmt::Block(Block {
@@ -54,7 +53,6 @@ impl Statements {
         Self::expression_statement(state)
     }
 
-    /// Try statement: try { ... } catch(e: T) { ... } finally { ... }
     pub fn try_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
 
@@ -75,7 +73,6 @@ impl Statements {
 
             let mut error_type = None;
             if Parser::match_token(state, &[TokenType::Colon]) {
-                // TODO: Call parse_type() from types module
                 error_type = None;
             }
 
@@ -127,10 +124,9 @@ impl Statements {
         }))
     }
 
-    /// Throw statement: throw expr;
     pub fn throw_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
-        // TODO: Call expression() from expressions module
+
         let value = Expr::Identifier(Identifier {
             name: "TODO".to_string(),
             position,
@@ -139,11 +135,9 @@ impl Statements {
         Ok(Stmt::ThrowStmt(ThrowStmt { value, position }))
     }
 
-    /// Block statements: { stmt1; stmt2; ... }
     pub fn block_statements(state: &mut ParserState) -> Result<Vec<Stmt>, RaccoonError> {
         let mut statements = Vec::new();
         while !state.check(&TokenType::RightBrace) && !state.is_at_end() {
-            // TODO: Call declaration() from declarations module
             statements.push(Stmt::ExprStmt(ExprStmt {
                 expression: Expr::Identifier(Identifier {
                     name: "TODO".to_string(),
@@ -156,11 +150,10 @@ impl Statements {
         Ok(statements)
     }
 
-    /// If statement: if (condition) then_stmt else else_stmt
     pub fn if_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
         Parser::consume(state, TokenType::LeftParen, "Expected '(' after 'if'")?;
-        // TODO: Call expression() from expressions module
+
         let condition = Expr::Identifier(Identifier {
             name: "TODO".to_string(),
             position,
@@ -182,11 +175,10 @@ impl Statements {
         }))
     }
 
-    /// While statement: while (condition) body
     pub fn while_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
         Parser::consume(state, TokenType::LeftParen, "Expected '(' after 'while'")?;
-        // TODO: Call expression() from expressions module
+
         let condition = Expr::Identifier(Identifier {
             name: "TODO".to_string(),
             position,
@@ -201,7 +193,6 @@ impl Statements {
         }))
     }
 
-    /// For statement: for (init; condition; increment) body, or for-in/for-of
     pub fn for_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
         Parser::consume(state, TokenType::LeftParen, "Expected '(' after 'for'")?;
@@ -214,12 +205,10 @@ impl Statements {
 
             let mut type_annotation = None;
             if Parser::match_token(state, &[TokenType::Colon]) {
-                // TODO: Call parse_type() from types module
                 type_annotation = None;
             }
 
             if Parser::match_token(state, &[TokenType::In]) {
-                // TODO: Call expression() from expressions module
                 let iterable = Expr::Identifier(Identifier {
                     name: "TODO".to_string(),
                     position,
@@ -237,7 +226,6 @@ impl Statements {
             }
 
             if Parser::match_token(state, &[TokenType::Of]) {
-                // TODO: Call expression() from expressions module
                 let iterable = Expr::Identifier(Identifier {
                     name: "TODO".to_string(),
                     position,
@@ -259,7 +247,7 @@ impl Statements {
                 TokenType::Assign,
                 "Expected '=' in variable declaration",
             )?;
-            // TODO: Call expression() from expressions module
+
             let init_value = Expr::Identifier(Identifier {
                 name: "TODO".to_string(),
                 position,
@@ -277,14 +265,12 @@ impl Statements {
 
             let mut condition = None;
             if !state.check(&TokenType::Semicolon) {
-                // TODO: Call expression() from expressions module
                 condition = None;
             }
             Parser::optional_semicolon(state);
 
             let mut increment = None;
             if !state.check(&TokenType::RightParen) {
-                // TODO: Call expression() from expressions module
                 increment = None;
             }
             Parser::consume(
@@ -310,14 +296,12 @@ impl Statements {
 
         let mut condition = None;
         if !state.check(&TokenType::Semicolon) {
-            // TODO: Call expression() from expressions module
             condition = None;
         }
         Parser::optional_semicolon(state);
 
         let mut increment = None;
         if !state.check(&TokenType::RightParen) {
-            // TODO: Call expression() from expressions module
             increment = None;
         }
         Parser::consume(
@@ -336,7 +320,6 @@ impl Statements {
         }))
     }
 
-    /// Do-while statement: do body while (condition);
     pub fn do_while_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
         let body = Box::new(Self::statement(state)?);
@@ -346,7 +329,7 @@ impl Statements {
             "Expected 'while' after do-while body",
         )?;
         Parser::consume(state, TokenType::LeftParen, "Expected '(' after 'while'")?;
-        // TODO: Call expression() from expressions module
+
         let condition = Expr::Identifier(Identifier {
             name: "TODO".to_string(),
             position,
@@ -361,11 +344,10 @@ impl Statements {
         }))
     }
 
-    /// Switch statement: switch (discriminant) { case test1: ...; case test2: ...; default: ...; }
     pub fn switch_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
         Parser::consume(state, TokenType::LeftParen, "Expected '(' after 'switch'")?;
-        // TODO: Call expression() from expressions module
+
         let discriminant = Expr::Identifier(Identifier {
             name: "TODO".to_string(),
             position,
@@ -385,7 +367,6 @@ impl Statements {
 
         while !state.check(&TokenType::RightBrace) && !state.is_at_end() {
             if Parser::match_token(state, &[TokenType::Case]) {
-                // TODO: Call expression() from expressions module
                 let test = Some(Expr::Identifier(Identifier {
                     name: "TODO".to_string(),
                     position,
@@ -440,13 +421,11 @@ impl Statements {
         }))
     }
 
-    /// Return statement: return [expr];
     pub fn return_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
         let mut value = None;
 
         if !state.check(&TokenType::Semicolon) && !Parser::can_insert_semicolon(state) {
-            // TODO: Call expression() from expressions module
             value = None;
         }
 
@@ -454,9 +433,7 @@ impl Statements {
         Ok(Stmt::ReturnStmt(ReturnStmt { value, position }))
     }
 
-    /// Expression statement: expr;
     pub fn expression_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
-        // TODO: Call expression() from expressions module
         let expr = Expr::Identifier(Identifier {
             name: "TODO".to_string(),
             position: (0, 0),

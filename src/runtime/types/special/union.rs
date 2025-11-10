@@ -4,11 +4,6 @@ use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// UnionType - Union type (A | B)
-// ============================================================================
-// Note: Union types are typically compile-time only
-
 pub struct UnionType;
 
 #[async_trait]

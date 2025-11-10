@@ -11,7 +11,6 @@ use crate::{
 pub struct Declarations;
 
 impl Declarations {
-    /// Entry point dispatcher for declarations
     pub fn declaration(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let mut decorators = Vec::new();
 
@@ -58,7 +57,6 @@ impl Declarations {
             ));
         }
 
-        // TODO: Call statement() - needs to be from statements module
         Err(RaccoonError::new(
             "Expected declaration or statement",
             state.current_position(),
@@ -66,7 +64,6 @@ impl Declarations {
         ))
     }
 
-    /// Variable declaration: let x: T = init; or const x: T = init;
     pub fn var_declaration(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let is_constant = state.previous().unwrap().token_type == TokenType::Const;
 
@@ -84,7 +81,6 @@ impl Declarations {
         let mut type_annotation = PrimitiveType::any();
 
         if Parser::match_token(state, &[TokenType::Colon]) {
-            // TODO: Call parse_type() from types module
             type_annotation = PrimitiveType::any();
         }
 
@@ -117,7 +113,6 @@ impl Declarations {
         }))
     }
 
-    /// Function declaration: fn name<T>(params: Types): RetType { body }
     pub fn function_declaration(
         state: &mut ParserState,
         decorators: Vec<DecoratorDecl>,
@@ -157,7 +152,6 @@ impl Declarations {
         )?;
 
         let return_type = if Parser::match_token(state, &[TokenType::Colon]) {
-            // TODO: Call parse_type() from types module
             None
         } else {
             None
@@ -172,7 +166,7 @@ impl Declarations {
                 TokenType::LeftBrace,
                 "Expected '{' before function body",
             )?;
-            // TODO: Call block_statements() from statements module
+
             Vec::new()
         };
 
@@ -189,7 +183,6 @@ impl Declarations {
         }))
     }
 
-    /// Parse type parameters: <T, U extends Base>
     pub fn parse_type_parameters(
         state: &mut ParserState,
     ) -> Result<Vec<TypeParameter>, RaccoonError> {
@@ -207,7 +200,6 @@ impl Declarations {
 
             let mut constraint = None;
             if Parser::match_token(state, &[TokenType::Extends]) {
-                // TODO: Call parse_type() from types module
                 constraint = None;
             }
 
@@ -225,7 +217,6 @@ impl Declarations {
         Ok(type_params)
     }
 
-    /// Check if lookahead is class or interface (for export default detection)
     pub fn lookahead_is_class_or_interface(state: &ParserState) -> bool {
         if state.current + 1 >= state.tokens.len() {
             return false;
@@ -234,7 +225,6 @@ impl Declarations {
         next_token_type == TokenType::Class || next_token_type == TokenType::Interface
     }
 
-    /// Class declaration: class Name<T> extends Base implements I { ... }
     pub fn class_declaration(
         state: &mut ParserState,
         decorators: Vec<DecoratorDecl>,
@@ -374,7 +364,6 @@ impl Declarations {
         }))
     }
 
-    /// Parse class property: name: Type = init;
     pub fn parse_class_property(
         state: &mut ParserState,
         decorators: Vec<DecoratorDecl>,
@@ -385,12 +374,11 @@ impl Declarations {
             .clone();
 
         Parser::consume(state, TokenType::Colon, "Expected ':' after property name")?;
-        // TODO: Call parse_type() from types module
+
         let property_type = PrimitiveType::any();
 
         let mut initializer = None;
         if Parser::match_token(state, &[TokenType::Assign]) {
-            // TODO: Call expression() from expressions module
             initializer = None;
         }
 
@@ -405,7 +393,6 @@ impl Declarations {
         })
     }
 
-    /// Parse constructor: constructor(params: Types) { body }
     pub fn parse_constructor(state: &mut ParserState) -> Result<ConstructorDecl, RaccoonError> {
         let position = state.previous().unwrap().position;
 
@@ -426,7 +413,7 @@ impl Declarations {
             TokenType::LeftBrace,
             "Expected '{' before constructor body",
         )?;
-        // TODO: Call block_statements() from statements module
+
         let body = Vec::new();
 
         Ok(ConstructorDecl {
@@ -436,7 +423,6 @@ impl Declarations {
         })
     }
 
-    /// Parse class method: [static] [async] name(params: Types): RetType { body }
     pub fn parse_method(
         state: &mut ParserState,
         decorators: Vec<DecoratorDecl>,
@@ -467,7 +453,6 @@ impl Declarations {
         )?;
 
         let return_type = if Parser::match_token(state, &[TokenType::Colon]) {
-            // TODO: Call parse_type() from types module
             None
         } else {
             None
@@ -478,7 +463,7 @@ impl Declarations {
             TokenType::LeftBrace,
             "Expected '{' before method body",
         )?;
-        // TODO: Call block_statements() from statements module
+
         let body = Vec::new();
 
         Ok(ClassMethod {
@@ -493,7 +478,6 @@ impl Declarations {
         })
     }
 
-    /// Parse accessor (getter/setter): get/set name(params: Types): RetType { body }
     pub fn parse_accessor(
         state: &mut ParserState,
         kind: AccessorKind,
@@ -534,7 +518,6 @@ impl Declarations {
         }
 
         let return_type = if Parser::match_token(state, &[TokenType::Colon]) {
-            // TODO: Call parse_type() from types module
             None
         } else {
             None
@@ -545,7 +528,7 @@ impl Declarations {
             TokenType::LeftBrace,
             "Expected '{' before accessor body",
         )?;
-        // TODO: Call block_statements() from statements module
+
         let body = Vec::new();
 
         Ok(PropertyAccessor {
@@ -559,7 +542,6 @@ impl Declarations {
         })
     }
 
-    /// Parse decorator: @name or @name(arg1, arg2)
     pub fn parse_decorator(state: &mut ParserState) -> Result<DecoratorDecl, RaccoonError> {
         let position = state.previous().unwrap().position;
         let name = Parser::consume(state, TokenType::Identifier, "Expected decorator name")?
@@ -571,7 +553,6 @@ impl Declarations {
         if Parser::match_token(state, &[TokenType::LeftParen]) {
             if !state.check(&TokenType::RightParen) {
                 loop {
-                    // TODO: Call expression() from expressions module
                     args.push(Expr::Identifier(Identifier {
                         name: "TODO".to_string(),
                         position,
@@ -595,7 +576,6 @@ impl Declarations {
         })
     }
 
-    /// Parse function parameters: (name: Type, name2: Type2 = default, ...rest: Type3)
     pub fn function_parameters(state: &mut ParserState) -> Result<Vec<FnParam>, RaccoonError> {
         let mut params = Vec::new();
         let mut has_optional = false;
@@ -612,7 +592,7 @@ impl Declarations {
                         TokenType::Colon,
                         "Expected ':' after destructuring pattern",
                     )?;
-                    // TODO: Call parse_type() from types module
+
                     let param_type = PrimitiveType::any();
 
                     let is_optional = Parser::match_token(state, &[TokenType::Question]);
@@ -648,7 +628,7 @@ impl Declarations {
 
                     let is_optional = Parser::match_token(state, &[TokenType::Question]);
                     Parser::consume(state, TokenType::Colon, "Expected ':' after parameter name")?;
-                    // TODO: Call parse_type() from types module
+
                     let param_type = PrimitiveType::any();
 
                     if is_optional && is_rest {
@@ -670,7 +650,6 @@ impl Declarations {
 
                     let mut default_value = None;
                     if Parser::match_token(state, &[TokenType::Assign]) {
-                        // TODO: Call expression() from expressions module
                         default_value = None;
                     }
 
@@ -696,12 +675,13 @@ impl Declarations {
         Ok(params)
     }
 
-    /// Parse destructuring pattern: [a, b] or { x, y: z }
     pub fn parse_destructuring_pattern(
         state: &mut ParserState,
     ) -> Result<DestructuringPattern, RaccoonError> {
         if Parser::match_token(state, &[TokenType::LeftBracket]) {
-            return Ok(DestructuringPattern::Array(Self::parse_array_pattern(state)?));
+            return Ok(DestructuringPattern::Array(Self::parse_array_pattern(
+                state,
+            )?));
         }
         if Parser::match_token(state, &[TokenType::LeftBrace]) {
             return Ok(DestructuringPattern::Object(Self::parse_object_pattern(
@@ -715,7 +695,6 @@ impl Declarations {
         ))
     }
 
-    /// Parse list destructuring pattern: [a, b, ...rest]
     pub fn parse_array_pattern(state: &mut ParserState) -> Result<ArrayPattern, RaccoonError> {
         let position = state.previous().unwrap().position;
         let mut elements = Vec::new();
@@ -780,7 +759,6 @@ impl Declarations {
         })
     }
 
-    /// Parse object destructuring pattern: { x, y: z, ...rest }
     pub fn parse_object_pattern(state: &mut ParserState) -> Result<ObjectPattern, RaccoonError> {
         let position = state.previous().unwrap().position;
         let mut properties = Vec::new();
@@ -850,7 +828,6 @@ impl Declarations {
         })
     }
 
-    /// Interface declaration: interface Name<T> extends Base { ... }
     pub fn interface_declaration(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let name = Parser::consume(state, TokenType::Identifier, "Expected interface name")?
             .value
@@ -897,7 +874,7 @@ impl Declarations {
                             state.advance();
                             state.advance();
                         }
-                        // TODO: Call parse_type() from types module
+
                         param_types.push(PrimitiveType::any());
                         if !Parser::match_token(state, &[TokenType::Comma]) {
                             break;
@@ -914,7 +891,7 @@ impl Declarations {
                     TokenType::Colon,
                     "Expected ':' after method signature",
                 )?;
-                // TODO: Call parse_type() from types module
+
                 let return_type = PrimitiveType::any();
 
                 properties.push(InterfaceDeclProperty {
@@ -929,7 +906,7 @@ impl Declarations {
                 Parser::optional_semicolon(state);
             } else {
                 Parser::consume(state, TokenType::Colon, "Expected ':' after property name")?;
-                // TODO: Call parse_type() from types module
+
                 let prop_type = PrimitiveType::any();
                 properties.push(InterfaceDeclProperty {
                     name: prop_name,
@@ -955,7 +932,6 @@ impl Declarations {
         }))
     }
 
-    /// Enum declaration: enum Name { A, B = 1, ... }
     pub fn enum_declaration(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let name = Parser::consume(state, TokenType::Identifier, "Expected enum name")?
             .value
@@ -974,7 +950,6 @@ impl Declarations {
 
             let mut value = None;
             if Parser::match_token(state, &[TokenType::Assign]) {
-                // TODO: Call expression() from expressions module
                 value = None;
             }
 
@@ -997,7 +972,6 @@ impl Declarations {
         }))
     }
 
-    /// Type alias: type Name = Type;
     pub fn type_alias_declaration(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let name = Parser::consume(state, TokenType::Identifier, "Expected type alias name")?
             .value
@@ -1009,7 +983,7 @@ impl Declarations {
             TokenType::Assign,
             "Expected '=' after type alias name",
         )?;
-        // TODO: Call parse_type() from types module
+
         let alias_type = PrimitiveType::any();
 
         Parser::optional_semicolon(state);
@@ -1021,7 +995,6 @@ impl Declarations {
         }))
     }
 
-    /// Import declaration: import defaultName, { a, b as c } from 'module'; or import * as ns from 'module';
     pub fn import_declaration(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
         let mut default_import = None;
@@ -1080,7 +1053,6 @@ impl Declarations {
         }))
     }
 
-    /// Parse named imports: { a, b as c, d }
     pub fn parse_named_imports(
         state: &mut ParserState,
         named_imports: &mut Vec<ImportSpecifier>,
@@ -1105,13 +1077,11 @@ impl Declarations {
         Ok(())
     }
 
-    /// Export declaration: export { a, b as c } from 'module'; or export default expr; or export fn foo() { }
     pub fn export_declaration(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
 
         if Parser::match_token(state, &[TokenType::Default]) {
             if state.check(&TokenType::LeftBrace) && !Self::lookahead_is_class_or_interface(state) {
-                // TODO: Call expression() from expressions module
                 let expression = Expr::Identifier(Identifier {
                     name: "TODO".to_string(),
                     position,
@@ -1203,7 +1173,6 @@ impl Declarations {
         }))
     }
 
-    /// Helper: Check if next two tokens match types (used in class member detection)
     pub fn check_next_next(state: &ParserState, types: &[TokenType]) -> bool {
         if state.current + 2 >= state.tokens.len() {
             return false;

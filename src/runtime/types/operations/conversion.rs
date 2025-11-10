@@ -1,14 +1,9 @@
-/// Type conversion module
-/// Provides comprehensive type conversion utilities with proper error handling
-/// Extends casting.rs with more conversion helpers
 use crate::error::RaccoonError;
 use crate::runtime::{BoolValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 
-/// Result of a type conversion attempt
 pub type ConversionResult = Result<RuntimeValue, ConversionError>;
 
-/// Detailed error information for type conversions
 #[derive(Debug, Clone)]
 pub enum ConversionError {
     InvalidType { from: String, to: String },
@@ -36,8 +31,6 @@ impl std::fmt::Display for ConversionError {
     }
 }
 
-/// Converts a RuntimeValue to a string representation
-/// Similar to JavaScript's String() constructor
 pub fn to_string(value: &RuntimeValue) -> String {
     match value {
         RuntimeValue::Str(s) => s.value.clone(),
@@ -86,8 +79,6 @@ pub fn to_string(value: &RuntimeValue) -> String {
     }
 }
 
-/// Converts a RuntimeValue to a number (int or float)
-/// Similar to JavaScript's Number() constructor
 pub fn to_number(value: &RuntimeValue) -> ConversionResult {
     match value {
         RuntimeValue::Int(i) => Ok(RuntimeValue::Int(IntValue::new(i.value))),
@@ -122,14 +113,11 @@ pub fn to_number(value: &RuntimeValue) -> ConversionResult {
     }
 }
 
-/// Converts a RuntimeValue to a boolean
-/// Similar to JavaScript's Boolean() constructor
 pub fn to_boolean(value: &RuntimeValue) -> RuntimeValue {
     use super::type_narrowing::is_truthy;
     RuntimeValue::Bool(BoolValue::new(is_truthy(value)))
 }
 
-/// Converts a RuntimeValue to an integer, with optional range checking
 pub fn to_integer(value: &RuntimeValue) -> ConversionResult {
     match to_number(value)? {
         RuntimeValue::Int(i) => Ok(RuntimeValue::Int(i)),
@@ -150,7 +138,6 @@ pub fn to_integer(value: &RuntimeValue) -> ConversionResult {
     }
 }
 
-/// Converts a RuntimeValue to a float
 pub fn to_float(value: &RuntimeValue) -> ConversionResult {
     match to_number(value)? {
         RuntimeValue::Float(f) => Ok(RuntimeValue::Float(f)),
@@ -162,7 +149,6 @@ pub fn to_float(value: &RuntimeValue) -> ConversionResult {
     }
 }
 
-/// Converts a Raccoon error to a standard error message
 pub fn error_to_raccoon_error(
     err: ConversionError,
     position: Position,
@@ -171,7 +157,6 @@ pub fn error_to_raccoon_error(
     RaccoonError::new(err.to_string(), position, file)
 }
 
-/// Safely attempts a conversion and returns a RaccoonError on failure
 pub fn safe_convert(
     value: RuntimeValue,
     target_type: &str,

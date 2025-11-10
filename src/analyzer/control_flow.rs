@@ -211,8 +211,6 @@ pub fn check_switch_stmt(
     for case in &stmt.cases {
         if let Some(ref test) = case.test {
             let test_type = analyzer.check_expr(test)?;
-            // Check that test type is comparable with discriminant type
-            // For now, we'll allow any comparison
             let _ = (discriminant_type.clone(), test_type);
         }
 

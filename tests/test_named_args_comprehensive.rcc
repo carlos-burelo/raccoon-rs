@@ -1,8 +1,8 @@
-// Test completo de argumentos nombrados
+
 print("=== Test Completo de Argumentos Nombrados ===");
 print("");
 
-// Test 1: Argumentos nombrados en orden diferente
+
 print("Test 1: Argumentos nombrados en orden diferente");
 fn configure(host: str, port: int, ssl: bool): void {
     print("Host:", host, "Port:", port, "SSL:", ssl);
@@ -12,7 +12,7 @@ configure(host: "localhost", port: 8080, ssl: true);
 configure(ssl: false, host: "example.com", port: 3000);
 print("");
 
-// Test 2: Valores por defecto con argumentos nombrados
+
 print("Test 2: Valores por defecto");
 fn createUser(name: str, age: int = 18, active: bool = true): void {
     print("Name:", name, "Age:", age, "Active:", active);
@@ -24,7 +24,7 @@ createUser(name: "Charlie", active: false);
 createUser(name: "Diana", age: 30, active: false);
 print("");
 
-// Test 3: Mezcla de posicionales y nombrados
+
 print("Test 3: Mezcla de posicionales y nombrados");
 fn bookFlight(origin: str, destination: str, flightDate: str, flightClass: str = "economy"): void {
     print("From:", origin, "To:", destination, "Date:", flightDate, "Class:", flightClass);
@@ -35,7 +35,7 @@ bookFlight("Madrid", "Barcelona", "2024-01-15", "business");
 bookFlight("Madrid", destination: "Barcelona", flightDate: "2024-01-15");
 print("");
 
-// Test 4: Funciones con retorno usando argumentos nombrados
+
 print("Test 4: Funciones con retorno");
 fn calculate(a: int, b: int, operation: str = "add"): int {
     if (operation == "add") {
@@ -56,7 +56,7 @@ let result3 = calculate(5, 3, operation: "multiply");
 print("5 * 3 =", result3);
 print("");
 
-// Test 5: Argumentos nombrados con diferentes tipos
+
 print("Test 5: Diferentes tipos de datos");
 fn formatMessage(text: str, repeat: int, uppercase: bool): str {
     let msg = uppercase ? text.toUpper() : text;
@@ -74,7 +74,7 @@ let msg2 = formatMessage(repeat: 2, text: "world", uppercase: false);
 print("Message 2:", msg2);
 print("");
 
-// Test 6: Solo argumentos nombrados (sin posicionales)
+
 print("Test 6: Solo argumentos nombrados");
 fn settings(debug: bool, verbose: bool, logLevel: str): void {
     print("Debug:", debug, "Verbose:", verbose, "LogLevel:", logLevel);

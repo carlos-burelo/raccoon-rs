@@ -1,4 +1,4 @@
-// Test for string stdlib high-level functions
+
 import {
     capitalize,
     title_case,
@@ -22,38 +22,38 @@ import {
 
 print("=== Testing String Stdlib ===\n");
 
-// Test capitalize
+
 print("Testing capitalize:");
 print("  capitalize('hello'):", capitalize("hello"));
 print("  capitalize('WORLD'):", capitalize("WORLD"));
 print("  capitalize(''):", capitalize(""));
 print("");
 
-// Test title_case
+
 print("Testing title_case:");
 print("  title_case('hello world'):", title_case("hello world"));
 print("  title_case('the quick brown fox'):", title_case("the quick brown fox"));
 print("");
 
-// Test is_empty
+
 print("Testing is_empty:");
 print("  is_empty(''):", is_empty(""));
 print("  is_empty('hello'):", is_empty("hello"));
 print("");
 
-// Test truncate
+
 print("Testing truncate:");
 print("  truncate('Hello World', 5, '...'):", truncate("Hello World", 5, "..."));
 print("  truncate('Hi', 10, '...'):", truncate("Hi", 10, "..."));
 print("");
 
-// Test padding
+
 print("Testing padding:");
 print("  pad_left('42', 5, '0'):", pad_left("42", 5, "0"));
 print("  pad_right('42', 5, '0'):", pad_right("42", 5, "0"));
 print("");
 
-// Test is_palindrome
+
 print("Testing is_palindrome:");
 print("  is_palindrome('racecar'):", is_palindrome("racecar"));
 print("  is_palindrome('hello'):", is_palindrome("hello"));
@@ -61,20 +61,20 @@ print("  is_palindrome('A'):", is_palindrome("A"));
 print("  is_palindrome(''):", is_palindrome(""));
 print("");
 
-// Test count
+
 print("Testing count:");
 print("  count('hello hello', 'll'):", count("hello hello", "ll"));
 print("  count('banana', 'a'):", count("banana", "a"));
 print("  count('test', 'x'):", count("test", "x"));
 print("");
 
-// Test remove
+
 print("Testing remove:");
 print("  remove('hello world', 'l'):", remove("hello world", "l"));
 print("  remove('test', 'x'):", remove("test", "x"));
 print("");
 
-// Test character type checks
+
 print("Testing character type checks:");
 print("  is_alpha('hello'):", is_alpha("hello"));
 print("  is_alpha('hello123'):", is_alpha("hello123"));
@@ -84,19 +84,19 @@ print("  is_alphanumeric('hello123'):", is_alphanumeric("hello123"));
 print("  is_alphanumeric('hello-123'):", is_alphanumeric("hello-123"));
 print("");
 
-// Test reverse_words
+
 print("Testing reverse_words:");
 print("  reverse_words('hello world'):", reverse_words("hello world"));
 print("  reverse_words('the quick brown fox'):", reverse_words("the quick brown fox"));
 print("");
 
-// Test repeat_with_sep
+
 print("Testing repeat_with_sep:");
 print("  repeat_with_sep('ha', 3, '-'):", repeat_with_sep("ha", 3, "-"));
 print("  repeat_with_sep('x', 0, ','):", repeat_with_sep("x", 0, ","));
 print("");
 
-// Test lines
+
 print("Testing lines:");
 let text = "line1\nline2\nline3";
 let text_lines = lines(text);
@@ -106,7 +106,7 @@ for (let i = 0; i < len(text_lines); i = i + 1) {
 }
 print("");
 
-// Test starts_with_any / ends_with_any
+
 print("Testing starts_with_any / ends_with_any:");
 let prefixes: str[] = ["hello", "hi", "hey"];
 let suffixes: str[] = [".txt", ".md", ".rs"];

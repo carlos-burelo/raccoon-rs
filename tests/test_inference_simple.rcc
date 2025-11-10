@@ -1,47 +1,47 @@
-// Test simple de inferencia de tipos en Raccoon
 
-// 1. Inferencia simple de literales
-let x = 42;              // Inferido como int
-let y = 3.14;            // Inferido como float
-let name = "Raccoon";    // Inferido como str
-let active = true;       // Inferido como bool
 
-// 2. Inferencia de listas homogéneas
-let numbers = [1, 2, 3, 4, 5];  // Inferido como int[]
-let strings = ["hello", "world"]; // Inferido como str[]
 
-// 3. Inferencia de listas con promoción numérica
-let mixed = [1, 2.5];  // Los int se promueven a float -> float[]
+let x = 42;              
+let y = 3.14;            
+let name = "Raccoon";    
+let active = true;       
 
-// 4. Inferencia con funciones
+
+let numbers = [1, 2, 3, 4, 5];  
+let strings = ["hello", "world"]; 
+
+
+let mixed = [1, 2.5];  
+
+
 fn add(a: int, b: int): int {
     return a + b;
 }
 
-let result = add(5, 10);  // result es int
+let result = add(5, 10);  
 
-// 5. Inferencia con arrow functions
-let multiply = (a: int, b: int) => a * b;  // Inferido como (int, int) => int
 
-// 6. Inferencia de rangos
-let range = 1..10;  // Inferido como int[]
+let multiply = (a: int, b: int) => a * b;  
 
-// 7. Inferencia con for-in
+
+let range = 1..10;  
+
+
 for (let num in numbers) {
-    // num es inferido como int (tipo del elemento de numbers)
+    
     let squared = num * num;
 }
 
-// 8. Inferencia de objetos anónimos
+
 let person = {
     name: "Alice",
     age: 30
 };
-// Inferido como { name: str, age: int }
 
-// 9. Inferencia con operaciones binarias
-let sum = 10 + 20;        // int
-let product = 5 * 2.5;    // float (promoción)
-let concat = "Hello" + " " + "World";  // str
+
+
+let sum = 10 + 20;        
+let product = 5 * 2.5;    
+let concat = "Hello" + " " + "World";  
 
 print("Type inference tests completed!");

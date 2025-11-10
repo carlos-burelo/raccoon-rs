@@ -1,4 +1,4 @@
-// Test de argumentos nombrados
+
 print("=== Test de argumentos nombrados ===");
 
 fn greet(name: str, age: int, city: str): void {
@@ -7,15 +7,15 @@ fn greet(name: str, age: int, city: str): void {
     print("City:", city);
 }
 
-// Llamada con argumentos posicionales
+
 print("\nLlamada posicional:");
 greet("Alice", 30, "Madrid");
 
-// Llamada con argumentos nombrados
+
 print("\nLlamada con argumentos nombrados:");
 greet(name: "Bob", age: 25, city: "Barcelona");
 
-// Llamada mixta (posicionales primero, luego nombrados)
+
 print("\nLlamada mixta:");
 greet("Charlie", age: 35, city: "Valencia");
 

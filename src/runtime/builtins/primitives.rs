@@ -1,9 +1,3 @@
-//! Primitive type registrations
-//! - int.parse(), int.MAX_VALUE, int.MIN_VALUE
-//! - str.fromCharCode(), str.empty
-//! - float.parse(), float constants (NaN, INFINITY, etc.)
-//! - bool (basic type)
-
 use crate::ast::types::PrimitiveType;
 use crate::fn_type;
 use crate::runtime::{

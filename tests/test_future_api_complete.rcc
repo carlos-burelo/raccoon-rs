@@ -1,20 +1,20 @@
-// Test completo de la API de Future/Promise en Raccoon
 
-// ==============================================
-// Test 1: Future.resolve() - Crear future resuelto
-// ==============================================
+
+
+
+
 print("=== Test 1: Future.resolve() ===")
 let resolved = Future.resolve(42)
 print(resolved)
 
 let result = await resolved
 print("Resultado de Future.resolve(42):", result)
-// Esperado: 42
 
 
-// ==============================================
-// Test 2: Future.reject() - Crear future rechazado
-// ==============================================
+
+
+
+
 print("\n=== Test 2: Future.reject() ===")
 let rejected = Future.reject("Error de prueba")
 print(rejected)
@@ -24,13 +24,13 @@ try {
     print("No debería llegar aquí")
 } catch (error) {
     print("Error capturado:", error)
-    // Esperado: "Error de prueba"
+    
 }
 
 
-// ==============================================
-// Test 3: .then() - Encadenar transformaciones
-// ==============================================
+
+
+
 print("\n=== Test 3: .then() con callback ===")
 
 async fn fetchData(): Future<int> {
@@ -47,12 +47,12 @@ let chained = Future.resolve(future1).then((value: any) => {
 
 let doubled = await chained
 print("Después de .then(x => x * 2):", doubled)
-// Esperado: 20
 
 
-// ==============================================
-// Test 4: .catch() - Manejo de errores
-// ==============================================
+
+
+
+
 print("\n=== Test 4: .catch() para errores ===")
 
 let errorFuture = Future.reject("Algo salió mal")
@@ -63,12 +63,12 @@ let recovered = errorFuture.catch((error: any) => {
 
 let recoveredValue = await recovered
 print("Valor después de .catch():", recoveredValue)
-// Esperado: "Valor recuperado"
 
 
-// ==============================================
-// Test 5: .then() con handler de rechazo
-// ==============================================
+
+
+
+
 print("\n=== Test 5: .then() con dos callbacks ===")
 
 let rejectedFuture = Future.reject("Error!")
@@ -85,12 +85,12 @@ let handled = rejectedFuture.then(
 
 let handledValue = await handled
 print("Resultado:", handledValue)
-// Esperado: "Manejado"
 
 
-// ==============================================
-// Test 6: .finally() - Limpieza
-// ==============================================
+
+
+
+
 print("\n=== Test 6: .finally() ===")
 
 let futureWithFinally = Future.resolve("OK")
@@ -100,12 +100,12 @@ let withCleanup = futureWithFinally.finally(() => {
 
 let finalResult = await withCleanup
 print("Resultado después de .finally():", finalResult)
-// Esperado: "OK"
 
 
-// ==============================================
-// Test 7: Future.all() - Múltiples futures exitosos
-// ==============================================
+
+
+
+
 print("\n=== Test 7: Future.all() con éxito ===")
 
 async fn task1(): Future<int> {
@@ -133,12 +133,12 @@ let futures = [
 let allResults = Future.all(futures)
 let combined = await allResults
 print("Future.all() resultados:", combined)
-// Esperado: [1, 2, 3]
 
 
-// ==============================================
-// Test 8: Future.all() - Con un error
-// ==============================================
+
+
+
+
 print("\n=== Test 8: Future.all() con error ===")
 
 let mixedFutures = [
@@ -152,13 +152,13 @@ try {
     print("No debería llegar aquí")
 } catch (error) {
     print("Error en Future.all():", error)
-    // Esperado: "Error en medio"
+    
 }
 
 
-// ==============================================
-// Test 9: Future.race() - Primera en resolver
-// ==============================================
+
+
+
 print("\n=== Test 9: Future.race() ===")
 
 let raceFutures = [
@@ -169,12 +169,12 @@ let raceFutures = [
 
 let raceWinner = await Future.race(raceFutures)
 print("Ganador de Future.race():", raceWinner)
-// Esperado: "Primera" (la primera resuelva)
 
 
-// ==============================================
-// Test 10: Encadenamiento complejo
-// ==============================================
+
+
+
+
 print("\n=== Test 10: Encadenamiento complejo ===")
 
 async fn complexOperation(): Future<int> {
@@ -201,12 +201,12 @@ let complexChain = Future.resolve(initialValue)
 
 let finalValue = await complexChain
 print("Valor final del encadenamiento:", finalValue)
-// Esperado: (5 + 5) * 2 - 3 = 17
 
 
-// ==============================================
-// Test 11: .then() retornando otro Future
-// ==============================================
+
+
+
+
 print("\n=== Test 11: .then() retornando Future ===")
 
 async fn nestedAsync(): Future<str> {
@@ -219,15 +219,15 @@ let nestedChain = outerFuture.then((value: any) => {
     return nestedAsync()
 })
 
-// El await interno debería manejar el future anidado
+
 let awaitedOuter = await nestedChain
 let nestedResult = await awaitedOuter
 print("Resultado anidado:", nestedResult)
 
 
-// ==============================================
-// RESUMEN
-// ==============================================
+
+
+
 print("\n=== RESUMEN ===")
 print("✓ Future.resolve() - OK")
 print("✓ Future.reject() - OK")

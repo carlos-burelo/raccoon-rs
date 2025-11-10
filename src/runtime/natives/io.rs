@@ -2,7 +2,6 @@ use crate::runtime::{FromRaccoon, Registrar, RuntimeValue, ToRaccoon};
 use std::fs;
 
 pub fn register_io_module(registrar: &mut Registrar) {
-    // read_file(path: string) -> string
     registrar.register_fn(
         "read_file",
         Some("io"),
@@ -17,7 +16,6 @@ pub fn register_io_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // write_file(path: string, content: string) -> bool
     registrar.register_fn(
         "write_file",
         Some("io"),
@@ -33,7 +31,6 @@ pub fn register_io_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // file_exists(path: string) -> bool
     registrar.register_fn(
         "file_exists",
         Some("io"),
@@ -45,7 +42,6 @@ pub fn register_io_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // delete_file(path: string) -> bool
     registrar.register_fn(
         "delete_file",
         Some("io"),

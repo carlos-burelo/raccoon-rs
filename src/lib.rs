@@ -1,22 +1,20 @@
+pub mod analyzer;
 pub mod ast;
 pub mod error;
 pub mod interpreter;
 pub mod ir;
 pub mod lexer;
-// pub mod output_style;
-pub mod analyzer;
 pub mod parser;
 pub mod runtime;
 pub mod symbol_table;
 pub mod tokens;
 pub mod type_system;
 
+pub use analyzer::SemanticAnalyzer;
 pub use error::RaccoonError;
 pub use interpreter::Interpreter;
 pub use ir::{IRCompiler, IROptimizer, Instruction, Register, VM};
 pub use lexer::Lexer;
-// pub use output_style::{Colors, Styles};
-pub use analyzer::SemanticAnalyzer;
 pub use parser::Parser;
 pub use runtime::{Environment, RuntimeValue};
 pub use symbol_table::{SymbolItem, SymbolKind, SymbolTable};

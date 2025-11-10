@@ -1,9 +1,5 @@
-/// Type narrowing module
-/// Provides type guards and type narrowing logic for runtime type checking
-/// Consolidates logic from src/type_system/inference.rs
 use crate::runtime::RuntimeValue;
 
-/// Represents a narrowed type based on runtime checks
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum NarrowedType {
     Int,
@@ -18,7 +14,6 @@ pub enum NarrowedType {
     Unknown,
 }
 
-/// Narrows a runtime value to a specific type based on its actual value
 pub fn narrow_type(value: &RuntimeValue) -> NarrowedType {
     match value {
         RuntimeValue::Int(_) => NarrowedType::Int,
@@ -45,7 +40,6 @@ pub fn narrow_type(value: &RuntimeValue) -> NarrowedType {
     }
 }
 
-/// Checks if a value matches a specific type using typeof operator
 pub fn typeof_check(value: &RuntimeValue, type_name: &str) -> bool {
     match type_name {
         "int" | "number" => matches!(
@@ -83,7 +77,6 @@ pub fn typeof_check(value: &RuntimeValue, type_name: &str) -> bool {
     }
 }
 
-/// Checks if a value is an instance of a specific class (instanceof operator)
 pub fn instanceof_check(value: &RuntimeValue, class_name: &str) -> bool {
     match value {
         RuntimeValue::ClassInstance(instance) => instance.class_name == class_name,
@@ -92,7 +85,6 @@ pub fn instanceof_check(value: &RuntimeValue, class_name: &str) -> bool {
     }
 }
 
-/// Checks if a value is truthy (used for type narrowing in conditionals)
 pub fn is_truthy(value: &RuntimeValue) -> bool {
     match value {
         RuntimeValue::Bool(b) => b.value,
@@ -106,12 +98,10 @@ pub fn is_truthy(value: &RuntimeValue) -> bool {
     }
 }
 
-/// Checks if a value is null or undefined
 pub fn is_null_or_undefined(value: &RuntimeValue) -> bool {
     matches!(value, RuntimeValue::Null(_))
 }
 
-/// Checks if a value is a numeric type
 pub fn is_numeric(value: &RuntimeValue) -> bool {
     matches!(
         value,
@@ -122,27 +112,22 @@ pub fn is_numeric(value: &RuntimeValue) -> bool {
     )
 }
 
-/// Checks if a value is an integer type
 pub fn is_integer(value: &RuntimeValue) -> bool {
     matches!(value, RuntimeValue::Int(_) | RuntimeValue::BigInt(_))
 }
 
-/// Checks if a value is a floating point type
 pub fn is_float(value: &RuntimeValue) -> bool {
     matches!(value, RuntimeValue::Float(_) | RuntimeValue::Decimal(_))
 }
 
-/// Checks if a value is a string type
 pub fn is_string(value: &RuntimeValue) -> bool {
     matches!(value, RuntimeValue::Str(_))
 }
 
-/// Checks if a value is a boolean type
 pub fn is_boolean(value: &RuntimeValue) -> bool {
     matches!(value, RuntimeValue::Bool(_))
 }
 
-/// Checks if a value is a collection type (list, map, object)
 pub fn is_collection(value: &RuntimeValue) -> bool {
     matches!(
         value,
@@ -150,7 +135,6 @@ pub fn is_collection(value: &RuntimeValue) -> bool {
     )
 }
 
-/// Checks if a value is a callable (function, class, async function)
 pub fn is_callable(value: &RuntimeValue) -> bool {
     matches!(
         value,

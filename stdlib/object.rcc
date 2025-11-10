@@ -1,10 +1,3 @@
-// Object stdlib - High-level object utilities
-// Native operations (keys, values, entries, has) are provided by the native module
-// Use native_object_keys(), native_object_values(), native_object_entries(), and native_object_has() directly
-
-/**
- * Creates a shallow copy of an object
- */
 export fn clone(obj: object): object {
     let result = {};
     let obj_keys = native_object_keys(obj);
@@ -17,9 +10,7 @@ export fn clone(obj: object): object {
     return result;
 }
 
-/**
- * Merges multiple objects into one
- */
+
 export fn merge(objects: object[]): object {
     let result = {};
 
@@ -36,9 +27,7 @@ export fn merge(objects: object[]): object {
     return result;
 }
 
-/**
- * Picks specific keys from an object
- */
+
 export fn pick(obj: object, pick_keys: str[]): object {
     let result = {};
 
@@ -52,9 +41,7 @@ export fn pick(obj: object, pick_keys: str[]): object {
     return result;
 }
 
-/**
- * Omits specific keys from an object
- */
+
 export fn omit(obj: object, omit_keys: str[]): object {
     let result = {};
     let obj_keys = native_object_keys(obj);
@@ -78,16 +65,12 @@ export fn omit(obj: object, omit_keys: str[]): object {
     return result;
 }
 
-/**
- * Checks if object is empty (has no keys)
- */
+
 export fn is_empty(obj: object): bool {
     return native_object_keys(obj).length == 0;
 }
 
-/**
- * Maps over object values
- */
+
 export fn map_values(obj: object, mapper: (value: any, key: str) => any): object {
     let result = {};
     let obj_keys = native_object_keys(obj);
@@ -100,9 +83,7 @@ export fn map_values(obj: object, mapper: (value: any, key: str) => any): object
     return result;
 }
 
-/**
- * Maps over object keys
- */
+
 export fn map_keys(obj: object, mapper: (key: str, value: any) => str): object {
     let result = {};
     let obj_keys = native_object_keys(obj);
@@ -116,9 +97,7 @@ export fn map_keys(obj: object, mapper: (key: str, value: any) => str): object {
     return result;
 }
 
-/**
- * Filters object by predicate
- */
+
 export fn filter(obj: object, predicate: (value: any, key: str) => bool): object {
     let result = {};
     let obj_keys = native_object_keys(obj);
@@ -133,9 +112,7 @@ export fn filter(obj: object, predicate: (value: any, key: str) => bool): object
     return result;
 }
 
-/**
- * Inverts object keys and values
- */
+
 export fn invert(obj: object): object {
     let result = {};
     let obj_keys = native_object_keys(obj);

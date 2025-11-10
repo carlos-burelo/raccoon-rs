@@ -6,7 +6,6 @@ use crate::runtime::{
 use std::collections::HashMap;
 
 pub fn register_http_module(registrar: &mut Registrar) {
-    // Register native_http_fetch_with_options function
     registrar.register_fn(
         "native_http_fetch_with_options",
         None::<&str>,
@@ -17,7 +16,6 @@ pub fn register_http_module(registrar: &mut Registrar) {
 
             let url = String::from_raccoon(&args[0]).unwrap_or_default();
 
-            // Parse options from second argument (if provided)
             let method = if args.len() > 1 {
                 if let RuntimeValue::Object(obj) = &args[1] {
                     if let Some(method_val) = obj.properties.get("method") {
@@ -32,7 +30,6 @@ pub fn register_http_module(registrar: &mut Registrar) {
                 "GET".to_string()
             };
 
-            // Create a simple HttpResponse object
             let mut response_properties = HashMap::new();
             response_properties.insert("status".to_string(), RuntimeValue::Int(IntValue::new(200)));
             response_properties.insert(
@@ -40,12 +37,10 @@ pub fn register_http_module(registrar: &mut Registrar) {
                 RuntimeValue::Str(StrValue::new("OK".to_string())),
             );
 
-            // Create empty headers map
             let headers_map =
                 MapValue::new(HashMap::new(), PrimitiveType::str(), PrimitiveType::str());
             response_properties.insert("headers".to_string(), RuntimeValue::Map(headers_map));
 
-            // Simulate a response body
             let body = format!(
                 "{{\"method\":\"{}\",\"url\":\"{}\",\"simulated\":true}}",
                 method, url
@@ -55,7 +50,6 @@ pub fn register_http_module(registrar: &mut Registrar) {
                 RuntimeValue::Str(StrValue::new(body.clone())),
             );
 
-            // Add json field (simulated)
             let mut json_properties = HashMap::new();
             json_properties.insert(
                 "method".to_string(),
@@ -71,7 +65,6 @@ pub fn register_http_module(registrar: &mut Registrar) {
 
             let response_obj = ObjectValue::new(response_properties, PrimitiveType::any());
 
-            // Return as a Future (for async support)
             RuntimeValue::Future(FutureValue::new_resolved(
                 RuntimeValue::Object(response_obj),
                 PrimitiveType::any(),
@@ -81,20 +74,18 @@ pub fn register_http_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // fetch(url: string) -> string (simplified - returns placeholder)
     registrar.register_fn(
         "fetch",
         Some("http"),
         |args| {
             let url = String::from_raccoon(&args[0]).unwrap_or_default();
-            // Simplified: just return the URL as a response
+
             format!("Fetched from: {}", url).to_raccoon()
         },
         1,
         Some(1),
     );
 
-    // get(url: string) -> string
     registrar.register_fn(
         "get",
         Some("http"),
@@ -106,7 +97,6 @@ pub fn register_http_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // post(url: string, body: string) -> string
     registrar.register_fn(
         "post",
         Some("http"),

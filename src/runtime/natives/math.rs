@@ -1,8 +1,6 @@
-/// Math functions: sqrt, pow, sin, cos, tan
 use crate::runtime::{FromRaccoon, Registrar, ToRaccoon};
 
 pub fn register_math_module(registrar: &mut Registrar) {
-    // sqrt(x: f64) -> f64
     registrar.register_fn(
         "sqrt",
         Some("math"),
@@ -14,7 +12,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // pow(base: f64, exp: f64) -> f64
     registrar.register_fn(
         "pow",
         Some("math"),
@@ -27,7 +24,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // sin(x: f64) -> f64
     registrar.register_fn(
         "sin",
         Some("math"),
@@ -39,7 +35,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // cos(x: f64) -> f64
     registrar.register_fn(
         "cos",
         Some("math"),
@@ -51,7 +46,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // tan(x: f64) -> f64
     registrar.register_fn(
         "tan",
         Some("math"),
@@ -63,7 +57,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // log(x: f64, base: f64?) -> f64
     registrar.register_fn(
         "log",
         Some("math"),
@@ -80,7 +73,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // min(a: f64, b: f64) -> f64
     registrar.register_fn(
         "min",
         Some("math"),
@@ -93,7 +85,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // max(a: f64, b: f64) -> f64
     registrar.register_fn(
         "max",
         Some("math"),
@@ -106,7 +97,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // abs(x: f64) -> f64
     registrar.register_fn(
         "abs",
         Some("math"),
@@ -118,7 +108,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // floor(x: f64) -> f64
     registrar.register_fn(
         "floor",
         Some("math"),
@@ -130,7 +119,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // ceil(x: f64) -> f64
     registrar.register_fn(
         "ceil",
         Some("math"),
@@ -142,7 +130,6 @@ pub fn register_math_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // round(x: f64) -> f64
     registrar.register_fn(
         "round",
         Some("math"),

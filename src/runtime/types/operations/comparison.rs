@@ -1,10 +1,7 @@
-/// Comparison operations module
-/// Centralizes comparison operations: ==, !=, <, <=, >, >=
 use crate::error::RaccoonError;
 use crate::runtime::{BoolValue, RuntimeValue};
 use crate::tokens::Position;
 
-/// Equality comparison: left == right
 pub fn equal(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -24,7 +21,6 @@ pub fn equal(
     Ok(RuntimeValue::Bool(BoolValue::new(result)))
 }
 
-/// Inequality comparison: left != right
 pub fn not_equal(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -38,7 +34,6 @@ pub fn not_equal(
     }
 }
 
-/// Less than comparison: left < right
 pub fn less_than(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -62,7 +57,6 @@ pub fn less_than(
     Ok(RuntimeValue::Bool(BoolValue::new(result)))
 }
 
-/// Less than or equal comparison: left <= right
 pub fn less_or_equal(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -86,7 +80,6 @@ pub fn less_or_equal(
     Ok(RuntimeValue::Bool(BoolValue::new(result)))
 }
 
-/// Greater than comparison: left > right
 pub fn greater_than(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -110,7 +103,6 @@ pub fn greater_than(
     Ok(RuntimeValue::Bool(BoolValue::new(result)))
 }
 
-/// Greater than or equal comparison: left >= right
 pub fn greater_or_equal(
     left: RuntimeValue,
     right: RuntimeValue,

@@ -1,12 +1,12 @@
-// Array destructuring basic
+
 let [d1, d2, d3]: int[] = [1, 2, 3]
 print(`1: ${d1}, ${d2}, ${d3}`)
 
-// Array destructuring with rest
+
 let [f1, ...fRest]: int[] = [1, 2, 3, 4, 5]
 print(`2: ${f1}, ${fRest}`)
 
-// Object destructuring
+
 interface ICoord {
     x: int
     y: int

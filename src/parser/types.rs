@@ -7,7 +7,6 @@ use crate::{ast::types::*, RaccoonError, TokenType};
 pub struct Types;
 
 impl Types {
-    /// Parse a type: Union | Intersection | Postfix | Primary
     pub fn parse_type(state: &mut ParserState) -> Result<Type, RaccoonError> {
         let mut type_ = Self::parse_intersection_type(state)?;
 
@@ -25,7 +24,6 @@ impl Types {
         Ok(type_)
     }
 
-    /// Parse intersection type: Type & Type & Type
     pub fn parse_intersection_type(state: &mut ParserState) -> Result<Type, RaccoonError> {
         let mut type_ = Self::parse_postfix_type(state)?;
 
@@ -43,7 +41,6 @@ impl Types {
         Ok(type_)
     }
 
-    /// Parse postfix type: Type? or Type[] or Type[][]
     pub fn parse_postfix_type(state: &mut ParserState) -> Result<Type, RaccoonError> {
         let mut type_ = Self::parse_primary_type(state)?;
 
@@ -61,7 +58,6 @@ impl Types {
         Ok(type_)
     }
 
-    /// Parse primary type: readonly Type, keyof Type, typeof Name, { ... }, [ ... ], (params) => RetType, null, Identifier, or builtin types
     pub fn parse_primary_type(state: &mut ParserState) -> Result<Type, RaccoonError> {
         if Parser::match_token(state, &[TokenType::Readonly]) {
             let inner_type = Self::parse_primary_type(state)?;
@@ -204,7 +200,6 @@ impl Types {
         ))
     }
 
-    /// Parse tuple type: [Type1, Type2, ...]
     pub fn parse_tuple_type(state: &mut ParserState) -> Result<Type, RaccoonError> {
         state.advance();
         let mut element_types = Vec::new();
@@ -226,7 +221,6 @@ impl Types {
         Ok(Type::Tuple(Box::new(TupleType::new(element_types))))
     }
 
-    /// Parse object type: { name: Type, readonly name2?: Type, ... }
     pub fn parse_object_type(state: &mut ParserState) -> Result<Type, RaccoonError> {
         state.advance();
         let mut properties = HashMap::new();

@@ -1,14 +1,9 @@
-/// Refactored DecimalType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{DecimalValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// DecimalType - Fixed precision decimal
-// ============================================================================
 
 pub struct DecimalType;
 
@@ -29,7 +24,6 @@ impl TypeHandler for DecimalType {
         let num = extract_decimal(value, "this", position, file.clone())?;
 
         match method {
-            // Conversion methods
             "toStr" | "toString" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(num.to_string())))
@@ -43,7 +37,6 @@ impl TypeHandler for DecimalType {
                 Ok(RuntimeValue::Float(FloatValue::new(num)))
             }
 
-            // Arithmetic methods
             "add" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let other = extract_decimal(&args[0], "other", position, file)?;
@@ -72,7 +65,6 @@ impl TypeHandler for DecimalType {
                 Ok(RuntimeValue::Decimal(DecimalValue::new(num / other)))
             }
 
-            // Rounding methods
             "round" => {
                 let places = if args.is_empty() {
                     0

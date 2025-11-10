@@ -1,4 +1,4 @@
-// Test recursion limit
+
 fn infinite(n: int): int {
   print("Call: " + n);
   return infinite(n + 1);

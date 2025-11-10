@@ -3,10 +3,6 @@ use crate::runtime::values::NativeFunctionValue;
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 
-/// Registry for native functions
-/// This provides a centralized way to register and lookup native functions
-/// with proper type information
-
 pub struct NativeRegistry {
     functions: Arc<RwLock<HashMap<String, NativeFunctionValue>>>,
 }
@@ -58,8 +54,6 @@ impl Default for NativeRegistry {
     }
 }
 
-/// Processor for native decorators
-/// Used to check if functions have native decorators that require special handling
 pub struct NativeDecoratorProcessor;
 
 impl NativeDecoratorProcessor {

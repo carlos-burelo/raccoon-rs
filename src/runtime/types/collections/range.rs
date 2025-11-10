@@ -1,15 +1,10 @@
-/// Refactored RangeType using helpers and metadata system
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{IntValue, ArrayValue, RuntimeValue};
+use crate::runtime::{ArrayValue, IntValue, RuntimeValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// RangeType - Range of numbers (Range<T>)
-// ============================================================================
 
 pub struct RangeType;
 
@@ -27,7 +22,6 @@ impl TypeHandler for RangeType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // Range is created as a list, so no instance methods
         Err(method_not_found_error("range", method, position, file))
     }
 
@@ -61,7 +55,6 @@ impl TypeHandler for RangeType {
                     ));
                 }
 
-                // Generate range as a list
                 let mut elements = Vec::new();
                 let mut current = start;
 

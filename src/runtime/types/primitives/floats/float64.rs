@@ -1,4 +1,3 @@
-/// Refactored Float64Type using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
@@ -7,10 +6,6 @@ use crate::runtime::{
 };
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// Float64Type - 64-bit floating point (default float)
-// ============================================================================
 
 pub struct Float64Type;
 
@@ -31,7 +26,6 @@ impl TypeHandler for Float64Type {
         let num = extract_float(value, "this", position, file.clone())?;
 
         match method {
-            // Conversion methods
             "toStr" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(num.to_string())))
@@ -89,7 +83,6 @@ impl TypeHandler for Float64Type {
                 Ok(RuntimeValue::Decimal(DecimalValue::new(num)))
             }
 
-            // Rounding methods
             "floor" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Int(IntValue::new(num.floor() as i64)))
@@ -103,7 +96,6 @@ impl TypeHandler for Float64Type {
                 Ok(RuntimeValue::Int(IntValue::new(num.round() as i64)))
             }
 
-            // Mathematical methods
             "abs" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Float(FloatValue::new(num.abs())))
@@ -137,7 +129,6 @@ impl TypeHandler for Float64Type {
                 )))
             }
 
-            // Trigonometric methods
             "sin" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Float(FloatValue::new(num.sin())))
@@ -163,7 +154,6 @@ impl TypeHandler for Float64Type {
                 Ok(RuntimeValue::Float(FloatValue::new(num.atan())))
             }
 
-            // Logarithmic/exponential methods
             "exp" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Float(FloatValue::new(num.exp())))
@@ -181,7 +171,6 @@ impl TypeHandler for Float64Type {
                 Ok(RuntimeValue::Float(FloatValue::new(num.log2())))
             }
 
-            // Predicate methods
             "isNaN" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Bool(BoolValue::new(num.is_nan())))
@@ -341,5 +330,4 @@ impl TypeHandler for Float64Type {
     }
 }
 
-// Alias for backwards compatibility
 pub type FloatType = Float64Type;

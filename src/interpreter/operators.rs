@@ -1,16 +1,12 @@
 use crate::ast::types::PrimitiveType;
-/// Operators module - Refactored to use centralized type operations
-/// All binary/unary operations are now delegated to src/runtime/types/operations/
-/// This module now serves as a thin wrapper for backward compatibility
+
 use crate::error::RaccoonError;
 use crate::runtime::types::operations;
 use crate::runtime::{
-    BoolValue, CallStack, FloatValue, IntValue, ArrayValue, RuntimeValue, StrValue,
+    ArrayValue, BoolValue, CallStack, FloatValue, IntValue, RuntimeValue, StrValue,
 };
 use crate::tokens::{BinaryOperator, Position, UnaryOperator};
 
-/// Helper: Check if a value is truthy
-/// Moved from operators for backward compatibility
 pub fn is_truthy(value: &RuntimeValue) -> bool {
     match value {
         RuntimeValue::Bool(b) => b.value,
@@ -22,8 +18,6 @@ pub fn is_truthy(value: &RuntimeValue) -> bool {
     }
 }
 
-/// Main async binary operation dispatcher (backward compatible)
-/// Delegates most operations to the centralized operations module
 pub async fn apply_binary_op(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -32,9 +26,7 @@ pub async fn apply_binary_op(
     file: &Option<String>,
     call_stack: &CallStack,
 ) -> Result<RuntimeValue, RaccoonError> {
-    // Operations that are delegated to the centralized module
     match operator {
-        // Arithmetic and comparison operations - delegated to operations module
         BinaryOperator::Add
         | BinaryOperator::Subtract
         | BinaryOperator::Multiply
@@ -59,7 +51,6 @@ pub async fn apply_binary_op(
                 .await
         }
 
-        // Operations that need special handling in the interpreter
         BinaryOperator::Range => match (left, right) {
             (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
                 let mut elements = Vec::new();
@@ -89,8 +80,6 @@ pub async fn apply_binary_op(
     }
 }
 
-/// Binary operation handler with truthiness callback (backward compatible)
-/// Combines arithmetic, comparison, and logical operations
 pub fn apply_binary_operation<F>(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -104,7 +93,6 @@ where
     F: Fn(&RuntimeValue) -> bool,
 {
     match operator {
-        // Arithmetic operations - implemented here for sync compatibility
         BinaryOperator::Add => match (&left, &right) {
             (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
                 Ok(RuntimeValue::Int(IntValue::new(l.value + r.value)))
@@ -121,7 +109,7 @@ where
             (RuntimeValue::Str(l), RuntimeValue::Str(r)) => Ok(RuntimeValue::Str(StrValue::new(
                 format!("{}{}", l.value, r.value),
             ))),
-            // String concatenation with any type
+
             (RuntimeValue::Str(l), r) => Ok(RuntimeValue::Str(StrValue::new(format!(
                 "{}{}",
                 l.value,
@@ -317,7 +305,6 @@ where
             )),
         },
 
-        // Bitwise operations
         BinaryOperator::BitwiseAnd => match (left, right) {
             (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
                 Ok(RuntimeValue::Int(IntValue::new(l.value & r.value)))
@@ -384,7 +371,6 @@ where
             )),
         },
 
-        // Comparison operations - delegated
         BinaryOperator::Equal => Ok(RuntimeValue::Bool(BoolValue::new(left.equals(&right)))),
         BinaryOperator::NotEqual => Ok(RuntimeValue::Bool(BoolValue::new(!left.equals(&right)))),
 
@@ -480,7 +466,6 @@ where
             )),
         },
 
-        // Logical operations
         BinaryOperator::And => {
             if !is_truthy(&left) {
                 Ok(left)
@@ -496,7 +481,6 @@ where
             }
         }
 
-        // Special operations
         BinaryOperator::Range => match (left, right) {
             (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
                 let mut elements = Vec::new();
@@ -526,7 +510,6 @@ where
     }
 }
 
-/// Unary operation handler (backward compatible)
 pub fn apply_unary_operation<F>(
     operand: RuntimeValue,
     operator: UnaryOperator,

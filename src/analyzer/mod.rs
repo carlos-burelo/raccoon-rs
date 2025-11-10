@@ -76,7 +76,6 @@ impl SemanticAnalyzer {
         Ok(())
     }
 
-    // Private methods for inter-module communication within the analyzer
     pub(in crate::analyzer) fn check_stmt(&mut self, stmt: &Stmt) -> Result<Type, RaccoonError> {
         statements::check_stmt(self, stmt)
     }

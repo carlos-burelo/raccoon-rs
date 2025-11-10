@@ -1,9 +1,5 @@
-// Standard library core module
-// This module provides essential global functions that are always available
-// These are implemented as native functions in Rust
-
-export const print = _builtin_print
-export const println = _builtin_println
-export const eprint = _builtin_eprint
-export const input = _builtin_input
-export const len = _builtin_len
+export const print = _builtin_print;
+export const println = _builtin_println;
+export const eprint = _builtin_eprint;
+export const input = _builtin_input;
+export const len = _builtin_len;

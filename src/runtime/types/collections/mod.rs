@@ -1,4 +1,3 @@
-// Collections module - generic/parameterized container types
 pub mod array;
 pub mod map;
 pub mod optional;
@@ -6,7 +5,6 @@ pub mod range;
 pub mod set;
 pub mod tuple;
 
-// Re-export for convenience
 pub use array::ArrayType;
 pub use map::MapType;
 pub use optional::OptionalType;

@@ -716,7 +716,7 @@ async fn asyncFunc(): int {
 }
 print("  ✓ async fn declared")
 
-// 15.2 Await expression
+
 async fn awaitFunc(): int {
     let result: int = await asyncFunc()
     return result
@@ -757,7 +757,7 @@ try {
     print("  ✓ Throw statement: caught error")
 }
 
-// 16.4 Multiple catch clauses
+
 try {
     throw "string error"
 } catch (e: str) {
@@ -788,25 +788,25 @@ testsPassed = testsPassed + 4
 
 print("\n[18] MODULE SYSTEM")
 
-// 18.1 Named imports
+
 import { add, multiply, PI } from "./test_module_math"
 let addResult: int = add(5, 10)
 let multiplyResult: int = multiply(3, 4)
 print(`  ✓ Named imports: add=${addResult}, multiply=${multiplyResult}, PI=${PI}`)
 
-// 18.2 Class import
+
 import { Calculator } from "./test_module_math"
 let calc: Calculator = new Calculator(10)
 let calcResult: int = calc.add(5).add(3).getResult()
 print(`  ✓ Class import: ${calcResult}`)
 
-// 18.3 Multiple function imports
+
 import { greet, uppercase } from "./test_module_utils"
 let greeting: str = greet("Raccoon")
 let upper: str = uppercase("hello")
 print(`  ✓ Multiple function imports: ${greeting}, upper=${upper}`)
 
-// 18.4 Class import from utils
+
 import { Helper } from "./test_module_utils"
 let helper: Helper = new Helper("Assistant")
 let helpMsg: str = helper.help()
@@ -890,7 +890,7 @@ print(`  ✓ Mixed operations: ${mixedResult}`)
 testsPassed = testsPassed + 5
 
 
-// Test file for all newly implemented features
+
 
 println("=== Testing Switch/Case ===");
 let day = 3;

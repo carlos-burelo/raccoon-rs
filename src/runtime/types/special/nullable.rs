@@ -4,11 +4,6 @@ use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// NullableType - Nullable type (T | null)
-// ============================================================================
-// Note: Nullable types are typically compile-time only
-
 pub struct NullableType;
 
 #[async_trait]

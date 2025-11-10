@@ -208,13 +208,11 @@ impl ControlFlow {
 
         let elements = match iterable {
             RuntimeValue::Array(list) => list.elements,
-            RuntimeValue::Str(s) => {
-                // Convert string to array of characters
-                s.value
-                    .chars()
-                    .map(|c| RuntimeValue::Str(StrValue::new(c.to_string())))
-                    .collect()
-            }
+            RuntimeValue::Str(s) => s
+                .value
+                .chars()
+                .map(|c| RuntimeValue::Str(StrValue::new(c.to_string())))
+                .collect(),
             _ => {
                 return Err(RaccoonError::new(
                     "For-of requires an iterable value (array or string)".to_string(),
@@ -266,18 +264,15 @@ impl ControlFlow {
         let mut fall_through = false;
 
         for case in &switch_stmt.cases {
-            // Check if this case matches
             if !fall_through {
                 if let Some(test_expr) = &case.test {
                     let test_value = interpreter.evaluate_expr(test_expr).await?;
                     matched = discriminant_value.equals(&test_value);
                 } else {
-                    // Default case
                     matched = true;
                 }
             }
 
-            // Execute the case if matched or if we're falling through
             if matched || fall_through {
                 fall_through = true;
 

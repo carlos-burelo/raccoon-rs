@@ -1,14 +1,9 @@
-/// Refactored BigIntType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BigIntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// BigIntType - Arbitrary precision integer
-// ============================================================================
 
 pub struct BigIntType;
 
@@ -29,7 +24,6 @@ impl TypeHandler for BigIntType {
         let bigint = extract_bigint(value, "this", position, file.clone())?;
 
         match method {
-            // Conversion methods
             "toStr" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(format!("{}n", bigint))))
@@ -39,7 +33,6 @@ impl TypeHandler for BigIntType {
                 Ok(RuntimeValue::Str(StrValue::new(format!("{}", bigint))))
             }
 
-            // Arithmetic methods
             "add" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let other = extract_bigint(&args[0], "other", position, file)?;
@@ -68,7 +61,6 @@ impl TypeHandler for BigIntType {
                 Ok(RuntimeValue::BigInt(BigIntValue::new(bigint / other)))
             }
 
-            // Mathematical methods
             "abs" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::BigInt(BigIntValue::new(bigint.abs())))

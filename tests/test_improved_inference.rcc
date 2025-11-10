@@ -1,20 +1,20 @@
-// Test de inferencia de tipos mejorada
 
-// 1. Lista mixta de int y float debe inferir float
-let mixed: any = [1, 2.5, 3];  // Debería ser float[]
 
-// 2. Lista de solo int debe inferir int
-let integers: any = [1, 2, 3, 4, 5];  // Debería ser int[]
 
-// 3. For-in infiere correctamente el tipo del elemento
+let mixed: any = [1, 2.5, 3];  
+
+
+let integers: any = [1, 2, 3, 4, 5];  
+
+
 for (let num in integers) {
-    // num debería ser int
+    
     let doubled = num * 2;
 }
 
-// 4. Operación binaria debe promocionar tipos
-let a = 5;      // int
-let b = 2.5;    // float
-let result = a + b;  // float
+
+let a = 5;      
+let b = 2.5;    
+let result = a + b;  
 
 print("Type inference tests completed!");

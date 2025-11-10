@@ -1,4 +1,4 @@
-pub mod builtins; // Modular built-in functions and types
+pub mod builtins;
 pub mod call_stack;
 pub mod control_flow;
 pub mod conversion;
@@ -7,12 +7,12 @@ pub mod dynamic;
 pub mod environment;
 pub mod module_registry;
 pub mod module_system;
-pub mod native; // Native function registry
-pub mod natives; // Native module implementations (math, string, array, etc.)
+pub mod native;
+pub mod natives;
 pub mod plugin_system;
-pub mod primitives; // Lazy-loaded primitives organized by context
+pub mod primitives;
 pub mod registrar;
-pub mod stdlib; // Standard library system (loader, wrappers, natives)
+pub mod stdlib;
 pub mod type_object;
 pub mod type_object_builder;
 pub mod types;

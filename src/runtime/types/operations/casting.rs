@@ -1,10 +1,7 @@
-/// Casting and type conversion module
-/// Centralizes all type coercion rules and conversion logic
 use crate::error::RaccoonError;
 use crate::runtime::{BoolValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 
-/// Type compatibility and widening rules
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum WidenResult {
     Same,
@@ -14,7 +11,6 @@ pub enum WidenResult {
     Incompatible,
 }
 
-/// Determines how two types can be widened for binary operations
 pub fn determine_widening(left_type: &RuntimeValue, right_type: &RuntimeValue) -> WidenResult {
     use RuntimeValue::*;
 
@@ -29,7 +25,6 @@ pub fn determine_widening(left_type: &RuntimeValue, right_type: &RuntimeValue) -
     }
 }
 
-/// Attempts to cast a value to a target type
 pub fn try_cast(
     value: RuntimeValue,
     target_type_name: &str,
@@ -125,7 +120,6 @@ pub fn try_cast(
     }
 }
 
-/// Widens a value to float
 pub fn widen_to_float(value: RuntimeValue) -> Result<RuntimeValue, RaccoonError> {
     match value {
         RuntimeValue::Int(i) => Ok(RuntimeValue::Float(FloatValue::new(i.value as f64))),
@@ -138,7 +132,6 @@ pub fn widen_to_float(value: RuntimeValue) -> Result<RuntimeValue, RaccoonError>
     }
 }
 
-/// Determines the common type for a binary operation
 pub fn get_common_type(left: &RuntimeValue, right: &RuntimeValue) -> Option<&'static str> {
     use RuntimeValue::*;
 

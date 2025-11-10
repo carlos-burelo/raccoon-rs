@@ -1,4 +1,3 @@
-/// Refactored integer types using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
@@ -7,10 +6,6 @@ use crate::runtime::{
 };
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// IntType - Generic signed integer (i64 by default)
-// ============================================================================
 
 pub struct IntType;
 
@@ -31,7 +26,6 @@ impl TypeHandler for IntType {
         let num = extract_int(value, "this", position, file.clone())?;
 
         match method {
-            // Conversion methods
             "toStr" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(num.to_string())))
@@ -89,7 +83,6 @@ impl TypeHandler for IntType {
                 Ok(RuntimeValue::Decimal(DecimalValue::new(num as f64)))
             }
 
-            // Mathematical methods
             "abs" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Int(IntValue::new(num.abs())))
@@ -126,7 +119,6 @@ impl TypeHandler for IntType {
                 )))
             }
 
-            // Predicate methods
             "isEven" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Bool(BoolValue::new(num % 2 == 0)))
@@ -244,10 +236,6 @@ impl TypeHandler for IntType {
     }
 }
 
-// ============================================================================
-// I8Type - 8-bit signed integer
-// ============================================================================
-
 pub struct I8Type;
 
 #[async_trait]
@@ -328,10 +316,6 @@ impl TypeHandler for I8Type {
         matches!(method, "parse")
     }
 }
-
-// ============================================================================
-// I16Type - 16-bit signed integer
-// ============================================================================
 
 pub struct I16Type;
 
@@ -414,10 +398,6 @@ impl TypeHandler for I16Type {
     }
 }
 
-// ============================================================================
-// I32Type - 32-bit signed integer
-// ============================================================================
-
 pub struct I32Type;
 
 #[async_trait]
@@ -498,10 +478,6 @@ impl TypeHandler for I32Type {
         matches!(method, "parse")
     }
 }
-
-// ============================================================================
-// I64Type - 64-bit signed integer
-// ============================================================================
 
 pub struct I64Type;
 

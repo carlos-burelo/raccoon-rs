@@ -1,35 +1,30 @@
-// Test file for all newly implemented features
-
 println("=== Testing Switch/Case ===");
 let day = 3;
 switch (day) {
-    case 1:
-        println("Monday");
-        break;
-    case 2:
-        println("Tuesday");
-        break;
-    case 3:
-        println("Wednesday");
-        break;
-    default:
-        println("Other day");
-        break;
+  case 1:
+    println("Monday");
+    break;
+  case 2:
+    println("Tuesday");
+    break;
+  case 3:
+    println("Wednesday");
+    break;
+  default:
+    println("Other day");
+    break;
 }
-
 println("\n=== Testing Do-While ===");
 let i = 0;
 do {
-    println("i = " + i.toStr());
-    i = i + 1;
+  println("i = " + i.toStr());
+  i = i + 1;
 } while (i < 3);
-
 println("\n=== Testing For-Of ===");
 let arr = [10, 20, 30];
 for (let item of arr) {
-    println("Item: " + item.toStr());
+  println("Item: " + item.toStr());
 }
-
 println("\n=== Testing String Methods ===");
 let text = "hello";
 println("repeat(3): " + text.repeat(3));
@@ -37,32 +32,32 @@ println("padStart(10, '*'): " + text.padStart(10, "*"));
 println("padEnd(10, '-'): " + text.padEnd(10, "-"));
 println("lastIndexOf('l'): " + text.lastIndexOf("l").toStr());
 println("charCodeAt(0): " + text.charCodeAt(0).toStr());
-
 println("\n=== Testing Array Methods ===");
 let numbers = [1, 2, 3, 4, 5];
 println("indexOf(3): " + numbers.indexOf(3).toStr());
 println("includes(4): " + numbers.includes(4).toStr());
 println("at(-1): " + numbers.at(-1).toStr());
-
 let arr2 = [1, 2, 3];
 arr2.fill(0, 1, 2);
 println("After fill(0, 1, 2): [" + arr2[0].toStr() + ", " + arr2[1].toStr() + ", " + arr2[2].toStr() + "]");
-
 let nested = [[1, 2], [3, 4]];
 let flattened = nested.flat();
 println("Flat result length: " + flattened.length.toStr());
-
 println("\n=== Testing Object Methods ===");
-let obj = { name: "Alice", age: 30 };
+let obj = {
+  name: "Alice",
+  age: 30
+};
 let keys = Object.keys(obj);
 println("Object.keys length: " + keys.length.toStr());
-
 let values = Object.values(obj);
 println("Object.values length: " + values.length.toStr());
-
-let target = { a: 1 };
-let source = { b: 2 };
+let target = {
+  a: 1
+};
+let source = {
+  b: 2
+};
 let result = Object.assign(target, source);
 println("Object.assign works: " + Object.keys(result).length.toStr());
-
 println("\n=== All tests completed! ===");

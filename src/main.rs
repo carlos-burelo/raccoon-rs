@@ -53,9 +53,7 @@ async fn run_file(path: &str) {
         Ok(program) => {
             let mut interpreter = Interpreter::new(file.clone());
             match interpreter.interpret(&program).await {
-                Ok(_result) => {
-                    // Success - output already printed by print() statements
-                }
+                Ok(_result) => {}
                 Err(error) => {
                     eprintln!("{}", error);
                     process::exit(1);

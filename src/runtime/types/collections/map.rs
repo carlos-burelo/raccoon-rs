@@ -1,4 +1,3 @@
-/// Refactored MapType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
@@ -6,15 +5,9 @@ use crate::runtime::{BoolValue, IntValue, MapValue, NullValue, RuntimeValue, Str
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// MapType - Key-value map/dictionary (Map<K, V>)
-// ============================================================================
-
 pub struct MapType;
 
 impl MapType {
-
-    /// Helper to extract map from RuntimeValue
     fn extract_map_mut<'a>(
         value: &'a mut RuntimeValue,
         position: Position,
@@ -131,7 +124,17 @@ impl TypeHandler for MapType {
     fn has_instance_method(&self, method: &str) -> bool {
         matches!(
             method,
-            "get" | "set" | "has" | "delete" | "clear" | "size" | "length" | "isEmpty" | "keys" | "values" | "toStr"
+            "get"
+                | "set"
+                | "has"
+                | "delete"
+                | "clear"
+                | "size"
+                | "length"
+                | "isEmpty"
+                | "keys"
+                | "values"
+                | "toStr"
         )
     }
 

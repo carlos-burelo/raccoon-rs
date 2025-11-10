@@ -1,5 +1,5 @@
-// JSON module - JSON parsing and stringification using core primitives
-// All logic is implemented in Raccoon, only atomic operations are delegated to Rust
+
+
 
 import {
     json_parse as core_json_parse,
@@ -11,13 +11,13 @@ class JSON {
         return core_json_parse(json);
     }
 
-    static stringify(value: any): string {
+    static stringify(value: any): str {
         return core_json_stringify(value);
     }
 
-    static stringify_pretty(value: any, indent: int): string {
-        // For now, just use regular stringify
-        // In the future, we can implement pretty printing in Raccoon
+    static stringify_pretty(value: any, indent: int): str {
+        
+        
         return core_json_stringify(value);
     }
 
@@ -25,7 +25,7 @@ class JSON {
         try {
             JSON.parse(json);
             return true;
-        } catch {
+        } catch (_){
             return false;
         }
     }
@@ -33,22 +33,22 @@ class JSON {
     static tryParse(json: string): any {
         try {
             return JSON.parse(json);
-        } catch {
+        } catch (_){
             return null;
         }
     }
 }
 
-// Standalone functions for backward compatibility
+
 fn parse(json: string): any {
     return JSON.parse(json);
 }
 
-fn stringify(value: any): string {
+fn stringify(value: any): str {
     return JSON.stringify(value);
 }
 
-fn stringify_pretty(value: any): string {
+fn stringify_pretty(value: any): str {
     return JSON.stringify_pretty(value, 2);
 }
 

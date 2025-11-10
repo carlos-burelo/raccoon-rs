@@ -1,4 +1,3 @@
-// Primitives module - scalar/singleton types with methods
 pub mod bool;
 pub mod char;
 pub mod floats;
@@ -8,7 +7,6 @@ pub mod numeric_trait;
 pub mod string;
 pub mod unit;
 
-// Re-export for convenience
 pub use self::bool::BoolType;
 pub use self::char::CharType;
 pub use self::floats::{DecimalType, Float32Type, Float64Type, FloatType};

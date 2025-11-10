@@ -4,11 +4,6 @@ use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// StreamType - Asynchronous stream (Stream<T>)
-// ============================================================================
-// Note: This is a placeholder - actual Stream type would need proper value representation
-
 pub struct StreamType;
 
 #[async_trait]

@@ -1,15 +1,15 @@
-// Test comprehensive function parameters support
+
 
 print("=== Testing Function Parameters ===")
 
-// 1. Basic parameters
+
 print("\n1. Basic parameters")
 fn basic(a: int, b: str): str {
     return b + " " + a
 }
 print(basic(42, "Answer:"))
 
-// 2. Parameters with default values
+
 print("\n2. Default parameters")
 fn withDefaults(name: str, greeting: str = "Hello", times: int = 1): str {
     return greeting + " " + name + "!"
@@ -18,7 +18,7 @@ print(withDefaults("Alice"))
 print(withDefaults("Bob", "Hi"))
 print(withDefaults("Charlie", "Hey", 2))
 
-// 3. Variadic parameters
+
 print("\n3. Variadic parameters")
 fn sum(...numbers: int[]): int {
     let total: int = 0
@@ -30,7 +30,7 @@ fn sum(...numbers: int[]): int {
 print(sum(1, 2, 3, 4, 5))
 print(sum(10, 20))
 
-// 4. Mix of regular and variadic
+
 print("\n4. Mix regular + variadic")
 fn format(prefix: str, ...items: str[]): str {
     let result: str = prefix + ": "
@@ -44,7 +44,7 @@ fn format(prefix: str, ...items: str[]): str {
 }
 print(format("Items", "apple", "banana", "cherry"))
 
-// 5. Mix of defaults and variadic
+
 print("\n5. Defaults + variadic")
 fn greet(greeting: str = "Hello", ...names: str[]): str {
     let result: str = greeting
@@ -56,7 +56,7 @@ fn greet(greeting: str = "Hello", ...names: str[]): str {
 print(greet("Hi", "Alice", "Bob", "Charlie"))
 print(greet("Welcome", "Dave"))
 
-// 6. Arrow functions with variadic
+
 print("\n6. Arrow functions with variadic")
 let multiply = (...nums: int[]): int => {
     let product: int = 1
@@ -67,7 +67,7 @@ let multiply = (...nums: int[]): int => {
 }
 print(multiply(2, 3, 4))
 
-// 7. Array destructuring (simpler test)
+
 print("\n7. Array destructuring")
 fn coords([x, y]: int[]): str {
     return "x=" + x + ", y=" + y

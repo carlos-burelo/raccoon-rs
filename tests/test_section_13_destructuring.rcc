@@ -1,20 +1,20 @@
-// TEST: Section 13 - Destructuring
+
 
 print("Testing Destructuring...")
 
-// 13.1 Array destructuring
+
 let [d1, d2, d3]: int[] = [1, 2, 3]
 print(`  ✓ Array destructuring: ${d1}, ${d2}, ${d3}`)
 
-// 13.2 Array destructuring with skip (SKIPPED - not implemented)
-// let [e1, , e3]: int[] = [10, 20, 30]
+
+
 print("  ⊗ Array destructuring skip: NOT IMPLEMENTED")
 
-// 13.3 Array destructuring with rest
+
 let [f1, ...fRest]: int[] = [1, 2, 3, 4, 5]
 print(`  ✓ Array destructuring rest: ${f1}, ${fRest}`)
 
-// 13.4 Object destructuring
+
 interface ICoord {
     x: int
     y: int
@@ -22,15 +22,15 @@ interface ICoord {
 let { x: coordX, y: coordY }: ICoord = { x: 100, y: 200 }
 print(`  ✓ Object destructuring: ${coordX}, ${coordY}`)
 
-// 13.5 Object destructuring shorthand
+
 let { x, y }: ICoord = { x: 50, y: 75 }
 print(`  ✓ Object destructuring shorthand: ${x}, ${y}`)
 
-// 13.6 Nested destructuring
+
 let [[g1, g2], [g3, g4]]: int[][] = [[1, 2], [3, 4]]
 print(`  ✓ Nested destructuring: ${g1}, ${g2}, ${g3}, ${g4}`)
 
-// 13.7 Function parameter destructuring
+
 fn destructParam({ x, y }: ICoord): int {
     return x + y
 }

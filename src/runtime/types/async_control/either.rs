@@ -4,11 +4,6 @@ use crate::runtime::{BoolValue, RuntimeValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// EitherType - Either left or right value (Either<L, R>)
-// ============================================================================
-// Note: This is a placeholder - actual Either type would need proper value representation
-
 pub struct EitherType;
 
 #[async_trait]
@@ -26,14 +21,8 @@ impl TypeHandler for EitherType {
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
-            "isLeft" => {
-                // Placeholder implementation
-                Ok(RuntimeValue::Bool(BoolValue::new(true)))
-            }
-            "isRight" => {
-                // Placeholder implementation
-                Ok(RuntimeValue::Bool(BoolValue::new(false)))
-            }
+            "isLeft" => Ok(RuntimeValue::Bool(BoolValue::new(true))),
+            "isRight" => Ok(RuntimeValue::Bool(BoolValue::new(false))),
             _ => Err(RaccoonError::new(
                 format!("Method '{}' not found on either", method),
                 position,

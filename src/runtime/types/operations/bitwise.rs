@@ -1,10 +1,7 @@
-/// Bitwise operations module
-/// Centralizes bitwise operations: and, or, xor, left shift, right shift, unsigned right shift
 use crate::error::RaccoonError;
 use crate::runtime::{IntValue, RuntimeValue};
 use crate::tokens::Position;
 
-/// Bitwise AND operation: Int & Int
 pub fn bitwise_and(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -23,7 +20,6 @@ pub fn bitwise_and(
     }
 }
 
-/// Bitwise OR operation: Int | Int
 pub fn bitwise_or(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -42,7 +38,6 @@ pub fn bitwise_or(
     }
 }
 
-/// Bitwise XOR operation: Int ^ Int
 pub fn bitwise_xor(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -61,7 +56,6 @@ pub fn bitwise_xor(
     }
 }
 
-/// Left shift operation: Int << Int
 pub fn left_shift(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -87,7 +81,6 @@ pub fn left_shift(
     }
 }
 
-/// Right shift operation: Int >> Int (arithmetic, sign-extending)
 pub fn right_shift(
     left: RuntimeValue,
     right: RuntimeValue,
@@ -113,7 +106,6 @@ pub fn right_shift(
     }
 }
 
-/// Unsigned right shift operation: Int >>> Int (zero-filling)
 pub fn unsigned_right_shift(
     left: RuntimeValue,
     right: RuntimeValue,

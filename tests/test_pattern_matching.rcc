@@ -1,6 +1,6 @@
-// Test Pattern Matching - Phase 2 Implementation
 
-// Test 1: Wildcard pattern
+
+
 fn test_wildcard_pattern() {
     let result = match 42 {
         _ => "matched"
@@ -8,7 +8,7 @@ fn test_wildcard_pattern() {
     println(result);
 }
 
-// Test 2: Variable pattern
+
 fn test_variable_pattern() {
     let value = 10;
     let result = match value {
@@ -17,7 +17,7 @@ fn test_variable_pattern() {
     println(result);
 }
 
-// Test 3: Multiple arms with different patterns
+
 fn test_multiple_arms() {
     let value = 2;
     let result = match value {
@@ -28,7 +28,7 @@ fn test_multiple_arms() {
     println(result);
 }
 
-// Test 4: List pattern matching
+
 fn test_list_pattern() {
     let list = [1, 2, 3];
     let result = match list {
@@ -38,7 +38,7 @@ fn test_list_pattern() {
     println(result);
 }
 
-// Test 5: Wildcard in list pattern
+
 fn test_wildcard_list_pattern() {
     let list = [1, 2, 3];
     let result = match list {
@@ -48,7 +48,7 @@ fn test_wildcard_list_pattern() {
     println(result);
 }
 
-// Test 6: Object pattern matching
+
 fn test_object_pattern() {
     let obj = {x: 10, y: 20};
     let result = match obj {
@@ -58,7 +58,7 @@ fn test_object_pattern() {
     println(result);
 }
 
-// Test 7: Nested list pattern
+
 fn test_nested_list_pattern() {
     let list = [[1, 2], [3, 4]];
     let result = match list {
@@ -68,7 +68,7 @@ fn test_nested_list_pattern() {
     println(result);
 }
 
-// Test 8: Match returns value
+
 fn test_match_returns_value() {
     let value = 3;
     let result = match value {
@@ -80,7 +80,7 @@ fn test_match_returns_value() {
     println(result);
 }
 
-// Test 9: Object pattern with custom bindings
+
 fn test_object_pattern_binding() {
     let obj = {name: "Alice", age: 30};
     let result = match obj {
@@ -90,7 +90,7 @@ fn test_object_pattern_binding() {
     println(result);
 }
 
-// Test 10: Fallthrough to default
+
 fn test_default_arm() {
     let value = 99;
     let result = match value {
@@ -101,7 +101,7 @@ fn test_default_arm() {
     println(result);
 }
 
-// Test 11: Match with empty list
+
 fn test_empty_list_pattern() {
     let list = [];
     let result = match list {
@@ -111,7 +111,7 @@ fn test_empty_list_pattern() {
     println(result);
 }
 
-// Test 12: Complex nested pattern
+
 fn test_complex_nested() {
     let data = {
         items: [1, 2, 3],
@@ -124,7 +124,7 @@ fn test_complex_nested() {
     println(result);
 }
 
-// Run all tests
+
 println("=== PATTERN MATCHING TESTS ===");
 
 println("Test 1: Wildcard pattern");

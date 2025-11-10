@@ -1,5 +1,5 @@
-// HTTP module - HTTP client using core primitives
-// All logic is implemented in Raccoon, only atomic operations are delegated to Rust
+
+
 
 import {
     http_get as core_http_get,
@@ -64,7 +64,7 @@ class HttpClient {
         this.timeout = ms;
     }
 
-    get(path: string): HttpResponse {
+    gett(path: string): HttpResponse {
         let url: string = this.buildUrl(path);
         let body: string = core_http_get(url);
         return new HttpResponse(body, 200, "OK");
@@ -158,7 +158,7 @@ class Http {
     }
 }
 
-// Fetch-like API
+
 fn fetch(url: string, options: object): HttpResponse {
     let method: string = options.method || "GET";
     let body: string = options.body || "";

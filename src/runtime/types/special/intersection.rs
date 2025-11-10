@@ -4,11 +4,6 @@ use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// IntersectionType - Intersection type (A & B)
-// ============================================================================
-// Note: Intersection types are typically compile-time only
-
 pub struct IntersectionType;
 
 #[async_trait]

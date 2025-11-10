@@ -1,10 +1,10 @@
-// Test modulo with floats
+
 let f1: float = 10.5
 let f2: float = 3.2
 let result: float = f1 % f2
 print(`Float modulo: ${result}`)
 
-// Mixed int and float
+
 let mixed1: float = 10.0 % 3
 print(`Float % int: ${mixed1}`)
 

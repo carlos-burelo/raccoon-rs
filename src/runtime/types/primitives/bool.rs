@@ -1,5 +1,5 @@
 use crate::error::RaccoonError;
-/// BoolType - Boolean primitive type with metadata system
+
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, NullValue, RuntimeValue, StrValue};

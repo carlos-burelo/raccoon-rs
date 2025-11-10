@@ -4,11 +4,6 @@ use crate::runtime::{BoolValue, RuntimeValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// ResultType - Result type for error handling (Result<T, E>)
-// ============================================================================
-// Note: This is a placeholder - actual Result type would need proper value representation
-
 pub struct ResultType;
 
 #[async_trait]
@@ -26,14 +21,8 @@ impl TypeHandler for ResultType {
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
-            "isOk" => {
-                // Placeholder implementation
-                Ok(RuntimeValue::Bool(BoolValue::new(true)))
-            }
-            "isErr" => {
-                // Placeholder implementation
-                Ok(RuntimeValue::Bool(BoolValue::new(false)))
-            }
+            "isOk" => Ok(RuntimeValue::Bool(BoolValue::new(true))),
+            "isErr" => Ok(RuntimeValue::Bool(BoolValue::new(false))),
             _ => Err(RaccoonError::new(
                 format!("Method '{}' not found on result", method),
                 position,

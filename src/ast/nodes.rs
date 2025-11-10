@@ -320,7 +320,7 @@ pub struct ExportDecl {
     pub declaration: Option<Box<Stmt>>,
     pub specifiers: Vec<ExportSpecifier>,
     pub is_default: bool,
-    pub module_specifier: Option<String>, // For export { ... } from "module"
+    pub module_specifier: Option<String>,
     pub position: Position,
 }
 
@@ -383,7 +383,7 @@ pub struct DoWhileStmt {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct SwitchCase {
-    pub test: Option<Expr>, // None for default case
+    pub test: Option<Expr>,
     pub consequent: Vec<Stmt>,
 }
 
@@ -625,7 +625,7 @@ pub struct IntLiteral {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct BigIntLiteral {
-    pub value: String, // Store as string, will be parsed to BigInt in runtime
+    pub value: String,
     pub position: Position,
 }
 
@@ -749,10 +749,10 @@ impl Pattern {
             Pattern::Wildcard(pos) => *pos,
             Pattern::Literal(expr) => expr.position(),
             Pattern::Range(start, _) => start.position(),
-            Pattern::Type(_) => (1, 1), // Types don't have position info
+            Pattern::Type(_) => (1, 1),
             Pattern::Array(patterns) => patterns.first().map(|p| p.position()).unwrap_or((1, 1)),
-            Pattern::Object(_) => (1, 1), // Objects don't have position info
-            Pattern::Variable(_) => (1, 1), // Variables don't have position info
+            Pattern::Object(_) => (1, 1),
+            Pattern::Variable(_) => (1, 1),
             Pattern::Or(patterns) => patterns.first().map(|p| p.position()).unwrap_or((1, 1)),
         }
     }

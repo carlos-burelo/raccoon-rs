@@ -1,9 +1,8 @@
-/// StrType - String primitive type with text manipulation methods
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{BoolValue, IntValue, ArrayValue, RuntimeValue, StrValue};
+use crate::runtime::{ArrayValue, BoolValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -26,7 +25,6 @@ impl TypeHandler for StrType {
         let s = extract_str(value, "this", position, file.clone())?;
 
         match method {
-            // Case conversion
             "toUpper" | "toUpperCase" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(s.to_uppercase())))
@@ -36,7 +34,6 @@ impl TypeHandler for StrType {
                 Ok(RuntimeValue::Str(StrValue::new(s.to_lowercase())))
             }
 
-            // Trimming
             "trim" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(s.trim().to_string())))
@@ -50,7 +47,6 @@ impl TypeHandler for StrType {
                 Ok(RuntimeValue::Str(StrValue::new(s.trim_end().to_string())))
             }
 
-            // Splitting
             "split" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let separator = extract_str(&args[0], "separator", position, file)?;
@@ -64,7 +60,6 @@ impl TypeHandler for StrType {
                 )))
             }
 
-            // Joining
             "join" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let separator = extract_str(&args[0], "separator", position, file)?;
@@ -76,7 +71,6 @@ impl TypeHandler for StrType {
                 Ok(RuntimeValue::Str(StrValue::new(joined)))
             }
 
-            // Replacement
             "replace" | "replaceAll" => {
                 require_args(&args, 2, method, position, file.clone())?;
                 let search = extract_str(&args[0], "search", position, file.clone())?;
@@ -86,7 +80,6 @@ impl TypeHandler for StrType {
                 )))
             }
 
-            // Searching
             "startsWith" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let prefix = extract_str(&args[0], "prefix", position, file)?;
@@ -115,7 +108,6 @@ impl TypeHandler for StrType {
                 Ok(RuntimeValue::Int(IntValue::new(index)))
             }
 
-            // Slicing
             "slice" => {
                 require_args_range(&args, 1, 2, method, position, file.clone())?;
                 let start = extract_int(&args[0], "start", position, file.clone())? as isize;
@@ -171,7 +163,6 @@ impl TypeHandler for StrType {
                 }
             }
 
-            // Character access
             "charAt" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let index = extract_int(&args[0], "index", position, file)? as usize;
@@ -195,7 +186,6 @@ impl TypeHandler for StrType {
                 }
             }
 
-            // Padding
             "padStart" => {
                 require_args_range(&args, 1, 2, method, position, file.clone())?;
                 let target_len =
@@ -237,7 +227,6 @@ impl TypeHandler for StrType {
                 Ok(RuntimeValue::Str(StrValue::new(result)))
             }
 
-            // Other transformations
             "repeat" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let count = extract_int(&args[0], "count", position, file.clone())?;
@@ -267,7 +256,6 @@ impl TypeHandler for StrType {
                 )))
             }
 
-            // Conversion
             "toStr" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(s.to_string())))
@@ -367,11 +355,34 @@ impl TypeHandler for StrType {
     fn has_instance_method(&self, method: &str) -> bool {
         matches!(
             method,
-            "toUpper" | "toUpperCase" | "toLower" | "toLowerCase" | "trim" | "trimStart"
-                | "trimLeft" | "trimEnd" | "trimRight" | "split" | "join" | "replace"
-                | "replaceAll" | "startsWith" | "endsWith" | "contains" | "indexOf"
-                | "lastIndexOf" | "slice" | "substring" | "charAt" | "charCodeAt"
-                | "padStart" | "padEnd" | "repeat" | "reverse" | "match" | "toStr"
+            "toUpper"
+                | "toUpperCase"
+                | "toLower"
+                | "toLowerCase"
+                | "trim"
+                | "trimStart"
+                | "trimLeft"
+                | "trimEnd"
+                | "trimRight"
+                | "split"
+                | "join"
+                | "replace"
+                | "replaceAll"
+                | "startsWith"
+                | "endsWith"
+                | "contains"
+                | "indexOf"
+                | "lastIndexOf"
+                | "slice"
+                | "substring"
+                | "charAt"
+                | "charCodeAt"
+                | "padStart"
+                | "padEnd"
+                | "repeat"
+                | "reverse"
+                | "match"
+                | "toStr"
         )
     }
 
@@ -424,5 +435,4 @@ mod tests {
             _ => panic!("Expected list"),
         }
     }
-
 }

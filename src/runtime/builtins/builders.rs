@@ -27,7 +27,6 @@ pub fn collect_futures(
                 let state = future.state.read().unwrap().clone();
                 match (state, strategy) {
                     (FutureState::Resolved(value), FutureCollectionStrategy::AllSettled) => {
-                        // For allSettled, wrap resolved values in object with status and value
                         let mut result_obj = HashMap::new();
                         result_obj.insert(
                             "status".to_string(),
@@ -40,11 +39,9 @@ pub fn collect_futures(
                         )));
                     }
                     (FutureState::Resolved(value), _) => {
-                        // For other strategies, just return the value directly
                         results.push(*value);
                     }
                     (FutureState::Rejected(error), FutureCollectionStrategy::AllSettled) => {
-                        // For allSettled, wrap rejected values in object with status and reason
                         let mut error_obj = HashMap::new();
                         error_obj.insert(
                             "status".to_string(),
@@ -129,10 +126,9 @@ impl TypeMethodBuilder {
             static_methods_map.insert(name, RuntimeValue::NativeFunction(*method));
         }
 
-        // Determine the TypeKind and Type based on the type name
         let (type_def, type_kind) = match self.type_name.as_str() {
             "Future" => (
-                PrimitiveType::any(), // Future is generic, but we use any for now
+                PrimitiveType::any(),
                 TypeKind::Generic {
                     name: "Future".to_string(),
                     constraints: vec![],

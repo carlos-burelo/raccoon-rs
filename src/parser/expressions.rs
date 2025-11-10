@@ -14,20 +14,16 @@ use crate::{
 pub struct Expressions;
 
 impl Expressions {
-    /// Parse an expression - entry point for all expression parsing
     pub fn expression(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         Self::assignment(state)
     }
 
-    /// Assignment expression: target = value or target += value, etc.
     pub fn assignment(state: &mut ParserState) -> Result<Expr, RaccoonError> {
-        // Check for match expression
         if state.check(&TokenType::Match) {
             state.advance();
             return Self::match_expr(state);
         }
 
-        // Check for class expression (anonymous class)
         if state.check(&TokenType::Class) {
             state.advance();
             return Self::class_expr(state);
@@ -87,7 +83,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Conditional (ternary) expression: condition ? then : else
     pub fn conditional(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let expr = Self::null_coalescing(state)?;
 
@@ -112,7 +107,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Null coalescing expression: left ?? right
     pub fn null_coalescing(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::logical_or(state)?;
 
@@ -129,7 +123,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Logical OR expression: left || right
     pub fn logical_or(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::logical_and(state)?;
 
@@ -147,7 +140,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Logical AND expression: left && right
     pub fn logical_and(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::equality(state)?;
 
@@ -165,7 +157,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Equality expression: left == right or left != right
     pub fn equality(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::comparison(state)?;
 
@@ -188,7 +179,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Comparison expression: <, >, <=, >= or instanceof
     pub fn comparison(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::bitwise_or(state)?;
 
@@ -234,7 +224,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Bitwise OR expression: left | right
     pub fn bitwise_or(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::bitwise_xor(state)?;
 
@@ -252,7 +241,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Bitwise XOR expression: left ^ right
     pub fn bitwise_xor(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::bitwise_and(state)?;
 
@@ -270,7 +258,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Bitwise AND expression: left & right
     pub fn bitwise_and(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::shift(state)?;
 
@@ -288,7 +275,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Shift expression: left << right, left >> right, left >>> right
     pub fn shift(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::range(state)?;
 
@@ -319,7 +305,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Range expression: start..end
     pub fn range(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let expr = Self::term(state)?;
 
@@ -336,7 +321,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Term (addition/subtraction): left + right or left - right
     pub fn term(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::factor(state)?;
 
@@ -359,7 +343,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Factor (multiplication/division/modulo): left * right or left / right or left % right
     pub fn factor(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::exponent(state)?;
 
@@ -386,7 +369,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Exponent (power): left ** right (right-associative)
     pub fn exponent(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::unary(state)?;
 
@@ -404,7 +386,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Unary expression: typeof, -, !, ~, ++, --, await, new
     pub fn unary(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         if Parser::match_token(state, &[TokenType::Typeof]) {
             let position = state.previous().unwrap().position;
@@ -463,7 +444,6 @@ impl Expressions {
         Self::postfix(state)
     }
 
-    /// Postfix expression: ++ or -- or null assertion (!)
     pub fn postfix(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let expr = Self::call(state)?;
 
@@ -493,7 +473,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// New expression: new Class<Type>(args)
     pub fn new_expression(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let position = state.previous().unwrap().position;
         let class_name = Parser::consume(
@@ -507,7 +486,6 @@ impl Expressions {
         let mut type_args = Vec::new();
         if Parser::match_token(state, &[TokenType::Lt]) {
             loop {
-                // TODO: Call parse_type() from types module
                 type_args.push(crate::ast::types::PrimitiveType::any());
                 if !Parser::match_token(state, &[TokenType::Comma]) {
                     break;
@@ -537,7 +515,6 @@ impl Expressions {
         }))
     }
 
-    /// Call expression: primary(args) or primary.property or primary[index]
     pub fn call(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::primary(state)?;
 
@@ -616,7 +593,6 @@ impl Expressions {
         Ok(expr)
     }
 
-    /// Finish call: parse call arguments
     fn finish_call(state: &mut ParserState, callee: Expr) -> Result<Expr, RaccoonError> {
         let mut args = Vec::new();
         let mut named_args = HashMap::new();
@@ -662,7 +638,6 @@ impl Expressions {
         }))
     }
 
-    /// Primary expression: literal, identifier, parenthesized expr, array, object, template string
     pub fn primary(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         if Parser::match_token(state, &[TokenType::This]) {
             return Ok(Expr::This(ThisExpr {
@@ -781,7 +756,6 @@ impl Expressions {
         ))
     }
 
-    /// array literal: [elem1, elem2, ...rest]
     pub fn array_literal(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let position = state.previous().unwrap().position;
         let mut elements = Vec::new();
@@ -806,7 +780,6 @@ impl Expressions {
         Ok(Expr::ArrayLiteral(ArrayLiteral { elements, position }))
     }
 
-    /// Object literal: { key: value, ...spread }
     pub fn object_literal(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let position = state.previous().unwrap().position;
         let mut properties = Vec::new();
@@ -859,7 +832,6 @@ impl Expressions {
         }))
     }
 
-    /// Template string: `hello ${expr} world`
     pub fn template_string(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let position = state.previous().unwrap().position;
         let mut parts = Vec::new();
@@ -895,7 +867,6 @@ impl Expressions {
         Ok(Expr::TemplateStr(TemplateStrExpr { parts, position }))
     }
 
-    /// Try to parse arrow function: (params) => expr or (params) => { stmts }
     pub fn try_parse_arrow_function(
         state: &mut ParserState,
         is_async: bool,
@@ -908,7 +879,6 @@ impl Expressions {
 
         let mut return_type = None;
         if Parser::match_token(state, &[TokenType::Colon]) {
-            // TODO: Call parse_type() from types module
             return_type = None;
         }
 
@@ -922,7 +892,7 @@ impl Expressions {
 
         let body = if state.check(&TokenType::LeftBrace) {
             state.advance();
-            // TODO: Call block_statements() from statements module
+
             let stmts = Vec::new();
             ArrowFnBody::Block(stmts)
         } else {
@@ -939,7 +909,6 @@ impl Expressions {
         })
     }
 
-    /// Parse arrow function parameters: (a, b: T, c?: T, ...rest: T)
     pub fn arrow_function_parameters(
         state: &mut ParserState,
     ) -> Result<Vec<FnParam>, RaccoonError> {
@@ -951,14 +920,13 @@ impl Expressions {
                 let is_rest = Parser::match_token(state, &[TokenType::Spread]);
 
                 if state.check(&TokenType::LeftBracket) || state.check(&TokenType::LeftBrace) {
-                    // TODO: Call parse_destructuring_pattern() from declarations module
                     let pattern = VarPattern::Identifier("TODO".to_string());
                     Parser::consume(
                         state,
                         TokenType::Colon,
                         "Expected ':' after destructuring pattern",
                     )?;
-                    // TODO: Call parse_type() from types module
+
                     let param_type = crate::ast::types::PrimitiveType::any();
 
                     let is_optional = Parser::match_token(state, &[TokenType::Question]);
@@ -995,7 +963,6 @@ impl Expressions {
                     let is_optional = Parser::match_token(state, &[TokenType::Question]);
 
                     let param_type = if Parser::match_token(state, &[TokenType::Colon]) {
-                        // TODO: Call parse_type() from types module
                         crate::ast::types::PrimitiveType::any()
                     } else {
                         crate::ast::types::PrimitiveType::any()
@@ -1045,7 +1012,6 @@ impl Expressions {
         Ok(params)
     }
 
-    /// Try to parse call type arguments: <Type1, Type2>
     fn try_parse_call_type_arguments(state: &mut ParserState) -> Result<Vec<Type>, RaccoonError> {
         if !Parser::match_token(state, &[TokenType::Lt]) {
             return Err(RaccoonError::new(
@@ -1057,7 +1023,6 @@ impl Expressions {
 
         let mut type_args = Vec::new();
         loop {
-            // TODO: Call parse_type() from types module
             type_args.push(crate::ast::types::PrimitiveType::any());
             if !Parser::match_token(state, &[TokenType::Comma]) {
                 break;
@@ -1068,14 +1033,11 @@ impl Expressions {
         Ok(type_args)
     }
 
-    /// Parse match expression: match scrutinee { pattern => expr, ... }
     pub fn match_expr(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let position = state.previous().unwrap().position;
 
-        // Parse scrutinee (the expression being matched)
         let scrutinee = Box::new(Self::conditional(state)?);
 
-        // Consume opening brace
         Parser::consume(
             state,
             TokenType::LeftBrace,
@@ -1084,15 +1046,12 @@ impl Expressions {
 
         let mut arms = Vec::new();
 
-        // Parse match arms: pattern => expr
         while !state.check(&TokenType::RightBrace) && !state.is_at_end() {
             let pattern = Self::parse_pattern(state)?;
             let position = pattern.position();
 
-            // Consume arrow
             Parser::consume(state, TokenType::Arrow, "Expected '=>' after pattern")?;
 
-            // Parse body expression
             let body = Box::new(Self::conditional(state)?);
 
             arms.push(MatchArm {
@@ -1102,7 +1061,6 @@ impl Expressions {
                 position,
             });
 
-            // Consume comma if not at closing brace
             if !state.check(&TokenType::RightBrace) {
                 Parser::consume(state, TokenType::Comma, "Expected ',' after match arm")?;
             }
@@ -1121,7 +1079,6 @@ impl Expressions {
         }))
     }
 
-    /// Parse pattern for match expression
     pub fn parse_pattern(state: &mut ParserState) -> Result<Pattern, RaccoonError> {
         if Parser::match_token(state, &[TokenType::Underscore]) {
             return Ok(Pattern::Wildcard(state.previous().unwrap().position));
@@ -1133,7 +1090,6 @@ impl Expressions {
         }
 
         if Parser::match_token(state, &[TokenType::LeftBracket]) {
-            // array pattern: [pat1, pat2, ...rest]
             let _position = state.previous().unwrap().position;
             let mut patterns = Vec::new();
 
@@ -1155,7 +1111,6 @@ impl Expressions {
         }
 
         if Parser::match_token(state, &[TokenType::LeftBrace]) {
-            // Object pattern: { x, y: pat }
             let _position = state.previous().unwrap().position;
             let mut properties = Vec::new();
 
@@ -1191,7 +1146,6 @@ impl Expressions {
             return Ok(Pattern::Object(properties));
         }
 
-        // Literal pattern
         if state.check(&TokenType::IntLiteral)
             || state.check(&TokenType::FloatLiteral)
             || state.check(&TokenType::StrLiteral)
@@ -1210,14 +1164,11 @@ impl Expressions {
         ))
     }
 
-    /// Parse anonymous class expression: class { properties, methods, constructor }
     pub fn class_expr(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let position = state.previous().unwrap().position;
 
-        // Parse optional type parameters
         let type_parameters = Self::parse_type_parameters(state)?;
 
-        // Parse optional extends clause
         let mut superclass = None;
         if Parser::match_token(state, &[TokenType::Extends]) {
             superclass = Some(
@@ -1227,7 +1178,6 @@ impl Expressions {
             );
         }
 
-        // Parse optional implements clause (we ignore the implements list for now)
         if Parser::match_token(state, &[TokenType::Implements]) {
             loop {
                 Parser::consume(state, TokenType::Identifier, "Expected interface name")?;
@@ -1345,7 +1295,6 @@ impl Expressions {
         }))
     }
 
-    /// Parse type parameters: <T, U, V>
     fn parse_type_parameters(
         state: &mut ParserState,
     ) -> Result<Vec<crate::ast::types::TypeParameter>, RaccoonError> {
@@ -1357,7 +1306,6 @@ impl Expressions {
                         .value
                         .clone();
 
-                // TODO: Parse constraint if present (extends Type)
                 type_params.push(crate::ast::types::TypeParameter {
                     name,
                     constraint: None,

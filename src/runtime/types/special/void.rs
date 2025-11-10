@@ -4,10 +4,6 @@ use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// VoidType - Void type (no return value)
-// ============================================================================
-
 pub struct VoidType;
 
 #[async_trait]

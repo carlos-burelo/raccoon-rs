@@ -1,21 +1,16 @@
 use crate::ast::types::{FunctionType, PrimitiveType, Type};
 use crate::runtime::Registrar;
-/// Wrapper functions that expose native module functions to stdlib .rcc files
-/// These are registered with simple names that can be called from within the stdlib modules
+
 use crate::runtime::{Environment, NativeFunctionValue, RuntimeValue};
 use std::sync::{Arc, Mutex};
 
 pub fn register_stdlib_wrappers(env: &mut Environment, registrar: Arc<Mutex<Registrar>>) {
-    // Math wrappers
     register_math_wrappers(env, registrar.clone());
-    // JSON wrappers
     register_json_wrappers(env, registrar.clone());
-    // HTTP wrappers
     register_http_wrappers(env, registrar);
 }
 
 fn register_math_wrappers(env: &mut Environment, _registrar: Arc<Mutex<Registrar>>) {
-    // sqrt wrapper
     let sqrt_fn = NativeFunctionValue::new(
         |args| {
             if args.is_empty() {
@@ -48,7 +43,6 @@ fn register_math_wrappers(env: &mut Environment, _registrar: Arc<Mutex<Registrar
         RuntimeValue::NativeFunction(sqrt_fn),
     );
 
-    // pow wrapper
     let pow_fn = NativeFunctionValue::new(
         |args| {
             if args.len() < 2 {
@@ -89,7 +83,6 @@ fn register_math_wrappers(env: &mut Environment, _registrar: Arc<Mutex<Registrar
         RuntimeValue::NativeFunction(pow_fn),
     );
 
-    // sin, cos, tan wrappers
     let sin_fn = NativeFunctionValue::new(
         |args| {
             if args.is_empty() {
@@ -225,12 +218,6 @@ fn register_math_wrappers(env: &mut Environment, _registrar: Arc<Mutex<Registrar
     );
 }
 
-fn register_json_wrappers(_env: &mut Environment, _registrar: Arc<Mutex<Registrar>>) {
-    // JSON functions will use native implementations directly
-    // For now, we'll skip these and implement them in the .rcc file differently
-}
+fn register_json_wrappers(_env: &mut Environment, _registrar: Arc<Mutex<Registrar>>) {}
 
-fn register_http_wrappers(_env: &mut Environment, _registrar: Arc<Mutex<Registrar>>) {
-    // HTTP functions will use native implementations directly
-    // For now, we'll skip these and implement them in the .rcc file differently
-}
+fn register_http_wrappers(_env: &mut Environment, _registrar: Arc<Mutex<Registrar>>) {}

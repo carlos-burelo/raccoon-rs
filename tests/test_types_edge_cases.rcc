@@ -289,9 +289,6 @@ print("  ✓ Después de push: i8[] = " + mixArr1.toStr());
 print("  ✓ Después de push: i32[] = " + mixArr2.toStr());
 print("  ✓ Después de push: f64[] = " + mixArr3.toStr());
 
-
-
-
 print("\n[ 13 ] Valores decimales de alta precisión:");
 
 let dec1: decimal = 0.1;
@@ -305,36 +302,9 @@ let dec6: decimal = dec4 + dec5;
 print("  ✓ Suma de alta precisión: " + dec6.toStr());
 
 
-
-
 print("\n[ 14 ] Funciones recursivas con tipos específicos:");
 
-// NOTE: Recursive functions cause stack overflow in the interpreter
-// This is a known limitation of the current runtime implementation
-//
-// fn factorialI32(n: i32): i32 {
-//   if (n <= 1) {
-//     return 1;
-//   }
-//   return n * factorialI32(n - 1);
-// }
-//
-// fn fibonacciI64(n: i64): i64 {
-//   if (n <= 1) {
-//     return n;
-//   }
-//   return fibonacciI64(n - 1) + fibonacciI64(n - 2);
-// }
-//
-// let fact5: i32 = factorialI32(5);
-// let fib6: i64 = fibonacciI64(6);
-//
-// print("  ✓ factorial(5) = " + fact5.toStr());
-// print("  ✓ fibonacci(6) = " + fib6.toStr());
-
 print("  ⚠ Skipped - recursive functions cause stack overflow in current interpreter");
-
-
 
 
 print("\n[ 15 ] Ranges con tipos enteros específicos:");

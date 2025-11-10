@@ -1,26 +1,26 @@
-// Advanced export patterns
 
-// 1. Export regular functions
+
+
 export fn square(x: int): int {
     return x * x
 }
 
-// 2. Export another function
+
 export fn cube(x: int): int {
     return x * x * x
 }
 
-// 3. Export object literal
+
 export let config = {
     host: "localhost",
     port: 8080,
     secure: false
 }
 
-// 4. Export array
+
 export let colors = ["red", "green", "blue"]
 
-// 5. Export simple class
+
 export class Container {
     name: str
     value: int
@@ -35,7 +35,7 @@ export class Container {
     }
 }
 
-// 6. Export static members
+
 export class MathUtils {
     static PI: float = 3.14159
     static E: float = 2.71828
@@ -52,12 +52,12 @@ export class MathUtils {
     }
 }
 
-// 7. Export with type annotations
+
 export let typedValue: int = 42
 export let typedString: str = "hello"
 export let typedFloat: float = 3.14
 
-// 8. Export multiple related functions
+
 export fn min(a: int, b: int): int {
     if (a < b) {
         return a

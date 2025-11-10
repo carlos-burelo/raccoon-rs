@@ -1,4 +1,4 @@
-// Test exporting interfaces and type aliases
+
 export interface Person {
     name: str;
     age: int;

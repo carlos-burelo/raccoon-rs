@@ -28,11 +28,10 @@ impl StdLibLoader {
     }
 
     pub fn module_exists(&self, module_name: &str) -> bool {
-        // Virtual module always exists
         if module_name == "std:runtime" {
             return true;
         }
-        // std:core is auto-loaded and cannot be explicitly imported
+
         if module_name == "std:core" {
             return false;
         }
@@ -47,27 +46,19 @@ impl StdLibLoader {
         self.stdlib_path.join(format!("{}.rcc", basename))
     }
 
-    /// Load the virtual "std:runtime" module
-    /// This module exposes all core primitives registered in the system
     fn load_core_module(&self) -> Result<RuntimeValue, RaccoonError> {
         let mut exports = HashMap::new();
 
-        // Create a temporary interpreter to get the registrar
         let interp = Interpreter::new(Some("std:runtime".to_string()));
         let registrar = interp.registrar.lock().unwrap();
 
-        // Export all functions that start with "core_" without namespace
         for (full_name, sig) in &registrar.functions {
             if full_name.starts_with("core_") && sig.namespace.is_none() {
-                // Create export name without "core_" prefix
                 let export_name = full_name.strip_prefix("core_").unwrap_or(full_name);
 
-                // Create a simple wrapper for the native function
                 let handler = sig.handler.clone();
                 let func_type = PrimitiveType::any();
 
-                // Create a closure that captures the handler
-                // Since we can't use closures with NativeFn, we'll use NativeAsyncFunction
                 let handler_clone = handler.clone();
                 let native_async_fn = crate::runtime::NativeAsyncFunctionValue::new(
                     std::sync::Arc::new(move |args| {
@@ -78,7 +69,6 @@ impl StdLibLoader {
                 );
                 let function_value = RuntimeValue::NativeAsyncFunction(native_async_fn);
 
-                // Export both with and without prefix for compatibility
                 exports.insert(export_name.to_string(), function_value.clone());
                 exports.insert(full_name.to_string(), function_value);
             }
@@ -91,12 +81,10 @@ impl StdLibLoader {
     }
 
     pub async fn load_module(&self, module_name: &str) -> Result<RuntimeValue, RaccoonError> {
-        // Handle virtual "std:runtime" module
         if module_name == "std:runtime" {
             return self.load_core_module();
         }
 
-        // std:core is automatically loaded and cannot be explicitly imported
         if module_name == "std:core" {
             return Err(RaccoonError::new(
                 "std:core is automatically loaded and cannot be explicitly imported".to_string(),
@@ -183,7 +171,7 @@ impl StdLibLoader {
         file_path: Option<String>,
     ) -> Result<HashMap<String, RuntimeValue>, RaccoonError> {
         let mut interp = Interpreter::new(file_path.clone());
-        // Share the same stdlib_loader so nested imports work
+
         interp.stdlib_loader = std::sync::Arc::new(Self {
             stdlib_path: self.stdlib_path.clone(),
             module_cache: self.module_cache.clone(),
@@ -234,7 +222,6 @@ impl StdLibLoader {
             exports.insert("default".into(), default_val);
         }
 
-        // Inject native module functions as exports if they're not already present
         if let Some(path_str) = &file_path {
             let module_name = if path_str.contains("stdlib/math.rcc")
                 || path_str.contains("stdlib\\math.rcc")
@@ -255,20 +242,11 @@ impl StdLibLoader {
                     let mut registrar = interp.registrar.lock().unwrap();
                     loader(&mut registrar);
 
-                    // Add native functions to exports if not already present
                     for (_full_name, sig) in &registrar.functions {
                         if sig.namespace.as_ref() == Some(&module.to_string()) {
                             let func_name = &sig.name;
                             if !exports.contains_key(func_name) {
-                                // Create a simple wrapper that will be called at runtime
                                 let _handler = sig.handler.clone();
-
-                                // We need to store this handler in a way that can be called
-                                // Since we can't convert it to a function pointer, we'll use
-                                // a workaround: create a NativeAsyncFunction that wraps it
-
-                                // For now, let's just log that we're skipping this
-                                // and rely on the .rcc files to export them
                             }
                         }
                     }
@@ -336,7 +314,6 @@ impl StdLibLoader {
         interp: &mut Interpreter,
         _file_path: &Option<String>,
     ) {
-        // Register wrapper functions that stdlib modules can use
         super::register_stdlib_wrappers(&mut interp.environment, interp.registrar.clone());
     }
 

@@ -1,12 +1,12 @@
-// Array destructuring basic
+
 let [d1, d2, d3]: int[] = [1, 2, 3]
 print(`1: ${d1}, ${d2}, ${d3}`)
 
-// Array destructuring with rest
+
 let [f1, ...fRest]: int[] = [1, 2, 3, 4, 5]
 print(`2: ${f1}, ${fRest}`)
 
-// Object destructuring
+
 interface ICoord {
     x: int
     y: int
@@ -14,15 +14,15 @@ interface ICoord {
 let { x: coordX, y: coordY }: ICoord = { x: 100, y: 200 }
 print(`3: ${coordX}, ${coordY}`)
 
-// Object destructuring shorthand
+
 let { x, y }: ICoord = { x: 50, y: 75 }
 print(`4: ${x}, ${y}`)
 
-// Nested destructuring
+
 let [[g1, g2], [g3, g4]]: int[][] = [[1, 2], [3, 4]]
 print(`5: ${g1}, ${g2}, ${g3}, ${g4}`)
 
-// Function parameter destructuring
+
 fn destructParam({ x, y }: ICoord): int {
     return x + y
 }

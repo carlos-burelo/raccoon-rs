@@ -1,13 +1,9 @@
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{IntValue, ArrayValue, RuntimeValue, StrValue};
+use crate::runtime::{ArrayValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
-
-// ============================================================================
-// ObjectType - Object literal type handler
-// ============================================================================
 
 pub struct ObjectType;
 

@@ -1,18 +1,13 @@
-//! String context primitives
-//! Low-level string operations
-
 use crate::primitive;
 use crate::register_context_primitives;
 use crate::runtime::{FromRaccoon, Registrar, RuntimeValue, ToRaccoon};
 
-// Get string length
 primitive! {
     string::core_string_len(s: String) -> i64 {
         s.len() as i64
     }
 }
 
-// Get character at index
 pub fn core_string_char_at(args: Vec<RuntimeValue>) -> RuntimeValue {
     let s = String::from_raccoon(&args[0]).unwrap_or_default();
     let index = i64::from_raccoon(&args[1]).unwrap_or(0) as usize;
@@ -23,7 +18,6 @@ pub fn core_string_char_at(args: Vec<RuntimeValue>) -> RuntimeValue {
         .to_raccoon()
 }
 
-// Get substring
 pub fn core_string_substring(args: Vec<RuntimeValue>) -> RuntimeValue {
     let s = String::from_raccoon(&args[0]).unwrap_or_default();
     let start = i64::from_raccoon(&args[1]).unwrap_or(0) as usize;
@@ -35,28 +29,24 @@ pub fn core_string_substring(args: Vec<RuntimeValue>) -> RuntimeValue {
         .to_raccoon()
 }
 
-// Convert to uppercase
 primitive! {
     string::core_string_to_upper(s: String) -> String {
         s.to_uppercase()
     }
 }
 
-// Convert to lowercase
 primitive! {
     string::core_string_to_lower(s: String) -> String {
         s.to_lowercase()
     }
 }
 
-// Trim whitespace
 primitive! {
     string::core_string_trim(s: String) -> String {
         s.trim().to_string()
     }
 }
 
-// Split string
 pub fn core_string_split(args: Vec<RuntimeValue>) -> RuntimeValue {
     let s = String::from_raccoon(&args[0]).unwrap_or_default();
     let delimiter = String::from_raccoon(&args[1]).unwrap_or_default();
@@ -70,7 +60,6 @@ pub fn core_string_split(args: Vec<RuntimeValue>) -> RuntimeValue {
         .to_raccoon()
 }
 
-// Replace all occurrences
 pub fn core_string_replace(args: Vec<RuntimeValue>) -> RuntimeValue {
     let s = String::from_raccoon(&args[0]).unwrap_or_default();
     let from = String::from_raccoon(&args[1]).unwrap_or_default();
@@ -78,28 +67,24 @@ pub fn core_string_replace(args: Vec<RuntimeValue>) -> RuntimeValue {
     s.replace(&from, &to).to_raccoon()
 }
 
-// Check if string starts with prefix
 primitive! {
     string::core_string_starts_with(s: String, prefix: String) -> bool {
         s.starts_with(&prefix)
     }
 }
 
-// Check if string ends with suffix
 primitive! {
     string::core_string_ends_with(s: String, suffix: String) -> bool {
         s.ends_with(&suffix)
     }
 }
 
-// Check if string contains substring
 primitive! {
     string::core_string_contains(s: String, substring: String) -> bool {
         s.contains(&substring)
     }
 }
 
-// Find index of substring
 primitive! {
     string::core_string_index_of(s: String, substring: String) -> i64 {
         s.find(&substring)
@@ -108,7 +93,6 @@ primitive! {
     }
 }
 
-/// Register all string primitives
 pub fn register_string_primitives(registrar: &mut Registrar) {
     register_context_primitives!(registrar, string, {
         core_string_len: 1..=1,

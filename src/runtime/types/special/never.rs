@@ -4,10 +4,6 @@ use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// NeverType - Never type (function that never returns)
-// ============================================================================
-
 pub struct NeverType;
 
 #[async_trait]

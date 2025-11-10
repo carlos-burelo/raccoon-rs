@@ -1,8 +1,5 @@
-/// Metadata system for type reflection
-/// Provides structured information about types, methods, and properties
 use std::collections::HashMap;
 
-/// Parameter metadata for method signatures
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ParamMetadata {
     pub name: &'static str,
@@ -32,7 +29,6 @@ impl ParamMetadata {
     }
 }
 
-/// Method metadata with signature information
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MethodMetadata {
     pub name: &'static str,
@@ -79,13 +75,11 @@ impl MethodMetadata {
         self
     }
 
-    /// Check if this method or any of its aliases matches the given name
     pub fn matches(&self, name: &str) -> bool {
         self.name == name || self.aliases.iter().any(|&alias| alias == name)
     }
 }
 
-/// Property metadata
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PropertyMetadata {
     pub name: &'static str,
@@ -114,7 +108,6 @@ impl PropertyMetadata {
     }
 }
 
-/// Complete type metadata
 #[derive(Debug, Clone)]
 pub struct TypeMetadata {
     pub type_name: &'static str,
@@ -159,39 +152,32 @@ impl TypeMetadata {
         self
     }
 
-    /// Find instance method by name (including aliases)
     pub fn find_instance_method(&self, name: &str) -> Option<&MethodMetadata> {
         self.instance_methods.iter().find(|m| m.matches(name))
     }
 
-    /// Find static method by name (including aliases)
     pub fn find_static_method(&self, name: &str) -> Option<&MethodMetadata> {
         self.static_methods.iter().find(|m| m.matches(name))
     }
 
-    /// Find static property by name
     pub fn find_static_property(&self, name: &str) -> Option<&PropertyMetadata> {
         self.static_properties.iter().find(|p| p.name == name)
     }
 
-    /// Check if instance method exists (including aliases)
     pub fn has_instance_method(&self, name: &str) -> bool {
         self.find_instance_method(name).is_some()
     }
 
-    /// Check if static method exists (including aliases)
     pub fn has_static_method(&self, name: &str) -> bool {
         self.find_static_method(name).is_some()
     }
 
-    /// Check if async instance method exists
     pub fn has_async_instance_method(&self, name: &str) -> bool {
         self.find_instance_method(name)
             .map(|m| m.is_async)
             .unwrap_or(false)
     }
 
-    /// Generate documentation string for this type
     pub fn generate_docs(&self) -> String {
         let mut docs = format!("# {}\n\n{}\n\n", self.type_name, self.description);
 
@@ -263,7 +249,6 @@ impl TypeMetadata {
     }
 }
 
-/// Global registry for type metadata
 pub struct MetadataRegistry {
     types: HashMap<&'static str, TypeMetadata>,
 }

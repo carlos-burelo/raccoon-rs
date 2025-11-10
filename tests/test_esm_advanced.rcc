@@ -1,23 +1,19 @@
-// Advanced ES Modules Test
-// Testing edge cases and advanced patterns
+import { square, cube } from "./modules/advanced_exports.rcc"
+import { config, colors } from "./modules/advanced_exports.rcc"
+import { MathUtils } from "./modules/advanced_exports.rcc"
+import { typedValue, typedString, typedFloat } from "./modules/advanced_exports.rcc"
+import { min, abs, clamp } from "./modules/advanced_exports.rcc"
+
 
 print("=== Advanced ES Modules Test ===\n")
 
-// ============================================================================
-// Test 1: Function Expression Exports
-// ============================================================================
 print("Test 1: Function Expression Exports")
-import { square, cube } from "./modules/advanced_exports.rcc"
 
 print("  square(5) =", square(5))
 print("  cube(3) =", cube(3))
 print("  ✓ Function expression exports working\n")
 
-// ============================================================================
-// Test 2: Object and Array Exports
-// ============================================================================
 print("Test 2: Object and Array Exports")
-import { config, colors } from "./modules/advanced_exports.rcc"
 
 print("  config.host =", config.host)
 print("  config.port =", config.port)
@@ -25,11 +21,7 @@ print("  colors[0] =", colors[0])
 print("  colors length =", colors.length)
 print("  ✓ Object and array exports working\n")
 
-// ============================================================================
-// Test 3: Static Member Exports
-// ============================================================================
 print("Test 3: Static Member Exports")
-import { MathUtils } from "./modules/advanced_exports.rcc"
 
 print("  MathUtils.PI =", MathUtils.PI)
 print("  MathUtils.E =", MathUtils.E)
@@ -37,22 +29,17 @@ print("  MathUtils.add(10, 20) =", MathUtils.add(10, 20))
 print("  MathUtils.max(15, 8) =", MathUtils.max(15, 8))
 print("  ✓ Static member exports working\n")
 
-// ============================================================================
-// Test 4: Typed Exports
-// ============================================================================
 print("Test 4: Typed Exports")
-import { typedValue, typedString, typedFloat } from "./modules/advanced_exports.rcc"
 
 print("  typedValue =", typedValue)
 print("  typedString =", typedString)
 print("  typedFloat =", typedFloat)
 print("  ✓ Typed exports working\n")
 
-// ============================================================================
-// Test 5: Multiple Related Functions
-// ============================================================================
+
+
+
 print("Test 5: Multiple Related Functions")
-import { min, abs, clamp } from "./modules/advanced_exports.rcc"
 
 print("  min(10, 5) =", min(10, 5))
 print("  abs(-42) =", abs(-42))
@@ -60,9 +47,9 @@ print("  clamp(150, 0, 100) =", clamp(150, 0, 100))
 print("  clamp(50, 0, 100) =", clamp(50, 0, 100))
 print("  ✓ Multiple related functions working\n")
 
-// ============================================================================
-// Test 6: Barrel Exports (Re-export Pattern)
-// ============================================================================
+
+
+
 print("Test 6: Barrel Exports")
 import {
     add,
@@ -87,11 +74,11 @@ print("  BARREL_VERSION =", BARREL_VERSION)
 print("  greet('Raccoon') =", greet("Raccoon"))
 print("  ✓ Barrel exports working\n")
 
-// ============================================================================
-// Test 7: Circular Dependency Detection (if applicable)
-// ============================================================================
+
+
+
 print("Test 7: Import Order Independence")
-// Importing in different order should work
+
 import { multiply } from "./modules/utilities.rcc"
 import { calculateArea } from "./modules/geometry.rcc"
 
@@ -99,9 +86,9 @@ print("  multiply(4, 5) =", multiply(4, 5))
 print("  calculateArea(3.0, 4.0) =", calculateArea(3.0, 4.0))
 print("  ✓ Import order independence working\n")
 
-// ============================================================================
-// Test 8: Multiple Imports from Same Module
-// ============================================================================
+
+
+
 print("Test 8: Multiple Imports from Same Module")
 import { Status } from "./modules/utilities.rcc"
 import { PI as utilPI, version } from "./modules/utilities.rcc"
@@ -111,21 +98,21 @@ print("  utilPI =", utilPI)
 print("  version =", version)
 print("  ✓ Multiple imports from same module working\n")
 
-// ============================================================================
-// Test 9: Deep Import Chains
-// ============================================================================
+
+
+
 print("Test 9: Deep Import Chains")
-// barrel_export imports from utilities, which exports various things
-// We're testing that the full chain works
+
+
 import { Status as BarrelStatus } from "./modules/barrel_export.rcc"
 
 print("  BarrelStatus.Pending =", BarrelStatus.Pending)
 print("  BarrelStatus.Completed =", BarrelStatus.Completed)
 print("  ✓ Deep import chains working\n")
 
-// ============================================================================
-// Test 10: Using Imported Values in Expressions
-// ============================================================================
+
+
+
 print("Test 10: Using Imported Values in Expressions")
 import { MAX_SIZE, MIN_SIZE } from "./modules/utilities.rcc"
 
@@ -136,9 +123,9 @@ print("  Range:", range)
 print("  Average:", average)
 print("  ✓ Using imported values in expressions working\n")
 
-// ============================================================================
-// Test 11: Namespace with Re-exports
-// ============================================================================
+
+
+
 print("Test 11: Namespace with Re-exports")
 import * as barrel from "./modules/barrel_export.rcc"
 
@@ -147,9 +134,9 @@ print("  barrel.greet('Module') =", barrel.greet("Module"))
 print("  barrel.BARREL_VERSION =", barrel.BARREL_VERSION)
 print("  ✓ Namespace with re-exports working\n")
 
-// ============================================================================
-// Final Summary
-// ============================================================================
+
+
+
 print("==================================================")
 print("ALL ADVANCED ES MODULES TESTS PASSED!")
 print("==================================================")

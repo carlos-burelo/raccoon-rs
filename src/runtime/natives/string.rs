@@ -1,7 +1,6 @@
 use crate::runtime::{FromRaccoon, Registrar, RuntimeValue, ToRaccoon};
 
 pub fn register_string_module(registrar: &mut Registrar) {
-    // length(s: string) -> i32
     registrar.register_fn(
         "length",
         Some("string"),
@@ -13,7 +12,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // upper(s: string) -> string
     registrar.register_fn(
         "upper",
         Some("string"),
@@ -25,7 +23,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // lower(s: string) -> string
     registrar.register_fn(
         "lower",
         Some("string"),
@@ -37,7 +34,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // trim(s: string) -> string
     registrar.register_fn(
         "trim",
         Some("string"),
@@ -49,7 +45,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // substring(s: string, start: i32, end: i32) -> string
     registrar.register_fn(
         "substring",
         Some("string"),
@@ -71,7 +66,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(3),
     );
 
-    // split(s: string, delimiter: string) -> list<string>
     registrar.register_fn(
         "split",
         Some("string"),
@@ -93,7 +87,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // replace(s: string, from: string, to: string) -> string
     registrar.register_fn(
         "replace",
         Some("string"),
@@ -107,7 +100,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(3),
     );
 
-    // contains(s: string, needle: string) -> bool
     registrar.register_fn(
         "contains",
         Some("string"),
@@ -120,7 +112,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // starts_with(s: string, prefix: string) -> bool
     registrar.register_fn(
         "starts_with",
         Some("string"),
@@ -133,7 +124,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // ends_with(s: string, suffix: string) -> bool
     registrar.register_fn(
         "ends_with",
         Some("string"),
@@ -146,7 +136,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // reverse(s: string) -> string
     registrar.register_fn(
         "reverse",
         Some("string"),
@@ -158,7 +147,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // repeat(s: string, count: i32) -> string
     registrar.register_fn(
         "repeat",
         Some("string"),
@@ -171,7 +159,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // char_at(s: string, index: i32) -> string
     registrar.register_fn(
         "char_at",
         Some("string"),
@@ -188,7 +175,6 @@ pub fn register_string_module(registrar: &mut Registrar) {
         Some(2),
     );
 
-    // index_of(s: string, needle: string) -> i32
     registrar.register_fn(
         "index_of",
         Some("string"),

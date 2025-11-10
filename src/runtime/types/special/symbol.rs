@@ -4,10 +4,6 @@ use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// SymbolType - Symbol type (unique identifier)
-// ============================================================================
-
 pub struct SymbolType;
 
 #[async_trait]

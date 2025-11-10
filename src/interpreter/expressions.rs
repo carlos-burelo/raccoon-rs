@@ -22,7 +22,7 @@ impl Expressions {
         match expr {
             Expr::IntLiteral(lit) => Ok(RuntimeValue::Int(IntValue::new(lit.value))),
             Expr::BigIntLiteral(lit) => {
-                // Parse BigInt value (remove 'n' suffix and underscores, handle different bases)
+                
                 let clean_value = lit.value.trim_end_matches('n').replace('_', "");
                 let value = if clean_value.starts_with("0b") || clean_value.starts_with("0B") {
                     i128::from_str_radix(&clean_value[2..], 2).unwrap_or(0)
@@ -40,11 +40,11 @@ impl Expressions {
             Expr::BoolLiteral(lit) => Ok(RuntimeValue::Bool(BoolValue::new(lit.value))),
             Expr::NullLiteral(_) => Ok(RuntimeValue::Null(NullValue::new())),
             Expr::Identifier(ident) => {
-                // First check for builtin types (like Future, Promise)
+                
                 if let Some(builtin_type) = interpreter.get_builtin_type(&ident.name) {
                     return Ok(builtin_type);
                 }
-                // Otherwise look up in environment
+                
                 interpreter.environment.get(&ident.name, ident.position)
             }
             Expr::Binary(binary) => Self::evaluate_binary_expr(interpreter, binary).await,
@@ -569,7 +569,7 @@ impl Expressions {
                     .clone()
                     .unwrap_or_else(|| "<anonymous>".to_string());
 
-                // For async functions, create a pending future and execute in spawn_local
+                
                 if is_async {
                     let return_type = match &fn_type {
                         Type::Function(fn_type) => fn_type.return_type.clone(),
@@ -579,7 +579,7 @@ impl Expressions {
                     let future_value = FutureValue::new(return_type.clone());
                     let future_clone = future_value.clone();
 
-                    // Clone the necessary data for the async task
+                    
                     let body = func.body.clone();
                     let file = interpreter.file.clone();
                     let type_registry = std::sync::Arc::clone(&interpreter.type_registry);
@@ -589,15 +589,15 @@ impl Expressions {
                     let module_registry = interpreter.module_registry.clone();
                     let max_recursion_depth = interpreter.max_recursion_depth;
 
-                    // Snapshot the current environment (includes the function scope)
+                    
                     let env_snapshot = interpreter.environment.clone();
 
-                    // Pop the scope in the parent interpreter
+                    
                     interpreter.environment.pop_scope();
 
-                    // Spawn the async task
+                    
                     tokio::task::spawn_local(async move {
-                        // Create a new interpreter context for this async function
+                        
                         let mut async_interpreter = Interpreter {
                             file,
                             environment: env_snapshot,
@@ -614,7 +614,7 @@ impl Expressions {
 
                         let mut result = RuntimeValue::Null(NullValue::new());
 
-                        // Execute the function body
+                        
                         for stmt in &body {
                             match async_interpreter.execute_stmt_internal(stmt).await {
                                 Ok(InterpreterResult::Value(v)) => result = v,
@@ -641,7 +641,7 @@ impl Expressions {
                     return Ok(RuntimeValue::Future(future_value));
                 }
 
-                // Synchronous function execution (original logic)
+                
                 let stack_frame = crate::runtime::StackFrame::new(
                     function_name,
                     call.position,
@@ -706,7 +706,7 @@ impl Expressions {
     ) -> Result<RuntimeValue, RaccoonError> {
         let mut elements = Vec::new();
         for elem in &list.elements {
-            // Handle spread expressions in array literals
+            
             if let Expr::Spread(spread) = elem {
                 let spread_value = Self::evaluate_expr(interpreter, &spread.argument).await?;
                 if let RuntimeValue::Array(list_val) = spread_value {
@@ -738,9 +738,9 @@ impl Expressions {
                     properties.insert(key.clone(), Self::evaluate_expr(interpreter, value).await?);
                 }
                 ObjectLiteralProperty::Spread(expr) => {
-                    // Evaluate the spread expression
+                    
                     let spread_value = Self::evaluate_expr(interpreter, expr).await?;
-                    // Merge properties from the spread object
+                    
                     if let RuntimeValue::Object(ref obj_val) = spread_value {
                         for (k, v) in &obj_val.properties {
                             properties.insert(k.clone(), v.clone());
@@ -1281,7 +1281,7 @@ impl Expressions {
 
             let class_value = interpreter.environment.get(&class_name, (0, 0))?;
 
-            // Extract ClassValue from either RuntimeValue::Class or RuntimeValue::Type
+            
             let class = match &class_value {
                 RuntimeValue::Class(c) => c.clone(),
                 RuntimeValue::Type(type_obj) => {
@@ -1307,7 +1307,7 @@ impl Expressions {
             if let Some(ref superclass_name) = class.declaration.superclass {
                 let superclass_value = interpreter.environment.get(superclass_name, (0, 0))?;
 
-                // Extract superclass ClassValue from either RuntimeValue::Class or RuntimeValue::Type
+                
                 let superclass = match &superclass_value {
                     RuntimeValue::Class(sc) => sc.clone(),
                     RuntimeValue::Type(type_obj) => {
@@ -1479,7 +1479,7 @@ impl Expressions {
             .environment
             .get(&new_expr.class_name, new_expr.position)?;
 
-        // Extract ClassValue from either RuntimeValue::Class or RuntimeValue::Type
+        
         let class = match &class_value {
             RuntimeValue::Class(c) => c.clone(),
             RuntimeValue::Type(type_obj) => {
@@ -1508,7 +1508,7 @@ impl Expressions {
             }
         };
 
-        // Now proceed with class instantiation
+        
         {
             let mut properties = HashMap::new();
             let mut methods = HashMap::new();
@@ -2021,7 +2021,7 @@ impl Expressions {
 
             RuntimeValue::PrimitiveTypeObject(type_obj) => {
                 if let Some(static_method) = type_obj.static_methods.get(&method_call.method) {
-                    // Call native static method
+                    
                     Ok((static_method.implementation)(args))
                 } else {
                     Err(RaccoonError::new(
@@ -2037,13 +2037,13 @@ impl Expressions {
 
             RuntimeValue::Type(type_obj) => {
                 if let Some(static_method) = type_obj.get_static_method(&method_call.method) {
-                    // Call the static method (supports both native and user-defined functions)
+                    
                     match static_method {
                         RuntimeValue::NativeFunction(native_fn) => {
                             Ok((native_fn.implementation)(args))
                         }
                         RuntimeValue::Function(_) => {
-                            // Call user-defined static method
+                            
                             Helpers::call_function(
                                 interpreter,
                                 static_method,
@@ -2403,19 +2403,19 @@ impl Expressions {
                         let on_fulfilled = args[0].clone();
                         let on_rejected = args.get(1).cloned();
 
-                        // Read current state
+                        
                         let state = future.state.read().unwrap().clone();
                         drop(state);
 
-                        // Create new future for the result
+                        
                         let new_future = FutureValue::new(PrimitiveType::any());
                         let new_future_clone = new_future.clone();
 
-                        // Handle the then callback based on current state
+                        
                         let state = future.state.read().unwrap().clone();
                         match state {
                             FutureState::Resolved(value) => {
-                                // Execute on_fulfilled callback
+                                
                                 match on_fulfilled {
                                     RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
                                         let call_result = Helpers::call_function(
@@ -2426,8 +2426,8 @@ impl Expressions {
                                         )
                                         .await?;
 
-                                        // If the callback returns a Future, pass it through without unwrapping
-                                        // (Raccoon has explicit await semantics, not auto-unwrapping like JS Promises)
+                                        
+                                        
                                         new_future_clone.resolve(call_result);
                                     }
                                     _ => {
@@ -2462,7 +2462,7 @@ impl Expressions {
                                         }
                                     }
                                 } else {
-                                    // No rejection handler, propagate the error
+                                    
                                     new_future_clone.reject(error);
                                 }
                             }
@@ -2488,18 +2488,18 @@ impl Expressions {
 
                         let on_rejected = args[0].clone();
 
-                        // Create new future for the result
+                        
                         let new_future = FutureValue::new(PrimitiveType::any());
                         let new_future_clone = new_future.clone();
 
                         let state = future.state.read().unwrap().clone();
                         match state {
                             FutureState::Resolved(value) => {
-                                // Pass through the resolved value
+                                
                                 new_future_clone.resolve(*value);
                             }
                             FutureState::Rejected(error) => {
-                                // Execute on_rejected callback
+                                
                                 match on_rejected {
                                     RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
                                         let error_value = RuntimeValue::Str(StrValue::new(error));
@@ -2543,13 +2543,13 @@ impl Expressions {
 
                         let on_finally = args[0].clone();
 
-                        // Create new future for the result
+                        
                         let new_future = FutureValue::new(PrimitiveType::any());
                         let new_future_clone = new_future.clone();
 
                         let state = future.state.read().unwrap().clone();
 
-                        // Execute the finally callback regardless of state
+                        
                         match on_finally {
                             RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
                                 let _ = Helpers::call_function(
@@ -2569,7 +2569,7 @@ impl Expressions {
                             }
                         }
 
-                        // Propagate the original state
+                        
                         match state {
                             FutureState::Resolved(value) => {
                                 new_future_clone.resolve(*value);
@@ -2599,14 +2599,14 @@ impl Expressions {
 
                         let on_tap = args[0].clone();
 
-                        // Create new future for the result
+                        
                         let new_future = FutureValue::new(PrimitiveType::any());
                         let new_future_clone = new_future.clone();
 
                         let state = future.state.read().unwrap().clone();
                         match state {
                             FutureState::Resolved(value) => {
-                                // Execute the tap callback for side effects
+                                
                                 match on_tap {
                                     RuntimeValue::Function(_) | RuntimeValue::NativeFunction(_) => {
                                         let _ = Helpers::call_function(
@@ -2625,11 +2625,11 @@ impl Expressions {
                                         ));
                                     }
                                 }
-                                // Pass through the original value unchanged
+                                
                                 new_future_clone.resolve(*value);
                             }
                             FutureState::Rejected(error) => {
-                                // Pass through the rejection
+                                
                                 new_future_clone.reject(error);
                             }
                             FutureState::Pending => {
@@ -2644,7 +2644,7 @@ impl Expressions {
                         Ok(RuntimeValue::Future(new_future))
                     }
                     "map" => {
-                        // Alias for .then() but only accepts one argument
+                        
                         if args.is_empty() {
                             return Err(RaccoonError::new(
                                 "Future.map() requires a callback".to_string(),
@@ -2761,7 +2761,7 @@ impl Expressions {
 
         match future_value {
             RuntimeValue::Future(future) => {
-                // Wait for the future to complete
+                
                 match future.wait_for_completion().await {
                     Ok(value) => Ok(value),
                     Err(error) => Err(RaccoonError::new(
@@ -2784,20 +2784,20 @@ impl Expressions {
         interpreter: &mut Interpreter,
         match_expr: &MatchExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // Evaluate the scrutinee (the value being matched)
+        
         let scrutinee_value = Self::evaluate_expr(interpreter, &match_expr.scrutinee).await?;
 
-        // Try each arm in order
+        
         for arm in &match_expr.arms {
-            // Try to match the pattern
+            
             if let Some(bindings) = Self::match_pattern(&arm.pattern, &scrutinee_value)? {
-                // Pattern matched - push new scope with bindings
+                
                 interpreter.environment.push_scope();
                 for (name, value) in bindings {
                     let _ = interpreter.environment.declare(name, value);
                 }
 
-                // Evaluate the body expression
+                
                 let result = Self::evaluate_expr(interpreter, &arm.body).await;
                 interpreter.environment.pop_scope();
 
@@ -2805,7 +2805,7 @@ impl Expressions {
             }
         }
 
-        // No arm matched
+        
         Err(RaccoonError::new(
             "Non-exhaustive pattern match: no arm matched the value".to_string(),
             match_expr.position,
@@ -2813,30 +2813,30 @@ impl Expressions {
         ))
     }
 
-    /// Try to match a pattern against a value
-    /// Returns Some(bindings) if the pattern matches, None if it doesn't
+    
+    
     fn match_pattern(
         pattern: &Pattern,
         value: &RuntimeValue,
     ) -> Result<Option<HashMap<String, RuntimeValue>>, RaccoonError> {
         match pattern {
             Pattern::Wildcard(_) => {
-                // Wildcard matches anything with no bindings
+                
                 Ok(Some(HashMap::new()))
             }
 
             Pattern::Variable(name) => {
-                // Variable pattern binds the value to the variable name
+                
                 let mut bindings = HashMap::new();
                 bindings.insert(name.clone(), value.clone());
                 Ok(Some(bindings))
             }
 
             Pattern::Literal(expr) => {
-                // Compare literal pattern with value using == operator
-                // For literals, we match if values are equal
+                
+                
                 match (expr.as_ref(), value) {
-                    // Integer literals
+                    
                     (Expr::IntLiteral(lit), RuntimeValue::Int(val)) => {
                         if lit.value as i64 == val.value {
                             Ok(Some(HashMap::new()))
@@ -2844,7 +2844,7 @@ impl Expressions {
                             Ok(None)
                         }
                     }
-                    // String literals
+                    
                     (Expr::StrLiteral(lit), RuntimeValue::Str(val)) => {
                         if lit.value == val.value {
                             Ok(Some(HashMap::new()))
@@ -2852,7 +2852,7 @@ impl Expressions {
                             Ok(None)
                         }
                     }
-                    // Float literals
+                    
                     (Expr::FloatLiteral(lit), RuntimeValue::Float(val)) => {
                         if (lit.value - val.value).abs() < f64::EPSILON {
                             Ok(Some(HashMap::new()))
@@ -2860,7 +2860,7 @@ impl Expressions {
                             Ok(None)
                         }
                     }
-                    // Boolean literals
+                    
                     (Expr::BoolLiteral(lit), RuntimeValue::Bool(val)) => {
                         if lit.value == val.value {
                             Ok(Some(HashMap::new()))
@@ -2868,82 +2868,82 @@ impl Expressions {
                             Ok(None)
                         }
                     }
-                    // Null literal
+                    
                     (Expr::NullLiteral(_), RuntimeValue::Null(_)) => Ok(Some(HashMap::new())),
-                    // Type mismatch or unsupported literal pattern
+                    
                     _ => Ok(None),
                 }
             }
 
             Pattern::Array(patterns) => {
-                // array pattern: [p1, p2, ...]
+                
                 if let RuntimeValue::Array(list_val) = value {
                     let elements = &list_val.elements;
                     if elements.len() != patterns.len() {
-                        return Ok(None); // Length mismatch
+                        return Ok(None); 
                     }
 
                     let mut all_bindings = HashMap::new();
 
-                    // Try to match each element
+                    
                     for (element, pattern) in elements.iter().zip(patterns.iter()) {
                         if let Some(bindings) = Self::match_pattern(pattern, element)? {
-                            // Merge bindings
+                            
                             for (name, val) in bindings {
                                 all_bindings.insert(name, val);
                             }
                         } else {
-                            return Ok(None); // One of the patterns didn't match
+                            return Ok(None); 
                         }
                     }
 
                     Ok(Some(all_bindings))
                 } else {
-                    Ok(None) // Value is not a list
+                    Ok(None) 
                 }
             }
 
             Pattern::Object(properties) => {
-                // Object pattern: { x, y: pat }
+                
                 if let RuntimeValue::Object(obj_val) = value {
                     let mut all_bindings = HashMap::new();
 
-                    // Try to match each property
+                    
                     for (key, pattern) in properties {
                         if let Some(property_value) = obj_val.properties.get(key) {
                             if let Some(bindings) = Self::match_pattern(pattern, property_value)? {
-                                // Merge bindings
+                                
                                 for (name, val) in bindings {
                                     all_bindings.insert(name, val);
                                 }
                             } else {
-                                return Ok(None); // Property pattern didn't match
+                                return Ok(None); 
                             }
                         } else {
-                            return Ok(None); // Property not found in object
+                            return Ok(None); 
                         }
                     }
 
                     Ok(Some(all_bindings))
                 } else {
-                    Ok(None) // Value is not an object
+                    Ok(None) 
                 }
             }
 
             Pattern::Range(_, _) => {
-                // Range patterns not implemented yet
-                // TODO: Implement range patterns
+                
+                
                 Ok(Some(HashMap::new()))
             }
 
             Pattern::Type(_) => {
-                // Type patterns not implemented yet
-                // TODO: Implement type patterns
+                
+                
                 Ok(Some(HashMap::new()))
             }
 
             Pattern::Or(patterns) => {
-                // Or pattern: try each alternative
+                
                 for alt_pattern in patterns {
                     if let Some(bindings) = Self::match_pattern(alt_pattern, value)? {
                         return Ok(Some(bindings));
@@ -2954,17 +2954,17 @@ impl Expressions {
         }
     }
 
-    /// Evaluate anonymous class expression
-    /// Returns a ClassValue that can be instantiated with 'new'
+    
+    
     #[async_recursion(?Send)]
     async fn evaluate_class_expr(
         interpreter: &mut Interpreter,
         class_expr: &ClassExpr,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // Generate a synthetic name for the anonymous class
+        
         let synthetic_name = format!("__AnonymousClass_{:?}", class_expr.position);
 
-        // Extract static methods into a HashMap
+        
         let mut static_methods = HashMap::new();
         for method in &class_expr.methods {
             if method.is_static {
@@ -2995,7 +2995,7 @@ impl Expressions {
             }
         }
 
-        // Extract static properties into a HashMap
+        
         let mut static_properties = HashMap::new();
         for prop in &class_expr.properties {
             if let Some(init) = &prop.initializer {
@@ -3006,7 +3006,7 @@ impl Expressions {
             }
         }
 
-        // Create a ClassDecl from the ClassExpr for storage
+        
         let class_decl = ClassDecl {
             name: synthetic_name.clone(),
             type_parameters: class_expr.type_parameters.clone(),
@@ -3024,7 +3024,7 @@ impl Expressions {
             &synthetic_name,
         ));
 
-        // Create and return the ClassValue
+        
         Ok(RuntimeValue::Class(ClassValue::with_properties(
             synthetic_name,
             static_methods,

@@ -1,4 +1,4 @@
-// Test getters and setters
+
 
 class Person {
     private _name: str;

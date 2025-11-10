@@ -1,12 +1,11 @@
 use crate::ast::types::PrimitiveType;
 use crate::runtime::{
-    BoolValue, FloatValue, FromRaccoon, IntValue, ArrayValue, NullValue, ObjectValue, Registrar,
+    ArrayValue, BoolValue, FloatValue, FromRaccoon, IntValue, NullValue, ObjectValue, Registrar,
     RuntimeValue, StrValue, ToRaccoon,
 };
 use serde_json::Value as JsonValue;
 
 pub fn register_json_module(registrar: &mut Registrar) {
-    // parse(json_str: string) -> any
     registrar.register_fn(
         "parse",
         Some("json"),
@@ -21,7 +20,6 @@ pub fn register_json_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // stringify(value: any) -> string
     registrar.register_fn(
         "stringify",
         Some("json"),
@@ -36,7 +34,6 @@ pub fn register_json_module(registrar: &mut Registrar) {
         Some(1),
     );
 
-    // stringify_pretty(value: any) -> string
     registrar.register_fn(
         "stringify_pretty",
         Some("json"),

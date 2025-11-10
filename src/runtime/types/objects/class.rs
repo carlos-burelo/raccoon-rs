@@ -4,10 +4,6 @@ use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
-// ============================================================================
-// ClassType - Class type handler
-// ============================================================================
-
 pub struct ClassType;
 
 #[async_trait]

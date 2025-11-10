@@ -1,4 +1,3 @@
-/// ArrayType - Dynamic array collection type
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
@@ -10,7 +9,6 @@ use async_trait::async_trait;
 pub struct ArrayType;
 
 impl ArrayType {
-    /// Helper to extract array from RuntimeValue
     fn extract_array_mut<'a>(
         value: &'a mut RuntimeValue,
         position: Position,
@@ -44,7 +42,6 @@ impl TypeHandler for ArrayType {
         let list = Self::extract_array_mut(value, position, file.clone())?;
 
         match method {
-            // Mutating methods
             "push" => {
                 require_args(&args, 1, method, position, file)?;
                 list.elements.push(args[0].clone());
@@ -98,7 +95,6 @@ impl TypeHandler for ArrayType {
                     }
                 }
 
-                // Insert new elements
                 for (i, arg) in args.iter().skip(2).enumerate() {
                     list.elements.insert(actual_start + i, arg.clone());
                 }
@@ -129,7 +125,6 @@ impl TypeHandler for ArrayType {
                 Ok(RuntimeValue::Null(NullValue::new()))
             }
 
-            // Non-mutating methods
             "concat" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let other = extract_array(&args[0], "other", position, file)?;
@@ -238,7 +233,6 @@ impl TypeHandler for ArrayType {
                 )))
             }
 
-            // Search methods
             "indexOf" => {
                 require_args(&args, 1, method, position, file)?;
                 for (i, elem) in list.elements.iter().enumerate() {
@@ -279,7 +273,6 @@ impl TypeHandler for ArrayType {
                 }
             }
 
-            // Access methods
             "first" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(list
@@ -297,7 +290,6 @@ impl TypeHandler for ArrayType {
                     .unwrap_or(RuntimeValue::Null(NullValue::new())))
             }
 
-            // Info methods
             "length" | "len" => {
                 require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Int(IntValue::new(list.elements.len() as i64)))
@@ -307,7 +299,6 @@ impl TypeHandler for ArrayType {
                 Ok(RuntimeValue::Bool(BoolValue::new(list.elements.is_empty())))
             }
 
-            // Conversion
             "join" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let separator = extract_str(&args[0], "separator", position, file)?;
@@ -601,7 +592,6 @@ impl TypeHandler for ArrayType {
                     )
                     .await?;
 
-                    // Flatten the result if it's a list
                     match result {
                         RuntimeValue::Array(inner_list) => {
                             result_elements.extend(inner_list.elements);
@@ -630,7 +620,6 @@ mod tests {
         let handler = ArrayType;
         let mut value = RuntimeValue::Array(ArrayValue::new(vec![], PrimitiveType::any()));
 
-        // Push
         handler
             .call_instance_method(
                 &mut value,
@@ -641,7 +630,6 @@ mod tests {
             )
             .unwrap();
 
-        // Pop
         let result = handler
             .call_instance_method(&mut value, "pop", vec![], Position::default(), None)
             .unwrap();

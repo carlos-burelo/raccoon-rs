@@ -1,45 +1,45 @@
-// Simplified test file for advanced type system features
 
-// Test 1: Tuple Types
+
+
 let tuple1: [str, int, bool];
 
-// Test 2: Object Inline Types
+
 let person: { name: str, age: int, email?: str } = {
     name: "Alice",
     age: 30
 };
 
-// Test 3: Type Aliases with Union Types
+
 type StringOrNumber = str | int;
 let value1: StringOrNumber = "hello";
 let value2: StringOrNumber = 42;
 
-// Test 4: Type Aliases with Intersection Types
+
 type Point = { x: int, y: int };
 type Named = { name: str };
 type NamedPoint = Point & Named;
 
-// Test 5: Readonly Types
+
 let immutableValue: readonly str;
 
-// Test 6: Object with readonly properties
+
 let config: { readonly apiUrl: str, timeout: int } = {
     apiUrl: "https://api.example.com",
     timeout: 5000
 };
 
-// Test 7: Never Type in type alias
+
 type Result = str | never;
 let result: Result = "success";
 
-// Test 8: Complex nested types
+
 type Response = {
     data: { items: [str, int, bool] },
     status: int,
     error?: str
 };
 
-// Test 9: Multiple optional properties
+
 let options: {
     host?: str,
     port?: int,

@@ -1,6 +1,6 @@
-// Test: Decoradores básicos
 
-// Test @deprecated
+
+
 @deprecated("Use newFunction instead")
 fn oldFunction(): int {
     return 42;
@@ -10,20 +10,20 @@ fn newFunction(): int {
     return 100;
 }
 
-// Test @pure
+
 @pure()
 fn add(a: int, b: int): int {
     return a + b;
 }
 
-// Test @pure + @inline
+
 @pure()
 @inline()
 fn multiply(a: int, b: int): int {
     return a * b;
 }
 
-// Test @cache
+
 @cache(5000)
 fn expensiveCalculation(n: int): int {
     let result = 0;
@@ -33,24 +33,24 @@ fn expensiveCalculation(n: int): int {
     return result;
 }
 
-// Main
+
 fn main(): void {
-    // Test pure functions
+    
     let sum = add(5, 3);
-    print("5 + 3 = " + sum);  // 8
+    print("5 + 3 = " + sum);  
 
     let prod = multiply(4, 5);
-    print("4 * 5 = " + prod);  // 20
+    print("4 * 5 = " + prod);  
 
-    // Test cached function
+    
     let calc1 = expensiveCalculation(100);
     print("First call: " + calc1);
 
-    // Second call should use cache (but we can't verify it easily)
+    
     let calc2 = expensiveCalculation(100);
     print("Second call: " + calc2);
 
-    // Test deprecated function (should emit warning)
+    
     let oldResult = oldFunction();
     print("Old result: " + oldResult);
 }

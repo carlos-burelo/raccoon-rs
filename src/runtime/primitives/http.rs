@@ -1,11 +1,7 @@
-//! HTTP context primitives
-//! Basic HTTP operations
-
 use crate::primitive;
 use crate::register_context_primitives;
 use crate::runtime::{FromRaccoon, Registrar, RuntimeValue, ToRaccoon};
 
-// HTTP GET request
 primitive! {
     http::core_http_get(url: String) -> String {
         match ureq::get(&url).call() {
@@ -18,7 +14,6 @@ primitive! {
     }
 }
 
-// HTTP POST request
 primitive! {
     http::core_http_post(url: String, body: String) -> String {
         match ureq::post(&url).send_string(&body) {
@@ -31,7 +26,6 @@ primitive! {
     }
 }
 
-// Generic HTTP request with headers
 pub fn core_http_request(args: Vec<RuntimeValue>) -> RuntimeValue {
     let method = String::from_raccoon(&args[0]).unwrap_or_default();
     let url = String::from_raccoon(&args[1]).unwrap_or_default();
@@ -41,7 +35,6 @@ pub fn core_http_request(args: Vec<RuntimeValue>) -> RuntimeValue {
     let agent = ureq::AgentBuilder::new().build();
     let mut request = agent.request(&method, &url);
 
-    // Parse and add headers
     if let Ok(headers) =
         serde_json::from_str::<serde_json::Map<String, serde_json::Value>>(&headers_json)
     {
@@ -67,7 +60,6 @@ pub fn core_http_request(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 }
 
-/// Register all HTTP primitives
 pub fn register_http_primitives(registrar: &mut Registrar) {
     register_context_primitives!(registrar, http, {
         core_http_get: 1..=1,

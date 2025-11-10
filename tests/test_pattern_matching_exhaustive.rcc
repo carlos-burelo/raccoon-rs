@@ -1,11 +1,11 @@
-// EXHAUSTIVE PATTERN MATCHING TESTS
-// Testing all pattern variants with multiple arms
+
+
 
 println("=== EXHAUSTIVE PATTERN MATCHING TESTS ===\n");
 
-// ============================================
-// TEST 1: INTEGER LITERALS
-// ============================================
+
+
+
 println("TEST 1: Integer Literals");
 fn test_int_literals() {
     let test1 = match 1 { 1 => "one", _ => "other" };
@@ -22,9 +22,9 @@ fn test_int_literals() {
 }
 test_int_literals();
 
-// ============================================
-// TEST 2: STRING LITERALS
-// ============================================
+
+
+
 println("\nTEST 2: String Literals");
 fn test_string_literals() {
     let test1 = match "hello" { "hello" => "found", _ => "not found" };
@@ -39,9 +39,9 @@ fn test_string_literals() {
 }
 test_string_literals();
 
-// ============================================
-// TEST 3: WILDCARDS WITH MULTIPLE ARMS
-// ============================================
+
+
+
 println("\nTEST 3: Wildcards (must be last)");
 fn test_wildcards() {
     let test1 = match 42 { _ => "any" };
@@ -56,9 +56,9 @@ fn test_wildcards() {
 }
 test_wildcards();
 
-// ============================================
-// TEST 4: VARIABLE PATTERNS
-// ============================================
+
+
+
 println("\nTEST 4: Variable Patterns (bind value)");
 fn test_variable_patterns() {
     let test1 = match 10 { x => x * 2 };
@@ -71,9 +71,9 @@ fn test_variable_patterns() {
 }
 test_variable_patterns();
 
-// ============================================
-// TEST 5: LIST PATTERNS - EXACT LENGTH
-// ============================================
+
+
+
 println("\nTEST 5: List Patterns - Exact Length Match");
 fn test_list_patterns_length() {
     let test1 = match [1] { [a] => a, _ => 0 };
@@ -90,12 +90,12 @@ fn test_list_patterns_length() {
 }
 test_list_patterns_length();
 
-// ============================================
-// TEST 6: LIST PATTERNS - WRONG LENGTH (fallthrough)
-// ============================================
+
+
+
 println("\nTEST 6: List Patterns - Wrong Length Falls Through");
 fn test_list_patterns_fallthrough() {
-    // Wrong length should not match
+    
     let test1 = match [1, 2] { [a] => a, _ => 999 };
     let test2 = match [1] { [a, b] => a + b, _ => 888 };
     let test3 = match [1, 2, 3] { [a, b] => a + b, _ => 777 };
@@ -106,9 +106,9 @@ fn test_list_patterns_fallthrough() {
 }
 test_list_patterns_fallthrough();
 
-// ============================================
-// TEST 7: LIST PATTERNS - WILDCARDS IN LISTS
-// ============================================
+
+
+
 println("\nTEST 7: List Patterns - Wildcards Inside");
 fn test_list_wildcards() {
     let test1 = match [1, 2, 3] { [a, _, c] => a + c, _ => 0 };
@@ -123,9 +123,9 @@ fn test_list_wildcards() {
 }
 test_list_wildcards();
 
-// ============================================
-// TEST 8: EMPTY LISTS
-// ============================================
+
+
+
 println("\nTEST 8: Empty Lists");
 fn test_empty_lists() {
     let test1 = match [] { [] => "empty", _ => "not empty" };
@@ -138,9 +138,9 @@ fn test_empty_lists() {
 }
 test_empty_lists();
 
-// ============================================
-// TEST 9: OBJECT PATTERNS - BASIC
-// ============================================
+
+
+
 println("\nTEST 9: Object Patterns - Basic");
 fn test_object_basic() {
     let test1 = match {x: 5} { {x} => x, _ => 0 };
@@ -153,9 +153,9 @@ fn test_object_basic() {
 }
 test_object_basic();
 
-// ============================================
-// TEST 10: OBJECT PATTERNS - BINDING NAMES
-// ============================================
+
+
+
 println("\nTEST 10: Object Patterns - Custom Binding Names");
 fn test_object_bindings() {
     let test1 = match {name: "Alice"} { {name: n} => n, _ => "" };
@@ -168,9 +168,9 @@ fn test_object_bindings() {
 }
 test_object_bindings();
 
-// ============================================
-// TEST 11: NESTED PATTERNS - LIST OF LISTS
-// ============================================
+
+
+
 println("\nTEST 11: Nested Patterns - List of Lists");
 fn test_nested_lists() {
     let test1 = match [[1, 2], [3, 4]] { [[a, b], [c, d]] => a + b + c + d, _ => 0 };
@@ -183,9 +183,9 @@ fn test_nested_lists() {
 }
 test_nested_lists();
 
-// ============================================
-// TEST 12: NESTED PATTERNS - OBJECT WITH LISTS
-// ============================================
+
+
+
 println("\nTEST 12: Nested Patterns - Object with Lists");
 fn test_nested_obj_list() {
     let test1 = match {items: [1, 2, 3]} { {items: [a, b, c]} => a + b + c, _ => 0 };
@@ -198,12 +198,12 @@ fn test_nested_obj_list() {
 }
 test_nested_obj_list();
 
-// ============================================
-// TEST 13: MULTIPLE ARMS - LITERAL PRIORITY
-// ============================================
+
+
+
 println("\nTEST 13: Multiple Arms - Literal Priority (first match wins)");
 fn test_multiple_arms_priority() {
-    // Multiple literals - first match should win
+    
     let test1 = match 2 { 1 => "one", 2 => "two", 2 => "two-again", _ => "other" };
     let test2 = match 3 { 1 => "one", 2 => "two", 3 => "three", _ => "other" };
     let test3 = match 5 { 1 => "one", 2 => "two", 3 => "three", _ => "default" };
@@ -214,9 +214,9 @@ fn test_multiple_arms_priority() {
 }
 test_multiple_arms_priority();
 
-// ============================================
-// TEST 14: COMPLEX NESTED - MIXED PATTERNS
-// ============================================
+
+
+
 println("\nTEST 14: Complex Nested - Mixed Patterns");
 fn test_complex_mixed() {
     let test1 = match {users: [{name: "Alice"}, {name: "Bob"}], count: 2} {
@@ -234,9 +234,9 @@ fn test_complex_mixed() {
 }
 test_complex_mixed();
 
-// ============================================
-// TEST 15: ALL ARMS LITERALS (no wildcard)
-// ============================================
+
+
+
 println("\nTEST 15: All Literal Arms (must match or error)");
 fn test_all_literals() {
     let test1 = match 1 { 1 => "match", 2 => "no" };
@@ -249,9 +249,9 @@ fn test_all_literals() {
 }
 test_all_literals();
 
-// ============================================
-// TEST 16: MIXED LITERALS AND VARIABLES
-// ============================================
+
+
+
 println("\nTEST 16: Mixed Literals and Variables");
 fn test_mixed_literals_vars() {
     let test1 = match 5 { 1 => "one", x => x * 2 };
@@ -262,9 +262,9 @@ fn test_mixed_literals_vars() {
 }
 test_mixed_literals_vars();
 
-// ============================================
-// TEST 17: FLOAT LITERALS (if supported)
-// ============================================
+
+
+
 println("\nTEST 17: Float Literals");
 fn test_float_literals() {
     let test1 = match 3.14 { 3.14 => "pi", _ => "other" };
@@ -277,9 +277,9 @@ fn test_float_literals() {
 }
 test_float_literals();
 
-// ============================================
-// TEST 18: BOOLEAN LITERALS
-// ============================================
+
+
+
 println("\nTEST 18: Boolean Literals");
 fn test_boolean_literals() {
     let test1 = match true { true => "yes", false => "no" };
@@ -290,9 +290,9 @@ fn test_boolean_literals() {
 }
 test_boolean_literals();
 
-// ============================================
-// FINAL SUMMARY
-// ============================================
+
+
+
 println("\n=== ALL EXHAUSTIVE TESTS COMPLETED ===");
 println("Pattern types tested:");
 println("  ✓ Integer literals");
