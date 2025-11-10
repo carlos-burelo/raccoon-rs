@@ -9,7 +9,7 @@ import {
     file_delete as core_file_delete,
     dir_create as core_dir_create,
     dir_list as core_dir_list
-} from "internal:core";
+} from "std:runtime";
 
 class File {
     path: string;

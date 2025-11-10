@@ -7,7 +7,7 @@ pub mod io;
 pub mod json;
 pub mod math;
 pub mod output;
-pub mod primitives; // Core primitives for internal:core module
+pub mod primitives; // Core primitives for std:runtime module
 pub mod random;
 pub mod string;
 pub mod time;

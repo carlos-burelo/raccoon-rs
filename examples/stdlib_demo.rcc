@@ -1,9 +1,3 @@
-// Demo of the new Raccoon stdlib architecture
-// This demonstrates the Deno-like approach where:
-// - Rust provides only atomic primitives
-// - All logic is implemented in Raccoon
-// - Primitives are accessed via "internal:core"
-
 import Math from "std:math";
 import { IO, File } from "std:io";
 

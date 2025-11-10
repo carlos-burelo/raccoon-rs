@@ -5,7 +5,7 @@ import {
     http_get as core_http_get,
     http_post as core_http_post,
     http_request as core_http_request
-} from "internal:core";
+} from "std:runtime";
 
 class HttpResponse {
     status: int;

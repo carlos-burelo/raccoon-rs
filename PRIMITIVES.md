@@ -26,12 +26,12 @@ stdlib/
 
 ## Usando Primitivas desde Raccoon
 
-### 1. Importar desde `internal:core`
+### 1. Importar desde `std:runtime`
 
-Las primitivas están disponibles en el módulo especial `internal:core`:
+Las primitivas están disponibles en el módulo especial `std:runtime`:
 
 ```raccoon
-import { sqrt, sin, cos, pow } from "internal:core";
+import { sqrt, sin, cos, pow } from "std:runtime";
 
 let x = sqrt(16.0);  // 4.0
 let y = sin(3.14159 / 2);  // 1.0
@@ -45,7 +45,7 @@ import {
     sqrt as core_sqrt,
     sin as core_sin,
     pow as core_pow
-} from "internal:core";
+} from "std:runtime";
 
 class Math {
     static PI = 3.141592653589793;
@@ -158,7 +158,7 @@ registrar.register_fn("core_nueva_funcion", None, core_nueva_funcion, 1, Some(1)
 ### 3. Usarla desde Raccoon
 
 ```raccoon
-import { nueva_funcion } from "internal:core";
+import { nueva_funcion } from "std:runtime";
 
 let resultado = nueva_funcion(42.0);
 ```
@@ -189,7 +189,7 @@ import {
     file_exists,
     dir_create,
     dir_list
-} from "internal:core";
+} from "std:runtime";
 
 class IO {
     // Wrapper simple

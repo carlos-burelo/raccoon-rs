@@ -43,7 +43,7 @@ pub fn core_http_get(url: String) -> String {
 2. Toda la Lógica en Raccoon
 // stdlib/math.rcc - Lógica en Raccoon usando primitivas
 
-import { core_sqrt, core_sin } from "internal:core";
+import { core_sqrt, core_sin } from "std:runtime";
 
 class Math {
     static PI = 3.141592653589793;
@@ -79,7 +79,7 @@ src/
 │   │   ├── macros.rs          # Macro #[native]
 │   │   └── primitives.rs       # SOLO funciones primitivas
 │   ├── stdlib/
-│   │   ├── loader.rs           # Mejora: soporte para "internal:core"
+│   │   ├── loader.rs           # Mejora: soporte para "std:runtime"
 │   │   └── mod.rs
 │   └── ...
 │
@@ -97,7 +97,7 @@ Problema Actual
 Necesitas wrappers.rs para exponer funciones
 Necesitas archivos .rcc que solo llamen _native_*
 Mucho boilerplate
-Solución: Módulo Virtual "internal:core"
+Solución: Módulo Virtual "std:runtime"
 // src/runtime/stdlib/loader.rs - MEJORADO
 
 pub struct StdLibLoader {
@@ -107,7 +107,7 @@ pub struct StdLibLoader {
 impl StdLibLoader {
     pub async fn load_module(&self, module_name: &str) -> Result<RuntimeValue, RaccoonError> {
         // Manejo especial para módulo virtual
-        if module_name == "internal:core" {
+        if module_name == "std:runtime" {
             return self.load_core_module().await;
         }
         
@@ -145,7 +145,7 @@ User Code (main.rcc)
          │
          └─> stdlib/math.rcc (Raccoon code)
               │
-              ├─> import { core_sqrt } from "internal:core"
+              ├─> import { core_sqrt } from "std:runtime"
               │
               └─> core_sqrt(4)  // Llama a la primitiva Rust
                    │
@@ -206,7 +206,7 @@ pub fn log(x: f64, base: f64) -> f64 {
 }
 Paso 2: Lógica en Raccoon (150 líneas)
 // stdlib/math.rcc
-import { sqrt, sin, cos, tan, log } from "internal:core";
+import { sqrt, sin, cos, tan, log } from "std:runtime";
 
 class Math {
     static PI = 3.141592653589793;
@@ -279,7 +279,7 @@ pub fn get_time_millis() -> i64 {
         .as_millis() as i64
 }
 // Raccoon: Lógica de negocio
-import { get_time_millis } from "internal:core";
+import { get_time_millis } from "std:runtime";
 
 class Date {
     time: int;
@@ -304,7 +304,7 @@ pub fn http_request(method: String, url: String, body: String) -> String {
     // Implementación con reqwest
 }
 // Raccoon: Cliente sofisticado
-import { http_request } from "internal:core";
+import { http_request } from "std:runtime";
 
 class HttpClient {
     baseUrl: string = "";

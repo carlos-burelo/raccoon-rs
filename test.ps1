@@ -1,6 +1,7 @@
 Get-ChildItem .\tests\*.rcc | ForEach-Object {
-  $out = cargo run -- $_.FullName 2>&1
-  if ($out -match 'error') {
-    Write-Host "Falló: $($_.Name)"
+  $output = cargo run -- $_.FullName 2>&1
+  $errors = $output | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] }
+  if ($errors) {
+    $errors | Out-Host
   }
 }

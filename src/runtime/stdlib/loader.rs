@@ -29,8 +29,12 @@ impl StdLibLoader {
 
     pub fn module_exists(&self, module_name: &str) -> bool {
         // Virtual module always exists
-        if module_name == "internal:core" {
+        if module_name == "std:runtime" {
             return true;
+        }
+        // std:core is auto-loaded and cannot be explicitly imported
+        if module_name == "std:core" {
+            return false;
         }
         if !module_name.starts_with("std:") {
             return false;
@@ -43,13 +47,13 @@ impl StdLibLoader {
         self.stdlib_path.join(format!("{}.rcc", basename))
     }
 
-    /// Load the virtual "internal:core" module
+    /// Load the virtual "std:runtime" module
     /// This module exposes all core primitives registered in the system
     fn load_core_module(&self) -> Result<RuntimeValue, RaccoonError> {
         let mut exports = HashMap::new();
 
         // Create a temporary interpreter to get the registrar
-        let interp = Interpreter::new(Some("internal:core".to_string()));
+        let interp = Interpreter::new(Some("std:runtime".to_string()));
         let registrar = interp.registrar.lock().unwrap();
 
         // Export all functions that start with "core_" without namespace
@@ -58,13 +62,21 @@ impl StdLibLoader {
                 // Create export name without "core_" prefix
                 let export_name = full_name.strip_prefix("core_").unwrap_or(full_name);
 
-                // Export as NativeFunction (not async) since these are synchronous operations
+                // Create a simple wrapper for the native function
                 let handler = sig.handler.clone();
-                let native_fn = crate::runtime::NativeFunctionValue::new(
-                    move |args| handler(args),
-                    crate::ast::types::Type::Primitive(PrimitiveType::any()),
+                let func_type = PrimitiveType::any();
+
+                // Create a closure that captures the handler
+                // Since we can't use closures with NativeFn, we'll use NativeAsyncFunction
+                let handler_clone = handler.clone();
+                let native_async_fn = crate::runtime::NativeAsyncFunctionValue::new(
+                    std::sync::Arc::new(move |args| {
+                        let result = (handler_clone.clone())(args);
+                        Box::pin(async { result })
+                    }),
+                    func_type.clone(),
                 );
-                let function_value = RuntimeValue::NativeFunction(native_fn);
+                let function_value = RuntimeValue::NativeAsyncFunction(native_async_fn);
 
                 // Export both with and without prefix for compatibility
                 exports.insert(export_name.to_string(), function_value.clone());
@@ -79,9 +91,18 @@ impl StdLibLoader {
     }
 
     pub async fn load_module(&self, module_name: &str) -> Result<RuntimeValue, RaccoonError> {
-        // Handle virtual "internal:core" module
-        if module_name == "internal:core" {
+        // Handle virtual "std:runtime" module
+        if module_name == "std:runtime" {
             return self.load_core_module();
+        }
+
+        // std:core is automatically loaded and cannot be explicitly imported
+        if module_name == "std:core" {
+            return Err(RaccoonError::new(
+                "std:core is automatically loaded and cannot be explicitly imported".to_string(),
+                (0, 0),
+                Option::<String>::None,
+            ));
         }
 
         {
@@ -316,47 +337,7 @@ impl StdLibLoader {
         _file_path: &Option<String>,
     ) {
         // Register wrapper functions that stdlib modules can use
-        super::register_stdlib_wrappers(
-            &mut interp.environment,
-            interp.registrar.clone(),
-        );
-
-        // Also register all core_* functions directly in the environment
-        let registrar = interp.registrar.lock().unwrap();
-        for (full_name, _sig) in &registrar.functions {
-            if full_name.starts_with("core_") && _sig.namespace.is_none() {
-                // Get the export name without prefix
-                let export_name = full_name.strip_prefix("core_").unwrap_or(full_name);
-
-                // Create a wrapper RuntimeValue::NativeRegisteredFunction that references the registered function
-                if let Some(func) = registrar.get_function(full_name, None) {
-                    // Store the function name so it can be called via the registrar
-                    let func_name = full_name.clone();
-                    let reg_clone = interp.registrar.clone();
-                    let wrapper = crate::runtime::NativeFunctionValue::new(
-                        move |args: Vec<RuntimeValue>| {
-                            let reg = reg_clone.lock().unwrap();
-                            if let Some(f) = reg.get_function(&func_name, None) {
-                                (f.handler)(args)
-                            } else {
-                                RuntimeValue::Null(crate::runtime::NullValue::new())
-                            }
-                        },
-                        crate::ast::types::PrimitiveType::any(),
-                    );
-
-                    // Register with both names (with and without core_ prefix)
-                    let _ = interp.environment.declare(
-                        export_name.to_string(),
-                        RuntimeValue::NativeFunction(wrapper.clone()),
-                    );
-                    let _ = interp.environment.declare(
-                        full_name.clone(),
-                        RuntimeValue::NativeFunction(wrapper),
-                    );
-                }
-            }
-        }
+        super::register_stdlib_wrappers(&mut interp.environment, interp.registrar.clone());
     }
 
     pub fn available_modules(&self) -> Vec<String> {

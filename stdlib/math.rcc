@@ -24,7 +24,7 @@ import {
     trunc as core_trunc,
     abs as core_abs,
     sign as core_sign
-} from "internal:core";
+} from "std:runtime";
 
 class Math {
     // Mathematical constants

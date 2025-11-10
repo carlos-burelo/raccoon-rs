@@ -1,3 +1,4 @@
+use crate::runtime::values::NullValue;
 /// Core primitives for the Raccoon standard library
 /// These are atomic operations that can only be implemented in Rust
 /// All stdlib logic should be implemented in .rcc files using these primitives
@@ -7,9 +8,7 @@
 /// - Simple, focused functions with clear purpose
 /// - All high-level logic goes in stdlib .rcc files
 /// - Use macros for clean, maintainable code
-
 use crate::runtime::{FromRaccoon, Registrar, RuntimeValue, ToRaccoon};
-use crate::runtime::values::NullValue;
 
 // ============================================================================
 // Math Primitives - Basic mathematical operations
@@ -460,15 +459,13 @@ pub fn core_array_sort(args: Vec<RuntimeValue>) -> RuntimeValue {
     let array_json = String::from_raccoon(&args[0]).unwrap_or_else(|_| "[]".to_string());
 
     if let Ok(mut arr) = serde_json::from_str::<Vec<serde_json::Value>>(&array_json) {
-        arr.sort_by(|a, b| {
-            match (a, b) {
-                (serde_json::Value::Number(n1), serde_json::Value::Number(n2)) => n1
-                    .as_f64()
-                    .partial_cmp(&n2.as_f64())
-                    .unwrap_or(std::cmp::Ordering::Equal),
-                (serde_json::Value::String(s1), serde_json::Value::String(s2)) => s1.cmp(s2),
-                _ => std::cmp::Ordering::Equal,
-            }
+        arr.sort_by(|a, b| match (a, b) {
+            (serde_json::Value::Number(n1), serde_json::Value::Number(n2)) => n1
+                .as_f64()
+                .partial_cmp(&n2.as_f64())
+                .unwrap_or(std::cmp::Ordering::Equal),
+            (serde_json::Value::String(s1), serde_json::Value::String(s2)) => s1.cmp(s2),
+            _ => std::cmp::Ordering::Equal,
         });
         serde_json::to_string(&arr)
             .unwrap_or_else(|_| "[]".to_string())
@@ -531,6 +528,54 @@ pub fn core_println(args: Vec<RuntimeValue>) -> RuntimeValue {
     RuntimeValue::Null(NullValue)
 }
 
+/// Print to stderr
+pub fn core_eprint(args: Vec<RuntimeValue>) -> RuntimeValue {
+    let message = String::from_raccoon(&args[0]).unwrap_or_default();
+    eprint!("{}", message);
+    RuntimeValue::Null(NullValue)
+}
+
+/// Read input from stdin
+pub fn core_input(args: Vec<RuntimeValue>) -> RuntimeValue {
+    use std::io::{self, Write};
+
+    let prompt = if !args.is_empty() {
+        String::from_raccoon(&args[0]).unwrap_or_default()
+    } else {
+        String::new()
+    };
+
+    if !prompt.is_empty() {
+        print!("{}", prompt);
+        let _ = io::stdout().flush();
+    }
+
+    let mut input = String::new();
+    match io::stdin().read_line(&mut input) {
+        Ok(_) => {
+            let trimmed = input.trim_end_matches(&['\r', '\n'][..]).to_string();
+            trimmed.to_raccoon()
+        }
+        Err(_) => "".to_string().to_raccoon(),
+    }
+}
+
+/// Get length of a value
+pub fn core_len(args: Vec<RuntimeValue>) -> RuntimeValue {
+    use crate::runtime::IntValue;
+
+    if args.is_empty() {
+        return RuntimeValue::Int(IntValue::new(0));
+    }
+
+    match &args[0] {
+        RuntimeValue::Str(s) => RuntimeValue::Int(IntValue::new(s.value.len() as i64)),
+        RuntimeValue::Array(a) => RuntimeValue::Int(IntValue::new(a.elements.len() as i64)),
+        RuntimeValue::Map(m) => RuntimeValue::Int(IntValue::new(m.entries.len() as i64)),
+        _ => RuntimeValue::Int(IntValue::new(0)),
+    }
+}
+
 /// Get environment variable
 pub fn core_env_get(args: Vec<RuntimeValue>) -> RuntimeValue {
     let name = String::from_raccoon(&args[0]).unwrap_or_default();
@@ -574,7 +619,7 @@ pub fn core_random(_args: Vec<RuntimeValue>) -> RuntimeValue {
 // ============================================================================
 
 /// Register all core primitives in the registrar
-/// These functions are accessible from "internal:core" module in Raccoon code
+/// These functions are accessible from "std:runtime" module in Raccoon code
 pub fn register_core_primitives(registrar: &mut Registrar) {
     // Math primitives
     registrar.register_fn("core_sqrt", None, core_sqrt, 1, Some(1));
@@ -617,22 +662,70 @@ pub fn register_core_primitives(registrar: &mut Registrar) {
 
     // Time primitives
     registrar.register_fn("core_time_now", None, core_time_now, 0, Some(0));
-    registrar.register_fn("core_time_now_micros", None, core_time_now_micros, 0, Some(0));
+    registrar.register_fn(
+        "core_time_now_micros",
+        None,
+        core_time_now_micros,
+        0,
+        Some(0),
+    );
     registrar.register_fn("core_sleep", None, core_sleep, 1, Some(1));
 
     // String primitives
     registrar.register_fn("core_string_len", None, core_string_len, 1, Some(1));
     registrar.register_fn("core_string_char_at", None, core_string_char_at, 2, Some(2));
-    registrar.register_fn("core_string_substring", None, core_string_substring, 3, Some(3));
-    registrar.register_fn("core_string_to_upper", None, core_string_to_upper, 1, Some(1));
-    registrar.register_fn("core_string_to_lower", None, core_string_to_lower, 1, Some(1));
+    registrar.register_fn(
+        "core_string_substring",
+        None,
+        core_string_substring,
+        3,
+        Some(3),
+    );
+    registrar.register_fn(
+        "core_string_to_upper",
+        None,
+        core_string_to_upper,
+        1,
+        Some(1),
+    );
+    registrar.register_fn(
+        "core_string_to_lower",
+        None,
+        core_string_to_lower,
+        1,
+        Some(1),
+    );
     registrar.register_fn("core_string_trim", None, core_string_trim, 1, Some(1));
     registrar.register_fn("core_string_split", None, core_string_split, 2, Some(2));
     registrar.register_fn("core_string_replace", None, core_string_replace, 3, Some(3));
-    registrar.register_fn("core_string_starts_with", None, core_string_starts_with, 2, Some(2));
-    registrar.register_fn("core_string_ends_with", None, core_string_ends_with, 2, Some(2));
-    registrar.register_fn("core_string_contains", None, core_string_contains, 2, Some(2));
-    registrar.register_fn("core_string_index_of", None, core_string_index_of, 2, Some(2));
+    registrar.register_fn(
+        "core_string_starts_with",
+        None,
+        core_string_starts_with,
+        2,
+        Some(2),
+    );
+    registrar.register_fn(
+        "core_string_ends_with",
+        None,
+        core_string_ends_with,
+        2,
+        Some(2),
+    );
+    registrar.register_fn(
+        "core_string_contains",
+        None,
+        core_string_contains,
+        2,
+        Some(2),
+    );
+    registrar.register_fn(
+        "core_string_index_of",
+        None,
+        core_string_index_of,
+        2,
+        Some(2),
+    );
 
     // Array primitives
     registrar.register_fn("core_array_join", None, core_array_join, 2, Some(2));
@@ -646,6 +739,9 @@ pub fn register_core_primitives(registrar: &mut Registrar) {
     // System primitives
     registrar.register_fn("core_print", None, core_print, 1, Some(1));
     registrar.register_fn("core_println", None, core_println, 1, Some(1));
+    registrar.register_fn("core_eprint", None, core_eprint, 1, Some(1));
+    registrar.register_fn("core_input", None, core_input, 0, None); // variadic
+    registrar.register_fn("core_len", None, core_len, 0, None); // variadic
     registrar.register_fn("core_env_get", None, core_env_get, 1, Some(1));
     registrar.register_fn("core_env_set", None, core_env_set, 2, Some(2));
     registrar.register_fn("core_exit", None, core_exit, 1, Some(1));

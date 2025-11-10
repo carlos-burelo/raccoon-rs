@@ -1,14 +1,4 @@
-
-
-
-
-
-
 print("=== ERROR HANDLING TEST ===")
-
-
-
-
 
 print("Test 1: Basic Try-Catch")
 
@@ -18,9 +8,6 @@ try {
 } catch (e) {
     print(`Caught: ${e}`)
 }
-
-
-
 
 
 print("Test 2: Normal Flow")
@@ -34,9 +21,6 @@ try {
 }
 
 
-
-
-
 print("Test 3: String Error")
 
 try {
@@ -44,10 +28,6 @@ try {
 } catch (error) {
     print(`Error message: ${error}`)
 }
-
-
-
-
 
 print("Test 4: Try-Catch in Function")
 

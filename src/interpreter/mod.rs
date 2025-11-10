@@ -9,7 +9,7 @@ mod operators;
 use crate::ast::nodes::*;
 use crate::error::RaccoonError;
 use crate::runtime::{
-    CallStack, DecoratorRegistry, Environment, FutureValue, ArrayValue, ModuleRegistry, NullValue,
+    ArrayValue, CallStack, DecoratorRegistry, Environment, FutureValue, ModuleRegistry, NullValue,
     Registrar, RuntimeValue, StrValue, TypeRegistry,
 };
 use crate::tokens::{BinaryOperator, Position};
@@ -43,7 +43,7 @@ impl Interpreter {
         let type_registry = std::sync::Arc::new(TypeRegistry::new());
         let registrar = std::sync::Arc::new(std::sync::Mutex::new(Registrar::new()));
 
-        // Register core primitives immediately (needed for internal:core module)
+        // Register core primitives immediately (needed for std:runtime module)
         {
             let mut reg = registrar.lock().unwrap();
             crate::runtime::natives::register_core_primitives(&mut reg);
@@ -113,8 +113,33 @@ impl Interpreter {
         setup_builtins(env);
     }
 
+    /// Load std:core module and inject its exports into the global scope
+    async fn load_std_core_if_needed(&mut self) -> Result<(), RaccoonError> {
+        // Check if std:core is already loaded by looking for 'print' in the environment
+        if self.environment.exists("print") {
+            return Ok(());
+        }
+
+        // Load the std:core module
+        let core_module = self.stdlib_loader.load_module("std:core").await?;
+
+        // Inject all exports from std:core into the global scope
+        if let RuntimeValue::Object(obj) = core_module {
+            for (name, value) in obj.properties.iter() {
+                let _ = self.environment.declare(name.clone(), value.clone());
+            }
+        }
+
+        Ok(())
+    }
+
     #[async_recursion(?Send)]
     pub async fn interpret(&mut self, program: &Program) -> Result<RuntimeValue, RaccoonError> {
+        // Load std:core module on first interpret call (only once per interpreter instance)
+        if self.file.is_none() || self.file.as_ref().map_or(false, |f| f == "<root>") {
+            self.load_std_core_if_needed().await?;
+        }
+
         let mut last_value = RuntimeValue::Null(NullValue::new());
 
         for stmt in &program.stmts {
