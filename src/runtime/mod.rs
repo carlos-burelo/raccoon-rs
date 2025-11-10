@@ -7,11 +7,10 @@ pub mod dynamic;
 pub mod environment;
 pub mod module_registry;
 pub mod module_system;
-pub mod native;
-pub mod natives;
+pub mod native; // Native function registry
+pub mod natives; // Native module implementations (math, string, array, etc.)
 pub mod plugin_system;
 pub mod registrar;
-pub mod rust_natives;
 pub mod stdlib; // Standard library system (loader, wrappers, natives)
 pub mod type_object;
 pub mod type_object_builder;
