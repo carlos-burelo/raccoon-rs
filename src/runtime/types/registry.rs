@@ -1,7 +1,6 @@
 use super::{CallbackExecutor, TypeHandler};
 // New modular imports - Primitives
 use super::primitives::{BigIntType, BoolType, DecimalType, IntType, StrType};
-use super::primitives::{I8Type, I16Type, I32Type, I64Type, U8Type, U16Type, U32Type, U64Type};
 use super::primitives::{Float32Type, CharType, NullType, UnitType};
 use super::primitives::floats::Float64Type; // Import Float64Type directly
 // Collections
@@ -29,16 +28,16 @@ impl TypeRegistry {
             handlers: HashMap::new(),
         };
 
-        // Primitive types - Integers
+        // Primitive types - Integers (using unified NumericHandler)
         registry.register(Box::new(IntType));
-        registry.register(Box::new(I8Type));
-        registry.register(Box::new(I16Type));
-        registry.register(Box::new(I32Type));
-        registry.register(Box::new(I64Type));
-        registry.register(Box::new(U8Type));
-        registry.register(Box::new(U16Type));
-        registry.register(Box::new(U32Type));
-        registry.register(Box::new(U64Type));
+        registry.register(Box::new(super::primitives::numeric_trait::I8Handler::new()));
+        registry.register(Box::new(super::primitives::numeric_trait::I16Handler::new()));
+        registry.register(Box::new(super::primitives::numeric_trait::I32Handler::new()));
+        registry.register(Box::new(super::primitives::numeric_trait::I64Handler::new()));
+        registry.register(Box::new(super::primitives::numeric_trait::U8Handler::new()));
+        registry.register(Box::new(super::primitives::numeric_trait::U16Handler::new()));
+        registry.register(Box::new(super::primitives::numeric_trait::U32Handler::new()));
+        registry.register(Box::new(super::primitives::numeric_trait::U64Handler::new()));
         registry.register(Box::new(BigIntType));
 
         // Primitive types - Floats
