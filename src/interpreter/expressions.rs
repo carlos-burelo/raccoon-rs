@@ -537,9 +537,78 @@ impl Expressions {
 
                 let is_async = func.is_async;
                 let fn_type = func.fn_type.clone();
-
-                // Push stack frame for tracking
                 let function_name = func.name.clone().unwrap_or_else(|| "<anonymous>".to_string());
+
+                // For async functions, create a pending future and execute in spawn_local
+                if is_async {
+                    let return_type = match &fn_type {
+                        Type::Function(fn_type) => fn_type.return_type.clone(),
+                        _ => PrimitiveType::any(),
+                    };
+
+                    let future_value = FutureValue::new(return_type.clone());
+                    let future_clone = future_value.clone();
+
+                    // Clone the necessary data for the async task
+                    let body = func.body.clone();
+                    let file = interpreter.file.clone();
+                    let type_registry = std::sync::Arc::clone(&interpreter.type_registry);
+                    let stdlib_loader = std::sync::Arc::clone(&interpreter.stdlib_loader);
+                    let decorator_registry = interpreter.decorator_registry.clone();
+                    let registrar = interpreter.registrar.clone();
+                    let module_registry = interpreter.module_registry.clone();
+                    let max_recursion_depth = interpreter.max_recursion_depth;
+
+                    // Snapshot the current environment (includes the function scope)
+                    let env_snapshot = interpreter.environment.clone();
+
+                    // Pop the scope in the parent interpreter
+                    interpreter.environment.pop_scope();
+
+                    // Spawn the async task
+                    tokio::task::spawn_local(async move {
+                        // Create a new interpreter context for this async function
+                        let mut async_interpreter = Interpreter {
+                            file,
+                            environment: env_snapshot,
+                            type_registry,
+                            stdlib_loader,
+                            recursion_depth: 0,
+                            max_recursion_depth,
+                            decorator_registry,
+                            registrar,
+                            module_registry,
+                            call_stack: CallStack::new(),
+                        };
+
+                        let mut result = RuntimeValue::Null(NullValue::new());
+
+                        // Execute the function body
+                        for stmt in &body {
+                            match async_interpreter.execute_stmt_internal(stmt).await {
+                                Ok(InterpreterResult::Value(v)) => result = v,
+                                Ok(InterpreterResult::Return(v)) => {
+                                    future_clone.resolve(v);
+                                    return;
+                                }
+                                Ok(_) => {
+                                    future_clone.reject("Unexpected break/continue in function".to_string());
+                                    return;
+                                }
+                                Err(e) => {
+                                    future_clone.reject(e.message);
+                                    return;
+                                }
+                            }
+                        }
+
+                        future_clone.resolve(result);
+                    });
+
+                    return Ok(RuntimeValue::Future(future_value));
+                }
+
+                // Synchronous function execution (original logic)
                 let stack_frame = crate::runtime::StackFrame::new(
                     function_name,
                     call.position,
@@ -556,17 +625,6 @@ impl Expressions {
                             interpreter.call_stack.pop();
                             interpreter.recursion_depth -= 1;
                             interpreter.environment.pop_scope();
-
-                            if is_async {
-                                let return_type = match &fn_type {
-                                    Type::Function(fn_type) => fn_type.return_type.clone(),
-                                    _ => PrimitiveType::any(),
-                                };
-                                return Ok(RuntimeValue::Future(FutureValue::new_resolved(
-                                    v,
-                                    return_type,
-                                )));
-                            }
                             return Ok(v);
                         }
                         _ => {
@@ -587,19 +645,7 @@ impl Expressions {
                 interpreter.call_stack.pop();
                 interpreter.recursion_depth -= 1;
                 interpreter.environment.pop_scope();
-
-                if is_async {
-                    let return_type = match &fn_type {
-                        Type::Function(fn_type) => fn_type.return_type.clone(),
-                        _ => PrimitiveType::any(),
-                    };
-                    Ok(RuntimeValue::Future(FutureValue::new_resolved(
-                        result,
-                        return_type,
-                    )))
-                } else {
-                    Ok(result)
-                }
+                Ok(result)
             }
             RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
             RuntimeValue::NativeAsyncFunction(func) => {
@@ -2650,17 +2696,11 @@ impl Expressions {
 
         match future_value {
             RuntimeValue::Future(future) => {
-                let state = future.state.read().unwrap();
-                match &*state {
-                    FutureState::Resolved(value) => Ok((**value).clone()),
-                    FutureState::Rejected(error) => Err(RaccoonError::new(
+                // Wait for the future to complete
+                match future.wait_for_completion().await {
+                    Ok(value) => Ok(value),
+                    Err(error) => Err(RaccoonError::new(
                         format!("Future rejected: {}", error),
-                        await_expr.position,
-                        interpreter.file.clone(),
-                    )),
-                    FutureState::Pending => Err(RaccoonError::new(
-                        "Cannot await pending future (async runtime not fully implemented)"
-                            .to_string(),
                         await_expr.position,
                         interpreter.file.clone(),
                     )),

@@ -27,7 +27,7 @@ impl InterpreterResult {}
 pub struct Interpreter {
     pub file: Option<String>,
     pub environment: Environment,
-    pub type_registry: TypeRegistry,
+    pub type_registry: std::sync::Arc<TypeRegistry>,
     pub stdlib_loader: std::sync::Arc<crate::runtime::StdLibLoader>,
     pub recursion_depth: usize,
     pub max_recursion_depth: usize,
@@ -40,7 +40,7 @@ pub struct Interpreter {
 impl Interpreter {
     pub fn new(file: Option<String>) -> Self {
         let mut env = Environment::new(file.clone());
-        let type_registry = TypeRegistry::new();
+        let type_registry = std::sync::Arc::new(TypeRegistry::new());
         let registrar = std::sync::Arc::new(std::sync::Mutex::new(Registrar::new()));
         let mut module_registry = ModuleRegistry::new();
 
@@ -338,7 +338,7 @@ impl Interpreter {
                 );
                 static_methods.insert("reject".to_string(), Box::new(reject_fn));
 
-                // Future.all(futures) - combines multiple futures
+                // Future.all(futures) - combines multiple futures and waits for all
                 let all_fn = NativeFunctionValue::new(
                     |args: Vec<RuntimeValue>| {
                         if args.is_empty() {
@@ -351,40 +351,34 @@ impl Interpreter {
 
                         match &args[0] {
                             RuntimeValue::List(list) => {
-                                // Check if any future is rejected
-                                for element in &list.elements {
-                                    if let RuntimeValue::Future(fut) = element {
-                                        if fut.is_rejected() {
-                                            let state = fut.state.read().unwrap();
-                                            if let crate::runtime::values::FutureState::Rejected(err) = &*state {
-                                                return RuntimeValue::Future(
-                                                    FutureValue::new_rejected(err.clone(), PrimitiveType::any())
-                                                );
+                                let futures = list.elements.clone();
+                                let result_future = FutureValue::new(PrimitiveType::any());
+                                let result_clone = result_future.clone();
+
+                                // Spawn async task to wait for all futures
+                                tokio::task::spawn_local(async move {
+                                    let mut results = Vec::new();
+
+                                    // Wait for all futures sequentially (can be optimized with tokio::join!)
+                                    for element in &futures {
+                                        if let RuntimeValue::Future(fut) = element {
+                                            match fut.wait_for_completion().await {
+                                                Ok(val) => results.push(val),
+                                                Err(err) => {
+                                                    result_clone.reject(err);
+                                                    return;
+                                                }
                                             }
-                                        }
-                                    }
-                                }
-
-                                // Collect resolved values
-                                let mut results = Vec::new();
-                                for element in &list.elements {
-                                    if let RuntimeValue::Future(fut) = element {
-                                        let state = fut.state.read().unwrap();
-                                        if let crate::runtime::values::FutureState::Resolved(val) = &*state {
-                                            results.push((**val).clone());
                                         } else {
-                                            results.push(RuntimeValue::Null(NullValue::new()));
+                                            results.push(element.clone());
                                         }
-                                    } else {
-                                        results.push(element.clone());
                                     }
-                                }
 
-                                let result_list = RuntimeValue::List(ListValue::new(results, PrimitiveType::any()));
-                                RuntimeValue::Future(FutureValue::new_resolved(
-                                    result_list,
-                                    PrimitiveType::any()
-                                ))
+                                    let result_list = RuntimeValue::List(ListValue::new(results, PrimitiveType::any()));
+                                    result_clone.resolve(result_list);
+                                });
+
+                                RuntimeValue::Future(result_future)
                             }
                             _ => RuntimeValue::Future(FutureValue::new_rejected(
                                 "Future.all requires an array".to_string(),
@@ -415,8 +409,47 @@ impl Interpreter {
                                     ));
                                 }
 
-                                // Return first future (which could be resolved or rejected)
-                                list.elements[0].clone()
+                                let futures = list.elements.clone();
+                                let result_future = FutureValue::new(PrimitiveType::any());
+                                let result_clone = result_future.clone();
+
+                                // Spawn async task to race all futures
+                                tokio::task::spawn_local(async move {
+                                    // Create a vector of async tasks to race
+                                    let mut tasks = Vec::new();
+
+                                    for element in &futures {
+                                        if let RuntimeValue::Future(fut) = element {
+                                            let fut_clone = fut.clone();
+                                            tasks.push(tokio::task::spawn_local(async move {
+                                                fut_clone.wait_for_completion().await
+                                            }));
+                                        }
+                                    }
+
+                                    // Wait for first to complete
+                                    if !tasks.is_empty() {
+                                        // Use select to wait for first completion
+                                        for task in tasks {
+                                            if let Ok(result) = task.await {
+                                                match result {
+                                                    Ok(val) => {
+                                                        result_clone.resolve(val);
+                                                        return;
+                                                    }
+                                                    Err(err) => {
+                                                        result_clone.reject(err);
+                                                        return;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    result_clone.resolve(RuntimeValue::Null(NullValue::new()));
+                                });
+
+                                RuntimeValue::Future(result_future)
                             }
                             _ => RuntimeValue::Future(FutureValue::new_rejected(
                                 "Future.race requires an array".to_string(),

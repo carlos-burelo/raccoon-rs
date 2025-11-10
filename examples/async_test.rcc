@@ -1,0 +1,45 @@
+// Test async/await functionality
+
+async fn fetchData(id: int): int {
+  print("Fetching data for ID:", id)
+  return id * 10
+}
+
+async fn processData(data: int): int {
+  print("Processing data:", data)
+  return data * 2
+}
+
+async fn main(): void {
+  print("=== Test 1: Simple async/await ===")
+  let future1 = fetchData(5)
+  print("Future created, state:", future1)
+  let result1 = await future1
+  print("Result:", result1)
+
+  print("\n=== Test 2: Chained async calls ===")
+  let data = await fetchData(3)
+  let processed = await processData(data)
+  print("Processed:", processed)
+
+  print("\n=== Test 3: Future.all() - concurrent execution ===")
+  let futures = [
+    fetchData(1),
+    fetchData(2),
+    fetchData(3)
+  ]
+  let results = await Future.all(futures)
+  print("All results:", results)
+
+  print("\n=== Test 4: Future.race() - first to complete ===")
+  let raceFutures = [
+    fetchData(10),
+    fetchData(20)
+  ]
+  let winner = await Future.race(raceFutures)
+  print("Race winner:", winner)
+
+  print("\n=== Async tests completed! ===")
+}
+
+await main()

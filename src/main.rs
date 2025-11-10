@@ -10,7 +10,8 @@ fn main() {
         .build()
         .expect("Failed to create Tokio runtime");
 
-    runtime.block_on(async_main());
+    let local = tokio::task::LocalSet::new();
+    runtime.block_on(local.run_until(async_main()));
 }
 
 async fn async_main() {
