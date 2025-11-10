@@ -228,7 +228,7 @@ impl RuntimeValue {
             RuntimeValue::Str(_) => "str".to_string(),
             RuntimeValue::Bool(_) => "bool".to_string(),
             RuntimeValue::Null(_) => "null".to_string(),
-            RuntimeValue::Array(_) => "list".to_string(),
+            RuntimeValue::Array(_) => "array".to_string(),
             RuntimeValue::Map(_) => "map".to_string(),
             RuntimeValue::Object(_) => "object".to_string(),
             RuntimeValue::Dynamic(d) => d.type_name().to_string(),

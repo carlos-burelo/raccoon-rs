@@ -3,7 +3,7 @@ use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{BoolValue, IntValue, ArrayValue, NullValue, RuntimeValue};
+use crate::runtime::{ArrayValue, BoolValue, IntValue, NullValue, RuntimeValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -14,7 +14,6 @@ use async_trait::async_trait;
 pub struct SetType;
 
 impl SetType {
-
     /// Helper to extract set (list) from RuntimeValue
     fn extract_set_mut<'a>(
         value: &'a mut RuntimeValue,
@@ -147,7 +146,7 @@ impl TypeHandler for SetType {
         match method {
             "from" => {
                 require_args(&args, 1, method, position, file.clone())?;
-                let list = extract_array(&args[0], "list", position, file)?;
+                let list = extract_array(&args[0], "array", position, file)?;
                 let mut unique = Vec::new();
                 for item in &list.elements {
                     if !unique.iter().any(|e: &RuntimeValue| e.equals(item)) {
@@ -166,7 +165,18 @@ impl TypeHandler for SetType {
     fn has_instance_method(&self, method: &str) -> bool {
         matches!(
             method,
-            "add" | "remove" | "contains" | "has" | "size" | "length" | "clear" | "isEmpty" | "toList" | "union" | "intersection" | "difference"
+            "add"
+                | "remove"
+                | "contains"
+                | "has"
+                | "size"
+                | "length"
+                | "clear"
+                | "isEmpty"
+                | "toList"
+                | "union"
+                | "intersection"
+                | "difference"
         )
     }
 

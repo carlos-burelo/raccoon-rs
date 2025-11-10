@@ -67,7 +67,7 @@ pub fn typeof_check(value: &RuntimeValue, type_name: &str) -> bool {
                 | RuntimeValue::Map(_)
                 | RuntimeValue::Array(_)
         ),
-        "array" | "list" => matches!(value, RuntimeValue::Array(_)),
+        "array" => matches!(value, RuntimeValue::Array(_)),
         "map" | "dict" => matches!(value, RuntimeValue::Map(_)),
         "function" => matches!(
             value,

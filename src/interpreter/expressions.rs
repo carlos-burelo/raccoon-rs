@@ -1140,7 +1140,7 @@ impl Expressions {
             RuntimeValue::Str(_) => "str",
             RuntimeValue::Bool(_) => "bool",
             RuntimeValue::Null(_) => "null",
-            RuntimeValue::Array(_) => "list",
+            RuntimeValue::Array(_) => "array",
             RuntimeValue::Map(_) => "map",
             RuntimeValue::Object(_) => "object",
             RuntimeValue::Class(ref c) => {

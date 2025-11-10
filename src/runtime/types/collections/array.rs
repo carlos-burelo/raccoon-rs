@@ -3,14 +3,13 @@ use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::{CallbackExecutor, TypeHandler};
-use crate::runtime::{BoolValue, IntValue, ArrayValue, NullValue, RuntimeValue, StrValue};
+use crate::runtime::{ArrayValue, BoolValue, IntValue, NullValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
 pub struct ArrayType;
 
 impl ArrayType {
-
     /// Helper to extract array from RuntimeValue
     fn extract_array_mut<'a>(
         value: &'a mut RuntimeValue,
@@ -31,7 +30,7 @@ impl ArrayType {
 #[async_trait]
 impl TypeHandler for ArrayType {
     fn type_name(&self) -> &str {
-        "list"
+        "array"
     }
 
     fn call_instance_method(
@@ -320,7 +319,7 @@ impl TypeHandler for ArrayType {
                 Ok(RuntimeValue::Str(StrValue::new(list.to_string())))
             }
 
-            _ => Err(method_not_found_error("list", method, position, file)),
+            _ => Err(method_not_found_error("array", method, position, file)),
         }
     }
 
@@ -332,18 +331,36 @@ impl TypeHandler for ArrayType {
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
         Err(static_method_not_found_error(
-            "list", method, position, file,
+            "array", method, position, file,
         ))
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
         matches!(
             method,
-            "push" | "pop" | "shift" | "unshift" | "clear" | "splice" | "fill" |
-            "concat" | "reverse" | "slice" | "flat" | "unique" |
-            "indexOf" | "lastIndexOf" | "includes" | "at" |
-            "first" | "last" | "length" | "len" | "isEmpty" |
-            "join" | "toStr"
+            "push"
+                | "pop"
+                | "shift"
+                | "unshift"
+                | "clear"
+                | "splice"
+                | "fill"
+                | "concat"
+                | "reverse"
+                | "slice"
+                | "flat"
+                | "unique"
+                | "indexOf"
+                | "lastIndexOf"
+                | "includes"
+                | "at"
+                | "first"
+                | "last"
+                | "length"
+                | "len"
+                | "isEmpty"
+                | "join"
+                | "toStr"
         )
     }
 
@@ -354,7 +371,15 @@ impl TypeHandler for ArrayType {
     fn has_async_instance_method(&self, method: &str) -> bool {
         matches!(
             method,
-            "map" | "filter" | "reduce" | "forEach" | "find" | "findIndex" | "some" | "every" | "flatMap"
+            "map"
+                | "filter"
+                | "reduce"
+                | "forEach"
+                | "find"
+                | "findIndex"
+                | "some"
+                | "every"
+                | "flatMap"
         )
     }
 
@@ -656,5 +681,4 @@ mod tests {
             _ => panic!("Expected list"),
         }
     }
-
 }
