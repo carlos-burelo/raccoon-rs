@@ -1,6 +1,7 @@
 pub mod ast;
 pub mod error;
 pub mod interpreter;
+pub mod ir;
 pub mod lexer;
 // pub mod output_style;
 pub mod analyzer;
@@ -12,6 +13,7 @@ pub mod type_system;
 
 pub use error::RaccoonError;
 pub use interpreter::Interpreter;
+pub use ir::{IRCompiler, IROptimizer, Instruction, Register, VM};
 pub use lexer::Lexer;
 // pub use output_style::{Colors, Styles};
 pub use analyzer::SemanticAnalyzer;

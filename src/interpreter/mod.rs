@@ -4,7 +4,7 @@ pub mod declarations;
 pub mod expressions;
 pub mod helpers;
 pub mod module_loader;
-mod operators;
+pub mod operators;
 
 use crate::ast::nodes::*;
 use crate::error::RaccoonError;
@@ -35,6 +35,7 @@ pub struct Interpreter {
     pub registrar: std::sync::Arc<std::sync::Mutex<Registrar>>,
     pub module_registry: std::sync::Arc<ModuleRegistry>,
     pub call_stack: CallStack,
+    pub use_ir: bool,
 }
 
 impl Interpreter {
@@ -97,6 +98,7 @@ impl Interpreter {
             registrar,
             module_registry: std::sync::Arc::new(module_registry),
             call_stack: CallStack::new(),
+            use_ir: false,
         }
     }
 
@@ -133,8 +135,45 @@ impl Interpreter {
         Ok(())
     }
 
+    /// Enable IR mode for optimized execution
+    pub fn enable_ir_mode(&mut self) {
+        self.use_ir = true;
+    }
+
+    /// Disable IR mode (use direct AST interpretation)
+    pub fn disable_ir_mode(&mut self) {
+        self.use_ir = false;
+    }
+
+    /// Interpret a program using IR compilation and VM execution
+    #[async_recursion(?Send)]
+    pub async fn interpret_with_ir(&mut self, program: &Program) -> Result<RuntimeValue, RaccoonError> {
+        // Load std:core module on first interpret call
+        if self.file.is_none() || self.file.as_ref().map_or(false, |f| f == "<root>") {
+            self.load_std_core_if_needed().await?;
+        }
+
+        // Compile AST to IR
+        let compiler = crate::ir::IRCompiler::new();
+        let ir_program = compiler.compile(program)?;
+
+        // Optimize IR
+        let optimizer = crate::ir::IROptimizer::new(ir_program);
+        let optimized_program = optimizer.optimize();
+
+        // Execute IR with VM
+        let mut vm = crate::ir::VM::new(self.environment.clone());
+        let result = vm.execute(optimized_program).await?;
+
+        Ok(result)
+    }
+
     #[async_recursion(?Send)]
     pub async fn interpret(&mut self, program: &Program) -> Result<RuntimeValue, RaccoonError> {
+        // If IR mode is enabled, use IR interpretation
+        if self.use_ir {
+            return self.interpret_with_ir(program).await;
+        }
         // Load std:core module on first interpret call (only once per interpreter instance)
         if self.file.is_none() || self.file.as_ref().map_or(false, |f| f == "<root>") {
             self.load_std_core_if_needed().await?;

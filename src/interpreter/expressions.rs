@@ -609,6 +609,7 @@ impl Expressions {
                             registrar,
                             module_registry,
                             call_stack: CallStack::new(),
+                            use_ir: false,
                         };
 
                         let mut result = RuntimeValue::Null(NullValue::new());
