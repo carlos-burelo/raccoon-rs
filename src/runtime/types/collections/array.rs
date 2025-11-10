@@ -20,7 +20,7 @@ impl ArrayType {
         match value {
             RuntimeValue::Array(a) => Ok(a),
             _ => Err(RaccoonError::new(
-                format!("Expected array, got {}", value.get_name()),
+                format!("Expected list, got {}", value.get_name()),
                 position,
                 file,
             )),
@@ -31,7 +31,7 @@ impl ArrayType {
 #[async_trait]
 impl TypeHandler for ArrayType {
     fn type_name(&self) -> &str {
-        "array"
+        "list"
     }
 
     fn call_instance_method(
@@ -320,7 +320,7 @@ impl TypeHandler for ArrayType {
                 Ok(RuntimeValue::Str(StrValue::new(list.to_string())))
             }
 
-            _ => Err(method_not_found_error("array", method, position, file)),
+            _ => Err(method_not_found_error("list", method, position, file)),
         }
     }
 
@@ -332,7 +332,7 @@ impl TypeHandler for ArrayType {
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
         Err(static_method_not_found_error(
-            "array", method, position, file,
+            "list", method, position, file,
         ))
     }
 

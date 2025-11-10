@@ -46,10 +46,6 @@ impl StdLibLoader {
     /// Load the virtual "internal:core" module
     /// This module exposes all core primitives registered in the system
     fn load_core_module(&self) -> Result<RuntimeValue, RaccoonError> {
-        use crate::runtime::values::NativeAsyncFunctionValue;
-        use std::pin::Pin;
-        use std::sync::Arc;
-
         let mut exports = HashMap::new();
 
         // Create a temporary interpreter to get the registrar
@@ -62,22 +58,17 @@ impl StdLibLoader {
                 // Create export name without "core_" prefix
                 let export_name = full_name.strip_prefix("core_").unwrap_or(full_name);
 
-                // Create a NativeAsyncFunction that wraps the sync handler
+                // Export as NativeFunction (not async) since these are synchronous operations
                 let handler = sig.handler.clone();
-                let native_fn: Arc<
-                    dyn Fn(Vec<RuntimeValue>) -> Pin<Box<dyn std::future::Future<Output = RuntimeValue> + 'static>>
-                        + Send
-                        + Sync
-                        + 'static,
-                > = Arc::new(move |args| {
-                    let result = handler(args);
-                    Box::pin(async move { result })
-                });
+                let native_fn = crate::runtime::NativeFunctionValue::new(
+                    move |args| handler(args),
+                    crate::ast::types::Type::Primitive(PrimitiveType::any()),
+                );
+                let function_value = RuntimeValue::NativeFunction(native_fn);
 
-                let native_async_fn = NativeAsyncFunctionValue::new(native_fn, PrimitiveType::any());
-                let function_value = RuntimeValue::NativeAsyncFunction(native_async_fn);
-
-                exports.insert(export_name.to_string(), function_value);
+                // Export both with and without prefix for compatibility
+                exports.insert(export_name.to_string(), function_value.clone());
+                exports.insert(full_name.to_string(), function_value);
             }
         }
 
@@ -171,6 +162,11 @@ impl StdLibLoader {
         file_path: Option<String>,
     ) -> Result<HashMap<String, RuntimeValue>, RaccoonError> {
         let mut interp = Interpreter::new(file_path.clone());
+        // Share the same stdlib_loader so nested imports work
+        interp.stdlib_loader = std::sync::Arc::new(Self {
+            stdlib_path: self.stdlib_path.clone(),
+            module_cache: self.module_cache.clone(),
+        });
         self.setup_native_functions_in_interpreter(&mut interp, &file_path);
 
         let mut exports = HashMap::new();
@@ -324,6 +320,43 @@ impl StdLibLoader {
             &mut interp.environment,
             interp.registrar.clone(),
         );
+
+        // Also register all core_* functions directly in the environment
+        let registrar = interp.registrar.lock().unwrap();
+        for (full_name, _sig) in &registrar.functions {
+            if full_name.starts_with("core_") && _sig.namespace.is_none() {
+                // Get the export name without prefix
+                let export_name = full_name.strip_prefix("core_").unwrap_or(full_name);
+
+                // Create a wrapper RuntimeValue::NativeRegisteredFunction that references the registered function
+                if let Some(func) = registrar.get_function(full_name, None) {
+                    // Store the function name so it can be called via the registrar
+                    let func_name = full_name.clone();
+                    let reg_clone = interp.registrar.clone();
+                    let wrapper = crate::runtime::NativeFunctionValue::new(
+                        move |args: Vec<RuntimeValue>| {
+                            let reg = reg_clone.lock().unwrap();
+                            if let Some(f) = reg.get_function(&func_name, None) {
+                                (f.handler)(args)
+                            } else {
+                                RuntimeValue::Null(crate::runtime::NullValue::new())
+                            }
+                        },
+                        crate::ast::types::PrimitiveType::any(),
+                    );
+
+                    // Register with both names (with and without core_ prefix)
+                    let _ = interp.environment.declare(
+                        export_name.to_string(),
+                        RuntimeValue::NativeFunction(wrapper.clone()),
+                    );
+                    let _ = interp.environment.declare(
+                        full_name.clone(),
+                        RuntimeValue::NativeFunction(wrapper),
+                    );
+                }
+            }
+        }
     }
 
     pub fn available_modules(&self) -> Vec<String> {
