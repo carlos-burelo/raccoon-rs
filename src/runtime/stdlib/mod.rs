@@ -10,5 +10,4 @@ pub mod natives;
 pub mod wrappers;
 
 pub use loader::StdLibLoader;
-pub use natives::register_all_stdlib_natives;
 pub use wrappers::register_stdlib_wrappers;

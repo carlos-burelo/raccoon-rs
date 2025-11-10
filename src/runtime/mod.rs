@@ -29,7 +29,7 @@ pub use module_system::{analyze_exports, resolve_module_path, Module, ModuleCach
 pub use native::{NativeDecoratorProcessor, NativeRegistry};
 pub use plugin_system::{NativePlugin, PluginManager, PluginRegistry};
 pub use registrar::Registrar;
-pub use stdlib::{register_all_stdlib_natives, register_stdlib_wrappers, StdLibLoader};
+pub use stdlib::{register_stdlib_wrappers, StdLibLoader};
 pub use type_object::{PrimitiveKind, SourceLocation, TypeKind, TypeMetadata, TypeObject};
 pub use type_object_builder::TypeObjectBuilder;
 pub use types::registry::TypeRegistry;
