@@ -1,0 +1,238 @@
+ANALISIS COMPLETO DEL SISTEMA DE TIPOS DE RACCOON
+====================================================
+
+1. TRAIT TYPEHANDLER (src/runtime/types/mod.rs)
+==============================================
+
+#[async_trait]
+pub trait TypeHandler: Send + Sync {
+    fn type_name(&self) -> &str;
+    fn call_instance_method(...) -> Result<RuntimeValue, RaccoonError>;
+    fn call_static_method(...) -> Result<RuntimeValue, RaccoonError>;
+    fn get_static_property(...) -> Result<RuntimeValue, RaccoonError>;
+    fn has_instance_method(&self, method: &str) -> bool;
+    fn has_static_method(&self, method: &str) -> bool;
+    async fn call_async_instance_method(...) -> Result<RuntimeValue, RaccoonError>;
+    fn has_async_instance_method(&self, method: &str) -> bool;
+}
+
+Todos los 33 tipos implementan este trait.
+
+
+2. LOS 33 TIPOS ORGANIZADOS
+============================
+
+PRIMITIVOS (15):
+  intType(i64), I8Type, I16Type, I32Type, I64Type
+  U8Type, U16Type, U32Type, U64Type
+  Float64Type(f64), Float32Type, DecimalType
+  StrType, BoolType, CharType, NullType, UnitType
+  BigIntType
+
+COLECCIONES (6):
+  ListType, MapType, SetType, TupleType, RangeType, OptionalType
+
+OBJETOS (4):
+  ObjectType, ClassType, FunctionType, InterfaceType
+
+ASINCRONOS (4):
+  FutureType, ResultType, StreamType, EitherType
+
+ESPECIALES (8):
+  VoidType, NeverType, UnionType, IntersectionType
+  NullableType, ReadonlyType, SymbolType, EnumType
+
+
+3. REGISTRO CENTRALIZADO (src/runtime/types/registry.rs)
+=========================================================
+
+pub struct TypeRegistry {
+    handlers: HashMap<String, Box<dyn TypeHandler>>,
+}
+
+new() -> registra todos los 33 tipos
+register(handler) -> añade handler
+get_handler(type_name) -> obtiene handler
+call_instance_method() -> delegado al handler
+call_static_method() -> delegado al handler
+call_async_instance_method() -> delegado al handler
+
+
+4. PATRONES DE IMPLEMENTACION
+=============================
+
+PATRÓN 1 - PRIMITIVO SIMPLE (BoolType)
+  - call_instance_method: "toStr"
+  - call_static_method: "parse" (convierte string a bool)
+  - has_instance_method: matches!("toStr")
+  - has_static_method: matches!("parse")
+
+PATRÓN 2 - COLECCIÓN (ListType)
+  - Métodos síncronos: push, pop, length, reverse, indexOf, includes, etc
+  - Métodos asincronos: map, filter, reduce, forEach, find, some, every, flatMap
+  - Manejo de callbacks con callback_executor
+  - Validación de cantidad de argumentos
+
+PATRÓN 3 - ASINCRONIZADO (FutureType)
+  - Métodos de estado: isPending, isResolved, isRejected
+  - Manejo de FutureState con RwLock
+  - Métodos estáticos en builtins: resolve, reject, all, race, allSettled, any
+
+PATRÓN 4 - MAPEO (ObjectType)
+  - Maneja múltiples variantes: Object, ClassInstance
+  - Métodos: keys, values, entries, size, hasOwnProperty
+
+
+5. BUILTINS.RS - MÉTODOS ESPECIALES
+====================================
+
+register_primitive_types(env):
+  - int.parse(string) -> int
+  - int.MAX_VALUE, int.MIN_VALUE
+  - str.fromCharCode(code) -> str
+  - str.empty
+  - float.parse(string) -> float
+  - float.MAX_VALUE, MIN_VALUE, INFINITY, NaN
+
+register_future_object(env):
+  - Future.resolve(value) -> Future<T>
+  - Future.reject(error) -> Future<T>
+  - Future.all(futures) -> Future<[T]>
+  - Future.race(futures) -> Future<T>
+  - Future.allSettled(futures) -> Future<[Result<T,E>]>
+  - Future.any(futures) -> Future<T>
+
+register_object_object(env):
+  - Object.keys(obj) -> [str]
+  - Object.values(obj) -> [any]
+  - Object.entries(obj) -> [[str, any]]
+  - Object.assign(target, ...sources) -> object
+
+
+6. EJEMPLOS CONCRETOS
+====================
+
+BoolType: call_instance_method
+  "toStr" => Ok(RuntimeValue::Str(value.to_string()))
+
+IntType: call_static_method
+  "parse" => match str.parse::<i64>() { Ok(n) => Int(n), Err(_) => Null }
+
+ListType: call_instance_method
+  "push" => list.elements.push(args[0]); Null
+  "pop" => list.elements.pop()
+  "length" => Int(list.elements.len() as i64)
+  "indexOf" => busca elem.equals(arg) retorna índice o -1
+
+ListType: call_async_instance_method
+  "map" => para cada (index, elem): ejecuta callback_executor, retorna nueva List
+  "filter" => para cada: ejecuta callback, si truthy añade a filtered
+  "reduce" => acumula resultado iterando lista
+
+FutureType: call_instance_method
+  "isPending" => Bool(matches!(state, Pending))
+  "isResolved" => Bool(matches!(state, Resolved(_)))
+  "isRejected" => Bool(matches!(state, Rejected(_)))
+  "toString" => Str("Future(Pending|Resolved|Rejected)")
+
+
+7. PATRONES COMUNES TODOS TIPOS
+================================
+
+A. VALIDACION TIPO:
+   let val = match value { RuntimeValue::Type(v) => v, _ => return Err(...) };
+
+B. VALIDACION ARGS:
+   if args.len() != expected { return Err(...); }
+
+C. CONVERSIONES:
+   "toStr" => Str(value.to_string())
+   "toInt" => Int(num as i64)
+   "toFloat" => Float(num as f64)
+
+D. BOOLEANOS:
+   "isEmpty" => Bool(collection.is_empty())
+   "isEven" => Bool(num % 2 == 0)
+
+E. MUTADORES (retornan null):
+   "push" => list.push(arg); Null
+   "clear" => collection.clear(); Null
+
+F. NUEVAS INSTANCIAS:
+   "reverse" => List::new(reversed, ...)
+
+G. BÚSQUEDA:
+   "indexOf" => for elem in list { if elem.equals(arg) { return idx } } -1
+
+H. ASYNC CON CALLBACK:
+   "map" => for elem in list { result = callback(elem); mapped.push(result) }
+
+
+8. FLUJO EJECUCION
+==================
+
+Instance Method Call: value.method(args)
+  → RuntimeValue detecta método
+  → TypeRegistry.call_instance_method()
+  → Busca handler por value.get_name()
+  → TypeHandler.call_instance_method()
+  → Match en el método específico
+  → Retorna RuntimeValue
+
+Static Method Call: Type.method(args)
+  → Detecta método estático
+  → TypeRegistry.call_static_method(type_name, ...)
+  → Busca handler por type_name
+  → TypeHandler.call_static_method()
+  → Retorna RuntimeValue
+
+Async Method Call: await value.method(callback)
+  → TypeRegistry.call_async_instance_method()
+  → TypeHandler.call_async_instance_method() [async]
+  → Ejecuta callback_executor para cada item
+  → Retorna RuntimeValue
+
+
+9. RESUMEN COBERTURA
+===================
+
+Tipo        | Métodos Instance | Métodos Async | Métodos Static | Props Static
+-----------|------------------|----------------|----------------|----------
+Primitivos | Sí (toStr, etc)  | No             | Sí (parse)     | Sí (MAX,MIN)
+Colecciones| Sí (30+ métodos) | Sí (8 métodos) | No             | No
+Objetos    | Sí (inspect)     | No             | No             | No
+Asincronos | Sí (isPending)   | Sí (Stream)    | Sí (Future)    | No
+Especiales | Mixto/Ninguno    | No             | No             | No
+
+
+10. PARA PROPONER SOLUCIÓN COMPLETA
+===================================
+
+Tu solución debe manejar:
+
+PRIMITIVOS:
+  ✓ Conversiones (toStr, toInt, toFloat, etc)
+  ✓ Validaciones (isEven, isEmpty, etc)
+  ✓ Métodos estáticos (parse, fromCharCode, etc)
+  ✓ Propiedades estáticas (MAX_VALUE, MIN_VALUE, INFINITY, NaN, etc)
+
+COLECCIONES:
+  ✓ Mutadores (push, pop, clear, set, delete, etc)
+  ✓ Acceso (get, at, first, last, indexOf, includes, etc)
+  ✓ Nuevas instancias (slice, reverse, concat, etc)
+  ✓ Async callbacks (map, filter, reduce, forEach, find, some, every, flatMap)
+
+OBJETOS:
+  ✓ Inspección (keys, values, entries, size, hasOwnProperty)
+  ✓ Manipulación (assign, etc)
+  ✓ Especiales (constructor, toString, etc)
+
+ASINCRONOS:
+  ✓ Estado (isPending, isResolved, isRejected)
+  ✓ Métodos estáticos (resolve, reject, all, race, allSettled, any)
+  ✓ Múltiples futures con estrategias diferentes
+
+ESPECIALES:
+  ✓ Compile-time only (union, intersection)
+  ✓ Sin métodos (void, never)
+
