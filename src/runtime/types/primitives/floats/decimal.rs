@@ -1,4 +1,7 @@
+/// Refactored DecimalType using helpers and metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{DecimalValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -10,6 +13,38 @@ use async_trait::async_trait;
 
 pub struct DecimalType;
 
+impl DecimalType {
+    /// Returns complete type metadata with all methods and properties
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("decimal", "Fixed precision decimal number type")
+            .with_instance_methods(vec![
+                // Conversion methods
+                MethodMetadata::new("toStr", "str", "Convert to string"),
+                MethodMetadata::new("toString", "str", "Convert to string"),
+                MethodMetadata::new("toInt", "int", "Convert to int (truncate)"),
+                MethodMetadata::new("toFloat", "float", "Convert to float"),
+                // Arithmetic methods
+                MethodMetadata::new("add", "decimal", "Add another decimal")
+                    .with_params(vec![ParamMetadata::new("other", "decimal")]),
+                MethodMetadata::new("subtract", "decimal", "Subtract another decimal")
+                    .with_params(vec![ParamMetadata::new("other", "decimal")]),
+                MethodMetadata::new("multiply", "decimal", "Multiply by another decimal")
+                    .with_params(vec![ParamMetadata::new("other", "decimal")]),
+                MethodMetadata::new("divide", "decimal", "Divide by another decimal")
+                    .with_params(vec![ParamMetadata::new("other", "decimal")]),
+                // Rounding methods
+                MethodMetadata::new("round", "decimal", "Round to specified decimal places")
+                    .with_params(vec![ParamMetadata::new("places", "int").optional()]),
+            ])
+            .with_static_methods(vec![MethodMetadata::new(
+                "parse",
+                "decimal",
+                "Parse string to decimal",
+            )
+            .with_params(vec![ParamMetadata::new("value", "str")])])
+    }
+}
+
 #[async_trait]
 impl TypeHandler for DecimalType {
     fn type_name(&self) -> &str {
@@ -20,132 +55,69 @@ impl TypeHandler for DecimalType {
         &self,
         value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let num = match value {
-            RuntimeValue::Decimal(d) => d.value,
-            _ => {
-                return Err(RaccoonError::new(
-                    format!("Expected decimal, got {}", value.get_name()),
-                    position,
-                    file,
-                ));
-            }
-        };
+        let num = extract_decimal(value, "this", position, file.clone())?;
 
         match method {
-            "toStr" | "toString" => Ok(RuntimeValue::Str(StrValue::new(num.to_string()))),
-            "toInt" => Ok(RuntimeValue::Int(IntValue::new(num as i64))),
-            "toFloat" => Ok(RuntimeValue::Float(FloatValue::new(num))),
+            // Conversion methods
+            "toStr" | "toString" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(num.to_string())))
+            }
+            "toInt" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Int(IntValue::new(num as i64)))
+            }
+            "toFloat" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Float(FloatValue::new(num)))
+            }
+
+            // Arithmetic methods
             "add" => {
-                if _args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "add requires 1 argument (decimal)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &_args[0] {
-                    RuntimeValue::Decimal(other) => {
-                        Ok(RuntimeValue::Decimal(DecimalValue::new(num + other.value)))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "add requires decimal argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_decimal(&args[0], "other", position, file)?;
+                Ok(RuntimeValue::Decimal(DecimalValue::new(num + other)))
             }
             "subtract" => {
-                if _args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "subtract requires 1 argument (decimal)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &_args[0] {
-                    RuntimeValue::Decimal(other) => {
-                        Ok(RuntimeValue::Decimal(DecimalValue::new(num - other.value)))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "subtract requires decimal argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_decimal(&args[0], "other", position, file)?;
+                Ok(RuntimeValue::Decimal(DecimalValue::new(num - other)))
             }
             "multiply" => {
-                if _args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "multiply requires 1 argument (decimal)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &_args[0] {
-                    RuntimeValue::Decimal(other) => {
-                        Ok(RuntimeValue::Decimal(DecimalValue::new(num * other.value)))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "multiply requires decimal argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_decimal(&args[0], "other", position, file)?;
+                Ok(RuntimeValue::Decimal(DecimalValue::new(num * other)))
             }
             "divide" => {
-                if _args.len() != 1 {
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_decimal(&args[0], "other", position, file.clone())?;
+                if other == 0.0 {
                     return Err(RaccoonError::new(
-                        "divide requires 1 argument (decimal)".to_string(),
+                        "Division by zero".to_string(),
                         position,
                         file,
                     ));
                 }
-                match &_args[0] {
-                    RuntimeValue::Decimal(other) => {
-                        if other.value == 0.0 {
-                            return Err(RaccoonError::new(
-                                "Division by zero".to_string(),
-                                position,
-                                file,
-                            ));
-                        }
-                        Ok(RuntimeValue::Decimal(DecimalValue::new(num / other.value)))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "divide requires decimal argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+                Ok(RuntimeValue::Decimal(DecimalValue::new(num / other)))
             }
+
+            // Rounding methods
             "round" => {
-                let places = if _args.is_empty() {
+                let places = if args.is_empty() {
                     0
                 } else {
-                    match &_args[0] {
-                        RuntimeValue::Int(i) => i.value as u32,
-                        _ => {
-                            return Err(RaccoonError::new(
-                                "round requires int argument for decimal places".to_string(),
-                                position,
-                                file,
-                            ))
-                        }
-                    }
+                    extract_int(&args[0], "places", position, file.clone())? as u32
                 };
                 let multiplier = 10_f64.powi(places as i32);
                 let rounded = (num * multiplier).round() / multiplier;
                 Ok(RuntimeValue::Decimal(DecimalValue::new(rounded)))
             }
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on decimal", method),
-                position,
-                file,
-            )),
+
+            _ => Err(method_not_found_error("decimal", method, position, file)),
         }
     }
 
@@ -158,33 +130,19 @@ impl TypeHandler for DecimalType {
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
             "parse" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "parse requires 1 argument (string)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::Str(s) => match s.value.trim().parse::<f64>() {
-                        Ok(num) => Ok(RuntimeValue::Decimal(DecimalValue::new(num))),
-                        Err(_) => Err(RaccoonError::new(
-                            format!("Failed to parse '{}' as decimal", s.value),
-                            position,
-                            file,
-                        )),
-                    },
-                    _ => Err(RaccoonError::new(
-                        "parse requires string argument".to_string(),
+                require_args(&args, 1, method, position, file.clone())?;
+                let s = extract_str(&args[0], "value", position, file.clone())?;
+                match s.trim().parse::<f64>() {
+                    Ok(num) => Ok(RuntimeValue::Decimal(DecimalValue::new(num))),
+                    Err(_) => Err(RaccoonError::new(
+                        format!("Failed to parse '{}' as decimal", s),
                         position,
                         file,
                     )),
                 }
             }
-            _ => Err(RaccoonError::new(
-                format!("Static method '{}' not found on decimal type", method),
-                position,
-                file,
+            _ => Err(static_method_not_found_error(
+                "decimal", method, position, file,
             )),
         }
     }

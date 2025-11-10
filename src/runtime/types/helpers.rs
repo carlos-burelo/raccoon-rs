@@ -1,6 +1,5 @@
 /// Helper functions for type system operations
 /// Provides reusable utilities for argument validation, type extraction, and error handling
-
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
@@ -15,7 +14,12 @@ pub fn require_args(
 ) -> Result<(), RaccoonError> {
     if args.len() != expected {
         return Err(RaccoonError::new(
-            format!("{} requires {} argument(s), got {}", method, expected, args.len()),
+            format!(
+                "{} requires {} argument(s), got {}",
+                method,
+                expected,
+                args.len()
+            ),
             position,
             file,
         ));
@@ -120,6 +124,40 @@ pub fn extract_float(
     }
 }
 
+/// Extracts a decimal value from a RuntimeValue
+pub fn extract_decimal(
+    value: &RuntimeValue,
+    arg_name: &str,
+    position: Position,
+    file: Option<String>,
+) -> Result<f64, RaccoonError> {
+    match value {
+        RuntimeValue::Decimal(d) => Ok(d.value),
+        _ => Err(RaccoonError::new(
+            format!("{} must be a decimal, got {}", arg_name, value.get_name()),
+            position,
+            file,
+        )),
+    }
+}
+
+/// Extracts a bigint value from a RuntimeValue
+pub fn extract_bigint(
+    value: &RuntimeValue,
+    arg_name: &str,
+    position: Position,
+    file: Option<String>,
+) -> Result<i128, RaccoonError> {
+    match value {
+        RuntimeValue::BigInt(b) => Ok(b.value),
+        _ => Err(RaccoonError::new(
+            format!("{} must be a bigint, got {}", arg_name, value.get_name()),
+            position,
+            file,
+        )),
+    }
+}
+
 /// Extracts a boolean value from a RuntimeValue
 pub fn extract_bool(
     value: &RuntimeValue,
@@ -207,7 +245,10 @@ pub fn static_method_not_found_error(
     file: Option<String>,
 ) -> RaccoonError {
     RaccoonError::new(
-        format!("Static method '{}' not found on type '{}'", method, type_name),
+        format!(
+            "Static method '{}' not found on type '{}'",
+            method, type_name
+        ),
         position,
         file,
     )
@@ -230,7 +271,7 @@ pub fn property_not_found_error(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::runtime::{IntValue, StrValue, BoolValue};
+    use crate::runtime::{BoolValue, IntValue, StrValue};
 
     #[test]
     fn test_require_args() {
@@ -242,7 +283,10 @@ mod tests {
     #[test]
     fn test_extract_str() {
         let val = RuntimeValue::Str(StrValue::new("hello".to_string()));
-        assert_eq!(extract_str(&val, "arg", Position::default(), None).unwrap(), "hello");
+        assert_eq!(
+            extract_str(&val, "arg", Position::default(), None).unwrap(),
+            "hello"
+        );
 
         let int_val = RuntimeValue::Int(IntValue::new(42));
         assert!(extract_str(&int_val, "arg", Position::default(), None).is_err());

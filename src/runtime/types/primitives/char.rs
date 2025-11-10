@@ -1,6 +1,9 @@
+/// Refactored CharType using helpers and metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{IntValue, RuntimeValue, StrValue};
+use crate::runtime::{BoolValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -9,6 +12,32 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct CharType;
+
+impl CharType {
+    /// Returns complete type metadata with all methods and properties
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("char", "Single Unicode character type")
+            .with_instance_methods(vec![
+                // Conversion methods
+                MethodMetadata::new("toString", "str", "Convert to string"),
+                MethodMetadata::new("toStr", "str", "Convert to string"),
+                MethodMetadata::new("toInt", "int", "Convert to Unicode code point"),
+                // Predicate methods
+                MethodMetadata::new("isDigit", "bool", "Check if character is a digit"),
+                MethodMetadata::new("isAlpha", "bool", "Check if character is alphabetic"),
+                MethodMetadata::new("isWhitespace", "bool", "Check if character is whitespace"),
+                // Case conversion methods
+                MethodMetadata::new("toUpperCase", "str", "Convert to uppercase"),
+                MethodMetadata::new("toLowerCase", "str", "Convert to lowercase"),
+            ])
+            .with_static_methods(vec![MethodMetadata::new(
+                "fromCode",
+                "str",
+                "Create char from Unicode code point",
+            )
+            .with_params(vec![ParamMetadata::new("code", "int")])])
+    }
+}
 
 #[async_trait]
 impl TypeHandler for CharType {
@@ -20,14 +49,12 @@ impl TypeHandler for CharType {
         &self,
         value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
         let ch = match value {
-            RuntimeValue::Str(s) if s.value.len() == 1 => {
-                s.value.chars().next().unwrap()
-            }
+            RuntimeValue::Str(s) if s.value.len() == 1 => s.value.chars().next().unwrap(),
             _ => {
                 return Err(RaccoonError::new(
                     format!("Expected char, got {}", value.get_name()),
@@ -38,28 +65,45 @@ impl TypeHandler for CharType {
         };
 
         match method {
-            "toString" | "toStr" => Ok(RuntimeValue::Str(StrValue::new(ch.to_string()))),
-            "toInt" => Ok(RuntimeValue::Int(IntValue::new(ch as i64))),
-            "isDigit" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
-                ch.is_numeric(),
-            ))),
-            "isAlpha" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
-                ch.is_alphabetic(),
-            ))),
-            "isWhitespace" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
-                ch.is_whitespace(),
-            ))),
-            "toUpperCase" => Ok(RuntimeValue::Str(StrValue::new(
-                ch.to_uppercase().to_string(),
-            ))),
-            "toLowerCase" => Ok(RuntimeValue::Str(StrValue::new(
-                ch.to_lowercase().to_string(),
-            ))),
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on char", method),
-                position,
-                file,
-            )),
+            // Conversion methods
+            "toString" | "toStr" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(ch.to_string())))
+            }
+            "toInt" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Int(IntValue::new(ch as i64)))
+            }
+
+            // Predicate methods
+            "isDigit" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Bool(BoolValue::new(ch.is_numeric())))
+            }
+            "isAlpha" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Bool(BoolValue::new(ch.is_alphabetic())))
+            }
+            "isWhitespace" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Bool(BoolValue::new(ch.is_whitespace())))
+            }
+
+            // Case conversion methods
+            "toUpperCase" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(
+                    ch.to_uppercase().to_string(),
+                )))
+            }
+            "toLowerCase" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(
+                    ch.to_lowercase().to_string(),
+                )))
+            }
+
+            _ => Err(method_not_found_error("char", method, position, file)),
         }
     }
 
@@ -72,36 +116,20 @@ impl TypeHandler for CharType {
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
             "fromCode" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "fromCode requires 1 argument (int)".to_string(),
+                require_args(&args, 1, method, position, file.clone())?;
+                let code = extract_int(&args[0], "code", position, file.clone())?;
+                if let Some(ch) = char::from_u32(code as u32) {
+                    Ok(RuntimeValue::Str(StrValue::new(ch.to_string())))
+                } else {
+                    Err(RaccoonError::new(
+                        format!("Invalid character code: {}", code),
                         position,
                         file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::Int(i) => {
-                        if let Some(ch) = char::from_u32(i.value as u32) {
-                            Ok(RuntimeValue::Str(StrValue::new(ch.to_string())))
-                        } else {
-                            Err(RaccoonError::new(
-                                format!("Invalid character code: {}", i.value),
-                                position,
-                                file,
-                            ))
-                        }
-                    }
-                    _ => Err(RaccoonError::new(
-                        "fromCode requires int argument".to_string(),
-                        position,
-                        file,
-                    )),
+                    ))
                 }
             }
-            _ => Err(RaccoonError::new(
-                format!("Static method '{}' not found on char type", method),
-                position,
-                file,
+            _ => Err(static_method_not_found_error(
+                "char", method, position, file,
             )),
         }
     }
