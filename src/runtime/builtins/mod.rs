@@ -7,8 +7,10 @@
 //! - `array`: Array functional methods
 //! - `builders`: Utilities for Future collection and TypeMethodBuilder
 //! - `macros`: Macros for function type definitions
+//! - `builtin_macros`: Macros for defining builtins
 
 pub mod array;
+pub mod builtin_macros;
 pub mod builders;
 pub mod global;
 pub mod macros;

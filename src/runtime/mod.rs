@@ -10,6 +10,7 @@ pub mod module_system;
 pub mod native; // Native function registry
 pub mod natives; // Native module implementations (math, string, array, etc.)
 pub mod plugin_system;
+pub mod primitives; // Lazy-loaded primitives organized by context
 pub mod registrar;
 pub mod stdlib; // Standard library system (loader, wrappers, natives)
 pub mod type_object;
@@ -28,6 +29,7 @@ pub use module_registry::ModuleRegistry;
 pub use module_system::{analyze_exports, resolve_module_path, Module, ModuleCache, ModuleSystem};
 pub use native::{NativeDecoratorProcessor, NativeRegistry};
 pub use plugin_system::{NativePlugin, PluginManager, PluginRegistry};
+pub use primitives::{LazyPrimitiveRegistry, PrimitiveContext};
 pub use registrar::Registrar;
 pub use stdlib::{register_stdlib_wrappers, StdLibLoader};
 pub use type_object::{PrimitiveKind, SourceLocation, TypeKind, TypeMetadata, TypeObject};
