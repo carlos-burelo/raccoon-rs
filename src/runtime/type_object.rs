@@ -74,6 +74,61 @@ impl TypeObject {
     pub fn get_constructor(&self) -> Option<&RuntimeValue> {
         self.constructor.as_ref().map(|b| b.as_ref())
     }
+
+    /// Obtiene el kind del tipo (para reflexión)
+    pub fn get_kind(&self) -> &TypeKind {
+        &self.kind
+    }
+
+    /// Obtiene todos los métodos estáticos
+    pub fn get_all_static_methods(&self) -> Vec<String> {
+        self.static_methods.keys().cloned().collect()
+    }
+
+    /// Obtiene todas las propiedades estáticas
+    pub fn get_all_static_properties(&self) -> Vec<String> {
+        self.static_properties.keys().cloned().collect()
+    }
+
+    /// Obtiene la definición del tipo
+    pub fn get_type_def(&self) -> &Type {
+        &self.type_def
+    }
+
+    /// Verifica si este tipo es primitivo
+    pub fn is_primitive(&self) -> bool {
+        matches!(self.kind, TypeKind::Primitive(_))
+    }
+
+    /// Verifica si este tipo es una clase
+    pub fn is_class(&self) -> bool {
+        matches!(self.kind, TypeKind::Class { .. })
+    }
+
+    /// Verifica si este tipo es una interface
+    pub fn is_interface(&self) -> bool {
+        matches!(self.kind, TypeKind::Interface { .. })
+    }
+
+    /// Verifica si este tipo es un enum
+    pub fn is_enum(&self) -> bool {
+        matches!(self.kind, TypeKind::Enum { .. })
+    }
+
+    /// Verifica si este tipo es una función
+    pub fn is_function(&self) -> bool {
+        matches!(self.kind, TypeKind::Function)
+    }
+
+    /// Obtiene la documentación si existe
+    pub fn get_documentation(&self) -> Option<&String> {
+        self.metadata.documentation.as_ref()
+    }
+
+    /// Obtiene los decoradores aplicados
+    pub fn get_decorators(&self) -> &Vec<String> {
+        &self.metadata.decorators
+    }
 }
 
 /// Clasificación de tipos

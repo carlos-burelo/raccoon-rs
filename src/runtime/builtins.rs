@@ -21,6 +21,7 @@ pub fn setup_builtins(env: &mut Environment) {
     register_primitive_types(env);
     register_future_object(env);
     register_object_object(env);
+    register_type_object(env);
 }
 
 fn register_builtin_functions(env: &mut Environment) {
@@ -645,6 +646,80 @@ fn register_object_object(env: &mut Environment) {
         fn_type!(variadic, PrimitiveType::any()),
         assign_impl,
     );
+
+    builder.build(env);
+}
+
+fn register_type_object(env: &mut Environment) {
+    let mut builder = TypeMethodBuilder::new("Type");
+
+    builder.add_method("typeOf", fn_type!(PrimitiveType::any(), PrimitiveType::any()), |args| {
+        if args.is_empty() {
+            return null_return!();
+        }
+        let value = &args[0];
+        let type_obj = value.get_type_object();
+        RuntimeValue::Type(type_obj)
+    });
+
+    builder.add_method("name", fn_type!(PrimitiveType::any(), PrimitiveType::str()), |args| {
+        if args.len() != 1 {
+            return null_return!();
+        }
+        match &args[0] {
+            RuntimeValue::Type(type_obj) => {
+                RuntimeValue::Str(StrValue::new(type_obj.name()))
+            }
+            _ => null_return!(),
+        }
+    });
+
+    let is_instance_type = crate::ast::types::Type::Function(Box::new(
+        crate::ast::types::FunctionType {
+            params: vec![PrimitiveType::any(), PrimitiveType::any()],
+            return_type: PrimitiveType::bool(),
+            is_variadic: false,
+        }
+    ));
+    builder.add_method("isInstance", is_instance_type, |args| {
+        if args.len() != 2 {
+            return RuntimeValue::Bool(crate::runtime::BoolValue::new(false));
+        }
+        let value = &args[0];
+        let value_type = value.get_type_object();
+
+        match &args[1] {
+            RuntimeValue::Type(target_type) => {
+                let is_instance = value_type.name() == target_type.name();
+                RuntimeValue::Bool(crate::runtime::BoolValue::new(is_instance))
+            }
+            _ => RuntimeValue::Bool(crate::runtime::BoolValue::new(false)),
+        }
+    });
+
+    builder.add_method("isPrimitive", fn_type!(PrimitiveType::any(), PrimitiveType::bool()), |args| {
+        if args.len() != 1 {
+            return RuntimeValue::Bool(crate::runtime::BoolValue::new(false));
+        }
+        match &args[0] {
+            RuntimeValue::Type(type_obj) => {
+                RuntimeValue::Bool(crate::runtime::BoolValue::new(type_obj.is_primitive()))
+            }
+            _ => RuntimeValue::Bool(crate::runtime::BoolValue::new(false)),
+        }
+    });
+
+    builder.add_method("isClass", fn_type!(PrimitiveType::any(), PrimitiveType::bool()), |args| {
+        if args.len() != 1 {
+            return RuntimeValue::Bool(crate::runtime::BoolValue::new(false));
+        }
+        match &args[0] {
+            RuntimeValue::Type(type_obj) => {
+                RuntimeValue::Bool(crate::runtime::BoolValue::new(type_obj.is_class()))
+            }
+            _ => RuntimeValue::Bool(crate::runtime::BoolValue::new(false)),
+        }
+    });
 
     builder.build(env);
 }
