@@ -42,6 +42,13 @@ impl Interpreter {
         let mut env = Environment::new(file.clone());
         let type_registry = std::sync::Arc::new(TypeRegistry::new());
         let registrar = std::sync::Arc::new(std::sync::Mutex::new(Registrar::new()));
+
+        // Register core primitives immediately (needed for internal:core module)
+        {
+            let mut reg = registrar.lock().unwrap();
+            crate::runtime::natives::register_core_primitives(&mut reg);
+        }
+
         let mut module_registry = ModuleRegistry::new();
 
         // Register all native modules (lazy-loaded, not yet initialized)

@@ -1,15 +1,214 @@
+// Math module - Complete implementation using core primitives
+// All logic is implemented in Raccoon, only atomic operations are delegated to Rust
+
+import {
+    sqrt as core_sqrt,
+    cbrt as core_cbrt,
+    sin as core_sin,
+    cos as core_cos,
+    tan as core_tan,
+    asin as core_asin,
+    acos as core_acos,
+    atan as core_atan,
+    atan2 as core_atan2,
+    sinh as core_sinh,
+    cosh as core_cosh,
+    tanh as core_tanh,
+    exp as core_exp,
+    ln as core_ln,
+    log10 as core_log10,
+    log as core_log,
+    floor as core_floor,
+    ceil as core_ceil,
+    round as core_round,
+    trunc as core_trunc,
+    abs as core_abs,
+    sign as core_sign
+} from "internal:core";
+
 class Math {
+    // Mathematical constants
     static PI: float = 3.141592653589793;
     static E: float = 2.718281828459045;
-    static TAU: float = 6.283185307179586;  
+    static TAU: float = 6.283185307179586;
     static SQRT2: float = 1.4142135623730951;
+    static SQRT1_2: float = 0.7071067811865476;
     static LN2: float = 0.6931471805599453;
     static LN10: float = 2.302585092994046;
+    static LOG2E: float = 1.4426950408889634;
+    static LOG10E: float = 0.4342944819032518;
     static EPSILON: float = 0.0000001;
 
+    // ========================================================================
+    // Basic Math Functions (delegate to primitives)
+    // ========================================================================
+
     static abs(x: float): float {
-        return x < 0.0 ? -x : x;
+        return core_abs(x);
     }
+
+    static sign(x: float): float {
+        return core_sign(x);
+    }
+
+    static floor(x: float): float {
+        return core_floor(x);
+    }
+
+    static ceil(x: float): float {
+        return core_ceil(x);
+    }
+
+    static round(x: float): float {
+        return core_round(x);
+    }
+
+    static trunc(x: float): float {
+        return core_trunc(x);
+    }
+
+    static sqrt(x: float): float {
+        return core_sqrt(x);
+    }
+
+    static cbrt(x: float): float {
+        return core_cbrt(x);
+    }
+
+    // ========================================================================
+    // Power and Exponential Functions
+    // ========================================================================
+
+    static pow(base: float, exp: float): float {
+        // Handle special cases
+        if (exp == 0.0) return 1.0;
+        if (base == 0.0) return 0.0;
+        if (exp == 1.0) return base;
+
+        // Use exp(exp * ln(base)) for general case
+        if (base > 0.0) {
+            return core_exp(exp * core_ln(base));
+        }
+
+        // For negative base with integer exponent
+        let isNegative: bool = false;
+        let absBase: float = base;
+        if (base < 0.0) {
+            absBase = -base;
+            isNegative = true;
+        }
+
+        let result: float = core_exp(exp * core_ln(absBase));
+
+        // If base is negative and exp is odd integer, result is negative
+        if (isNegative) {
+            let expInt: int = exp;
+            if (exp == expInt && expInt % 2 == 1) {
+                return -result;
+            }
+        }
+
+        return result;
+    }
+
+    static exp(x: float): float {
+        return core_exp(x);
+    }
+
+    static log(x: float): float {
+        return core_ln(x);
+    }
+
+    static log10(x: float): float {
+        return core_log10(x);
+    }
+
+    static log2(x: float): float {
+        return core_ln(x) / Math.LN2;
+    }
+
+    static logBase(x: float, base: float): float {
+        return core_log(x, base);
+    }
+
+    // ========================================================================
+    // Trigonometric Functions
+    // ========================================================================
+
+    static sin(x: float): float {
+        return core_sin(x);
+    }
+
+    static cos(x: float): float {
+        return core_cos(x);
+    }
+
+    static tan(x: float): float {
+        return core_tan(x);
+    }
+
+    static asin(x: float): float {
+        return core_asin(x);
+    }
+
+    static acos(x: float): float {
+        return core_acos(x);
+    }
+
+    static atan(x: float): float {
+        return core_atan(x);
+    }
+
+    static atan2(y: float, x: float): float {
+        return core_atan2(y, x);
+    }
+
+    // ========================================================================
+    // Hyperbolic Functions
+    // ========================================================================
+
+    static sinh(x: float): float {
+        return core_sinh(x);
+    }
+
+    static cosh(x: float): float {
+        return core_cosh(x);
+    }
+
+    static tanh(x: float): float {
+        return core_tanh(x);
+    }
+
+    static asinh(x: float): float {
+        // asinh(x) = ln(x + sqrt(x^2 + 1))
+        return core_ln(x + core_sqrt(x * x + 1.0));
+    }
+
+    static acosh(x: float): float {
+        // acosh(x) = ln(x + sqrt(x^2 - 1))
+        return core_ln(x + core_sqrt(x * x - 1.0));
+    }
+
+    static atanh(x: float): float {
+        // atanh(x) = 0.5 * ln((1 + x) / (1 - x))
+        return 0.5 * core_ln((1.0 + x) / (1.0 - x));
+    }
+
+    // ========================================================================
+    // Angle Conversion
+    // ========================================================================
+
+    static toRadians(degrees: float): float {
+        return degrees * (Math.PI / 180.0);
+    }
+
+    static toDegrees(radians: float): float {
+        return radians * (180.0 / Math.PI);
+    }
+
+    // ========================================================================
+    // Min/Max and Clamping
+    // ========================================================================
 
     static min(...values: float[]): float {
         if (values.length == 0) {
@@ -39,105 +238,63 @@ class Math {
         return maxVal;
     }
 
-    
     static clamp(value: float, minVal: float, maxVal: float): float {
-        if (value < minVal) {
-            return minVal;
-        }
-        if (value > maxVal) {
-            return maxVal;
-        }
+        if (value < minVal) return minVal;
+        if (value > maxVal) return maxVal;
         return value;
     }
 
-    
+    // ========================================================================
+    // Interpolation and Utilities
+    // ========================================================================
+
     static lerp(a: float, b: float, t: float): float {
         return a + (b - a) * t;
     }
 
-    
-    static sign(x: float): int {
-        if (x < 0) {
-            return -1;
-        }
-        if (x > 0) {
-            return 1;
-        }
-        return 0;
+    static hypot(x: float, y: float): float {
+        return core_sqrt(x * x + y * y);
     }
 
-
-    
-    static floor(x: float): float {
-        let intPart: int = x;  
-        if (x < 0.0 && x != intPart) {
-            return intPart - 1.0;
-        }
-        return intPart;
+    static fract(x: float): float {
+        return x - core_floor(x);
     }
 
+    // ========================================================================
+    // Integer Math Functions
+    // ========================================================================
 
-    
-
-    static ceil(x: float): float {
-        let intPart: int = x;
-        if (x > 0.0 && x != intPart) {
-            return intPart + 1.0;
-        }
-        return intPart;
-    }
-
-    
-    static round(x: float): float {
-        if (x >= 0.0) {
-            return Math.floor(x + 0.5);
-        }
-        return Math.ceil(x - 0.5);
-    }
-
-
-    
-    static trunc(x: float): float {
-        return x;  
-        return int.parse(x);
-    }
-
-
-    
     static factorial(n: int): int {
         if (n <= 1) {
             return 1;
         }
-        return n * Math.factorial(n - 1);
-    }
-
-    
-    static gcd(a: int, b: int): int {
-        while (b != 0) {
-            let t: int = b;
-            b = a % b;
-            a = t;
+        let result: int = 1;
+        for (let i = 2; i <= n; i = i + 1) {
+            result = result * i;
         }
-        return a;
+        return result;
     }
 
-    
+    static gcd(a: int, b: int): int {
+        let absA: int = a < 0 ? -a : a;
+        let absB: int = b < 0 ? -b : b;
+
+        while (absB != 0) {
+            let temp: int = absB;
+            absB = absA % absB;
+            absA = temp;
+        }
+        return absA;
+    }
+
     static lcm(a: int, b: int): int {
-        return (a / Math.gcd(a, b)) * b;
+        if (a == 0 || b == 0) {
+            return 0;
+        }
+        let absA: int = a < 0 ? -a : a;
+        let absB: int = b < 0 ? -b : b;
+        return (absA / Math.gcd(absA, absB)) * absB;
     }
-
-
-    
-    static toRadians(degrees: float): float {
-        return degrees * (Math.PI / 180.0);
-    }
-
-    
-
-    static toDegrees(radians: float): float {
-        return radians * (180.0 / Math.PI);
-    }
-
 
     static isEven(n: int): bool {
         return n % 2 == 0;
@@ -158,7 +315,7 @@ class Math {
             return false;
         }
 
-        let i = 3;
+        let i: int = 3;
         while (i * i <= n) {
             if (n % i == 0) {
                 return false;
@@ -169,34 +326,24 @@ class Math {
         return true;
     }
 
-    // Native math functions (delegated to native implementations)
-    static sqrt(x: float): float {
-        return _native_sqrt(x);
+    // ========================================================================
+    // Floating Point Utilities
+    // ========================================================================
+
+    static isNaN(x: float): bool {
+        return x != x;
     }
 
-    static pow(base: float, exp: float): float {
-        return _native_pow(base, exp);
+    static isFinite(x: float): bool {
+        return !Math.isNaN(x) && x != 1.0 / 0.0 && x != -1.0 / 0.0;
     }
 
-    static sin(x: float): float {
-        return _native_sin(x);
+    static approxEqual(a: float, b: float, epsilon: float): bool {
+        return core_abs(a - b) < epsilon;
     }
 
-    static cos(x: float): float {
-        return _native_cos(x);
-    }
-
-    static tan(x: float): float {
-        return _native_tan(x);
-    }
-
-    static log(x: float, base: float): float {
-        return _native_log(x, base);
-    }
-
-    static random(): float {
-        // This will need to be imported from random module or implemented
-        return 0.5;
+    static approxEqualDefault(a: float, b: float): bool {
+        return Math.approxEqual(a, b, Math.EPSILON);
     }
 }
 
