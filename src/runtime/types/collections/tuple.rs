@@ -1,5 +1,8 @@
+/// Refactored TupleType using helpers and metadata system
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{IntValue, ListValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -10,6 +13,47 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct TupleType;
+
+impl TupleType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new(
+            "tuple",
+            "Fixed-size heterogeneous collection with multiple types",
+        )
+        .with_instance_methods(vec![
+            MethodMetadata::new("get", "any", "Get element at index")
+                .with_params(vec![ParamMetadata::new("index", "int")]),
+            MethodMetadata::new("length", "int", "Get number of elements").with_alias("size"),
+            MethodMetadata::new("toString", "str", "Convert to string").with_alias("toStr"),
+            MethodMetadata::new("toList", "list", "Convert to list"),
+            MethodMetadata::new("first", "any", "Get first element"),
+            MethodMetadata::new("last", "any", "Get last element"),
+        ])
+        .with_static_methods(vec![MethodMetadata::new(
+            "of",
+            "tuple",
+            "Create tuple from elements",
+        )
+        .with_params(vec![ParamMetadata::new("elements", "any").variadic()])])
+    }
+
+    /// Helper to extract tuple (list) from RuntimeValue
+    fn extract_tuple<'a>(
+        value: &'a RuntimeValue,
+        position: Position,
+        file: Option<String>,
+    ) -> Result<&'a ListValue, RaccoonError> {
+        match value {
+            RuntimeValue::List(list) => Ok(list),
+            _ => Err(RaccoonError::new(
+                format!("Expected tuple, got {}", value.get_name()),
+                position,
+                file,
+            )),
+        }
+    }
+}
 
 #[async_trait]
 impl TypeHandler for TupleType {
@@ -25,69 +69,72 @@ impl TypeHandler for TupleType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let tuple = match value {
-            RuntimeValue::List(list) => list,
-            _ => {
-                return Err(RaccoonError::new(
-                    format!("Expected tuple, got {}", value.get_name()),
-                    position,
-                    file,
-                ));
-            }
-        };
+        let tuple = Self::extract_tuple(value, position, file.clone())?;
 
         match method {
             "get" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "get requires 1 argument (index)".to_string(),
+                require_args(&args, 1, method, position, file.clone())?;
+                let index = extract_int(&args[0], "index", position, file.clone())? as usize;
+                if index < tuple.elements.len() {
+                    Ok(tuple.elements[index].clone())
+                } else {
+                    Err(RaccoonError::new(
+                        format!(
+                            "Index {} out of bounds for tuple of length {}",
+                            index,
+                            tuple.elements.len()
+                        ),
                         position,
                         file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::Int(i) => {
-                        let index = i.value as usize;
-                        if index < tuple.elements.len() {
-                            Ok(tuple.elements[index].clone())
-                        } else {
-                            Err(RaccoonError::new(
-                                format!(
-                                    "Index {} out of bounds for tuple of length {}",
-                                    index,
-                                    tuple.elements.len()
-                                ),
-                                position,
-                                file,
-                            ))
-                        }
-                    }
-                    _ => Err(RaccoonError::new(
-                        "get requires int argument".to_string(),
-                        position,
-                        file,
-                    )),
+                    ))
                 }
             }
-            "length" | "size" => Ok(RuntimeValue::Int(
-                IntValue::new(tuple.elements.len() as i64),
-            )),
+            "length" | "size" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Int(
+                    IntValue::new(tuple.elements.len() as i64),
+                ))
+            }
             "toString" | "toStr" => {
+                require_args(&args, 0, method, position, file)?;
                 let items: Vec<String> = tuple.elements.iter().map(|e| e.to_string()).collect();
                 Ok(RuntimeValue::Str(StrValue::new(format!(
                     "({})",
                     items.join(", ")
                 ))))
             }
-            "toList" => Ok(RuntimeValue::List(ListValue::new(
-                tuple.elements.clone(),
-                PrimitiveType::any(),
-            ))),
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on tuple", method),
-                position,
-                file,
-            )),
+            "toList" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::List(ListValue::new(
+                    tuple.elements.clone(),
+                    PrimitiveType::any(),
+                )))
+            }
+            "first" => {
+                require_args(&args, 0, method, position, file.clone())?;
+                if tuple.elements.is_empty() {
+                    Err(RaccoonError::new(
+                        "Cannot get first element of empty tuple".to_string(),
+                        position,
+                        file,
+                    ))
+                } else {
+                    Ok(tuple.elements[0].clone())
+                }
+            }
+            "last" => {
+                require_args(&args, 0, method, position, file.clone())?;
+                if tuple.elements.is_empty() {
+                    Err(RaccoonError::new(
+                        "Cannot get last element of empty tuple".to_string(),
+                        position,
+                        file,
+                    ))
+                } else {
+                    Ok(tuple.elements[tuple.elements.len() - 1].clone())
+                }
+            }
+            _ => Err(method_not_found_error("tuple", method, position, file)),
         }
     }
 
@@ -106,22 +153,17 @@ impl TypeHandler for TupleType {
                     PrimitiveType::any(),
                 )))
             }
-            _ => Err(RaccoonError::new(
-                format!("Static method '{}' not found on tuple type", method),
-                position,
-                file,
+            _ => Err(static_method_not_found_error(
+                "tuple", method, position, file,
             )),
         }
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(
-            method,
-            "get" | "length" | "size" | "toString" | "toStr" | "toList"
-        )
+        Self::metadata().has_instance_method(method)
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        matches!(method, "of")
+        Self::metadata().has_static_method(method)
     }
 }

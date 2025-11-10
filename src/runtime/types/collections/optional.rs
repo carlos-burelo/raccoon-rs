@@ -1,4 +1,7 @@
+/// Refactored OptionalType using helpers and metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, NullValue, RuntimeValue};
 use crate::tokens::Position;
@@ -9,6 +12,30 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct OptionalType;
+
+impl OptionalType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new(
+            "optional",
+            "Optional value type representing Some(value) or None",
+        )
+        .with_instance_methods(vec![
+            MethodMetadata::new("isSome", "bool", "Check if value is Some (not null)"),
+            MethodMetadata::new("isNone", "bool", "Check if value is None (null)"),
+            MethodMetadata::new("unwrap", "any", "Unwrap value, throws if None"),
+            MethodMetadata::new("unwrapOr", "any", "Unwrap value or return default")
+                .with_params(vec![ParamMetadata::new("default", "any")]),
+            MethodMetadata::new("expect", "any", "Unwrap value or throw with message")
+                .with_params(vec![ParamMetadata::new("message", "str")]),
+        ])
+        .with_static_methods(vec![
+            MethodMetadata::new("some", "any", "Create Some(value)")
+                .with_params(vec![ParamMetadata::new("value", "any")]),
+            MethodMetadata::new("none", "null", "Create None value"),
+        ])
+    }
+}
 
 #[async_trait]
 impl TypeHandler for OptionalType {
@@ -26,14 +53,17 @@ impl TypeHandler for OptionalType {
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
             "isSome" => {
+                require_args(&args, 0, method, position, file)?;
                 let is_some = !matches!(value, RuntimeValue::Null(_));
                 Ok(RuntimeValue::Bool(BoolValue::new(is_some)))
             }
             "isNone" => {
+                require_args(&args, 0, method, position, file)?;
                 let is_none = matches!(value, RuntimeValue::Null(_));
                 Ok(RuntimeValue::Bool(BoolValue::new(is_none)))
             }
             "unwrap" => {
+                require_args(&args, 0, method, position, file.clone())?;
                 if matches!(value, RuntimeValue::Null(_)) {
                     Err(RaccoonError::new(
                         "Cannot unwrap None value".to_string(),
@@ -45,44 +75,27 @@ impl TypeHandler for OptionalType {
                 }
             }
             "unwrapOr" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "unwrapOr requires 1 argument (default value)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
+                require_args(&args, 1, method, position, file)?;
                 if matches!(value, RuntimeValue::Null(_)) {
                     Ok(args[0].clone())
                 } else {
                     Ok(value.clone())
                 }
             }
-            "map" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "map requires 1 argument (function)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
+            "expect" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let message = extract_str(&args[0], "message", position, file.clone())?;
                 if matches!(value, RuntimeValue::Null(_)) {
-                    Ok(RuntimeValue::Null(NullValue::new()))
-                } else {
-                    // Would need to call the function with the value
-                    // This requires callback execution which is more complex
                     Err(RaccoonError::new(
-                        "Optional.map not yet fully implemented".to_string(),
+                        format!("Expect failed: {}", message),
                         position,
                         file,
                     ))
+                } else {
+                    Ok(value.clone())
                 }
             }
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on optional", method),
-                position,
-                file,
-            )),
+            _ => Err(method_not_found_error("optional", method, position, file)),
         }
     }
 
@@ -95,29 +108,24 @@ impl TypeHandler for OptionalType {
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
             "some" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "some requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
+                require_args(&args, 1, method, position, file)?;
                 Ok(args[0].clone())
             }
-            "none" => Ok(RuntimeValue::Null(NullValue::new())),
-            _ => Err(RaccoonError::new(
-                format!("Static method '{}' not found on optional type", method),
-                position,
-                file,
+            "none" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Null(NullValue::new()))
+            }
+            _ => Err(static_method_not_found_error(
+                "optional", method, position, file,
             )),
         }
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(method, "isSome" | "isNone" | "unwrap" | "unwrapOr" | "map")
+        Self::metadata().has_instance_method(method)
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        matches!(method, "some" | "none")
+        Self::metadata().has_static_method(method)
     }
 }

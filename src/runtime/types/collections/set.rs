@@ -1,5 +1,8 @@
+/// Refactored SetType using helpers and metadata system
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, IntValue, ListValue, NullValue, RuntimeValue};
 use crate::tokens::Position;
@@ -10,6 +13,54 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct SetType;
+
+impl SetType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("set", "Unique collection with no duplicate elements")
+            .with_instance_methods(vec![
+                MethodMetadata::new("add", "null", "Add element to set (no duplicates)")
+                    .with_params(vec![ParamMetadata::new("element", "any")]),
+                MethodMetadata::new("remove", "null", "Remove element from set")
+                    .with_params(vec![ParamMetadata::new("element", "any")]),
+                MethodMetadata::new("contains", "bool", "Check if element exists in set")
+                    .with_params(vec![ParamMetadata::new("element", "any")])
+                    .with_alias("has"),
+                MethodMetadata::new("size", "int", "Get number of elements").with_alias("length"),
+                MethodMetadata::new("clear", "null", "Remove all elements"),
+                MethodMetadata::new("isEmpty", "bool", "Check if set is empty"),
+                MethodMetadata::new("toList", "list", "Convert to list"),
+                MethodMetadata::new("union", "set", "Union with another set")
+                    .with_params(vec![ParamMetadata::new("other", "set")]),
+                MethodMetadata::new("intersection", "set", "Intersection with another set")
+                    .with_params(vec![ParamMetadata::new("other", "set")]),
+                MethodMetadata::new("difference", "set", "Difference with another set")
+                    .with_params(vec![ParamMetadata::new("other", "set")]),
+            ])
+            .with_static_methods(vec![MethodMetadata::new(
+                "from",
+                "set",
+                "Create set from list (removing duplicates)",
+            )
+            .with_params(vec![ParamMetadata::new("list", "list")])])
+    }
+
+    /// Helper to extract set (list) from RuntimeValue
+    fn extract_set_mut<'a>(
+        value: &'a mut RuntimeValue,
+        position: Position,
+        file: Option<String>,
+    ) -> Result<&'a mut ListValue, RaccoonError> {
+        match value {
+            RuntimeValue::List(list) => Ok(list),
+            _ => Err(RaccoonError::new(
+                format!("Expected set, got {}", value.get_name()),
+                position,
+                file,
+            )),
+        }
+    }
+}
 
 #[async_trait]
 impl TypeHandler for SetType {
@@ -25,26 +76,11 @@ impl TypeHandler for SetType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let set = match value {
-            RuntimeValue::List(list) => list,
-            _ => {
-                return Err(RaccoonError::new(
-                    format!("Expected set, got {}", value.get_name()),
-                    position,
-                    file,
-                ));
-            }
-        };
+        let set = Self::extract_set_mut(value, position, file.clone())?;
 
         match method {
             "add" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "add requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
+                require_args(&args, 1, method, position, file)?;
                 let item = &args[0];
                 // Check if item already exists
                 let exists = set.elements.iter().any(|e| e.equals(item));
@@ -54,99 +90,80 @@ impl TypeHandler for SetType {
                 Ok(RuntimeValue::Null(NullValue::new()))
             }
             "remove" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "remove requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
+                require_args(&args, 1, method, position, file)?;
                 let item = &args[0];
                 set.elements.retain(|e| !e.equals(item));
                 Ok(RuntimeValue::Null(NullValue::new()))
             }
             "contains" | "has" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "contains requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
+                require_args(&args, 1, method, position, file)?;
                 let item = &args[0];
                 let exists = set.elements.iter().any(|e| e.equals(item));
                 Ok(RuntimeValue::Bool(BoolValue::new(exists)))
             }
-            "size" | "length" => Ok(RuntimeValue::Int(IntValue::new(set.elements.len() as i64))),
+            "size" | "length" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Int(IntValue::new(set.elements.len() as i64)))
+            }
             "clear" => {
+                require_args(&args, 0, method, position, file)?;
                 set.elements.clear();
                 Ok(RuntimeValue::Null(NullValue::new()))
             }
-            "toList" => Ok(RuntimeValue::List(ListValue::new(
-                set.elements.clone(),
-                PrimitiveType::any(),
-            ))),
+            "isEmpty" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Bool(BoolValue::new(set.elements.is_empty())))
+            }
+            "toList" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::List(ListValue::new(
+                    set.elements.clone(),
+                    PrimitiveType::any(),
+                )))
+            }
             "union" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "union requires 1 argument (set)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::List(other) => {
-                        let mut result = set.elements.clone();
-                        for item in &other.elements {
-                            if !result.iter().any(|e| e.equals(item)) {
-                                result.push(item.clone());
-                            }
-                        }
-                        Ok(RuntimeValue::List(ListValue::new(
-                            result,
-                            PrimitiveType::any(),
-                        )))
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_list(&args[0], "other", position, file)?;
+                let mut result = set.elements.clone();
+                for item in &other.elements {
+                    if !result.iter().any(|e| e.equals(item)) {
+                        result.push(item.clone());
                     }
-                    _ => Err(RaccoonError::new(
-                        "union requires set argument".to_string(),
-                        position,
-                        file,
-                    )),
                 }
+                Ok(RuntimeValue::List(ListValue::new(
+                    result,
+                    PrimitiveType::any(),
+                )))
             }
             "intersection" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "intersection requires 1 argument (set)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::List(other) => {
-                        let result: Vec<RuntimeValue> = set
-                            .elements
-                            .iter()
-                            .filter(|e| other.elements.iter().any(|o| o.equals(e)))
-                            .cloned()
-                            .collect();
-                        Ok(RuntimeValue::List(ListValue::new(
-                            result,
-                            PrimitiveType::any(),
-                        )))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "intersection requires set argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_list(&args[0], "other", position, file)?;
+                let result: Vec<RuntimeValue> = set
+                    .elements
+                    .iter()
+                    .filter(|e| other.elements.iter().any(|o| o.equals(e)))
+                    .cloned()
+                    .collect();
+                Ok(RuntimeValue::List(ListValue::new(
+                    result,
+                    PrimitiveType::any(),
+                )))
             }
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on set", method),
-                position,
-                file,
-            )),
+            "difference" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_list(&args[0], "other", position, file)?;
+                let result: Vec<RuntimeValue> = set
+                    .elements
+                    .iter()
+                    .filter(|e| !other.elements.iter().any(|o| o.equals(e)))
+                    .cloned()
+                    .collect();
+                Ok(RuntimeValue::List(ListValue::new(
+                    result,
+                    PrimitiveType::any(),
+                )))
+            }
+            _ => Err(method_not_found_error("set", method, position, file)),
         }
     }
 
@@ -159,58 +176,28 @@ impl TypeHandler for SetType {
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
             "from" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "from requires 1 argument (list)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::List(list) => {
-                        let mut unique = Vec::new();
-                        for item in &list.elements {
-                            if !unique.iter().any(|e: &RuntimeValue| e.equals(item)) {
-                                unique.push(item.clone());
-                            }
-                        }
-                        Ok(RuntimeValue::List(ListValue::new(
-                            unique,
-                            PrimitiveType::any(),
-                        )))
+                require_args(&args, 1, method, position, file.clone())?;
+                let list = extract_list(&args[0], "list", position, file)?;
+                let mut unique = Vec::new();
+                for item in &list.elements {
+                    if !unique.iter().any(|e: &RuntimeValue| e.equals(item)) {
+                        unique.push(item.clone());
                     }
-                    _ => Err(RaccoonError::new(
-                        "from requires list argument".to_string(),
-                        position,
-                        file,
-                    )),
                 }
+                Ok(RuntimeValue::List(ListValue::new(
+                    unique,
+                    PrimitiveType::any(),
+                )))
             }
-            _ => Err(RaccoonError::new(
-                format!("Static method '{}' not found on set type", method),
-                position,
-                file,
-            )),
+            _ => Err(static_method_not_found_error("set", method, position, file)),
         }
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(
-            method,
-            "add"
-                | "remove"
-                | "contains"
-                | "has"
-                | "size"
-                | "length"
-                | "clear"
-                | "toList"
-                | "union"
-                | "intersection"
-        )
+        Self::metadata().has_instance_method(method)
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        matches!(method, "from")
+        Self::metadata().has_static_method(method)
     }
 }

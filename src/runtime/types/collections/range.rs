@@ -1,5 +1,8 @@
+/// Refactored RangeType using helpers and metadata system
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{IntValue, ListValue, RuntimeValue};
 use crate::tokens::Position;
@@ -10,6 +13,31 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct RangeType;
+
+impl RangeType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("range", "Range of integer values with start, end, and step")
+            .with_static_methods(vec![
+                MethodMetadata::new("new", "list<int>", "Create range from start to end")
+                    .with_params(vec![
+                        ParamMetadata::new("start", "int"),
+                        ParamMetadata::new("end", "int"),
+                        ParamMetadata::new("step", "int").optional(),
+                    ]),
+                MethodMetadata::new(
+                    "inclusive",
+                    "list<int>",
+                    "Create inclusive range from start to end",
+                )
+                .with_params(vec![
+                    ParamMetadata::new("start", "int"),
+                    ParamMetadata::new("end", "int"),
+                    ParamMetadata::new("step", "int").optional(),
+                ]),
+            ])
+    }
+}
 
 #[async_trait]
 impl TypeHandler for RangeType {
@@ -25,13 +53,8 @@ impl TypeHandler for RangeType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // Range would typically be represented as a custom struct
-        // For now, using a placeholder implementation
-        Err(RaccoonError::new(
-            format!("Method '{}' not found on range", method),
-            position,
-            file,
-        ))
+        // Range is created as a list, so no instance methods
+        Err(method_not_found_error("range", method, position, file))
     }
 
     fn call_static_method(
@@ -42,54 +65,18 @@ impl TypeHandler for RangeType {
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
-            "new" => {
-                if args.len() < 2 || args.len() > 3 {
-                    return Err(RaccoonError::new(
-                        "new requires 2 or 3 arguments (start, end, [step])".to_string(),
-                        position,
-                        file,
-                    ));
-                }
+            "new" | "inclusive" => {
+                require_args_range(&args, 2, 3, method, position, file.clone())?;
 
-                let start = match &args[0] {
-                    RuntimeValue::Int(i) => i.value,
-                    _ => {
-                        return Err(RaccoonError::new(
-                            "Range start must be an integer".to_string(),
-                            position,
-                            file,
-                        ))
-                    }
-                };
-
-                let end = match &args[1] {
-                    RuntimeValue::Int(i) => i.value,
-                    _ => {
-                        return Err(RaccoonError::new(
-                            "Range end must be an integer".to_string(),
-                            position,
-                            file,
-                        ))
-                    }
-                };
+                let start = extract_int(&args[0], "start", position, file.clone())?;
+                let end = extract_int(&args[1], "end", position, file.clone())?;
 
                 let step = if args.len() == 3 {
-                    match &args[2] {
-                        RuntimeValue::Int(i) => i.value,
-                        _ => {
-                            return Err(RaccoonError::new(
-                                "Range step must be an integer".to_string(),
-                                position,
-                                file,
-                            ))
-                        }
-                    }
+                    extract_int(&args[2], "step", position, file.clone())?
+                } else if start < end {
+                    1
                 } else {
-                    if start < end {
-                        1
-                    } else {
-                        -1
-                    }
+                    -1
                 };
 
                 if step == 0 {
@@ -104,13 +91,23 @@ impl TypeHandler for RangeType {
                 let mut elements = Vec::new();
                 let mut current = start;
 
+                let inclusive = method == "inclusive";
+
                 if step > 0 {
-                    while current < end {
+                    while if inclusive {
+                        current <= end
+                    } else {
+                        current < end
+                    } {
                         elements.push(RuntimeValue::Int(IntValue::new(current)));
                         current += step;
                     }
                 } else {
-                    while current > end {
+                    while if inclusive {
+                        current >= end
+                    } else {
+                        current > end
+                    } {
                         elements.push(RuntimeValue::Int(IntValue::new(current)));
                         current += step;
                     }
@@ -121,10 +118,8 @@ impl TypeHandler for RangeType {
                     PrimitiveType::int(),
                 )))
             }
-            _ => Err(RaccoonError::new(
-                format!("Static method '{}' not found on range type", method),
-                position,
-                file,
+            _ => Err(static_method_not_found_error(
+                "range", method, position, file,
             )),
         }
     }
@@ -134,6 +129,6 @@ impl TypeHandler for RangeType {
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        matches!(method, "new")
+        Self::metadata().has_static_method(method)
     }
 }
