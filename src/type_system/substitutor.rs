@@ -40,7 +40,7 @@ impl TypeSubstitutor {
                 }
             }
 
-            Type::List(list_type) => Type::List(Box::new(ListType {
+            Type::Array(list_type) => Type::Array(Box::new(ArrayType {
                 element_type: self.substitute(&list_type.element_type),
             })),
 

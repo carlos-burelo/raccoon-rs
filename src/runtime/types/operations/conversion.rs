@@ -59,7 +59,7 @@ pub fn to_string(value: &RuntimeValue) -> String {
         RuntimeValue::Decimal(d) => d.value.to_string(),
         RuntimeValue::Bool(b) => b.value.to_string(),
         RuntimeValue::Null(_) => "null".to_string(),
-        RuntimeValue::List(l) => {
+        RuntimeValue::Array(l) => {
             let elements: Vec<String> = l.elements.iter().map(to_string).collect();
             format!("[{}]", elements.join(", "))
         }

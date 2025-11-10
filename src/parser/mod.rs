@@ -638,7 +638,7 @@ impl Parser {
 
     fn parse_destructuring_pattern(&mut self) -> Result<DestructuringPattern, RaccoonError> {
         if self.match_token(&[TokenType::LeftBracket]) {
-            return Ok(DestructuringPattern::List(self.parse_list_pattern()?));
+            return Ok(DestructuringPattern::Array(self.parse_array_pattern()?));
         }
         if self.match_token(&[TokenType::LeftBrace]) {
             return Ok(DestructuringPattern::Object(self.parse_object_pattern()?));
@@ -650,7 +650,7 @@ impl Parser {
         ))
     }
 
-    fn parse_list_pattern(&mut self) -> Result<ListPattern, RaccoonError> {
+    fn parse_array_pattern(&mut self) -> Result<ArrayPattern, RaccoonError> {
         let position = self.previous().position;
         let mut elements = Vec::new();
         let mut rest = None;
@@ -675,11 +675,11 @@ impl Parser {
                 if self.check(&TokenType::Comma) {
                     elements.push(None);
                 } else if self.match_token(&[TokenType::LeftBracket]) {
-                    elements.push(Some(ListPatternElement::List(Box::new(
-                        self.parse_list_pattern()?,
+                    elements.push(Some(ArrayPatternElement::List(Box::new(
+                        self.parse_array_pattern()?,
                     ))));
                 } else if self.match_token(&[TokenType::LeftBrace]) {
-                    elements.push(Some(ListPatternElement::Object(Box::new(
+                    elements.push(Some(ArrayPatternElement::Object(Box::new(
                         self.parse_object_pattern()?,
                     ))));
                 } else {
@@ -687,7 +687,7 @@ impl Parser {
                         .consume(TokenType::Identifier, "Expected identifier")?
                         .value
                         .clone();
-                    elements.push(Some(ListPatternElement::Identifier(Identifier {
+                    elements.push(Some(ArrayPatternElement::Identifier(Identifier {
                         name,
                         position: self.previous().position,
                     })));
@@ -704,7 +704,7 @@ impl Parser {
         }
 
         self.consume(TokenType::RightBracket, "Expected ']'")?;
-        Ok(ListPattern {
+        Ok(ArrayPattern {
             elements,
             rest,
             position,
@@ -740,7 +740,7 @@ impl Parser {
 
                 let value = if self.match_token(&[TokenType::Colon]) {
                     if self.match_token(&[TokenType::LeftBracket]) {
-                        ObjectPatternValue::List(self.parse_list_pattern()?)
+                        ObjectPatternValue::Array(self.parse_array_pattern()?)
                     } else if self.match_token(&[TokenType::LeftBrace]) {
                         ObjectPatternValue::Object(self.parse_object_pattern()?)
                     } else {
@@ -1117,7 +1117,7 @@ impl Parser {
 
         while self.match_token(&[TokenType::LeftBracket]) {
             self.consume(TokenType::RightBracket, "Expected ']'")?;
-            type_ = Type::List(Box::new(ListType {
+            type_ = Type::Array(Box::new(ArrayType {
                 element_type: type_,
             }));
         }
@@ -2366,7 +2366,7 @@ impl Parser {
         }
 
         if self.match_token(&[TokenType::LeftBracket]) {
-            return self.list_literal();
+            return self.array_literal();
         }
 
         if self.match_token(&[TokenType::LeftBrace]) {
@@ -2384,7 +2384,7 @@ impl Parser {
         ))
     }
 
-    fn list_literal(&mut self) -> Result<Expr, RaccoonError> {
+    fn array_literal(&mut self) -> Result<Expr, RaccoonError> {
         let position = self.previous().position;
         let mut elements = Vec::new();
 
@@ -2405,7 +2405,7 @@ impl Parser {
         }
 
         self.consume(TokenType::RightBracket, "Expected ']'")?;
-        Ok(Expr::ListLiteral(ListLiteral { elements, position }))
+        Ok(Expr::ArrayLiteral(ArrayLiteral { elements, position }))
     }
 
     fn object_literal(&mut self) -> Result<Expr, RaccoonError> {
@@ -3168,7 +3168,7 @@ impl Parser {
         }
 
         if self.match_token(&[TokenType::LeftBracket]) {
-            // List pattern: [pat1, pat2, ...rest]
+            // array pattern: [pat1, pat2, ...rest]
             let mut patterns = Vec::new();
 
             if !self.check(&TokenType::RightBracket) {
@@ -3180,8 +3180,8 @@ impl Parser {
                 }
             }
 
-            self.consume(TokenType::RightBracket, "Expected ']' after list pattern")?;
-            return Ok(Pattern::List(patterns));
+            self.consume(TokenType::RightBracket, "Expected ']' after array pattern")?;
+            return Ok(Pattern::Array(patterns));
         }
 
         if self.match_token(&[TokenType::LeftBrace]) {
@@ -3298,7 +3298,7 @@ impl Expr {
             Expr::StrLiteral(e) => e.position,
             Expr::BoolLiteral(e) => e.position,
             Expr::NullLiteral(e) => e.position,
-            Expr::ListLiteral(e) => e.position,
+            Expr::ArrayLiteral(e) => e.position,
             Expr::ObjectLiteral(e) => e.position,
             Expr::Spread(e) => e.position,
             Expr::Match(e) => e.position,

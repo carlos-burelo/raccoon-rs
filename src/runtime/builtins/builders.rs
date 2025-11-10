@@ -14,7 +14,7 @@ pub enum FutureCollectionStrategy {
 }
 
 pub fn collect_futures(
-    futures_list: &ListValue,
+    futures_list: &ArrayValue,
     strategy: FutureCollectionStrategy,
 ) -> (Vec<RuntimeValue>, bool, Option<String>) {
     let mut results = Vec::new();
@@ -76,9 +76,9 @@ pub fn collect_futures(
     (results, has_pending, first_error)
 }
 
-pub fn validate_futures_list(value: &RuntimeValue) -> Result<ListValue, String> {
+pub fn validate_futures_array(value: &RuntimeValue) -> Result<ArrayValue, String> {
     match value {
-        RuntimeValue::List(list) => {
+        RuntimeValue::Array(list) => {
             for element in &list.elements {
                 if !matches!(element, RuntimeValue::Future(_)) {
                     return Err("List contains non-future elements".to_string());
@@ -199,9 +199,9 @@ pub fn extract_int(args: &[RuntimeValue], index: usize) -> Result<i64, String> {
     }
 }
 
-pub fn extract_list(args: &[RuntimeValue], index: usize) -> Result<ListValue, String> {
+pub fn extract_array(args: &[RuntimeValue], index: usize) -> Result<ArrayValue, String> {
     match &args.get(index) {
-        Some(RuntimeValue::List(l)) => Ok(l.clone()),
+        Some(RuntimeValue::Array(l)) => Ok(l.clone()),
         _ => Err(format!("Argument {} is not a list", index)),
     }
 }
@@ -220,7 +220,7 @@ mod tests {
 
     #[test]
     fn test_collect_futures_empty() {
-        let list = ListValue::new(vec![], PrimitiveType::any());
+        let list = ArrayValue::new(vec![], PrimitiveType::any());
         let (results, has_pending, error) = collect_futures(&list, FutureCollectionStrategy::All);
         assert!(results.is_empty());
         assert!(!has_pending);

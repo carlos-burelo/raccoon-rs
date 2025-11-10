@@ -1,7 +1,6 @@
 /// Refactored NullType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -12,21 +11,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct NullType;
-
-impl NullType {
-    /// Returns complete type metadata with all methods and properties
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new(
-            "null",
-            "Null/None value type representing absence of a value",
-        )
-        .with_instance_methods(vec![
-            // Conversion methods
-            MethodMetadata::new("toString", "str", "Convert to string 'null'"),
-            MethodMetadata::new("toStr", "str", "Convert to string 'null'"),
-        ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for NullType {

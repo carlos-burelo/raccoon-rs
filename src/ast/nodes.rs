@@ -60,9 +60,9 @@ pub enum NodeType {
     StrLiteral,
     BoolLiteral,
     NullLiteral,
-    ListLiteral,
+    ArrayLiteral,
     ObjectLiteral,
-    ListPattern,
+    ArrayPattern,
     ObjectPattern,
     RestElement,
 }
@@ -137,7 +137,7 @@ pub enum Expr {
     StrLiteral(StrLiteral),
     BoolLiteral(BoolLiteral),
     NullLiteral(NullLiteral),
-    ListLiteral(ListLiteral),
+    ArrayLiteral(ArrayLiteral),
     ObjectLiteral(ObjectLiteral),
     Spread(SpreadExpr),
     Match(MatchExpr),
@@ -146,7 +146,7 @@ pub enum Expr {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum DestructuringPattern {
-    List(ListPattern),
+    Array(ArrayPattern),
     Object(ObjectPattern),
 }
 
@@ -653,7 +653,7 @@ pub struct NullLiteral {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct ListLiteral {
+pub struct ArrayLiteral {
     pub elements: Vec<Expr>,
     pub position: Position,
 }
@@ -671,16 +671,16 @@ pub struct ObjectLiteral {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct ListPattern {
-    pub elements: Vec<Option<ListPatternElement>>,
+pub struct ArrayPattern {
+    pub elements: Vec<Option<ArrayPatternElement>>,
     pub rest: Option<RestElement>,
     pub position: Position,
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum ListPatternElement {
+pub enum ArrayPatternElement {
     Identifier(Identifier),
-    List(Box<ListPattern>),
+    List(Box<ArrayPattern>),
     Object(Box<ObjectPattern>),
 }
 
@@ -700,7 +700,7 @@ pub struct ObjectPatternProperty {
 #[derive(Debug, Clone, PartialEq)]
 pub enum ObjectPatternValue {
     Identifier(Identifier),
-    List(ListPattern),
+    Array(ArrayPattern),
     Object(ObjectPattern),
 }
 
@@ -737,7 +737,7 @@ pub enum Pattern {
     Literal(Box<Expr>),
     Range(Box<Expr>, Box<Expr>),
     Type(Type),
-    List(Vec<Pattern>),
+    Array(Vec<Pattern>),
     Object(Vec<(String, Pattern)>),
     Variable(String),
     Or(Vec<Pattern>),
@@ -750,7 +750,7 @@ impl Pattern {
             Pattern::Literal(expr) => expr.position(),
             Pattern::Range(start, _) => start.position(),
             Pattern::Type(_) => (1, 1), // Types don't have position info
-            Pattern::List(patterns) => patterns.first().map(|p| p.position()).unwrap_or((1, 1)),
+            Pattern::Array(patterns) => patterns.first().map(|p| p.position()).unwrap_or((1, 1)),
             Pattern::Object(_) => (1, 1), // Objects don't have position info
             Pattern::Variable(_) => (1, 1), // Variables don't have position info
             Pattern::Or(patterns) => patterns.first().map(|p| p.position()).unwrap_or((1, 1)),

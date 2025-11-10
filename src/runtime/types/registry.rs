@@ -4,7 +4,7 @@ use super::primitives::floats::Float64Type;
 use super::primitives::{BigIntType, BoolType, DecimalType, IntType, StrType};
 use super::primitives::{CharType, Float32Type, NullType, UnitType}; // Import Float64Type directly
                                                                     // Collections
-use super::collections::{ListType, MapType, OptionalType, RangeType, SetType, TupleType};
+use super::collections::{ArrayType, MapType, OptionalType, RangeType, SetType, TupleType};
 // Objects
 use super::objects::{ClassType, FunctionType, InterfaceType, ObjectType};
 // Async/Control
@@ -56,7 +56,7 @@ impl TypeRegistry {
         registry.register(Box::new(UnitType));
 
         // Collection types
-        registry.register(Box::new(ListType));
+        registry.register(Box::new(ArrayType));
         registry.register(Box::new(MapType));
         registry.register(Box::new(SetType));
         registry.register(Box::new(TupleType));

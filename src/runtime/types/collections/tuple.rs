@@ -2,9 +2,8 @@
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{IntValue, ListValue, RuntimeValue, StrValue};
+use crate::runtime::{IntValue, ArrayValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -15,37 +14,15 @@ use async_trait::async_trait;
 pub struct TupleType;
 
 impl TupleType {
-    /// Returns complete type metadata with all methods
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new(
-            "tuple",
-            "Fixed-size heterogeneous collection with multiple types",
-        )
-        .with_instance_methods(vec![
-            MethodMetadata::new("get", "any", "Get element at index")
-                .with_params(vec![ParamMetadata::new("index", "int")]),
-            MethodMetadata::new("length", "int", "Get number of elements").with_alias("size"),
-            MethodMetadata::new("toString", "str", "Convert to string").with_alias("toStr"),
-            MethodMetadata::new("toList", "list", "Convert to list"),
-            MethodMetadata::new("first", "any", "Get first element"),
-            MethodMetadata::new("last", "any", "Get last element"),
-        ])
-        .with_static_methods(vec![MethodMetadata::new(
-            "of",
-            "tuple",
-            "Create tuple from elements",
-        )
-        .with_params(vec![ParamMetadata::new("elements", "any").variadic()])])
-    }
 
     /// Helper to extract tuple (list) from RuntimeValue
     fn extract_tuple<'a>(
         value: &'a RuntimeValue,
         position: Position,
         file: Option<String>,
-    ) -> Result<&'a ListValue, RaccoonError> {
+    ) -> Result<&'a ArrayValue, RaccoonError> {
         match value {
-            RuntimeValue::List(list) => Ok(list),
+            RuntimeValue::Array(list) => Ok(list),
             _ => Err(RaccoonError::new(
                 format!("Expected tuple, got {}", value.get_name()),
                 position,
@@ -105,7 +82,7 @@ impl TypeHandler for TupleType {
             }
             "toList" => {
                 require_args(&args, 0, method, position, file)?;
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     tuple.elements.clone(),
                     PrimitiveType::any(),
                 )))
@@ -148,7 +125,7 @@ impl TypeHandler for TupleType {
         match method {
             "of" => {
                 // Creates a tuple from the provided arguments
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     args,
                     PrimitiveType::any(),
                 )))
@@ -160,10 +137,13 @@ impl TypeHandler for TupleType {
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        Self::metadata().has_instance_method(method)
+        matches!(
+            method,
+            "get" | "length" | "size" | "toString" | "toStr" | "toList" | "first" | "last"
+        )
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        Self::metadata().has_static_method(method)
+        matches!(method, "of")
     }
 }

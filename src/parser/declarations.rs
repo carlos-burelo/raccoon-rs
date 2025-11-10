@@ -701,7 +701,7 @@ impl Declarations {
         state: &mut ParserState,
     ) -> Result<DestructuringPattern, RaccoonError> {
         if Parser::match_token(state, &[TokenType::LeftBracket]) {
-            return Ok(DestructuringPattern::List(Self::parse_list_pattern(state)?));
+            return Ok(DestructuringPattern::Array(Self::parse_array_pattern(state)?));
         }
         if Parser::match_token(state, &[TokenType::LeftBrace]) {
             return Ok(DestructuringPattern::Object(Self::parse_object_pattern(
@@ -716,7 +716,7 @@ impl Declarations {
     }
 
     /// Parse list destructuring pattern: [a, b, ...rest]
-    pub fn parse_list_pattern(state: &mut ParserState) -> Result<ListPattern, RaccoonError> {
+    pub fn parse_array_pattern(state: &mut ParserState) -> Result<ArrayPattern, RaccoonError> {
         let position = state.previous().unwrap().position;
         let mut elements = Vec::new();
         let mut rest = None;
@@ -744,11 +744,11 @@ impl Declarations {
                 if state.check(&TokenType::Comma) {
                     elements.push(None);
                 } else if Parser::match_token(state, &[TokenType::LeftBracket]) {
-                    elements.push(Some(ListPatternElement::List(Box::new(
-                        Self::parse_list_pattern(state)?,
+                    elements.push(Some(ArrayPatternElement::List(Box::new(
+                        Self::parse_array_pattern(state)?,
                     ))));
                 } else if Parser::match_token(state, &[TokenType::LeftBrace]) {
-                    elements.push(Some(ListPatternElement::Object(Box::new(
+                    elements.push(Some(ArrayPatternElement::Object(Box::new(
                         Self::parse_object_pattern(state)?,
                     ))));
                 } else {
@@ -756,7 +756,7 @@ impl Declarations {
                         Parser::consume(state, TokenType::Identifier, "Expected identifier")?
                             .value
                             .clone();
-                    elements.push(Some(ListPatternElement::Identifier(Identifier {
+                    elements.push(Some(ArrayPatternElement::Identifier(Identifier {
                         name,
                         position: state.previous().unwrap().position,
                     })));
@@ -773,7 +773,7 @@ impl Declarations {
         }
 
         Parser::consume(state, TokenType::RightBracket, "Expected ']'")?;
-        Ok(ListPattern {
+        Ok(ArrayPattern {
             elements,
             rest,
             position,
@@ -812,7 +812,7 @@ impl Declarations {
 
                 let value = if Parser::match_token(state, &[TokenType::Colon]) {
                     if Parser::match_token(state, &[TokenType::LeftBracket]) {
-                        ObjectPatternValue::List(Self::parse_list_pattern(state)?)
+                        ObjectPatternValue::Array(Self::parse_array_pattern(state)?)
                     } else if Parser::match_token(state, &[TokenType::LeftBrace]) {
                         ObjectPatternValue::Object(Self::parse_object_pattern(state)?)
                     } else {

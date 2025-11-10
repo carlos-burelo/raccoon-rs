@@ -1,9 +1,6 @@
 /// Refactored integer types using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{
-    MethodMetadata, ParamMetadata, PropertyMetadata, TypeMetadata,
-};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{
     BoolValue, DecimalValue, FloatValue, IntValue, NullValue, RuntimeValue, StrValue,
@@ -16,65 +13,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct IntType;
-
-impl IntType {
-    /// Returns complete type metadata with all methods and properties
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("int", "64-bit signed integer type with arithmetic methods")
-            .with_instance_methods(vec![
-                // Conversion methods
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (identity)"),
-                MethodMetadata::new("toI8", "int", "Convert to 8-bit signed integer"),
-                MethodMetadata::new("toI16", "int", "Convert to 16-bit signed integer"),
-                MethodMetadata::new("toI32", "int", "Convert to 32-bit signed integer"),
-                MethodMetadata::new("toI64", "int", "Convert to 64-bit signed integer"),
-                MethodMetadata::new("toU8", "int", "Convert to 8-bit unsigned integer"),
-                MethodMetadata::new("toU16", "int", "Convert to 16-bit unsigned integer"),
-                MethodMetadata::new("toU32", "int", "Convert to 32-bit unsigned integer"),
-                MethodMetadata::new("toU64", "int", "Convert to 64-bit unsigned integer"),
-                MethodMetadata::new("toF32", "float", "Convert to 32-bit float"),
-                MethodMetadata::new("toF64", "float", "Convert to 64-bit float"),
-                MethodMetadata::new("toFloat", "float", "Convert to float"),
-                MethodMetadata::new("toDecimal", "decimal", "Convert to decimal"),
-                // Mathematical methods
-                MethodMetadata::new("abs", "int", "Absolute value"),
-                MethodMetadata::new("sign", "int", "Sign of number (-1, 0, or 1)"),
-                MethodMetadata::new("pow", "int", "Raise to power")
-                    .with_params(vec![ParamMetadata::new("exponent", "int")]),
-                MethodMetadata::new("clamp", "int", "Clamp value between min and max").with_params(
-                    vec![
-                        ParamMetadata::new("min", "int"),
-                        ParamMetadata::new("max", "int"),
-                    ],
-                ),
-                // Predicate methods
-                MethodMetadata::new("isEven", "bool", "Check if number is even"),
-                MethodMetadata::new("isOdd", "bool", "Check if number is odd"),
-                MethodMetadata::new("isPositive", "bool", "Check if number is positive"),
-                MethodMetadata::new("isNegative", "bool", "Check if number is negative"),
-                MethodMetadata::new("isZero", "bool", "Check if number is zero"),
-            ])
-            .with_static_methods(vec![
-                MethodMetadata::new("parse", "int", "Parse string to integer")
-                    .with_params(vec![ParamMetadata::new("value", "str")]),
-                MethodMetadata::new(
-                    "tryParse",
-                    "int|null",
-                    "Try to parse string, returns null on failure",
-                )
-                .with_params(vec![ParamMetadata::new("value", "str")]),
-                MethodMetadata::new("compare", "int", "Compare two integers").with_params(vec![
-                    ParamMetadata::new("a", "int"),
-                    ParamMetadata::new("b", "int"),
-                ]),
-            ])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "int", "Maximum int value (i64::MAX)").readonly(),
-                PropertyMetadata::new("minValue", "int", "Minimum int value (i64::MIN)").readonly(),
-            ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for IntType {
@@ -312,27 +250,6 @@ impl TypeHandler for IntType {
 
 pub struct I8Type;
 
-impl I8Type {
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("i8", "8-bit signed integer type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (i64)"),
-                MethodMetadata::new("abs", "int", "Absolute value"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "int",
-                "Parse string to i8",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "int", "Maximum i8 value (127)").readonly(),
-                PropertyMetadata::new("minValue", "int", "Minimum i8 value (-128)").readonly(),
-            ])
-    }
-}
-
 #[async_trait]
 impl TypeHandler for I8Type {
     fn type_name(&self) -> &str {
@@ -417,27 +334,6 @@ impl TypeHandler for I8Type {
 // ============================================================================
 
 pub struct I16Type;
-
-impl I16Type {
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("i16", "16-bit signed integer type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (i64)"),
-                MethodMetadata::new("abs", "int", "Absolute value"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "int",
-                "Parse string to i16",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "int", "Maximum i16 value (32767)").readonly(),
-                PropertyMetadata::new("minValue", "int", "Minimum i16 value (-32768)").readonly(),
-            ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for I16Type {
@@ -524,29 +420,6 @@ impl TypeHandler for I16Type {
 
 pub struct I32Type;
 
-impl I32Type {
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("i32", "32-bit signed integer type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (i64)"),
-                MethodMetadata::new("abs", "int", "Absolute value"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "int",
-                "Parse string to i32",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "int", "Maximum i32 value (2147483647)")
-                    .readonly(),
-                PropertyMetadata::new("minValue", "int", "Minimum i32 value (-2147483648)")
-                    .readonly(),
-            ])
-    }
-}
-
 #[async_trait]
 impl TypeHandler for I32Type {
     fn type_name(&self) -> &str {
@@ -631,27 +504,6 @@ impl TypeHandler for I32Type {
 // ============================================================================
 
 pub struct I64Type;
-
-impl I64Type {
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("i64", "64-bit signed integer type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (identity)"),
-                MethodMetadata::new("abs", "int", "Absolute value"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "int",
-                "Parse string to i64",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "int", "Maximum i64 value").readonly(),
-                PropertyMetadata::new("minValue", "int", "Minimum i64 value").readonly(),
-            ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for I64Type {

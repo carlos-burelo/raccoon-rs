@@ -1,7 +1,6 @@
 /// Refactored UnitType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -12,20 +11,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct UnitType;
-
-impl UnitType {
-    /// Returns complete type metadata with all methods and properties
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new(
-            "unit",
-            "Unit type representing void/absence of value, displayed as ()",
-        )
-        .with_instance_methods(vec![
-            MethodMetadata::new("toString", "str", "Convert to string '()'"),
-            MethodMetadata::new("toStr", "str", "Convert to string '()'"),
-        ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for UnitType {

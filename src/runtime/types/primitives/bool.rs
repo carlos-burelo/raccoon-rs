@@ -1,34 +1,12 @@
 use crate::error::RaccoonError;
 /// BoolType - Boolean primitive type with metadata system
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, NullValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
 pub struct BoolType;
-
-impl BoolType {
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("bool", "Boolean type representing true/false values")
-            .with_instance_methods(vec![MethodMetadata::new(
-                "toStr",
-                "str",
-                "Convert to string",
-            )])
-            .with_static_methods(vec![
-                MethodMetadata::new("parse", "bool", "Parse boolean from string")
-                    .with_params(vec![ParamMetadata::new("value", "str")]),
-                MethodMetadata::new(
-                    "tryParse",
-                    "bool?",
-                    "Try parse boolean, returns null on failure",
-                )
-                .with_params(vec![ParamMetadata::new("value", "str")]),
-            ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for BoolType {

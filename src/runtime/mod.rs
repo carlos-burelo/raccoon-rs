@@ -1,7 +1,4 @@
-pub mod builtin_plugins;
-pub mod builtins;
-pub mod builtins_builders;
-pub mod builtins_macros;
+pub mod builtins; // Modular built-in functions and types
 pub mod call_stack;
 pub mod control_flow;
 pub mod conversion;
@@ -15,9 +12,7 @@ pub mod natives;
 pub mod plugin_system;
 pub mod registrar;
 pub mod rust_natives;
-pub mod stdlib_loader;
-pub mod stdlib_natives;
-pub mod stdlib_wrappers;
+pub mod stdlib; // Standard library system (loader, wrappers, natives)
 pub mod type_object;
 pub mod type_object_builder;
 pub mod types;
@@ -35,7 +30,7 @@ pub use module_system::{analyze_exports, resolve_module_path, Module, ModuleCach
 pub use native::{NativeDecoratorProcessor, NativeRegistry};
 pub use plugin_system::{NativePlugin, PluginManager, PluginRegistry};
 pub use registrar::Registrar;
-pub use stdlib_loader::StdLibLoader;
+pub use stdlib::{register_all_stdlib_natives, register_stdlib_wrappers, StdLibLoader};
 pub use type_object::{PrimitiveKind, SourceLocation, TypeKind, TypeMetadata, TypeObject};
 pub use type_object_builder::TypeObjectBuilder;
 pub use types::registry::TypeRegistry;

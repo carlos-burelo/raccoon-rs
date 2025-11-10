@@ -1,7 +1,6 @@
 /// Refactored BigIntType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BigIntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -12,35 +11,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct BigIntType;
-
-impl BigIntType {
-    /// Returns complete type metadata with all methods and properties
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("bigint", "Arbitrary precision integer type (128-bit)")
-            .with_instance_methods(vec![
-                // Conversion methods
-                MethodMetadata::new("toStr", "str", "Convert to string with 'n' suffix"),
-                MethodMetadata::new("toString", "str", "Convert to string without suffix"),
-                // Arithmetic methods
-                MethodMetadata::new("add", "bigint", "Add another bigint")
-                    .with_params(vec![ParamMetadata::new("other", "bigint")]),
-                MethodMetadata::new("subtract", "bigint", "Subtract another bigint")
-                    .with_params(vec![ParamMetadata::new("other", "bigint")]),
-                MethodMetadata::new("multiply", "bigint", "Multiply by another bigint")
-                    .with_params(vec![ParamMetadata::new("other", "bigint")]),
-                MethodMetadata::new("divide", "bigint", "Divide by another bigint")
-                    .with_params(vec![ParamMetadata::new("other", "bigint")]),
-                // Mathematical methods
-                MethodMetadata::new("abs", "bigint", "Absolute value"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "bigint",
-                "Parse string to bigint",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for BigIntType {

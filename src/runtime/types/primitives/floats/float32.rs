@@ -1,9 +1,6 @@
 /// Refactored Float32Type using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{
-    MethodMetadata, ParamMetadata, PropertyMetadata, TypeMetadata,
-};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -14,39 +11,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct Float32Type;
-
-impl Float32Type {
-    /// Returns complete type metadata with all methods and properties
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("f32", "32-bit floating point number type")
-            .with_instance_methods(vec![
-                // Conversion methods
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (truncate)"),
-                MethodMetadata::new("toFloat", "float", "Convert to 64-bit float"),
-                MethodMetadata::new("toF64", "float", "Convert to 64-bit float"),
-                // Rounding methods
-                MethodMetadata::new("floor", "int", "Round down to nearest integer"),
-                MethodMetadata::new("ceil", "int", "Round up to nearest integer"),
-                MethodMetadata::new("round", "int", "Round to nearest integer"),
-                // Mathematical methods
-                MethodMetadata::new("abs", "float", "Absolute value"),
-                MethodMetadata::new("sqrt", "float", "Square root"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "float",
-                "Parse string to f32",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "float", "Maximum f32 value").readonly(),
-                PropertyMetadata::new("minValue", "float", "Minimum f32 value").readonly(),
-                PropertyMetadata::new("infinity", "float", "Positive infinity").readonly(),
-                PropertyMetadata::new("nan", "float", "Not a Number").readonly(),
-            ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for Float32Type {

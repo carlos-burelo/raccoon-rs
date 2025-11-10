@@ -5,7 +5,7 @@ use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::operations;
 use crate::runtime::{
-    BoolValue, CallStack, FloatValue, IntValue, ListValue, RuntimeValue, StrValue,
+    BoolValue, CallStack, FloatValue, IntValue, ArrayValue, RuntimeValue, StrValue,
 };
 use crate::tokens::{BinaryOperator, Position, UnaryOperator};
 
@@ -58,7 +58,7 @@ pub async fn apply_binary_op(
                 for i in l.value..=r.value {
                     elements.push(RuntimeValue::Int(IntValue::new(i)));
                 }
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     elements,
                     PrimitiveType::int(),
                 )))
@@ -502,7 +502,7 @@ where
                 for i in l.value..=r.value {
                     elements.push(RuntimeValue::Int(IntValue::new(i)));
                 }
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     elements,
                     PrimitiveType::int(),
                 )))

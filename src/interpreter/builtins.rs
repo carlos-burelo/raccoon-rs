@@ -1,6 +1,6 @@
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
-use crate::runtime::{BoolValue, IntValue, ListValue, NullValue, RuntimeValue};
+use crate::runtime::{BoolValue, IntValue, ArrayValue, NullValue, RuntimeValue};
 use crate::tokens::Position;
 use async_recursion::async_recursion;
 
@@ -11,7 +11,7 @@ pub struct Builtins;
 
 impl Builtins {
     #[async_recursion(?Send)]
-    pub async fn handle_list_functional_method(
+    pub async fn handle_array_functional_method(
         interpreter: &mut Interpreter,
         object: &mut RuntimeValue,
         method: &str,
@@ -19,7 +19,7 @@ impl Builtins {
         position: Position,
     ) -> Result<RuntimeValue, RaccoonError> {
         let list = match object {
-            RuntimeValue::List(l) => l,
+            RuntimeValue::Array(l) => l,
             _ => {
                 return Err(RaccoonError::new(
                     format!("Expected list, got {}", object.get_name()),
@@ -62,7 +62,7 @@ impl Builtins {
                     mapped[0].get_type()
                 };
 
-                Ok(RuntimeValue::List(ListValue::new(mapped, element_type)))
+                Ok(RuntimeValue::Array(ArrayValue::new(mapped, element_type)))
             }
             "filter" => {
                 if args.is_empty() {
@@ -93,7 +93,7 @@ impl Builtins {
                     }
                 }
 
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     filtered,
                     list.element_type.clone(),
                 )))

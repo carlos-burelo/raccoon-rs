@@ -9,7 +9,7 @@ mod operators;
 use crate::ast::nodes::*;
 use crate::error::RaccoonError;
 use crate::runtime::{
-    CallStack, DecoratorRegistry, Environment, FutureValue, ListValue, ModuleRegistry, NullValue,
+    CallStack, DecoratorRegistry, Environment, FutureValue, ArrayValue, ModuleRegistry, NullValue,
     Registrar, RuntimeValue, StrValue, TypeRegistry,
 };
 use crate::tokens::{BinaryOperator, Position};
@@ -74,7 +74,7 @@ impl Interpreter {
         Self::register_builtins(&mut env, registrar.clone());
 
         // Register stdlib wrapper functions
-        crate::runtime::stdlib_wrappers::register_stdlib_wrappers(&mut env, registrar.clone());
+        crate::runtime::register_stdlib_wrappers(&mut env, registrar.clone());
 
         let stdlib_loader = std::sync::Arc::new(crate::runtime::StdLibLoader::with_default_path());
         let decorator_registry = DecoratorRegistry::new();
@@ -97,80 +97,13 @@ impl Interpreter {
         env: &mut Environment,
         _registrar: std::sync::Arc<std::sync::Mutex<Registrar>>,
     ) {
-        use crate::ast::types::PrimitiveType;
-        use crate::runtime::{setup_builtins, IntValue, NativeFunctionValue, StrValue};
+        use crate::runtime::setup_builtins;
 
-        // Call the main setup_builtins to register Future, Object, and primitive types
+        // Call the main setup_builtins to register all builtins:
+        // - Global functions: print, println, eprint, input, len
+        // - Primitive types: int, str, float, bool with static methods/properties
+        // - Built-in objects: Future, Object, Type
         setup_builtins(env);
-
-        let print_fn = NativeFunctionValue::new(
-            |args: Vec<RuntimeValue>| {
-                for (i, arg) in args.iter().enumerate() {
-                    if i > 0 {
-                        print!(" ");
-                    }
-                    print!("{}", arg.to_string());
-                }
-                println!();
-                RuntimeValue::Null(NullValue::new())
-            },
-            crate::fn_type!(variadic, PrimitiveType::void()),
-        );
-        let _ = env.declare("print".to_string(), RuntimeValue::NativeFunction(print_fn));
-
-        let println_fn = NativeFunctionValue::new(
-            |args: Vec<RuntimeValue>| {
-                if args.is_empty() {
-                    println!();
-                } else {
-                    println!("{}", args[0].to_string());
-                }
-                RuntimeValue::Null(NullValue::new())
-            },
-            crate::fn_type!(PrimitiveType::str(), PrimitiveType::void()),
-        );
-        let _ = env.declare(
-            "println".to_string(),
-            RuntimeValue::NativeFunction(println_fn),
-        );
-
-        let input_fn = NativeFunctionValue::new(
-            |args: Vec<RuntimeValue>| {
-                let prompt = if !args.is_empty() {
-                    args[0].to_string()
-                } else {
-                    String::new()
-                };
-
-                if !prompt.is_empty() {
-                    print!("{}", prompt);
-                    let _ = std::io::Write::flush(&mut std::io::stdout());
-                }
-
-                let mut input = String::new();
-                let _ = std::io::stdin().read_line(&mut input);
-                RuntimeValue::Str(StrValue::new(input.trim_end().to_string()))
-            },
-            crate::fn_type!(variadic, PrimitiveType::str()),
-        );
-        let _ = env.declare("input".to_string(), RuntimeValue::NativeFunction(input_fn));
-
-        let len_fn = NativeFunctionValue::new(
-            |args: Vec<RuntimeValue>| {
-                if args.is_empty() {
-                    return RuntimeValue::Null(NullValue::new());
-                }
-                match &args[0] {
-                    RuntimeValue::Str(s) => RuntimeValue::Int(IntValue::new(s.value.len() as i64)),
-                    RuntimeValue::List(l) => {
-                        RuntimeValue::Int(IntValue::new(l.elements.len() as i64))
-                    }
-                    _ => RuntimeValue::Null(NullValue::new()),
-                }
-            },
-            crate::fn_type!(variadic, PrimitiveType::int()),
-        );
-        let _ = env.declare("len".to_string(), RuntimeValue::NativeFunction(len_fn));
     }
 
     #[async_recursion(?Send)]
@@ -404,7 +337,7 @@ impl Interpreter {
                     |args: Vec<RuntimeValue>| {
                         if args.is_empty() {
                             let list =
-                                RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
+                                RuntimeValue::Array(ArrayValue::new(vec![], PrimitiveType::any()));
                             return RuntimeValue::Future(FutureValue::new_resolved(
                                 list,
                                 PrimitiveType::any(),
@@ -412,7 +345,7 @@ impl Interpreter {
                         }
 
                         match &args[0] {
-                            RuntimeValue::List(list) => {
+                            RuntimeValue::Array(list) => {
                                 let futures = list.elements.clone();
                                 let result_future = FutureValue::new(PrimitiveType::any());
                                 let result_clone = result_future.clone();
@@ -436,7 +369,7 @@ impl Interpreter {
                                         }
                                     }
 
-                                    let result_list = RuntimeValue::List(ListValue::new(
+                                    let result_list = RuntimeValue::Array(ArrayValue::new(
                                         results,
                                         PrimitiveType::any(),
                                     ));
@@ -466,7 +399,7 @@ impl Interpreter {
                         }
 
                         match &args[0] {
-                            RuntimeValue::List(list) => {
+                            RuntimeValue::Array(list) => {
                                 if list.elements.is_empty() {
                                     return RuntimeValue::Future(FutureValue::new_resolved(
                                         RuntimeValue::Null(NullValue::new()),
@@ -531,7 +464,7 @@ impl Interpreter {
                     |args: Vec<RuntimeValue>| {
                         if args.is_empty() {
                             let list =
-                                RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
+                                RuntimeValue::Array(ArrayValue::new(vec![], PrimitiveType::any()));
                             return RuntimeValue::Future(FutureValue::new_resolved(
                                 list,
                                 PrimitiveType::any(),
@@ -539,7 +472,7 @@ impl Interpreter {
                         }
 
                         match &args[0] {
-                            RuntimeValue::List(list) => {
+                            RuntimeValue::Array(list) => {
                                 let mut results = Vec::new();
 
                                 for element in &list.elements {
@@ -620,7 +553,7 @@ impl Interpreter {
                                     }
                                 }
 
-                                let result_list = RuntimeValue::List(ListValue::new(
+                                let result_list = RuntimeValue::Array(ArrayValue::new(
                                     results,
                                     PrimitiveType::any(),
                                 ));
@@ -650,7 +583,7 @@ impl Interpreter {
                         }
 
                         match &args[0] {
-                            RuntimeValue::List(list) => {
+                            RuntimeValue::Array(list) => {
                                 // Find first resolved future
                                 for element in &list.elements {
                                     if let RuntimeValue::Future(fut) = element {

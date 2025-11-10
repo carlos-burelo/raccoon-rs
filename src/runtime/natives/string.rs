@@ -84,7 +84,7 @@ pub fn register_string_module(registrar: &mut Registrar) {
                 .map(|part| part.to_string().to_raccoon())
                 .collect();
 
-            RuntimeValue::List(crate::runtime::ListValue::new(
+            RuntimeValue::Array(crate::runtime::ArrayValue::new(
                 parts,
                 crate::ast::types::PrimitiveType::str(),
             ))

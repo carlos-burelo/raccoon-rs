@@ -51,7 +51,7 @@ impl Expressions {
             Expr::Unary(unary) => Self::evaluate_unary_expr(interpreter, unary).await,
             Expr::Assignment(assign) => Self::evaluate_assignment(interpreter, assign).await,
             Expr::Call(call) => Self::evaluate_call_expr(interpreter, call).await,
-            Expr::ListLiteral(list) => Self::evaluate_list_literal(interpreter, list).await,
+            Expr::ArrayLiteral(list) => Self::evaluate_array_literal(interpreter, list).await,
             Expr::ObjectLiteral(obj) => Self::evaluate_object_literal(interpreter, obj).await,
             Expr::Member(member) => Self::evaluate_member_expr(interpreter, member).await,
             Expr::Index(index) => Self::evaluate_index_expr(interpreter, index).await,
@@ -381,7 +381,7 @@ impl Expressions {
                 let idx = Self::evaluate_expr(interpreter, &index_expr.index).await?;
 
                 match (&mut object, &idx) {
-                    (RuntimeValue::List(list), RuntimeValue::Int(i)) => {
+                    (RuntimeValue::Array(list), RuntimeValue::Int(i)) => {
                         if i.value < 0 || i.value >= list.elements.len() as i64 {
                             return Err(RaccoonError::new(
                                 format!("[1409] Index out of bounds: {}", i.value),
@@ -457,7 +457,7 @@ impl Expressions {
             if let Expr::Spread(spread_expr) = arg {
                 let spread_value = Self::evaluate_expr(interpreter, &spread_expr.argument).await?;
 
-                if let RuntimeValue::List(list) = spread_value {
+                if let RuntimeValue::Array(list) = spread_value {
                     args.extend(list.elements.clone());
                 } else {
                     print!("Spread operator can only be applied to arrays");
@@ -506,20 +506,20 @@ impl Expressions {
                         }
 
                         let element_type = match &param.param_type {
-                            Type::List(list_type) => list_type.element_type.clone(),
+                            Type::Array(list_type) => list_type.element_type.clone(),
                             _ => PrimitiveType::any(),
                         };
 
-                        RuntimeValue::List(ListValue::new(rest_args, element_type))
+                        RuntimeValue::Array(ArrayValue::new(rest_args, element_type))
                     } else if let Some(named_value) = named_args.get(&param_name) {
                         named_value.clone()
                     } else if positional_index < args.len() {
                         let current_arg = &args[positional_index];
                         let should_use_default =
-                            if let VarPattern::Destructuring(DestructuringPattern::List(_)) =
+                            if let VarPattern::Destructuring(DestructuringPattern::Array(_)) =
                                 &param.pattern
                             {
-                                !matches!(current_arg, RuntimeValue::List(_))
+                                !matches!(current_arg, RuntimeValue::Array(_))
                                     && param.default_value.is_some()
                             } else {
                                 false
@@ -699,16 +699,16 @@ impl Expressions {
         }
     }
 
-    async fn evaluate_list_literal(
+    async fn evaluate_array_literal(
         interpreter: &mut Interpreter,
-        list: &ListLiteral,
+        list: &ArrayLiteral,
     ) -> Result<RuntimeValue, RaccoonError> {
         let mut elements = Vec::new();
         for elem in &list.elements {
             // Handle spread expressions in array literals
             if let Expr::Spread(spread) = elem {
                 let spread_value = Self::evaluate_expr(interpreter, &spread.argument).await?;
-                if let RuntimeValue::List(list_val) = spread_value {
+                if let RuntimeValue::Array(list_val) = spread_value {
                     elements.extend(list_val.elements);
                 }
             } else {
@@ -722,7 +722,7 @@ impl Expressions {
             elements[0].get_type()
         };
 
-        Ok(RuntimeValue::List(ListValue::new(elements, element_type)))
+        Ok(RuntimeValue::Array(ArrayValue::new(elements, element_type)))
     }
 
     async fn evaluate_object_literal(
@@ -839,7 +839,7 @@ impl Expressions {
                     interpreter.file.clone(),
                 )),
             },
-            RuntimeValue::List(list) => match member.property.as_str() {
+            RuntimeValue::Array(list) => match member.property.as_str() {
                 "length" => Ok(RuntimeValue::Int(IntValue::new(list.elements.len() as i64))),
                 "first" => {
                     if list.elements.is_empty() {
@@ -935,7 +935,7 @@ impl Expressions {
         let idx = Self::evaluate_expr(interpreter, &index.index).await?;
 
         match (object, idx) {
-            (RuntimeValue::List(list), RuntimeValue::Int(i)) => {
+            (RuntimeValue::Array(list), RuntimeValue::Int(i)) => {
                 if i.value < 0 || i.value >= list.elements.len() as i64 {
                     println!("Index value: {}", i.value);
                     println!("List length: {}", list.elements.len());
@@ -1140,7 +1140,7 @@ impl Expressions {
             RuntimeValue::Str(_) => "str",
             RuntimeValue::Bool(_) => "bool",
             RuntimeValue::Null(_) => "null",
-            RuntimeValue::List(_) => "list",
+            RuntimeValue::Array(_) => "list",
             RuntimeValue::Map(_) => "map",
             RuntimeValue::Object(_) => "object",
             RuntimeValue::Class(ref c) => {
@@ -1425,7 +1425,7 @@ impl Expressions {
                 for i in s.value..=e.value {
                     elements.push(RuntimeValue::Int(IntValue::new(i)));
                 }
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     elements,
                     PrimitiveType::int(),
                 )))
@@ -1663,11 +1663,11 @@ impl Expressions {
                         }
 
                         let element_type = match &param.param_type {
-                            Type::List(list_type) => list_type.element_type.clone(),
+                            Type::Array(list_type) => list_type.element_type.clone(),
                             _ => PrimitiveType::any(),
                         };
 
-                        RuntimeValue::List(ListValue::new(rest_args, element_type))
+                        RuntimeValue::Array(ArrayValue::new(rest_args, element_type))
                     } else if positional_index < args.len() {
                         let arg = args[positional_index].clone();
                         positional_index += 1;
@@ -1760,7 +1760,7 @@ impl Expressions {
             strings.push(RuntimeValue::Str(StrValue::new(String::new())));
         }
 
-        let strings_list = RuntimeValue::List(ListValue::new(strings, PrimitiveType::str()));
+        let strings_list = RuntimeValue::Array(ArrayValue::new(strings, PrimitiveType::str()));
 
         let mut args = vec![strings_list];
         args.extend(values);
@@ -1787,11 +1787,11 @@ impl Expressions {
                         }
 
                         let element_type = match &param.param_type {
-                            Type::List(list_type) => list_type.element_type.clone(),
+                            Type::Array(list_type) => list_type.element_type.clone(),
                             _ => PrimitiveType::any(),
                         };
 
-                        RuntimeValue::List(ListValue::new(rest_args, element_type))
+                        RuntimeValue::Array(ArrayValue::new(rest_args, element_type))
                     } else if positional_index < args.len() {
                         let arg = args[positional_index].clone();
                         positional_index += 1;
@@ -1921,11 +1921,11 @@ impl Expressions {
                             }
 
                             let element_type = match &param.param_type {
-                                Type::List(list_type) => list_type.element_type.clone(),
+                                Type::Array(list_type) => list_type.element_type.clone(),
                                 _ => PrimitiveType::any(),
                             };
 
-                            RuntimeValue::List(ListValue::new(rest_args, element_type))
+                            RuntimeValue::Array(ArrayValue::new(rest_args, element_type))
                         } else if positional_index < args.len() {
                             let arg = args[positional_index].clone();
                             positional_index += 1;
@@ -2074,7 +2074,7 @@ impl Expressions {
                 }
             }
 
-            RuntimeValue::List(_) => {
+            RuntimeValue::Array(_) => {
                 if matches!(
                     method_call.method.as_str(),
                     "map"
@@ -2086,7 +2086,7 @@ impl Expressions {
                         | "some"
                         | "every"
                 ) {
-                    Builtins::handle_list_functional_method(
+                    Builtins::handle_array_functional_method(
                         interpreter,
                         &mut object,
                         &method_call.method,
@@ -2143,11 +2143,11 @@ impl Expressions {
                                     }
 
                                     let element_type = match &param.param_type {
-                                        Type::List(list_type) => list_type.element_type.clone(),
+                                        Type::Array(list_type) => list_type.element_type.clone(),
                                         _ => PrimitiveType::any(),
                                     };
 
-                                    RuntimeValue::List(ListValue::new(rest_args, element_type))
+                                    RuntimeValue::Array(ArrayValue::new(rest_args, element_type))
                                 } else if positional_index < args.len() {
                                     let arg = args[positional_index].clone();
                                     positional_index += 1;
@@ -2292,11 +2292,11 @@ impl Expressions {
                             }
 
                             let element_type = match &param.param_type {
-                                Type::List(list_type) => list_type.element_type.clone(),
+                                Type::Array(list_type) => list_type.element_type.clone(),
                                 _ => PrimitiveType::any(),
                             };
 
-                            RuntimeValue::List(ListValue::new(rest_args, element_type))
+                            RuntimeValue::Array(ArrayValue::new(rest_args, element_type))
                         } else if positional_index < args.len() {
                             let arg = args[positional_index].clone();
                             positional_index += 1;
@@ -2727,7 +2727,7 @@ impl Expressions {
             )),
         };
 
-        let should_update = matches!(object, RuntimeValue::List(_) | RuntimeValue::Map(_));
+        let should_update = matches!(object, RuntimeValue::Array(_) | RuntimeValue::Map(_));
 
         if should_update {
             if let Some((name, position)) = var_info {
@@ -2874,9 +2874,9 @@ impl Expressions {
                 }
             }
 
-            Pattern::List(patterns) => {
-                // List pattern: [p1, p2, ...]
-                if let RuntimeValue::List(list_val) = value {
+            Pattern::Array(patterns) => {
+                // array pattern: [p1, p2, ...]
+                if let RuntimeValue::Array(list_val) = value {
                     let elements = &list_val.elements;
                     if elements.len() != patterns.len() {
                         return Ok(None); // Length mismatch

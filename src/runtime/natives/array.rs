@@ -1,4 +1,4 @@
-use crate::runtime::{FromRaccoon, ListValue, Registrar, RuntimeValue, ToRaccoon};
+use crate::runtime::{FromRaccoon, ArrayValue, Registrar, RuntimeValue, ToRaccoon};
 
 pub fn register_array_module(registrar: &mut Registrar) {
     // length(arr: list) -> i32
@@ -6,7 +6,7 @@ pub fn register_array_module(registrar: &mut Registrar) {
         "length",
         Some("array"),
         |args| match &args[0] {
-            RuntimeValue::List(list) => (list.elements.len() as i32).to_raccoon(),
+            RuntimeValue::Array(list) => (list.elements.len() as i32).to_raccoon(),
             _ => (0i32).to_raccoon(),
         },
         1,
@@ -18,12 +18,12 @@ pub fn register_array_module(registrar: &mut Registrar) {
         "push",
         Some("array"),
         |args| match &args[0] {
-            RuntimeValue::List(list) => {
+            RuntimeValue::Array(list) => {
                 let mut new_elements = list.elements.clone();
                 if args.len() > 1 {
                     new_elements.push(args[1].clone());
                 }
-                RuntimeValue::List(ListValue::new(new_elements, list.element_type.clone()))
+                RuntimeValue::Array(ArrayValue::new(new_elements, list.element_type.clone()))
             }
             _ => args[0].clone(),
         },
@@ -36,7 +36,7 @@ pub fn register_array_module(registrar: &mut Registrar) {
         "pop",
         Some("array"),
         |args| match &args[0] {
-            RuntimeValue::List(list) => {
+            RuntimeValue::Array(list) => {
                 if list.elements.is_empty() {
                     RuntimeValue::Null(crate::runtime::NullValue::new())
                 } else {
@@ -57,7 +57,7 @@ pub fn register_array_module(registrar: &mut Registrar) {
         "shift",
         Some("array"),
         |args| match &args[0] {
-            RuntimeValue::List(list) => {
+            RuntimeValue::Array(list) => {
                 if list.elements.is_empty() {
                     RuntimeValue::Null(crate::runtime::NullValue::new())
                 } else {
@@ -78,7 +78,7 @@ pub fn register_array_module(registrar: &mut Registrar) {
         "slice",
         Some("array"),
         |args| match &args[0] {
-            RuntimeValue::List(list) => {
+            RuntimeValue::Array(list) => {
                 let start = i32::from_raccoon(&args[1]).unwrap_or(0) as usize;
                 let end =
                     i32::from_raccoon(&args[2]).unwrap_or(list.elements.len() as i32) as usize;
@@ -88,12 +88,12 @@ pub fn register_array_module(registrar: &mut Registrar) {
 
                 if start <= end {
                     let sliced = list.elements[start..end].to_vec();
-                    RuntimeValue::List(ListValue::new(sliced, list.element_type.clone()))
+                    RuntimeValue::Array(ArrayValue::new(sliced, list.element_type.clone()))
                 } else {
-                    RuntimeValue::List(ListValue::new(vec![], list.element_type.clone()))
+                    RuntimeValue::Array(ArrayValue::new(vec![], list.element_type.clone()))
                 }
             }
-            _ => RuntimeValue::List(ListValue::new(
+            _ => RuntimeValue::Array(ArrayValue::new(
                 vec![],
                 crate::ast::types::PrimitiveType::any(),
             )),
@@ -107,10 +107,10 @@ pub fn register_array_module(registrar: &mut Registrar) {
         "reverse",
         Some("array"),
         |args| match &args[0] {
-            RuntimeValue::List(list) => {
+            RuntimeValue::Array(list) => {
                 let mut reversed = list.elements.clone();
                 reversed.reverse();
-                RuntimeValue::List(ListValue::new(reversed, list.element_type.clone()))
+                RuntimeValue::Array(ArrayValue::new(reversed, list.element_type.clone()))
             }
             _ => args[0].clone(),
         },
@@ -123,7 +123,7 @@ pub fn register_array_module(registrar: &mut Registrar) {
         "contains",
         Some("array"),
         |args| match &args[0] {
-            RuntimeValue::List(list) => {
+            RuntimeValue::Array(list) => {
                 let found = list
                     .elements
                     .iter()
@@ -141,7 +141,7 @@ pub fn register_array_module(registrar: &mut Registrar) {
         "index_of",
         Some("array"),
         |args| match &args[0] {
-            RuntimeValue::List(list) => {
+            RuntimeValue::Array(list) => {
                 for (i, elem) in list.elements.iter().enumerate() {
                     if elem.to_string() == args[1].to_string() {
                         return (i as i32).to_raccoon();
@@ -160,7 +160,7 @@ pub fn register_array_module(registrar: &mut Registrar) {
         "join",
         Some("array"),
         |args| match &args[0] {
-            RuntimeValue::List(list) => {
+            RuntimeValue::Array(list) => {
                 let sep = String::from_raccoon(&args[1]).unwrap_or_default();
                 let joined = list
                     .elements

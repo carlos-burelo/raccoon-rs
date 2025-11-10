@@ -11,7 +11,7 @@ pub enum NarrowedType {
     Str,
     Bool,
     Null,
-    List,
+    Array,
     Map,
     Object,
     Function,
@@ -28,7 +28,7 @@ pub fn narrow_type(value: &RuntimeValue) -> NarrowedType {
         RuntimeValue::Str(_) => NarrowedType::Str,
         RuntimeValue::Bool(_) => NarrowedType::Bool,
         RuntimeValue::Null(_) => NarrowedType::Null,
-        RuntimeValue::List(_) => NarrowedType::List,
+        RuntimeValue::Array(_) => NarrowedType::Array,
         RuntimeValue::Map(_) => NarrowedType::Map,
         RuntimeValue::Object(_) => NarrowedType::Object,
         RuntimeValue::Class(_) => NarrowedType::Object,
@@ -65,9 +65,9 @@ pub fn typeof_check(value: &RuntimeValue, type_name: &str) -> bool {
                 | RuntimeValue::Class(_)
                 | RuntimeValue::ClassInstance(_)
                 | RuntimeValue::Map(_)
-                | RuntimeValue::List(_)
+                | RuntimeValue::Array(_)
         ),
-        "array" | "list" => matches!(value, RuntimeValue::List(_)),
+        "array" | "list" => matches!(value, RuntimeValue::Array(_)),
         "map" | "dict" => matches!(value, RuntimeValue::Map(_)),
         "function" => matches!(
             value,
@@ -146,7 +146,7 @@ pub fn is_boolean(value: &RuntimeValue) -> bool {
 pub fn is_collection(value: &RuntimeValue) -> bool {
     matches!(
         value,
-        RuntimeValue::List(_) | RuntimeValue::Map(_) | RuntimeValue::Object(_)
+        RuntimeValue::Array(_) | RuntimeValue::Map(_) | RuntimeValue::Object(_)
     )
 }
 

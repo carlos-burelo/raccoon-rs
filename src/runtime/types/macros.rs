@@ -268,16 +268,16 @@ macro_rules! define_type {
                 )
             }
 
-            fn has_instance_method(&self, method: &str) -> bool {
-                Self::metadata().has_instance_method(method)
+            fn has_instance_method(&self, _method: &str) -> bool {
+                false
             }
 
-            fn has_static_method(&self, method: &str) -> bool {
-                Self::metadata().has_static_method(method)
+            fn has_static_method(&self, _method: &str) -> bool {
+                false
             }
 
-            fn has_async_instance_method(&self, method: &str) -> bool {
-                Self::metadata().has_async_instance_method(method)
+            fn has_async_instance_method(&self, _method: &str) -> bool {
+                false
             }
         }
     };

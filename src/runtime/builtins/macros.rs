@@ -80,7 +80,7 @@ macro_rules! str_value {
 #[macro_export]
 macro_rules! list_value {
     ($elements:expr, $element_type:expr) => {
-        $crate::runtime::RuntimeValue::List($crate::runtime::ListValue::new(
+        $crate::runtime::RuntimeValue::Array($crate::runtime::ArrayValue::new(
             $elements,
             $element_type,
         ))

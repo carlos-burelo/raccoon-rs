@@ -1,7 +1,7 @@
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{IntValue, ListValue, RuntimeValue, StrValue};
+use crate::runtime::{IntValue, ArrayValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -43,14 +43,14 @@ impl TypeHandler for ObjectType {
                     .keys()
                     .map(|k| RuntimeValue::Str(StrValue::new(k.clone())))
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     keys,
                     PrimitiveType::str(),
                 )))
             }
             "values" => {
                 let values: Vec<RuntimeValue> = obj.properties.values().cloned().collect();
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     values,
                     PrimitiveType::any(),
                 )))
@@ -61,10 +61,10 @@ impl TypeHandler for ObjectType {
                     .iter()
                     .map(|(k, v)| {
                         let pair = vec![RuntimeValue::Str(StrValue::new(k.clone())), v.clone()];
-                        RuntimeValue::List(ListValue::new(pair, PrimitiveType::any()))
+                        RuntimeValue::Array(ArrayValue::new(pair, PrimitiveType::any()))
                     })
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     entries,
                     PrimitiveType::any(),
                 )))

@@ -1,7 +1,6 @@
 /// Refactored CharType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -12,32 +11,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct CharType;
-
-impl CharType {
-    /// Returns complete type metadata with all methods and properties
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("char", "Single Unicode character type")
-            .with_instance_methods(vec![
-                // Conversion methods
-                MethodMetadata::new("toString", "str", "Convert to string"),
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to Unicode code point"),
-                // Predicate methods
-                MethodMetadata::new("isDigit", "bool", "Check if character is a digit"),
-                MethodMetadata::new("isAlpha", "bool", "Check if character is alphabetic"),
-                MethodMetadata::new("isWhitespace", "bool", "Check if character is whitespace"),
-                // Case conversion methods
-                MethodMetadata::new("toUpperCase", "str", "Convert to uppercase"),
-                MethodMetadata::new("toLowerCase", "str", "Convert to lowercase"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "fromCode",
-                "str",
-                "Create char from Unicode code point",
-            )
-            .with_params(vec![ParamMetadata::new("code", "int")])])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for CharType {

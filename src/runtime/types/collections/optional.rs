@@ -1,7 +1,6 @@
 /// Refactored OptionalType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, NullValue, RuntimeValue};
 use crate::tokens::Position;
@@ -12,30 +11,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct OptionalType;
-
-impl OptionalType {
-    /// Returns complete type metadata with all methods
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new(
-            "optional",
-            "Optional value type representing Some(value) or None",
-        )
-        .with_instance_methods(vec![
-            MethodMetadata::new("isSome", "bool", "Check if value is Some (not null)"),
-            MethodMetadata::new("isNone", "bool", "Check if value is None (null)"),
-            MethodMetadata::new("unwrap", "any", "Unwrap value, throws if None"),
-            MethodMetadata::new("unwrapOr", "any", "Unwrap value or return default")
-                .with_params(vec![ParamMetadata::new("default", "any")]),
-            MethodMetadata::new("expect", "any", "Unwrap value or throw with message")
-                .with_params(vec![ParamMetadata::new("message", "str")]),
-        ])
-        .with_static_methods(vec![
-            MethodMetadata::new("some", "any", "Create Some(value)")
-                .with_params(vec![ParamMetadata::new("value", "any")]),
-            MethodMetadata::new("none", "null", "Create None value"),
-        ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for OptionalType {
@@ -122,10 +97,10 @@ impl TypeHandler for OptionalType {
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        Self::metadata().has_instance_method(method)
+        matches!(method, "isSome" | "isNone" | "unwrap" | "unwrapOr" | "expect")
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        Self::metadata().has_static_method(method)
+        matches!(method, "some" | "none")
     }
 }

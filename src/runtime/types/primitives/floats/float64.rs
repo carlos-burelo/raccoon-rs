@@ -1,9 +1,6 @@
 /// Refactored Float64Type using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{
-    MethodMetadata, ParamMetadata, PropertyMetadata, TypeMetadata,
-};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{
     BoolValue, DecimalValue, FloatValue, IntValue, NullValue, RuntimeValue, StrValue,
@@ -16,92 +13,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct Float64Type;
-
-impl Float64Type {
-    /// Returns complete type metadata with all methods and properties
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new(
-            "float",
-            "64-bit floating point number type with mathematical methods",
-        )
-        .with_instance_methods(vec![
-            // Conversion methods
-            MethodMetadata::new("toStr", "str", "Convert to string"),
-            MethodMetadata::new("toInt", "int", "Convert to int (truncate)"),
-            MethodMetadata::new("toI8", "int", "Convert to 8-bit signed integer"),
-            MethodMetadata::new("toI16", "int", "Convert to 16-bit signed integer"),
-            MethodMetadata::new("toI32", "int", "Convert to 32-bit signed integer"),
-            MethodMetadata::new("toI64", "int", "Convert to 64-bit signed integer"),
-            MethodMetadata::new("toU8", "int", "Convert to 8-bit unsigned integer"),
-            MethodMetadata::new("toU16", "int", "Convert to 16-bit unsigned integer"),
-            MethodMetadata::new("toU32", "int", "Convert to 32-bit unsigned integer"),
-            MethodMetadata::new("toU64", "int", "Convert to 64-bit unsigned integer"),
-            MethodMetadata::new("toF32", "float", "Convert to 32-bit float"),
-            MethodMetadata::new("toF64", "float", "Convert to 64-bit float (identity)"),
-            MethodMetadata::new("toFloat", "float", "Convert to float (identity)"),
-            MethodMetadata::new("toDecimal", "decimal", "Convert to decimal"),
-            // Rounding methods
-            MethodMetadata::new("floor", "int", "Round down to nearest integer"),
-            MethodMetadata::new("ceil", "int", "Round up to nearest integer"),
-            MethodMetadata::new("round", "int", "Round to nearest integer"),
-            // Mathematical methods
-            MethodMetadata::new("abs", "float", "Absolute value"),
-            MethodMetadata::new("sqrt", "float", "Square root"),
-            MethodMetadata::new("sign", "int", "Sign of number (-1, 0, or 1)"),
-            MethodMetadata::new("pow", "float", "Raise to power")
-                .with_params(vec![ParamMetadata::new("exponent", "float|int")]),
-            MethodMetadata::new("clamp", "float", "Clamp value between min and max").with_params(
-                vec![
-                    ParamMetadata::new("min", "float|int"),
-                    ParamMetadata::new("max", "float|int"),
-                ],
-            ),
-            // Trigonometric methods
-            MethodMetadata::new("sin", "float", "Sine"),
-            MethodMetadata::new("cos", "float", "Cosine"),
-            MethodMetadata::new("tan", "float", "Tangent"),
-            MethodMetadata::new("asin", "float", "Arc sine"),
-            MethodMetadata::new("acos", "float", "Arc cosine"),
-            MethodMetadata::new("atan", "float", "Arc tangent"),
-            // Logarithmic/exponential methods
-            MethodMetadata::new("exp", "float", "Exponential (e^x)"),
-            MethodMetadata::new("ln", "float", "Natural logarithm"),
-            MethodMetadata::new("log10", "float", "Base-10 logarithm"),
-            MethodMetadata::new("log2", "float", "Base-2 logarithm"),
-            // Predicate methods
-            MethodMetadata::new("isNaN", "bool", "Check if value is NaN"),
-            MethodMetadata::new("isInfinite", "bool", "Check if value is infinite"),
-            MethodMetadata::new("isFinite", "bool", "Check if value is finite"),
-            MethodMetadata::new("isPositive", "bool", "Check if value is positive"),
-            MethodMetadata::new("isNegative", "bool", "Check if value is negative"),
-            MethodMetadata::new("isZero", "bool", "Check if value is zero"),
-        ])
-        .with_static_methods(vec![
-            MethodMetadata::new("parse", "float", "Parse string to float")
-                .with_params(vec![ParamMetadata::new("value", "str")]),
-            MethodMetadata::new(
-                "tryParse",
-                "float|null",
-                "Try to parse string, returns null on failure",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")]),
-            MethodMetadata::new("isNaN", "bool", "Check if value is NaN")
-                .with_params(vec![ParamMetadata::new("value", "float")]),
-            MethodMetadata::new("isInfinite", "bool", "Check if value is infinite")
-                .with_params(vec![ParamMetadata::new("value", "float")]),
-            MethodMetadata::new("isFinite", "bool", "Check if value is finite")
-                .with_params(vec![ParamMetadata::new("value", "float")]),
-        ])
-        .with_static_properties(vec![
-            PropertyMetadata::new("maxValue", "float", "Maximum float value (f64::MAX)").readonly(),
-            PropertyMetadata::new("minValue", "float", "Minimum float value (f64::MIN)").readonly(),
-            PropertyMetadata::new("infinity", "float", "Positive infinity").readonly(),
-            PropertyMetadata::new("negativeInfinity", "float", "Negative infinity").readonly(),
-            PropertyMetadata::new("nan", "float", "Not a Number").readonly(),
-            PropertyMetadata::new("epsilon", "float", "Machine epsilon").readonly(),
-        ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for Float64Type {

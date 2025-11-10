@@ -1,138 +1,13 @@
-/// StrType - String primitive type with helpers and metadata system
+/// StrType - String primitive type with text manipulation methods
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{
-    MethodMetadata, ParamMetadata, PropertyMetadata, TypeMetadata,
-};
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{BoolValue, IntValue, ListValue, RuntimeValue, StrValue};
+use crate::runtime::{BoolValue, IntValue, ArrayValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
 pub struct StrType;
-
-impl StrType {
-    /// Returns complete type metadata with all methods and properties
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("str", "String type with text manipulation methods")
-            .with_instance_methods(vec![
-                // Case conversion
-                MethodMetadata::new("toUpper", "str", "Convert to uppercase")
-                    .with_alias("toUpperCase"),
-                MethodMetadata::new("toLower", "str", "Convert to lowercase")
-                    .with_alias("toLowerCase"),
-                // Trimming
-                MethodMetadata::new("trim", "str", "Remove whitespace from both ends"),
-                MethodMetadata::new("trimStart", "str", "Remove whitespace from start")
-                    .with_alias("trimLeft"),
-                MethodMetadata::new("trimEnd", "str", "Remove whitespace from end")
-                    .with_alias("trimRight"),
-                // Splitting and joining
-                MethodMetadata::new("split", "list<str>", "Split string by separator")
-                    .with_params(vec![ParamMetadata::new("separator", "str")]),
-                MethodMetadata::new("join", "str", "Join characters with separator")
-                    .with_params(vec![ParamMetadata::new("separator", "str")]),
-                // Replacement
-                MethodMetadata::new("replace", "str", "Replace first occurrence").with_params(
-                    vec![
-                        ParamMetadata::new("search", "str"),
-                        ParamMetadata::new("replacement", "str"),
-                    ],
-                ),
-                MethodMetadata::new("replaceAll", "str", "Replace all occurrences").with_params(
-                    vec![
-                        ParamMetadata::new("search", "str"),
-                        ParamMetadata::new("replacement", "str"),
-                    ],
-                ),
-                // Searching
-                MethodMetadata::new("startsWith", "bool", "Check if starts with prefix")
-                    .with_params(vec![ParamMetadata::new("prefix", "str")]),
-                MethodMetadata::new("endsWith", "bool", "Check if ends with suffix")
-                    .with_params(vec![ParamMetadata::new("suffix", "str")]),
-                MethodMetadata::new("contains", "bool", "Check if contains substring")
-                    .with_params(vec![ParamMetadata::new("substring", "str")]),
-                MethodMetadata::new(
-                    "indexOf",
-                    "int",
-                    "Find first index of substring, -1 if not found",
-                )
-                .with_params(vec![ParamMetadata::new("substring", "str")]),
-                MethodMetadata::new(
-                    "lastIndexOf",
-                    "int",
-                    "Find last index of substring, -1 if not found",
-                )
-                .with_params(vec![ParamMetadata::new("substring", "str")]),
-                // Slicing
-                MethodMetadata::new("slice", "str", "Extract substring using indices").with_params(
-                    vec![
-                        ParamMetadata::new("start", "int"),
-                        ParamMetadata::new("end", "int").optional(),
-                    ],
-                ),
-                MethodMetadata::new(
-                    "substring",
-                    "str",
-                    "Extract substring (non-negative indices)",
-                )
-                .with_params(vec![
-                    ParamMetadata::new("start", "int"),
-                    ParamMetadata::new("end", "int").optional(),
-                ]),
-                // Character access
-                MethodMetadata::new("charAt", "str", "Get character at index")
-                    .with_params(vec![ParamMetadata::new("index", "int")]),
-                MethodMetadata::new("charCodeAt", "int", "Get character code at index")
-                    .with_params(vec![ParamMetadata::new("index", "int")]),
-                // Padding
-                MethodMetadata::new("padStart", "str", "Pad string from start").with_params(vec![
-                    ParamMetadata::new("targetLength", "int"),
-                    ParamMetadata::new("padString", "str").optional(),
-                ]),
-                MethodMetadata::new("padEnd", "str", "Pad string from end").with_params(vec![
-                    ParamMetadata::new("targetLength", "int"),
-                    ParamMetadata::new("padString", "str").optional(),
-                ]),
-                // Other transformations
-                MethodMetadata::new("repeat", "str", "Repeat string N times")
-                    .with_params(vec![ParamMetadata::new("count", "int")]),
-                MethodMetadata::new("reverse", "str", "Reverse string"),
-                MethodMetadata::new("match", "list<str>", "Find all matches of pattern")
-                    .with_params(vec![ParamMetadata::new("pattern", "str")]),
-                // Conversion
-                MethodMetadata::new("toStr", "str", "Convert to string (identity)"),
-            ])
-            .with_static_methods(vec![
-                MethodMetadata::new("isNullOrEmpty", "bool", "Check if string is null or empty")
-                    .with_params(vec![ParamMetadata::new("value", "any")]),
-                MethodMetadata::new(
-                    "isNullOrWhiteSpace",
-                    "bool",
-                    "Check if string is null or whitespace",
-                )
-                .with_params(vec![ParamMetadata::new("value", "any")]),
-                MethodMetadata::new("concat", "str", "Concatenate multiple strings")
-                    .with_params(vec![ParamMetadata::new("values", "any").variadic()]),
-                MethodMetadata::new("join", "str", "Join values with separator").with_params(vec![
-                    ParamMetadata::new("separator", "str"),
-                    ParamMetadata::new("values", "any").variadic(),
-                ]),
-                MethodMetadata::new("format", "str", "Format string with placeholders")
-                    .with_params(vec![
-                        ParamMetadata::new("template", "str"),
-                        ParamMetadata::new("args", "any").variadic(),
-                    ]),
-            ])
-            .with_static_properties(vec![PropertyMetadata::new(
-                "empty",
-                "str",
-                "Empty string constant",
-            )
-            .readonly()])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for StrType {
@@ -183,7 +58,7 @@ impl TypeHandler for StrType {
                     .split(separator)
                     .map(|p| RuntimeValue::Str(StrValue::new(p.to_string())))
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     parts,
                     PrimitiveType::str(),
                 )))
@@ -386,7 +261,7 @@ impl TypeHandler for StrType {
                     .match_indices(pattern)
                     .map(|(_, m)| RuntimeValue::Str(StrValue::new(m.to_string())))
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     matches,
                     PrimitiveType::str(),
                 )))
@@ -445,7 +320,7 @@ impl TypeHandler for StrType {
                     .iter()
                     .map(|v| match v {
                         RuntimeValue::Str(s) => s.value.clone(),
-                        RuntimeValue::List(l) => l
+                        RuntimeValue::Array(l) => l
                             .elements
                             .iter()
                             .map(|e| match e {
@@ -490,15 +365,25 @@ impl TypeHandler for StrType {
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        Self::metadata().has_instance_method(method)
+        matches!(
+            method,
+            "toUpper" | "toUpperCase" | "toLower" | "toLowerCase" | "trim" | "trimStart"
+                | "trimLeft" | "trimEnd" | "trimRight" | "split" | "join" | "replace"
+                | "replaceAll" | "startsWith" | "endsWith" | "contains" | "indexOf"
+                | "lastIndexOf" | "slice" | "substring" | "charAt" | "charCodeAt"
+                | "padStart" | "padEnd" | "repeat" | "reverse" | "match" | "toStr"
+        )
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        Self::metadata().has_static_method(method)
+        matches!(
+            method,
+            "isNullOrEmpty" | "isNullOrWhiteSpace" | "concat" | "join" | "format"
+        )
     }
 
-    fn has_async_instance_method(&self, method: &str) -> bool {
-        Self::metadata().has_async_instance_method(method)
+    fn has_async_instance_method(&self, _method: &str) -> bool {
+        false
     }
 }
 
@@ -535,18 +420,9 @@ mod tests {
             .unwrap();
 
         match result {
-            RuntimeValue::List(l) => assert_eq!(l.elements.len(), 3),
+            RuntimeValue::Array(l) => assert_eq!(l.elements.len(), 3),
             _ => panic!("Expected list"),
         }
     }
 
-    #[test]
-    fn test_metadata() {
-        let metadata = StrType::metadata();
-        assert_eq!(metadata.type_name, "str");
-        assert!(metadata.has_instance_method("toUpper"));
-        assert!(metadata.has_instance_method("toUpperCase")); // alias
-        assert!(metadata.has_static_method("concat"));
-        assert!(!metadata.has_instance_method("nonexistent"));
-    }
 }

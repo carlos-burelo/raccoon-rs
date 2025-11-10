@@ -53,7 +53,7 @@ impl Types {
 
         while Parser::match_token(state, &[TokenType::LeftBracket]) {
             Parser::consume(state, TokenType::RightBracket, "Expected ']'")?;
-            type_ = Type::List(Box::new(ListType {
+            type_ = Type::Array(Box::new(ArrayType {
                 element_type: type_,
             }));
         }

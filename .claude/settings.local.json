@@ -12,7 +12,17 @@
       "Bash(./target/debug/raccoon.exe run:*)",
       "Bash(git checkout:*)",
       "Bash(cargo run:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(dir \"c:\\Users\\x\\dev\\raccoon\" /b)",
+      "Bash(dir:*)",
+      "Bash(nul)",
+      "Bash(find:*)",
+      "Bash(cargo test:*)",
+      "Bash(while read f)",
+      "Bash(done)",
+      "Bash(for file in src/analyzer/control_flow.rs src/interpreter/builtins.rs src/type_system/checker.rs src/parser/expressions.rs src/interpreter/expressions.rs)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(del \"c:\\Users\\x\\dev\\raccoon\\src\\runtime\\builtin_plugins.rs\")"
     ],
     "deny": [],
     "ask": []

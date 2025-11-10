@@ -194,14 +194,14 @@ pub fn extract_numeric(
 }
 
 /// Extracts a list value from a RuntimeValue
-pub fn extract_list<'a>(
+pub fn extract_array<'a>(
     value: &'a RuntimeValue,
     arg_name: &str,
     position: Position,
     file: Option<String>,
-) -> Result<&'a crate::runtime::ListValue, RaccoonError> {
+) -> Result<&'a crate::runtime::ArrayValue, RaccoonError> {
     match value {
-        RuntimeValue::List(l) => Ok(l),
+        RuntimeValue::Array(l) => Ok(l),
         _ => Err(RaccoonError::new(
             format!("{} must be a list, got {}", arg_name, value.get_name()),
             position,
@@ -218,7 +218,7 @@ pub fn to_truthy(value: &RuntimeValue) -> bool {
         RuntimeValue::Int(i) => i.value != 0,
         RuntimeValue::Float(f) => f.value != 0.0,
         RuntimeValue::Str(s) => !s.value.is_empty(),
-        RuntimeValue::List(l) => !l.elements.is_empty(),
+        RuntimeValue::Array(l) => !l.elements.is_empty(),
         _ => true,
     }
 }

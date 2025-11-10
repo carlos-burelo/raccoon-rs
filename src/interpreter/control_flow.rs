@@ -158,7 +158,7 @@ impl ControlFlow {
         let iterable = interpreter.evaluate_expr(&for_in.iterable).await?;
 
         let elements = match iterable {
-            RuntimeValue::List(list) => list.elements,
+            RuntimeValue::Array(list) => list.elements,
             _ => {
                 return Err(RaccoonError::new(
                     "For-in requires an iterable value".to_string(),
@@ -207,7 +207,7 @@ impl ControlFlow {
         let iterable = interpreter.evaluate_expr(&for_of.iterable).await?;
 
         let elements = match iterable {
-            RuntimeValue::List(list) => list.elements,
+            RuntimeValue::Array(list) => list.elements,
             RuntimeValue::Str(s) => {
                 // Convert string to array of characters
                 s.value

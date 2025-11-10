@@ -2,9 +2,8 @@
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{BoolValue, IntValue, ListValue, NullValue, RuntimeValue};
+use crate::runtime::{BoolValue, IntValue, ArrayValue, NullValue, RuntimeValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -15,44 +14,15 @@ use async_trait::async_trait;
 pub struct SetType;
 
 impl SetType {
-    /// Returns complete type metadata with all methods
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("set", "Unique collection with no duplicate elements")
-            .with_instance_methods(vec![
-                MethodMetadata::new("add", "null", "Add element to set (no duplicates)")
-                    .with_params(vec![ParamMetadata::new("element", "any")]),
-                MethodMetadata::new("remove", "null", "Remove element from set")
-                    .with_params(vec![ParamMetadata::new("element", "any")]),
-                MethodMetadata::new("contains", "bool", "Check if element exists in set")
-                    .with_params(vec![ParamMetadata::new("element", "any")])
-                    .with_alias("has"),
-                MethodMetadata::new("size", "int", "Get number of elements").with_alias("length"),
-                MethodMetadata::new("clear", "null", "Remove all elements"),
-                MethodMetadata::new("isEmpty", "bool", "Check if set is empty"),
-                MethodMetadata::new("toList", "list", "Convert to list"),
-                MethodMetadata::new("union", "set", "Union with another set")
-                    .with_params(vec![ParamMetadata::new("other", "set")]),
-                MethodMetadata::new("intersection", "set", "Intersection with another set")
-                    .with_params(vec![ParamMetadata::new("other", "set")]),
-                MethodMetadata::new("difference", "set", "Difference with another set")
-                    .with_params(vec![ParamMetadata::new("other", "set")]),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "from",
-                "set",
-                "Create set from list (removing duplicates)",
-            )
-            .with_params(vec![ParamMetadata::new("list", "list")])])
-    }
 
     /// Helper to extract set (list) from RuntimeValue
     fn extract_set_mut<'a>(
         value: &'a mut RuntimeValue,
         position: Position,
         file: Option<String>,
-    ) -> Result<&'a mut ListValue, RaccoonError> {
+    ) -> Result<&'a mut ArrayValue, RaccoonError> {
         match value {
-            RuntimeValue::List(list) => Ok(list),
+            RuntimeValue::Array(list) => Ok(list),
             _ => Err(RaccoonError::new(
                 format!("Expected set, got {}", value.get_name()),
                 position,
@@ -116,49 +86,49 @@ impl TypeHandler for SetType {
             }
             "toList" => {
                 require_args(&args, 0, method, position, file)?;
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     set.elements.clone(),
                     PrimitiveType::any(),
                 )))
             }
             "union" => {
                 require_args(&args, 1, method, position, file.clone())?;
-                let other = extract_list(&args[0], "other", position, file)?;
+                let other = extract_array(&args[0], "other", position, file)?;
                 let mut result = set.elements.clone();
                 for item in &other.elements {
                     if !result.iter().any(|e| e.equals(item)) {
                         result.push(item.clone());
                     }
                 }
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     result,
                     PrimitiveType::any(),
                 )))
             }
             "intersection" => {
                 require_args(&args, 1, method, position, file.clone())?;
-                let other = extract_list(&args[0], "other", position, file)?;
+                let other = extract_array(&args[0], "other", position, file)?;
                 let result: Vec<RuntimeValue> = set
                     .elements
                     .iter()
                     .filter(|e| other.elements.iter().any(|o| o.equals(e)))
                     .cloned()
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     result,
                     PrimitiveType::any(),
                 )))
             }
             "difference" => {
                 require_args(&args, 1, method, position, file.clone())?;
-                let other = extract_list(&args[0], "other", position, file)?;
+                let other = extract_array(&args[0], "other", position, file)?;
                 let result: Vec<RuntimeValue> = set
                     .elements
                     .iter()
                     .filter(|e| !other.elements.iter().any(|o| o.equals(e)))
                     .cloned()
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     result,
                     PrimitiveType::any(),
                 )))
@@ -177,14 +147,14 @@ impl TypeHandler for SetType {
         match method {
             "from" => {
                 require_args(&args, 1, method, position, file.clone())?;
-                let list = extract_list(&args[0], "list", position, file)?;
+                let list = extract_array(&args[0], "list", position, file)?;
                 let mut unique = Vec::new();
                 for item in &list.elements {
                     if !unique.iter().any(|e: &RuntimeValue| e.equals(item)) {
                         unique.push(item.clone());
                     }
                 }
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     unique,
                     PrimitiveType::any(),
                 )))
@@ -194,10 +164,13 @@ impl TypeHandler for SetType {
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        Self::metadata().has_instance_method(method)
+        matches!(
+            method,
+            "add" | "remove" | "contains" | "has" | "size" | "length" | "clear" | "isEmpty" | "toList" | "union" | "intersection" | "difference"
+        )
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        Self::metadata().has_static_method(method)
+        matches!(method, "from")
     }
 }

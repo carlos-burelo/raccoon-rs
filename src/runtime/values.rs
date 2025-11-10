@@ -17,7 +17,7 @@ pub enum RuntimeValue {
     Str(StrValue),
     Bool(BoolValue),
     Null(NullValue),
-    List(ListValue),
+    Array(ArrayValue),
     Map(MapValue),
     Object(ObjectValue),
     Class(ClassValue),
@@ -43,7 +43,7 @@ impl RuntimeValue {
             RuntimeValue::Str(_) => PrimitiveType::str(),
             RuntimeValue::Bool(_) => PrimitiveType::bool(),
             RuntimeValue::Null(_) => PrimitiveType::null(),
-            RuntimeValue::List(l) => Type::List(Box::new(ListType {
+            RuntimeValue::Array(l) => Type::Array(Box::new(ArrayType {
                 element_type: l.element_type.clone(),
             })),
             RuntimeValue::Map(m) => Type::Map(Box::new(MapType {
@@ -175,7 +175,7 @@ impl RuntimeValue {
             RuntimeValue::Str(v) => v.to_string(),
             RuntimeValue::Bool(v) => v.to_string(),
             RuntimeValue::Null(v) => v.to_string(),
-            RuntimeValue::List(v) => v.to_string(),
+            RuntimeValue::Array(v) => v.to_string(),
             RuntimeValue::Map(v) => v.to_string(),
             RuntimeValue::Object(v) => v.to_string(),
             RuntimeValue::Class(v) => v.to_string(),
@@ -228,7 +228,7 @@ impl RuntimeValue {
             RuntimeValue::Str(_) => "str".to_string(),
             RuntimeValue::Bool(_) => "bool".to_string(),
             RuntimeValue::Null(_) => "null".to_string(),
-            RuntimeValue::List(_) => "list".to_string(),
+            RuntimeValue::Array(_) => "list".to_string(),
             RuntimeValue::Map(_) => "map".to_string(),
             RuntimeValue::Object(_) => "object".to_string(),
             RuntimeValue::Dynamic(d) => d.type_name().to_string(),
@@ -344,12 +344,12 @@ impl NullValue {
 }
 
 #[derive(Debug, Clone)]
-pub struct ListValue {
+pub struct ArrayValue {
     pub elements: Vec<RuntimeValue>,
     pub element_type: Type,
 }
 
-impl ListValue {
+impl ArrayValue {
     pub fn new(elements: Vec<RuntimeValue>, element_type: Type) -> Self {
         Self {
             elements,

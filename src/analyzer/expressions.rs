@@ -40,7 +40,7 @@ pub fn check_expr(analyzer: &mut SemanticAnalyzer, expr: &Expr) -> Result<Type, 
         Expr::StrLiteral(_) => Ok(PrimitiveType::str()),
         Expr::BoolLiteral(_) => Ok(PrimitiveType::bool()),
         Expr::NullLiteral(_) => Ok(PrimitiveType::null()),
-        Expr::ListLiteral(e) => check_list_literal(analyzer, e),
+        Expr::ArrayLiteral(e) => check_array_literal(analyzer, e),
         Expr::ObjectLiteral(e) => check_object_literal(analyzer, e),
         Expr::Spread(_) => Err(RaccoonError::new(
             "Spread operator cannot be used outside of function calls",
@@ -211,7 +211,7 @@ pub fn check_member_expr(
         }
     }
 
-    if let Type::List(_) = object_type {
+    if let Type::Array(_) = object_type {
         if expr.property == "length" {
             return Ok(PrimitiveType::int());
         }
@@ -590,12 +590,12 @@ pub fn check_unary_update_expr(
     Ok(operand_type)
 }
 
-pub fn check_list_literal(
+pub fn check_array_literal(
     analyzer: &mut SemanticAnalyzer,
-    list: &ListLiteral,
+    list: &ArrayLiteral,
 ) -> Result<Type, RaccoonError> {
     if list.elements.is_empty() {
-        return Ok(Type::List(Box::new(ListType {
+        return Ok(Type::Array(Box::new(ArrayType {
             element_type: PrimitiveType::unknown(),
         })));
     }
@@ -606,7 +606,7 @@ pub fn check_list_literal(
         if let Expr::Spread(spread) = element {
             let spread_type = analyzer.check_expr(&spread.argument)?;
             // If it's a list, get its element type
-            if let Type::List(list_type) = spread_type {
+            if let Type::Array(list_type) = spread_type {
                 element_types.push(list_type.element_type.clone());
             }
         } else {
@@ -618,7 +618,7 @@ pub fn check_list_literal(
         .type_inference
         .infer_common_type(&element_types, list.position)?;
 
-    Ok(Type::List(Box::new(ListType {
+    Ok(Type::Array(Box::new(ArrayType {
         element_type: common_type,
     })))
 }

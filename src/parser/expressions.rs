@@ -763,7 +763,7 @@ impl Expressions {
         }
 
         if Parser::match_token(state, &[TokenType::LeftBracket]) {
-            return Self::list_literal(state);
+            return Self::array_literal(state);
         }
 
         if Parser::match_token(state, &[TokenType::LeftBrace]) {
@@ -781,8 +781,8 @@ impl Expressions {
         ))
     }
 
-    /// List literal: [elem1, elem2, ...rest]
-    pub fn list_literal(state: &mut ParserState) -> Result<Expr, RaccoonError> {
+    /// array literal: [elem1, elem2, ...rest]
+    pub fn array_literal(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let position = state.previous().unwrap().position;
         let mut elements = Vec::new();
 
@@ -803,7 +803,7 @@ impl Expressions {
         }
 
         Parser::consume(state, TokenType::RightBracket, "Expected ']'")?;
-        Ok(Expr::ListLiteral(ListLiteral { elements, position }))
+        Ok(Expr::ArrayLiteral(ArrayLiteral { elements, position }))
     }
 
     /// Object literal: { key: value, ...spread }
@@ -1133,7 +1133,7 @@ impl Expressions {
         }
 
         if Parser::match_token(state, &[TokenType::LeftBracket]) {
-            // List pattern: [pat1, pat2, ...rest]
+            // array pattern: [pat1, pat2, ...rest]
             let _position = state.previous().unwrap().position;
             let mut patterns = Vec::new();
 
@@ -1149,9 +1149,9 @@ impl Expressions {
             Parser::consume(
                 state,
                 TokenType::RightBracket,
-                "Expected ']' after list pattern",
+                "Expected ']' after array pattern",
             )?;
-            return Ok(Pattern::List(patterns));
+            return Ok(Pattern::Array(patterns));
         }
 
         if Parser::match_token(state, &[TokenType::LeftBrace]) {

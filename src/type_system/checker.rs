@@ -34,7 +34,7 @@ impl TypeChecker {
         match operator {
             BinaryOperator::Range => {
                 if self.is_integer_type(left_type) && self.is_integer_type(right_type) {
-                    return Ok(Type::List(Box::new(ListType {
+                    return Ok(Type::Array(Box::new(ArrayType {
                         element_type: left_type.clone(),
                     })));
                 }
@@ -454,7 +454,7 @@ impl TypeChecker {
             ));
         }
 
-        Ok(Type::List(Box::new(ListType {
+        Ok(Type::Array(Box::new(ArrayType {
             element_type: PrimitiveType::int(),
         })))
     }
@@ -473,7 +473,7 @@ impl TypeChecker {
             ));
         }
 
-        if let Type::List(list_type) = object_type {
+        if let Type::Array(list_type) = object_type {
             return Ok(list_type.element_type.clone());
         }
 

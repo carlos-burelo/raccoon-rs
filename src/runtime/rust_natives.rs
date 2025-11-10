@@ -135,7 +135,7 @@ fn native_list_length(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 
     match &args[0] {
-        RuntimeValue::List(list) => (list.elements.len() as i64).to_runtime(),
+        RuntimeValue::Array(list) => (list.elements.len() as i64).to_runtime(),
         _ => RuntimeValue::Null(crate::runtime::values::NullValue::new()),
     }
 }
@@ -146,10 +146,10 @@ fn native_list_push(args: Vec<RuntimeValue>) -> RuntimeValue {
     }
 
     match &args[0] {
-        RuntimeValue::List(list) => {
+        RuntimeValue::Array(list) => {
             let mut elements = list.elements.clone();
             elements.push(args[1].clone());
-            RuntimeValue::List(crate::runtime::values::ListValue::new(
+            RuntimeValue::Array(crate::runtime::values::ArrayValue::new(
                 elements,
                 list.element_type.clone(),
             ))

@@ -53,7 +53,7 @@ impl TypeInferenceEngine {
         symbol_table: &SymbolTable,
     ) -> Result<Type, RaccoonError> {
         match expr {
-            Expr::ListLiteral(list) => self.infer_list_with_hint(list, expected_type, symbol_table),
+            Expr::ArrayLiteral(list) => self.infer_list_with_hint(list, expected_type, symbol_table),
             Expr::ObjectLiteral(obj) => {
                 self.infer_object_with_hint(obj, expected_type, symbol_table)
             }
@@ -69,16 +69,16 @@ impl TypeInferenceEngine {
 
     fn infer_list_with_hint(
         &mut self,
-        _list: &ListLiteral,
+        _list: &ArrayLiteral,
         expected_type: Option<&Type>,
         _symbol_table: &SymbolTable,
     ) -> Result<Type, RaccoonError> {
-        if let Some(Type::List(list_type)) = expected_type {
-            Ok(Type::List(Box::new(ListType {
+        if let Some(Type::Array(list_type)) = expected_type {
+            Ok(Type::Array(Box::new(ArrayType {
                 element_type: list_type.element_type.clone(),
             })))
         } else {
-            Ok(Type::List(Box::new(ListType {
+            Ok(Type::Array(Box::new(ArrayType {
                 element_type: PrimitiveType::unknown(),
             })))
         }
@@ -413,8 +413,8 @@ impl TypeInferenceEngine {
                 Ok(())
             }
 
-            Type::List(list_type) => {
-                if let Type::List(arg_list) = arg_type {
+            Type::Array(list_type) => {
+                if let Type::Array(arg_list) = arg_type {
                     self.collect_type_substitutions(
                         &list_type.element_type,
                         &arg_list.element_type,

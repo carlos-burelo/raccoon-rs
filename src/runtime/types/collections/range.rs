@@ -2,9 +2,8 @@
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{IntValue, ListValue, RuntimeValue};
+use crate::runtime::{IntValue, ArrayValue, RuntimeValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -13,31 +12,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct RangeType;
-
-impl RangeType {
-    /// Returns complete type metadata with all methods
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("range", "Range of integer values with start, end, and step")
-            .with_static_methods(vec![
-                MethodMetadata::new("new", "list<int>", "Create range from start to end")
-                    .with_params(vec![
-                        ParamMetadata::new("start", "int"),
-                        ParamMetadata::new("end", "int"),
-                        ParamMetadata::new("step", "int").optional(),
-                    ]),
-                MethodMetadata::new(
-                    "inclusive",
-                    "list<int>",
-                    "Create inclusive range from start to end",
-                )
-                .with_params(vec![
-                    ParamMetadata::new("start", "int"),
-                    ParamMetadata::new("end", "int"),
-                    ParamMetadata::new("step", "int").optional(),
-                ]),
-            ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for RangeType {
@@ -113,7 +87,7 @@ impl TypeHandler for RangeType {
                     }
                 }
 
-                Ok(RuntimeValue::List(ListValue::new(
+                Ok(RuntimeValue::Array(ArrayValue::new(
                     elements,
                     PrimitiveType::int(),
                 )))
@@ -129,6 +103,6 @@ impl TypeHandler for RangeType {
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        Self::metadata().has_static_method(method)
+        matches!(method, "new" | "inclusive")
     }
 }

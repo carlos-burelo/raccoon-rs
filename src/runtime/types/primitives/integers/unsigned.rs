@@ -1,9 +1,6 @@
 /// Refactored unsigned integer types using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{
-    MethodMetadata, ParamMetadata, PropertyMetadata, TypeMetadata,
-};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -14,26 +11,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct U8Type;
-
-impl U8Type {
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("u8", "8-bit unsigned integer type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (i64)"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "int",
-                "Parse string to u8",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "int", "Maximum u8 value (255)").readonly(),
-                PropertyMetadata::new("minValue", "int", "Minimum u8 value (0)").readonly(),
-            ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for U8Type {
@@ -116,26 +93,6 @@ impl TypeHandler for U8Type {
 
 pub struct U16Type;
 
-impl U16Type {
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("u16", "16-bit unsigned integer type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (i64)"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "int",
-                "Parse string to u16",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "int", "Maximum u16 value (65535)").readonly(),
-                PropertyMetadata::new("minValue", "int", "Minimum u16 value (0)").readonly(),
-            ])
-    }
-}
-
 #[async_trait]
 impl TypeHandler for U16Type {
     fn type_name(&self) -> &str {
@@ -217,27 +174,6 @@ impl TypeHandler for U16Type {
 
 pub struct U32Type;
 
-impl U32Type {
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("u32", "32-bit unsigned integer type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (i64)"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "int",
-                "Parse string to u32",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "int", "Maximum u32 value (4294967295)")
-                    .readonly(),
-                PropertyMetadata::new("minValue", "int", "Minimum u32 value (0)").readonly(),
-            ])
-    }
-}
-
 #[async_trait]
 impl TypeHandler for U32Type {
     fn type_name(&self) -> &str {
@@ -318,26 +254,6 @@ impl TypeHandler for U32Type {
 // ============================================================================
 
 pub struct U64Type;
-
-impl U64Type {
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("u64", "64-bit unsigned integer type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (i64)"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "int",
-                "Parse string to u64",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", "int", "Maximum u64 value").readonly(),
-                PropertyMetadata::new("minValue", "int", "Minimum u64 value (0)").readonly(),
-            ])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for U64Type {

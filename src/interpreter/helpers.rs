@@ -1,7 +1,7 @@
 use crate::ast::nodes::*;
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
-use crate::runtime::{FutureValue, ListValue, NullValue, ObjectValue, RuntimeValue};
+use crate::runtime::{FutureValue, ArrayValue, NullValue, ObjectValue, RuntimeValue};
 use crate::tokens::Position;
 use async_recursion::async_recursion;
 use std::collections::HashMap;
@@ -19,8 +19,8 @@ impl Helpers {
         position: Position,
     ) -> Result<(), RaccoonError> {
         match pattern {
-            DestructuringPattern::List(list_pattern) => {
-                Self::destructure_list_pattern(interpreter, list_pattern, value, position).await
+            DestructuringPattern::Array(list_pattern) => {
+                Self::destructure_array_pattern(interpreter, list_pattern, value, position).await
             }
             DestructuringPattern::Object(obj_pattern) => {
                 Self::destructure_object_pattern(interpreter, obj_pattern, value, position).await
@@ -29,14 +29,14 @@ impl Helpers {
     }
 
     #[async_recursion(?Send)]
-    pub async fn destructure_list_pattern(
+    pub async fn destructure_array_pattern(
         interpreter: &mut Interpreter,
-        pattern: &ListPattern,
+        pattern: &ArrayPattern,
         value: &RuntimeValue,
         position: Position,
     ) -> Result<(), RaccoonError> {
         let elements = match value {
-            RuntimeValue::List(list) => &list.elements,
+            RuntimeValue::Array(list) => &list.elements,
             _ => {
                 return Err(RaccoonError::new(
                     format!("Cannot destructure non-list value"),
@@ -58,13 +58,13 @@ impl Helpers {
                 }
 
                 match elem_pat {
-                    ListPatternElement::Identifier(id) => {
+                    ArrayPatternElement::Identifier(id) => {
                         interpreter
                             .environment
                             .declare(id.name.clone(), elements[index].clone())?;
                     }
-                    ListPatternElement::List(nested_list) => {
-                        Self::destructure_list_pattern(
+                    ArrayPatternElement::List(nested_list) => {
+                        Self::destructure_array_pattern(
                             interpreter,
                             nested_list,
                             &elements[index],
@@ -72,7 +72,7 @@ impl Helpers {
                         )
                         .await?;
                     }
-                    ListPatternElement::Object(nested_obj) => {
+                    ArrayPatternElement::Object(nested_obj) => {
                         Self::destructure_object_pattern(
                             interpreter,
                             nested_obj,
@@ -88,7 +88,7 @@ impl Helpers {
 
         if let Some(rest) = &pattern.rest {
             let remaining: Vec<RuntimeValue> = elements[index..].to_vec();
-            let rest_value = RuntimeValue::List(ListValue::new(remaining, PrimitiveType::any()));
+            let rest_value = RuntimeValue::Array(ArrayValue::new(remaining, PrimitiveType::any()));
             interpreter
                 .environment
                 .declare(rest.argument.name.clone(), rest_value)?;
@@ -138,8 +138,8 @@ impl Helpers {
                         .environment
                         .declare(id.name.clone(), prop_value)?;
                 }
-                ObjectPatternValue::List(nested_list) => {
-                    Self::destructure_list_pattern(interpreter, nested_list, &prop_value, position)
+                ObjectPatternValue::Array(nested_list) => {
+                    Self::destructure_array_pattern(interpreter, nested_list, &prop_value, position)
                         .await?;
                 }
                 ObjectPatternValue::Object(nested_obj) => {

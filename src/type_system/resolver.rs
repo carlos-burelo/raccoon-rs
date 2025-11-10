@@ -38,7 +38,7 @@ impl<'a> TypeResolver<'a> {
                 }
             }
 
-            Type::List(list_type) => Ok(Type::List(Box::new(ListType {
+            Type::Array(list_type) => Ok(Type::Array(Box::new(ArrayType {
                 element_type: self.resolve(&list_type.element_type)?,
             }))),
 

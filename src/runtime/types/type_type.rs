@@ -1,6 +1,6 @@
 use crate::ast::types::PrimitiveType;
 use crate::runtime::types::TypeHandler;
-use crate::runtime::values::{BoolValue, ListValue, NullValue, RuntimeValue, StrValue};
+use crate::runtime::values::{BoolValue, ArrayValue, NullValue, RuntimeValue, StrValue};
 use crate::{Position, RaccoonError};
 use async_trait::async_trait;
 
@@ -69,7 +69,7 @@ impl TypeHandler for TypeType {
                         .into_iter()
                         .map(|m| RuntimeValue::Str(StrValue::new(m)))
                         .collect();
-                    Ok(RuntimeValue::List(ListValue::new(
+                    Ok(RuntimeValue::Array(ArrayValue::new(
                         list,
                         PrimitiveType::str(),
                     )))
@@ -80,7 +80,7 @@ impl TypeHandler for TypeType {
                         .into_iter()
                         .map(|p| RuntimeValue::Str(StrValue::new(p)))
                         .collect();
-                    Ok(RuntimeValue::List(ListValue::new(
+                    Ok(RuntimeValue::Array(ArrayValue::new(
                         list,
                         PrimitiveType::str(),
                     )))

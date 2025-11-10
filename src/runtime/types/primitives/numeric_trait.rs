@@ -2,7 +2,6 @@
 /// Unifies behavior for all numeric types (i8, i16, i32, i64, u8, u16, u32, u64, f32, f64)
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::*;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{DecimalValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -151,26 +150,6 @@ impl<T: NumericBounds> NumericHandler<T> {
             RuntimeValue::Float(f) => Ok(T::from_i64(f.value as i64)),
             _ => Err(()),
         }
-    }
-
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new(T::TYPE_NAME, T::DESCRIPTION)
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int"),
-                MethodMetadata::new("toFloat", "float", "Convert to float"),
-                MethodMetadata::new("abs", T::TYPE_NAME, "Absolute value"),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                T::TYPE_NAME,
-                "Parse from string",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-            .with_static_properties(vec![
-                PropertyMetadata::new("maxValue", T::TYPE_NAME, "Maximum value").readonly(),
-                PropertyMetadata::new("minValue", T::TYPE_NAME, "Minimum value").readonly(),
-            ])
     }
 }
 

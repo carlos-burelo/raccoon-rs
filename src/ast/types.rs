@@ -26,7 +26,7 @@ pub enum TypeKind {
     Never,
     Func,
     Symbol,
-    List,
+    Array,
     Tuple,
     Map,
     Object,
@@ -65,7 +65,7 @@ pub trait TypeTrait {
 #[derive(Debug, Clone, PartialEq)]
 pub enum Type {
     Primitive(PrimitiveType),
-    List(Box<ListType>),
+    Array(Box<ArrayType>),
     Tuple(Box<TupleType>),
     Map(Box<MapType>),
     Object(Box<ObjectType>),
@@ -93,7 +93,7 @@ impl Type {
     pub fn kind(&self) -> TypeKind {
         match self {
             Type::Primitive(t) => t.kind.clone(),
-            Type::List(_) => TypeKind::List,
+            Type::Array(_) => TypeKind::Array,
             Type::Tuple(_) => TypeKind::Tuple,
             Type::Map(_) => TypeKind::Map,
             Type::Object(_) => TypeKind::Object,
@@ -121,7 +121,7 @@ impl Type {
     pub fn equals(&self, other: &Type) -> bool {
         match (self, other) {
             (Type::Primitive(a), Type::Primitive(b)) => a.equals(b),
-            (Type::List(a), Type::List(b)) => a.element_type.equals(&b.element_type),
+            (Type::Array(a), Type::Array(b)) => a.element_type.equals(&b.element_type),
             (Type::Tuple(a), Type::Tuple(b)) => a.equals(b),
             (Type::Map(a), Type::Map(b)) => {
                 a.key_type.equals(&b.key_type) && a.value_type.equals(&b.value_type)
@@ -164,7 +164,7 @@ impl Type {
 
         match self {
             Type::Primitive(p) => p.is_assignable_to(target),
-            Type::List(l) => l.is_assignable_to(target),
+            Type::Array(l) => l.is_assignable_to(target),
             Type::Tuple(t) => t.is_assignable_to(target),
             Type::Object(o) => o.is_assignable_to(target),
             Type::Nullable(n) => n.is_assignable_to(target),
@@ -329,17 +329,17 @@ impl PrimitiveType {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct ListType {
+pub struct ArrayType {
     pub element_type: Type,
 }
 
-impl ListType {
+impl ArrayType {
     pub fn is_assignable_to(&self, target: &Type) -> bool {
         if matches!(target.kind(), TypeKind::Any | TypeKind::Unknown) {
             return true;
         }
 
-        if let Type::List(target_list) = target {
+        if let Type::Array(target_list) = target {
             return self
                 .element_type
                 .is_assignable_to(&target_list.element_type);

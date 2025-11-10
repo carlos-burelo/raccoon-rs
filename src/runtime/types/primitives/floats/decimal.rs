@@ -1,7 +1,6 @@
 /// Refactored DecimalType using helpers and metadata system
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{DecimalValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -12,38 +11,6 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct DecimalType;
-
-impl DecimalType {
-    /// Returns complete type metadata with all methods and properties
-    pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("decimal", "Fixed precision decimal number type")
-            .with_instance_methods(vec![
-                // Conversion methods
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-                MethodMetadata::new("toString", "str", "Convert to string"),
-                MethodMetadata::new("toInt", "int", "Convert to int (truncate)"),
-                MethodMetadata::new("toFloat", "float", "Convert to float"),
-                // Arithmetic methods
-                MethodMetadata::new("add", "decimal", "Add another decimal")
-                    .with_params(vec![ParamMetadata::new("other", "decimal")]),
-                MethodMetadata::new("subtract", "decimal", "Subtract another decimal")
-                    .with_params(vec![ParamMetadata::new("other", "decimal")]),
-                MethodMetadata::new("multiply", "decimal", "Multiply by another decimal")
-                    .with_params(vec![ParamMetadata::new("other", "decimal")]),
-                MethodMetadata::new("divide", "decimal", "Divide by another decimal")
-                    .with_params(vec![ParamMetadata::new("other", "decimal")]),
-                // Rounding methods
-                MethodMetadata::new("round", "decimal", "Round to specified decimal places")
-                    .with_params(vec![ParamMetadata::new("places", "int").optional()]),
-            ])
-            .with_static_methods(vec![MethodMetadata::new(
-                "parse",
-                "decimal",
-                "Parse string to decimal",
-            )
-            .with_params(vec![ParamMetadata::new("value", "str")])])
-    }
-}
 
 #[async_trait]
 impl TypeHandler for DecimalType {

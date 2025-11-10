@@ -96,7 +96,7 @@ impl ToRaccoon for &str {
 impl FromRaccoon for Vec<RuntimeValue> {
     fn from_runtime(value: &RuntimeValue) -> Result<Self, String> {
         match value {
-            RuntimeValue::List(list) => Ok(list.elements.clone()),
+            RuntimeValue::Array(list) => Ok(list.elements.clone()),
             _ => Err(format!("Expected list, got {}", value.to_string())),
         }
     }
@@ -105,7 +105,7 @@ impl FromRaccoon for Vec<RuntimeValue> {
 impl<T: FromRaccoon> FromRaccoon for Vec<T> {
     fn from_runtime(value: &RuntimeValue) -> Result<Self, String> {
         match value {
-            RuntimeValue::List(list) => list
+            RuntimeValue::Array(list) => list
                 .elements
                 .iter()
                 .map(|v| T::from_runtime(v))
@@ -118,7 +118,7 @@ impl<T: FromRaccoon> FromRaccoon for Vec<T> {
 impl<T: ToRaccoon> ToRaccoon for Vec<T> {
     fn to_runtime(self) -> RuntimeValue {
         let elements: Vec<RuntimeValue> = self.into_iter().map(|v| v.to_runtime()).collect();
-        RuntimeValue::List(crate::runtime::values::ListValue::new(
+        RuntimeValue::Array(crate::runtime::values::ArrayValue::new(
             elements,
             PrimitiveType::any(),
         ))

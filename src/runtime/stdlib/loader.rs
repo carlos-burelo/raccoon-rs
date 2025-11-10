@@ -267,7 +267,7 @@ impl StdLibLoader {
         _file_path: &Option<String>,
     ) {
         // Register wrapper functions that stdlib modules can use
-        crate::runtime::stdlib_wrappers::register_stdlib_wrappers(
+        super::register_stdlib_wrappers(
             &mut interp.environment,
             interp.registrar.clone(),
         );

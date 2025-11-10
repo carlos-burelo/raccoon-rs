@@ -130,7 +130,7 @@ pub fn check_for_in_stmt(
 ) -> Result<Type, RaccoonError> {
     let iterable_type = analyzer.check_expr(&stmt.iterable)?;
 
-    let element_type = if let Type::List(ref list_type) = iterable_type {
+    let element_type = if let Type::Array(ref list_type) = iterable_type {
         list_type.element_type.clone()
     } else if matches!(iterable_type.kind(), TypeKind::Str) {
         PrimitiveType::str()
@@ -169,7 +169,7 @@ pub fn check_for_of_stmt(
 ) -> Result<Type, RaccoonError> {
     let iterable_type = analyzer.check_expr(&stmt.iterable)?;
 
-    let element_type = if let Type::List(ref list_type) = iterable_type {
+    let element_type = if let Type::Array(ref list_type) = iterable_type {
         list_type.element_type.clone()
     } else if matches!(iterable_type.kind(), TypeKind::Str) {
         PrimitiveType::str()

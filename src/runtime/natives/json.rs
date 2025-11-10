@@ -1,6 +1,6 @@
 use crate::ast::types::PrimitiveType;
 use crate::runtime::{
-    BoolValue, FloatValue, FromRaccoon, IntValue, ListValue, NullValue, ObjectValue, Registrar,
+    BoolValue, FloatValue, FromRaccoon, IntValue, ArrayValue, NullValue, ObjectValue, Registrar,
     RuntimeValue, StrValue, ToRaccoon,
 };
 use serde_json::Value as JsonValue;
@@ -68,7 +68,7 @@ fn convert_serde_to_runtime(value: &JsonValue) -> RuntimeValue {
         JsonValue::String(s) => RuntimeValue::Str(StrValue::new(s.clone())),
         JsonValue::Array(arr) => {
             let elements = arr.iter().map(convert_serde_to_runtime).collect();
-            RuntimeValue::List(ListValue::new(elements, PrimitiveType::any()))
+            RuntimeValue::Array(ArrayValue::new(elements, PrimitiveType::any()))
         }
         JsonValue::Object(obj) => {
             let properties = obj
@@ -89,7 +89,7 @@ fn convert_runtime_to_serde(value: &RuntimeValue) -> JsonValue {
             .map(JsonValue::Number)
             .unwrap_or(JsonValue::Null),
         RuntimeValue::Str(s) => JsonValue::String(s.value.clone()),
-        RuntimeValue::List(list) => {
+        RuntimeValue::Array(list) => {
             let arr = list.elements.iter().map(convert_runtime_to_serde).collect();
             JsonValue::Array(arr)
         }
