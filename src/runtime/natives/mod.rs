@@ -1,3 +1,6 @@
+#[macro_use]
+pub mod macros; // Macro system for defining native primitives
+
 pub mod array;
 pub mod http;
 pub mod io;
