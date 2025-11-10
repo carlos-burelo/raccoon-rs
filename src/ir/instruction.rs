@@ -280,6 +280,160 @@ pub enum Instruction {
     PushScope,
     /// Pop the current environment scope
     PopScope,
+
+    // === Loop Control ===
+    /// Break from loop (handled specially by loop constructs)
+    Break,
+    /// Continue in loop (handled specially by loop constructs)
+    Continue,
+
+    // === Try-Catch ===
+    /// Try-catch block: try { body } catch(err) { handler }
+    TryCatch {
+        try_body: Vec<Instruction>,
+        catch_handler: Option<(String, Vec<Instruction>)>, // (error_var_name, handler_body)
+        finally_body: Option<Vec<Instruction>>,
+    },
+
+    // === Class Operations ===
+    /// Create a class definition
+    CreateClass {
+        name: String,
+        constructor: Option<(Vec<String>, Vec<Instruction>)>, // (params, body)
+        methods: Vec<(String, Vec<String>, Vec<Instruction>, bool)>, // (name, params, body, is_async)
+        properties: Vec<(String, Register)>,
+    },
+
+    // === This and Super ===
+    /// Load 'this' value
+    LoadThis { dest: Register },
+    /// Call super method
+    CallSuper {
+        dest: Register,
+        method: String,
+        args: Vec<Register>,
+    },
+
+    // === Advanced Spread ===
+    /// Spread in array context
+    SpreadArray {
+        dest: Register,
+        operand: Register,
+    },
+    /// Spread in object context
+    SpreadObject {
+        dest: Register,
+        operand: Register,
+    },
+    /// Spread in call arguments
+    SpreadCall {
+        dest: Register,
+        operand: Register,
+    },
+
+    // === Module Operations ===
+    /// Import statement
+    Import {
+        dest: Register,
+        path: String,
+        items: Vec<String>, // specific imports or empty for default
+    },
+    /// Export statement
+    Export {
+        name: String,
+        value: Register,
+    },
+
+    // === For-In/For-Of ===
+    /// For-in loop: for (var in obj)
+    ForIn {
+        variable: String,
+        object: Register,
+        body: Vec<Instruction>,
+    },
+    /// For-of loop: for (var of iterable)
+    ForOf {
+        variable: String,
+        iterable: Register,
+        body: Vec<Instruction>,
+    },
+
+    // === Assignment Operations ===
+    /// Compound assignment: dest +=/−=/etc src
+    CompoundAssign {
+        dest: Register,
+        src: Register,
+        op: BinaryOperator,
+    },
+
+    // === Iterator Protocol ===
+    /// Get iterator from iterable
+    GetIterator {
+        dest: Register,
+        iterable: Register,
+    },
+    /// Call next() on iterator
+    IteratorNext {
+        dest: Register,
+        iterator: Register,
+    },
+
+    // === Generators ===
+    /// Yield a value (in generator function)
+    Yield {
+        value: Option<Register>,
+    },
+    /// Create a generator function
+    CreateGenerator {
+        dest: Register,
+        name: String,
+        params: Vec<String>,
+        body: Vec<Instruction>,
+    },
+
+    // === Promise/Async ===
+    /// Catch promise error
+    Catch {
+        dest: Register,
+        promise: Register,
+        handler: Vec<Instruction>,
+    },
+    /// Finally block for promise
+    Finally {
+        block: Vec<Instruction>,
+    },
+
+    // === Tagged Template ===
+    /// Tagged template string
+    TaggedTemplate {
+        dest: Register,
+        tag: Register,
+        parts: Vec<String>,
+        expressions: Vec<Register>,
+    },
+
+    // === Null Assertion ===
+    /// Assert value is not null (!. operator)
+    NullAssert {
+        dest: Register,
+        value: Register,
+    },
+
+    // === Delete Operator ===
+    /// Delete property from object
+    DeleteProperty {
+        dest: Register,
+        object: Register,
+        property: String,
+    },
+
+    // === In Operator ===
+    /// Check if property exists in object
+    In {
+        dest: Register,
+        property: String,
+        object: Register,
+    },
 }
 
 /// Template string part (literal or expression)
@@ -319,6 +473,11 @@ impl Instruction {
                 | Instruction::JumpIfTrue { .. }
                 | Instruction::Return { .. }
                 | Instruction::Throw { .. }
+                | Instruction::Break
+                | Instruction::Continue
+                | Instruction::TryCatch { .. }
+                | Instruction::ForIn { .. }
+                | Instruction::ForOf { .. }
         )
     }
 
@@ -363,7 +522,20 @@ impl Instruction {
             | Instruction::Spread { dest, .. }
             | Instruction::Conditional { dest, .. }
             | Instruction::NullCoalesce { dest, .. }
-            | Instruction::OptionalChain { dest, .. } => Some(dest),
+            | Instruction::OptionalChain { dest, .. }
+            | Instruction::LoadThis { dest }
+            | Instruction::CallSuper { dest, .. }
+            | Instruction::SpreadArray { dest, .. }
+            | Instruction::SpreadObject { dest, .. }
+            | Instruction::SpreadCall { dest, .. }
+            | Instruction::Import { dest, .. }
+            | Instruction::GetIterator { dest, .. }
+            | Instruction::IteratorNext { dest, .. }
+            | Instruction::CreateGenerator { dest, .. }
+            | Instruction::TaggedTemplate { dest, .. }
+            | Instruction::NullAssert { dest, .. }
+            | Instruction::DeleteProperty { dest, .. }
+            | Instruction::In { dest, .. } => Some(dest),
             _ => None,
         }
     }
@@ -372,20 +544,45 @@ impl Instruction {
     pub fn source_registers(&self) -> Vec<&Register> {
         let mut sources = Vec::new();
         match self {
+            // Instructions that don't use any registers
+            Instruction::LoadConst { .. } | Instruction::Declare { .. } | Instruction::Label { .. }
+            | Instruction::Jump { .. } | Instruction::Load { .. } | Instruction::Nop
+            | Instruction::Comment { .. } | Instruction::PushScope | Instruction::PopScope
+            | Instruction::Break | Instruction::Continue | Instruction::LoadThis { .. }
+            | Instruction::Import { .. } | Instruction::CreateGenerator { .. }
+            | Instruction::Finally { .. } | Instruction::TryCatch { .. } | Instruction::CreateClass { .. } => {},
+
+            // Instructions that use value register
+            Instruction::Return { value } => {
+                if let Some(val) = value {
+                    sources.push(val);
+                }
+            }
+
+            // Basic move and store
             Instruction::Move { src, .. } => sources.push(src),
             Instruction::Store { src, .. } => sources.push(src),
+
+            // Binary operations
             Instruction::BinaryOp { left, right, .. } => {
                 sources.push(left);
                 sources.push(right);
             }
+
+            // Unary operations
             Instruction::UnaryOp { operand, .. } => sources.push(operand),
+
+            // Conditional jumps
             Instruction::JumpIfFalse { condition, .. }
             | Instruction::JumpIfTrue { condition, .. } => sources.push(condition),
+
+            // Function calls
             Instruction::Call { callee, args, .. } => {
                 sources.push(callee);
                 sources.extend(args.iter());
             }
-            Instruction::Return { value: Some(val) } => sources.push(val),
+
+            // Array operations
             Instruction::CreateArray { elements, .. } => sources.extend(elements.iter()),
             Instruction::LoadIndex { array, index, .. } => {
                 sources.push(array);
@@ -400,6 +597,8 @@ impl Instruction {
                 sources.push(index);
                 sources.push(value);
             }
+
+            // Object operations
             Instruction::CreateObject { properties, .. } => {
                 sources.extend(properties.iter().map(|(_, reg)| reg));
             }
@@ -410,23 +609,42 @@ impl Instruction {
                 sources.push(object);
                 sources.push(value);
             }
+            Instruction::DeleteProperty { object, .. } => sources.push(object),
+            Instruction::In { object, .. } => sources.push(object),
+
+            // Method calls
             Instruction::MethodCall {
                 object, args, ..
             } => {
                 sources.push(object);
                 sources.extend(args.iter());
             }
+
+            // Instance operations
             Instruction::NewInstance { args, .. } => sources.extend(args.iter()),
+
+            // Async operations
             Instruction::Await { future, .. } => sources.push(future),
+
+            // Type operations
             Instruction::TypeOf { operand, .. } | Instruction::InstanceOf { operand, .. } => {
                 sources.push(operand)
             }
+
+            // Exception handling
             Instruction::Throw { value } => sources.push(value),
+            Instruction::Catch { promise, .. } => sources.push(promise),
+
+            // Destructuring
             Instruction::DestructureArray { src, .. }
             | Instruction::DestructureObject { src, .. } => sources.push(src),
+
+            // Increment/Decrement
             Instruction::Increment { operand, .. } | Instruction::Decrement { operand, .. } => {
                 sources.push(operand)
             }
+
+            // Template operations
             Instruction::CreateTemplate { parts, .. } => {
                 for part in parts {
                     if let TemplatePart::Expr(reg) = part {
@@ -434,6 +652,14 @@ impl Instruction {
                     }
                 }
             }
+            Instruction::TaggedTemplate {
+                tag, expressions, ..
+            } => {
+                sources.push(tag);
+                sources.extend(expressions.iter());
+            }
+
+            // Match expression
             Instruction::Match { scrutinee, arms, .. } => {
                 sources.push(scrutinee);
                 for arm in arms {
@@ -442,11 +668,20 @@ impl Instruction {
                     }
                 }
             }
+
+            // Range operations
             Instruction::CreateRange { start, end, .. } => {
                 sources.push(start);
                 sources.push(end);
             }
-            Instruction::Spread { operand, .. } => sources.push(operand),
+
+            // Spread operations
+            Instruction::Spread { operand, .. }
+            | Instruction::SpreadArray { operand, .. }
+            | Instruction::SpreadObject { operand, .. }
+            | Instruction::SpreadCall { operand, .. } => sources.push(operand),
+
+            // Conditional operation
             Instruction::Conditional {
                 condition,
                 then_val,
@@ -457,12 +692,44 @@ impl Instruction {
                 sources.push(then_val);
                 sources.push(else_val);
             }
+
+            // Null operations
             Instruction::NullCoalesce { left, right, .. } => {
                 sources.push(left);
                 sources.push(right);
             }
+            Instruction::NullAssert { value, .. } => sources.push(value),
             Instruction::OptionalChain { object, .. } => sources.push(object),
-            _ => {}
+
+            // Class operations
+            Instruction::CallSuper { args, .. } => sources.extend(args.iter()),
+
+            // Module operations
+            Instruction::Export { value, .. } => sources.push(value),
+
+            // Loop operations
+            Instruction::ForIn { object, .. } => sources.push(object),
+            Instruction::ForOf { iterable, .. } => sources.push(iterable),
+
+            // Assignment operations
+            Instruction::CompoundAssign { dest, src, .. } => {
+                sources.push(dest);
+                sources.push(src);
+            }
+
+            // Iterator operations
+            Instruction::GetIterator { iterable, .. } => sources.push(iterable),
+            Instruction::IteratorNext { iterator, .. } => sources.push(iterator),
+
+            // Generator operations
+            Instruction::Yield { value } => {
+                if let Some(val) = value {
+                    sources.push(val);
+                }
+            }
+
+            // Function definition
+            Instruction::CreateFunction { .. } => {},
         }
         sources
     }

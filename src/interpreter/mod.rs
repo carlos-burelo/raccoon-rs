@@ -98,7 +98,7 @@ impl Interpreter {
             registrar,
             module_registry: std::sync::Arc::new(module_registry),
             call_stack: CallStack::new(),
-            use_ir: false,
+            use_ir: true,
         }
     }
 

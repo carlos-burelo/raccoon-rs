@@ -1,0 +1,45 @@
+println("=== Minimal IR Test ===");
+
+// Basic variables
+let x = 10;
+let y = 20;
+println("x + y = " + (x + y));
+
+// Arrays
+let arr = [1, 2, 3];
+println("Array length: " + arr.length);
+
+// Objects
+let obj = { a: 100 };
+println("obj.a = " + obj.a);
+
+// If
+if (x > 5) {
+    println("x is greater than 5");
+}
+
+// While
+let i = 0;
+while (i < 2) {
+    println("while: " + i);
+    i = i + 1;
+}
+
+// For
+for (let j = 0; j < 2; j = j + 1) {
+    println("for: " + j);
+}
+
+// For-of
+let nums = [100, 200];
+for (const n of nums) {
+    println("for-of: " + n);
+}
+
+// For-in
+let config = { x: 1, y: 2 };
+for (const k in config) {
+    println("for-in key: " + k);
+}
+
+println("=== Test Complete ===");

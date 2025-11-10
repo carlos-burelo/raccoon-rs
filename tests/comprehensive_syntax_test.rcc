@@ -1,0 +1,573 @@
+// ============================================================================
+// RACCOON LANGUAGE - COMPREHENSIVE SYNTAX TEST
+// ============================================================================
+// This file tests all major features of the Raccoon language to verify
+// that the IR compiler and VM correctly handle all syntax constructs.
+// ============================================================================
+
+// =========================
+// 1. VARIABLES AND CONSTANTS
+// =========================
+let x = 10;
+const PI = 3.14159;
+let name = "Raccoon";
+let isEnabled = true;
+let nothing = null;
+
+// =========================
+// 2. PRIMITIVE TYPES
+// =========================
+let int_val: int = 42;
+let float_val: float = 3.14;
+let str_val: str = "hello";
+let bool_val: bool = false;
+let big_int: bigint = 9007199254740992n;
+
+// =========================
+// 3. ARITHMETIC OPERATIONS
+// =========================
+let sum = 10 + 5;
+let diff = 10 - 5;
+let product = 10 * 5;
+let quotient = 10 / 5;
+let remainder = 10 % 3;
+let power = 2 ** 3;
+
+// =========================
+// 4. COMPARISON OPERATORS
+// =========================
+let eq = 5 == 5;
+let neq = 5 != 3;
+let lt = 5 < 10;
+let gt = 10 > 5;
+let lte = 5 <= 5;
+let gte = 5 >= 5;
+
+// =========================
+// 5. LOGICAL OPERATORS
+// =========================
+let and_result = true && false;
+let or_result = true || false;
+let not_result = !true;
+
+// =========================
+// 6. BITWISE OPERATORS
+// =========================
+let bitwise_and = 5 & 3;
+let bitwise_or = 5 | 3;
+let bitwise_xor = 5 ^ 3;
+let bitwise_not = ~5;
+let left_shift = 5 << 1;
+let right_shift = 5 >> 1;
+
+// =========================
+// 7. STRINGS
+// =========================
+let basic_str = "hello";
+let template_str = `Hello, ${name}!`;
+let multiline = "line1\nline2\nline3";
+let escaped = "quote: \"test\"";
+
+// =========================
+// 8. ARRAYS
+// =========================
+let empty_array = [];
+let simple_array = [1, 2, 3, 4, 5];
+let mixed_array = [1, "two", 3.0, true];
+let nested_array = [[1, 2], [3, 4], [5, 6]];
+
+// Array methods
+let arr = [10, 20, 30];
+arr.push(40);
+let first = arr[0];
+let length = arr.length;
+let has_20 = arr.includes(20);
+let index_of_30 = arr.indexOf(30);
+
+// =========================
+// 9. OBJECTS
+// =========================
+let empty_obj = {};
+let person = {
+    name: "Alice",
+    age: 30,
+    email: "alice@example.com"
+};
+
+let obj_access = person.name;
+person.city = "New York";
+
+// Object methods
+let keys = Object.keys(person);
+let values = Object.values(person);
+let entries = Object.entries(person);
+
+// =========================
+// 10. SPREAD OPERATOR
+// =========================
+let arr1 = [1, 2, 3];
+let arr2 = [...arr1, 4, 5];
+
+let obj1 = { a: 1, b: 2 };
+let obj2 = { ...obj1, c: 3 };
+
+// =========================
+// 11. DESTRUCTURING
+// =========================
+let [a, b, c] = [1, 2, 3];
+let [first, ...rest] = [1, 2, 3, 4, 5];
+
+let { x: xval, y: yval } = { x: 10, y: 20 };
+let { name: nm, age: ag } = person;
+
+// =========================
+// 12. CONDITIONAL STATEMENTS
+// =========================
+if (x > 5) {
+    let result = "x is greater than 5";
+} else if (x == 5) {
+    let result = "x equals 5";
+} else {
+    let result = "x is less than 5";
+}
+
+// Ternary operator
+let abs_value = x < 0 ? -x : x;
+
+// =========================
+// 13. LOOPS
+// =========================
+
+// While loop
+let i = 0;
+while (i < 5) {
+    let squared = i * i;
+    i = i + 1;
+}
+
+// Do-while loop
+let j = 0;
+do {
+    let val = j * 2;
+    j = j + 1;
+} while (j < 3);
+
+// Traditional for loop
+for (let k = 0; k < 5; k = k + 1) {
+    let sq = k * k;
+}
+
+// For-in loop (iterate over object keys)
+let obj_to_iterate = { x: 10, y: 20, z: 30 };
+for (const key in obj_to_iterate) {
+    let value = obj_to_iterate[key];
+}
+
+// For-of loop (iterate over array elements)
+let arr_to_iterate = [100, 200, 300];
+for (const elem of arr_to_iterate) {
+    let double = elem * 2;
+}
+
+// =========================
+// 14. SWITCH STATEMENT
+// =========================
+let grade = "A";
+switch (grade) {
+    case "A":
+        let score = 90;
+        break;
+    case "B":
+        let score = 80;
+        break;
+    case "C":
+        let score = 70;
+        break;
+    default:
+        let score = 0;
+}
+
+// =========================
+// 15. FUNCTIONS
+// =========================
+
+// Function declaration
+function add(a, b) {
+    return a + b;
+}
+
+let sum_result = add(5, 3);
+
+// Arrow function
+const multiply = (a, b) => a * b;
+let product_result = multiply(4, 5);
+
+// Arrow function with block
+const divide = (a, b) => {
+    if (b == 0) {
+        return null;
+    }
+    return a / b;
+};
+
+// Function with default parameters
+function greet(name, greeting = "Hello") {
+    return greeting + ", " + name + "!";
+}
+
+// Function with rest parameters
+function sum_all(...numbers) {
+    let total = 0;
+    for (const num of numbers) {
+        total = total + num;
+    }
+    return total;
+}
+
+// =========================
+// 16. CLASSES
+// =========================
+
+class Point {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    distance() {
+        return (this.x * this.x + this.y * this.y) ** 0.5;
+    }
+
+    translate(dx, dy) {
+        this.x = this.x + dx;
+        this.y = this.y + dy;
+    }
+
+    static origin() {
+        return new Point(0, 0);
+    }
+}
+
+let p = new Point(3, 4);
+let dist = p.distance();
+p.translate(1, 1);
+let origin = Point.origin();
+
+// Class with inheritance (simplified)
+class ColoredPoint {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+    }
+
+    describe() {
+        return "Point at (" + this.x + ", " + this.y + ") with color " + this.color;
+    }
+}
+
+let cp = new ColoredPoint(5, 5, "red");
+let desc = cp.describe();
+
+// =========================
+// 17. EXCEPTION HANDLING
+// =========================
+
+try {
+    let risky_result = divide(10, 0);
+    if (risky_result == null) {
+        throw "Division by zero error";
+    }
+} catch (error) {
+    let error_msg = "Caught error: " + error;
+} finally {
+    let cleanup_done = true;
+}
+
+// =========================
+// 18. OPERATORS
+// =========================
+
+// Nullish coalescing
+let default_name = null ?? "Unknown";
+
+// Optional chaining
+let user = {
+    profile: {
+        name: "Bob"
+    }
+};
+let user_name = user?.profile?.name;
+
+// Null assertion (non-null)
+let required_val = user_name!;
+
+// Delete operator
+let obj_to_delete = { a: 1, b: 2, c: 3 };
+delete obj_to_delete.b;
+
+// In operator
+let has_prop = "a" in obj_to_delete;
+let no_prop = "b" in obj_to_delete;
+
+// Typeof operator
+let type_of_str = typeof "hello";
+let type_of_num = typeof 42;
+let type_of_bool = typeof true;
+let type_of_obj = typeof { x: 1 };
+
+// Instanceof operator
+let is_point = p instanceof Point;
+
+// =========================
+// 19. COMPOUND ASSIGNMENTS
+// =========================
+let val = 10;
+val = val + 5;    // 15
+val = val - 3;    // 12
+val = val * 2;    // 24
+val = val / 3;    // 8
+val = val % 5;    // 3
+val = val ** 2;   // 9
+
+// =========================
+// 20. INCREMENT/DECREMENT
+// =========================
+let counter = 5;
+let pre_inc = ++counter;
+let post_inc = counter++;
+let pre_dec = --counter;
+let post_dec = counter--;
+
+// =========================
+// 21. TEMPLATE STRINGS
+// =========================
+let user_name_var = "Alice";
+let user_age_var = 30;
+let user_template = `Name: ${user_name_var}, Age: ${user_age_var}`;
+let calc_template = `2 + 2 = ${2 + 2}`;
+
+// =========================
+// 22. PATTERN MATCHING (MATCH EXPRESSION)
+// =========================
+let value = 2;
+let match_result = match value {
+    1 => "one",
+    2 => "two",
+    3 => "three",
+    _ => "other"
+};
+
+// Pattern matching with ranges
+let score = 85;
+let grade_match = match score {
+    90..100 => "A",
+    80..90 => "B",
+    70..80 => "C",
+    _ => "F"
+};
+
+// =========================
+// 23. RANGE OPERATOR
+// =========================
+let range1 = 1..5;
+let range2 = 1..=5;
+let range3 = "a".."z";
+
+// =========================
+// 24. ASYNC/AWAIT (BASIC)
+// =========================
+async function fetch_data() {
+    let data = await Promise.resolve("data");
+    return data;
+}
+
+// =========================
+// 25. ENUMERATIONS
+// =========================
+enum Color {
+    Red = 0,
+    Green = 1,
+    Blue = 2
+}
+
+let color_value = Color.Red;
+
+enum Status {
+    Pending,
+    Active,
+    Completed
+}
+
+let status = Status.Pending;
+
+// =========================
+// 26. TYPE ANNOTATIONS
+// =========================
+let typed_int: int = 42;
+let typed_str: str = "hello";
+let typed_array: [int] = [1, 2, 3];
+let typed_obj: {x: int, y: int} = {x: 10, y: 20};
+
+// =========================
+// 27. COMMENTS
+// =========================
+// This is a single line comment
+
+/*
+This is a multi-line comment
+that spans multiple lines
+and explains something important
+*/
+
+// =========================
+// 28. IDENTIFIERS AND NAMES
+// =========================
+let snake_case_var = 100;
+let camelCaseVar = 200;
+let PascalCaseVar = 300;
+let CONSTANT_VAR = 400;
+let var_with_123 = 500;
+
+// =========================
+// 29. MODULE IMPORTS/EXPORTS (BASIC)
+// =========================
+// import { add, subtract } from "math";
+// export const PI = 3.14159;
+// export function calculate(a, b) {
+//     return add(a, b);
+// }
+
+// =========================
+// 30. OBJECT METHODS
+// =========================
+let methods_obj = {
+    value: 42,
+    getValue: function() {
+        return this.value;
+    },
+    setValue: function(newVal) {
+        this.value = newVal;
+    }
+};
+
+let obj_method_result = methods_obj.getValue();
+methods_obj.setValue(100);
+
+// =========================
+// COMPREHENSIVE EXPRESSION TEST
+// =========================
+
+// Complex expression combining multiple operators
+let complex = (10 + 5) * 2 - 3 / 1 + 4 % 2;
+
+// Chained method calls
+let arr_complex = [1, 2, 3, 4, 5];
+let arr_length = arr_complex.length;
+let arr_includes = arr_complex.includes(3);
+
+// Nested object access
+let nested = {
+    level1: {
+        level2: {
+            level3: {
+                value: 42
+            }
+        }
+    }
+};
+let nested_val = nested.level1.level2.level3.value;
+
+// =========================
+// CONTROL FLOW COMBINATIONS
+// =========================
+
+// If-else with multiple conditions
+let x_val = 50;
+if (x_val > 100) {
+    let result = "very high";
+} else if (x_val > 50) {
+    let result = "high";
+} else if (x_val == 50) {
+    let result = "exact";
+} else {
+    let result = "low";
+}
+
+// Nested loops
+for (let i = 1; i <= 3; i = i + 1) {
+    for (let j = 1; j <= 3; j = j + 1) {
+        let product = i * j;
+    }
+}
+
+// =========================
+// FUNCTION COMBINATIONS
+// =========================
+
+// Higher-order function
+function apply_twice(fn, val) {
+    return fn(fn(val));
+}
+
+const double = (n) => n * 2;
+let doubled_result = apply_twice(double, 5);
+
+// Function returning function
+function make_adder(x) {
+    return (y) => x + y;
+}
+
+let add_5 = make_adder(5);
+let add_result = add_5(10);
+
+// =========================
+// OBJECT AND ARRAY COMBINATIONS
+// =========================
+
+let data = {
+    items: [
+        { id: 1, name: "item1", price: 10.50 },
+        { id: 2, name: "item2", price: 20.00 },
+        { id: 3, name: "item3", price: 15.75 }
+    ],
+    total: 0
+};
+
+let first_item = data.items[0];
+let first_item_name = data.items[0].name;
+let first_item_price = data.items[0].price;
+
+// =========================
+// ERROR HANDLING COMBINATIONS
+// =========================
+
+try {
+    let test_val = 100;
+    if (test_val < 0) {
+        throw "negative value";
+    }
+    let result = test_val * 2;
+} catch (err) {
+    let error_handled = true;
+} finally {
+    let cleanup = true;
+}
+
+// =========================
+// SUMMARY
+// =========================
+// This comprehensive test file covers:
+// 1. All primitive types (int, float, str, bool, null, bigint)
+// 2. All operators (arithmetic, logical, bitwise, comparison)
+// 3. All control flow statements (if, while, do-while, for, for-in, for-of, switch)
+// 4. All expression types (literals, binary ops, unary ops, ternary)
+// 5. Functions (declarations, arrow functions, parameters)
+// 6. Classes (constructors, methods, properties)
+// 7. Objects and arrays (creation, access, methods)
+// 8. Exception handling (try-catch-finally)
+// 9. Advanced features (destructuring, spread, optional chaining, null coalescing)
+// 10. Modern operators (delete, in, typeof, instanceof)
+// 11. Pattern matching and ranges
+// 12. Type annotations
+// ============================================================================

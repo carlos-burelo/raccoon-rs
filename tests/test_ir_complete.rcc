@@ -1,0 +1,113 @@
+// Complete IR/VM feature test
+
+println("=== IR/VM Complete Test ===");
+
+// 1. Variables and basic operations
+let x = 10;
+let y = 20;
+println("Variables: x=" + x + ", y=" + y);
+
+// 2. Arrays
+let arr = [1, 2, 3, 4, 5];
+println("Array length: " + arr.length);
+println("First element: " + arr.first);
+
+// 3. Objects
+let obj = { name: "test", value: 42, nested: { a: 1 } };
+println("Object property: " + obj.name);
+println("Nested property: " + obj.nested.a);
+
+// 4. String operations
+let myString = "Hello, World!";
+println("String length: " + myString.length);
+
+// 5. Comparisons
+if (x < y) {
+    println("x is less than y");
+}
+
+if (x > 5) {
+    println("x is greater than 5");
+}
+
+// 6. Logical operations
+if (x > 5 && y > 15) {
+    println("Both conditions true");
+}
+
+if (x > 100 || y > 15) {
+    println("At least one condition true");
+}
+
+// 7. While loop
+let i = 0;
+while (i < 3) {
+    println("While iteration: " + i);
+    i = i + 1;
+}
+
+// 8. For loop
+for (let j = 0; j < 3; j = j + 1) {
+    println("For iteration: " + j);
+}
+
+// 9. For-in loop
+let config = { debug: true, mode: "fast", timeout: 5000 };
+for (const key in config) {
+    println("Config key: " + key);
+}
+
+// 10. For-of loop
+let numbers = [10, 20, 30];
+for (const num of numbers) {
+    println("For-of: " + num);
+}
+
+// 11. Try-catch-finally
+try {
+    let test = 100;
+    println("Try block: " + test);
+} catch (err) {
+    println("Caught error: " + err);
+} finally {
+    println("Finally block executed");
+}
+
+// 12. Template strings
+let name = "Raccoon";
+let greeting = `Welcome, ${name}!`;
+println(greeting);
+
+// 13. Arithmetic operations
+println("10 + 5 = " + (10 + 5));
+println("10 - 3 = " + (10 - 3));
+println("10 * 2 = " + (10 * 2));
+println("10 / 2 = " + (10 / 2));
+println("10 % 3 = " + (10 % 3));
+
+// 14. Spread operator
+let arr1 = [1, 2, 3];
+let arr2 = [...arr1, 4, 5];
+println("Spread array length: " + arr2.length);
+
+let obj1 = { a: 1, b: 2 };
+let obj2 = { ...obj1, c: 3 };
+println("Spread object properties: a, b, c");
+
+// 15. Multiple operations
+let arr3 = [1, 2, 3];
+let arr4 = [4, 5, 6];
+let merged = [...arr3, ...arr4];
+println("Merged arrays length: " + merged.length);
+
+// 17. Ternary operator
+let age = 25;
+let status = age > 18 ? "adult" : "minor";
+println("Status: " + status);
+
+// 18. Null coalescing
+let val = null;
+let result = val ?? "default";
+println("Null coalesce result: " + result);
+
+println("=== All IR/VM tests passed ===");

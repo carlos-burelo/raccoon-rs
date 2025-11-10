@@ -34,7 +34,7 @@ pub async fn apply_binary_op(
 ) -> Result<RuntimeValue, RaccoonError> {
     // Operations that are delegated to the centralized module
     match operator {
-        // Arithmetic operations - delegated to operations::arithmetic
+        // Arithmetic and comparison operations - delegated to operations module
         BinaryOperator::Add
         | BinaryOperator::Subtract
         | BinaryOperator::Multiply
@@ -46,7 +46,15 @@ pub async fn apply_binary_op(
         | BinaryOperator::BitwiseXor
         | BinaryOperator::LeftShift
         | BinaryOperator::RightShift
-        | BinaryOperator::UnsignedRightShift => {
+        | BinaryOperator::UnsignedRightShift
+        | BinaryOperator::LessThan
+        | BinaryOperator::LessEqual
+        | BinaryOperator::GreaterThan
+        | BinaryOperator::GreaterEqual
+        | BinaryOperator::Equal
+        | BinaryOperator::NotEqual
+        | BinaryOperator::And
+        | BinaryOperator::Or => {
             operations::apply_binary_operation(left, right, operator, position, file, call_stack)
                 .await
         }
@@ -78,13 +86,6 @@ pub async fn apply_binary_op(
                 Ok(left)
             }
         }
-
-        // Unsupported operations
-        _ => Err(RaccoonError::new(
-            format!("Operator {:?} not supported in apply_binary_op", operator),
-            position,
-            file.clone(),
-        )),
     }
 }
 

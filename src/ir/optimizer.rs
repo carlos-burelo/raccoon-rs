@@ -2,7 +2,7 @@ use crate::runtime::RuntimeValue;
 use crate::tokens::BinaryOperator;
 use std::collections::{HashMap, HashSet};
 
-use super::instruction::{Instruction, IRProgram, Register};
+use super::instruction::{Instruction, IRProgram};
 
 /// IR Optimizer - performs various optimization passes
 pub struct IROptimizer {

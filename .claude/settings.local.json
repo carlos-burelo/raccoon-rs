@@ -23,7 +23,9 @@
       "Bash(for file in src/analyzer/control_flow.rs src/interpreter/builtins.rs src/type_system/checker.rs src/parser/expressions.rs src/interpreter/expressions.rs)",
       "Bash(do echo \"=== $file ===\")",
       "Bash(del \"c:\\Users\\x\\dev\\raccoon\\src\\runtime\\builtin_plugins.rs\")",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(cut:*)",
+      "Bash(sed:*)"
     ],
     "deny": [],
     "ask": []

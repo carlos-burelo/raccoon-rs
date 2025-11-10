@@ -1,0 +1,57 @@
+// Test for-in loop
+let obj = { a: 1, b: 2, c: 3 };
+for key in obj {
+    println(key);
+}
+
+// Test for-of loop
+let arr = [1, 2, 3];
+for elem of arr {
+    println(elem);
+}
+
+// Test try-catch-finally
+try {
+    let x = 1;
+    println(x);
+} catch (e) {
+    println("Error: " + e);
+} finally {
+    println("Done");
+}
+
+// Test classes
+class Point {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    distance() {
+        return sqrt(this.x * this.x + this.y * this.y);
+    }
+}
+
+let p = new Point(3, 4);
+println(p.distance());
+
+// Test spread in arrays
+let arr1 = [1, 2, 3];
+let arr2 = [...arr1, 4, 5];
+println(arr2);
+
+// Test spread in objects
+let obj1 = { a: 1, b: 2 };
+let obj2 = { ...obj1, c: 3 };
+println(obj2);
+
+// Test delete operator
+let obj3 = { x: 10, y: 20 };
+delete obj3.x;
+println(obj3);
+
+// Test in operator
+let obj4 = { name: "test" };
+if ("name" in obj4) {
+    println("name property exists");
+}

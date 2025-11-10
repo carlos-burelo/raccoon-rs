@@ -1,8 +1,9 @@
 
+import Math from "std:math"
+
 print("Test 1: print simple")
 print("Test 2: print con múltiples args", 123, 456)
 
-import Math from "std:math"
 print("PI =", Math.PI)
 
 print("Math.E =", Math.E)

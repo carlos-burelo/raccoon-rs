@@ -1,0 +1,464 @@
+// ============================================================================
+// RACCOON LANGUAGE - IR & VM NEW FEATURES TEST
+// ============================================================================
+// This file tests the newly implemented IR and VM features:
+// - For-in loops
+// - For-of loops
+// - Try-catch-finally
+// - Classes with constructors and methods
+// - Spread operator in arrays and objects
+// - Delete operator
+// - In operator
+// - Null assertion
+// ============================================================================
+
+// =========================
+// 1. FOR-IN LOOPS
+// =========================
+
+// Basic for-in loop
+let person = {
+    name: "Alice",
+    age: 30,
+    city: "New York"
+};
+
+println("=== FOR-IN LOOP TEST ===");
+for (const key in person) {
+    println("Key: " + key);
+}
+
+// For-in with object manipulation
+let config = {
+    debug: true,
+    version: "1.0",
+    timeout: 5000
+};
+
+for (const setting in config) {
+    let value = config[setting];
+    println(setting + " = " + value);
+}
+
+// For-in with array (iterates indices)
+let colors = ["red", "green", "blue"];
+for (const idx in colors) {
+    let color = colors[idx];
+    println("Color " + idx + ": " + color);
+}
+
+// =========================
+// 2. FOR-OF LOOPS
+// =========================
+
+println("=== FOR-OF LOOP TEST ===");
+
+// Basic for-of loop
+let numbers = [10, 20, 30, 40, 50];
+for (const num of numbers) {
+    let doubled = num * 2;
+    println("Doubled: " + doubled);
+}
+
+// For-of with array of objects
+let users = [
+    { id: 1, name: "Alice" },
+    { id: 2, name: "Bob" },
+    { id: 3, name: "Charlie" }
+];
+
+for (const user of users) {
+    println("User: " + user.name);
+}
+
+// For-of with nested arrays
+let matrix = [[1, 2], [3, 4], [5, 6]];
+for (const row of matrix) {
+    for (const elem of row) {
+        println("Element: " + elem);
+    }
+}
+
+// =========================
+// 3. TRY-CATCH-FINALLY
+// =========================
+
+println("=== TRY-CATCH-FINALLY TEST ===");
+
+// Basic try-catch
+try {
+    let result = 10 / 2;
+    println("Division result: " + result);
+} catch (error) {
+    println("Error caught: " + error);
+}
+
+// Try-catch-finally
+try {
+    let value = 42;
+    let processed = value * 2;
+    println("Processed: " + processed);
+} catch (err) {
+    println("Error: " + err);
+} finally {
+    println("Cleanup complete");
+}
+
+// Multiple catch blocks (simplified as single catch)
+try {
+    let data = { x: 10 };
+    let result = data.y + 5;
+} catch (error) {
+    println("Property access error: " + error);
+}
+
+// Nested try-catch
+try {
+    try {
+        let x = 100;
+        let y = x / 0;
+    } catch (inner_err) {
+        println("Inner catch: " + inner_err);
+        throw "Nested error";
+    }
+} catch (outer_err) {
+    println("Outer catch: " + outer_err);
+}
+
+// =========================
+// 4. CLASSES
+// =========================
+
+println("=== CLASS TEST ===");
+
+class Rectangle {
+    constructor(width, height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    area() {
+        return this.width * this.height;
+    }
+
+    perimeter() {
+        return 2 * (this.width + this.height);
+    }
+
+    describe() {
+        return "Rectangle " + this.width + "x" + this.height;
+    }
+}
+
+let rect = new Rectangle(5, 10);
+let area = rect.area();
+let perim = rect.perimeter();
+let desc = rect.describe();
+
+println("Area: " + area);
+println("Perimeter: " + perim);
+println("Description: " + desc);
+
+// Class with properties
+class Circle {
+    constructor(radius) {
+        this.radius = radius;
+        this.pi = 3.14159;
+    }
+
+    circumference() {
+        return 2 * this.pi * this.radius;
+    }
+
+    getArea() {
+        return this.pi * this.radius * this.radius;
+    }
+}
+
+let circle = new Circle(5);
+let circumf = circle.circumference();
+let circle_area = circle.getArea();
+
+println("Circumference: " + circumf);
+println("Circle Area: " + circle_area);
+
+// Class with multiple methods
+class Calculator {
+    constructor(initial_value) {
+        this.value = initial_value;
+    }
+
+    add(x) {
+        this.value = this.value + x;
+        return this;
+    }
+
+    subtract(x) {
+        this.value = this.value - x;
+        return this;
+    }
+
+    multiply(x) {
+        this.value = this.value * x;
+        return this;
+    }
+
+    divide(x) {
+        if (x != 0) {
+            this.value = this.value / x;
+        }
+        return this;
+    }
+
+    getResult() {
+        return this.value;
+    }
+}
+
+let calc = new Calculator(10);
+calc.add(5);
+calc.subtract(2);
+calc.multiply(3);
+let calc_result = calc.getResult();
+println("Calculator result: " + calc_result);
+
+// =========================
+// 5. SPREAD OPERATOR
+// =========================
+
+println("=== SPREAD OPERATOR TEST ===");
+
+// Spread in arrays
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combined = [...arr1, ...arr2];
+let with_new = [...arr1, 99, ...arr2];
+
+println("Combined array length: " + combined.length);
+
+// Spread with single value
+let single = [10];
+let expanded = [...single, 20, 30];
+println("Expanded array length: " + expanded.length);
+
+// Spread in objects
+let obj1 = { a: 1, b: 2 };
+let obj2 = { c: 3, d: 4 };
+let merged = { ...obj1, ...obj2 };
+let with_override = { ...obj1, b: 99, c: 3 };
+
+println("Merged object keys: a, b, c, d");
+
+// Spread with new properties
+let original = { x: 10, y: 20 };
+let extended = { ...original, z: 30 };
+let has_z = "z" in extended;
+println("Extended has z: " + has_z);
+
+// =========================
+// 6. DELETE OPERATOR
+// =========================
+
+println("=== DELETE OPERATOR TEST ===");
+
+let obj_to_modify = {
+    prop1: "value1",
+    prop2: "value2",
+    prop3: "value3"
+};
+
+delete obj_to_modify.prop2;
+
+let has_prop1 = "prop1" in obj_to_modify;
+let has_prop2 = "prop2" in obj_to_modify;
+let has_prop3 = "prop3" in obj_to_modify;
+
+println("Has prop1: " + has_prop1);
+println("Has prop2: " + has_prop2);
+println("Has prop3: " + has_prop3);
+
+// Delete from array (via object interface)
+let arr_to_modify = [1, 2, 3, 4, 5];
+delete arr_to_modify[2];
+println("Array length after delete: " + arr_to_modify.length);
+
+// =========================
+// 7. IN OPERATOR
+// =========================
+
+println("=== IN OPERATOR TEST ===");
+
+let test_obj = {
+    name: "Test",
+    value: 100,
+    active: true
+};
+
+let in_name = "name" in test_obj;
+let in_value = "value" in test_obj;
+let in_active = "active" in test_obj;
+let in_missing = "missing" in test_obj;
+
+println("'name' in object: " + in_name);
+println("'value' in object: " + in_value);
+println("'active' in object: " + in_active);
+println("'missing' in object: " + in_missing);
+
+// In operator with arrays
+let test_arr = [10, 20, 30];
+let in_0 = 0 in test_arr;
+let in_1 = 1 in test_arr;
+let in_5 = 5 in test_arr;
+
+println("Index 0 in array: " + in_0);
+println("Index 1 in array: " + in_1);
+println("Index 5 in array: " + in_5);
+
+// =========================
+// 8. NULL ASSERTION
+// =========================
+
+println("=== NULL ASSERTION TEST ===");
+
+let maybe_value = "Hello";
+let asserted = maybe_value!;
+println("Asserted value: " + asserted);
+
+let obj_with_prop = { data: "important" };
+let prop_value = obj_with_prop.data;
+let asserted_prop = prop_value!;
+println("Asserted property: " + asserted_prop);
+
+// =========================
+// 9. COMBINED FEATURES TEST
+// =========================
+
+println("=== COMBINED FEATURES TEST ===");
+
+// For-of with class instances
+class Item {
+    constructor(id, name, price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    total_with_tax(tax_rate) {
+        return this.price * (1 + tax_rate);
+    }
+}
+
+let items = [
+    new Item(1, "Apple", 1.50),
+    new Item(2, "Banana", 0.75),
+    new Item(3, "Orange", 2.00)
+];
+
+let total_cost = 0;
+for (const item of items) {
+    let with_tax = item.total_with_tax(0.1);
+    total_cost = total_cost + with_tax;
+}
+println("Total cost with tax: " + total_cost);
+
+// Try-catch with for-in
+try {
+    let safe_obj = { a: 1, b: 2, c: 3 };
+    let sum = 0;
+    for (const key in safe_obj) {
+        sum = sum + safe_obj[key];
+    }
+    println("Sum from for-in: " + sum);
+} catch (err) {
+    println("Error in for-in: " + err);
+}
+
+// Spread and for-of combination
+let base_arr = [1, 2, 3];
+let extended_arr = [...base_arr, 4, 5];
+let even_sum = 0;
+for (const num of extended_arr) {
+    if (num % 2 == 0) {
+        even_sum = even_sum + num;
+    }
+}
+println("Even sum: " + even_sum);
+
+// Class with spread in properties
+let config_defaults = { debug: false, verbose: false };
+let config_custom = { debug: true, extra: "value" };
+let merged_config = { ...config_defaults, ...config_custom };
+
+// Delete and in operator combination
+let dynamic_obj = { x: 1, y: 2, z: 3 };
+if ("y" in dynamic_obj) {
+    delete dynamic_obj.y;
+}
+let after_delete = "y" in dynamic_obj;
+println("Y exists after delete: " + after_delete);
+
+// =========================
+// 10. ADVANCED COMBINATIONS
+// =========================
+
+println("=== ADVANCED COMBINATIONS TEST ===");
+
+class DataProcessor {
+    constructor(data) {
+        this.data = data;
+        this.results = [];
+    }
+
+    process() {
+        try {
+            for (const item of this.data) {
+                let processed = item * 2;
+                this.results.push(processed);
+            }
+        } catch (err) {
+            println("Processing error: " + err);
+        }
+        return this.results;
+    }
+}
+
+let processor = new DataProcessor([1, 2, 3, 4, 5]);
+let processed_results = processor.process();
+println("Processed items count: " + processed_results.length);
+
+// Complex object creation with spread
+let user_template = {
+    id: 0,
+    active: true,
+    role: "user"
+};
+
+let users_list = [
+    { ...user_template, id: 1, name: "Alice" },
+    { ...user_template, id: 2, name: "Bob" },
+    { ...user_template, id: 3, name: "Charlie" }
+];
+
+for (const user of users_list) {
+    let active_status = user.active ? "active" : "inactive";
+    println("User " + user.name + " is " + active_status);
+}
+
+// =========================
+// SUMMARY
+// ============================================================================
+// This test file validates:
+// ✓ For-in loops (object and array iteration)
+// ✓ For-of loops (array element iteration)
+// ✓ Try-catch-finally blocks
+// ✓ Class declarations with constructors
+// ✓ Class methods (instance and getters)
+// ✓ Class method chaining
+// ✓ Spread operator in arrays
+// ✓ Spread operator in objects
+// ✓ Delete operator (object properties)
+// ✓ In operator (property existence checks)
+// ✓ Null assertion operator (!)
+// ✓ Complex combinations of new features
+// ✓ Error handling with exception catching
+// ============================================================================

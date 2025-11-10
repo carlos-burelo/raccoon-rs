@@ -1,0 +1,113 @@
+// Basic test for IR/VM execution
+println("=== IR/VM Basic Test ===");
+
+// Variables
+let x = 10;
+let y = 20;
+let sum = x + y;
+println("Sum: " + sum);
+
+// Arrays
+let arr = [1, 2, 3, 4, 5];
+println("Array length: " + arr.length);
+println("First element: " + arr[0]);
+
+// Objects
+let obj = { a: 100, b: 200, c: 300 };
+println("Object a: " + obj.a);
+
+// Arithmetic
+let a = 10;
+let b = 3;
+println("10 + 3 = " + (a + b));
+println("10 - 3 = " + (a - b));
+println("10 * 3 = " + (a * b));
+println("10 / 3 = " + (a / b));
+println("10 % 3 = " + (a % b));
+
+// Comparisons
+let cond1 = (5 < 10);
+let cond2 = (10 == 10);
+let cond3 = (5 > 3);
+println("5 < 10: " + cond1);
+println("10 == 10: " + cond2);
+println("5 > 3: " + cond3);
+
+// If statements
+if (x > 5) {
+    println("x is greater than 5");
+}
+
+if (y < 15) {
+    println("y is less than 15");
+}
+
+// While loop
+let i = 0;
+while (i < 3) {
+    println("While iteration: " + i);
+    i = i + 1;
+}
+
+// Traditional for loop
+for (let j = 0; j < 3; j = j + 1) {
+    println("For iteration: " + j);
+}
+
+// For-of loop
+let numbers = [10, 20, 30];
+for (const num of numbers) {
+    println("For-of: " + num);
+}
+
+// For-in loop
+let config = { debug: true, mode: "fast" };
+for (const key in config) {
+    println("Key: " + key);
+}
+
+// Template strings
+let name = "World";
+let greeting = `Hello, ${name}!`;
+println(greeting);
+
+// Try-catch
+try {
+    let test = 42;
+    println("In try block: " + test);
+} catch (e) {
+    println("Error: " + e);
+} finally {
+    println("Finally block executed");
+}
+
+// Spread operator
+let arr1 = [1, 2, 3];
+let arr2 = [...arr1, 4, 5];
+println("Spread array length: " + arr2.length);
+
+let obj1 = { x: 10, y: 20 };
+let obj2 = { ...obj1, z: 30 };
+println("Spread object created");
+
+// Delete operator is not fully supported yet
+// let obj3 = { a: 1, b: 2, c: 3 };
+// delete obj3.b;
+
+// In operator is not yet fully supported as expression
+// let hasX = "x" in obj4;
+
+// Ternary operator
+let value = 5;
+let result = value > 3 ? "greater" : "less";
+println("Ternary result: " + result);
+
+// Array destructuring
+let [first, second, third] = [100, 200, 300];
+println("Destructured first: " + first);
+
+// Object destructuring
+let { x: xval, y: yval } = { x: 50, y: 75 };
+println("Destructured x: " + xval);
+
+println("\n=== All tests completed ===");

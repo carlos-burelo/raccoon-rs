@@ -1,12 +1,9 @@
 use crate::ast::nodes::*;
-use crate::ast::types::Type;
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;
-use crate::tokens::Position;
-use std::collections::HashMap;
 
 use super::instruction::{
-    Instruction, IRProgram, MatchArm as IRMatchArm, MatchPattern as IRMatchPattern, Register,
+    IRProgram, Instruction, MatchArm as IRMatchArm, MatchPattern as IRMatchPattern, Register,
     TemplatePart,
 };
 
@@ -214,9 +211,65 @@ impl IRCompiler {
     }
 
     /// Compile a class declaration
-    fn compile_class_decl(&mut self, _decl: &ClassDecl) -> Result<(), RaccoonError> {
-        // TODO: Implement class compilation
-        // For now, this is a placeholder
+    fn compile_class_decl(&mut self, decl: &ClassDecl) -> Result<(), RaccoonError> {
+        let mut constructor = None;
+        let mut methods = Vec::new();
+        let mut properties = Vec::new();
+
+        // Compile constructor
+        if let Some(ctor) = &decl.constructor {
+            let mut params = Vec::new();
+            for param in &ctor.parameters {
+                if let VarPattern::Identifier(name) = &param.pattern {
+                    params.push(name.clone());
+                }
+            }
+
+            let mut body_compiler = IRCompiler::new();
+            for stmt in &ctor.body {
+                body_compiler.compile_stmt(stmt)?;
+            }
+
+            constructor = Some((params, body_compiler.program.instructions));
+        }
+
+        // Compile methods
+        for method in &decl.methods {
+            let mut params = Vec::new();
+            for param in &method.parameters {
+                if let VarPattern::Identifier(name) = &param.pattern {
+                    params.push(name.clone());
+                }
+            }
+
+            let mut body_compiler = IRCompiler::new();
+            for stmt in &method.body {
+                body_compiler.compile_stmt(stmt)?;
+            }
+
+            methods.push((
+                method.name.clone(),
+                params,
+                body_compiler.program.instructions,
+                method.is_async,
+            ));
+        }
+
+        // Compile properties
+        for prop in &decl.properties {
+            if let Some(init) = &prop.initializer {
+                let reg = self.compile_expr(init)?;
+                properties.push((prop.name.clone(), reg));
+            }
+        }
+
+        self.program.emit(Instruction::CreateClass {
+            name: decl.name.clone(),
+            constructor,
+            methods,
+            properties,
+        });
+
         Ok(())
     }
 
@@ -313,9 +366,7 @@ impl IRCompiler {
 
         self.compile_stmt(&while_stmt.body)?;
 
-        self.program.emit(Instruction::Jump {
-            label: start_label,
-        });
+        self.program.emit(Instruction::Jump { label: start_label });
 
         self.program.emit_label(end_label);
         Ok(())
@@ -373,9 +424,7 @@ impl IRCompiler {
             self.compile_expr(increment)?;
         }
 
-        self.program.emit(Instruction::Jump {
-            label: start_label,
-        });
+        self.program.emit(Instruction::Jump { label: start_label });
 
         self.program.emit_label(end_label);
         self.program.emit(Instruction::PopScope);
@@ -383,14 +432,38 @@ impl IRCompiler {
     }
 
     /// Compile a for-in statement
-    fn compile_for_in_stmt(&mut self, _for_in: &ForInStmt) -> Result<(), RaccoonError> {
-        // TODO: Implement for-in compilation
+    fn compile_for_in_stmt(&mut self, for_in: &ForInStmt) -> Result<(), RaccoonError> {
+        let object_reg = self.compile_expr(&for_in.iterable)?;
+
+        let mut body_compiler = IRCompiler::new();
+        body_compiler.compile_stmt(&for_in.body)?;
+
+        let var_name = for_in.variable.clone();
+
+        self.program.emit(Instruction::ForIn {
+            variable: var_name,
+            object: object_reg,
+            body: body_compiler.program.instructions,
+        });
+
         Ok(())
     }
 
     /// Compile a for-of statement
-    fn compile_for_of_stmt(&mut self, _for_of: &ForOfStmt) -> Result<(), RaccoonError> {
-        // TODO: Implement for-of compilation
+    fn compile_for_of_stmt(&mut self, for_of: &ForOfStmt) -> Result<(), RaccoonError> {
+        let iterable_reg = self.compile_expr(&for_of.iterable)?;
+
+        let mut body_compiler = IRCompiler::new();
+        body_compiler.compile_stmt(&for_of.body)?;
+
+        let var_name = for_of.variable.clone();
+
+        self.program.emit(Instruction::ForOf {
+            variable: var_name,
+            iterable: iterable_reg,
+            body: body_compiler.program.instructions,
+        });
+
         Ok(())
     }
 
@@ -453,9 +526,41 @@ impl IRCompiler {
     }
 
     /// Compile a try statement
-    fn compile_try_stmt(&mut self, _try_stmt: &TryStmt) -> Result<(), RaccoonError> {
-        // TODO: Implement try-catch compilation
-        // This requires exception handling support in the VM
+    fn compile_try_stmt(&mut self, try_stmt: &TryStmt) -> Result<(), RaccoonError> {
+        let mut try_compiler = IRCompiler::new();
+        for stmt in &try_stmt.try_block.statements {
+            try_compiler.compile_stmt(stmt)?;
+        }
+
+        let catch_handler = if let Some(catch_clause) = try_stmt.catch_clauses.first() {
+            let error_var = catch_clause.error_var.clone();
+
+            let mut catch_compiler = IRCompiler::new();
+            for stmt in &catch_clause.body.statements {
+                catch_compiler.compile_stmt(stmt)?;
+            }
+
+            Some((error_var, catch_compiler.program.instructions))
+        } else {
+            None
+        };
+
+        let finally_body = if let Some(finally_block) = &try_stmt.finally_block {
+            let mut finally_compiler = IRCompiler::new();
+            for stmt in &finally_block.statements {
+                finally_compiler.compile_stmt(stmt)?;
+            }
+            Some(finally_compiler.program.instructions)
+        } else {
+            None
+        };
+
+        self.program.emit(Instruction::TryCatch {
+            try_body: try_compiler.program.instructions,
+            catch_handler,
+            finally_body,
+        });
+
         Ok(())
     }
 
@@ -642,7 +747,20 @@ impl IRCompiler {
     fn compile_array_literal(&mut self, array: &ArrayLiteral) -> Result<Register, RaccoonError> {
         let mut elements = Vec::new();
         for elem in &array.elements {
-            elements.push(self.compile_expr(elem)?);
+            // Check if element is a spread
+            if let Expr::Spread(spread) = elem {
+                // Handle spread - compile the expression and add special marker
+                let spread_reg = self.compile_expr(&spread.argument)?;
+                // Create a temporary to hold the spread result
+                let spread_dest = self.next_temp();
+                self.program.emit(Instruction::SpreadArray {
+                    dest: spread_dest.clone(),
+                    operand: spread_reg,
+                });
+                elements.push(spread_dest);
+            } else {
+                elements.push(self.compile_expr(elem)?);
+            }
         }
 
         let dest = self.next_temp();
@@ -655,10 +773,7 @@ impl IRCompiler {
     }
 
     /// Compile an object literal
-    fn compile_object_literal(
-        &mut self,
-        obj: &ObjectLiteral,
-    ) -> Result<Register, RaccoonError> {
+    fn compile_object_literal(&mut self, obj: &ObjectLiteral) -> Result<Register, RaccoonError> {
         let mut properties = Vec::new();
 
         for prop in &obj.properties {
@@ -667,8 +782,16 @@ impl IRCompiler {
                     let value_reg = self.compile_expr(value)?;
                     properties.push((key.clone(), value_reg));
                 }
-                ObjectLiteralProperty::Spread(_) => {
-                    // TODO: Handle spread in objects
+                ObjectLiteralProperty::Spread(spread_expr) => {
+                    // Handle spread in object - compile to special instruction
+                    let spread_reg = self.compile_expr(spread_expr)?;
+                    let spread_dest = self.next_temp();
+                    self.program.emit(Instruction::SpreadObject {
+                        dest: spread_dest.clone(),
+                        operand: spread_reg,
+                    });
+                    // Add as special property (will be expanded by VM)
+                    properties.push(("...".to_string(), spread_dest));
                 }
             }
         }
@@ -732,10 +855,7 @@ impl IRCompiler {
     }
 
     /// Compile a unary update expression (++/--)
-    fn compile_unary_update(
-        &mut self,
-        update: &UnaryUpdateExpr,
-    ) -> Result<Register, RaccoonError> {
+    fn compile_unary_update(&mut self, update: &UnaryUpdateExpr) -> Result<Register, RaccoonError> {
         let operand = self.compile_expr(&update.operand)?;
         let dest = self.next_temp();
 
@@ -1038,6 +1158,7 @@ impl IRCompiler {
             _ => Ok(IRMatchPattern::Wildcard),
         }
     }
+
 }
 
 impl Default for IRCompiler {

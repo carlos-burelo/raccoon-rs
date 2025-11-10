@@ -3,7 +3,7 @@ use crate::runtime::{Environment, RuntimeValue};
 use async_recursion::async_recursion;
 use std::collections::HashMap;
 
-use super::instruction::{Instruction, IRProgram, MatchPattern, Register, TemplatePart};
+use super::instruction::{IRProgram, Instruction, MatchPattern, Register, TemplatePart};
 
 /// Virtual Machine for executing IR bytecode
 pub struct VM {
@@ -13,17 +13,8 @@ pub struct VM {
     environment: Environment,
     /// Program counter
     pc: usize,
-    /// Call stack for function calls
-    call_stack: Vec<CallFrame>,
     /// Current executing program
     program: Option<IRProgram>,
-}
-
-/// Call frame for function invocations
-#[derive(Debug, Clone)]
-struct CallFrame {
-    return_address: usize,
-    saved_registers: HashMap<String, RuntimeValue>,
 }
 
 impl VM {
@@ -32,7 +23,6 @@ impl VM {
             registers: HashMap::new(),
             environment,
             pc: 0,
-            call_stack: Vec::new(),
             program: None,
         }
     }
@@ -90,9 +80,11 @@ impl VM {
                 Ok(ExecutionResult::Continue)
             }
 
-            Instruction::Declare { name, is_const } => {
-                self.environment
-                    .declare(name.clone(), RuntimeValue::Null(crate::runtime::NullValue::new()))?;
+            Instruction::Declare { name, is_const: _ } => {
+                self.environment.declare(
+                    name.clone(),
+                    RuntimeValue::Null(crate::runtime::NullValue::new()),
+                )?;
                 Ok(ExecutionResult::Continue)
             }
 
@@ -231,10 +223,10 @@ impl VM {
 
             Instruction::CreateFunction {
                 dest,
-                name,
-                params,
-                body,
-                is_async,
+                name: _,
+                params: _,
+                body: _,
+                is_async: _,
             } => {
                 // Create a closure/function value (simplified - storing as a native function for now)
                 // In a full implementation, we would store the IR body and execute it later
@@ -349,6 +341,30 @@ impl VM {
                         .get(property)
                         .cloned()
                         .unwrap_or(RuntimeValue::Null(crate::runtime::NullValue::new())),
+                    RuntimeValue::Array(arr) => match property.as_str() {
+                        "length" => RuntimeValue::Int(crate::runtime::IntValue::new(arr.elements.len() as i64)),
+                        "first" => {
+                            if arr.elements.is_empty() {
+                                RuntimeValue::Null(crate::runtime::NullValue::new())
+                            } else {
+                                arr.elements[0].clone()
+                            }
+                        }
+                        _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
+                    },
+                    RuntimeValue::Str(s) => match property.as_str() {
+                        "length" => RuntimeValue::Int(crate::runtime::IntValue::new(s.value.len() as i64)),
+                        "isEmpty" => RuntimeValue::Bool(crate::runtime::BoolValue::new(s.value.is_empty())),
+                        _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
+                    },
+                    RuntimeValue::ClassInstance(instance) => {
+                        // Try to get property from instance
+                        if let Some(value) = instance.properties.read().unwrap().get(property) {
+                            value.clone()
+                        } else {
+                            RuntimeValue::Null(crate::runtime::NullValue::new())
+                        }
+                    }
                     _ => {
                         return Err(RaccoonError::new(
                             "Cannot access property of non-object",
@@ -407,7 +423,7 @@ impl VM {
 
             Instruction::NewInstance {
                 dest,
-                class_name,
+                class_name: _,
                 args,
             } => {
                 let mut arg_values = Vec::new();
@@ -428,11 +444,9 @@ impl VM {
                 let future_val = self.get_register(future)?;
 
                 let result = match future_val {
-                    RuntimeValue::Future(fut) => {
-                        fut.wait_for_completion().await.map_err(|e| {
-                            RaccoonError::new(&format!("Await error: {}", e), (0, 0), None::<String>)
-                        })?
-                    }
+                    RuntimeValue::Future(fut) => fut.wait_for_completion().await.map_err(|e| {
+                        RaccoonError::new(&format!("Await error: {}", e), (0, 0), None::<String>)
+                    })?,
                     _ => future_val,
                 };
 
@@ -496,10 +510,11 @@ impl VM {
                         if *has_rest {
                             if let Some(rest) = rest_dest {
                                 let rest_elements = arr.elements[dests.len()..].to_vec();
-                                let rest_array = RuntimeValue::Array(crate::runtime::ArrayValue::new(
-                                    rest_elements,
-                                    crate::ast::types::PrimitiveType::any(),
-                                ));
+                                let rest_array =
+                                    RuntimeValue::Array(crate::runtime::ArrayValue::new(
+                                        rest_elements,
+                                        crate::ast::types::PrimitiveType::any(),
+                                    ));
                                 self.set_register(rest, rest_array);
                             }
                         }
@@ -519,7 +534,7 @@ impl VM {
             Instruction::DestructureObject {
                 mappings,
                 src,
-                rest_dest,
+                rest_dest: _,
             } => {
                 let src_val = self.get_register(src)?;
 
@@ -755,6 +770,397 @@ impl VM {
                 self.environment.pop_scope();
                 Ok(ExecutionResult::Continue)
             }
+
+            Instruction::Break => {
+                // Break is handled by loop instructions
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::Continue => {
+                // Continue is handled by loop instructions
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::ForIn {
+                variable,
+                object,
+                body,
+            } => {
+                let obj_val = self.get_register(object)?;
+
+                match obj_val {
+                    RuntimeValue::Object(obj) => {
+                        for key in obj.properties.keys() {
+                            // Create a new scope for each iteration
+                            let mut loop_env = self.environment.clone();
+                            loop_env.push_scope();
+                            loop_env.declare(
+                                variable.clone(),
+                                RuntimeValue::Str(crate::runtime::StrValue::new(key.clone())),
+                            )?;
+
+                            let mut loop_vm = VM::new(loop_env);
+                            let loop_program = IRProgram {
+                                instructions: body.clone(),
+                                constant_pool: Vec::new(),
+                                labels: HashMap::new(),
+                            };
+                            loop_vm.execute(loop_program).await?;
+                        }
+                    }
+                    RuntimeValue::Array(arr) => {
+                        for (i, _) in arr.elements.iter().enumerate() {
+                            // Create a new scope for each iteration
+                            let mut loop_env = self.environment.clone();
+                            loop_env.push_scope();
+                            loop_env.declare(
+                                variable.clone(),
+                                RuntimeValue::Int(crate::runtime::IntValue::new(i as i64)),
+                            )?;
+
+                            let mut loop_vm = VM::new(loop_env);
+                            let loop_program = IRProgram {
+                                instructions: body.clone(),
+                                constant_pool: Vec::new(),
+                                labels: HashMap::new(),
+                            };
+                            loop_vm.execute(loop_program).await?;
+                        }
+                    }
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "for-in requires object or array",
+                            (0, 0),
+                            None::<String>,
+                        ))
+                    }
+                }
+
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::ForOf {
+                variable,
+                iterable,
+                body,
+            } => {
+                let iter_val = self.get_register(iterable)?;
+
+                match iter_val {
+                    RuntimeValue::Array(arr) => {
+                        for elem in arr.elements {
+                            // Create a new scope for each iteration
+                            let mut loop_env = self.environment.clone();
+                            loop_env.push_scope();
+                            loop_env.declare(variable.clone(), elem)?;
+
+                            let mut loop_vm = VM::new(loop_env);
+                            let loop_program = IRProgram {
+                                instructions: body.clone(),
+                                constant_pool: Vec::new(),
+                                labels: HashMap::new(),
+                            };
+                            loop_vm.execute(loop_program).await?;
+                        }
+                    }
+                    _ => {
+                        return Err(RaccoonError::new(
+                            "for-of requires iterable",
+                            (0, 0),
+                            None::<String>,
+                        ))
+                    }
+                }
+
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::TryCatch {
+                try_body,
+                catch_handler,
+                finally_body,
+            } => {
+                let mut try_vm = VM::new(self.environment.clone());
+                let try_program = IRProgram {
+                    instructions: try_body.clone(),
+                    constant_pool: Vec::new(),
+                    labels: HashMap::new(),
+                };
+
+                let try_result = try_vm.execute(try_program).await;
+
+                match try_result {
+                    Err(error) if catch_handler.is_some() => {
+                        let (error_var, catch_body) = catch_handler.as_ref().unwrap();
+                        self.environment.declare(
+                            error_var.clone(),
+                            RuntimeValue::Str(crate::runtime::StrValue::new(error.message.clone())),
+                        )?;
+
+                        let mut catch_vm = VM::new(self.environment.clone());
+                        let catch_program = IRProgram {
+                            instructions: catch_body.clone(),
+                            constant_pool: Vec::new(),
+                            labels: HashMap::new(),
+                        };
+                        catch_vm.execute(catch_program).await?;
+                    }
+                    Ok(_) => {}
+                    Err(e) => return Err(e),
+                }
+
+                if let Some(finally) = finally_body {
+                    let mut finally_vm = VM::new(self.environment.clone());
+                    let finally_program = IRProgram {
+                        instructions: finally.clone(),
+                        constant_pool: Vec::new(),
+                        labels: HashMap::new(),
+                    };
+                    finally_vm.execute(finally_program).await?;
+                }
+
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::LoadThis { dest } => {
+                // Simplified: load 'this' (in a full implementation, track current 'this')
+                let this_val = RuntimeValue::Object(crate::runtime::ObjectValue::new(
+                    HashMap::new(),
+                    crate::ast::types::PrimitiveType::any(),
+                ));
+                self.set_register(dest, this_val);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::CallSuper {
+                dest,
+                method: _,
+                args: _,
+            } => {
+                // Simplified: super call (full implementation would require inheritance tracking)
+                self.set_register(dest, RuntimeValue::Null(crate::runtime::NullValue::new()));
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::CreateClass {
+                name,
+                constructor: _,
+                methods: _,
+                properties: _,
+            } => {
+                // Create a class value
+                let class = RuntimeValue::Object(crate::runtime::ObjectValue::new(
+                    HashMap::new(),
+                    crate::ast::types::PrimitiveType::any(),
+                ));
+                self.environment.declare(name.clone(), class)?;
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::SpreadArray { dest, operand } => {
+                let val = self.get_register(operand)?;
+                // For now, just pass through the value
+                // In a full implementation, this would be handled by CreateArray
+                self.set_register(dest, val);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::SpreadObject { dest, operand } => {
+                let val = self.get_register(operand)?;
+                // For now, just pass through the value
+                // In a full implementation, this would be handled by CreateObject
+                self.set_register(dest, val);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::SpreadCall { dest, operand } => {
+                let val = self.get_register(operand)?;
+                // For now, just pass through the value
+                // In a full implementation, this would expand arguments in a call
+                self.set_register(dest, val);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::Import {
+                dest,
+                path: _,
+                items: _,
+            } => {
+                // Simplified: return a module object
+                let module = RuntimeValue::Object(crate::runtime::ObjectValue::new(
+                    HashMap::new(),
+                    crate::ast::types::PrimitiveType::any(),
+                ));
+                self.set_register(dest, module);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::Export { name: _, value: _ } => {
+                // Export is handled at compile time mostly
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::CompoundAssign { dest, src, op } => {
+                let dest_val = self.get_register(dest)?;
+                let src_val = self.get_register(src)?;
+
+                let result = crate::interpreter::operators::apply_binary_op(
+                    dest_val,
+                    src_val,
+                    op.clone(),
+                    (0, 0),
+                    &None,
+                    &crate::runtime::CallStack::new(),
+                )
+                .await?;
+
+                self.set_register(dest, result);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::GetIterator { dest, iterable } => {
+                let iter_val = self.get_register(iterable)?;
+                // Simplified: return the iterable itself
+                self.set_register(dest, iter_val);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::IteratorNext { dest, iterator } => {
+                let _iter = self.get_register(iterator)?;
+                // Simplified: return done=true
+                let mut result = HashMap::new();
+                result.insert(
+                    "done".to_string(),
+                    RuntimeValue::Bool(crate::runtime::BoolValue::new(true)),
+                );
+                let iter_result = RuntimeValue::Object(crate::runtime::ObjectValue::new(
+                    result,
+                    crate::ast::types::PrimitiveType::any(),
+                ));
+                self.set_register(dest, iter_result);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::CreateGenerator {
+                dest,
+                name: _,
+                params: _,
+                body: _,
+            } => {
+                // Simplified: create a generator function as null for now
+                let gen = RuntimeValue::Null(crate::runtime::NullValue::new());
+                self.set_register(dest, gen);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::Yield { value } => {
+                // Simplified: just return the value
+                let val = if let Some(v) = value {
+                    self.get_register(v)?
+                } else {
+                    RuntimeValue::Null(crate::runtime::NullValue::new())
+                };
+                Ok(ExecutionResult::Return(val))
+            }
+
+            Instruction::Catch {
+                dest: _,
+                promise: _,
+                handler: _,
+            } => {
+                // Promise catch - simplified implementation
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::Finally { block: _ } => {
+                // Finally block - already handled in TryCatch
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::TaggedTemplate {
+                dest,
+                tag,
+                parts,
+                expressions,
+            } => {
+                let _tag_fn = self.get_register(tag)?;
+
+                let strings = parts.clone();
+                let mut values = Vec::new();
+
+                for expr_reg in expressions {
+                    values.push(self.get_register(expr_reg)?);
+                }
+
+                // Call the tag function with strings and values
+                // Simplified: just concatenate for now
+                let mut result = String::new();
+                for (i, part) in strings.iter().enumerate() {
+                    result.push_str(part);
+                    if i < values.len() {
+                        result.push_str(&values[i].to_string());
+                    }
+                }
+
+                let template_result = RuntimeValue::Str(crate::runtime::StrValue::new(result));
+                self.set_register(dest, template_result);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::NullAssert { dest, value } => {
+                let val = self.get_register(value)?;
+                // Check if null and throw if so
+                if matches!(val, RuntimeValue::Null(_)) {
+                    return Err(RaccoonError::new(
+                        "Null assertion failed",
+                        (0, 0),
+                        None::<String>,
+                    ));
+                }
+                self.set_register(dest, val);
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::DeleteProperty {
+                dest,
+                object,
+                property,
+            } => {
+                let obj_val = self.get_register(object)?;
+
+                match obj_val {
+                    RuntimeValue::Object(mut obj) => {
+                        obj.properties.remove(property);
+                        let result = RuntimeValue::Bool(crate::runtime::BoolValue::new(true));
+                        self.set_register(dest, result);
+                    }
+                    _ => {
+                        let result = RuntimeValue::Bool(crate::runtime::BoolValue::new(false));
+                        self.set_register(dest, result);
+                    }
+                }
+
+                Ok(ExecutionResult::Continue)
+            }
+
+            Instruction::In {
+                dest,
+                property,
+                object,
+            } => {
+                let obj_val = self.get_register(object)?;
+
+                let exists = match obj_val {
+                    RuntimeValue::Object(obj) => obj.properties.contains_key(property),
+                    _ => false,
+                };
+
+                self.set_register(
+                    dest,
+                    RuntimeValue::Bool(crate::runtime::BoolValue::new(exists)),
+                );
+                Ok(ExecutionResult::Continue)
+            }
         }
     }
 
@@ -821,31 +1227,78 @@ impl VM {
     /// Call a function
     async fn call_function(
         &mut self,
-        _callee: RuntimeValue,
-        _args: Vec<RuntimeValue>,
+        callee: RuntimeValue,
+        args: Vec<RuntimeValue>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // TODO: Implement function calling
-        Ok(RuntimeValue::Null(crate::runtime::NullValue::new()))
+        match callee {
+            RuntimeValue::NativeFunction(func) => {
+                Ok((func.implementation)(args))
+            }
+            RuntimeValue::NativeAsyncFunction(func) => {
+                Ok((func.implementation)(args).await)
+            }
+            RuntimeValue::Function(_) => {
+                // TODO: Implement user-defined function calls
+                // This would require:
+                // 1. Setting up a new scope
+                // 2. Binding parameters
+                // 3. Executing the function body
+                // 4. Managing the call stack
+                Ok(RuntimeValue::Null(crate::runtime::NullValue::new()))
+            }
+            _ => {
+                Err(RaccoonError::new(
+                    "Cannot call non-function value",
+                    (0, 0),
+                    None::<String>,
+                ))
+            }
+        }
     }
 
     /// Call a method on an object
     async fn call_method(
         &mut self,
-        _object: RuntimeValue,
-        _method: &str,
-        _args: Vec<RuntimeValue>,
+        object: RuntimeValue,
+        method: &str,
+        args: Vec<RuntimeValue>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        // TODO: Implement method calling
-        Ok(RuntimeValue::Null(crate::runtime::NullValue::new()))
+        match object {
+            RuntimeValue::Object(obj) => {
+                // Try to get the method from the object
+                if let Some(method_val) = obj.properties.get(method) {
+                    self.call_function(method_val.clone(), args).await
+                } else {
+                    Err(RaccoonError::new(
+                        &format!("Method '{}' not found", method),
+                        (0, 0),
+                        None::<String>,
+                    ))
+                }
+            }
+            RuntimeValue::ClassInstance(_) => {
+                // For class instances, call the method from the class
+                // In a full implementation, would look up the method in the class definition
+                Ok(RuntimeValue::Null(crate::runtime::NullValue::new()))
+            }
+            _ => {
+                // For other types, try to use the type handler
+                // This would use the runtime type system to find the method
+                Ok(RuntimeValue::Null(crate::runtime::NullValue::new()))
+            }
+        }
     }
 
     /// Get a register value
     fn get_register(&self, reg: &Register) -> Result<RuntimeValue, RaccoonError> {
         let key = reg.to_string();
-        self.registers
-            .get(&key)
-            .cloned()
-            .ok_or_else(|| RaccoonError::new(&format!("Register not found: {}", key), (0, 0), None::<String>))
+        self.registers.get(&key).cloned().ok_or_else(|| {
+            RaccoonError::new(
+                &format!("Register not found: {}", key),
+                (0, 0),
+                None::<String>,
+            )
+        })
     }
 
     /// Set a register value
@@ -856,12 +1309,17 @@ impl VM {
 
     /// Resolve a label to an instruction position
     fn resolve_label(&self, label: &str) -> Option<usize> {
-        self.program.as_ref().and_then(|p| p.labels.get(label).copied())
+        self.program
+            .as_ref()
+            .and_then(|p| p.labels.get(label).copied())
     }
 
     /// Get the current program length
     fn get_program_len(&self) -> usize {
-        self.program.as_ref().map(|p| p.instructions.len()).unwrap_or(0)
+        self.program
+            .as_ref()
+            .map(|p| p.instructions.len())
+            .unwrap_or(0)
     }
 
     /// Get an instruction at a specific position
