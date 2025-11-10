@@ -26,6 +26,7 @@ pub enum DecoratorTarget {
     ClassProperty,
 }
 
+#[derive(Clone)]
 pub struct DecoratorRegistry {
     decorators: HashMap<String, DecoratorSpec>,
 }

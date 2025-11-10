@@ -6,6 +6,7 @@ use std::fmt;
 use std::future::Future;
 use std::pin::Pin;
 use std::sync::{Arc, RwLock};
+use tokio::sync::Notify;
 
 #[derive(Debug, Clone)]
 pub enum RuntimeValue {
@@ -501,7 +502,7 @@ impl fmt::Debug for NativeFunctionValue {
 }
 
 pub type NativeAsyncFn = Arc<
-    dyn Fn(Vec<RuntimeValue>) -> Pin<Box<(dyn Future<Output = RuntimeValue> + 'static)>>
+    dyn Fn(Vec<RuntimeValue>) -> Pin<Box<dyn Future<Output = RuntimeValue> + 'static>>
         + Send
         + Sync
         + 'static,
@@ -642,10 +643,20 @@ impl EnumObject {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct FutureValue {
     pub state: Arc<RwLock<FutureState>>,
     pub value_type: Type,
+    pub notifier: Arc<Notify>,
+}
+
+impl fmt::Debug for FutureValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("FutureValue")
+            .field("state", &self.state)
+            .field("value_type", &self.value_type)
+            .finish()
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -660,29 +671,55 @@ impl FutureValue {
         Self {
             state: Arc::new(RwLock::new(FutureState::Pending)),
             value_type,
+            notifier: Arc::new(Notify::new()),
         }
     }
 
     pub fn new_resolved(value: RuntimeValue, value_type: Type) -> Self {
+        let notifier = Arc::new(Notify::new());
+        notifier.notify_waiters(); // Notify immediately since it's already resolved
         Self {
             state: Arc::new(RwLock::new(FutureState::Resolved(Box::new(value)))),
             value_type,
+            notifier,
         }
     }
 
     pub fn new_rejected(error: String, value_type: Type) -> Self {
+        let notifier = Arc::new(Notify::new());
+        notifier.notify_waiters(); // Notify immediately since it's already rejected
         Self {
             state: Arc::new(RwLock::new(FutureState::Rejected(error))),
             value_type,
+            notifier,
         }
     }
 
     pub fn resolve(&self, value: RuntimeValue) {
         *self.state.write().unwrap() = FutureState::Resolved(Box::new(value));
+        self.notifier.notify_waiters();
     }
 
     pub fn reject(&self, error: String) {
         *self.state.write().unwrap() = FutureState::Rejected(error);
+        self.notifier.notify_waiters();
+    }
+
+    pub async fn wait_for_completion(&self) -> Result<RuntimeValue, String> {
+        loop {
+            {
+                let state = self.state.read().unwrap();
+                match &*state {
+                    FutureState::Resolved(value) => return Ok((**value).clone()),
+                    FutureState::Rejected(error) => return Err(error.clone()),
+                    FutureState::Pending => {
+                        // Continue waiting
+                    }
+                }
+            } // Release lock before awaiting
+
+            self.notifier.notified().await;
+        }
     }
 
     pub fn is_resolved(&self) -> bool {
