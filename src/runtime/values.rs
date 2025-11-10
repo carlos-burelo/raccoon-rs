@@ -67,6 +67,106 @@ impl RuntimeValue {
         }
     }
 
+    pub fn get_type_object(&self) -> TypeObject {
+        use crate::runtime::type_object::{TypeKind, PrimitiveKind, TypeMetadata};
+        use std::collections::HashMap;
+
+        match self {
+            RuntimeValue::Int(_) => TypeObject::new(
+                PrimitiveType::int(),
+                TypeKind::Primitive(PrimitiveKind::Int),
+                HashMap::new(),
+                HashMap::new(),
+                None,
+                TypeMetadata::new(),
+            ),
+            RuntimeValue::BigInt(_) => TypeObject::new(
+                PrimitiveType::bigint(),
+                TypeKind::Primitive(PrimitiveKind::BigInt),
+                HashMap::new(),
+                HashMap::new(),
+                None,
+                TypeMetadata::new(),
+            ),
+            RuntimeValue::Float(_) => TypeObject::new(
+                PrimitiveType::float(),
+                TypeKind::Primitive(PrimitiveKind::Float),
+                HashMap::new(),
+                HashMap::new(),
+                None,
+                TypeMetadata::new(),
+            ),
+            RuntimeValue::Decimal(_) => TypeObject::new(
+                PrimitiveType::decimal(),
+                TypeKind::Primitive(PrimitiveKind::Decimal),
+                HashMap::new(),
+                HashMap::new(),
+                None,
+                TypeMetadata::new(),
+            ),
+            RuntimeValue::Str(_) => TypeObject::new(
+                PrimitiveType::str(),
+                TypeKind::Primitive(PrimitiveKind::String),
+                HashMap::new(),
+                HashMap::new(),
+                None,
+                TypeMetadata::new(),
+            ),
+            RuntimeValue::Bool(_) => TypeObject::new(
+                PrimitiveType::bool(),
+                TypeKind::Primitive(PrimitiveKind::Bool),
+                HashMap::new(),
+                HashMap::new(),
+                None,
+                TypeMetadata::new(),
+            ),
+            RuntimeValue::Null(_) => TypeObject::new(
+                PrimitiveType::null(),
+                TypeKind::Primitive(PrimitiveKind::Null),
+                HashMap::new(),
+                HashMap::new(),
+                None,
+                TypeMetadata::new(),
+            ),
+            RuntimeValue::Type(t) => t.clone(),
+            RuntimeValue::Class(c) => TypeObject::new(
+                c.class_type.clone(),
+                TypeKind::Class {
+                    name: c.class_name.clone(),
+                    superclass: c.declaration.superclass.as_ref().map(|s| s.clone()),
+                },
+                HashMap::new(),
+                HashMap::new(),
+                None,
+                TypeMetadata::new(),
+            ),
+            RuntimeValue::EnumObject(e) => {
+                let variants: Vec<String> = e.members.iter()
+                    .map(|(name, _)| name.clone())
+                    .collect();
+                TypeObject::new(
+                    e.enum_type.clone(),
+                    TypeKind::Enum {
+                        name: e.enum_name.clone(),
+                        variants,
+                    },
+                    HashMap::new(),
+                    HashMap::new(),
+                    None,
+                    TypeMetadata::new(),
+                )
+            }
+            _ => TypeObject::new(
+                self.get_type(),
+                TypeKind::Unknown,
+                HashMap::new(),
+                HashMap::new(),
+                None,
+                TypeMetadata::new(),
+            ),
+        }
+    }
+
     pub fn to_string(&self) -> String {
         match self {
             RuntimeValue::Int(v) => v.to_string(),

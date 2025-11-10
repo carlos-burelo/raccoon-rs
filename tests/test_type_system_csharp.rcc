@@ -1,0 +1,91 @@
+print("=== SISTEMA DE TIPOS ESTILO C# ===\n");
+
+print("1. USANDO Type.typeOf() PARA OBTENER TIPOS");
+let num = 42;
+let text = "hello";
+let flag = true;
+
+let numType = Type.typeOf(num);
+let textType = Type.typeOf(text);
+let flagType = Type.typeOf(flag);
+
+print("Type.typeOf(42) = " + Type.name(numType));
+print("Type.typeOf('hello') = " + Type.name(textType));
+print("Type.typeOf(true) = " + Type.name(flagType));
+print("");
+
+print("2. VERIFICANDO SI ES PRIMITIVO");
+print("int es primitivo? " + Type.isPrimitive(numType));
+print("str es primitivo? " + Type.isPrimitive(textType));
+print("");
+
+print("3. USANDO Type.isInstance() PARA VERIFICAR TIPOS");
+print("42 es instancia de int? " + Type.isInstance(num, int));
+print("'hello' es instancia de str? " + Type.isInstance(text, str));
+print("42 es instancia de str? " + Type.isInstance(num, str));
+print("");
+
+print("4. OBTENIENDO INFORMACION DE TIPOS NATIVOS");
+print("Tipo int:");
+print("  Nombre: " + Type.name(int));
+print("  Es primitivo: " + Type.isPrimitive(int));
+print("  MAX_VALUE: " + int.MAX_VALUE);
+print("  MIN_VALUE: " + int.MIN_VALUE);
+print("");
+
+print("Tipo str:");
+print("  Nombre: " + Type.name(str));
+print("  Es primitivo: " + Type.isPrimitive(str));
+print("");
+
+print("5. ACCEDIENDO PROPIEDADES ESTATICAS");
+print("  int.MAX_VALUE = " + int.MAX_VALUE);
+print("  int.MIN_VALUE = " + int.MIN_VALUE);
+print("");
+
+print("6. USANDO METODOS ESTATICOS DE TIPOS");
+let parsed = int.parse("123");
+print("int.parse('123') = " + parsed);
+print("");
+
+print("7. METODOS DE INSTANCIA EN VALORES");
+let myNum = 42;
+print("(42).toStr() = " + myNum.toStr());
+print("(42).isEven() = " + myNum.isEven());
+print("(42).abs() = " + myNum.abs());
+print("");
+
+let myStr = "hello world";
+print("('hello world').toUpper() = " + myStr.toUpper());
+print("('hello world').length = " + myStr.length);
+print("");
+
+print("8. TRABAJANDO CON CLASES");
+class Person {
+    public name: str;
+    public age: int;
+
+    constructor(name: str, age: int) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+let person = new Person("Alice", 30);
+let personType = Type.typeOf(person);
+print("Type.typeOf(person) = " + Type.name(personType));
+print("person es una clase? " + Type.isClass(personType));
+print("");
+
+print("9. TRABAJANDO CON ENUMS");
+enum Color {
+    Red = 0,
+    Green = 1,
+    Blue = 2
+}
+
+let colorType = Type.typeOf(Color);
+print("Type.typeOf(Color) = " + Type.name(colorType));
+print("");
+
+print("=== SISTEMA DE TIPOS COMPLETADO ===");

@@ -12,6 +12,8 @@ use super::objects::{ClassType, FunctionType, InterfaceType, ObjectType};
 use super::async_control::{FutureType, ResultType, StreamType, EitherType};
 // Special
 use super::special::{EnumType, VoidType, NeverType, SymbolType, UnionType, IntersectionType, NullableType, ReadonlyType};
+// Type reflection
+use super::type_type::TypeType;
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
@@ -80,6 +82,9 @@ impl TypeRegistry {
         registry.register(Box::new(IntersectionType));
         registry.register(Box::new(NullableType));
         registry.register(Box::new(ReadonlyType));
+
+        // Type reflection
+        registry.register(Box::new(TypeType::new()));
 
         registry
     }

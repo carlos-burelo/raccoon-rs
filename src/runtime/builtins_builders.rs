@@ -144,6 +144,12 @@ impl TypeMethodBuilder {
                     name: "Object".to_string(),
                 },
             ),
+            "Type" => (
+                PrimitiveType::any(),
+                TypeKind::Module {
+                    name: "Type".to_string(),
+                },
+            ),
             _ => (PrimitiveType::any(), TypeKind::Unknown),
         };
 
