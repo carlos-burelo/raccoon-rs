@@ -1,15 +1,30 @@
+/// EitherType - Either type handler with metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, RuntimeValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
 // ============================================================================
-// EitherType - Either left or right value (Either<L, R>)
+// EitherType - Either type handler
 // ============================================================================
-// Note: This is a placeholder - actual Either type would need proper value representation
 
 pub struct EitherType;
+
+impl EitherType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("either", "Either type for sum types (Left or Right)")
+            .with_instance_methods(vec![
+                MethodMetadata::new("isLeft", "bool", "Check if value is Left"),
+                MethodMetadata::new("isRight", "bool", "Check if value is Right"),
+                MethodMetadata::new("unwrapLeft", "any", "Unwrap Left value or panic"),
+                MethodMetadata::new("unwrapRight", "any", "Unwrap Right value or panic"),
+            ])
+    }
+}
 
 #[async_trait]
 impl TypeHandler for EitherType {
@@ -21,10 +36,12 @@ impl TypeHandler for EitherType {
         &self,
         _value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
+        require_args(&args, 0, method, position, file.clone())?;
+
         match method {
             "isLeft" => {
                 // Placeholder implementation
@@ -34,11 +51,15 @@ impl TypeHandler for EitherType {
                 // Placeholder implementation
                 Ok(RuntimeValue::Bool(BoolValue::new(false)))
             }
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on either", method),
-                position,
-                file,
-            )),
+            "unwrapLeft" | "unwrapRight" => {
+                // Placeholder - needs proper implementation
+                Err(RaccoonError::new(
+                    format!("Method '{}' not yet implemented on either", method),
+                    position,
+                    file,
+                ))
+            }
+            _ => Err(method_not_found_error("either", method, position, file)),
         }
     }
 
@@ -49,18 +70,16 @@ impl TypeHandler for EitherType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Static method '{}' not found on either type", method),
-            position,
-            file,
+        Err(static_method_not_found_error(
+            "either", method, position, file,
         ))
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(method, "isLeft" | "isRight" | "unwrapLeft" | "unwrapRight")
+        Self::metadata().has_instance_method(method)
     }
 
-    fn has_static_method(&self, _method: &str) -> bool {
-        false
+    fn has_static_method(&self, method: &str) -> bool {
+        Self::metadata().has_static_method(method)
     }
 }

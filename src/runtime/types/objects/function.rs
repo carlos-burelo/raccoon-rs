@@ -1,4 +1,7 @@
+/// FunctionType - Function type handler with metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -10,6 +13,20 @@ use async_trait::async_trait;
 
 pub struct FunctionType;
 
+impl FunctionType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("function", "Function type representing callable code")
+            .with_instance_methods(vec![
+                MethodMetadata::new("length", "int", "Get number of function parameters"),
+                MethodMetadata::new("name", "str", "Get function name"),
+                MethodMetadata::new("isAsync", "bool", "Check if function is async"),
+                MethodMetadata::new("toString", "str", "Convert to string representation")
+                    .with_alias("toStr"),
+            ])
+    }
+}
+
 #[async_trait]
 impl TypeHandler for FunctionType {
     fn type_name(&self) -> &str {
@@ -20,10 +37,12 @@ impl TypeHandler for FunctionType {
         &self,
         value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
+        require_args(&args, 0, method, position, file.clone())?;
+
         let func = match value {
             RuntimeValue::Function(f) => f,
             RuntimeValue::NativeFunction(_f) => match method {
@@ -34,13 +53,7 @@ impl TypeHandler for FunctionType {
                         "[Native Function]".to_string(),
                     )))
                 }
-                _ => {
-                    return Err(RaccoonError::new(
-                        format!("Method '{}' not found on function", method),
-                        position,
-                        file,
-                    ))
-                }
+                _ => return Err(method_not_found_error("function", method, position, file)),
             },
             _ => {
                 return Err(RaccoonError::new(
@@ -62,11 +75,7 @@ impl TypeHandler for FunctionType {
                 "[Function: {} params]",
                 func.parameters.len()
             )))),
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on function", method),
-                position,
-                file,
-            )),
+            _ => Err(method_not_found_error("function", method, position, file)),
         }
     }
 
@@ -77,18 +86,16 @@ impl TypeHandler for FunctionType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Static method '{}' not found on function type", method),
-            position,
-            file,
+        Err(static_method_not_found_error(
+            "function", method, position, file,
         ))
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(method, "length" | "name" | "isAsync" | "toString" | "toStr")
+        Self::metadata().has_instance_method(method)
     }
 
-    fn has_static_method(&self, _method: &str) -> bool {
-        false
+    fn has_static_method(&self, method: &str) -> bool {
+        Self::metadata().has_static_method(method)
     }
 }

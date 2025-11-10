@@ -1,4 +1,7 @@
+/// EnumType - Enumeration type handler with metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -10,6 +13,18 @@ use async_trait::async_trait;
 
 pub struct EnumType;
 
+impl EnumType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("enum", "Enumeration type representing named constants")
+            .with_instance_methods(vec![
+                MethodMetadata::new("name", "str", "Get enum variant name"),
+                MethodMetadata::new("toString", "str", "Convert to string representation")
+                    .with_alias("toStr"),
+            ])
+    }
+}
+
 #[async_trait]
 impl TypeHandler for EnumType {
     fn type_name(&self) -> &str {
@@ -20,10 +35,12 @@ impl TypeHandler for EnumType {
         &self,
         value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
+        require_args(&args, 0, method, position, file.clone())?;
+
         let enum_val = match value {
             RuntimeValue::Enum(e) => e,
             RuntimeValue::EnumObject(e) => match method {
@@ -35,8 +52,9 @@ impl TypeHandler for EnumType {
                     ))))
                 }
                 _ => {
-                    return Err(RaccoonError::new(
-                        format!("Method '{}' not found on enum object", method),
+                    return Err(method_not_found_error(
+                        "enum object",
+                        method,
                         position,
                         file,
                     ))
@@ -59,11 +77,7 @@ impl TypeHandler for EnumType {
             "toString" | "toStr" => Ok(RuntimeValue::Str(StrValue::new(
                 enum_val.member_name.clone(),
             ))),
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on enum", method),
-                position,
-                file,
-            )),
+            _ => Err(method_not_found_error("enum", method, position, file)),
         }
     }
 
@@ -74,18 +88,16 @@ impl TypeHandler for EnumType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Static method '{}' not found on enum type", method),
-            position,
-            file,
+        Err(static_method_not_found_error(
+            "enum", method, position, file,
         ))
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(method, "name" | "toString" | "toStr")
+        Self::metadata().has_instance_method(method)
     }
 
-    fn has_static_method(&self, _method: &str) -> bool {
-        false
+    fn has_static_method(&self, method: &str) -> bool {
+        Self::metadata().has_static_method(method)
     }
 }

@@ -1,14 +1,30 @@
+/// NeverType - Never type handler with metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
 // ============================================================================
-// NeverType - Never type (function that never returns)
+// NeverType - Never type handler
 // ============================================================================
 
 pub struct NeverType;
+
+impl NeverType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("never", "Never type representing unreachable code")
+            .with_instance_methods(vec![MethodMetadata::new(
+                "toString",
+                "str",
+                "Convert to string representation",
+            )
+            .with_alias("toStr")])
+    }
+}
 
 #[async_trait]
 impl TypeHandler for NeverType {
@@ -20,17 +36,15 @@ impl TypeHandler for NeverType {
         &self,
         _value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
+        require_args(&args, 0, method, position, file.clone())?;
+
         match method {
             "toString" | "toStr" => Ok(RuntimeValue::Str(StrValue::new("never".to_string()))),
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on never", method),
-                position,
-                file,
-            )),
+            _ => Err(method_not_found_error("never", method, position, file)),
         }
     }
 
@@ -41,18 +55,16 @@ impl TypeHandler for NeverType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Static method '{}' not found on never type", method),
-            position,
-            file,
+        Err(static_method_not_found_error(
+            "never", method, position, file,
         ))
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(method, "toString" | "toStr")
+        Self::metadata().has_instance_method(method)
     }
 
-    fn has_static_method(&self, _method: &str) -> bool {
-        false
+    fn has_static_method(&self, method: &str) -> bool {
+        Self::metadata().has_static_method(method)
     }
 }

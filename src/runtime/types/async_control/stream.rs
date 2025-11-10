@@ -1,15 +1,27 @@
+/// StreamType - Stream type handler with metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::TypeMetadata;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::RuntimeValue;
 use crate::tokens::Position;
 use async_trait::async_trait;
 
 // ============================================================================
-// StreamType - Asynchronous stream (Stream<T>)
+// StreamType - Stream type handler (placeholder)
 // ============================================================================
-// Note: This is a placeholder - actual Stream type would need proper value representation
 
 pub struct StreamType;
+
+impl StreamType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new(
+            "stream",
+            "Stream type for async iteration (not yet implemented)",
+        )
+    }
+}
 
 #[async_trait]
 impl TypeHandler for StreamType {
@@ -25,11 +37,7 @@ impl TypeHandler for StreamType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Method '{}' not found on stream", method),
-            position,
-            file,
-        ))
+        Err(method_not_found_error("stream", method, position, file))
     }
 
     fn call_static_method(
@@ -39,18 +47,16 @@ impl TypeHandler for StreamType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Static method '{}' not found on stream type", method),
-            position,
-            file,
+        Err(static_method_not_found_error(
+            "stream", method, position, file,
         ))
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(method, "subscribe" | "map" | "filter" | "reduce")
+        Self::metadata().has_instance_method(method)
     }
 
-    fn has_static_method(&self, _method: &str) -> bool {
-        false
+    fn has_static_method(&self, method: &str) -> bool {
+        Self::metadata().has_static_method(method)
     }
 }

@@ -1,5 +1,8 @@
+/// ObjectType - Object literal type handler with metadata system
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{IntValue, ListValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -11,6 +14,23 @@ use async_trait::async_trait;
 
 pub struct ObjectType;
 
+impl ObjectType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("object", "Object type for key-value data structures")
+            .with_instance_methods(vec![
+                MethodMetadata::new("keys", "list<str>", "Get list of object keys"),
+                MethodMetadata::new("values", "list<any>", "Get list of object values"),
+                MethodMetadata::new("entries", "list<list<any>>", "Get list of key-value pairs"),
+                MethodMetadata::new("size", "int", "Get number of properties").with_alias("length"),
+                MethodMetadata::new("hasOwnProperty", "bool", "Check if object has property")
+                    .with_params(vec![ParamMetadata::new("key", "str")]),
+                MethodMetadata::new("toString", "str", "Convert to string representation")
+                    .with_alias("toStr"),
+            ])
+    }
+}
+
 #[async_trait]
 impl TypeHandler for ObjectType {
     fn type_name(&self) -> &str {
@@ -21,7 +41,7 @@ impl TypeHandler for ObjectType {
         &self,
         value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
@@ -38,6 +58,7 @@ impl TypeHandler for ObjectType {
 
         match method {
             "keys" => {
+                require_args(&args, 0, method, position, file)?;
                 let keys: Vec<RuntimeValue> = obj
                     .properties
                     .keys()
@@ -49,6 +70,7 @@ impl TypeHandler for ObjectType {
                 )))
             }
             "values" => {
+                require_args(&args, 0, method, position, file)?;
                 let values: Vec<RuntimeValue> = obj.properties.values().cloned().collect();
                 Ok(RuntimeValue::List(ListValue::new(
                     values,
@@ -56,6 +78,7 @@ impl TypeHandler for ObjectType {
                 )))
             }
             "entries" => {
+                require_args(&args, 0, method, position, file)?;
                 let entries: Vec<RuntimeValue> = obj
                     .properties
                     .iter()
@@ -69,35 +92,23 @@ impl TypeHandler for ObjectType {
                     PrimitiveType::any(),
                 )))
             }
-            "size" | "length" => Ok(RuntimeValue::Int(
-                IntValue::new(obj.properties.len() as i64),
-            )),
-            "hasOwnProperty" => {
-                if _args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "hasOwnProperty requires 1 argument (key)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &_args[0] {
-                    RuntimeValue::Str(s) => {
-                        let has_prop = obj.properties.contains_key(&s.value);
-                        Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(has_prop)))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "hasOwnProperty requires string argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+            "size" | "length" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Int(
+                    IntValue::new(obj.properties.len() as i64),
+                ))
             }
-            "toString" | "toStr" => Ok(RuntimeValue::Str(StrValue::new(obj.to_string()))),
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on object", method),
-                position,
-                file,
-            )),
+            "hasOwnProperty" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let key = extract_str(&args[0], "key", position, file)?;
+                let has_prop = obj.properties.contains_key(key);
+                Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(has_prop)))
+            }
+            "toString" | "toStr" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(obj.to_string())))
+            }
+            _ => Err(method_not_found_error("object", method, position, file)),
         }
     }
 
@@ -108,28 +119,16 @@ impl TypeHandler for ObjectType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Static method '{}' not found on object type", method),
-            position,
-            file,
+        Err(static_method_not_found_error(
+            "object", method, position, file,
         ))
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(
-            method,
-            "keys"
-                | "values"
-                | "entries"
-                | "size"
-                | "length"
-                | "hasOwnProperty"
-                | "toString"
-                | "toStr"
-        )
+        Self::metadata().has_instance_method(method)
     }
 
-    fn has_static_method(&self, _method: &str) -> bool {
-        false
+    fn has_static_method(&self, method: &str) -> bool {
+        Self::metadata().has_static_method(method)
     }
 }

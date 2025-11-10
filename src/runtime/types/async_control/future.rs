@@ -1,4 +1,7 @@
+/// FutureType - Asynchronous computation result with metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::{CallbackExecutor, TypeHandler};
 use crate::runtime::{BoolValue, FutureState, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -10,6 +13,26 @@ use async_trait::async_trait;
 
 pub struct FutureType;
 
+impl FutureType {
+    /// Returns complete type metadata with all methods
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("future", "Future type for asynchronous computations")
+            .with_instance_methods(vec![
+                MethodMetadata::new("isPending", "bool", "Check if future is pending"),
+                MethodMetadata::new("isResolved", "bool", "Check if future is resolved"),
+                MethodMetadata::new("isRejected", "bool", "Check if future is rejected"),
+                MethodMetadata::new("toString", "str", "Convert to string representation")
+                    .with_alias("toStr"),
+                MethodMetadata::new("then", "future", "Chain callback on resolution")
+                    .with_params(vec![ParamMetadata::new("callback", "function")])
+                    .async_method(),
+                MethodMetadata::new("catch", "any", "Handle rejection with callback")
+                    .with_params(vec![ParamMetadata::new("callback", "function")])
+                    .async_method(),
+            ])
+    }
+}
+
 #[async_trait]
 impl TypeHandler for FutureType {
     fn type_name(&self) -> &str {
@@ -20,7 +43,7 @@ impl TypeHandler for FutureType {
         &self,
         value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
@@ -37,21 +60,25 @@ impl TypeHandler for FutureType {
 
         match method {
             "isPending" => {
+                require_args(&args, 0, method, position, file)?;
                 let state = future.state.read().unwrap();
                 let is_pending = matches!(*state, FutureState::Pending);
                 Ok(RuntimeValue::Bool(BoolValue::new(is_pending)))
             }
             "isResolved" => {
+                require_args(&args, 0, method, position, file)?;
                 let state = future.state.read().unwrap();
                 let is_resolved = matches!(*state, FutureState::Resolved(_));
                 Ok(RuntimeValue::Bool(BoolValue::new(is_resolved)))
             }
             "isRejected" => {
+                require_args(&args, 0, method, position, file)?;
                 let state = future.state.read().unwrap();
                 let is_rejected = matches!(*state, FutureState::Rejected(_));
                 Ok(RuntimeValue::Bool(BoolValue::new(is_rejected)))
             }
             "toString" | "toStr" => {
+                require_args(&args, 0, method, position, file)?;
                 let state = future.state.read().unwrap();
                 let status = match *state {
                     FutureState::Pending => "Pending",
@@ -63,11 +90,7 @@ impl TypeHandler for FutureType {
                     status
                 ))))
             }
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on future", method),
-                position,
-                file,
-            )),
+            _ => Err(method_not_found_error("future", method, position, file)),
         }
     }
 
@@ -78,33 +101,21 @@ impl TypeHandler for FutureType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Static method '{}' not found on future type", method),
-            position,
-            file,
+        Err(static_method_not_found_error(
+            "future", method, position, file,
         ))
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(
-            method,
-            "isPending"
-                | "isResolved"
-                | "isRejected"
-                | "toString"
-                | "toStr"
-                | "then"
-                | "catch"
-                | "finally"
-        )
+        Self::metadata().has_instance_method(method)
     }
 
-    fn has_static_method(&self, _method: &str) -> bool {
-        false
+    fn has_static_method(&self, method: &str) -> bool {
+        Self::metadata().has_static_method(method)
     }
 
     fn has_async_instance_method(&self, method: &str) -> bool {
-        matches!(method, "then" | "catch" | "finally")
+        Self::metadata().has_async_instance_method(method)
     }
 
     async fn call_async_instance_method(
@@ -129,14 +140,7 @@ impl TypeHandler for FutureType {
 
         match method {
             "then" => {
-                if args.is_empty() {
-                    return Err(RaccoonError::new(
-                        "then requires a callback function".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-
+                require_args(&args, 1, method, position, file.clone())?;
                 let callback = args[0].clone();
 
                 // Wait for the future to resolve
@@ -168,14 +172,7 @@ impl TypeHandler for FutureType {
                 }
             }
             "catch" => {
-                if args.is_empty() {
-                    return Err(RaccoonError::new(
-                        "catch requires a callback function".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-
+                require_args(&args, 1, method, position, file.clone())?;
                 let callback = args[0].clone();
 
                 // Wait for the future to complete
