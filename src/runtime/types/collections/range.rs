@@ -85,7 +85,11 @@ impl TypeHandler for RangeType {
                         }
                     }
                 } else {
-                    if start < end { 1 } else { -1 }
+                    if start < end {
+                        1
+                    } else {
+                        -1
+                    }
                 };
 
                 if step == 0 {
@@ -112,7 +116,10 @@ impl TypeHandler for RangeType {
                     }
                 }
 
-                Ok(RuntimeValue::List(ListValue::new(elements, PrimitiveType::int())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    elements,
+                    PrimitiveType::int(),
+                )))
             }
             _ => Err(RaccoonError::new(
                 format!("Static method '{}' not found on range type", method),

@@ -40,7 +40,10 @@ pub fn check_if_stmt(analyzer: &mut SemanticAnalyzer, stmt: &IfStmt) -> Result<T
     Ok(PrimitiveType::void())
 }
 
-pub fn check_while_stmt(analyzer: &mut SemanticAnalyzer, stmt: &WhileStmt) -> Result<Type, RaccoonError> {
+pub fn check_while_stmt(
+    analyzer: &mut SemanticAnalyzer,
+    stmt: &WhileStmt,
+) -> Result<Type, RaccoonError> {
     let cond_type = analyzer.check_expr(&stmt.condition)?;
 
     if !matches!(cond_type.kind(), TypeKind::Bool) {
@@ -61,7 +64,10 @@ pub fn check_while_stmt(analyzer: &mut SemanticAnalyzer, stmt: &WhileStmt) -> Re
     Ok(PrimitiveType::void())
 }
 
-pub fn check_do_while_stmt(analyzer: &mut SemanticAnalyzer, stmt: &DoWhileStmt) -> Result<Type, RaccoonError> {
+pub fn check_do_while_stmt(
+    analyzer: &mut SemanticAnalyzer,
+    stmt: &DoWhileStmt,
+) -> Result<Type, RaccoonError> {
     let prev_in_loop = analyzer.in_loop;
     analyzer.in_loop = true;
 
@@ -82,7 +88,10 @@ pub fn check_do_while_stmt(analyzer: &mut SemanticAnalyzer, stmt: &DoWhileStmt) 
     Ok(PrimitiveType::void())
 }
 
-pub fn check_for_stmt(analyzer: &mut SemanticAnalyzer, stmt: &ForStmt) -> Result<Type, RaccoonError> {
+pub fn check_for_stmt(
+    analyzer: &mut SemanticAnalyzer,
+    stmt: &ForStmt,
+) -> Result<Type, RaccoonError> {
     analyzer.symbol_table.enter_scope();
 
     if let Some(ref initializer) = stmt.initializer {
@@ -115,7 +124,10 @@ pub fn check_for_stmt(analyzer: &mut SemanticAnalyzer, stmt: &ForStmt) -> Result
     Ok(PrimitiveType::void())
 }
 
-pub fn check_for_in_stmt(analyzer: &mut SemanticAnalyzer, stmt: &ForInStmt) -> Result<Type, RaccoonError> {
+pub fn check_for_in_stmt(
+    analyzer: &mut SemanticAnalyzer,
+    stmt: &ForInStmt,
+) -> Result<Type, RaccoonError> {
     let iterable_type = analyzer.check_expr(&stmt.iterable)?;
 
     let element_type = if let Type::List(ref list_type) = iterable_type {
@@ -151,7 +163,10 @@ pub fn check_for_in_stmt(analyzer: &mut SemanticAnalyzer, stmt: &ForInStmt) -> R
     Ok(PrimitiveType::void())
 }
 
-pub fn check_for_of_stmt(analyzer: &mut SemanticAnalyzer, stmt: &ForOfStmt) -> Result<Type, RaccoonError> {
+pub fn check_for_of_stmt(
+    analyzer: &mut SemanticAnalyzer,
+    stmt: &ForOfStmt,
+) -> Result<Type, RaccoonError> {
     let iterable_type = analyzer.check_expr(&stmt.iterable)?;
 
     let element_type = if let Type::List(ref list_type) = iterable_type {
@@ -187,7 +202,10 @@ pub fn check_for_of_stmt(analyzer: &mut SemanticAnalyzer, stmt: &ForOfStmt) -> R
     Ok(PrimitiveType::void())
 }
 
-pub fn check_switch_stmt(analyzer: &mut SemanticAnalyzer, stmt: &SwitchStmt) -> Result<Type, RaccoonError> {
+pub fn check_switch_stmt(
+    analyzer: &mut SemanticAnalyzer,
+    stmt: &SwitchStmt,
+) -> Result<Type, RaccoonError> {
     let discriminant_type = analyzer.check_expr(&stmt.discriminant)?;
 
     for case in &stmt.cases {

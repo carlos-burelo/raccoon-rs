@@ -1,17 +1,17 @@
 use std::collections::HashMap;
 
 use crate::{
-    Position, RaccoonError, Token, TokenType,
     ast::{nodes::*, types::*},
     tokens::{AccessModifier, BinaryOperator, UnaryOperator},
+    Position, RaccoonError, Token, TokenType,
 };
 
-pub mod state;
-pub mod utilities;
 pub mod declarations;
-pub mod statements;
 pub mod expressions;
+pub mod state;
+pub mod statements;
 pub mod types;
+pub mod utilities;
 
 pub struct Parser {
     tokens: Vec<Token>,
@@ -1581,7 +1581,10 @@ impl Parser {
                     consequent.push(self.statement()?);
                 }
 
-                cases.push(SwitchCase { test: None, consequent });
+                cases.push(SwitchCase {
+                    test: None,
+                    consequent,
+                });
             } else {
                 return Err(RaccoonError::new(
                     "Expected 'case' or 'default' in switch statement".to_string(),
@@ -2665,7 +2668,10 @@ impl Parser {
     }
 
     /// Try to parse single-parameter arrow function without parentheses: x => expr
-    fn try_parse_single_param_arrow(&mut self, is_async: bool) -> Result<ArrowFnExpr, RaccoonError> {
+    fn try_parse_single_param_arrow(
+        &mut self,
+        is_async: bool,
+    ) -> Result<ArrowFnExpr, RaccoonError> {
         let position = self.peek().position;
 
         // Parse the single parameter (must be an identifier)
@@ -3019,7 +3025,8 @@ impl Parser {
         let mut type_params = Vec::new();
         if self.match_token(&[TokenType::Lt]) {
             loop {
-                let name = self.consume(TokenType::Identifier, "Expected type parameter name")?
+                let name = self
+                    .consume(TokenType::Identifier, "Expected type parameter name")?
                     .value
                     .clone();
                 type_params.push(crate::ast::types::TypeParameter {
@@ -3099,7 +3106,9 @@ impl Parser {
                     ));
                 }
                 constructor = Some(self.parse_constructor()?);
-            } else if !is_static && !is_async && self.check(&TokenType::Get)
+            } else if !is_static
+                && !is_async
+                && self.check(&TokenType::Get)
                 && self.check_next(&[TokenType::Identifier])
                 && self.check_next_next(&[TokenType::LeftParen])
             {
@@ -3108,7 +3117,9 @@ impl Parser {
                     member_decorators,
                     access_modifier,
                 )?);
-            } else if !is_static && !is_async && self.check(&TokenType::Set)
+            } else if !is_static
+                && !is_async
+                && self.check(&TokenType::Set)
                 && self.check_next(&[TokenType::Identifier])
                 && self.check_next_next(&[TokenType::LeftParen])
             {
@@ -3180,7 +3191,10 @@ impl Parser {
             if !self.check(&TokenType::RightBrace) {
                 loop {
                     let key = self
-                        .consume(TokenType::Identifier, "Expected property name in object pattern")?
+                        .consume(
+                            TokenType::Identifier,
+                            "Expected property name in object pattern",
+                        )?
                         .value
                         .clone();
 

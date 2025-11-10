@@ -1,15 +1,15 @@
 use std::collections::HashMap;
 
+use super::declarations::Declarations;
+use super::state::ParserState;
+use super::utilities::Parser;
+use crate::tokens::AccessModifier;
 use crate::{
     ast::nodes::*,
     ast::types::Type,
     tokens::{BinaryOperator, UnaryOperator},
     RaccoonError, TokenType,
 };
-use super::state::ParserState;
-use super::utilities::Parser;
-use super::declarations::Declarations;
-use crate::tokens::AccessModifier;
 
 pub struct Expressions;
 
@@ -54,21 +54,24 @@ impl Expressions {
 
         let expr = Self::conditional(state)?;
 
-        if Parser::match_token(state, &[
-            TokenType::Assign,
-            TokenType::PlusAssign,
-            TokenType::MinusAssign,
-            TokenType::MultiplyAssign,
-            TokenType::DivideAssign,
-            TokenType::ModuloAssign,
-            TokenType::AmpersandAssign,
-            TokenType::BitwiseOrAssign,
-            TokenType::BitwiseXorAssign,
-            TokenType::LeftShiftAssign,
-            TokenType::RightShiftAssign,
-            TokenType::UnsignedRightShiftAssign,
-            TokenType::ExponentAssign,
-        ]) {
+        if Parser::match_token(
+            state,
+            &[
+                TokenType::Assign,
+                TokenType::PlusAssign,
+                TokenType::MinusAssign,
+                TokenType::MultiplyAssign,
+                TokenType::DivideAssign,
+                TokenType::ModuloAssign,
+                TokenType::AmpersandAssign,
+                TokenType::BitwiseOrAssign,
+                TokenType::BitwiseXorAssign,
+                TokenType::LeftShiftAssign,
+                TokenType::RightShiftAssign,
+                TokenType::UnsignedRightShiftAssign,
+                TokenType::ExponentAssign,
+            ],
+        ) {
             let operator = state.previous().unwrap().token_type;
             let value = Box::new(Self::assignment(state)?);
             let position = expr.position();
@@ -190,7 +193,10 @@ impl Expressions {
         let mut expr = Self::bitwise_or(state)?;
 
         loop {
-            if Parser::match_token(state, &[TokenType::Lt, TokenType::Gt, TokenType::Lte, TokenType::Gte]) {
+            if Parser::match_token(
+                state,
+                &[TokenType::Lt, TokenType::Gt, TokenType::Lte, TokenType::Gte],
+            ) {
                 let operator = match state.previous().unwrap().token_type {
                     TokenType::Lt => BinaryOperator::LessThan,
                     TokenType::Gt => BinaryOperator::GreaterThan,
@@ -286,11 +292,14 @@ impl Expressions {
     pub fn shift(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::range(state)?;
 
-        while Parser::match_token(state, &[
-            TokenType::LeftShift,
-            TokenType::RightShift,
-            TokenType::UnsignedRightShift,
-        ]) {
+        while Parser::match_token(
+            state,
+            &[
+                TokenType::LeftShift,
+                TokenType::RightShift,
+                TokenType::UnsignedRightShift,
+            ],
+        ) {
             let operator = match state.previous().unwrap().token_type {
                 TokenType::LeftShift => BinaryOperator::LeftShift,
                 TokenType::RightShift => BinaryOperator::RightShift,
@@ -354,7 +363,10 @@ impl Expressions {
     pub fn factor(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let mut expr = Self::exponent(state)?;
 
-        while Parser::match_token(state, &[TokenType::Multiply, TokenType::Divide, TokenType::Modulo]) {
+        while Parser::match_token(
+            state,
+            &[TokenType::Multiply, TokenType::Divide, TokenType::Modulo],
+        ) {
             let operator = match state.previous().unwrap().token_type {
                 TokenType::Multiply => BinaryOperator::Multiply,
                 TokenType::Divide => BinaryOperator::Divide,
@@ -400,7 +412,10 @@ impl Expressions {
             return Ok(Expr::TypeOf(TypeOfExpr { operand, position }));
         }
 
-        if Parser::match_token(state, &[TokenType::Minus, TokenType::Bang, TokenType::BitwiseNot]) {
+        if Parser::match_token(
+            state,
+            &[TokenType::Minus, TokenType::Bang, TokenType::BitwiseNot],
+        ) {
             let operator = match state.previous().unwrap().token_type {
                 TokenType::Minus => UnaryOperator::Negate,
                 TokenType::Bang => UnaryOperator::Not,
@@ -481,9 +496,13 @@ impl Expressions {
     /// New expression: new Class<Type>(args)
     pub fn new_expression(state: &mut ParserState) -> Result<Expr, RaccoonError> {
         let position = state.previous().unwrap().position;
-        let class_name = Parser::consume(state, TokenType::Identifier, "Expected class name after new")?
-            .value
-            .clone();
+        let class_name = Parser::consume(
+            state,
+            TokenType::Identifier,
+            "Expected class name after new",
+        )?
+        .value
+        .clone();
 
         let mut type_args = Vec::new();
         if Parser::match_token(state, &[TokenType::Lt]) {
@@ -562,7 +581,11 @@ impl Expressions {
                             }
                         }
                     }
-                    Parser::consume(state, TokenType::RightParen, "Expected ')' after method arguments")?;
+                    Parser::consume(
+                        state,
+                        TokenType::RightParen,
+                        "Expected ')' after method arguments",
+                    )?;
                     expr = Expr::MethodCall(MethodCallExpr {
                         object: Box::new(expr),
                         method: name,
@@ -604,7 +627,8 @@ impl Expressions {
                     let position = state.previous().unwrap().position;
                     let argument = Box::new(Self::expression(state)?);
                     args.push(Expr::Spread(SpreadExpr { argument, position }));
-                } else if state.check(&TokenType::Identifier) && Parser::check_next(state, &[TokenType::Colon])
+                } else if state.check(&TokenType::Identifier)
+                    && Parser::check_next(state, &[TokenType::Colon])
                 {
                     let name = state.advance().unwrap().value.clone();
                     state.advance();
@@ -730,7 +754,11 @@ impl Expressions {
             state.current = saved_pos;
             state.advance();
             let expr = Self::expression(state)?;
-            Parser::consume(state, TokenType::RightParen, "Expected ')' after expression")?;
+            Parser::consume(
+                state,
+                TokenType::RightParen,
+                "Expected ')' after expression",
+            )?;
             return Ok(expr);
         }
 
@@ -808,7 +836,11 @@ impl Expressions {
                         });
                         properties.push(ObjectLiteralProperty::KeyValue { key, value });
                     } else {
-                        Parser::consume(state, TokenType::Colon, "Expected ':' after property name")?;
+                        Parser::consume(
+                            state,
+                            TokenType::Colon,
+                            "Expected ':' after property name",
+                        )?;
                         let value = Self::expression(state)?;
                         properties.push(ObjectLiteralProperty::KeyValue { key, value });
                     }
@@ -855,7 +887,11 @@ impl Expressions {
             }
         }
 
-        Parser::consume(state, TokenType::TemplateStrEnd, "Expected end of template string")?;
+        Parser::consume(
+            state,
+            TokenType::TemplateStrEnd,
+            "Expected end of template string",
+        )?;
         Ok(Expr::TemplateStr(TemplateStrExpr { parts, position }))
     }
 
@@ -904,7 +940,9 @@ impl Expressions {
     }
 
     /// Parse arrow function parameters: (a, b: T, c?: T, ...rest: T)
-    pub fn arrow_function_parameters(state: &mut ParserState) -> Result<Vec<FnParam>, RaccoonError> {
+    pub fn arrow_function_parameters(
+        state: &mut ParserState,
+    ) -> Result<Vec<FnParam>, RaccoonError> {
         let mut params = Vec::new();
         let mut has_optional = false;
 
@@ -915,7 +953,11 @@ impl Expressions {
                 if state.check(&TokenType::LeftBracket) || state.check(&TokenType::LeftBrace) {
                     // TODO: Call parse_destructuring_pattern() from declarations module
                     let pattern = VarPattern::Identifier("TODO".to_string());
-                    Parser::consume(state, TokenType::Colon, "Expected ':' after destructuring pattern")?;
+                    Parser::consume(
+                        state,
+                        TokenType::Colon,
+                        "Expected ':' after destructuring pattern",
+                    )?;
                     // TODO: Call parse_type() from types module
                     let param_type = crate::ast::types::PrimitiveType::any();
 
@@ -945,9 +987,10 @@ impl Expressions {
                         is_optional,
                     });
                 } else {
-                    let name = Parser::consume(state, TokenType::Identifier, "Expected parameter name")?
-                        .value
-                        .clone();
+                    let name =
+                        Parser::consume(state, TokenType::Identifier, "Expected parameter name")?
+                            .value
+                            .clone();
 
                     let is_optional = Parser::match_token(state, &[TokenType::Question]);
 
@@ -1033,7 +1076,11 @@ impl Expressions {
         let scrutinee = Box::new(Self::conditional(state)?);
 
         // Consume opening brace
-        Parser::consume(state, TokenType::LeftBrace, "Expected '{' after match scrutinee")?;
+        Parser::consume(
+            state,
+            TokenType::LeftBrace,
+            "Expected '{' after match scrutinee",
+        )?;
 
         let mut arms = Vec::new();
 
@@ -1061,7 +1108,11 @@ impl Expressions {
             }
         }
 
-        Parser::consume(state, TokenType::RightBrace, "Expected '}' after match arms")?;
+        Parser::consume(
+            state,
+            TokenType::RightBrace,
+            "Expected '}' after match arms",
+        )?;
 
         Ok(Expr::Match(MatchExpr {
             scrutinee,
@@ -1095,7 +1146,11 @@ impl Expressions {
                 }
             }
 
-            Parser::consume(state, TokenType::RightBracket, "Expected ']' after list pattern")?;
+            Parser::consume(
+                state,
+                TokenType::RightBracket,
+                "Expected ']' after list pattern",
+            )?;
             return Ok(Pattern::List(patterns));
         }
 
@@ -1128,7 +1183,11 @@ impl Expressions {
                 }
             }
 
-            Parser::consume(state, TokenType::RightBrace, "Expected '}' after object pattern")?;
+            Parser::consume(
+                state,
+                TokenType::RightBrace,
+                "Expected '}' after object pattern",
+            )?;
             return Ok(Pattern::Object(properties));
         }
 
@@ -1261,11 +1320,19 @@ impl Expressions {
                     is_async,
                 )?);
             } else {
-                properties.push(Declarations::parse_class_property(state, member_decorators, access_modifier)?);
+                properties.push(Declarations::parse_class_property(
+                    state,
+                    member_decorators,
+                    access_modifier,
+                )?);
             }
         }
 
-        Parser::consume(state, TokenType::RightBrace, "Expected '}' after class body")?;
+        Parser::consume(
+            state,
+            TokenType::RightBrace,
+            "Expected '}' after class body",
+        )?;
 
         Ok(Expr::Class(ClassExpr {
             type_parameters,
@@ -1279,13 +1346,16 @@ impl Expressions {
     }
 
     /// Parse type parameters: <T, U, V>
-    fn parse_type_parameters(state: &mut ParserState) -> Result<Vec<crate::ast::types::TypeParameter>, RaccoonError> {
+    fn parse_type_parameters(
+        state: &mut ParserState,
+    ) -> Result<Vec<crate::ast::types::TypeParameter>, RaccoonError> {
         let mut type_params = Vec::new();
         if Parser::match_token(state, &[TokenType::Lt]) {
             loop {
-                let name = Parser::consume(state, TokenType::Identifier, "Expected type parameter name")?
-                    .value
-                    .clone();
+                let name =
+                    Parser::consume(state, TokenType::Identifier, "Expected type parameter name")?
+                        .value
+                        .clone();
 
                 // TODO: Parse constraint if present (extends Type)
                 type_params.push(crate::ast::types::TypeParameter {

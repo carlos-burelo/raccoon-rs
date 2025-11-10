@@ -4,8 +4,8 @@ use crate::runtime::{BoolValue, IntValue, ListValue, NullValue, RuntimeValue};
 use crate::tokens::Position;
 use async_recursion::async_recursion;
 
-use super::Interpreter;
 use super::helpers::Helpers;
+use super::Interpreter;
 
 pub struct Builtins;
 

@@ -1,16 +1,19 @@
 use super::{CallbackExecutor, TypeHandler};
 // New modular imports - Primitives
+use super::primitives::floats::Float64Type;
 use super::primitives::{BigIntType, BoolType, DecimalType, IntType, StrType};
-use super::primitives::{Float32Type, CharType, NullType, UnitType};
-use super::primitives::floats::Float64Type; // Import Float64Type directly
-// Collections
-use super::collections::{ListType, MapType, SetType, TupleType, RangeType, OptionalType};
+use super::primitives::{CharType, Float32Type, NullType, UnitType}; // Import Float64Type directly
+                                                                    // Collections
+use super::collections::{ListType, MapType, OptionalType, RangeType, SetType, TupleType};
 // Objects
 use super::objects::{ClassType, FunctionType, InterfaceType, ObjectType};
 // Async/Control
-use super::async_control::{FutureType, ResultType, StreamType, EitherType};
+use super::async_control::{EitherType, FutureType, ResultType, StreamType};
 // Special
-use super::special::{EnumType, VoidType, NeverType, SymbolType, UnionType, IntersectionType, NullableType, ReadonlyType};
+use super::special::{
+    EnumType, IntersectionType, NeverType, NullableType, ReadonlyType, SymbolType, UnionType,
+    VoidType,
+};
 // Type reflection
 use super::type_type::TypeType;
 use crate::error::RaccoonError;

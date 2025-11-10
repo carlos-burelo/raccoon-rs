@@ -1,5 +1,5 @@
-use crate::{RaccoonError, Token, TokenType};
 use super::state::ParserState;
+use crate::{RaccoonError, Token, TokenType};
 
 pub struct Parser;
 

@@ -154,7 +154,11 @@ impl Lexer {
 
             if char == '_' && (self.is_at_end() || !self.is_alpha_numeric(self.peek_next())) {
                 // Underscore as wildcard pattern
-                self.add_token(TokenType::Underscore, "_".to_string(), (self.line, self.column));
+                self.add_token(
+                    TokenType::Underscore,
+                    "_".to_string(),
+                    (self.line, self.column),
+                );
                 self.advance();
             } else if self.is_alpha(char) {
                 self.identifier()?;

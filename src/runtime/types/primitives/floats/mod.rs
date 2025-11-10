@@ -1,7 +1,7 @@
 // Floating point types module
+pub mod decimal;
 pub mod float32;
 pub mod float64;
-pub mod decimal;
 
 // Re-export all float types
 pub use decimal::DecimalType;

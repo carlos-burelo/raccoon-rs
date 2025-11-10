@@ -1,4 +1,4 @@
-use crate::runtime::{Registrar, RuntimeValue, FromRaccoon, ToRaccoon};
+use crate::runtime::{FromRaccoon, Registrar, RuntimeValue, ToRaccoon};
 use std::fs;
 
 pub fn register_io_module(registrar: &mut Registrar) {

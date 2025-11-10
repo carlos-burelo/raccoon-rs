@@ -1,6 +1,5 @@
 /// Comparison operations module
 /// Centralizes comparison operations: ==, !=, <, <=, >, >=
-
 use crate::error::RaccoonError;
 use crate::runtime::{BoolValue, RuntimeValue};
 use crate::tokens::Position;

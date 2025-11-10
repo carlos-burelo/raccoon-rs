@@ -6,15 +6,14 @@
 /// - src/type_system/checker.rs
 /// - src/ast/types.rs
 /// - src/runtime/native.rs
-
 pub mod arithmetic;
 pub mod bitwise;
-pub mod comparison;
-pub mod logical;
 pub mod casting;
+pub mod comparison;
 pub mod compatibility;
-pub mod type_narrowing;
 pub mod conversion;
+pub mod logical;
+pub mod type_narrowing;
 
 use crate::error::RaccoonError;
 use crate::runtime::{CallStack, RuntimeValue};
@@ -56,9 +55,7 @@ pub async fn apply_binary_operation(
         BinaryOperator::LessThan => comparison::less_than(left, right, position, file),
         BinaryOperator::LessEqual => comparison::less_or_equal(left, right, position, file),
         BinaryOperator::GreaterThan => comparison::greater_than(left, right, position, file),
-        BinaryOperator::GreaterEqual => {
-            comparison::greater_or_equal(left, right, position, file)
-        }
+        BinaryOperator::GreaterEqual => comparison::greater_or_equal(left, right, position, file),
 
         // Logical operations
         BinaryOperator::And => logical::and(left, right, position, file),
@@ -66,12 +63,10 @@ pub async fn apply_binary_operation(
 
         // Special operations not handled here (Range, NullCoalesce)
         // These are handled in src/interpreter/operators.rs
-        BinaryOperator::Range | BinaryOperator::NullCoalesce => {
-            Err(RaccoonError::new(
-                "Range and NullCoalesce operations are handled in interpreter".to_string(),
-                position,
-                file.clone(),
-            ))
-        }
+        BinaryOperator::Range | BinaryOperator::NullCoalesce => Err(RaccoonError::new(
+            "Range and NullCoalesce operations are handled in interpreter".to_string(),
+            position,
+            file.clone(),
+        )),
     }
 }

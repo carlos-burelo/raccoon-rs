@@ -1,6 +1,5 @@
 /// Generic numeric type handler
 /// Unifies behavior for all numeric types (i8, i16, i32, i64, u8, u16, u32, u64, f32, f64)
-
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::metadata::*;
@@ -162,10 +161,12 @@ impl<T: NumericBounds> NumericHandler<T> {
                 MethodMetadata::new("toFloat", "float", "Convert to float"),
                 MethodMetadata::new("abs", T::TYPE_NAME, "Absolute value"),
             ])
-            .with_static_methods(vec![
-                MethodMetadata::new("parse", T::TYPE_NAME, "Parse from string")
-                    .with_params(vec![ParamMetadata::new("value", "str")]),
-            ])
+            .with_static_methods(vec![MethodMetadata::new(
+                "parse",
+                T::TYPE_NAME,
+                "Parse from string",
+            )
+            .with_params(vec![ParamMetadata::new("value", "str")])])
             .with_static_properties(vec![
                 PropertyMetadata::new("maxValue", T::TYPE_NAME, "Maximum value").readonly(),
                 PropertyMetadata::new("minValue", T::TYPE_NAME, "Minimum value").readonly(),
@@ -235,7 +236,12 @@ where
                     )),
                 }
             }
-            _ => Err(static_method_not_found_error(T::TYPE_NAME, method, position, file)),
+            _ => Err(static_method_not_found_error(
+                T::TYPE_NAME,
+                method,
+                position,
+                file,
+            )),
         }
     }
 
@@ -248,7 +254,12 @@ where
         match property {
             "maxValue" => Ok(RuntimeValue::Int(IntValue::new(T::MAX_VALUE.to_i64()))),
             "minValue" => Ok(RuntimeValue::Int(IntValue::new(T::MIN_VALUE.to_i64()))),
-            _ => Err(property_not_found_error(T::TYPE_NAME, property, position, file)),
+            _ => Err(property_not_found_error(
+                T::TYPE_NAME,
+                property,
+                position,
+                file,
+            )),
         }
     }
 

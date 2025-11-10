@@ -52,7 +52,11 @@ impl TypeHandler for TupleType {
                             Ok(tuple.elements[index].clone())
                         } else {
                             Err(RaccoonError::new(
-                                format!("Index {} out of bounds for tuple of length {}", index, tuple.elements.len()),
+                                format!(
+                                    "Index {} out of bounds for tuple of length {}",
+                                    index,
+                                    tuple.elements.len()
+                                ),
                                 position,
                                 file,
                             ))
@@ -65,16 +69,20 @@ impl TypeHandler for TupleType {
                     )),
                 }
             }
-            "length" | "size" => Ok(RuntimeValue::Int(IntValue::new(tuple.elements.len() as i64))),
+            "length" | "size" => Ok(RuntimeValue::Int(
+                IntValue::new(tuple.elements.len() as i64),
+            )),
             "toString" | "toStr" => {
-                let items: Vec<String> = tuple
-                    .elements
-                    .iter()
-                    .map(|e| e.to_string())
-                    .collect();
-                Ok(RuntimeValue::Str(StrValue::new(format!("({})", items.join(", ")))))
+                let items: Vec<String> = tuple.elements.iter().map(|e| e.to_string()).collect();
+                Ok(RuntimeValue::Str(StrValue::new(format!(
+                    "({})",
+                    items.join(", ")
+                ))))
             }
-            "toList" => Ok(RuntimeValue::List(ListValue::new(tuple.elements.clone(), PrimitiveType::any()))),
+            "toList" => Ok(RuntimeValue::List(ListValue::new(
+                tuple.elements.clone(),
+                PrimitiveType::any(),
+            ))),
             _ => Err(RaccoonError::new(
                 format!("Method '{}' not found on tuple", method),
                 position,
@@ -93,7 +101,10 @@ impl TypeHandler for TupleType {
         match method {
             "of" => {
                 // Creates a tuple from the provided arguments
-                Ok(RuntimeValue::List(ListValue::new(args, PrimitiveType::any())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    args,
+                    PrimitiveType::any(),
+                )))
             }
             _ => Err(RaccoonError::new(
                 format!("Static method '{}' not found on tuple type", method),

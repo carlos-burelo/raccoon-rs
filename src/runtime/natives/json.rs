@@ -1,5 +1,8 @@
-use crate::runtime::{Registrar, RuntimeValue, FromRaccoon, ToRaccoon, NullValue, BoolValue, IntValue, FloatValue, StrValue, ListValue, ObjectValue};
 use crate::ast::types::PrimitiveType;
+use crate::runtime::{
+    BoolValue, FloatValue, FromRaccoon, IntValue, ListValue, NullValue, ObjectValue, Registrar,
+    RuntimeValue, StrValue, ToRaccoon,
+};
 use serde_json::Value as JsonValue;
 
 pub fn register_json_module(registrar: &mut Registrar) {

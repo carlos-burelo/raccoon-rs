@@ -13,98 +13,101 @@ pub struct ListTypeRefactored;
 impl ListTypeRefactored {
     /// Returns complete type metadata with all methods
     pub fn metadata() -> TypeMetadata {
-        TypeMetadata::new("list", "Dynamic array type with collection manipulation methods")
-            .with_instance_methods(vec![
-                // Mutating methods
-                MethodMetadata::new("push", "null", "Add element to end of list")
-                    .with_params(vec![ParamMetadata::new("element", "any")]),
-                MethodMetadata::new("pop", "any", "Remove and return last element"),
-                MethodMetadata::new("shift", "any", "Remove and return first element"),
-                MethodMetadata::new("unshift", "int", "Add elements to start of list")
-                    .with_params(vec![ParamMetadata::new("elements", "any").variadic()]),
-                MethodMetadata::new("clear", "null", "Remove all elements"),
-                MethodMetadata::new("splice", "list", "Remove/insert elements at index")
-                    .with_params(vec![
-                        ParamMetadata::new("start", "int"),
-                        ParamMetadata::new("deleteCount", "int").optional(),
-                        ParamMetadata::new("items", "any").variadic(),
-                    ]),
-                MethodMetadata::new("fill", "null", "Fill list with value")
-                    .with_params(vec![
-                        ParamMetadata::new("value", "any"),
-                        ParamMetadata::new("start", "int").optional(),
-                        ParamMetadata::new("end", "int").optional(),
-                    ]),
-
-                // Non-mutating methods
-                MethodMetadata::new("concat", "list", "Concatenate with another list")
-                    .with_params(vec![ParamMetadata::new("other", "list")]),
-                MethodMetadata::new("reverse", "list", "Return reversed copy"),
-                MethodMetadata::new("slice", "list", "Extract slice of list")
-                    .with_params(vec![
-                        ParamMetadata::new("start", "int"),
-                        ParamMetadata::new("end", "int").optional(),
-                    ]),
-                MethodMetadata::new("flat", "list", "Flatten nested lists")
-                    .with_params(vec![ParamMetadata::new("depth", "int").optional()]),
-                MethodMetadata::new("unique", "list", "Remove duplicate elements"),
-
-                // Search methods
-                MethodMetadata::new("indexOf", "int", "Find first index of element, -1 if not found")
-                    .with_params(vec![ParamMetadata::new("element", "any")]),
-                MethodMetadata::new("lastIndexOf", "int", "Find last index of element, -1 if not found")
-                    .with_params(vec![ParamMetadata::new("element", "any")]),
-                MethodMetadata::new("includes", "bool", "Check if list contains element")
-                    .with_params(vec![ParamMetadata::new("element", "any")]),
-                MethodMetadata::new("at", "any?", "Get element at index (supports negative)")
-                    .with_params(vec![ParamMetadata::new("index", "int")]),
-
-                // Access methods
-                MethodMetadata::new("first", "any?", "Get first element"),
-                MethodMetadata::new("last", "any?", "Get last element"),
-
-                // Info methods
-                MethodMetadata::new("length", "int", "Get number of elements")
-                    .with_alias("len"),
-                MethodMetadata::new("isEmpty", "bool", "Check if list is empty"),
-
-                // Conversion
-                MethodMetadata::new("join", "str", "Join elements with separator")
-                    .with_params(vec![ParamMetadata::new("separator", "str")]),
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-
-                // Async methods (higher-order functions)
-                MethodMetadata::new("map", "list", "Map elements with callback")
-                    .with_params(vec![ParamMetadata::new("callback", "function")])
-                    .async_method(),
-                MethodMetadata::new("filter", "list", "Filter elements with callback")
-                    .with_params(vec![ParamMetadata::new("callback", "function")])
-                    .async_method(),
-                MethodMetadata::new("reduce", "any", "Reduce list to single value")
-                    .with_params(vec![
-                        ParamMetadata::new("callback", "function"),
-                        ParamMetadata::new("initialValue", "any").optional(),
-                    ])
-                    .async_method(),
-                MethodMetadata::new("forEach", "null", "Execute callback for each element")
-                    .with_params(vec![ParamMetadata::new("callback", "function")])
-                    .async_method(),
-                MethodMetadata::new("find", "any?", "Find first element matching callback")
-                    .with_params(vec![ParamMetadata::new("callback", "function")])
-                    .async_method(),
-                MethodMetadata::new("findIndex", "int", "Find first index matching callback")
-                    .with_params(vec![ParamMetadata::new("callback", "function")])
-                    .async_method(),
-                MethodMetadata::new("some", "bool", "Check if any element matches callback")
-                    .with_params(vec![ParamMetadata::new("callback", "function")])
-                    .async_method(),
-                MethodMetadata::new("every", "bool", "Check if all elements match callback")
-                    .with_params(vec![ParamMetadata::new("callback", "function")])
-                    .async_method(),
-                MethodMetadata::new("flatMap", "list", "Map and flatten results")
-                    .with_params(vec![ParamMetadata::new("callback", "function")])
-                    .async_method(),
-            ])
+        TypeMetadata::new(
+            "list",
+            "Dynamic array type with collection manipulation methods",
+        )
+        .with_instance_methods(vec![
+            // Mutating methods
+            MethodMetadata::new("push", "null", "Add element to end of list")
+                .with_params(vec![ParamMetadata::new("element", "any")]),
+            MethodMetadata::new("pop", "any", "Remove and return last element"),
+            MethodMetadata::new("shift", "any", "Remove and return first element"),
+            MethodMetadata::new("unshift", "int", "Add elements to start of list")
+                .with_params(vec![ParamMetadata::new("elements", "any").variadic()]),
+            MethodMetadata::new("clear", "null", "Remove all elements"),
+            MethodMetadata::new("splice", "list", "Remove/insert elements at index").with_params(
+                vec![
+                    ParamMetadata::new("start", "int"),
+                    ParamMetadata::new("deleteCount", "int").optional(),
+                    ParamMetadata::new("items", "any").variadic(),
+                ],
+            ),
+            MethodMetadata::new("fill", "null", "Fill list with value").with_params(vec![
+                ParamMetadata::new("value", "any"),
+                ParamMetadata::new("start", "int").optional(),
+                ParamMetadata::new("end", "int").optional(),
+            ]),
+            // Non-mutating methods
+            MethodMetadata::new("concat", "list", "Concatenate with another list")
+                .with_params(vec![ParamMetadata::new("other", "list")]),
+            MethodMetadata::new("reverse", "list", "Return reversed copy"),
+            MethodMetadata::new("slice", "list", "Extract slice of list").with_params(vec![
+                ParamMetadata::new("start", "int"),
+                ParamMetadata::new("end", "int").optional(),
+            ]),
+            MethodMetadata::new("flat", "list", "Flatten nested lists")
+                .with_params(vec![ParamMetadata::new("depth", "int").optional()]),
+            MethodMetadata::new("unique", "list", "Remove duplicate elements"),
+            // Search methods
+            MethodMetadata::new(
+                "indexOf",
+                "int",
+                "Find first index of element, -1 if not found",
+            )
+            .with_params(vec![ParamMetadata::new("element", "any")]),
+            MethodMetadata::new(
+                "lastIndexOf",
+                "int",
+                "Find last index of element, -1 if not found",
+            )
+            .with_params(vec![ParamMetadata::new("element", "any")]),
+            MethodMetadata::new("includes", "bool", "Check if list contains element")
+                .with_params(vec![ParamMetadata::new("element", "any")]),
+            MethodMetadata::new("at", "any?", "Get element at index (supports negative)")
+                .with_params(vec![ParamMetadata::new("index", "int")]),
+            // Access methods
+            MethodMetadata::new("first", "any?", "Get first element"),
+            MethodMetadata::new("last", "any?", "Get last element"),
+            // Info methods
+            MethodMetadata::new("length", "int", "Get number of elements").with_alias("len"),
+            MethodMetadata::new("isEmpty", "bool", "Check if list is empty"),
+            // Conversion
+            MethodMetadata::new("join", "str", "Join elements with separator")
+                .with_params(vec![ParamMetadata::new("separator", "str")]),
+            MethodMetadata::new("toStr", "str", "Convert to string"),
+            // Async methods (higher-order functions)
+            MethodMetadata::new("map", "list", "Map elements with callback")
+                .with_params(vec![ParamMetadata::new("callback", "function")])
+                .async_method(),
+            MethodMetadata::new("filter", "list", "Filter elements with callback")
+                .with_params(vec![ParamMetadata::new("callback", "function")])
+                .async_method(),
+            MethodMetadata::new("reduce", "any", "Reduce list to single value")
+                .with_params(vec![
+                    ParamMetadata::new("callback", "function"),
+                    ParamMetadata::new("initialValue", "any").optional(),
+                ])
+                .async_method(),
+            MethodMetadata::new("forEach", "null", "Execute callback for each element")
+                .with_params(vec![ParamMetadata::new("callback", "function")])
+                .async_method(),
+            MethodMetadata::new("find", "any?", "Find first element matching callback")
+                .with_params(vec![ParamMetadata::new("callback", "function")])
+                .async_method(),
+            MethodMetadata::new("findIndex", "int", "Find first index matching callback")
+                .with_params(vec![ParamMetadata::new("callback", "function")])
+                .async_method(),
+            MethodMetadata::new("some", "bool", "Check if any element matches callback")
+                .with_params(vec![ParamMetadata::new("callback", "function")])
+                .async_method(),
+            MethodMetadata::new("every", "bool", "Check if all elements match callback")
+                .with_params(vec![ParamMetadata::new("callback", "function")])
+                .async_method(),
+            MethodMetadata::new("flatMap", "list", "Map and flatten results")
+                .with_params(vec![ParamMetadata::new("callback", "function")])
+                .async_method(),
+        ])
     }
 
     /// Helper to extract list from RuntimeValue
@@ -200,7 +203,10 @@ impl TypeHandler for ListTypeRefactored {
                     list.elements.insert(actual_start + i, arg.clone());
                 }
 
-                Ok(RuntimeValue::List(ListValue::new(removed, list.element_type.clone())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    removed,
+                    list.element_type.clone(),
+                )))
             }
             "fill" => {
                 require_min_args(&args, 1, method, position, file.clone())?;
@@ -229,13 +235,19 @@ impl TypeHandler for ListTypeRefactored {
                 let other = extract_list(&args[0], "other", position, file)?;
                 let mut combined = list.elements.clone();
                 combined.extend(other.elements.clone());
-                Ok(RuntimeValue::List(ListValue::new(combined, list.element_type.clone())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    combined,
+                    list.element_type.clone(),
+                )))
             }
             "reverse" => {
                 require_args(&args, 0, method, position, file)?;
                 let mut reversed = list.elements.clone();
                 reversed.reverse();
-                Ok(RuntimeValue::List(ListValue::new(reversed, list.element_type.clone())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    reversed,
+                    list.element_type.clone(),
+                )))
             }
             "slice" => {
                 require_args_range(&args, 1, 2, method, position, file.clone())?;
@@ -269,7 +281,10 @@ impl TypeHandler for ListTypeRefactored {
                         list.element_type.clone(),
                     )))
                 } else {
-                    Ok(RuntimeValue::List(ListValue::new(vec![], list.element_type.clone())))
+                    Ok(RuntimeValue::List(ListValue::new(
+                        vec![],
+                        list.element_type.clone(),
+                    )))
                 }
             }
             "flat" => {
@@ -297,7 +312,10 @@ impl TypeHandler for ListTypeRefactored {
                 }
 
                 let flattened = flatten_recursive(&list.elements, depth);
-                Ok(RuntimeValue::List(ListValue::new(flattened, PrimitiveType::any())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    flattened,
+                    PrimitiveType::any(),
+                )))
             }
             "unique" => {
                 require_args(&args, 0, method, position, file)?;
@@ -314,7 +332,10 @@ impl TypeHandler for ListTypeRefactored {
                         unique_elements.push(elem.clone());
                     }
                 }
-                Ok(RuntimeValue::List(ListValue::new(unique_elements, list.element_type.clone())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    unique_elements,
+                    list.element_type.clone(),
+                )))
             }
 
             // Search methods
@@ -361,11 +382,19 @@ impl TypeHandler for ListTypeRefactored {
             // Access methods
             "first" => {
                 require_args(&args, 0, method, position, file)?;
-                Ok(list.elements.first().cloned().unwrap_or(RuntimeValue::Null(NullValue::new())))
+                Ok(list
+                    .elements
+                    .first()
+                    .cloned()
+                    .unwrap_or(RuntimeValue::Null(NullValue::new())))
             }
             "last" => {
                 require_args(&args, 0, method, position, file)?;
-                Ok(list.elements.last().cloned().unwrap_or(RuntimeValue::Null(NullValue::new())))
+                Ok(list
+                    .elements
+                    .last()
+                    .cloned()
+                    .unwrap_or(RuntimeValue::Null(NullValue::new())))
             }
 
             // Info methods
@@ -401,7 +430,9 @@ impl TypeHandler for ListTypeRefactored {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(static_method_not_found_error("list", method, position, file))
+        Err(static_method_not_found_error(
+            "list", method, position, file,
+        ))
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
@@ -436,7 +467,10 @@ impl TypeHandler for ListTypeRefactored {
                 for (index, element) in list.elements.iter().enumerate() {
                     let result = callback_executor(
                         callback.clone(),
-                        vec![element.clone(), RuntimeValue::Int(IntValue::new(index as i64))],
+                        vec![
+                            element.clone(),
+                            RuntimeValue::Int(IntValue::new(index as i64)),
+                        ],
                         position,
                     )
                     .await?;
@@ -460,7 +494,10 @@ impl TypeHandler for ListTypeRefactored {
                 for (index, element) in list.elements.iter().enumerate() {
                     let result = callback_executor(
                         callback.clone(),
-                        vec![element.clone(), RuntimeValue::Int(IntValue::new(index as i64))],
+                        vec![
+                            element.clone(),
+                            RuntimeValue::Int(IntValue::new(index as i64)),
+                        ],
                         position,
                     )
                     .await?;
@@ -470,7 +507,10 @@ impl TypeHandler for ListTypeRefactored {
                     }
                 }
 
-                Ok(RuntimeValue::List(ListValue::new(filtered, list.element_type.clone())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    filtered,
+                    list.element_type.clone(),
+                )))
             }
 
             "reduce" => {
@@ -514,7 +554,10 @@ impl TypeHandler for ListTypeRefactored {
                 for (index, element) in list.elements.iter().enumerate() {
                     callback_executor(
                         callback.clone(),
-                        vec![element.clone(), RuntimeValue::Int(IntValue::new(index as i64))],
+                        vec![
+                            element.clone(),
+                            RuntimeValue::Int(IntValue::new(index as i64)),
+                        ],
                         position,
                     )
                     .await?;
@@ -528,7 +571,10 @@ impl TypeHandler for ListTypeRefactored {
                 for (index, element) in list.elements.iter().enumerate() {
                     let result = callback_executor(
                         callback.clone(),
-                        vec![element.clone(), RuntimeValue::Int(IntValue::new(index as i64))],
+                        vec![
+                            element.clone(),
+                            RuntimeValue::Int(IntValue::new(index as i64)),
+                        ],
                         position,
                     )
                     .await?;
@@ -546,7 +592,10 @@ impl TypeHandler for ListTypeRefactored {
                 for (index, element) in list.elements.iter().enumerate() {
                     let result = callback_executor(
                         callback.clone(),
-                        vec![element.clone(), RuntimeValue::Int(IntValue::new(index as i64))],
+                        vec![
+                            element.clone(),
+                            RuntimeValue::Int(IntValue::new(index as i64)),
+                        ],
                         position,
                     )
                     .await?;
@@ -564,7 +613,10 @@ impl TypeHandler for ListTypeRefactored {
                 for (index, element) in list.elements.iter().enumerate() {
                     let result = callback_executor(
                         callback.clone(),
-                        vec![element.clone(), RuntimeValue::Int(IntValue::new(index as i64))],
+                        vec![
+                            element.clone(),
+                            RuntimeValue::Int(IntValue::new(index as i64)),
+                        ],
                         position,
                     )
                     .await?;
@@ -582,7 +634,10 @@ impl TypeHandler for ListTypeRefactored {
                 for (index, element) in list.elements.iter().enumerate() {
                     let result = callback_executor(
                         callback.clone(),
-                        vec![element.clone(), RuntimeValue::Int(IntValue::new(index as i64))],
+                        vec![
+                            element.clone(),
+                            RuntimeValue::Int(IntValue::new(index as i64)),
+                        ],
                         position,
                     )
                     .await?;
@@ -602,7 +657,10 @@ impl TypeHandler for ListTypeRefactored {
                 for (index, element) in list.elements.iter().enumerate() {
                     let result = callback_executor(
                         callback.clone(),
-                        vec![element.clone(), RuntimeValue::Int(IntValue::new(index as i64))],
+                        vec![
+                            element.clone(),
+                            RuntimeValue::Int(IntValue::new(index as i64)),
+                        ],
                         position,
                     )
                     .await?;
@@ -616,7 +674,10 @@ impl TypeHandler for ListTypeRefactored {
                     }
                 }
 
-                Ok(RuntimeValue::List(ListValue::new(result_elements, PrimitiveType::any())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    result_elements,
+                    PrimitiveType::any(),
+                )))
             }
 
             _ => self.call_instance_method(value, method, args, position, file),

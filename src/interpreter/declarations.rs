@@ -2,9 +2,7 @@ use crate::ast::nodes::*;
 use crate::ast::types::{PrimitiveType, Type};
 use crate::error::RaccoonError;
 use crate::runtime::{
-    DecoratorTarget, FunctionValue,
-    NullValue, RuntimeValue,
-    TypeKind, TypeObjectBuilder,
+    DecoratorTarget, FunctionValue, NullValue, RuntimeValue, TypeKind, TypeObjectBuilder,
 };
 use async_recursion::async_recursion;
 use std::collections::HashMap;
@@ -28,7 +26,9 @@ impl Declarations {
 
         match &decl.pattern {
             VarPattern::Identifier(name) => {
-                interpreter.environment.declare(name.clone(), value.clone())?;
+                interpreter
+                    .environment
+                    .declare(name.clone(), value.clone())?;
             }
             VarPattern::Destructuring(pattern) => {
                 super::helpers::Helpers::destructure_pattern(
@@ -86,7 +86,9 @@ impl Declarations {
             .with_decorators(decl.decorators.clone()),
         );
 
-        interpreter.environment.declare(decl.name.clone(), function)?;
+        interpreter
+            .environment
+            .declare(decl.name.clone(), function)?;
 
         for decorator_info in &decorators {
             match decorator_info.spec.name.as_str() {
@@ -169,7 +171,7 @@ impl Declarations {
                         method.body.clone(),
                         method.is_async,
                         fn_type,
-                    ))
+                    )),
                 );
 
                 // For TypeObject (new)
@@ -204,13 +206,15 @@ impl Declarations {
         )
         .static_methods(type_static_methods)
         .static_properties(type_static_properties)
-        .constructor(class_value.clone())  // The class value acts as constructor
+        .constructor(class_value.clone()) // The class value acts as constructor
         .documentation(extract_doc_from_decorators(&decl.decorators))
         .decorators(decl.decorators.iter().map(|d| d.name.clone()).collect())
         .build();
 
         // Declare the TypeObject in the environment
-        interpreter.environment.declare(decl.name.clone(), RuntimeValue::Type(type_object))?;
+        interpreter
+            .environment
+            .declare(decl.name.clone(), RuntimeValue::Type(type_object))?;
 
         Ok(RuntimeValue::Null(NullValue::new()))
     }
@@ -257,7 +261,9 @@ impl Declarations {
         for (member_name, member_data) in &members {
             let member_value = match member_data {
                 EnumValueData::Int(i) => RuntimeValue::Int(crate::runtime::IntValue::new(*i)),
-                EnumValueData::Str(s) => RuntimeValue::Str(crate::runtime::StrValue::new(s.clone())),
+                EnumValueData::Str(s) => {
+                    RuntimeValue::Str(crate::runtime::StrValue::new(s.clone()))
+                }
             };
             static_properties.insert(member_name.clone(), member_value);
         }
@@ -271,12 +277,14 @@ impl Declarations {
             },
         )
         .static_properties(static_properties)
-        .constructor(RuntimeValue::EnumObject(enum_obj))  // EnumObject acts as constructor/namespace
+        .constructor(RuntimeValue::EnumObject(enum_obj)) // EnumObject acts as constructor/namespace
         .documentation(format!("Enum {}", decl.name))
         .build();
 
         // Declare the TypeObject in the environment
-        interpreter.environment.declare(decl.name.clone(), RuntimeValue::Type(type_object))?;
+        interpreter
+            .environment
+            .declare(decl.name.clone(), RuntimeValue::Type(type_object))?;
 
         Ok(InterpreterResult::Value(RuntimeValue::Null(
             NullValue::new(),

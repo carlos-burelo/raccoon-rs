@@ -1,9 +1,6 @@
-use crate::{
-    ast::nodes::*,
-    RaccoonError, TokenType,
-};
 use super::state::ParserState;
 use super::utilities::Parser;
+use crate::{ast::nodes::*, RaccoonError, TokenType};
 
 pub struct Statements;
 
@@ -71,9 +68,10 @@ impl Statements {
         while Parser::match_token(state, &[TokenType::Catch]) {
             let catch_pos = state.previous().unwrap().position;
             Parser::consume(state, TokenType::LeftParen, "Expected '(' after 'catch'")?;
-            let error_var = Parser::consume(state, TokenType::Identifier, "Expected error variable name")?
-                .value
-                .clone();
+            let error_var =
+                Parser::consume(state, TokenType::Identifier, "Expected error variable name")?
+                    .value
+                    .clone();
 
             let mut error_type = None;
             if Parser::match_token(state, &[TokenType::Colon]) {
@@ -81,8 +79,16 @@ impl Statements {
                 error_type = None;
             }
 
-            Parser::consume(state, TokenType::RightParen, "Expected ')' after catch parameter")?;
-            Parser::consume(state, TokenType::LeftBrace, "Expected '{' after catch clause")?;
+            Parser::consume(
+                state,
+                TokenType::RightParen,
+                "Expected ')' after catch parameter",
+            )?;
+            Parser::consume(
+                state,
+                TokenType::LeftBrace,
+                "Expected '{' after catch clause",
+            )?;
             let body = Block {
                 statements: Self::block_statements(state)?,
                 position: catch_pos,
@@ -248,7 +254,11 @@ impl Statements {
                 }));
             }
 
-            Parser::consume(state, TokenType::Assign, "Expected '=' in variable declaration")?;
+            Parser::consume(
+                state,
+                TokenType::Assign,
+                "Expected '=' in variable declaration",
+            )?;
             // TODO: Call expression() from expressions module
             let init_value = Expr::Identifier(Identifier {
                 name: "TODO".to_string(),
@@ -277,7 +287,11 @@ impl Statements {
                 // TODO: Call expression() from expressions module
                 increment = None;
             }
-            Parser::consume(state, TokenType::RightParen, "Expected ')' after for clauses")?;
+            Parser::consume(
+                state,
+                TokenType::RightParen,
+                "Expected ')' after for clauses",
+            )?;
             let body = Box::new(Self::statement(state)?);
 
             return Ok(Stmt::ForStmt(ForStmt {
@@ -306,7 +320,11 @@ impl Statements {
             // TODO: Call expression() from expressions module
             increment = None;
         }
-        Parser::consume(state, TokenType::RightParen, "Expected ')' after for clauses")?;
+        Parser::consume(
+            state,
+            TokenType::RightParen,
+            "Expected ')' after for clauses",
+        )?;
         let body = Box::new(Self::statement(state)?);
 
         Ok(Stmt::ForStmt(ForStmt {
@@ -322,7 +340,11 @@ impl Statements {
     pub fn do_while_statement(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let position = state.previous().unwrap().position;
         let body = Box::new(Self::statement(state)?);
-        Parser::consume(state, TokenType::While, "Expected 'while' after do-while body")?;
+        Parser::consume(
+            state,
+            TokenType::While,
+            "Expected 'while' after do-while body",
+        )?;
         Parser::consume(state, TokenType::LeftParen, "Expected '(' after 'while'")?;
         // TODO: Call expression() from expressions module
         let condition = Expr::Identifier(Identifier {
@@ -348,8 +370,16 @@ impl Statements {
             name: "TODO".to_string(),
             position,
         });
-        Parser::consume(state, TokenType::RightParen, "Expected ')' after discriminant")?;
-        Parser::consume(state, TokenType::LeftBrace, "Expected '{' to start switch body")?;
+        Parser::consume(
+            state,
+            TokenType::RightParen,
+            "Expected ')' after discriminant",
+        )?;
+        Parser::consume(
+            state,
+            TokenType::LeftBrace,
+            "Expected '{' to start switch body",
+        )?;
 
         let mut cases = Vec::new();
 
@@ -384,7 +414,10 @@ impl Statements {
                     consequent.push(Self::statement(state)?);
                 }
 
-                cases.push(SwitchCase { test: None, consequent });
+                cases.push(SwitchCase {
+                    test: None,
+                    consequent,
+                });
             } else {
                 return Err(RaccoonError::new(
                     "Expected 'case' or 'default' in switch statement".to_string(),
@@ -394,7 +427,11 @@ impl Statements {
             }
         }
 
-        Parser::consume(state, TokenType::RightBrace, "Expected '}' after switch body")?;
+        Parser::consume(
+            state,
+            TokenType::RightBrace,
+            "Expected '}' after switch body",
+        )?;
 
         Ok(Stmt::SwitchStmt(SwitchStmt {
             discriminant,

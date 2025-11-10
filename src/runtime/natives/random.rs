@@ -1,4 +1,4 @@
-use crate::runtime::{Registrar, FromRaccoon, ToRaccoon};
+use crate::runtime::{FromRaccoon, Registrar, ToRaccoon};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub fn register_random_module(registrar: &mut Registrar) {

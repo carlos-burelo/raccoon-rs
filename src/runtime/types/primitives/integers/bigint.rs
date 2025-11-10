@@ -1,4 +1,7 @@
+/// Refactored BigIntType using helpers and metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BigIntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -9,6 +12,35 @@ use async_trait::async_trait;
 // ============================================================================
 
 pub struct BigIntType;
+
+impl BigIntType {
+    /// Returns complete type metadata with all methods and properties
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("bigint", "Arbitrary precision integer type (128-bit)")
+            .with_instance_methods(vec![
+                // Conversion methods
+                MethodMetadata::new("toStr", "str", "Convert to string with 'n' suffix"),
+                MethodMetadata::new("toString", "str", "Convert to string without suffix"),
+                // Arithmetic methods
+                MethodMetadata::new("add", "bigint", "Add another bigint")
+                    .with_params(vec![ParamMetadata::new("other", "bigint")]),
+                MethodMetadata::new("subtract", "bigint", "Subtract another bigint")
+                    .with_params(vec![ParamMetadata::new("other", "bigint")]),
+                MethodMetadata::new("multiply", "bigint", "Multiply by another bigint")
+                    .with_params(vec![ParamMetadata::new("other", "bigint")]),
+                MethodMetadata::new("divide", "bigint", "Divide by another bigint")
+                    .with_params(vec![ParamMetadata::new("other", "bigint")]),
+                // Mathematical methods
+                MethodMetadata::new("abs", "bigint", "Absolute value"),
+            ])
+            .with_static_methods(vec![MethodMetadata::new(
+                "parse",
+                "bigint",
+                "Parse string to bigint",
+            )
+            .with_params(vec![ParamMetadata::new("value", "str")])])
+    }
+}
 
 #[async_trait]
 impl TypeHandler for BigIntType {
@@ -24,109 +56,55 @@ impl TypeHandler for BigIntType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let bigint = match value {
-            RuntimeValue::BigInt(b) => &b.value,
-            _ => {
-                return Err(RaccoonError::new(
-                    format!("Expected bigint, got {}", value.get_name()),
-                    position,
-                    file,
-                ));
-            }
-        };
+        let bigint = extract_bigint(value, "this", position, file.clone())?;
 
         match method {
-            "toStr" => Ok(RuntimeValue::Str(StrValue::new(format!("{}n", bigint)))),
-            "toString" => Ok(RuntimeValue::Str(StrValue::new(format!("{}", bigint)))),
+            // Conversion methods
+            "toStr" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(format!("{}n", bigint))))
+            }
+            "toString" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(format!("{}", bigint))))
+            }
+
+            // Arithmetic methods
             "add" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "add requires 1 argument (bigint)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::BigInt(other) => {
-                        Ok(RuntimeValue::BigInt(BigIntValue::new(bigint + other.value)))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "add requires bigint argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_bigint(&args[0], "other", position, file)?;
+                Ok(RuntimeValue::BigInt(BigIntValue::new(bigint + other)))
             }
             "subtract" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "subtract requires 1 argument (bigint)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::BigInt(other) => {
-                        Ok(RuntimeValue::BigInt(BigIntValue::new(bigint - other.value)))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "subtract requires bigint argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_bigint(&args[0], "other", position, file)?;
+                Ok(RuntimeValue::BigInt(BigIntValue::new(bigint - other)))
             }
             "multiply" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "multiply requires 1 argument (bigint)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::BigInt(other) => {
-                        Ok(RuntimeValue::BigInt(BigIntValue::new(bigint * other.value)))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "multiply requires bigint argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_bigint(&args[0], "other", position, file)?;
+                Ok(RuntimeValue::BigInt(BigIntValue::new(bigint * other)))
             }
             "divide" => {
-                if args.len() != 1 {
+                require_args(&args, 1, method, position, file.clone())?;
+                let other = extract_bigint(&args[0], "other", position, file.clone())?;
+                if other == 0 {
                     return Err(RaccoonError::new(
-                        "divide requires 1 argument (bigint)".to_string(),
+                        "Division by zero".to_string(),
                         position,
                         file,
                     ));
                 }
-                match &args[0] {
-                    RuntimeValue::BigInt(other) => {
-                        if other.value == 0 {
-                            return Err(RaccoonError::new(
-                                "Division by zero".to_string(),
-                                position,
-                                file,
-                            ));
-                        }
-                        Ok(RuntimeValue::BigInt(BigIntValue::new(bigint / other.value)))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "divide requires bigint argument".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+                Ok(RuntimeValue::BigInt(BigIntValue::new(bigint / other)))
             }
-            "abs" => Ok(RuntimeValue::BigInt(BigIntValue::new(bigint.abs()))),
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on bigint", method),
-                position,
-                file,
-            )),
+
+            // Mathematical methods
+            "abs" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::BigInt(BigIntValue::new(bigint.abs())))
+            }
+
+            _ => Err(method_not_found_error("bigint", method, position, file)),
         }
     }
 
@@ -139,36 +117,20 @@ impl TypeHandler for BigIntType {
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
             "parse" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "parse requires 1 argument (string)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::Str(s) => {
-                        let trimmed = s.value.trim().trim_end_matches('n');
-                        match trimmed.parse::<i128>() {
-                            Ok(num) => Ok(RuntimeValue::BigInt(BigIntValue::new(num))),
-                            Err(_) => Err(RaccoonError::new(
-                                format!("Failed to parse '{}' as bigint", s.value),
-                                position,
-                                file,
-                            )),
-                        }
-                    }
-                    _ => Err(RaccoonError::new(
-                        "parse requires string argument".to_string(),
+                require_args(&args, 1, method, position, file.clone())?;
+                let s = extract_str(&args[0], "value", position, file.clone())?;
+                let trimmed = s.trim().trim_end_matches('n');
+                match trimmed.parse::<i128>() {
+                    Ok(num) => Ok(RuntimeValue::BigInt(BigIntValue::new(num))),
+                    Err(_) => Err(RaccoonError::new(
+                        format!("Failed to parse '{}' as bigint", s),
                         position,
                         file,
                     )),
                 }
             }
-            _ => Err(RaccoonError::new(
-                format!("Static method '{}' not found on bigint type", method),
-                position,
-                file,
+            _ => Err(static_method_not_found_error(
+                "bigint", method, position, file,
             )),
         }
     }

@@ -1,5 +1,5 @@
 use crate::ast::types::Type;
-use crate::runtime::type_object::{TypeObject, TypeKind, TypeMetadata, SourceLocation};
+use crate::runtime::type_object::{SourceLocation, TypeKind, TypeMetadata, TypeObject};
 use crate::runtime::values::RuntimeValue;
 use std::collections::HashMap;
 
@@ -116,7 +116,10 @@ mod tests {
         .build();
 
         assert_eq!(type_obj.name(), "int");
-        assert_eq!(type_obj.metadata.documentation, Some("Integer type".to_string()));
+        assert_eq!(
+            type_obj.metadata.documentation,
+            Some("Integer type".to_string())
+        );
     }
 
     #[test]
@@ -144,6 +147,9 @@ mod tests {
         .build();
 
         assert_eq!(type_obj.metadata.decorators.len(), 2);
-        assert!(type_obj.metadata.decorators.contains(&"@sealed".to_string()));
+        assert!(type_obj
+            .metadata
+            .decorators
+            .contains(&"@sealed".to_string()));
     }
 }

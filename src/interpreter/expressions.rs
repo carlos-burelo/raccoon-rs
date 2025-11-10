@@ -6,10 +6,10 @@ use crate::tokens::BinaryOperator;
 use async_recursion::async_recursion;
 use std::collections::HashMap;
 
-use super::{Interpreter, InterpreterResult};
-use super::helpers::Helpers;
 use super::builtins::Builtins;
+use super::helpers::Helpers;
 use super::operators;
+use super::{Interpreter, InterpreterResult};
 
 pub struct Expressions;
 
@@ -46,7 +46,7 @@ impl Expressions {
                 }
                 // Otherwise look up in environment
                 interpreter.environment.get(&ident.name, ident.position)
-            },
+            }
             Expr::Binary(binary) => Self::evaluate_binary_expr(interpreter, binary).await,
             Expr::Unary(unary) => Self::evaluate_unary_expr(interpreter, unary).await,
             Expr::Assignment(assign) => Self::evaluate_assignment(interpreter, assign).await,
@@ -60,16 +60,28 @@ impl Expressions {
             Expr::TemplateStr(template) => Self::evaluate_template_str(interpreter, template).await,
             Expr::ArrowFn(arrow) => Self::evaluate_arrow_fn(interpreter, arrow).await,
             Expr::TypeOf(typeof_expr) => Self::evaluate_typeof_expr(interpreter, typeof_expr).await,
-            Expr::InstanceOf(instanceof) => Self::evaluate_instanceof_expr(interpreter, instanceof).await,
-            Expr::OptionalChaining(opt_chain) => Self::evaluate_optional_chaining(interpreter, opt_chain).await,
-            Expr::NullAssertion(null_assert) => Self::evaluate_null_assertion(interpreter, null_assert).await,
-            Expr::MethodCall(method_call) => Self::evaluate_method_call(interpreter, method_call).await,
+            Expr::InstanceOf(instanceof) => {
+                Self::evaluate_instanceof_expr(interpreter, instanceof).await
+            }
+            Expr::OptionalChaining(opt_chain) => {
+                Self::evaluate_optional_chaining(interpreter, opt_chain).await
+            }
+            Expr::NullAssertion(null_assert) => {
+                Self::evaluate_null_assertion(interpreter, null_assert).await
+            }
+            Expr::MethodCall(method_call) => {
+                Self::evaluate_method_call(interpreter, method_call).await
+            }
             Expr::This(_) => Self::evaluate_this_expr(interpreter).await,
             Expr::Super(_) => Self::evaluate_super_expr(interpreter).await,
             Expr::New(new_expr) => Self::evaluate_new_expr(interpreter, new_expr).await,
-            Expr::TaggedTemplate(tagged) => Self::evaluate_tagged_template(interpreter, tagged).await,
+            Expr::TaggedTemplate(tagged) => {
+                Self::evaluate_tagged_template(interpreter, tagged).await
+            }
             Expr::Range(range) => Self::evaluate_range_expr(interpreter, range).await,
-            Expr::NullCoalescing(null_coal) => Self::evaluate_null_coalescing(interpreter, null_coal).await,
+            Expr::NullCoalescing(null_coal) => {
+                Self::evaluate_null_coalescing(interpreter, null_coal).await
+            }
             Expr::Await(await_expr) => Self::evaluate_await_expr(interpreter, await_expr).await,
             Expr::Spread(_) => Err(RaccoonError::new(
                 "Spread operator cannot be used outside of function calls",
@@ -107,9 +119,13 @@ impl Expressions {
     ) -> Result<RuntimeValue, RaccoonError> {
         let operand = Self::evaluate_expr(interpreter, &unary.operand).await?;
 
-        operators::apply_unary_operation(operand, unary.operator, unary.position, &interpreter.file, |v| {
-            interpreter.is_truthy(v)
-        })
+        operators::apply_unary_operation(
+            operand,
+            unary.operator,
+            unary.position,
+            &interpreter.file,
+            |v| interpreter.is_truthy(v),
+        )
     }
 
     #[async_recursion(?Send)]
@@ -273,7 +289,8 @@ impl Expressions {
 
         match &*assign.target {
             Expr::Identifier(ident) => {
-                interpreter.environment
+                interpreter
+                    .environment
                     .assign(&ident.name, final_value.clone(), ident.position)?;
                 Ok(final_value)
             }
@@ -286,8 +303,11 @@ impl Expressions {
                             .insert(member.property.clone(), final_value.clone());
 
                         if let Expr::Identifier(ident) = &*member.object {
-                            interpreter.environment
-                                .assign(&ident.name, object.clone(), ident.position)?;
+                            interpreter.environment.assign(
+                                &ident.name,
+                                object.clone(),
+                                ident.position,
+                            )?;
                         }
 
                         Ok(final_value)
@@ -306,7 +326,8 @@ impl Expressions {
                             if let Some(param) = accessor.parameters.first() {
                                 match &param.pattern {
                                     VarPattern::Identifier(name) => {
-                                        interpreter.environment
+                                        interpreter
+                                            .environment
                                             .declare(name.clone(), final_value.clone())?;
                                     }
                                     VarPattern::Destructuring(pattern) => {
@@ -339,8 +360,11 @@ impl Expressions {
                             .insert(member.property.clone(), final_value.clone());
 
                         if let Expr::Identifier(ident) = &*member.object {
-                            interpreter.environment
-                                .assign(&ident.name, object.clone(), ident.position)?;
+                            interpreter.environment.assign(
+                                &ident.name,
+                                object.clone(),
+                                ident.position,
+                            )?;
                         }
 
                         Ok(final_value)
@@ -390,7 +414,8 @@ impl Expressions {
                 }
 
                 if let Expr::Identifier(ident) = &*index_expr.object {
-                    interpreter.environment
+                    interpreter
+                        .environment
                         .assign(&ident.name, object.clone(), ident.position)?;
                 }
 
@@ -526,7 +551,9 @@ impl Expressions {
                             interpreter.environment.declare(name.clone(), value)?;
                         }
                         VarPattern::Destructuring(pattern) => {
-                            if let Err(e) = Helpers::destructure_pattern(interpreter, pattern, &value, (0, 0)).await
+                            if let Err(e) =
+                                Helpers::destructure_pattern(interpreter, pattern, &value, (0, 0))
+                                    .await
                             {
                                 interpreter.environment.pop_scope();
                                 return Err(e);
@@ -537,7 +564,10 @@ impl Expressions {
 
                 let is_async = func.is_async;
                 let fn_type = func.fn_type.clone();
-                let function_name = func.name.clone().unwrap_or_else(|| "<anonymous>".to_string());
+                let function_name = func
+                    .name
+                    .clone()
+                    .unwrap_or_else(|| "<anonymous>".to_string());
 
                 // For async functions, create a pending future and execute in spawn_local
                 if is_async {
@@ -592,7 +622,9 @@ impl Expressions {
                                     return;
                                 }
                                 Ok(_) => {
-                                    future_clone.reject("Unexpected break/continue in function".to_string());
+                                    future_clone.reject(
+                                        "Unexpected break/continue in function".to_string(),
+                                    );
                                     return;
                                 }
                                 Err(e) => {
@@ -878,7 +910,8 @@ impl Expressions {
                     Err(RaccoonError::new(
                         format!(
                             "Static member '{}' not found on type '{}'",
-                            member.property, type_obj.name()
+                            member.property,
+                            type_obj.name()
                         ),
                         member.position,
                         interpreter.file.clone(),
@@ -1271,103 +1304,105 @@ impl Expressions {
             };
 
             if let Some(ref superclass_name) = class.declaration.superclass {
-                    let superclass_value = interpreter.environment.get(superclass_name, (0, 0))?;
+                let superclass_value = interpreter.environment.get(superclass_name, (0, 0))?;
 
-                    // Extract superclass ClassValue from either RuntimeValue::Class or RuntimeValue::Type
-                    let superclass = match &superclass_value {
-                        RuntimeValue::Class(sc) => sc.clone(),
-                        RuntimeValue::Type(type_obj) => {
-                            if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
-                                sc.clone()
-                            } else {
-                                return Err(RaccoonError::new(
-                                    format!("Superclass '{}' does not have a valid constructor", superclass_name),
-                                    (0, 0),
-                                    interpreter.file.clone(),
-                                ));
-                            }
-                        }
-                        _ => {
-                            return Err(RaccoonError::new(
-                                format!("'{}' is not a class", superclass_name),
-                                (0, 0),
-                                interpreter.file.clone(),
-                            ));
-                        }
-                    };
-
-                    if let Some(ref super_constructor) = superclass.declaration.constructor {
-                            let mut arg_values = Vec::new();
-                            for arg in args {
-                                arg_values.push(Self::evaluate_expr(interpreter, arg).await?);
-                            }
-
-                            interpreter.environment.push_scope();
-
-                            for (param, arg) in
-                                super_constructor.parameters.iter().zip(arg_values.iter())
-                            {
-                                match &param.pattern {
-                                    VarPattern::Identifier(name) => {
-                                        interpreter.environment.declare(name.clone(), arg.clone())?;
-                                    }
-                                    VarPattern::Destructuring(pattern) => {
-                                        if let Err(e) =
-                                            Helpers::destructure_pattern(interpreter, pattern, arg, (0, 0)).await
-                                        {
-                                            interpreter.environment.pop_scope();
-                                            return Err(e);
-                                        }
-                                    }
-                                }
-                            }
-
-                            interpreter.environment.declare(
-                                "this".to_string(),
-                                RuntimeValue::ClassInstance(instance.clone()),
-                            )?;
-
-                            for stmt in &super_constructor.body {
-                                if let Stmt::ExprStmt(expr_stmt) = stmt {
-                                    if let Expr::Assignment(assign) = &expr_stmt.expression {
-                                        if let Expr::Member(member) = &*assign.target {
-                                            if let Expr::This(_) = &*member.object {
-                                                let value =
-                                                    Self::evaluate_expr(interpreter, &assign.value).await?;
-                                                instance
-                                                    .properties
-                                                    .write()
-                                                    .unwrap()
-                                                    .insert(member.property.clone(), value);
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                match interpreter.execute_stmt_internal(stmt).await? {
-                                    InterpreterResult::Return(_) => break,
-                                    _ => {}
-                                }
-                            }
-
-                            interpreter.environment.pop_scope();
-
-                            return Ok(RuntimeValue::Null(NullValue::new()));
+                // Extract superclass ClassValue from either RuntimeValue::Class or RuntimeValue::Type
+                let superclass = match &superclass_value {
+                    RuntimeValue::Class(sc) => sc.clone(),
+                    RuntimeValue::Type(type_obj) => {
+                        if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
+                            sc.clone()
                         } else {
                             return Err(RaccoonError::new(
-                                format!("Superclass '{}' has no constructor", superclass_name),
+                                format!(
+                                    "Superclass '{}' does not have a valid constructor",
+                                    superclass_name
+                                ),
                                 (0, 0),
                                 interpreter.file.clone(),
                             ));
                         }
+                    }
+                    _ => {
+                        return Err(RaccoonError::new(
+                            format!("'{}' is not a class", superclass_name),
+                            (0, 0),
+                            interpreter.file.clone(),
+                        ));
+                    }
+                };
+
+                if let Some(ref super_constructor) = superclass.declaration.constructor {
+                    let mut arg_values = Vec::new();
+                    for arg in args {
+                        arg_values.push(Self::evaluate_expr(interpreter, arg).await?);
+                    }
+
+                    interpreter.environment.push_scope();
+
+                    for (param, arg) in super_constructor.parameters.iter().zip(arg_values.iter()) {
+                        match &param.pattern {
+                            VarPattern::Identifier(name) => {
+                                interpreter.environment.declare(name.clone(), arg.clone())?;
+                            }
+                            VarPattern::Destructuring(pattern) => {
+                                if let Err(e) =
+                                    Helpers::destructure_pattern(interpreter, pattern, arg, (0, 0))
+                                        .await
+                                {
+                                    interpreter.environment.pop_scope();
+                                    return Err(e);
+                                }
+                            }
+                        }
+                    }
+
+                    interpreter.environment.declare(
+                        "this".to_string(),
+                        RuntimeValue::ClassInstance(instance.clone()),
+                    )?;
+
+                    for stmt in &super_constructor.body {
+                        if let Stmt::ExprStmt(expr_stmt) = stmt {
+                            if let Expr::Assignment(assign) = &expr_stmt.expression {
+                                if let Expr::Member(member) = &*assign.target {
+                                    if let Expr::This(_) = &*member.object {
+                                        let value =
+                                            Self::evaluate_expr(interpreter, &assign.value).await?;
+                                        instance
+                                            .properties
+                                            .write()
+                                            .unwrap()
+                                            .insert(member.property.clone(), value);
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+
+                        match interpreter.execute_stmt_internal(stmt).await? {
+                            InterpreterResult::Return(_) => break,
+                            _ => {}
+                        }
+                    }
+
+                    interpreter.environment.pop_scope();
+
+                    return Ok(RuntimeValue::Null(NullValue::new()));
                 } else {
                     return Err(RaccoonError::new(
-                        "Cannot use 'super' in class without superclass".to_string(),
+                        format!("Superclass '{}' has no constructor", superclass_name),
                         (0, 0),
                         interpreter.file.clone(),
                     ));
                 }
+            } else {
+                return Err(RaccoonError::new(
+                    "Cannot use 'super' in class without superclass".to_string(),
+                    (0, 0),
+                    interpreter.file.clone(),
+                ));
+            }
         } else {
             return Err(RaccoonError::new(
                 "Cannot use 'super' outside of a class constructor".to_string(),
@@ -1474,221 +1509,229 @@ impl Expressions {
 
         // Now proceed with class instantiation
         {
-                let mut properties = HashMap::new();
-                let mut methods = HashMap::new();
+            let mut properties = HashMap::new();
+            let mut methods = HashMap::new();
 
-                if let Some(ref superclass_name) = class.declaration.superclass {
-                    let superclass_value = interpreter.environment.get(superclass_name, new_expr.position).ok();
-                    let superclass = match superclass_value {
-                        Some(RuntimeValue::Class(sc)) => Some(sc),
-                        Some(RuntimeValue::Type(type_obj)) => {
-                            if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
-                                Some(sc.clone())
-                            } else {
-                                None
-                            }
-                        }
-                        _ => None
-                    };
-
-                    if let Some(superclass) = superclass {
-                        for prop in &superclass.declaration.properties {
-                            let value = if let Some(init) = &prop.initializer {
-                                Self::evaluate_expr(interpreter, init).await?
-                            } else {
-                                RuntimeValue::Null(NullValue::new())
-                            };
-                            properties.insert(prop.name.clone(), value);
-                        }
-
-                        for method in &superclass.declaration.methods {
-                            if !method.is_static {
-                                let fn_type =
-                                    Type::Function(Box::new(crate::ast::types::FunctionType {
-                                        params: method
-                                            .parameters
-                                            .iter()
-                                            .map(|p| p.param_type.clone())
-                                            .collect(),
-                                        return_type: method
-                                            .return_type
-                                            .clone()
-                                            .unwrap_or_else(|| PrimitiveType::unknown()),
-                                        is_variadic: method.parameters.iter().any(|p| p.is_rest),
-                                    }));
-
-                                let function = FunctionValue::new(
-                                    method.parameters.clone(),
-                                    method.body.clone(),
-                                    false,
-                                    fn_type,
-                                );
-
-                                methods.insert(method.name.clone(), function);
-                            }
-                        }
-                    }
-                }
-
-                for prop in &class.declaration.properties {
-                    let value = if let Some(init) = &prop.initializer {
-                        Self::evaluate_expr(interpreter, init).await?
-                    } else {
-                        RuntimeValue::Null(NullValue::new())
-                    };
-                    properties.insert(prop.name.clone(), value);
-                }
-
-                for method in &class.declaration.methods {
-                    if !method.is_static {
-                        let fn_type = Type::Function(Box::new(crate::ast::types::FunctionType {
-                            params: method
-                                .parameters
-                                .iter()
-                                .map(|p| p.param_type.clone())
-                                .collect(),
-                            return_type: method
-                                .return_type
-                                .clone()
-                                .unwrap_or_else(|| PrimitiveType::unknown()),
-                            is_variadic: method.parameters.iter().any(|p| p.is_rest),
-                        }));
-
-                        let function = FunctionValue::new(
-                            method.parameters.clone(),
-                            method.body.clone(),
-                            false,
-                            fn_type,
-                        );
-
-                        methods.insert(method.name.clone(), function);
-                    }
-                }
-
-                let mut accessors = Vec::new();
-
-                if let Some(ref superclass_name) = class.declaration.superclass {
-                    let superclass_value = interpreter.environment.get(superclass_name, new_expr.position).ok();
-                    let superclass = match superclass_value {
-                        Some(RuntimeValue::Class(sc)) => Some(sc),
-                        Some(RuntimeValue::Type(type_obj)) => {
-                            if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
-                                Some(sc.clone())
-                            } else {
-                                None
-                            }
-                        }
-                        _ => None
-                    };
-
-                    if let Some(superclass) = superclass {
-                        accessors.extend(superclass.declaration.accessors.clone());
-                    }
-                }
-
-                accessors.extend(class.declaration.accessors.clone());
-
-                let instance = crate::runtime::ClassInstance::new(
-                    class.class_name.clone(),
-                    properties,
-                    methods,
-                    accessors,
-                    class.class_type.clone(),
-                );
-
-                if let Some(constructor) = &class.declaration.constructor {
-                    let mut args = Vec::new();
-                    for arg in &new_expr.args {
-                        args.push(Self::evaluate_expr(interpreter, arg).await?);
-                    }
-
-                    interpreter.environment.push_scope();
-
-                    let mut positional_index = 0;
-
-                    for (i, param) in constructor.parameters.iter().enumerate() {
-                        let param_name = match &param.pattern {
-                            VarPattern::Identifier(name) => name.clone(),
-                            VarPattern::Destructuring(_) => {
-                                format!("__param_{}", i)
-                            }
-                        };
-
-                        let value = if param.is_rest {
-                            let mut rest_args = Vec::new();
-                            while positional_index < args.len() {
-                                rest_args.push(args[positional_index].clone());
-                                positional_index += 1;
-                            }
-
-                            let element_type = match &param.param_type {
-                                Type::List(list_type) => list_type.element_type.clone(),
-                                _ => PrimitiveType::any(),
-                            };
-
-                            RuntimeValue::List(ListValue::new(rest_args, element_type))
-                        } else if positional_index < args.len() {
-                            let arg = args[positional_index].clone();
-                            positional_index += 1;
-                            arg
-                        } else if let Some(default_expr) = &param.default_value {
-                            Self::evaluate_expr(interpreter, default_expr).await?
+            if let Some(ref superclass_name) = class.declaration.superclass {
+                let superclass_value = interpreter
+                    .environment
+                    .get(superclass_name, new_expr.position)
+                    .ok();
+                let superclass = match superclass_value {
+                    Some(RuntimeValue::Class(sc)) => Some(sc),
+                    Some(RuntimeValue::Type(type_obj)) => {
+                        if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
+                            Some(sc.clone())
                         } else {
-                            interpreter.environment.pop_scope();
-                            return Err(RaccoonError::new(
-                                format!("Missing required argument for parameter '{}'", param_name),
-                                (0, 0),
-                                interpreter.file.clone(),
-                            ));
+                            None
+                        }
+                    }
+                    _ => None,
+                };
+
+                if let Some(superclass) = superclass {
+                    for prop in &superclass.declaration.properties {
+                        let value = if let Some(init) = &prop.initializer {
+                            Self::evaluate_expr(interpreter, init).await?
+                        } else {
+                            RuntimeValue::Null(NullValue::new())
                         };
-
-                        match &param.pattern {
-                            VarPattern::Identifier(name) => {
-                                interpreter.environment.declare(name.clone(), value)?;
-                            }
-                            VarPattern::Destructuring(pattern) => {
-                                if let Err(e) =
-                                    Helpers::destructure_pattern(interpreter, pattern, &value, (0, 0)).await
-                                {
-                                    interpreter.environment.pop_scope();
-                                    return Err(e);
-                                }
-                            }
-                        }
+                        properties.insert(prop.name.clone(), value);
                     }
 
-                    interpreter.environment.declare(
-                        "this".to_string(),
-                        RuntimeValue::ClassInstance(instance.clone()),
-                    )?;
+                    for method in &superclass.declaration.methods {
+                        if !method.is_static {
+                            let fn_type =
+                                Type::Function(Box::new(crate::ast::types::FunctionType {
+                                    params: method
+                                        .parameters
+                                        .iter()
+                                        .map(|p| p.param_type.clone())
+                                        .collect(),
+                                    return_type: method
+                                        .return_type
+                                        .clone()
+                                        .unwrap_or_else(|| PrimitiveType::unknown()),
+                                    is_variadic: method.parameters.iter().any(|p| p.is_rest),
+                                }));
 
-                    for stmt in &constructor.body {
-                        if let Stmt::ExprStmt(expr_stmt) = stmt {
-                            if let Expr::Assignment(assign) = &expr_stmt.expression {
-                                if let Expr::Member(member) = &*assign.target {
-                                    if let Expr::This(_) = &*member.object {
-                                        let value = Self::evaluate_expr(interpreter, &assign.value).await?;
-                                        instance
-                                            .properties
-                                            .write()
-                                            .unwrap()
-                                            .insert(member.property.clone(), value);
-                                        continue;
-                                    }
-                                }
-                            }
-                        }
+                            let function = FunctionValue::new(
+                                method.parameters.clone(),
+                                method.body.clone(),
+                                false,
+                                fn_type,
+                            );
 
-                        match interpreter.execute_stmt_internal(stmt).await? {
-                            InterpreterResult::Return(_) => break,
-                            _ => {}
+                            methods.insert(method.name.clone(), function);
                         }
                     }
+                }
+            }
 
-                    interpreter.environment.pop_scope();
+            for prop in &class.declaration.properties {
+                let value = if let Some(init) = &prop.initializer {
+                    Self::evaluate_expr(interpreter, init).await?
+                } else {
+                    RuntimeValue::Null(NullValue::new())
+                };
+                properties.insert(prop.name.clone(), value);
+            }
+
+            for method in &class.declaration.methods {
+                if !method.is_static {
+                    let fn_type = Type::Function(Box::new(crate::ast::types::FunctionType {
+                        params: method
+                            .parameters
+                            .iter()
+                            .map(|p| p.param_type.clone())
+                            .collect(),
+                        return_type: method
+                            .return_type
+                            .clone()
+                            .unwrap_or_else(|| PrimitiveType::unknown()),
+                        is_variadic: method.parameters.iter().any(|p| p.is_rest),
+                    }));
+
+                    let function = FunctionValue::new(
+                        method.parameters.clone(),
+                        method.body.clone(),
+                        false,
+                        fn_type,
+                    );
+
+                    methods.insert(method.name.clone(), function);
+                }
+            }
+
+            let mut accessors = Vec::new();
+
+            if let Some(ref superclass_name) = class.declaration.superclass {
+                let superclass_value = interpreter
+                    .environment
+                    .get(superclass_name, new_expr.position)
+                    .ok();
+                let superclass = match superclass_value {
+                    Some(RuntimeValue::Class(sc)) => Some(sc),
+                    Some(RuntimeValue::Type(type_obj)) => {
+                        if let Some(RuntimeValue::Class(sc)) = type_obj.get_constructor() {
+                            Some(sc.clone())
+                        } else {
+                            None
+                        }
+                    }
+                    _ => None,
+                };
+
+                if let Some(superclass) = superclass {
+                    accessors.extend(superclass.declaration.accessors.clone());
+                }
+            }
+
+            accessors.extend(class.declaration.accessors.clone());
+
+            let instance = crate::runtime::ClassInstance::new(
+                class.class_name.clone(),
+                properties,
+                methods,
+                accessors,
+                class.class_type.clone(),
+            );
+
+            if let Some(constructor) = &class.declaration.constructor {
+                let mut args = Vec::new();
+                for arg in &new_expr.args {
+                    args.push(Self::evaluate_expr(interpreter, arg).await?);
                 }
 
-                Ok(RuntimeValue::ClassInstance(instance))
+                interpreter.environment.push_scope();
+
+                let mut positional_index = 0;
+
+                for (i, param) in constructor.parameters.iter().enumerate() {
+                    let param_name = match &param.pattern {
+                        VarPattern::Identifier(name) => name.clone(),
+                        VarPattern::Destructuring(_) => {
+                            format!("__param_{}", i)
+                        }
+                    };
+
+                    let value = if param.is_rest {
+                        let mut rest_args = Vec::new();
+                        while positional_index < args.len() {
+                            rest_args.push(args[positional_index].clone());
+                            positional_index += 1;
+                        }
+
+                        let element_type = match &param.param_type {
+                            Type::List(list_type) => list_type.element_type.clone(),
+                            _ => PrimitiveType::any(),
+                        };
+
+                        RuntimeValue::List(ListValue::new(rest_args, element_type))
+                    } else if positional_index < args.len() {
+                        let arg = args[positional_index].clone();
+                        positional_index += 1;
+                        arg
+                    } else if let Some(default_expr) = &param.default_value {
+                        Self::evaluate_expr(interpreter, default_expr).await?
+                    } else {
+                        interpreter.environment.pop_scope();
+                        return Err(RaccoonError::new(
+                            format!("Missing required argument for parameter '{}'", param_name),
+                            (0, 0),
+                            interpreter.file.clone(),
+                        ));
+                    };
+
+                    match &param.pattern {
+                        VarPattern::Identifier(name) => {
+                            interpreter.environment.declare(name.clone(), value)?;
+                        }
+                        VarPattern::Destructuring(pattern) => {
+                            if let Err(e) =
+                                Helpers::destructure_pattern(interpreter, pattern, &value, (0, 0))
+                                    .await
+                            {
+                                interpreter.environment.pop_scope();
+                                return Err(e);
+                            }
+                        }
+                    }
+                }
+
+                interpreter.environment.declare(
+                    "this".to_string(),
+                    RuntimeValue::ClassInstance(instance.clone()),
+                )?;
+
+                for stmt in &constructor.body {
+                    if let Stmt::ExprStmt(expr_stmt) = stmt {
+                        if let Expr::Assignment(assign) = &expr_stmt.expression {
+                            if let Expr::Member(member) = &*assign.target {
+                                if let Expr::This(_) = &*member.object {
+                                    let value =
+                                        Self::evaluate_expr(interpreter, &assign.value).await?;
+                                    instance
+                                        .properties
+                                        .write()
+                                        .unwrap()
+                                        .insert(member.property.clone(), value);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+
+                    match interpreter.execute_stmt_internal(stmt).await? {
+                        InterpreterResult::Return(_) => break,
+                        _ => {}
+                    }
+                }
+
+                interpreter.environment.pop_scope();
+            }
+
+            Ok(RuntimeValue::ClassInstance(instance))
         }
     }
 
@@ -1771,7 +1814,9 @@ impl Expressions {
                             interpreter.environment.declare(name.clone(), value)?;
                         }
                         VarPattern::Destructuring(pattern) => {
-                            if let Err(e) = Helpers::destructure_pattern(interpreter, pattern, &value, (0, 0)).await
+                            if let Err(e) =
+                                Helpers::destructure_pattern(interpreter, pattern, &value, (0, 0))
+                                    .await
                             {
                                 interpreter.environment.pop_scope();
                                 return Err(e);
@@ -1901,8 +1946,13 @@ impl Expressions {
                                 interpreter.environment.declare(name.clone(), value)?;
                             }
                             VarPattern::Destructuring(pattern) => {
-                                if let Err(e) =
-                                    Helpers::destructure_pattern(interpreter, pattern, &value, (0, 0)).await
+                                if let Err(e) = Helpers::destructure_pattern(
+                                    interpreter,
+                                    pattern,
+                                    &value,
+                                    (0, 0),
+                                )
+                                .await
                                 {
                                     interpreter.environment.pop_scope();
                                     return Err(e);
@@ -2004,7 +2054,8 @@ impl Expressions {
                         _ => Err(RaccoonError::new(
                             format!(
                                 "Static method '{}' on type '{}' is not callable",
-                                method_call.method, type_obj.name()
+                                method_call.method,
+                                type_obj.name()
                             ),
                             method_call.position,
                             interpreter.file.clone(),
@@ -2014,7 +2065,8 @@ impl Expressions {
                     Err(RaccoonError::new(
                         format!(
                             "Static method '{}' not found on type '{}'",
-                            method_call.method, type_obj.name()
+                            method_call.method,
+                            type_obj.name()
                         ),
                         method_call.position,
                         interpreter.file.clone(),
@@ -2119,8 +2171,13 @@ impl Expressions {
                                         interpreter.environment.declare(name.clone(), value)?;
                                     }
                                     VarPattern::Destructuring(pattern) => {
-                                        if let Err(e) =
-                                            Helpers::destructure_pattern(interpreter, pattern, &value, (0, 0)).await
+                                        if let Err(e) = Helpers::destructure_pattern(
+                                            interpreter,
+                                            pattern,
+                                            &value,
+                                            (0, 0),
+                                        )
+                                        .await
                                         {
                                             interpreter.environment.pop_scope();
                                             return Err(e);
@@ -2260,8 +2317,13 @@ impl Expressions {
                                 interpreter.environment.declare(name.clone(), value)?;
                             }
                             VarPattern::Destructuring(pattern) => {
-                                if let Err(e) =
-                                    Helpers::destructure_pattern(interpreter, pattern, &value, (0, 0)).await
+                                if let Err(e) = Helpers::destructure_pattern(
+                                    interpreter,
+                                    pattern,
+                                    &value,
+                                    (0, 0),
+                                )
+                                .await
                                 {
                                     interpreter.environment.pop_scope();
                                     return Err(e);
@@ -2669,7 +2731,9 @@ impl Expressions {
 
         if should_update {
             if let Some((name, position)) = var_info {
-                interpreter.environment.assign(&name, object.clone(), position)?;
+                interpreter
+                    .environment
+                    .assign(&name, object.clone(), position)?;
             }
 
             if let Some(property_name) = member_info {
@@ -2750,7 +2814,10 @@ impl Expressions {
 
     /// Try to match a pattern against a value
     /// Returns Some(bindings) if the pattern matches, None if it doesn't
-    fn match_pattern(pattern: &Pattern, value: &RuntimeValue) -> Result<Option<HashMap<String, RuntimeValue>>, RaccoonError> {
+    fn match_pattern(
+        pattern: &Pattern,
+        value: &RuntimeValue,
+    ) -> Result<Option<HashMap<String, RuntimeValue>>, RaccoonError> {
         match pattern {
             Pattern::Wildcard(_) => {
                 // Wildcard matches anything with no bindings
@@ -2801,9 +2868,7 @@ impl Expressions {
                         }
                     }
                     // Null literal
-                    (Expr::NullLiteral(_), RuntimeValue::Null(_)) => {
-                        Ok(Some(HashMap::new()))
-                    }
+                    (Expr::NullLiteral(_), RuntimeValue::Null(_)) => Ok(Some(HashMap::new())),
                     // Type mismatch or unsupported literal pattern
                     _ => Ok(None),
                 }

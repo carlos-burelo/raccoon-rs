@@ -250,10 +250,7 @@ macro_rules! define_type {
                 file: Option<String>,
             ) -> Result<$crate::runtime::RuntimeValue, $crate::error::RaccoonError> {
                 Err($crate::runtime::types::helpers::method_not_found_error(
-                    $type_name,
-                    method,
-                    position,
-                    file,
+                    $type_name, method, position, file,
                 ))
             }
 
@@ -264,12 +261,11 @@ macro_rules! define_type {
                 position: $crate::tokens::Position,
                 file: Option<String>,
             ) -> Result<$crate::runtime::RuntimeValue, $crate::error::RaccoonError> {
-                Err($crate::runtime::types::helpers::static_method_not_found_error(
-                    $type_name,
-                    method,
-                    position,
-                    file,
-                ))
+                Err(
+                    $crate::runtime::types::helpers::static_method_not_found_error(
+                        $type_name, method, position, file,
+                    ),
+                )
             }
 
             fn has_instance_method(&self, method: &str) -> bool {

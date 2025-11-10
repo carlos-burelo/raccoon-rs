@@ -1,12 +1,13 @@
+use crate::ast::types::PrimitiveType;
 /// Operators module - Refactored to use centralized type operations
 /// All binary/unary operations are now delegated to src/runtime/types/operations/
 /// This module now serves as a thin wrapper for backward compatibility
-
 use crate::error::RaccoonError;
-use crate::runtime::{BoolValue, CallStack, FloatValue, IntValue, ListValue, RuntimeValue, StrValue};
 use crate::runtime::types::operations;
+use crate::runtime::{
+    BoolValue, CallStack, FloatValue, IntValue, ListValue, RuntimeValue, StrValue,
+};
 use crate::tokens::{BinaryOperator, Position, UnaryOperator};
-use crate::ast::types::PrimitiveType;
 
 /// Helper: Check if a value is truthy
 /// Moved from operators for backward compatibility
@@ -46,7 +47,8 @@ pub async fn apply_binary_op(
         | BinaryOperator::LeftShift
         | BinaryOperator::RightShift
         | BinaryOperator::UnsignedRightShift => {
-            operations::apply_binary_operation(left, right, operator, position, file, call_stack).await
+            operations::apply_binary_operation(left, right, operator, position, file, call_stack)
+                .await
         }
 
         // Operations that need special handling in the interpreter
@@ -109,22 +111,26 @@ where
             (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
                 Ok(RuntimeValue::Float(FloatValue::new(l.value + r.value)))
             }
-            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
-                Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 + r.value)))
-            }
-            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
-                Ok(RuntimeValue::Float(FloatValue::new(l.value + r.value as f64)))
-            }
-            (RuntimeValue::Str(l), RuntimeValue::Str(r)) => {
-                Ok(RuntimeValue::Str(StrValue::new(format!("{}{}", l.value, r.value))))
-            }
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => Ok(RuntimeValue::Float(
+                FloatValue::new(l.value as f64 + r.value),
+            )),
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => Ok(RuntimeValue::Float(
+                FloatValue::new(l.value + r.value as f64),
+            )),
+            (RuntimeValue::Str(l), RuntimeValue::Str(r)) => Ok(RuntimeValue::Str(StrValue::new(
+                format!("{}{}", l.value, r.value),
+            ))),
             // String concatenation with any type
-            (RuntimeValue::Str(l), r) => {
-                Ok(RuntimeValue::Str(StrValue::new(format!("{}{}", l.value, r.to_string()))))
-            }
-            (l, RuntimeValue::Str(r)) => {
-                Ok(RuntimeValue::Str(StrValue::new(format!("{}{}", l.to_string(), r.value))))
-            }
+            (RuntimeValue::Str(l), r) => Ok(RuntimeValue::Str(StrValue::new(format!(
+                "{}{}",
+                l.value,
+                r.to_string()
+            )))),
+            (l, RuntimeValue::Str(r)) => Ok(RuntimeValue::Str(StrValue::new(format!(
+                "{}{}",
+                l.to_string(),
+                r.value
+            )))),
             _ => Err(RaccoonError::new(
                 "Invalid operands for addition".to_string(),
                 position,
@@ -139,12 +145,12 @@ where
             (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
                 Ok(RuntimeValue::Float(FloatValue::new(l.value - r.value)))
             }
-            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
-                Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 - r.value)))
-            }
-            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
-                Ok(RuntimeValue::Float(FloatValue::new(l.value - r.value as f64)))
-            }
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => Ok(RuntimeValue::Float(
+                FloatValue::new(l.value as f64 - r.value),
+            )),
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => Ok(RuntimeValue::Float(
+                FloatValue::new(l.value - r.value as f64),
+            )),
             _ => Err(RaccoonError::new(
                 "Invalid operands for subtraction".to_string(),
                 position,
@@ -159,12 +165,12 @@ where
             (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
                 Ok(RuntimeValue::Float(FloatValue::new(l.value * r.value)))
             }
-            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
-                Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 * r.value)))
-            }
-            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
-                Ok(RuntimeValue::Float(FloatValue::new(l.value * r.value as f64)))
-            }
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => Ok(RuntimeValue::Float(
+                FloatValue::new(l.value as f64 * r.value),
+            )),
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => Ok(RuntimeValue::Float(
+                FloatValue::new(l.value * r.value as f64),
+            )),
             _ => Err(RaccoonError::new(
                 "Invalid operands for multiplication".to_string(),
                 position,
@@ -182,7 +188,9 @@ where
                         call_stack.clone(),
                     ));
                 }
-                Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 / r.value as f64)))
+                Ok(RuntimeValue::Float(FloatValue::new(
+                    l.value as f64 / r.value as f64,
+                )))
             }
             (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
                 if r.value == 0.0 {
@@ -204,7 +212,9 @@ where
                         call_stack.clone(),
                     ));
                 }
-                Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 / r.value)))
+                Ok(RuntimeValue::Float(FloatValue::new(
+                    l.value as f64 / r.value,
+                )))
             }
             (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
                 if r.value == 0 {
@@ -215,7 +225,9 @@ where
                         call_stack.clone(),
                     ));
                 }
-                Ok(RuntimeValue::Float(FloatValue::new(l.value / r.value as f64)))
+                Ok(RuntimeValue::Float(FloatValue::new(
+                    l.value / r.value as f64,
+                )))
             }
             _ => Err(RaccoonError::new(
                 "Invalid operands for division".to_string(),
@@ -253,7 +265,9 @@ where
                         file.clone(),
                     ));
                 }
-                Ok(RuntimeValue::Float(FloatValue::new(l.value as f64 % r.value)))
+                Ok(RuntimeValue::Float(FloatValue::new(
+                    l.value as f64 % r.value,
+                )))
             }
             (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
                 if r.value == 0 {
@@ -263,7 +277,9 @@ where
                         file.clone(),
                     ));
                 }
-                Ok(RuntimeValue::Float(FloatValue::new(l.value % r.value as f64)))
+                Ok(RuntimeValue::Float(FloatValue::new(
+                    l.value % r.value as f64,
+                )))
             }
             _ => Err(RaccoonError::new(
                 "Invalid operands for modulo".to_string(),
@@ -275,20 +291,24 @@ where
         BinaryOperator::Exponent => match (left, right) {
             (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
                 if r.value < 0 {
-                    Ok(RuntimeValue::Float(FloatValue::new((l.value as f64).powf(r.value as f64))))
+                    Ok(RuntimeValue::Float(FloatValue::new(
+                        (l.value as f64).powf(r.value as f64),
+                    )))
                 } else {
-                    Ok(RuntimeValue::Int(IntValue::new(l.value.pow(r.value as u32))))
+                    Ok(RuntimeValue::Int(IntValue::new(
+                        l.value.pow(r.value as u32),
+                    )))
                 }
             }
             (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
                 Ok(RuntimeValue::Float(FloatValue::new(l.value.powf(r.value))))
             }
-            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
-                Ok(RuntimeValue::Float(FloatValue::new((l.value as f64).powf(r.value))))
-            }
-            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
-                Ok(RuntimeValue::Float(FloatValue::new(l.value.powf(r.value as f64))))
-            }
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => Ok(RuntimeValue::Float(
+                FloatValue::new((l.value as f64).powf(r.value)),
+            )),
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => Ok(RuntimeValue::Float(
+                FloatValue::new(l.value.powf(r.value as f64)),
+            )),
             _ => Err(RaccoonError::new(
                 "Invalid operands for exponentiation".to_string(),
                 position,
@@ -353,124 +373,111 @@ where
         },
 
         BinaryOperator::UnsignedRightShift => match (left, right) {
-            (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
-                Ok(RuntimeValue::Int(IntValue::new((l.value as u64 >> r.value) as i64)))
-            }
+            (RuntimeValue::Int(l), RuntimeValue::Int(r)) => Ok(RuntimeValue::Int(IntValue::new(
+                (l.value as u64 >> r.value) as i64,
+            ))),
             _ => Err(RaccoonError::new(
                 "Unsigned right shift requires integer operands".to_string(),
                 position,
                 file.clone(),
             )),
-        }
+        },
 
         // Comparison operations - delegated
-        BinaryOperator::Equal => {
-            Ok(RuntimeValue::Bool(BoolValue::new(left.equals(&right))))
-        }
-        BinaryOperator::NotEqual => {
-            Ok(RuntimeValue::Bool(BoolValue::new(!left.equals(&right))))
-        }
+        BinaryOperator::Equal => Ok(RuntimeValue::Bool(BoolValue::new(left.equals(&right)))),
+        BinaryOperator::NotEqual => Ok(RuntimeValue::Bool(BoolValue::new(!left.equals(&right)))),
 
-
-        BinaryOperator::LessThan => {
-            match (left, right) {
-                (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value < r.value)))
-                }
-                (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value < r.value)))
-                }
-                (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new((l.value as f64) < r.value)))
-                }
-                (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value < (r.value as f64))))
-                }
-                (RuntimeValue::Str(l), RuntimeValue::Str(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value < r.value)))
-                }
-                _ => Err(RaccoonError::new(
-                    "Invalid operands for less than comparison".to_string(),
-                    position,
-                    file.clone(),
-                )),
+        BinaryOperator::LessThan => match (left, right) {
+            (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value < r.value)))
             }
-        }
-
-        BinaryOperator::LessEqual => {
-            match (left, right) {
-                (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value <= r.value)))
-                }
-                (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value <= r.value)))
-                }
-                (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new((l.value as f64) <= r.value)))
-                }
-                (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value <= (r.value as f64))))
-                }
-                (RuntimeValue::Str(l), RuntimeValue::Str(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value <= r.value)))
-                }
-                _ => Err(RaccoonError::new(
-                    "Invalid operands for less than or equal comparison".to_string(),
-                    position,
-                    file.clone(),
-                )),
+            (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value < r.value)))
             }
-        }
-
-        BinaryOperator::GreaterThan => {
-            match (left, right) {
-                (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value > r.value)))
-                }
-                (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value > r.value)))
-                }
-                (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new((l.value as f64) > r.value)))
-                }
-                (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value > (r.value as f64))))
-                }
-                (RuntimeValue::Str(l), RuntimeValue::Str(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value > r.value)))
-                }
-                _ => Err(RaccoonError::new(
-                    "Invalid operands for greater than comparison".to_string(),
-                    position,
-                    file.clone(),
-                )),
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => Ok(RuntimeValue::Bool(
+                BoolValue::new((l.value as f64) < r.value),
+            )),
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => Ok(RuntimeValue::Bool(
+                BoolValue::new(l.value < (r.value as f64)),
+            )),
+            (RuntimeValue::Str(l), RuntimeValue::Str(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value < r.value)))
             }
-        }
+            _ => Err(RaccoonError::new(
+                "Invalid operands for less than comparison".to_string(),
+                position,
+                file.clone(),
+            )),
+        },
 
-        BinaryOperator::GreaterEqual => {
-            match (left, right) {
-                (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value >= r.value)))
-                }
-                (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value >= r.value)))
-                }
-                (RuntimeValue::Int(l), RuntimeValue::Float(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new((l.value as f64) >= r.value)))
-                }
-                (RuntimeValue::Float(l), RuntimeValue::Int(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value >= (r.value as f64))))
-                }
-                (RuntimeValue::Str(l), RuntimeValue::Str(r)) => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(l.value >= r.value)))
-                }
-                _ => Err(RaccoonError::new(
-                    "Invalid operands for greater than or equal comparison".to_string(),
-                    position,
-                    file.clone(),
-                )),
+        BinaryOperator::LessEqual => match (left, right) {
+            (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value <= r.value)))
             }
-        }
+            (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value <= r.value)))
+            }
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => Ok(RuntimeValue::Bool(
+                BoolValue::new((l.value as f64) <= r.value),
+            )),
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => Ok(RuntimeValue::Bool(
+                BoolValue::new(l.value <= (r.value as f64)),
+            )),
+            (RuntimeValue::Str(l), RuntimeValue::Str(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value <= r.value)))
+            }
+            _ => Err(RaccoonError::new(
+                "Invalid operands for less than or equal comparison".to_string(),
+                position,
+                file.clone(),
+            )),
+        },
+
+        BinaryOperator::GreaterThan => match (left, right) {
+            (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value > r.value)))
+            }
+            (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value > r.value)))
+            }
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => Ok(RuntimeValue::Bool(
+                BoolValue::new((l.value as f64) > r.value),
+            )),
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => Ok(RuntimeValue::Bool(
+                BoolValue::new(l.value > (r.value as f64)),
+            )),
+            (RuntimeValue::Str(l), RuntimeValue::Str(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value > r.value)))
+            }
+            _ => Err(RaccoonError::new(
+                "Invalid operands for greater than comparison".to_string(),
+                position,
+                file.clone(),
+            )),
+        },
+
+        BinaryOperator::GreaterEqual => match (left, right) {
+            (RuntimeValue::Int(l), RuntimeValue::Int(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value >= r.value)))
+            }
+            (RuntimeValue::Float(l), RuntimeValue::Float(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value >= r.value)))
+            }
+            (RuntimeValue::Int(l), RuntimeValue::Float(r)) => Ok(RuntimeValue::Bool(
+                BoolValue::new((l.value as f64) >= r.value),
+            )),
+            (RuntimeValue::Float(l), RuntimeValue::Int(r)) => Ok(RuntimeValue::Bool(
+                BoolValue::new(l.value >= (r.value as f64)),
+            )),
+            (RuntimeValue::Str(l), RuntimeValue::Str(r)) => {
+                Ok(RuntimeValue::Bool(BoolValue::new(l.value >= r.value)))
+            }
+            _ => Err(RaccoonError::new(
+                "Invalid operands for greater than or equal comparison".to_string(),
+                position,
+                file.clone(),
+            )),
+        },
 
         // Logical operations
         BinaryOperator::And => {
@@ -539,9 +546,7 @@ where
                 file.clone(),
             )),
         },
-        UnaryOperator::Not => {
-            Ok(RuntimeValue::Bool(BoolValue::new(!is_truthy_fn(&operand))))
-        }
+        UnaryOperator::Not => Ok(RuntimeValue::Bool(BoolValue::new(!is_truthy_fn(&operand)))),
         UnaryOperator::BitwiseNot => match operand {
             RuntimeValue::Int(v) => Ok(RuntimeValue::Int(IntValue::new(!v.value))),
             _ => Err(RaccoonError::new(

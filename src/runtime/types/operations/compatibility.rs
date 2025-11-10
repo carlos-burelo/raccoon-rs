@@ -1,7 +1,6 @@
 /// Type compatibility and validation module
 /// Centralizes all type checking and compatibility logic
 /// Consolidates logic from src/type_system/checker.rs
-
 use crate::runtime::RuntimeValue;
 
 /// Checks if a type is numeric (Int or Float)
@@ -94,7 +93,11 @@ pub fn supports_operation(op_name: &str, left: &RuntimeValue, right: &RuntimeVal
             // Only integers
             is_integer_type(left) && is_integer_type(right)
         }
-        "bitwise_and" | "bitwise_or" | "bitwise_xor" | "left_shift" | "right_shift"
+        "bitwise_and"
+        | "bitwise_or"
+        | "bitwise_xor"
+        | "left_shift"
+        | "right_shift"
         | "unsigned_right_shift" => {
             // Only integers
             is_integer_type(left) && is_integer_type(right)

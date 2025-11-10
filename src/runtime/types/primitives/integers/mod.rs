@@ -1,7 +1,7 @@
 // Integer types module
+pub mod bigint;
 pub mod signed;
 pub mod unsigned;
-pub mod bigint;
 
 // Re-export all integer types
 pub use bigint::BigIntType;

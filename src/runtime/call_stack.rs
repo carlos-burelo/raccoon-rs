@@ -26,7 +26,12 @@ impl StackFrame {
             .file
             .as_ref()
             .map(|f| format!("{}:{}:{}", f, self.call_position.0, self.call_position.1))
-            .unwrap_or_else(|| format!("<unknown>:{}:{}", self.call_position.0, self.call_position.1));
+            .unwrap_or_else(|| {
+                format!(
+                    "<unknown>:{}:{}",
+                    self.call_position.0, self.call_position.1
+                )
+            });
 
         format!("  at {} ({})", self.function_name, file_info)
     }
@@ -119,11 +124,19 @@ mod tests {
         let mut stack = CallStack::new();
         assert_eq!(stack.depth(), 0);
 
-        stack.push(StackFrame::new("foo".to_string(), (1, 1), Some("test.rn".to_string())));
+        stack.push(StackFrame::new(
+            "foo".to_string(),
+            (1, 1),
+            Some("test.rn".to_string()),
+        ));
         assert_eq!(stack.depth(), 1);
         assert_eq!(stack.current_function(), Some("foo"));
 
-        stack.push(StackFrame::new("bar".to_string(), (2, 2), Some("test.rn".to_string())));
+        stack.push(StackFrame::new(
+            "bar".to_string(),
+            (2, 2),
+            Some("test.rn".to_string()),
+        ));
         assert_eq!(stack.depth(), 2);
         assert_eq!(stack.current_function(), Some("bar"));
 
@@ -134,7 +147,11 @@ mod tests {
 
     #[test]
     fn test_stack_frame_format() {
-        let frame = StackFrame::new("myFunction".to_string(), (10, 5), Some("main.rn".to_string()));
+        let frame = StackFrame::new(
+            "myFunction".to_string(),
+            (10, 5),
+            Some("main.rn".to_string()),
+        );
         let formatted = frame.format();
         assert!(formatted.contains("myFunction"));
         assert!(formatted.contains("main.rn"));

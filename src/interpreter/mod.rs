@@ -1,16 +1,16 @@
-mod operators;
-pub mod declarations;
+pub mod builtins;
 pub mod control_flow;
+pub mod declarations;
 pub mod expressions;
 pub mod helpers;
 pub mod module_loader;
-pub mod builtins;
+mod operators;
 
 use crate::ast::nodes::*;
 use crate::error::RaccoonError;
 use crate::runtime::{
-    CallStack, DecoratorRegistry, Environment, NullValue, RuntimeValue,
-    TypeRegistry, Registrar, ModuleRegistry, FutureValue, ListValue, StrValue,
+    CallStack, DecoratorRegistry, Environment, FutureValue, ListValue, ModuleRegistry, NullValue,
+    Registrar, RuntimeValue, StrValue, TypeRegistry,
 };
 use crate::tokens::{BinaryOperator, Position};
 use async_recursion::async_recursion;
@@ -45,14 +45,30 @@ impl Interpreter {
         let mut module_registry = ModuleRegistry::new();
 
         // Register all native modules (lazy-loaded, not yet initialized)
-        module_registry.register("math", |registrar| crate::runtime::natives::register_math_module(registrar));
-        module_registry.register("string", |registrar| crate::runtime::natives::register_string_module(registrar));
-        module_registry.register("array", |registrar| crate::runtime::natives::register_array_module(registrar));
-        module_registry.register("json", |registrar| crate::runtime::natives::register_json_module(registrar));
-        module_registry.register("time", |registrar| crate::runtime::natives::register_time_module(registrar));
-        module_registry.register("random", |registrar| crate::runtime::natives::register_random_module(registrar));
-        module_registry.register("io", |registrar| crate::runtime::natives::register_io_module(registrar));
-        module_registry.register("http", |registrar| crate::runtime::natives::register_http_module(registrar));
+        module_registry.register("math", |registrar| {
+            crate::runtime::natives::register_math_module(registrar)
+        });
+        module_registry.register("string", |registrar| {
+            crate::runtime::natives::register_string_module(registrar)
+        });
+        module_registry.register("array", |registrar| {
+            crate::runtime::natives::register_array_module(registrar)
+        });
+        module_registry.register("json", |registrar| {
+            crate::runtime::natives::register_json_module(registrar)
+        });
+        module_registry.register("time", |registrar| {
+            crate::runtime::natives::register_time_module(registrar)
+        });
+        module_registry.register("random", |registrar| {
+            crate::runtime::natives::register_random_module(registrar)
+        });
+        module_registry.register("io", |registrar| {
+            crate::runtime::natives::register_io_module(registrar)
+        });
+        module_registry.register("http", |registrar| {
+            crate::runtime::natives::register_http_module(registrar)
+        });
 
         // Initialize builtins only (print, println, input, len)
         Self::register_builtins(&mut env, registrar.clone());
@@ -77,9 +93,12 @@ impl Interpreter {
         }
     }
 
-    fn register_builtins(env: &mut Environment, _registrar: std::sync::Arc<std::sync::Mutex<Registrar>>) {
-        use crate::runtime::{NativeFunctionValue, StrValue, IntValue, setup_builtins};
+    fn register_builtins(
+        env: &mut Environment,
+        _registrar: std::sync::Arc<std::sync::Mutex<Registrar>>,
+    ) {
         use crate::ast::types::PrimitiveType;
+        use crate::runtime::{setup_builtins, IntValue, NativeFunctionValue, StrValue};
 
         // Call the main setup_builtins to register Future, Object, and primitive types
         setup_builtins(env);
@@ -110,7 +129,10 @@ impl Interpreter {
             },
             crate::fn_type!(PrimitiveType::str(), PrimitiveType::void()),
         );
-        let _ = env.declare("println".to_string(), RuntimeValue::NativeFunction(println_fn));
+        let _ = env.declare(
+            "println".to_string(),
+            RuntimeValue::NativeFunction(println_fn),
+        );
 
         let input_fn = NativeFunctionValue::new(
             |args: Vec<RuntimeValue>| {
@@ -140,7 +162,9 @@ impl Interpreter {
                 }
                 match &args[0] {
                     RuntimeValue::Str(s) => RuntimeValue::Int(IntValue::new(s.value.len() as i64)),
-                    RuntimeValue::List(l) => RuntimeValue::Int(IntValue::new(l.elements.len() as i64)),
+                    RuntimeValue::List(l) => {
+                        RuntimeValue::Int(IntValue::new(l.elements.len() as i64))
+                    }
                     _ => RuntimeValue::Null(NullValue::new()),
                 }
             },
@@ -183,15 +207,33 @@ impl Interpreter {
             Stmt::FnDecl(decl) => declarations::Declarations::execute_fn_decl(self, decl)
                 .await
                 .map(InterpreterResult::Value),
-            Stmt::Block(block) => control_flow::ControlFlow::execute_block_internal(self, block).await,
-            Stmt::IfStmt(if_stmt) => control_flow::ControlFlow::execute_if_stmt_internal(self, if_stmt).await,
-            Stmt::WhileStmt(while_stmt) => control_flow::ControlFlow::execute_while_stmt(self, while_stmt).await,
-            Stmt::DoWhileStmt(do_while_stmt) => control_flow::ControlFlow::execute_do_while_stmt(self, do_while_stmt).await,
-            Stmt::ForStmt(for_stmt) => control_flow::ControlFlow::execute_for_stmt(self, for_stmt).await,
-            Stmt::ForInStmt(for_in) => control_flow::ControlFlow::execute_for_in_stmt(self, for_in).await,
-            Stmt::ForOfStmt(for_of) => control_flow::ControlFlow::execute_for_of_stmt(self, for_of).await,
-            Stmt::SwitchStmt(switch_stmt) => control_flow::ControlFlow::execute_switch_stmt(self, switch_stmt).await,
-            Stmt::ReturnStmt(ret) => control_flow::ControlFlow::execute_return_stmt(self, ret).await,
+            Stmt::Block(block) => {
+                control_flow::ControlFlow::execute_block_internal(self, block).await
+            }
+            Stmt::IfStmt(if_stmt) => {
+                control_flow::ControlFlow::execute_if_stmt_internal(self, if_stmt).await
+            }
+            Stmt::WhileStmt(while_stmt) => {
+                control_flow::ControlFlow::execute_while_stmt(self, while_stmt).await
+            }
+            Stmt::DoWhileStmt(do_while_stmt) => {
+                control_flow::ControlFlow::execute_do_while_stmt(self, do_while_stmt).await
+            }
+            Stmt::ForStmt(for_stmt) => {
+                control_flow::ControlFlow::execute_for_stmt(self, for_stmt).await
+            }
+            Stmt::ForInStmt(for_in) => {
+                control_flow::ControlFlow::execute_for_in_stmt(self, for_in).await
+            }
+            Stmt::ForOfStmt(for_of) => {
+                control_flow::ControlFlow::execute_for_of_stmt(self, for_of).await
+            }
+            Stmt::SwitchStmt(switch_stmt) => {
+                control_flow::ControlFlow::execute_switch_stmt(self, switch_stmt).await
+            }
+            Stmt::ReturnStmt(ret) => {
+                control_flow::ControlFlow::execute_return_stmt(self, ret).await
+            }
             Stmt::BreakStmt(_) => Ok(InterpreterResult::Break),
             Stmt::ContinueStmt(_) => Ok(InterpreterResult::Continue),
             Stmt::ExprStmt(expr_stmt) => self
@@ -204,16 +246,24 @@ impl Interpreter {
             Stmt::InterfaceDecl(_) => Ok(InterpreterResult::Value(RuntimeValue::Null(
                 NullValue::new(),
             ))),
-            Stmt::EnumDecl(enum_decl) => declarations::Declarations::execute_enum_decl(self, enum_decl).await,
+            Stmt::EnumDecl(enum_decl) => {
+                declarations::Declarations::execute_enum_decl(self, enum_decl).await
+            }
             Stmt::TypeAliasDecl(_) => Ok(InterpreterResult::Value(RuntimeValue::Null(
                 NullValue::new(),
             ))),
-            Stmt::ImportDecl(import_decl) => module_loader::ModuleLoader::execute_import_decl(self, import_decl).await,
+            Stmt::ImportDecl(import_decl) => {
+                module_loader::ModuleLoader::execute_import_decl(self, import_decl).await
+            }
             Stmt::ExportDecl(_) => Ok(InterpreterResult::Value(RuntimeValue::Null(
                 NullValue::new(),
             ))),
-            Stmt::TryStmt(try_stmt) => control_flow::ControlFlow::execute_try_stmt(self, try_stmt).await,
-            Stmt::ThrowStmt(throw) => declarations::Declarations::execute_throw_stmt(self, throw).await,
+            Stmt::TryStmt(try_stmt) => {
+                control_flow::ControlFlow::execute_try_stmt(self, try_stmt).await
+            }
+            Stmt::ThrowStmt(throw) => {
+                declarations::Declarations::execute_throw_stmt(self, throw).await
+            }
         }
     }
 
@@ -229,7 +279,15 @@ impl Interpreter {
         operator: BinaryOperator,
         position: Position,
     ) -> Result<RuntimeValue, RaccoonError> {
-        operators::apply_binary_op(left, right, operator, position, &self.file, &self.call_stack).await
+        operators::apply_binary_op(
+            left,
+            right,
+            operator,
+            position,
+            &self.file,
+            &self.call_stack,
+        )
+        .await
     }
 
     pub fn is_truthy(&self, value: &RuntimeValue) -> bool {
@@ -301,8 +359,8 @@ impl Interpreter {
     /// Get a builtin type by name (e.g., "Future", "Promise")
     /// Returns a PrimitiveTypeObject with static methods, not a global object instance
     pub fn get_builtin_type(&self, name: &str) -> Option<RuntimeValue> {
-        use crate::runtime::{PrimitiveTypeObject, NativeFunctionValue};
         use crate::ast::types::PrimitiveType;
+        use crate::runtime::{NativeFunctionValue, PrimitiveTypeObject};
         use std::collections::HashMap;
 
         match name {
@@ -332,7 +390,10 @@ impl Interpreter {
                         } else {
                             args[0].to_string()
                         };
-                        RuntimeValue::Future(FutureValue::new_rejected(reason_str, PrimitiveType::any()))
+                        RuntimeValue::Future(FutureValue::new_rejected(
+                            reason_str,
+                            PrimitiveType::any(),
+                        ))
                     },
                     crate::fn_type!(variadic, PrimitiveType::any()),
                 );
@@ -342,10 +403,11 @@ impl Interpreter {
                 let all_fn = NativeFunctionValue::new(
                     |args: Vec<RuntimeValue>| {
                         if args.is_empty() {
-                            let list = RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
+                            let list =
+                                RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
                             return RuntimeValue::Future(FutureValue::new_resolved(
                                 list,
-                                PrimitiveType::any()
+                                PrimitiveType::any(),
                             ));
                         }
 
@@ -374,7 +436,10 @@ impl Interpreter {
                                         }
                                     }
 
-                                    let result_list = RuntimeValue::List(ListValue::new(results, PrimitiveType::any()));
+                                    let result_list = RuntimeValue::List(ListValue::new(
+                                        results,
+                                        PrimitiveType::any(),
+                                    ));
                                     result_clone.resolve(result_list);
                                 });
 
@@ -382,7 +447,7 @@ impl Interpreter {
                             }
                             _ => RuntimeValue::Future(FutureValue::new_rejected(
                                 "Future.all requires an array".to_string(),
-                                PrimitiveType::any()
+                                PrimitiveType::any(),
                             )),
                         }
                     },
@@ -396,7 +461,7 @@ impl Interpreter {
                         if args.is_empty() {
                             return RuntimeValue::Future(FutureValue::new_resolved(
                                 RuntimeValue::Null(NullValue::new()),
-                                PrimitiveType::any()
+                                PrimitiveType::any(),
                             ));
                         }
 
@@ -405,7 +470,7 @@ impl Interpreter {
                                 if list.elements.is_empty() {
                                     return RuntimeValue::Future(FutureValue::new_resolved(
                                         RuntimeValue::Null(NullValue::new()),
-                                        PrimitiveType::any()
+                                        PrimitiveType::any(),
                                     ));
                                 }
 
@@ -453,7 +518,7 @@ impl Interpreter {
                             }
                             _ => RuntimeValue::Future(FutureValue::new_rejected(
                                 "Future.race requires an array".to_string(),
-                                PrimitiveType::any()
+                                PrimitiveType::any(),
                             )),
                         }
                     },
@@ -465,10 +530,11 @@ impl Interpreter {
                 let all_settled_fn = NativeFunctionValue::new(
                     |args: Vec<RuntimeValue>| {
                         if args.is_empty() {
-                            let list = RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
+                            let list =
+                                RuntimeValue::List(ListValue::new(vec![], PrimitiveType::any()));
                             return RuntimeValue::Future(FutureValue::new_resolved(
                                 list,
-                                PrimitiveType::any()
+                                PrimitiveType::any(),
                             ));
                         }
 
@@ -481,41 +547,91 @@ impl Interpreter {
                                         let state = fut.state.read().unwrap();
                                         let result_obj = match &*state {
                                             crate::runtime::values::FutureState::Resolved(val) => {
-                                                let mut obj_props = std::collections::HashMap::new();
-                                                obj_props.insert("status".to_string(), RuntimeValue::Str(StrValue::new("fulfilled".to_string())));
-                                                obj_props.insert("value".to_string(), (**val).clone());
-                                                RuntimeValue::Object(crate::runtime::ObjectValue::new(obj_props, PrimitiveType::any()))
+                                                let mut obj_props =
+                                                    std::collections::HashMap::new();
+                                                obj_props.insert(
+                                                    "status".to_string(),
+                                                    RuntimeValue::Str(StrValue::new(
+                                                        "fulfilled".to_string(),
+                                                    )),
+                                                );
+                                                obj_props
+                                                    .insert("value".to_string(), (**val).clone());
+                                                RuntimeValue::Object(
+                                                    crate::runtime::ObjectValue::new(
+                                                        obj_props,
+                                                        PrimitiveType::any(),
+                                                    ),
+                                                )
                                             }
                                             crate::runtime::values::FutureState::Rejected(err) => {
-                                                let mut obj_props = std::collections::HashMap::new();
-                                                obj_props.insert("status".to_string(), RuntimeValue::Str(StrValue::new("rejected".to_string())));
-                                                obj_props.insert("reason".to_string(), RuntimeValue::Str(StrValue::new(err.clone())));
-                                                RuntimeValue::Object(crate::runtime::ObjectValue::new(obj_props, PrimitiveType::any()))
+                                                let mut obj_props =
+                                                    std::collections::HashMap::new();
+                                                obj_props.insert(
+                                                    "status".to_string(),
+                                                    RuntimeValue::Str(StrValue::new(
+                                                        "rejected".to_string(),
+                                                    )),
+                                                );
+                                                obj_props.insert(
+                                                    "reason".to_string(),
+                                                    RuntimeValue::Str(StrValue::new(err.clone())),
+                                                );
+                                                RuntimeValue::Object(
+                                                    crate::runtime::ObjectValue::new(
+                                                        obj_props,
+                                                        PrimitiveType::any(),
+                                                    ),
+                                                )
                                             }
                                             crate::runtime::values::FutureState::Pending => {
-                                                let mut obj_props = std::collections::HashMap::new();
-                                                obj_props.insert("status".to_string(), RuntimeValue::Str(StrValue::new("pending".to_string())));
-                                                RuntimeValue::Object(crate::runtime::ObjectValue::new(obj_props, PrimitiveType::any()))
+                                                let mut obj_props =
+                                                    std::collections::HashMap::new();
+                                                obj_props.insert(
+                                                    "status".to_string(),
+                                                    RuntimeValue::Str(StrValue::new(
+                                                        "pending".to_string(),
+                                                    )),
+                                                );
+                                                RuntimeValue::Object(
+                                                    crate::runtime::ObjectValue::new(
+                                                        obj_props,
+                                                        PrimitiveType::any(),
+                                                    ),
+                                                )
                                             }
                                         };
                                         results.push(result_obj);
                                     } else {
                                         let mut obj_props = std::collections::HashMap::new();
-                                        obj_props.insert("status".to_string(), RuntimeValue::Str(StrValue::new("fulfilled".to_string())));
+                                        obj_props.insert(
+                                            "status".to_string(),
+                                            RuntimeValue::Str(StrValue::new(
+                                                "fulfilled".to_string(),
+                                            )),
+                                        );
                                         obj_props.insert("value".to_string(), element.clone());
-                                        results.push(RuntimeValue::Object(crate::runtime::ObjectValue::new(obj_props, PrimitiveType::any())));
+                                        results.push(RuntimeValue::Object(
+                                            crate::runtime::ObjectValue::new(
+                                                obj_props,
+                                                PrimitiveType::any(),
+                                            ),
+                                        ));
                                     }
                                 }
 
-                                let result_list = RuntimeValue::List(ListValue::new(results, PrimitiveType::any()));
+                                let result_list = RuntimeValue::List(ListValue::new(
+                                    results,
+                                    PrimitiveType::any(),
+                                ));
                                 RuntimeValue::Future(FutureValue::new_resolved(
                                     result_list,
-                                    PrimitiveType::any()
+                                    PrimitiveType::any(),
                                 ))
                             }
                             _ => RuntimeValue::Future(FutureValue::new_rejected(
                                 "Future.allSettled requires an array".to_string(),
-                                PrimitiveType::any()
+                                PrimitiveType::any(),
                             )),
                         }
                     },
@@ -529,7 +645,7 @@ impl Interpreter {
                         if args.is_empty() {
                             return RuntimeValue::Future(FutureValue::new_rejected(
                                 "All futures rejected".to_string(),
-                                PrimitiveType::any()
+                                PrimitiveType::any(),
                             ));
                         }
 
@@ -539,17 +655,21 @@ impl Interpreter {
                                 for element in &list.elements {
                                     if let RuntimeValue::Future(fut) = element {
                                         let state = fut.state.read().unwrap();
-                                        if let crate::runtime::values::FutureState::Resolved(val) = &*state {
-                                            return RuntimeValue::Future(FutureValue::new_resolved(
-                                                (**val).clone(),
-                                                PrimitiveType::any()
-                                            ));
+                                        if let crate::runtime::values::FutureState::Resolved(val) =
+                                            &*state
+                                        {
+                                            return RuntimeValue::Future(
+                                                FutureValue::new_resolved(
+                                                    (**val).clone(),
+                                                    PrimitiveType::any(),
+                                                ),
+                                            );
                                         }
                                     } else {
                                         // Non-future values are treated as resolved
                                         return RuntimeValue::Future(FutureValue::new_resolved(
                                             element.clone(),
-                                            PrimitiveType::any()
+                                            PrimitiveType::any(),
                                         ));
                                     }
                                 }
@@ -558,23 +678,27 @@ impl Interpreter {
                                 for element in &list.elements {
                                     if let RuntimeValue::Future(fut) = element {
                                         let state = fut.state.read().unwrap();
-                                        if let crate::runtime::values::FutureState::Rejected(err) = &*state {
-                                            return RuntimeValue::Future(FutureValue::new_rejected(
-                                                err.clone(),
-                                                PrimitiveType::any()
-                                            ));
+                                        if let crate::runtime::values::FutureState::Rejected(err) =
+                                            &*state
+                                        {
+                                            return RuntimeValue::Future(
+                                                FutureValue::new_rejected(
+                                                    err.clone(),
+                                                    PrimitiveType::any(),
+                                                ),
+                                            );
                                         }
                                     }
                                 }
 
                                 RuntimeValue::Future(FutureValue::new_rejected(
                                     "All futures rejected".to_string(),
-                                    PrimitiveType::any()
+                                    PrimitiveType::any(),
                                 ))
                             }
                             _ => RuntimeValue::Future(FutureValue::new_rejected(
                                 "Future.any requires an array".to_string(),
-                                PrimitiveType::any()
+                                PrimitiveType::any(),
                             )),
                         }
                     },
@@ -585,7 +709,7 @@ impl Interpreter {
                 let static_properties = HashMap::new();
 
                 // Create a Future type: Future<any>
-                use crate::ast::types::{Type, FutureType};
+                use crate::ast::types::{FutureType, Type};
                 let any_type = PrimitiveType::any();
                 let future_type = Type::Future(Box::new(FutureType {
                     inner_type: any_type,

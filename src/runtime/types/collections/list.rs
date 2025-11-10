@@ -1,6 +1,6 @@
-use crate::runtime::types::{CallbackExecutor, TypeHandler};
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
+use crate::runtime::types::{CallbackExecutor, TypeHandler};
 use crate::runtime::{BoolValue, IntValue, ListValue, NullValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
@@ -279,10 +279,7 @@ impl TypeHandler for ListType {
                     }
                 };
 
-                fn flatten_recursive(
-                    elements: &[RuntimeValue],
-                    depth: usize,
-                ) -> Vec<RuntimeValue> {
+                fn flatten_recursive(elements: &[RuntimeValue], depth: usize) -> Vec<RuntimeValue> {
                     if depth == 0 {
                         return elements.to_vec();
                     }
@@ -866,7 +863,15 @@ impl TypeHandler for ListType {
     fn has_async_instance_method(&self, method: &str) -> bool {
         matches!(
             method,
-            "map" | "filter" | "reduce" | "forEach" | "find" | "findIndex" | "some" | "every" | "flatMap"
+            "map"
+                | "filter"
+                | "reduce"
+                | "forEach"
+                | "find"
+                | "findIndex"
+                | "some"
+                | "every"
+                | "flatMap"
         )
     }
 }

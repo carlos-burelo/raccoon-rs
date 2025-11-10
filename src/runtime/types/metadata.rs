@@ -1,6 +1,5 @@
 /// Metadata system for type reflection
 /// Provides structured information about types, methods, and properties
-
 use std::collections::HashMap;
 
 /// Parameter metadata for method signatures
@@ -162,23 +161,17 @@ impl TypeMetadata {
 
     /// Find instance method by name (including aliases)
     pub fn find_instance_method(&self, name: &str) -> Option<&MethodMetadata> {
-        self.instance_methods
-            .iter()
-            .find(|m| m.matches(name))
+        self.instance_methods.iter().find(|m| m.matches(name))
     }
 
     /// Find static method by name (including aliases)
     pub fn find_static_method(&self, name: &str) -> Option<&MethodMetadata> {
-        self.static_methods
-            .iter()
-            .find(|m| m.matches(name))
+        self.static_methods.iter().find(|m| m.matches(name))
     }
 
     /// Find static property by name
     pub fn find_static_property(&self, name: &str) -> Option<&PropertyMetadata> {
-        self.static_properties
-            .iter()
-            .find(|p| p.name == name)
+        self.static_properties.iter().find(|p| p.name == name)
     }
 
     /// Check if instance method exists (including aliases)
@@ -334,11 +327,10 @@ mod tests {
 
     #[test]
     fn test_type_metadata() {
-        let metadata = TypeMetadata::new("str", "String type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toUpper", "str", "Convert to uppercase"),
-                MethodMetadata::new("toLower", "str", "Convert to lowercase"),
-            ]);
+        let metadata = TypeMetadata::new("str", "String type").with_instance_methods(vec![
+            MethodMetadata::new("toUpper", "str", "Convert to uppercase"),
+            MethodMetadata::new("toLower", "str", "Convert to lowercase"),
+        ]);
 
         assert!(metadata.has_instance_method("toUpper"));
         assert!(metadata.has_instance_method("toLower"));
@@ -347,11 +339,10 @@ mod tests {
 
     #[test]
     fn test_generate_docs() {
-        let metadata = TypeMetadata::new("str", "String type")
-            .with_instance_methods(vec![
-                MethodMetadata::new("split", "list<str>", "Splits a string")
-                    .with_params(vec![ParamMetadata::new("separator", "str")]),
-            ]);
+        let metadata = TypeMetadata::new("str", "String type").with_instance_methods(vec![
+            MethodMetadata::new("split", "list<str>", "Splits a string")
+                .with_params(vec![ParamMetadata::new("separator", "str")]),
+        ]);
 
         let docs = metadata.generate_docs();
         assert!(docs.contains("# str"));

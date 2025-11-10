@@ -1,4 +1,7 @@
+/// Refactored NullType using helpers and metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -10,6 +13,21 @@ use async_trait::async_trait;
 
 pub struct NullType;
 
+impl NullType {
+    /// Returns complete type metadata with all methods and properties
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new(
+            "null",
+            "Null/None value type representing absence of a value",
+        )
+        .with_instance_methods(vec![
+            // Conversion methods
+            MethodMetadata::new("toString", "str", "Convert to string 'null'"),
+            MethodMetadata::new("toStr", "str", "Convert to string 'null'"),
+        ])
+    }
+}
+
 #[async_trait]
 impl TypeHandler for NullType {
     fn type_name(&self) -> &str {
@@ -20,7 +38,7 @@ impl TypeHandler for NullType {
         &self,
         value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
@@ -36,12 +54,12 @@ impl TypeHandler for NullType {
         }
 
         match method {
-            "toString" | "toStr" => Ok(RuntimeValue::Str(StrValue::new("null".to_string()))),
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on null", method),
-                position,
-                file,
-            )),
+            // Conversion methods
+            "toString" | "toStr" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new("null".to_string())))
+            }
+            _ => Err(method_not_found_error("null", method, position, file)),
         }
     }
 
@@ -52,10 +70,8 @@ impl TypeHandler for NullType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Static method '{}' not found on null type", method),
-            position,
-            file,
+        Err(static_method_not_found_error(
+            "null", method, position, file,
         ))
     }
 

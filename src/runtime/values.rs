@@ -68,7 +68,7 @@ impl RuntimeValue {
     }
 
     pub fn get_type_object(&self) -> TypeObject {
-        use crate::runtime::type_object::{TypeKind, PrimitiveKind, TypeMetadata};
+        use crate::runtime::type_object::{PrimitiveKind, TypeKind, TypeMetadata};
         use std::collections::HashMap;
 
         match self {
@@ -141,9 +141,8 @@ impl RuntimeValue {
                 TypeMetadata::new(),
             ),
             RuntimeValue::EnumObject(e) => {
-                let variants: Vec<String> = e.members.iter()
-                    .map(|(name, _)| name.clone())
-                    .collect();
+                let variants: Vec<String> =
+                    e.members.iter().map(|(name, _)| name.clone()).collect();
                 TypeObject::new(
                     e.enum_type.clone(),
                     TypeKind::Enum {
@@ -208,15 +207,13 @@ impl RuntimeValue {
         match self {
             RuntimeValue::Class(c) => c.class_name.clone(),
             RuntimeValue::ClassInstance(c) => c.class_name.clone(),
-            RuntimeValue::Function(f) => {
-                f.name.clone().unwrap_or_else(|| {
-                    if f.is_async {
-                        "[async fn]".to_string()
-                    } else {
-                        "[fn]".to_string()
-                    }
-                })
-            }
+            RuntimeValue::Function(f) => f.name.clone().unwrap_or_else(|| {
+                if f.is_async {
+                    "[async fn]".to_string()
+                } else {
+                    "[fn]".to_string()
+                }
+            }),
             RuntimeValue::NativeFunction(_) => "[Native fn]".to_string(),
             RuntimeValue::NativeAsyncFunction(_) => "[Native async fn]".to_string(),
             RuntimeValue::Future(_) => "future".to_string(),

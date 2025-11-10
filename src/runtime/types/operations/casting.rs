@@ -1,8 +1,7 @@
 /// Casting and type conversion module
 /// Centralizes all type coercion rules and conversion logic
-
 use crate::error::RaccoonError;
-use crate::runtime::{FloatValue, IntValue, RuntimeValue, StrValue, BoolValue};
+use crate::runtime::{BoolValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 
 /// Type compatibility and widening rules
@@ -62,24 +61,28 @@ pub fn try_cast(
         },
         RuntimeValue::Str(s) => match target_type_name {
             "str" => Ok(RuntimeValue::Str(s)),
-            "int" => {
-                s.value.parse::<i64>()
-                    .map(|v| RuntimeValue::Int(IntValue::new(v)))
-                    .map_err(|_| RaccoonError::new(
+            "int" => s
+                .value
+                .parse::<i64>()
+                .map(|v| RuntimeValue::Int(IntValue::new(v)))
+                .map_err(|_| {
+                    RaccoonError::new(
                         format!("Cannot cast '{}' to int", s.value),
                         position,
                         file.clone(),
-                    ))
-            }
-            "float" => {
-                s.value.parse::<f64>()
-                    .map(|v| RuntimeValue::Float(FloatValue::new(v)))
-                    .map_err(|_| RaccoonError::new(
+                    )
+                }),
+            "float" => s
+                .value
+                .parse::<f64>()
+                .map(|v| RuntimeValue::Float(FloatValue::new(v)))
+                .map_err(|_| {
+                    RaccoonError::new(
                         format!("Cannot cast '{}' to float", s.value),
                         position,
                         file.clone(),
-                    ))
-            }
+                    )
+                }),
             "bool" => Ok(RuntimeValue::Bool(BoolValue::new(!s.value.is_empty()))),
             _ => Err(RaccoonError::new(
                 format!("Cannot cast str to {}", target_type_name),
@@ -89,8 +92,16 @@ pub fn try_cast(
         },
         RuntimeValue::Bool(b) => match target_type_name {
             "bool" => Ok(RuntimeValue::Bool(b)),
-            "int" => Ok(RuntimeValue::Int(IntValue::new(if b.value { 1 } else { 0 }))),
-            "float" => Ok(RuntimeValue::Float(FloatValue::new(if b.value { 1.0 } else { 0.0 }))),
+            "int" => Ok(RuntimeValue::Int(IntValue::new(if b.value {
+                1
+            } else {
+                0
+            }))),
+            "float" => Ok(RuntimeValue::Float(FloatValue::new(if b.value {
+                1.0
+            } else {
+                0.0
+            }))),
             "str" => Ok(RuntimeValue::Str(StrValue::new(b.value.to_string()))),
             _ => Err(RaccoonError::new(
                 format!("Cannot cast bool to {}", target_type_name),
@@ -152,8 +163,14 @@ mod tests {
         let float_val = RuntimeValue::Float(FloatValue::new(3.14));
 
         assert_eq!(determine_widening(&int_val, &int_val), WidenResult::Same);
-        assert_eq!(determine_widening(&int_val, &float_val), WidenResult::WidenLeft);
-        assert_eq!(determine_widening(&float_val, &int_val), WidenResult::WidenRight);
+        assert_eq!(
+            determine_widening(&int_val, &float_val),
+            WidenResult::WidenLeft
+        );
+        assert_eq!(
+            determine_widening(&float_val, &int_val),
+            WidenResult::WidenRight
+        );
     }
 
     #[test]
