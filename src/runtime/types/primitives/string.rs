@@ -1,11 +1,138 @@
+/// StrType - String primitive type with helpers and metadata system
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{
+    MethodMetadata, ParamMetadata, PropertyMetadata, TypeMetadata,
+};
 use crate::runtime::types::TypeHandler;
-use crate::runtime::{ListValue, RuntimeValue, StrValue};
+use crate::runtime::{BoolValue, IntValue, ListValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
 pub struct StrType;
+
+impl StrType {
+    /// Returns complete type metadata with all methods and properties
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new("str", "String type with text manipulation methods")
+            .with_instance_methods(vec![
+                // Case conversion
+                MethodMetadata::new("toUpper", "str", "Convert to uppercase")
+                    .with_alias("toUpperCase"),
+                MethodMetadata::new("toLower", "str", "Convert to lowercase")
+                    .with_alias("toLowerCase"),
+                // Trimming
+                MethodMetadata::new("trim", "str", "Remove whitespace from both ends"),
+                MethodMetadata::new("trimStart", "str", "Remove whitespace from start")
+                    .with_alias("trimLeft"),
+                MethodMetadata::new("trimEnd", "str", "Remove whitespace from end")
+                    .with_alias("trimRight"),
+                // Splitting and joining
+                MethodMetadata::new("split", "list<str>", "Split string by separator")
+                    .with_params(vec![ParamMetadata::new("separator", "str")]),
+                MethodMetadata::new("join", "str", "Join characters with separator")
+                    .with_params(vec![ParamMetadata::new("separator", "str")]),
+                // Replacement
+                MethodMetadata::new("replace", "str", "Replace first occurrence").with_params(
+                    vec![
+                        ParamMetadata::new("search", "str"),
+                        ParamMetadata::new("replacement", "str"),
+                    ],
+                ),
+                MethodMetadata::new("replaceAll", "str", "Replace all occurrences").with_params(
+                    vec![
+                        ParamMetadata::new("search", "str"),
+                        ParamMetadata::new("replacement", "str"),
+                    ],
+                ),
+                // Searching
+                MethodMetadata::new("startsWith", "bool", "Check if starts with prefix")
+                    .with_params(vec![ParamMetadata::new("prefix", "str")]),
+                MethodMetadata::new("endsWith", "bool", "Check if ends with suffix")
+                    .with_params(vec![ParamMetadata::new("suffix", "str")]),
+                MethodMetadata::new("contains", "bool", "Check if contains substring")
+                    .with_params(vec![ParamMetadata::new("substring", "str")]),
+                MethodMetadata::new(
+                    "indexOf",
+                    "int",
+                    "Find first index of substring, -1 if not found",
+                )
+                .with_params(vec![ParamMetadata::new("substring", "str")]),
+                MethodMetadata::new(
+                    "lastIndexOf",
+                    "int",
+                    "Find last index of substring, -1 if not found",
+                )
+                .with_params(vec![ParamMetadata::new("substring", "str")]),
+                // Slicing
+                MethodMetadata::new("slice", "str", "Extract substring using indices").with_params(
+                    vec![
+                        ParamMetadata::new("start", "int"),
+                        ParamMetadata::new("end", "int").optional(),
+                    ],
+                ),
+                MethodMetadata::new(
+                    "substring",
+                    "str",
+                    "Extract substring (non-negative indices)",
+                )
+                .with_params(vec![
+                    ParamMetadata::new("start", "int"),
+                    ParamMetadata::new("end", "int").optional(),
+                ]),
+                // Character access
+                MethodMetadata::new("charAt", "str", "Get character at index")
+                    .with_params(vec![ParamMetadata::new("index", "int")]),
+                MethodMetadata::new("charCodeAt", "int", "Get character code at index")
+                    .with_params(vec![ParamMetadata::new("index", "int")]),
+                // Padding
+                MethodMetadata::new("padStart", "str", "Pad string from start").with_params(vec![
+                    ParamMetadata::new("targetLength", "int"),
+                    ParamMetadata::new("padString", "str").optional(),
+                ]),
+                MethodMetadata::new("padEnd", "str", "Pad string from end").with_params(vec![
+                    ParamMetadata::new("targetLength", "int"),
+                    ParamMetadata::new("padString", "str").optional(),
+                ]),
+                // Other transformations
+                MethodMetadata::new("repeat", "str", "Repeat string N times")
+                    .with_params(vec![ParamMetadata::new("count", "int")]),
+                MethodMetadata::new("reverse", "str", "Reverse string"),
+                MethodMetadata::new("match", "list<str>", "Find all matches of pattern")
+                    .with_params(vec![ParamMetadata::new("pattern", "str")]),
+                // Conversion
+                MethodMetadata::new("toStr", "str", "Convert to string (identity)"),
+            ])
+            .with_static_methods(vec![
+                MethodMetadata::new("isNullOrEmpty", "bool", "Check if string is null or empty")
+                    .with_params(vec![ParamMetadata::new("value", "any")]),
+                MethodMetadata::new(
+                    "isNullOrWhiteSpace",
+                    "bool",
+                    "Check if string is null or whitespace",
+                )
+                .with_params(vec![ParamMetadata::new("value", "any")]),
+                MethodMetadata::new("concat", "str", "Concatenate multiple strings")
+                    .with_params(vec![ParamMetadata::new("values", "any").variadic()]),
+                MethodMetadata::new("join", "str", "Join values with separator").with_params(vec![
+                    ParamMetadata::new("separator", "str"),
+                    ParamMetadata::new("values", "any").variadic(),
+                ]),
+                MethodMetadata::new("format", "str", "Format string with placeholders")
+                    .with_params(vec![
+                        ParamMetadata::new("template", "str"),
+                        ParamMetadata::new("args", "any").variadic(),
+                    ]),
+            ])
+            .with_static_properties(vec![PropertyMetadata::new(
+                "empty",
+                "str",
+                "Empty string constant",
+            )
+            .readonly()])
+    }
+}
 
 #[async_trait]
 impl TypeHandler for StrType {
@@ -21,206 +148,121 @@ impl TypeHandler for StrType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        let s = match value {
-            RuntimeValue::Str(s) => &s.value,
-            _ => {
-                return Err(RaccoonError::new(
-                    format!("Expected str, got {}", value.get_name()),
-                    position,
-                    file,
-                ));
-            }
-        };
+        let s = extract_str(value, "this", position, file.clone())?;
 
         match method {
-            "toUpper" | "toUpperCase" => Ok(RuntimeValue::Str(StrValue::new(s.to_uppercase()))),
-            "toLower" | "toLowerCase" => Ok(RuntimeValue::Str(StrValue::new(s.to_lowercase()))),
-            "trim" => Ok(RuntimeValue::Str(StrValue::new(s.trim().to_string()))),
+            // Case conversion
+            "toUpper" | "toUpperCase" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(s.to_uppercase())))
+            }
+            "toLower" | "toLowerCase" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(s.to_lowercase())))
+            }
+
+            // Trimming
+            "trim" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(s.trim().to_string())))
+            }
             "trimStart" | "trimLeft" => {
+                require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(s.trim_start().to_string())))
             }
             "trimEnd" | "trimRight" => {
+                require_args(&args, 0, method, position, file)?;
                 Ok(RuntimeValue::Str(StrValue::new(s.trim_end().to_string())))
             }
+
+            // Splitting
             "split" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "split requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Str(sep) = &args[0] {
-                    let parts: Vec<RuntimeValue> = s
-                        .split(&sep.value)
-                        .map(|p| RuntimeValue::Str(StrValue::new(p.to_string())))
-                        .collect();
-                    Ok(RuntimeValue::List(ListValue::new(
-                        parts,
-                        PrimitiveType::str(),
-                    )))
-                } else {
-                    Err(RaccoonError::new(
-                        "split requires string argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let separator = extract_str(&args[0], "separator", position, file)?;
+                let parts: Vec<RuntimeValue> = s
+                    .split(separator)
+                    .map(|p| RuntimeValue::Str(StrValue::new(p.to_string())))
+                    .collect();
+                Ok(RuntimeValue::List(ListValue::new(
+                    parts,
+                    PrimitiveType::str(),
+                )))
             }
-            "replace" => {
-                if args.len() != 2 {
-                    return Err(RaccoonError::new(
-                        "replace requires 2 arguments (search, replacement)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match (&args[0], &args[1]) {
-                    (RuntimeValue::Str(search), RuntimeValue::Str(replacement)) => {
-                        Ok(RuntimeValue::Str(StrValue::new(
-                            s.replace(&search.value, &replacement.value),
-                        )))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "replace requires two string arguments".to_string(),
-                        position,
-                        file,
-                    )),
-                }
+
+            // Joining
+            "join" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let separator = extract_str(&args[0], "separator", position, file)?;
+                let joined = s
+                    .chars()
+                    .map(|c| c.to_string())
+                    .collect::<Vec<String>>()
+                    .join(separator);
+                Ok(RuntimeValue::Str(StrValue::new(joined)))
             }
+
+            // Replacement
+            "replace" | "replaceAll" => {
+                require_args(&args, 2, method, position, file.clone())?;
+                let search = extract_str(&args[0], "search", position, file.clone())?;
+                let replacement = extract_str(&args[1], "replacement", position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(
+                    s.replace(search, replacement),
+                )))
+            }
+
+            // Searching
             "startsWith" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "startsWith requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Str(prefix) = &args[0] {
-                    Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
-                        s.starts_with(&prefix.value),
-                    )))
-                } else {
-                    Err(RaccoonError::new(
-                        "startsWith requires string argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let prefix = extract_str(&args[0], "prefix", position, file)?;
+                Ok(RuntimeValue::Bool(BoolValue::new(s.starts_with(prefix))))
             }
             "endsWith" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "endsWith requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Str(suffix) = &args[0] {
-                    Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
-                        s.ends_with(&suffix.value),
-                    )))
-                } else {
-                    Err(RaccoonError::new(
-                        "endsWith requires string argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let suffix = extract_str(&args[0], "suffix", position, file)?;
+                Ok(RuntimeValue::Bool(BoolValue::new(s.ends_with(suffix))))
             }
             "contains" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "contains requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Str(substr) = &args[0] {
-                    Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
-                        s.contains(&substr.value),
-                    )))
-                } else {
-                    Err(RaccoonError::new(
-                        "contains requires string argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
+                require_args(&args, 1, method, position, file.clone())?;
+                let substring = extract_str(&args[0], "substring", position, file)?;
+                Ok(RuntimeValue::Bool(BoolValue::new(s.contains(substring))))
             }
-            "toStr" => Ok(RuntimeValue::Str(StrValue::new(s.to_string()))),
-            "join" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "join requires 1 argument (separator)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Str(sep) = &args[0] {
-                    let joined = s
-                        .chars()
-                        .map(|c| c.to_string())
-                        .collect::<Vec<String>>()
-                        .join(&sep.value);
-                    Ok(RuntimeValue::Str(StrValue::new(joined)))
-                } else {
-                    Err(RaccoonError::new(
-                        "join requires string argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
+            "indexOf" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let substring = extract_str(&args[0], "substring", position, file)?;
+                let index = s.find(substring).map(|i| i as i64).unwrap_or(-1);
+                Ok(RuntimeValue::Int(IntValue::new(index)))
             }
+            "lastIndexOf" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let substring = extract_str(&args[0], "substring", position, file)?;
+                let index = s.rfind(substring).map(|i| i as i64).unwrap_or(-1);
+                Ok(RuntimeValue::Int(IntValue::new(index)))
+            }
+
+            // Slicing
             "slice" => {
-                if args.len() < 1 || args.len() > 2 {
-                    return Err(RaccoonError::new(
-                        "slice requires 1 or 2 arguments".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                let start = match &args[0] {
-                    RuntimeValue::Int(i) => i.value as isize,
-                    _ => {
-                        return Err(RaccoonError::new(
-                            "slice requires integer arguments".to_string(),
-                            position,
-                            file,
-                        ));
-                    }
-                };
+                require_args_range(&args, 1, 2, method, position, file.clone())?;
+                let start = extract_int(&args[0], "start", position, file.clone())? as isize;
                 let end = if args.len() == 2 {
-                    match &args[1] {
-                        RuntimeValue::Int(i) => Some(i.value as isize),
-                        _ => {
-                            return Err(RaccoonError::new(
-                                "slice requires integer arguments".to_string(),
-                                position,
-                                file,
-                            ));
-                        }
-                    }
+                    Some(extract_int(&args[1], "end", position, file.clone())? as isize)
                 } else {
                     None
                 };
 
                 let len = s.len() as isize;
-                let real_start = if start < 0 { len + start } else { start };
-                let real_end = match end {
-                    Some(e) => {
-                        if e < 0 {
-                            len + e
-                        } else {
-                            e
-                        }
-                    }
-                    None => len,
+                let real_start = if start < 0 {
+                    (len + start).max(0)
+                } else {
+                    start.min(len)
                 };
+                let real_end = end
+                    .map(|e| if e < 0 { (len + e).max(0) } else { e.min(len) })
+                    .unwrap_or(len);
 
-                if real_start < 0 || real_end > len || real_start > real_end {
+                if real_start > real_end {
                     return Err(RaccoonError::new(
-                        "slice indices out of bounds".to_string(),
+                        "slice: start index cannot be greater than end index".to_string(),
                         position,
                         file,
                     ));
@@ -230,261 +272,11 @@ impl TypeHandler for StrType {
                     s[real_start as usize..real_end as usize].to_string(),
                 )))
             }
-
-            "indexOf" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "indexOf requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Str(substr) = &args[0] {
-                    if let Some(index) = s.find(&substr.value) {
-                        Ok(RuntimeValue::Int(crate::runtime::IntValue::new(
-                            index as i64,
-                        )))
-                    } else {
-                        Ok(RuntimeValue::Int(crate::runtime::IntValue::new(-1)))
-                    }
-                } else {
-                    Err(RaccoonError::new(
-                        "indexOf requires string argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
-            }
-
-            "lastIndexOf" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "lastIndexOf requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Str(substr) = &args[0] {
-                    if let Some(index) = s.rfind(&substr.value) {
-                        Ok(RuntimeValue::Int(crate::runtime::IntValue::new(
-                            index as i64,
-                        )))
-                    } else {
-                        Ok(RuntimeValue::Int(crate::runtime::IntValue::new(-1)))
-                    }
-                } else {
-                    Err(RaccoonError::new(
-                        "lastIndexOf requires string argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
-            }
-
-            "repeat" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "repeat requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Int(count) = &args[0] {
-                    if count.value < 0 {
-                        return Err(RaccoonError::new(
-                            "repeat count must be non-negative".to_string(),
-                            position,
-                            file,
-                        ));
-                    }
-                    Ok(RuntimeValue::Str(StrValue::new(
-                        s.repeat(count.value as usize),
-                    )))
-                } else {
-                    Err(RaccoonError::new(
-                        "repeat requires integer argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
-            }
-
-            "padStart" => {
-                if args.len() < 1 || args.len() > 2 {
-                    return Err(RaccoonError::new(
-                        "padStart requires 1 or 2 arguments".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                let target_len = match &args[0] {
-                    RuntimeValue::Int(i) => i.value as usize,
-                    _ => {
-                        return Err(RaccoonError::new(
-                            "padStart requires integer as first argument".to_string(),
-                            position,
-                            file,
-                        ));
-                    }
-                };
-                let pad_str = if args.len() == 2 {
-                    match &args[1] {
-                        RuntimeValue::Str(p) => p.value.clone(),
-                        _ => {
-                            return Err(RaccoonError::new(
-                                "padStart requires string as second argument".to_string(),
-                                position,
-                                file,
-                            ));
-                        }
-                    }
-                } else {
-                    " ".to_string()
-                };
-
-                if target_len <= s.len() || pad_str.is_empty() {
-                    return Ok(RuntimeValue::Str(StrValue::new(s.to_string())));
-                }
-
-                let pad_needed = target_len - s.len();
-                let pad_count = (pad_needed + pad_str.len() - 1) / pad_str.len();
-                let padding = pad_str.repeat(pad_count);
-                let result = format!("{}{}", &padding[..pad_needed], s);
-                Ok(RuntimeValue::Str(StrValue::new(result)))
-            }
-
-            "padEnd" => {
-                if args.len() < 1 || args.len() > 2 {
-                    return Err(RaccoonError::new(
-                        "padEnd requires 1 or 2 arguments".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                let target_len = match &args[0] {
-                    RuntimeValue::Int(i) => i.value as usize,
-                    _ => {
-                        return Err(RaccoonError::new(
-                            "padEnd requires integer as first argument".to_string(),
-                            position,
-                            file,
-                        ));
-                    }
-                };
-                let pad_str = if args.len() == 2 {
-                    match &args[1] {
-                        RuntimeValue::Str(p) => p.value.clone(),
-                        _ => {
-                            return Err(RaccoonError::new(
-                                "padEnd requires string as second argument".to_string(),
-                                position,
-                                file,
-                            ));
-                        }
-                    }
-                } else {
-                    " ".to_string()
-                };
-
-                if target_len <= s.len() || pad_str.is_empty() {
-                    return Ok(RuntimeValue::Str(StrValue::new(s.to_string())));
-                }
-
-                let pad_needed = target_len - s.len();
-                let pad_count = (pad_needed + pad_str.len() - 1) / pad_str.len();
-                let padding = pad_str.repeat(pad_count);
-                let result = format!("{}{}", s, &padding[..pad_needed]);
-                Ok(RuntimeValue::Str(StrValue::new(result)))
-            }
-
-            "charCodeAt" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "charCodeAt requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Int(index) = &args[0] {
-                    let idx = index.value as usize;
-                    if idx >= s.len() {
-                        return Err(RaccoonError::new(
-                            "charCodeAt index out of bounds".to_string(),
-                            position,
-                            file,
-                        ));
-                    }
-                    if let Some(ch) = s.chars().nth(idx) {
-                        Ok(RuntimeValue::Int(crate::runtime::IntValue::new(ch as i64)))
-                    } else {
-                        Err(RaccoonError::new(
-                            "charCodeAt index out of bounds".to_string(),
-                            position,
-                            file,
-                        ))
-                    }
-                } else {
-                    Err(RaccoonError::new(
-                        "charCodeAt requires integer argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
-            }
-
-            "charAt" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "charAt requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                if let RuntimeValue::Int(index) = &args[0] {
-                    let idx = index.value as usize;
-                    if let Some(ch) = s.chars().nth(idx) {
-                        Ok(RuntimeValue::Str(StrValue::new(ch.to_string())))
-                    } else {
-                        Ok(RuntimeValue::Str(StrValue::new(String::new())))
-                    }
-                } else {
-                    Err(RaccoonError::new(
-                        "charAt requires integer argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
-            }
-
             "substring" => {
-                if args.is_empty() || args.len() > 2 {
-                    return Err(RaccoonError::new(
-                        "substring requires 1 or 2 arguments".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                let start = match &args[0] {
-                    RuntimeValue::Int(i) => i.value.max(0) as usize,
-                    _ => {
-                        return Err(RaccoonError::new(
-                            "substring requires integer arguments".to_string(),
-                            position,
-                            file,
-                        ));
-                    }
-                };
+                require_args_range(&args, 1, 2, method, position, file.clone())?;
+                let start = extract_int(&args[0], "start", position, file.clone())?.max(0) as usize;
                 let end = if args.len() == 2 {
-                    match &args[1] {
-                        RuntimeValue::Int(i) => Some(i.value.max(0) as usize),
-                        _ => {
-                            return Err(RaccoonError::new(
-                                "substring requires integer arguments".to_string(),
-                                position,
-                                file,
-                            ));
-                        }
-                    }
+                    Some(extract_int(&args[1], "end", position, file.clone())?.max(0) as usize)
                 } else {
                     None
                 };
@@ -504,63 +296,109 @@ impl TypeHandler for StrType {
                 }
             }
 
-            "reverse" => Ok(RuntimeValue::Str(StrValue::new(
-                s.chars().rev().collect::<String>(),
-            ))),
-
-            "replaceAll" => {
-                if args.len() != 2 {
-                    return Err(RaccoonError::new(
-                        "replaceAll requires 2 arguments (search, replacement)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match (&args[0], &args[1]) {
-                    (RuntimeValue::Str(search), RuntimeValue::Str(replacement)) => {
-                        Ok(RuntimeValue::Str(StrValue::new(
-                            s.replace(&search.value, &replacement.value),
-                        )))
-                    }
-                    _ => Err(RaccoonError::new(
-                        "replaceAll requires two string arguments".to_string(),
+            // Character access
+            "charAt" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let index = extract_int(&args[0], "index", position, file)? as usize;
+                let ch = s
+                    .chars()
+                    .nth(index)
+                    .map(|c| c.to_string())
+                    .unwrap_or_default();
+                Ok(RuntimeValue::Str(StrValue::new(ch)))
+            }
+            "charCodeAt" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let index = extract_int(&args[0], "index", position, file.clone())? as usize;
+                match s.chars().nth(index) {
+                    Some(ch) => Ok(RuntimeValue::Int(IntValue::new(ch as i64))),
+                    None => Err(RaccoonError::new(
+                        format!("charCodeAt: index {} out of bounds", index),
                         position,
                         file,
                     )),
                 }
             }
 
-            "match" => {
-                if args.len() != 1 {
+            // Padding
+            "padStart" => {
+                require_args_range(&args, 1, 2, method, position, file.clone())?;
+                let target_len =
+                    extract_int(&args[0], "targetLength", position, file.clone())? as usize;
+                let pad_str = if args.len() == 2 {
+                    extract_str(&args[1], "padString", position, file)?.to_string()
+                } else {
+                    " ".to_string()
+                };
+
+                if target_len <= s.len() || pad_str.is_empty() {
+                    return Ok(RuntimeValue::Str(StrValue::new(s.to_string())));
+                }
+
+                let pad_needed = target_len - s.len();
+                let pad_count = (pad_needed + pad_str.len() - 1) / pad_str.len();
+                let padding = pad_str.repeat(pad_count);
+                let result = format!("{}{}", &padding[..pad_needed], s);
+                Ok(RuntimeValue::Str(StrValue::new(result)))
+            }
+            "padEnd" => {
+                require_args_range(&args, 1, 2, method, position, file.clone())?;
+                let target_len =
+                    extract_int(&args[0], "targetLength", position, file.clone())? as usize;
+                let pad_str = if args.len() == 2 {
+                    extract_str(&args[1], "padString", position, file)?.to_string()
+                } else {
+                    " ".to_string()
+                };
+
+                if target_len <= s.len() || pad_str.is_empty() {
+                    return Ok(RuntimeValue::Str(StrValue::new(s.to_string())));
+                }
+
+                let pad_needed = target_len - s.len();
+                let pad_count = (pad_needed + pad_str.len() - 1) / pad_str.len();
+                let padding = pad_str.repeat(pad_count);
+                let result = format!("{}{}", s, &padding[..pad_needed]);
+                Ok(RuntimeValue::Str(StrValue::new(result)))
+            }
+
+            // Other transformations
+            "repeat" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let count = extract_int(&args[0], "count", position, file.clone())?;
+                if count < 0 {
                     return Err(RaccoonError::new(
-                        "match requires 1 argument".to_string(),
+                        "repeat: count must be non-negative".to_string(),
                         position,
                         file,
                     ));
                 }
-                if let RuntimeValue::Str(pattern) = &args[0] {
-                    let matches: Vec<RuntimeValue> = s
-                        .match_indices(&pattern.value)
-                        .map(|(_, m)| RuntimeValue::Str(StrValue::new(m.to_string())))
-                        .collect();
-                    Ok(RuntimeValue::List(ListValue::new(
-                        matches,
-                        PrimitiveType::str(),
-                    )))
-                } else {
-                    Err(RaccoonError::new(
-                        "match requires string argument".to_string(),
-                        position,
-                        file,
-                    ))
-                }
+                Ok(RuntimeValue::Str(StrValue::new(s.repeat(count as usize))))
+            }
+            "reverse" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(s.chars().rev().collect())))
+            }
+            "match" => {
+                require_args(&args, 1, method, position, file.clone())?;
+                let pattern = extract_str(&args[0], "pattern", position, file)?;
+                let matches: Vec<RuntimeValue> = s
+                    .match_indices(pattern)
+                    .map(|(_, m)| RuntimeValue::Str(StrValue::new(m.to_string())))
+                    .collect();
+                Ok(RuntimeValue::List(ListValue::new(
+                    matches,
+                    PrimitiveType::str(),
+                )))
             }
 
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on string", method),
-                position,
-                file,
-            )),
+            // Conversion
+            "toStr" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new(s.to_string())))
+            }
+
+            _ => Err(method_not_found_error("str", method, position, file)),
         }
     }
 
@@ -573,40 +411,22 @@ impl TypeHandler for StrType {
     ) -> Result<RuntimeValue, RaccoonError> {
         match method {
             "isNullOrEmpty" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "isNullOrEmpty requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::Null(_) => {
-                        Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true)))
-                    }
-                    RuntimeValue::Str(s) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
-                        s.value.is_empty(),
-                    ))),
-                    _ => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false))),
-                }
+                require_args(&args, 1, method, position, file)?;
+                let result = match &args[0] {
+                    RuntimeValue::Null(_) => true,
+                    RuntimeValue::Str(s) => s.value.is_empty(),
+                    _ => false,
+                };
+                Ok(RuntimeValue::Bool(BoolValue::new(result)))
             }
             "isNullOrWhiteSpace" => {
-                if args.len() != 1 {
-                    return Err(RaccoonError::new(
-                        "isNullOrWhiteSpace requires 1 argument".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                match &args[0] {
-                    RuntimeValue::Null(_) => {
-                        Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(true)))
-                    }
-                    RuntimeValue::Str(s) => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
-                        s.value.trim().is_empty(),
-                    ))),
-                    _ => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(false))),
-                }
+                require_args(&args, 1, method, position, file)?;
+                let result = match &args[0] {
+                    RuntimeValue::Null(_) => true,
+                    RuntimeValue::Str(s) => s.value.trim().is_empty(),
+                    _ => false,
+                };
+                Ok(RuntimeValue::Bool(BoolValue::new(result)))
             }
             "concat" => {
                 let parts: Vec<String> = args
@@ -619,23 +439,8 @@ impl TypeHandler for StrType {
                 Ok(RuntimeValue::Str(StrValue::new(parts.join(""))))
             }
             "join" => {
-                if args.len() < 2 {
-                    return Err(RaccoonError::new(
-                        "join requires at least 2 arguments (separator, values...)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                let separator = match &args[0] {
-                    RuntimeValue::Str(s) => &s.value,
-                    _ => {
-                        return Err(RaccoonError::new(
-                            "join requires string separator as first argument".to_string(),
-                            position,
-                            file,
-                        ));
-                    }
-                };
+                require_min_args(&args, 2, method, position, file.clone())?;
+                let separator = extract_str(&args[0], "separator", position, file)?;
                 let parts: Vec<String> = args[1..]
                     .iter()
                     .map(|v| match v {
@@ -655,25 +460,9 @@ impl TypeHandler for StrType {
                 Ok(RuntimeValue::Str(StrValue::new(parts.join(separator))))
             }
             "format" => {
-                if args.is_empty() {
-                    return Err(RaccoonError::new(
-                        "format requires at least 1 argument (format string)".to_string(),
-                        position,
-                        file,
-                    ));
-                }
-                let format_str = match &args[0] {
-                    RuntimeValue::Str(s) => &s.value,
-                    _ => {
-                        return Err(RaccoonError::new(
-                            "format requires string as first argument".to_string(),
-                            position,
-                            file,
-                        ));
-                    }
-                };
-
-                let mut result = format_str.clone();
+                require_min_args(&args, 1, method, position, file.clone())?;
+                let format_str = extract_str(&args[0], "template", position, file)?;
+                let mut result = format_str.to_string();
                 for (i, arg) in args[1..].iter().enumerate() {
                     let placeholder = format!("{{{}}}", i);
                     let value = match arg {
@@ -684,11 +473,7 @@ impl TypeHandler for StrType {
                 }
                 Ok(RuntimeValue::Str(StrValue::new(result)))
             }
-            _ => Err(RaccoonError::new(
-                format!("Static method '{}' not found on str type", method),
-                position,
-                file,
-            )),
+            _ => Err(static_method_not_found_error("str", method, position, file)),
         }
     }
 
@@ -700,52 +485,68 @@ impl TypeHandler for StrType {
     ) -> Result<RuntimeValue, RaccoonError> {
         match property {
             "empty" => Ok(RuntimeValue::Str(StrValue::new(String::new()))),
-            _ => Err(RaccoonError::new(
-                format!("Static property '{}' not found on str type", property),
-                position,
-                file,
-            )),
+            _ => Err(property_not_found_error("str", property, position, file)),
         }
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(
-            method,
-            "toUpper"
-                | "toUpperCase"
-                | "toLower"
-                | "toLowerCase"
-                | "trim"
-                | "trimStart"
-                | "trimLeft"
-                | "trimEnd"
-                | "trimRight"
-                | "split"
-                | "replace"
-                | "replaceAll"
-                | "startsWith"
-                | "endsWith"
-                | "contains"
-                | "indexOf"
-                | "lastIndexOf"
-                | "slice"
-                | "substring"
-                | "charAt"
-                | "charCodeAt"
-                | "join"
-                | "toStr"
-                | "repeat"
-                | "padStart"
-                | "padEnd"
-                | "reverse"
-                | "match"
-        )
+        Self::metadata().has_instance_method(method)
     }
 
     fn has_static_method(&self, method: &str) -> bool {
-        matches!(
-            method,
-            "isNullOrEmpty" | "isNullOrWhiteSpace" | "concat" | "join" | "format"
-        )
+        Self::metadata().has_static_method(method)
+    }
+
+    fn has_async_instance_method(&self, method: &str) -> bool {
+        Self::metadata().has_async_instance_method(method)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_str_to_upper() {
+        let handler = StrType;
+        let mut value = RuntimeValue::Str(StrValue::new("hello".to_string()));
+        let result = handler
+            .call_instance_method(&mut value, "toUpper", vec![], Position::default(), None)
+            .unwrap();
+
+        match result {
+            RuntimeValue::Str(s) => assert_eq!(s.value, "HELLO"),
+            _ => panic!("Expected string"),
+        }
+    }
+
+    #[test]
+    fn test_str_split() {
+        let handler = StrType;
+        let mut value = RuntimeValue::Str(StrValue::new("a,b,c".to_string()));
+        let result = handler
+            .call_instance_method(
+                &mut value,
+                "split",
+                vec![RuntimeValue::Str(StrValue::new(",".to_string()))],
+                Position::default(),
+                None,
+            )
+            .unwrap();
+
+        match result {
+            RuntimeValue::List(l) => assert_eq!(l.elements.len(), 3),
+            _ => panic!("Expected list"),
+        }
+    }
+
+    #[test]
+    fn test_metadata() {
+        let metadata = StrType::metadata();
+        assert_eq!(metadata.type_name, "str");
+        assert!(metadata.has_instance_method("toUpper"));
+        assert!(metadata.has_instance_method("toUpperCase")); // alias
+        assert!(metadata.has_static_method("concat"));
+        assert!(!metadata.has_instance_method("nonexistent"));
     }
 }

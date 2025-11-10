@@ -1,13 +1,11 @@
 // Primitives module - scalar/singleton types with methods
 pub mod bool;
-pub mod bool_refactored;
 pub mod char;
 pub mod floats;
 pub mod integers;
 pub mod null;
 pub mod numeric_trait;
 pub mod string;
-pub mod string_refactored;
 pub mod unit;
 
 // Re-export for convenience

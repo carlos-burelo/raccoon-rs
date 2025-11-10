@@ -1,6 +1,5 @@
 // Collections module - generic/parameterized container types
 pub mod list;
-pub mod list_refactored;
 pub mod map;
 pub mod optional;
 pub mod range;
