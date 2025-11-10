@@ -28,6 +28,10 @@ impl StdLibLoader {
     }
 
     pub fn module_exists(&self, module_name: &str) -> bool {
+        // Virtual module always exists
+        if module_name == "internal:core" {
+            return true;
+        }
         if !module_name.starts_with("std:") {
             return false;
         }
@@ -39,7 +43,56 @@ impl StdLibLoader {
         self.stdlib_path.join(format!("{}.rcc", basename))
     }
 
+    /// Load the virtual "internal:core" module
+    /// This module exposes all core primitives registered in the system
+    fn load_core_module(&self) -> Result<RuntimeValue, RaccoonError> {
+        use crate::runtime::values::NativeAsyncFunctionValue;
+        use std::pin::Pin;
+        use std::sync::Arc;
+
+        let mut exports = HashMap::new();
+
+        // Create a temporary interpreter to get the registrar
+        let interp = Interpreter::new(Some("internal:core".to_string()));
+        let registrar = interp.registrar.lock().unwrap();
+
+        // Export all functions that start with "core_" without namespace
+        for (full_name, sig) in &registrar.functions {
+            if full_name.starts_with("core_") && sig.namespace.is_none() {
+                // Create export name without "core_" prefix
+                let export_name = full_name.strip_prefix("core_").unwrap_or(full_name);
+
+                // Create a NativeAsyncFunction that wraps the sync handler
+                let handler = sig.handler.clone();
+                let native_fn: Arc<
+                    dyn Fn(Vec<RuntimeValue>) -> Pin<Box<dyn std::future::Future<Output = RuntimeValue> + 'static>>
+                        + Send
+                        + Sync
+                        + 'static,
+                > = Arc::new(move |args| {
+                    let result = handler(args);
+                    Box::pin(async move { result })
+                });
+
+                let native_async_fn = NativeAsyncFunctionValue::new(native_fn, PrimitiveType::any());
+                let function_value = RuntimeValue::NativeAsyncFunction(native_async_fn);
+
+                exports.insert(export_name.to_string(), function_value);
+            }
+        }
+
+        Ok(RuntimeValue::Object(ObjectValue::new(
+            exports,
+            PrimitiveType::any(),
+        )))
+    }
+
     pub async fn load_module(&self, module_name: &str) -> Result<RuntimeValue, RaccoonError> {
+        // Handle virtual "internal:core" module
+        if module_name == "internal:core" {
+            return self.load_core_module();
+        }
+
         {
             let cache = self.module_cache.read().unwrap();
             if let Some(value) = cache.get(module_name) {

@@ -4,6 +4,7 @@ pub mod io;
 pub mod json;
 pub mod math;
 pub mod output;
+pub mod primitives; // Core primitives for internal:core module
 pub mod random;
 pub mod string;
 pub mod time;
@@ -14,6 +15,7 @@ pub use http::register_http_module;
 pub use io::register_io_module;
 pub use json::register_json_module;
 pub use math::register_math_module;
+pub use primitives::register_core_primitives;
 pub use random::register_random_module;
 pub use string::register_string_module;
 pub use time::register_time_module;

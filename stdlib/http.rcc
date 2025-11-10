@@ -1,40 +1,171 @@
-// HTTP operations provided by native module
-// TODO: Implement HTTP wrapper functions
+// HTTP module - HTTP client using core primitives
+// All logic is implemented in Raccoon, only atomic operations are delegated to Rust
 
-// HTTP Response type (for type hints)
-interface HttpResponse {
+import {
+    http_get as core_http_get,
+    http_post as core_http_post,
+    http_request as core_http_request
+} from "internal:core";
+
+class HttpResponse {
     status: int;
-    statusText: str;
-    body: str;
-    headers: Map<str, str>;
-    json: any;
+    statusText: string;
+    body: string;
+    headers: object;
+
+    constructor(body: string, status: int, statusText: string) {
+        this.body = body;
+        this.status = status;
+        this.statusText = statusText;
+        this.headers = {};
+    }
+
+    json(): any {
+        return JSON.parse(this.body);
+    }
+
+    text(): string {
+        return this.body;
+    }
+
+    isOk(): bool {
+        return this.status >= 200 && this.status < 300;
+    }
+
+    isError(): bool {
+        return !this.isOk();
+    }
 }
 
-// HTTP Client class (placeholder)
+class HttpClient {
+    baseUrl: string;
+    headers: object;
+    timeout: int;
+
+    constructor(baseUrl: string) {
+        this.baseUrl = baseUrl;
+        this.headers = {};
+        this.timeout = 30000;
+    }
+
+    setHeader(name: string, value: string): void {
+        this.headers[name] = value;
+    }
+
+    removeHeader(name: string): void {
+        delete this.headers[name];
+    }
+
+    clearHeaders(): void {
+        this.headers = {};
+    }
+
+    setTimeout(ms: int): void {
+        this.timeout = ms;
+    }
+
+    get(path: string): HttpResponse {
+        let url: string = this.buildUrl(path);
+        let body: string = core_http_get(url);
+        return new HttpResponse(body, 200, "OK");
+    }
+
+    post(path: string, body: string): HttpResponse {
+        let url: string = this.buildUrl(path);
+        let responseBody: string = core_http_post(url, body);
+        return new HttpResponse(responseBody, 200, "OK");
+    }
+
+    request(method: string, path: string, body: string): HttpResponse {
+        let url: string = this.buildUrl(path);
+        let headersJson: string = JSON.stringify(this.headers);
+        let responseBody: string = core_http_request(method, url, body, headersJson);
+        return new HttpResponse(responseBody, 200, "OK");
+    }
+
+    put(path: string, body: string): HttpResponse {
+        return this.request("PUT", path, body);
+    }
+
+    delete(path: string): HttpResponse {
+        return this.request("DELETE", path, "");
+    }
+
+    patch(path: string, body: string): HttpResponse {
+        return this.request("PATCH", path, body);
+    }
+
+    head(path: string): HttpResponse {
+        return this.request("HEAD", path, "");
+    }
+
+    options(path: string): HttpResponse {
+        return this.request("OPTIONS", path, "");
+    }
+
+    private buildUrl(path: string): string {
+        if (path.startsWith("http://") || path.startsWith("https://")) {
+            return path;
+        }
+
+        let url: string = this.baseUrl;
+        if (!url.endsWith("/") && !path.startsWith("/")) {
+            url = url + "/";
+        }
+        return url + path;
+    }
+}
+
 class Http {
-    static async get(url: str): HttpResponse {
-        // Placeholder - needs native implementation
-        return null;
+    static get(url: string): HttpResponse {
+        let body: string = core_http_get(url);
+        return new HttpResponse(body, 200, "OK");
     }
 
-    static async post(url: str, body: str): HttpResponse {
-        // Placeholder - needs native implementation
-        return null;
+    static post(url: string, body: string): HttpResponse {
+        let responseBody: string = core_http_post(url, body);
+        return new HttpResponse(responseBody, 200, "OK");
     }
 
-    static async fetch(url: str, options: any): HttpResponse {
-        // Placeholder - needs native implementation
-        return null;
+    static request(method: string, url: string, body: string, headers: object): HttpResponse {
+        let headersJson: string = JSON.stringify(headers);
+        let responseBody: string = core_http_request(method, url, body, headersJson);
+        return new HttpResponse(responseBody, 200, "OK");
+    }
+
+    static put(url: string, body: string): HttpResponse {
+        return Http.request("PUT", url, body, {});
+    }
+
+    static delete(url: string): HttpResponse {
+        return Http.request("DELETE", url, "", {});
+    }
+
+    static patch(url: string, body: string): HttpResponse {
+        return Http.request("PATCH", url, body, {});
+    }
+
+    static head(url: string): HttpResponse {
+        return Http.request("HEAD", url, "", {});
+    }
+
+    static options(url: string): HttpResponse {
+        return Http.request("OPTIONS", url, "", {});
+    }
+
+    static createClient(baseUrl: string): HttpClient {
+        return new HttpClient(baseUrl);
     }
 }
 
-export fn fetch(url: str, options: any): any {
-    // Placeholder - needs native implementation
-    return null;
+// Fetch-like API
+fn fetch(url: string, options: object): HttpResponse {
+    let method: string = options.method || "GET";
+    let body: string = options.body || "";
+    let headers: object = options.headers || {};
+
+    return Http.request(method, url, body, headers);
 }
 
-
-// Re-export classes and functions
-export { Http, HttpResponse, fetch };
-
+export { Http, HttpClient, HttpResponse, fetch };
 export default Http;

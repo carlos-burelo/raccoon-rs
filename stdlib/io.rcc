@@ -1,4 +1,142 @@
-// I/O operations are provided by the native module
-// Use native_io_read_file(), native_io_write_file(), native_io_append_file(),
-// native_io_file_exists(), native_io_delete_file(), native_io_read_dir(),
-// native_io_create_dir(), and native_io_input() directly
+// IO module - File system operations using core primitives
+// All logic is implemented in Raccoon, only atomic operations are delegated to Rust
+
+import {
+    file_read as core_file_read,
+    file_write as core_file_write,
+    file_append as core_file_append,
+    file_exists as core_file_exists,
+    file_delete as core_file_delete,
+    dir_create as core_dir_create,
+    dir_list as core_dir_list
+} from "internal:core";
+
+class File {
+    path: string;
+
+    constructor(path: string) {
+        this.path = path;
+    }
+
+    read(): string {
+        return core_file_read(this.path);
+    }
+
+    write(content: string): bool {
+        return core_file_write(this.path, content);
+    }
+
+    append(content: string): bool {
+        return core_file_append(this.path, content);
+    }
+
+    exists(): bool {
+        return core_file_exists(this.path);
+    }
+
+    delete(): bool {
+        return core_file_delete(this.path);
+    }
+
+    readLines(): string[] {
+        let content: string = this.read();
+        if (content == "") {
+            return [];
+        }
+        // Split by newline
+        return content.split("\n");
+    }
+
+    writeLines(lines: string[]): bool {
+        let content: string = lines.join("\n");
+        return this.write(content);
+    }
+
+    appendLine(line: string): bool {
+        return this.append(line + "\n");
+    }
+}
+
+class Directory {
+    path: string;
+
+    constructor(path: string) {
+        this.path = path;
+    }
+
+    create(): bool {
+        return core_dir_create(this.path);
+    }
+
+    list(): string[] {
+        let result: string = core_dir_list(this.path);
+        // Parse JSON array
+        return JSON.parse(result);
+    }
+
+    exists(): bool {
+        return core_file_exists(this.path);
+    }
+}
+
+class IO {
+    static readFile(path: string): string {
+        return core_file_read(path);
+    }
+
+    static writeFile(path: string, content: string): bool {
+        return core_file_write(path, content);
+    }
+
+    static appendFile(path: string, content: string): bool {
+        return core_file_append(path, content);
+    }
+
+    static fileExists(path: string): bool {
+        return core_file_exists(path);
+    }
+
+    static deleteFile(path: string): bool {
+        return core_file_delete(path);
+    }
+
+    static createDir(path: string): bool {
+        return core_dir_create(path);
+    }
+
+    static listDir(path: string): string[] {
+        let result: string = core_dir_list(path);
+        return JSON.parse(result);
+    }
+
+    static readLines(path: string): string[] {
+        let content: string = IO.readFile(path);
+        if (content == "") {
+            return [];
+        }
+        return content.split("\n");
+    }
+
+    static writeLines(path: string, lines: string[]): bool {
+        let content: string = lines.join("\n");
+        return IO.writeFile(path, content);
+    }
+
+    static copyFile(source: string, dest: string): bool {
+        if (!IO.fileExists(source)) {
+            return false;
+        }
+        let content: string = IO.readFile(source);
+        return IO.writeFile(dest, content);
+    }
+
+    static moveFile(source: string, dest: string): bool {
+        if (!IO.copyFile(source, dest)) {
+            return false;
+        }
+        return IO.deleteFile(source);
+    }
+}
+
+export { File, Directory, IO };
+export default IO;

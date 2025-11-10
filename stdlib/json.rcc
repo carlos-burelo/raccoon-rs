@@ -1,23 +1,64 @@
-// JSON operations provided by native module
-// TODO: Implement JSON wrapper functions
+// JSON module - JSON parsing and stringification using core primitives
+// All logic is implemented in Raccoon, only atomic operations are delegated to Rust
 
-export fn parse(json: str): any {
-    // Placeholder - needs native implementation
-    return null;
+import {
+    json_parse as core_json_parse,
+    json_stringify as core_json_stringify
+} from "internal:core";
+
+class JSON {
+    static parse(json: string): any {
+        return core_json_parse(json);
+    }
+
+    static stringify(value: any): string {
+        return core_json_stringify(value);
+    }
+
+    static stringify_pretty(value: any, indent: int): string {
+        // For now, just use regular stringify
+        // In the future, we can implement pretty printing in Raccoon
+        return core_json_stringify(value);
+    }
+
+    static isValid(json: string): bool {
+        try {
+            JSON.parse(json);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    static tryParse(json: string): any {
+        try {
+            return JSON.parse(json);
+        } catch {
+            return null;
+        }
+    }
 }
 
-export fn stringify(value: any): str {
-    // Placeholder - needs native implementation
-    return "null";
+// Standalone functions for backward compatibility
+fn parse(json: string): any {
+    return JSON.parse(json);
 }
 
-export fn stringify_pretty(value: any): str {
-    // Placeholder - needs native implementation
-    return "null";
+fn stringify(value: any): string {
+    return JSON.stringify(value);
 }
 
-export default {
-    parse,
-    stringify,
-    stringify_pretty
-};
+fn stringify_pretty(value: any): string {
+    return JSON.stringify_pretty(value, 2);
+}
+
+fn isValid(json: string): bool {
+    return JSON.isValid(json);
+}
+
+fn tryParse(json: string): any {
+    return JSON.tryParse(json);
+}
+
+export { JSON, parse, stringify, stringify_pretty, isValid, tryParse };
+export default JSON;
