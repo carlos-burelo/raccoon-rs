@@ -26,22 +26,22 @@ impl TypeHandler for FunctionType {
     ) -> Result<RuntimeValue, RaccoonError> {
         let func = match value {
             RuntimeValue::Function(f) => f,
-            RuntimeValue::NativeFunction(_f) => {
-                match method {
-                    "name" => return Ok(RuntimeValue::Str(StrValue::new("[native]".to_string()))),
-                    "length" => return Ok(RuntimeValue::Int(IntValue::new(0))),
-                    "toString" | "toStr" => {
-                        return Ok(RuntimeValue::Str(StrValue::new("[Native Function]".to_string())))
-                    }
-                    _ => {
-                        return Err(RaccoonError::new(
-                            format!("Method '{}' not found on function", method),
-                            position,
-                            file,
-                        ))
-                    }
+            RuntimeValue::NativeFunction(_f) => match method {
+                "name" => return Ok(RuntimeValue::Str(StrValue::new("[native]".to_string()))),
+                "length" => return Ok(RuntimeValue::Int(IntValue::new(0))),
+                "toString" | "toStr" => {
+                    return Ok(RuntimeValue::Str(StrValue::new(
+                        "[Native Function]".to_string(),
+                    )))
                 }
-            }
+                _ => {
+                    return Err(RaccoonError::new(
+                        format!("Method '{}' not found on function", method),
+                        position,
+                        file,
+                    ))
+                }
+            },
             _ => {
                 return Err(RaccoonError::new(
                     format!("Expected function, got {}", value.get_name()),
@@ -52,7 +52,9 @@ impl TypeHandler for FunctionType {
         };
 
         match method {
-            "length" => Ok(RuntimeValue::Int(IntValue::new(func.parameters.len() as i64))),
+            "length" => Ok(RuntimeValue::Int(IntValue::new(
+                func.parameters.len() as i64
+            ))),
             "isAsync" => Ok(RuntimeValue::Bool(crate::runtime::BoolValue::new(
                 func.is_async,
             ))),
@@ -83,10 +85,7 @@ impl TypeHandler for FunctionType {
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(
-            method,
-            "length" | "name" | "isAsync" | "toString" | "toStr"
-        )
+        matches!(method, "length" | "name" | "isAsync" | "toString" | "toStr")
     }
 
     fn has_static_method(&self, _method: &str) -> bool {

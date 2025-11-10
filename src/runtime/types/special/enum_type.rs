@@ -26,24 +26,22 @@ impl TypeHandler for EnumType {
     ) -> Result<RuntimeValue, RaccoonError> {
         let enum_val = match value {
             RuntimeValue::Enum(e) => e,
-            RuntimeValue::EnumObject(e) => {
-                match method {
-                    "name" => return Ok(RuntimeValue::Str(StrValue::new(e.enum_name.clone()))),
-                    "toString" | "toStr" => {
-                        return Ok(RuntimeValue::Str(StrValue::new(format!(
-                            "[Enum: {}]",
-                            e.enum_name
-                        ))))
-                    }
-                    _ => {
-                        return Err(RaccoonError::new(
-                            format!("Method '{}' not found on enum object", method),
-                            position,
-                            file,
-                        ))
-                    }
+            RuntimeValue::EnumObject(e) => match method {
+                "name" => return Ok(RuntimeValue::Str(StrValue::new(e.enum_name.clone()))),
+                "toString" | "toStr" => {
+                    return Ok(RuntimeValue::Str(StrValue::new(format!(
+                        "[Enum: {}]",
+                        e.enum_name
+                    ))))
                 }
-            }
+                _ => {
+                    return Err(RaccoonError::new(
+                        format!("Method '{}' not found on enum object", method),
+                        position,
+                        file,
+                    ))
+                }
+            },
             _ => {
                 return Err(RaccoonError::new(
                     format!("Expected enum, got {}", value.get_name()),
@@ -58,9 +56,9 @@ impl TypeHandler for EnumType {
                 "{}.{}",
                 enum_val.enum_name, enum_val.member_name
             )))),
-            "toString" | "toStr" => {
-                Ok(RuntimeValue::Str(StrValue::new(enum_val.member_name.clone())))
-            }
+            "toString" | "toStr" => Ok(RuntimeValue::Str(StrValue::new(
+                enum_val.member_name.clone(),
+            ))),
             _ => Err(RaccoonError::new(
                 format!("Method '{}' not found on enum", method),
                 position,

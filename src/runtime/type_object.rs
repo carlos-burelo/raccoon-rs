@@ -144,15 +144,10 @@ pub enum TypeKind {
     },
 
     /// Interface
-    Interface {
-        name: String,
-    },
+    Interface { name: String },
 
     /// Enum
-    Enum {
-        name: String,
-        variants: Vec<String>,
-    },
+    Enum { name: String, variants: Vec<String> },
 
     /// Tipo función
     Function,
@@ -164,15 +159,10 @@ pub enum TypeKind {
     },
 
     /// Alias de tipo
-    Alias {
-        name: String,
-        target: Box<Type>,
-    },
+    Alias { name: String, target: Box<Type> },
 
     /// Tipo módulo
-    Module {
-        name: String,
-    },
+    Module { name: String },
 
     /// Tipo unknown/any
     Unknown,

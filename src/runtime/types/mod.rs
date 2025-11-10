@@ -1,16 +1,16 @@
 // Type system - modular organization
-pub mod primitives;
-pub mod collections;
-pub mod objects;
 pub mod async_control;
-pub mod special;
-pub mod registry;
-pub mod operations;
-pub mod type_type;
-pub mod helpers;
-pub mod metadata;
-pub mod macros;
 pub mod auto_register;
+pub mod collections;
+pub mod helpers;
+pub mod macros;
+pub mod metadata;
+pub mod objects;
+pub mod operations;
+pub mod primitives;
+pub mod registry;
+pub mod special;
+pub mod type_type;
 
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;

@@ -1,6 +1,6 @@
-use std::collections::{HashMap, HashSet};
-use std::sync::{Mutex, Arc};
 use crate::runtime::Registrar;
+use std::collections::{HashMap, HashSet};
+use std::sync::{Arc, Mutex};
 
 /// Type for module loader functions
 pub type ModuleLoader = Arc<dyn Fn(&mut Registrar) + Send + Sync>;

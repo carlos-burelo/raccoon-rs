@@ -57,10 +57,7 @@ impl TypeHandler for EitherType {
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(
-            method,
-            "isLeft" | "isRight" | "unwrapLeft" | "unwrapRight"
-        )
+        matches!(method, "isLeft" | "isRight" | "unwrapLeft" | "unwrapRight")
     }
 
     fn has_static_method(&self, _method: &str) -> bool {

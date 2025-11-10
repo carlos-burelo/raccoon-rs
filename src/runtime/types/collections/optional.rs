@@ -114,10 +114,7 @@ impl TypeHandler for OptionalType {
     }
 
     fn has_instance_method(&self, method: &str) -> bool {
-        matches!(
-            method,
-            "isSome" | "isNone" | "unwrap" | "unwrapOr" | "map"
-        )
+        matches!(method, "isSome" | "isNone" | "unwrap" | "unwrapOr" | "map")
     }
 
     fn has_static_method(&self, method: &str) -> bool {

@@ -1,5 +1,5 @@
 /// Math functions: sqrt, pow, sin, cos, tan
-use crate::runtime::{Registrar, FromRaccoon, ToRaccoon};
+use crate::runtime::{FromRaccoon, Registrar, ToRaccoon};
 
 pub fn register_math_module(registrar: &mut Registrar) {
     // sqrt(x: f64) -> f64

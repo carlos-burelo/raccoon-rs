@@ -750,14 +750,10 @@ impl Pattern {
             Pattern::Literal(expr) => expr.position(),
             Pattern::Range(start, _) => start.position(),
             Pattern::Type(_) => (1, 1), // Types don't have position info
-            Pattern::List(patterns) => {
-                patterns.first().map(|p| p.position()).unwrap_or((1, 1))
-            }
+            Pattern::List(patterns) => patterns.first().map(|p| p.position()).unwrap_or((1, 1)),
             Pattern::Object(_) => (1, 1), // Objects don't have position info
             Pattern::Variable(_) => (1, 1), // Variables don't have position info
-            Pattern::Or(patterns) => {
-                patterns.first().map(|p| p.position()).unwrap_or((1, 1))
-            }
+            Pattern::Or(patterns) => patterns.first().map(|p| p.position()).unwrap_or((1, 1)),
         }
     }
 }

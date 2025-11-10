@@ -1,4 +1,6 @@
-use crate::runtime::{RuntimeValue, FloatValue, IntValue, StrValue, BoolValue, NullValue, ListValue};
+use crate::runtime::{
+    BoolValue, FloatValue, IntValue, ListValue, NullValue, RuntimeValue, StrValue,
+};
 
 /// Trait for converting Raccoon RuntimeValue to Rust types
 pub trait FromRaccoon: Sized {
@@ -102,12 +104,7 @@ impl ToRaccoon for String {
 impl<T: FromRaccoon> FromRaccoon for Vec<T> {
     fn from_raccoon(val: &RuntimeValue) -> Result<Self, String> {
         match val {
-            RuntimeValue::List(list) => {
-                list.elements
-                    .iter()
-                    .map(|v| T::from_raccoon(v))
-                    .collect()
-            }
+            RuntimeValue::List(list) => list.elements.iter().map(|v| T::from_raccoon(v)).collect(),
             _ => Err("Expected list".into()),
         }
     }
@@ -116,7 +113,10 @@ impl<T: FromRaccoon> FromRaccoon for Vec<T> {
 impl<T: ToRaccoon> ToRaccoon for Vec<T> {
     fn to_raccoon(self) -> RuntimeValue {
         let elements = self.into_iter().map(|v| v.to_raccoon()).collect();
-        RuntimeValue::List(ListValue::new(elements, crate::ast::types::PrimitiveType::any()))
+        RuntimeValue::List(ListValue::new(
+            elements,
+            crate::ast::types::PrimitiveType::any(),
+        ))
     }
 }
 

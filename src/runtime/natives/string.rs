@@ -1,4 +1,4 @@
-use crate::runtime::{Registrar, RuntimeValue, FromRaccoon, ToRaccoon};
+use crate::runtime::{FromRaccoon, Registrar, RuntimeValue, ToRaccoon};
 
 pub fn register_string_module(registrar: &mut Registrar) {
     // length(s: string) -> i32
@@ -84,7 +84,10 @@ pub fn register_string_module(registrar: &mut Registrar) {
                 .map(|part| part.to_string().to_raccoon())
                 .collect();
 
-            RuntimeValue::List(crate::runtime::ListValue::new(parts, crate::ast::types::PrimitiveType::str()))
+            RuntimeValue::List(crate::runtime::ListValue::new(
+                parts,
+                crate::ast::types::PrimitiveType::str(),
+            ))
         },
         2,
         Some(2),

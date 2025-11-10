@@ -1,12 +1,12 @@
+use super::expressions::Expressions;
+use super::state::ParserState;
+use super::utilities::Parser;
 use crate::{
     ast::nodes::*,
-    ast::types::{Type, TypeParameter, PrimitiveType},
+    ast::types::{PrimitiveType, Type, TypeParameter},
     tokens::AccessModifier,
     RaccoonError, TokenType,
 };
-use super::state::ParserState;
-use super::utilities::Parser;
-use super::expressions::Expressions;
 
 pub struct Declarations;
 
@@ -70,7 +70,8 @@ impl Declarations {
     pub fn var_declaration(state: &mut ParserState) -> Result<Stmt, RaccoonError> {
         let is_constant = state.previous().unwrap().token_type == TokenType::Const;
 
-        let pattern = if state.check(&TokenType::LeftBracket) || state.check(&TokenType::LeftBrace) {
+        let pattern = if state.check(&TokenType::LeftBracket) || state.check(&TokenType::LeftBrace)
+        {
             VarPattern::Destructuring(Self::parse_destructuring_pattern(state)?)
         } else {
             VarPattern::Identifier(
@@ -129,7 +130,11 @@ impl Declarations {
         };
 
         if is_declare || is_async {
-            Parser::consume(state, TokenType::Fn, "Expected 'fn' after 'declare' or 'async'")?;
+            Parser::consume(
+                state,
+                TokenType::Fn,
+                "Expected 'fn' after 'declare' or 'async'",
+            )?;
         }
 
         let name = Parser::consume(state, TokenType::Identifier, "Expected function name")?
@@ -139,9 +144,17 @@ impl Declarations {
 
         let type_parameters = Self::parse_type_parameters(state)?;
 
-        Parser::consume(state, TokenType::LeftParen, "Expected '(' after function name")?;
+        Parser::consume(
+            state,
+            TokenType::LeftParen,
+            "Expected '(' after function name",
+        )?;
         let parameters = Self::function_parameters(state)?;
-        Parser::consume(state, TokenType::RightParen, "Expected ')' after parameters")?;
+        Parser::consume(
+            state,
+            TokenType::RightParen,
+            "Expected ')' after parameters",
+        )?;
 
         let return_type = if Parser::match_token(state, &[TokenType::Colon]) {
             // TODO: Call parse_type() from types module
@@ -154,7 +167,11 @@ impl Declarations {
             Parser::optional_semicolon(state);
             Vec::new()
         } else {
-            Parser::consume(state, TokenType::LeftBrace, "Expected '{' before function body")?;
+            Parser::consume(
+                state,
+                TokenType::LeftBrace,
+                "Expected '{' before function body",
+            )?;
             // TODO: Call block_statements() from statements module
             Vec::new()
         };
@@ -173,7 +190,9 @@ impl Declarations {
     }
 
     /// Parse type parameters: <T, U extends Base>
-    pub fn parse_type_parameters(state: &mut ParserState) -> Result<Vec<TypeParameter>, RaccoonError> {
+    pub fn parse_type_parameters(
+        state: &mut ParserState,
+    ) -> Result<Vec<TypeParameter>, RaccoonError> {
         let mut type_params = Vec::new();
 
         if !Parser::match_token(state, &[TokenType::Lt]) {
@@ -181,9 +200,10 @@ impl Declarations {
         }
 
         loop {
-            let param_name = Parser::consume(state, TokenType::Identifier, "Expected type parameter name")?
-                .value
-                .clone();
+            let param_name =
+                Parser::consume(state, TokenType::Identifier, "Expected type parameter name")?
+                    .value
+                    .clone();
 
             let mut constraint = None;
             if Parser::match_token(state, &[TokenType::Extends]) {
@@ -327,11 +347,19 @@ impl Declarations {
                     is_async,
                 )?);
             } else {
-                properties.push(Self::parse_class_property(state, member_decorators, access_modifier)?);
+                properties.push(Self::parse_class_property(
+                    state,
+                    member_decorators,
+                    access_modifier,
+                )?);
             }
         }
 
-        Parser::consume(state, TokenType::RightBrace, "Expected '}' after class body")?;
+        Parser::consume(
+            state,
+            TokenType::RightBrace,
+            "Expected '}' after class body",
+        )?;
 
         Ok(Stmt::ClassDecl(ClassDecl {
             name,
@@ -381,11 +409,23 @@ impl Declarations {
     pub fn parse_constructor(state: &mut ParserState) -> Result<ConstructorDecl, RaccoonError> {
         let position = state.previous().unwrap().position;
 
-        Parser::consume(state, TokenType::LeftParen, "Expected '(' after constructor")?;
+        Parser::consume(
+            state,
+            TokenType::LeftParen,
+            "Expected '(' after constructor",
+        )?;
         let parameters = Self::function_parameters(state)?;
-        Parser::consume(state, TokenType::RightParen, "Expected ')' after parameters")?;
+        Parser::consume(
+            state,
+            TokenType::RightParen,
+            "Expected ')' after parameters",
+        )?;
 
-        Parser::consume(state, TokenType::LeftBrace, "Expected '{' before constructor body")?;
+        Parser::consume(
+            state,
+            TokenType::LeftBrace,
+            "Expected '{' before constructor body",
+        )?;
         // TODO: Call block_statements() from statements module
         let body = Vec::new();
 
@@ -414,9 +454,17 @@ impl Declarations {
                 .clone()
         };
 
-        Parser::consume(state, TokenType::LeftParen, "Expected '(' after method name")?;
+        Parser::consume(
+            state,
+            TokenType::LeftParen,
+            "Expected '(' after method name",
+        )?;
         let parameters = Self::function_parameters(state)?;
-        Parser::consume(state, TokenType::RightParen, "Expected ')' after parameters")?;
+        Parser::consume(
+            state,
+            TokenType::RightParen,
+            "Expected ')' after parameters",
+        )?;
 
         let return_type = if Parser::match_token(state, &[TokenType::Colon]) {
             // TODO: Call parse_type() from types module
@@ -425,7 +473,11 @@ impl Declarations {
             None
         };
 
-        Parser::consume(state, TokenType::LeftBrace, "Expected '{' before method body")?;
+        Parser::consume(
+            state,
+            TokenType::LeftBrace,
+            "Expected '{' before method body",
+        )?;
         // TODO: Call block_statements() from statements module
         let body = Vec::new();
 
@@ -454,9 +506,17 @@ impl Declarations {
             .value
             .clone();
 
-        Parser::consume(state, TokenType::LeftParen, "Expected '(' after accessor name")?;
+        Parser::consume(
+            state,
+            TokenType::LeftParen,
+            "Expected '(' after accessor name",
+        )?;
         let parameters = Self::function_parameters(state)?;
-        Parser::consume(state, TokenType::RightParen, "Expected ')' after parameters")?;
+        Parser::consume(
+            state,
+            TokenType::RightParen,
+            "Expected ')' after parameters",
+        )?;
 
         if kind == AccessorKind::Get && !parameters.is_empty() {
             return Err(RaccoonError::new(
@@ -480,7 +540,11 @@ impl Declarations {
             None
         };
 
-        Parser::consume(state, TokenType::LeftBrace, "Expected '{' before accessor body")?;
+        Parser::consume(
+            state,
+            TokenType::LeftBrace,
+            "Expected '{' before accessor body",
+        )?;
         // TODO: Call block_statements() from statements module
         let body = Vec::new();
 
@@ -541,8 +605,13 @@ impl Declarations {
                 let is_rest = Parser::match_token(state, &[TokenType::Spread]);
 
                 if state.check(&TokenType::LeftBracket) || state.check(&TokenType::LeftBrace) {
-                    let pattern = VarPattern::Destructuring(Self::parse_destructuring_pattern(state)?);
-                    Parser::consume(state, TokenType::Colon, "Expected ':' after destructuring pattern")?;
+                    let pattern =
+                        VarPattern::Destructuring(Self::parse_destructuring_pattern(state)?);
+                    Parser::consume(
+                        state,
+                        TokenType::Colon,
+                        "Expected ':' after destructuring pattern",
+                    )?;
                     // TODO: Call parse_type() from types module
                     let param_type = PrimitiveType::any();
 
@@ -572,9 +641,10 @@ impl Declarations {
                         is_optional,
                     });
                 } else {
-                    let name = Parser::consume(state, TokenType::Identifier, "Expected parameter name")?
-                        .value
-                        .clone();
+                    let name =
+                        Parser::consume(state, TokenType::Identifier, "Expected parameter name")?
+                            .value
+                            .clone();
 
                     let is_optional = Parser::match_token(state, &[TokenType::Question]);
                     Parser::consume(state, TokenType::Colon, "Expected ':' after parameter name")?;
@@ -627,12 +697,16 @@ impl Declarations {
     }
 
     /// Parse destructuring pattern: [a, b] or { x, y: z }
-    pub fn parse_destructuring_pattern(state: &mut ParserState) -> Result<DestructuringPattern, RaccoonError> {
+    pub fn parse_destructuring_pattern(
+        state: &mut ParserState,
+    ) -> Result<DestructuringPattern, RaccoonError> {
         if Parser::match_token(state, &[TokenType::LeftBracket]) {
             return Ok(DestructuringPattern::List(Self::parse_list_pattern(state)?));
         }
         if Parser::match_token(state, &[TokenType::LeftBrace]) {
-            return Ok(DestructuringPattern::Object(Self::parse_object_pattern(state)?));
+            return Ok(DestructuringPattern::Object(Self::parse_object_pattern(
+                state,
+            )?));
         }
         Err(RaccoonError::new(
             "Expected destructuring pattern",
@@ -650,9 +724,13 @@ impl Declarations {
         if !state.check(&TokenType::RightBracket) {
             loop {
                 if Parser::match_token(state, &[TokenType::Spread]) {
-                    let name = Parser::consume(state, TokenType::Identifier, "Expected identifier after ...")?
-                        .value
-                        .clone();
+                    let name = Parser::consume(
+                        state,
+                        TokenType::Identifier,
+                        "Expected identifier after ...",
+                    )?
+                    .value
+                    .clone();
                     rest = Some(RestElement {
                         argument: Identifier {
                             name,
@@ -674,9 +752,10 @@ impl Declarations {
                         Self::parse_object_pattern(state)?,
                     ))));
                 } else {
-                    let name = Parser::consume(state, TokenType::Identifier, "Expected identifier")?
-                        .value
-                        .clone();
+                    let name =
+                        Parser::consume(state, TokenType::Identifier, "Expected identifier")?
+                            .value
+                            .clone();
                     elements.push(Some(ListPatternElement::Identifier(Identifier {
                         name,
                         position: state.previous().unwrap().position,
@@ -710,9 +789,13 @@ impl Declarations {
         if !state.check(&TokenType::RightBrace) {
             loop {
                 if Parser::match_token(state, &[TokenType::Spread]) {
-                    let name = Parser::consume(state, TokenType::Identifier, "Expected identifier after ...")?
-                        .value
-                        .clone();
+                    let name = Parser::consume(
+                        state,
+                        TokenType::Identifier,
+                        "Expected identifier after ...",
+                    )?
+                    .value
+                    .clone();
                     rest = Some(RestElement {
                         argument: Identifier {
                             name,
@@ -733,9 +816,10 @@ impl Declarations {
                     } else if Parser::match_token(state, &[TokenType::LeftBrace]) {
                         ObjectPatternValue::Object(Self::parse_object_pattern(state)?)
                     } else {
-                        let value_name = Parser::consume(state, TokenType::Identifier, "Expected identifier")?
-                            .value
-                            .clone();
+                        let value_name =
+                            Parser::consume(state, TokenType::Identifier, "Expected identifier")?
+                                .value
+                                .clone();
                         ObjectPatternValue::Identifier(Identifier {
                             name: value_name,
                             position: state.previous().unwrap().position,
@@ -750,7 +834,9 @@ impl Declarations {
 
                 properties.push(ObjectPatternProperty { key, value });
 
-                if !Parser::match_token(state, &[TokenType::Comma]) || state.check(&TokenType::RightBrace) {
+                if !Parser::match_token(state, &[TokenType::Comma])
+                    || state.check(&TokenType::RightBrace)
+                {
                     break;
                 }
             }
@@ -787,14 +873,19 @@ impl Declarations {
             }
         }
 
-        Parser::consume(state, TokenType::LeftBrace, "Expected '{' after interface name")?;
+        Parser::consume(
+            state,
+            TokenType::LeftBrace,
+            "Expected '{' after interface name",
+        )?;
 
         let mut properties = Vec::new();
 
         while !state.check(&TokenType::RightBrace) && !state.is_at_end() {
-            let prop_name = Parser::consume(state, TokenType::Identifier, "Expected property name")?
-                .value
-                .clone();
+            let prop_name =
+                Parser::consume(state, TokenType::Identifier, "Expected property name")?
+                    .value
+                    .clone();
 
             if Parser::match_token(state, &[TokenType::LeftParen]) {
                 let mut param_types = Vec::new();
@@ -813,8 +904,16 @@ impl Declarations {
                         }
                     }
                 }
-                Parser::consume(state, TokenType::RightParen, "Expected ')' after parameters")?;
-                Parser::consume(state, TokenType::Colon, "Expected ':' after method signature")?;
+                Parser::consume(
+                    state,
+                    TokenType::RightParen,
+                    "Expected ')' after parameters",
+                )?;
+                Parser::consume(
+                    state,
+                    TokenType::Colon,
+                    "Expected ':' after method signature",
+                )?;
                 // TODO: Call parse_type() from types module
                 let return_type = PrimitiveType::any();
 
@@ -841,7 +940,11 @@ impl Declarations {
             }
         }
 
-        Parser::consume(state, TokenType::RightBrace, "Expected '}' after interface body")?;
+        Parser::consume(
+            state,
+            TokenType::RightBrace,
+            "Expected '}' after interface body",
+        )?;
 
         Ok(Stmt::InterfaceDecl(InterfaceDecl {
             name,
@@ -864,9 +967,10 @@ impl Declarations {
         let mut members = Vec::new();
 
         while !state.check(&TokenType::RightBrace) && !state.is_at_end() {
-            let member_name = Parser::consume(state, TokenType::Identifier, "Expected enum member name")?
-                .value
-                .clone();
+            let member_name =
+                Parser::consume(state, TokenType::Identifier, "Expected enum member name")?
+                    .value
+                    .clone();
 
             let mut value = None;
             if Parser::match_token(state, &[TokenType::Assign]) {
@@ -900,7 +1004,11 @@ impl Declarations {
             .clone();
         let position = state.previous().unwrap().position;
 
-        Parser::consume(state, TokenType::Assign, "Expected '=' after type alias name")?;
+        Parser::consume(
+            state,
+            TokenType::Assign,
+            "Expected '=' after type alias name",
+        )?;
         // TODO: Call parse_type() from types module
         let alias_type = PrimitiveType::any();
 
@@ -930,19 +1038,36 @@ impl Declarations {
         } else if state.check(&TokenType::Identifier) {
             default_import = Some(state.advance().unwrap().value.clone());
             if Parser::match_token(state, &[TokenType::Comma]) {
-                Parser::consume(state, TokenType::LeftBrace, "Expected '{' after default import")?;
+                Parser::consume(
+                    state,
+                    TokenType::LeftBrace,
+                    "Expected '{' after default import",
+                )?;
                 Self::parse_named_imports(state, &mut named_imports)?;
-                Parser::consume(state, TokenType::RightBrace, "Expected '}' after named imports")?;
+                Parser::consume(
+                    state,
+                    TokenType::RightBrace,
+                    "Expected '}' after named imports",
+                )?;
             }
         } else if Parser::match_token(state, &[TokenType::LeftBrace]) {
             Self::parse_named_imports(state, &mut named_imports)?;
-            Parser::consume(state, TokenType::RightBrace, "Expected '}' after named imports")?;
+            Parser::consume(
+                state,
+                TokenType::RightBrace,
+                "Expected '}' after named imports",
+            )?;
         }
 
-        Parser::consume(state, TokenType::From, "Expected 'from' after import specifiers")?;
-        let module_specifier = Parser::consume(state, TokenType::StrLiteral, "Expected module path")?
-            .value
-            .clone();
+        Parser::consume(
+            state,
+            TokenType::From,
+            "Expected 'from' after import specifiers",
+        )?;
+        let module_specifier =
+            Parser::consume(state, TokenType::StrLiteral, "Expected module path")?
+                .value
+                .clone();
 
         Parser::optional_semicolon(state);
 
@@ -1024,9 +1149,13 @@ impl Declarations {
                 let mut exported = None;
                 if Parser::match_token(state, &[TokenType::As]) {
                     exported = Some(
-                        Parser::consume(state, TokenType::Identifier, "Expected exported name after as")?
-                            .value
-                            .clone(),
+                        Parser::consume(
+                            state,
+                            TokenType::Identifier,
+                            "Expected exported name after as",
+                        )?
+                        .value
+                        .clone(),
                     );
                 }
                 specifiers.push(ExportSpecifier { local, exported });
@@ -1042,9 +1171,13 @@ impl Declarations {
 
             let module_specifier = if Parser::match_token(state, &[TokenType::From]) {
                 Some(
-                    Parser::consume(state, TokenType::StrLiteral, "Expected module path after 'from'")?
-                        .value
-                        .clone(),
+                    Parser::consume(
+                        state,
+                        TokenType::StrLiteral,
+                        "Expected module path after 'from'",
+                    )?
+                    .value
+                    .clone(),
                 )
             } else {
                 None

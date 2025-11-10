@@ -85,47 +85,80 @@ impl SemanticAnalyzer {
         expressions::check_expr(self, expr)
     }
 
-    pub(in crate::analyzer) fn check_var_decl(&mut self, decl: &VarDecl) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_var_decl(
+        &mut self,
+        decl: &VarDecl,
+    ) -> Result<Type, RaccoonError> {
         declarations::check_var_decl(self, decl)
     }
 
-    pub(in crate::analyzer) fn check_fn_decl(&mut self, decl: &FnDecl) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_fn_decl(
+        &mut self,
+        decl: &FnDecl,
+    ) -> Result<Type, RaccoonError> {
         declarations::check_fn_decl(self, decl)
     }
 
-    pub(in crate::analyzer) fn check_class_decl(&mut self, decl: &ClassDecl) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_class_decl(
+        &mut self,
+        decl: &ClassDecl,
+    ) -> Result<Type, RaccoonError> {
         declarations::check_class_decl(self, decl)
     }
 
-    pub(in crate::analyzer) fn check_if_stmt(&mut self, stmt: &IfStmt) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_if_stmt(
+        &mut self,
+        stmt: &IfStmt,
+    ) -> Result<Type, RaccoonError> {
         control_flow::check_if_stmt(self, stmt)
     }
 
-    pub(in crate::analyzer) fn check_while_stmt(&mut self, stmt: &WhileStmt) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_while_stmt(
+        &mut self,
+        stmt: &WhileStmt,
+    ) -> Result<Type, RaccoonError> {
         control_flow::check_while_stmt(self, stmt)
     }
 
-    pub(in crate::analyzer) fn check_do_while_stmt(&mut self, stmt: &DoWhileStmt) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_do_while_stmt(
+        &mut self,
+        stmt: &DoWhileStmt,
+    ) -> Result<Type, RaccoonError> {
         control_flow::check_do_while_stmt(self, stmt)
     }
 
-    pub(in crate::analyzer) fn check_for_stmt(&mut self, stmt: &ForStmt) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_for_stmt(
+        &mut self,
+        stmt: &ForStmt,
+    ) -> Result<Type, RaccoonError> {
         control_flow::check_for_stmt(self, stmt)
     }
 
-    pub(in crate::analyzer) fn check_for_in_stmt(&mut self, stmt: &ForInStmt) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_for_in_stmt(
+        &mut self,
+        stmt: &ForInStmt,
+    ) -> Result<Type, RaccoonError> {
         control_flow::check_for_in_stmt(self, stmt)
     }
 
-    pub(in crate::analyzer) fn check_for_of_stmt(&mut self, stmt: &ForOfStmt) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_for_of_stmt(
+        &mut self,
+        stmt: &ForOfStmt,
+    ) -> Result<Type, RaccoonError> {
         control_flow::check_for_of_stmt(self, stmt)
     }
 
-    pub(in crate::analyzer) fn check_switch_stmt(&mut self, stmt: &SwitchStmt) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn check_switch_stmt(
+        &mut self,
+        stmt: &SwitchStmt,
+    ) -> Result<Type, RaccoonError> {
         control_flow::check_switch_stmt(self, stmt)
     }
 
-    pub(in crate::analyzer) fn infer_function_return_type(&mut self, body: &[Stmt]) -> Result<Type, RaccoonError> {
+    pub(in crate::analyzer) fn infer_function_return_type(
+        &mut self,
+        body: &[Stmt],
+    ) -> Result<Type, RaccoonError> {
         types::infer_function_return_type(self, body)
     }
 

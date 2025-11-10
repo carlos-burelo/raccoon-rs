@@ -1,8 +1,6 @@
 use crate::ast::types::PrimitiveType;
 use crate::runtime::types::TypeHandler;
-use crate::runtime::values::{
-    BoolValue, ListValue, RuntimeValue, StrValue, NullValue,
-};
+use crate::runtime::values::{BoolValue, ListValue, NullValue, RuntimeValue, StrValue};
 use crate::{Position, RaccoonError};
 use async_trait::async_trait;
 
@@ -30,27 +28,15 @@ impl TypeHandler for TypeType {
     ) -> Result<RuntimeValue, RaccoonError> {
         if let RuntimeValue::Type(type_obj) = value {
             match method {
-                "name" => {
-                    Ok(RuntimeValue::Str(StrValue::new(type_obj.name())))
-                }
-                "kind" => {
-                    Ok(RuntimeValue::Str(StrValue::new(type_obj.get_kind().kind_name().to_string())))
-                }
-                "isPrimitive" => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_primitive())))
-                }
-                "isClass" => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_class())))
-                }
-                "isInterface" => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_interface())))
-                }
-                "isEnum" => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_enum())))
-                }
-                "isFunction" => {
-                    Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_function())))
-                }
+                "name" => Ok(RuntimeValue::Str(StrValue::new(type_obj.name()))),
+                "kind" => Ok(RuntimeValue::Str(StrValue::new(
+                    type_obj.get_kind().kind_name().to_string(),
+                ))),
+                "isPrimitive" => Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_primitive()))),
+                "isClass" => Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_class()))),
+                "isInterface" => Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_interface()))),
+                "isEnum" => Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_enum()))),
+                "isFunction" => Ok(RuntimeValue::Bool(BoolValue::new(type_obj.is_function()))),
                 "hasMethod" => {
                     if args.len() != 1 {
                         return Err(RaccoonError::new(
@@ -60,7 +46,9 @@ impl TypeHandler for TypeType {
                         ));
                     }
                     let method_name = args[0].to_string();
-                    Ok(RuntimeValue::Bool(BoolValue::new(type_obj.has_static_method(&method_name))))
+                    Ok(RuntimeValue::Bool(BoolValue::new(
+                        type_obj.has_static_method(&method_name),
+                    )))
                 }
                 "hasProperty" => {
                     if args.len() != 1 {
@@ -71,31 +59,40 @@ impl TypeHandler for TypeType {
                         ));
                     }
                     let prop_name = args[0].to_string();
-                    Ok(RuntimeValue::Bool(BoolValue::new(type_obj.has_static_property(&prop_name))))
+                    Ok(RuntimeValue::Bool(BoolValue::new(
+                        type_obj.has_static_property(&prop_name),
+                    )))
                 }
                 "getMethods" => {
                     let methods = type_obj.get_all_static_methods();
-                    let list = methods.into_iter()
+                    let list = methods
+                        .into_iter()
                         .map(|m| RuntimeValue::Str(StrValue::new(m)))
                         .collect();
-                    Ok(RuntimeValue::List(ListValue::new(list, PrimitiveType::str())))
+                    Ok(RuntimeValue::List(ListValue::new(
+                        list,
+                        PrimitiveType::str(),
+                    )))
                 }
                 "getProperties" => {
                     let properties = type_obj.get_all_static_properties();
-                    let list = properties.into_iter()
+                    let list = properties
+                        .into_iter()
                         .map(|p| RuntimeValue::Str(StrValue::new(p)))
                         .collect();
-                    Ok(RuntimeValue::List(ListValue::new(list, PrimitiveType::str())))
+                    Ok(RuntimeValue::List(ListValue::new(
+                        list,
+                        PrimitiveType::str(),
+                    )))
                 }
-                "getDocumentation" => {
-                    match type_obj.get_documentation() {
-                        Some(doc) => Ok(RuntimeValue::Str(StrValue::new(doc.clone()))),
-                        None => Ok(RuntimeValue::Null(NullValue::new())),
-                    }
-                }
-                "toString" => {
-                    Ok(RuntimeValue::Str(StrValue::new(format!("[Type {}]", type_obj.name()))))
-                }
+                "getDocumentation" => match type_obj.get_documentation() {
+                    Some(doc) => Ok(RuntimeValue::Str(StrValue::new(doc.clone()))),
+                    None => Ok(RuntimeValue::Null(NullValue::new())),
+                },
+                "toString" => Ok(RuntimeValue::Str(StrValue::new(format!(
+                    "[Type {}]",
+                    type_obj.name()
+                )))),
                 _ => Err(RaccoonError::new(
                     format!("Method '{}' not found on Type", method),
                     position,
@@ -236,8 +233,18 @@ impl TypeHandler for TypeType {
     fn has_instance_method(&self, method: &str) -> bool {
         matches!(
             method,
-            "name" | "kind" | "isPrimitive" | "isClass" | "isInterface" | "isEnum" | "isFunction"
-                | "hasMethod" | "hasProperty" | "getMethods" | "getProperties" | "getDocumentation"
+            "name"
+                | "kind"
+                | "isPrimitive"
+                | "isClass"
+                | "isInterface"
+                | "isEnum"
+                | "isFunction"
+                | "hasMethod"
+                | "hasProperty"
+                | "getMethods"
+                | "getProperties"
+                | "getDocumentation"
                 | "toString"
         )
     }

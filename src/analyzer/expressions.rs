@@ -52,7 +52,10 @@ pub fn check_expr(analyzer: &mut SemanticAnalyzer, expr: &Expr) -> Result<Type, 
     }
 }
 
-pub fn check_binary_expr(analyzer: &mut SemanticAnalyzer, expr: &BinaryExpr) -> Result<Type, RaccoonError> {
+pub fn check_binary_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &BinaryExpr,
+) -> Result<Type, RaccoonError> {
     let left_type = analyzer.check_expr(&expr.left)?;
     let right_type = analyzer.check_expr(&expr.right)?;
 
@@ -75,14 +78,20 @@ pub fn check_binary_expr(analyzer: &mut SemanticAnalyzer, expr: &BinaryExpr) -> 
         .infer_binary_type(expr.operator, &left_type, &right_type)
 }
 
-pub fn check_unary_expr(analyzer: &mut SemanticAnalyzer, expr: &UnaryExpr) -> Result<Type, RaccoonError> {
+pub fn check_unary_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &UnaryExpr,
+) -> Result<Type, RaccoonError> {
     let operand_type = analyzer.check_expr(&expr.operand)?;
     analyzer
         .type_checker
         .infer_unary_type(expr.operator, &operand_type, expr.position)
 }
 
-pub fn check_call_expr(analyzer: &mut SemanticAnalyzer, expr: &CallExpr) -> Result<Type, RaccoonError> {
+pub fn check_call_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &CallExpr,
+) -> Result<Type, RaccoonError> {
     let callee_type = analyzer.check_expr(&expr.callee)?;
 
     if let Type::Function(fn_type) = callee_type {
@@ -124,7 +133,10 @@ pub fn check_call_expr(analyzer: &mut SemanticAnalyzer, expr: &CallExpr) -> Resu
     ))
 }
 
-pub fn check_new_expr(analyzer: &mut SemanticAnalyzer, expr: &NewExpr) -> Result<Type, RaccoonError> {
+pub fn check_new_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &NewExpr,
+) -> Result<Type, RaccoonError> {
     if expr.class_name == "Map" {
         if expr.type_args.len() != 2 {
             return Err(RaccoonError::new(
@@ -144,13 +156,16 @@ pub fn check_new_expr(analyzer: &mut SemanticAnalyzer, expr: &NewExpr) -> Result
         })));
     }
 
-    let class_symbol = analyzer.symbol_table.lookup(&expr.class_name).ok_or_else(|| {
-        RaccoonError::new(
-            format!("Class '{}' not found", expr.class_name),
-            expr.position,
-            analyzer.file.clone(),
-        )
-    })?;
+    let class_symbol = analyzer
+        .symbol_table
+        .lookup(&expr.class_name)
+        .ok_or_else(|| {
+            RaccoonError::new(
+                format!("Class '{}' not found", expr.class_name),
+                expr.position,
+                analyzer.file.clone(),
+            )
+        })?;
 
     if class_symbol.kind != SymbolKind::Class {
         return Err(RaccoonError::new(
@@ -163,7 +178,10 @@ pub fn check_new_expr(analyzer: &mut SemanticAnalyzer, expr: &NewExpr) -> Result
     Ok(class_symbol.symbol_type.clone())
 }
 
-pub fn check_member_expr(analyzer: &mut SemanticAnalyzer, expr: &MemberExpr) -> Result<Type, RaccoonError> {
+pub fn check_member_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &MemberExpr,
+) -> Result<Type, RaccoonError> {
     let object_type = analyzer.check_expr(&expr.object)?;
 
     if let Type::Class(ref class_type) = object_type {
@@ -209,7 +227,10 @@ pub fn check_member_expr(analyzer: &mut SemanticAnalyzer, expr: &MemberExpr) -> 
     ))
 }
 
-pub fn check_method_call_expr(analyzer: &mut SemanticAnalyzer, expr: &MethodCallExpr) -> Result<Type, RaccoonError> {
+pub fn check_method_call_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &MethodCallExpr,
+) -> Result<Type, RaccoonError> {
     let object_type = analyzer.check_expr(&expr.object)?;
 
     if let Type::Class(ref class_type) = object_type {
@@ -263,7 +284,10 @@ pub fn check_method_call_expr(analyzer: &mut SemanticAnalyzer, expr: &MethodCall
     ))
 }
 
-pub fn check_index_expr(analyzer: &mut SemanticAnalyzer, expr: &IndexExpr) -> Result<Type, RaccoonError> {
+pub fn check_index_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &IndexExpr,
+) -> Result<Type, RaccoonError> {
     let object_type = analyzer.check_expr(&expr.object)?;
     let index_type = analyzer.check_expr(&expr.index)?;
 
@@ -272,7 +296,10 @@ pub fn check_index_expr(analyzer: &mut SemanticAnalyzer, expr: &IndexExpr) -> Re
         .validate_index_expr(&object_type, &index_type, expr.position)
 }
 
-pub fn check_await_expr(analyzer: &mut SemanticAnalyzer, expr: &AwaitExpr) -> Result<Type, RaccoonError> {
+pub fn check_await_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &AwaitExpr,
+) -> Result<Type, RaccoonError> {
     let expr_type = analyzer.check_expr(&expr.expression)?;
 
     if let Type::Future(future_type) = expr_type {
@@ -322,7 +349,10 @@ pub fn check_super_expr(analyzer: &SemanticAnalyzer) -> Result<Type, RaccoonErro
     ))
 }
 
-pub fn check_instanceof_expr(analyzer: &mut SemanticAnalyzer, expr: &InstanceOfExpr) -> Result<Type, RaccoonError> {
+pub fn check_instanceof_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &InstanceOfExpr,
+) -> Result<Type, RaccoonError> {
     analyzer.check_expr(&expr.operand)?;
 
     let type_symbol = analyzer.symbol_table.lookup(&expr.type_name);
@@ -337,7 +367,10 @@ pub fn check_instanceof_expr(analyzer: &mut SemanticAnalyzer, expr: &InstanceOfE
     Ok(PrimitiveType::bool())
 }
 
-pub fn check_arrow_fn_expr(analyzer: &mut SemanticAnalyzer, expr: &ArrowFnExpr) -> Result<Type, RaccoonError> {
+pub fn check_arrow_fn_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &ArrowFnExpr,
+) -> Result<Type, RaccoonError> {
     analyzer.symbol_table.enter_scope();
 
     let param_types: Result<Vec<_>, _> = {
@@ -407,23 +440,32 @@ pub fn check_arrow_fn_expr(analyzer: &mut SemanticAnalyzer, expr: &ArrowFnExpr) 
     })))
 }
 
-pub fn check_identifier(analyzer: &mut SemanticAnalyzer, identifier: &Identifier) -> Result<Type, RaccoonError> {
+pub fn check_identifier(
+    analyzer: &mut SemanticAnalyzer,
+    identifier: &Identifier,
+) -> Result<Type, RaccoonError> {
     if let Some(narrowed_type) = analyzer.type_inference.get_narrowed_type(&identifier.name) {
         return Ok(narrowed_type);
     }
 
-    let symbol = analyzer.symbol_table.lookup(&identifier.name).ok_or_else(|| {
-        RaccoonError::new(
-            format!("Undefined variable '{}'", identifier.name),
-            identifier.position,
-            analyzer.file.clone(),
-        )
-    })?;
+    let symbol = analyzer
+        .symbol_table
+        .lookup(&identifier.name)
+        .ok_or_else(|| {
+            RaccoonError::new(
+                format!("Undefined variable '{}'", identifier.name),
+                identifier.position,
+                analyzer.file.clone(),
+            )
+        })?;
 
     Ok(symbol.symbol_type.clone())
 }
 
-pub fn check_assignment(analyzer: &mut SemanticAnalyzer, assignment: &Assignment) -> Result<Type, RaccoonError> {
+pub fn check_assignment(
+    analyzer: &mut SemanticAnalyzer,
+    assignment: &Assignment,
+) -> Result<Type, RaccoonError> {
     let target_type = analyzer.check_expr(&assignment.target)?;
     let value_type = analyzer.check_expr(&assignment.value)?;
 
@@ -435,7 +477,10 @@ pub fn check_assignment(analyzer: &mut SemanticAnalyzer, assignment: &Assignment
     )
 }
 
-pub fn check_range_expr(analyzer: &mut SemanticAnalyzer, expr: &RangeExpr) -> Result<Type, RaccoonError> {
+pub fn check_range_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &RangeExpr,
+) -> Result<Type, RaccoonError> {
     let start_type = analyzer.check_expr(&expr.start)?;
     let end_type = analyzer.check_expr(&expr.end)?;
 
@@ -444,7 +489,10 @@ pub fn check_range_expr(analyzer: &mut SemanticAnalyzer, expr: &RangeExpr) -> Re
         .validate_range_expr(&start_type, &end_type, expr.position)
 }
 
-pub fn check_conditional_expr(analyzer: &mut SemanticAnalyzer, expr: &ConditionalExpr) -> Result<Type, RaccoonError> {
+pub fn check_conditional_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &ConditionalExpr,
+) -> Result<Type, RaccoonError> {
     let cond_type = analyzer.check_expr(&expr.condition)?;
 
     if !matches!(cond_type.kind(), TypeKind::Bool) {
@@ -525,7 +573,10 @@ pub fn check_null_assertion_expr(
     Ok(operand_type)
 }
 
-pub fn check_unary_update_expr(analyzer: &mut SemanticAnalyzer, expr: &UnaryUpdateExpr) -> Result<Type, RaccoonError> {
+pub fn check_unary_update_expr(
+    analyzer: &mut SemanticAnalyzer,
+    expr: &UnaryUpdateExpr,
+) -> Result<Type, RaccoonError> {
     let operand_type = analyzer.check_expr(&expr.operand)?;
 
     if !analyzer.type_checker.is_numeric_type(&operand_type) {
@@ -539,7 +590,10 @@ pub fn check_unary_update_expr(analyzer: &mut SemanticAnalyzer, expr: &UnaryUpda
     Ok(operand_type)
 }
 
-pub fn check_list_literal(analyzer: &mut SemanticAnalyzer, list: &ListLiteral) -> Result<Type, RaccoonError> {
+pub fn check_list_literal(
+    analyzer: &mut SemanticAnalyzer,
+    list: &ListLiteral,
+) -> Result<Type, RaccoonError> {
     if list.elements.is_empty() {
         return Ok(Type::List(Box::new(ListType {
             element_type: PrimitiveType::unknown(),
@@ -569,7 +623,10 @@ pub fn check_list_literal(analyzer: &mut SemanticAnalyzer, list: &ListLiteral) -
     })))
 }
 
-pub fn check_object_literal(analyzer: &mut SemanticAnalyzer, obj: &ObjectLiteral) -> Result<Type, RaccoonError> {
+pub fn check_object_literal(
+    analyzer: &mut SemanticAnalyzer,
+    obj: &ObjectLiteral,
+) -> Result<Type, RaccoonError> {
     let mut properties = HashMap::new();
 
     for prop in &obj.properties {
@@ -604,14 +661,23 @@ pub fn check_object_literal(analyzer: &mut SemanticAnalyzer, obj: &ObjectLiteral
     })))
 }
 
-pub fn check_match_expr(_analyzer: &mut SemanticAnalyzer, _expr: &MatchExpr) -> Result<Type, RaccoonError> {
+pub fn check_match_expr(
+    _analyzer: &mut SemanticAnalyzer,
+    _expr: &MatchExpr,
+) -> Result<Type, RaccoonError> {
     // TODO: Implement pattern matching type checking
     // For now, return any type
     Ok(Type::Primitive(PrimitiveType::new(TypeKind::Any, "any")))
 }
 
-pub fn check_class_expr(_analyzer: &mut SemanticAnalyzer, _expr: &ClassExpr) -> Result<Type, RaccoonError> {
+pub fn check_class_expr(
+    _analyzer: &mut SemanticAnalyzer,
+    _expr: &ClassExpr,
+) -> Result<Type, RaccoonError> {
     // Class expressions return a class type
     // The type is the class itself (can be instantiated with new)
-    Ok(Type::Primitive(PrimitiveType::new(TypeKind::Class, "class")))
+    Ok(Type::Primitive(PrimitiveType::new(
+        TypeKind::Class,
+        "class",
+    )))
 }

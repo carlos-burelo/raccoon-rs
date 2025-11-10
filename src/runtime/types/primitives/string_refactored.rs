@@ -2,7 +2,9 @@
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::helpers::*;
-use crate::runtime::types::metadata::{MethodMetadata, ParamMetadata, PropertyMetadata, TypeMetadata};
+use crate::runtime::types::metadata::{
+    MethodMetadata, ParamMetadata, PropertyMetadata, TypeMetadata,
+};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{BoolValue, IntValue, ListValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -20,32 +22,30 @@ impl StrTypeRefactored {
                     .with_alias("toUpperCase"),
                 MethodMetadata::new("toLower", "str", "Convert to lowercase")
                     .with_alias("toLowerCase"),
-
                 // Trimming
                 MethodMetadata::new("trim", "str", "Remove whitespace from both ends"),
                 MethodMetadata::new("trimStart", "str", "Remove whitespace from start")
                     .with_alias("trimLeft"),
                 MethodMetadata::new("trimEnd", "str", "Remove whitespace from end")
                     .with_alias("trimRight"),
-
                 // Splitting and joining
                 MethodMetadata::new("split", "list<str>", "Split string by separator")
                     .with_params(vec![ParamMetadata::new("separator", "str")]),
                 MethodMetadata::new("join", "str", "Join characters with separator")
                     .with_params(vec![ParamMetadata::new("separator", "str")]),
-
                 // Replacement
-                MethodMetadata::new("replace", "str", "Replace first occurrence")
-                    .with_params(vec![
+                MethodMetadata::new("replace", "str", "Replace first occurrence").with_params(
+                    vec![
                         ParamMetadata::new("search", "str"),
                         ParamMetadata::new("replacement", "str"),
-                    ]),
-                MethodMetadata::new("replaceAll", "str", "Replace all occurrences")
-                    .with_params(vec![
+                    ],
+                ),
+                MethodMetadata::new("replaceAll", "str", "Replace all occurrences").with_params(
+                    vec![
                         ParamMetadata::new("search", "str"),
                         ParamMetadata::new("replacement", "str"),
-                    ]),
-
+                    ],
+                ),
                 // Searching
                 MethodMetadata::new("startsWith", "bool", "Check if starts with prefix")
                     .with_params(vec![ParamMetadata::new("prefix", "str")]),
@@ -53,72 +53,84 @@ impl StrTypeRefactored {
                     .with_params(vec![ParamMetadata::new("suffix", "str")]),
                 MethodMetadata::new("contains", "bool", "Check if contains substring")
                     .with_params(vec![ParamMetadata::new("substring", "str")]),
-                MethodMetadata::new("indexOf", "int", "Find first index of substring, -1 if not found")
-                    .with_params(vec![ParamMetadata::new("substring", "str")]),
-                MethodMetadata::new("lastIndexOf", "int", "Find last index of substring, -1 if not found")
-                    .with_params(vec![ParamMetadata::new("substring", "str")]),
-
+                MethodMetadata::new(
+                    "indexOf",
+                    "int",
+                    "Find first index of substring, -1 if not found",
+                )
+                .with_params(vec![ParamMetadata::new("substring", "str")]),
+                MethodMetadata::new(
+                    "lastIndexOf",
+                    "int",
+                    "Find last index of substring, -1 if not found",
+                )
+                .with_params(vec![ParamMetadata::new("substring", "str")]),
                 // Slicing
-                MethodMetadata::new("slice", "str", "Extract substring using indices")
-                    .with_params(vec![
+                MethodMetadata::new("slice", "str", "Extract substring using indices").with_params(
+                    vec![
                         ParamMetadata::new("start", "int"),
                         ParamMetadata::new("end", "int").optional(),
-                    ]),
-                MethodMetadata::new("substring", "str", "Extract substring (non-negative indices)")
-                    .with_params(vec![
-                        ParamMetadata::new("start", "int"),
-                        ParamMetadata::new("end", "int").optional(),
-                    ]),
-
+                    ],
+                ),
+                MethodMetadata::new(
+                    "substring",
+                    "str",
+                    "Extract substring (non-negative indices)",
+                )
+                .with_params(vec![
+                    ParamMetadata::new("start", "int"),
+                    ParamMetadata::new("end", "int").optional(),
+                ]),
                 // Character access
                 MethodMetadata::new("charAt", "str", "Get character at index")
                     .with_params(vec![ParamMetadata::new("index", "int")]),
                 MethodMetadata::new("charCodeAt", "int", "Get character code at index")
                     .with_params(vec![ParamMetadata::new("index", "int")]),
-
                 // Padding
-                MethodMetadata::new("padStart", "str", "Pad string from start")
-                    .with_params(vec![
-                        ParamMetadata::new("targetLength", "int"),
-                        ParamMetadata::new("padString", "str").optional(),
-                    ]),
-                MethodMetadata::new("padEnd", "str", "Pad string from end")
-                    .with_params(vec![
-                        ParamMetadata::new("targetLength", "int"),
-                        ParamMetadata::new("padString", "str").optional(),
-                    ]),
-
+                MethodMetadata::new("padStart", "str", "Pad string from start").with_params(vec![
+                    ParamMetadata::new("targetLength", "int"),
+                    ParamMetadata::new("padString", "str").optional(),
+                ]),
+                MethodMetadata::new("padEnd", "str", "Pad string from end").with_params(vec![
+                    ParamMetadata::new("targetLength", "int"),
+                    ParamMetadata::new("padString", "str").optional(),
+                ]),
                 // Other transformations
                 MethodMetadata::new("repeat", "str", "Repeat string N times")
                     .with_params(vec![ParamMetadata::new("count", "int")]),
                 MethodMetadata::new("reverse", "str", "Reverse string"),
                 MethodMetadata::new("match", "list<str>", "Find all matches of pattern")
                     .with_params(vec![ParamMetadata::new("pattern", "str")]),
-
                 // Conversion
                 MethodMetadata::new("toStr", "str", "Convert to string (identity)"),
             ])
             .with_static_methods(vec![
                 MethodMetadata::new("isNullOrEmpty", "bool", "Check if string is null or empty")
                     .with_params(vec![ParamMetadata::new("value", "any")]),
-                MethodMetadata::new("isNullOrWhiteSpace", "bool", "Check if string is null or whitespace")
-                    .with_params(vec![ParamMetadata::new("value", "any")]),
+                MethodMetadata::new(
+                    "isNullOrWhiteSpace",
+                    "bool",
+                    "Check if string is null or whitespace",
+                )
+                .with_params(vec![ParamMetadata::new("value", "any")]),
                 MethodMetadata::new("concat", "str", "Concatenate multiple strings")
                     .with_params(vec![ParamMetadata::new("values", "any").variadic()]),
-                MethodMetadata::new("join", "str", "Join values with separator")
-                    .with_params(vec![
-                        ParamMetadata::new("separator", "str"),
-                        ParamMetadata::new("values", "any").variadic(),
-                    ]),
+                MethodMetadata::new("join", "str", "Join values with separator").with_params(vec![
+                    ParamMetadata::new("separator", "str"),
+                    ParamMetadata::new("values", "any").variadic(),
+                ]),
                 MethodMetadata::new("format", "str", "Format string with placeholders")
                     .with_params(vec![
                         ParamMetadata::new("template", "str"),
                         ParamMetadata::new("args", "any").variadic(),
                     ]),
             ])
-            .with_static_properties(vec![
-                PropertyMetadata::new("empty", "str", "Empty string constant").readonly(),
-            ])
+            .with_static_properties(vec![PropertyMetadata::new(
+                "empty",
+                "str",
+                "Empty string constant",
+            )
+            .readonly()])
     }
 }
 
@@ -171,7 +183,10 @@ impl TypeHandler for StrTypeRefactored {
                     .split(separator)
                     .map(|p| RuntimeValue::Str(StrValue::new(p.to_string())))
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(parts, PrimitiveType::str())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    parts,
+                    PrimitiveType::str(),
+                )))
             }
 
             // Joining
@@ -191,7 +206,9 @@ impl TypeHandler for StrTypeRefactored {
                 require_args(&args, 2, method, position, file.clone())?;
                 let search = extract_str(&args[0], "search", position, file.clone())?;
                 let replacement = extract_str(&args[1], "replacement", position, file)?;
-                Ok(RuntimeValue::Str(StrValue::new(s.replace(search, replacement))))
+                Ok(RuntimeValue::Str(StrValue::new(
+                    s.replace(search, replacement),
+                )))
             }
 
             // Searching
@@ -234,8 +251,14 @@ impl TypeHandler for StrTypeRefactored {
                 };
 
                 let len = s.len() as isize;
-                let real_start = if start < 0 { (len + start).max(0) } else { start.min(len) };
-                let real_end = end.map(|e| if e < 0 { (len + e).max(0) } else { e.min(len) }).unwrap_or(len);
+                let real_start = if start < 0 {
+                    (len + start).max(0)
+                } else {
+                    start.min(len)
+                };
+                let real_end = end
+                    .map(|e| if e < 0 { (len + e).max(0) } else { e.min(len) })
+                    .unwrap_or(len);
 
                 if real_start > real_end {
                     return Err(RaccoonError::new(
@@ -263,9 +286,13 @@ impl TypeHandler for StrTypeRefactored {
                 let real_end = end.unwrap_or(len).min(len);
 
                 if real_start <= real_end {
-                    Ok(RuntimeValue::Str(StrValue::new(s[real_start..real_end].to_string())))
+                    Ok(RuntimeValue::Str(StrValue::new(
+                        s[real_start..real_end].to_string(),
+                    )))
                 } else {
-                    Ok(RuntimeValue::Str(StrValue::new(s[real_end..real_start].to_string())))
+                    Ok(RuntimeValue::Str(StrValue::new(
+                        s[real_end..real_start].to_string(),
+                    )))
                 }
             }
 
@@ -273,7 +300,11 @@ impl TypeHandler for StrTypeRefactored {
             "charAt" => {
                 require_args(&args, 1, method, position, file.clone())?;
                 let index = extract_int(&args[0], "index", position, file)? as usize;
-                let ch = s.chars().nth(index).map(|c| c.to_string()).unwrap_or_default();
+                let ch = s
+                    .chars()
+                    .nth(index)
+                    .map(|c| c.to_string())
+                    .unwrap_or_default();
                 Ok(RuntimeValue::Str(StrValue::new(ch)))
             }
             "charCodeAt" => {
@@ -292,7 +323,8 @@ impl TypeHandler for StrTypeRefactored {
             // Padding
             "padStart" => {
                 require_args_range(&args, 1, 2, method, position, file.clone())?;
-                let target_len = extract_int(&args[0], "targetLength", position, file.clone())? as usize;
+                let target_len =
+                    extract_int(&args[0], "targetLength", position, file.clone())? as usize;
                 let pad_str = if args.len() == 2 {
                     extract_str(&args[1], "padString", position, file)?.to_string()
                 } else {
@@ -311,7 +343,8 @@ impl TypeHandler for StrTypeRefactored {
             }
             "padEnd" => {
                 require_args_range(&args, 1, 2, method, position, file.clone())?;
-                let target_len = extract_int(&args[0], "targetLength", position, file.clone())? as usize;
+                let target_len =
+                    extract_int(&args[0], "targetLength", position, file.clone())? as usize;
                 let pad_str = if args.len() == 2 {
                     extract_str(&args[1], "padString", position, file)?.to_string()
                 } else {
@@ -353,7 +386,10 @@ impl TypeHandler for StrTypeRefactored {
                     .match_indices(pattern)
                     .map(|(_, m)| RuntimeValue::Str(StrValue::new(m.to_string())))
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(matches, PrimitiveType::str())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    matches,
+                    PrimitiveType::str(),
+                )))
             }
 
             // Conversion
@@ -474,13 +510,9 @@ mod tests {
     fn test_str_to_upper() {
         let handler = StrTypeRefactored;
         let mut value = RuntimeValue::Str(StrValue::new("hello".to_string()));
-        let result = handler.call_instance_method(
-            &mut value,
-            "toUpper",
-            vec![],
-            Position::default(),
-            None,
-        ).unwrap();
+        let result = handler
+            .call_instance_method(&mut value, "toUpper", vec![], Position::default(), None)
+            .unwrap();
 
         match result {
             RuntimeValue::Str(s) => assert_eq!(s.value, "HELLO"),
@@ -492,13 +524,15 @@ mod tests {
     fn test_str_split() {
         let handler = StrTypeRefactored;
         let mut value = RuntimeValue::Str(StrValue::new("a,b,c".to_string()));
-        let result = handler.call_instance_method(
-            &mut value,
-            "split",
-            vec![RuntimeValue::Str(StrValue::new(",".to_string()))],
-            Position::default(),
-            None,
-        ).unwrap();
+        let result = handler
+            .call_instance_method(
+                &mut value,
+                "split",
+                vec![RuntimeValue::Str(StrValue::new(",".to_string()))],
+                Position::default(),
+                None,
+            )
+            .unwrap();
 
         match result {
             RuntimeValue::List(l) => assert_eq!(l.elements.len(), 3),

@@ -1,6 +1,5 @@
 /// Auto-registration system for types
 /// Uses the `inventory` crate to collect types at compile time
-
 use super::TypeHandler;
 
 /// Trait for types that can be automatically registered

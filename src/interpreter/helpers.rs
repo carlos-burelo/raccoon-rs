@@ -1,9 +1,7 @@
 use crate::ast::nodes::*;
 use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
-use crate::runtime::{
-    FutureValue, ListValue, NullValue, ObjectValue, RuntimeValue,
-};
+use crate::runtime::{FutureValue, ListValue, NullValue, ObjectValue, RuntimeValue};
 use crate::tokens::Position;
 use async_recursion::async_recursion;
 use std::collections::HashMap;
@@ -61,16 +59,27 @@ impl Helpers {
 
                 match elem_pat {
                     ListPatternElement::Identifier(id) => {
-                        interpreter.environment
+                        interpreter
+                            .environment
                             .declare(id.name.clone(), elements[index].clone())?;
                     }
                     ListPatternElement::List(nested_list) => {
-                        Self::destructure_list_pattern(interpreter, nested_list, &elements[index], position)
-                            .await?;
+                        Self::destructure_list_pattern(
+                            interpreter,
+                            nested_list,
+                            &elements[index],
+                            position,
+                        )
+                        .await?;
                     }
                     ListPatternElement::Object(nested_obj) => {
-                        Self::destructure_object_pattern(interpreter, nested_obj, &elements[index], position)
-                            .await?;
+                        Self::destructure_object_pattern(
+                            interpreter,
+                            nested_obj,
+                            &elements[index],
+                            position,
+                        )
+                        .await?;
                     }
                 }
             }
@@ -80,7 +89,8 @@ impl Helpers {
         if let Some(rest) = &pattern.rest {
             let remaining: Vec<RuntimeValue> = elements[index..].to_vec();
             let rest_value = RuntimeValue::List(ListValue::new(remaining, PrimitiveType::any()));
-            interpreter.environment
+            interpreter
+                .environment
                 .declare(rest.argument.name.clone(), rest_value)?;
         }
 
@@ -124,15 +134,22 @@ impl Helpers {
 
             match &prop.value {
                 ObjectPatternValue::Identifier(id) => {
-                    interpreter.environment.declare(id.name.clone(), prop_value)?;
+                    interpreter
+                        .environment
+                        .declare(id.name.clone(), prop_value)?;
                 }
                 ObjectPatternValue::List(nested_list) => {
                     Self::destructure_list_pattern(interpreter, nested_list, &prop_value, position)
                         .await?;
                 }
                 ObjectPatternValue::Object(nested_obj) => {
-                    Self::destructure_object_pattern(interpreter, nested_obj, &prop_value, position)
-                        .await?;
+                    Self::destructure_object_pattern(
+                        interpreter,
+                        nested_obj,
+                        &prop_value,
+                        position,
+                    )
+                    .await?;
                 }
             }
         }
@@ -165,7 +182,8 @@ impl Helpers {
             }
             let rest_value =
                 RuntimeValue::Object(ObjectValue::new(remaining, PrimitiveType::any()));
-            interpreter.environment
+            interpreter
+                .environment
                 .declare(rest.argument.name.clone(), rest_value)?;
         }
 
@@ -203,7 +221,8 @@ impl Helpers {
                         }
                         VarPattern::Destructuring(pattern) => {
                             if let Err(e) =
-                                Self::destructure_pattern(interpreter, pattern, &value, position).await
+                                Self::destructure_pattern(interpreter, pattern, &value, position)
+                                    .await
                             {
                                 interpreter.environment.pop_scope();
                                 return Err(e);

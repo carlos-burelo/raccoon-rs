@@ -82,7 +82,10 @@ impl TypeHandler for SetType {
                 set.elements.clear();
                 Ok(RuntimeValue::Null(NullValue::new()))
             }
-            "toList" => Ok(RuntimeValue::List(ListValue::new(set.elements.clone(), PrimitiveType::any()))),
+            "toList" => Ok(RuntimeValue::List(ListValue::new(
+                set.elements.clone(),
+                PrimitiveType::any(),
+            ))),
             "union" => {
                 if args.len() != 1 {
                     return Err(RaccoonError::new(
@@ -99,7 +102,10 @@ impl TypeHandler for SetType {
                                 result.push(item.clone());
                             }
                         }
-                        Ok(RuntimeValue::List(ListValue::new(result, PrimitiveType::any())))
+                        Ok(RuntimeValue::List(ListValue::new(
+                            result,
+                            PrimitiveType::any(),
+                        )))
                     }
                     _ => Err(RaccoonError::new(
                         "union requires set argument".to_string(),
@@ -124,7 +130,10 @@ impl TypeHandler for SetType {
                             .filter(|e| other.elements.iter().any(|o| o.equals(e)))
                             .cloned()
                             .collect();
-                        Ok(RuntimeValue::List(ListValue::new(result, PrimitiveType::any())))
+                        Ok(RuntimeValue::List(ListValue::new(
+                            result,
+                            PrimitiveType::any(),
+                        )))
                     }
                     _ => Err(RaccoonError::new(
                         "intersection requires set argument".to_string(),
@@ -165,7 +174,10 @@ impl TypeHandler for SetType {
                                 unique.push(item.clone());
                             }
                         }
-                        Ok(RuntimeValue::List(ListValue::new(unique, PrimitiveType::any())))
+                        Ok(RuntimeValue::List(ListValue::new(
+                            unique,
+                            PrimitiveType::any(),
+                        )))
                     }
                     _ => Err(RaccoonError::new(
                         "from requires list argument".to_string(),

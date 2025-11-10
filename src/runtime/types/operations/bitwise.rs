@@ -1,6 +1,5 @@
 /// Bitwise operations module
 /// Centralizes bitwise operations: and, or, xor, left shift, right shift, unsigned right shift
-
 use crate::error::RaccoonError;
 use crate::runtime::{IntValue, RuntimeValue};
 use crate::tokens::Position;
@@ -130,7 +129,9 @@ pub fn unsigned_right_shift(
                     file.clone(),
                 ));
             }
-            Ok(RuntimeValue::Int(IntValue::new((l.value as u64 >> r.value) as i64)))
+            Ok(RuntimeValue::Int(IntValue::new(
+                (l.value as u64 >> r.value) as i64,
+            )))
         }
         _ => Err(RaccoonError::new(
             "Invalid operands for unsigned right shift (only Int >>> Int is supported)".to_string(),

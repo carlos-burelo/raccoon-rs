@@ -1,11 +1,10 @@
+use crate::error::RaccoonError;
 /// BoolType - REFACTORED VERSION
 /// Uses new helper functions and metadata system
-
 use crate::runtime::types::helpers::*;
 use crate::runtime::types::metadata::*;
 use crate::runtime::types::TypeHandler;
-use crate::error::RaccoonError;
-use crate::runtime::{RuntimeValue, StrValue, BoolValue, NullValue};
+use crate::runtime::{BoolValue, NullValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -14,14 +13,20 @@ pub struct BoolType;
 impl BoolType {
     pub fn metadata() -> TypeMetadata {
         TypeMetadata::new("bool", "Boolean type representing true/false values")
-            .with_instance_methods(vec![
-                MethodMetadata::new("toStr", "str", "Convert to string"),
-            ])
+            .with_instance_methods(vec![MethodMetadata::new(
+                "toStr",
+                "str",
+                "Convert to string",
+            )])
             .with_static_methods(vec![
                 MethodMetadata::new("parse", "bool", "Parse boolean from string")
                     .with_params(vec![ParamMetadata::new("value", "str")]),
-                MethodMetadata::new("tryParse", "bool?", "Try parse boolean, returns null on failure")
-                    .with_params(vec![ParamMetadata::new("value", "str")]),
+                MethodMetadata::new(
+                    "tryParse",
+                    "bool?",
+                    "Try parse boolean, returns null on failure",
+                )
+                .with_params(vec![ParamMetadata::new("value", "str")]),
             ])
     }
 }
@@ -91,7 +96,9 @@ impl TypeHandler for BoolType {
                     _ => Ok(RuntimeValue::Null(NullValue::new())),
                 }
             }
-            _ => Err(static_method_not_found_error("bool", method, position, file)),
+            _ => Err(static_method_not_found_error(
+                "bool", method, position, file,
+            )),
         }
     }
 
@@ -112,7 +119,9 @@ mod tests {
     fn test_bool_to_str() {
         let handler = BoolType;
         let mut val = RuntimeValue::Bool(BoolValue::new(true));
-        let result = handler.call_instance_method(&mut val, "toStr", vec![], Position::default(), None).unwrap();
+        let result = handler
+            .call_instance_method(&mut val, "toStr", vec![], Position::default(), None)
+            .unwrap();
 
         match result {
             RuntimeValue::Str(s) => assert_eq!(s.value, "true"),
@@ -124,7 +133,9 @@ mod tests {
     fn test_bool_parse() {
         let handler = BoolType;
         let args = vec![RuntimeValue::Str(StrValue::new("true".to_string()))];
-        let result = handler.call_static_method("parse", args, Position::default(), None).unwrap();
+        let result = handler
+            .call_static_method("parse", args, Position::default(), None)
+            .unwrap();
 
         match result {
             RuntimeValue::Bool(b) => assert!(b.value),

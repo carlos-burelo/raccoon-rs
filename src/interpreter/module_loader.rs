@@ -19,7 +19,8 @@ impl ModuleLoader {
 
         if let Some(namespace_name) = &import_decl.namespace_import {
             let namespace_obj = Self::get_module_namespace(interpreter, module_spec).await?;
-            interpreter.environment
+            interpreter
+                .environment
                 .declare(namespace_name.clone(), namespace_obj)?;
             return Ok(InterpreterResult::Value(RuntimeValue::Null(
                 NullValue::new(),
@@ -36,7 +37,9 @@ impl ModuleLoader {
 
         if let Some(default_name) = &import_decl.default_import {
             let value = Self::get_module_export(interpreter, module_spec, "default").await?;
-            interpreter.environment.declare(default_name.clone(), value)?;
+            interpreter
+                .environment
+                .declare(default_name.clone(), value)?;
         }
 
         Ok(InterpreterResult::Value(RuntimeValue::Null(
@@ -251,9 +254,11 @@ impl ModuleLoader {
                         if let Some(module_spec) = &export_decl.module_specifier {
                             let source_module_path =
                                 Self::resolve_relative_path(&module_interp, module_spec)?;
-                            let source_module =
-                                Box::pin(Self::load_file_module(&module_interp, &source_module_path))
-                                    .await?;
+                            let source_module = Box::pin(Self::load_file_module(
+                                &module_interp,
+                                &source_module_path,
+                            ))
+                            .await?;
 
                             if let RuntimeValue::Object(obj) = source_module {
                                 for spec in &export_decl.specifiers {

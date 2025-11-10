@@ -40,7 +40,9 @@ impl ControlFlow {
         let condition = interpreter.evaluate_expr(&if_stmt.condition).await?;
 
         if interpreter.is_truthy(&condition) {
-            interpreter.execute_stmt_internal(&if_stmt.then_branch).await
+            interpreter
+                .execute_stmt_internal(&if_stmt.then_branch)
+                .await
         } else if let Some(else_branch) = &if_stmt.else_branch {
             interpreter.execute_stmt_internal(else_branch).await
         } else {
@@ -80,7 +82,10 @@ impl ControlFlow {
         do_while_stmt: &DoWhileStmt,
     ) -> Result<InterpreterResult, RaccoonError> {
         loop {
-            match interpreter.execute_stmt_internal(&do_while_stmt.body).await? {
+            match interpreter
+                .execute_stmt_internal(&do_while_stmt.body)
+                .await?
+            {
                 InterpreterResult::Value(_) => {}
                 InterpreterResult::Break => break,
                 InterpreterResult::Continue => {
@@ -166,12 +171,14 @@ impl ControlFlow {
         interpreter.environment.push_scope();
 
         if !elements.is_empty() {
-            interpreter.environment
+            interpreter
+                .environment
                 .declare(for_in.variable.clone(), elements[0].clone())?;
         }
 
         for element in elements {
-            interpreter.environment
+            interpreter
+                .environment
                 .assign(&for_in.variable, element, for_in.position)?;
 
             match interpreter.execute_stmt_internal(&for_in.body).await? {
@@ -220,12 +227,14 @@ impl ControlFlow {
         interpreter.environment.push_scope();
 
         if !elements.is_empty() {
-            interpreter.environment
+            interpreter
+                .environment
                 .declare(for_of.variable.clone(), elements[0].clone())?;
         }
 
         for element in elements {
-            interpreter.environment
+            interpreter
+                .environment
                 .assign(&for_of.variable, element, for_of.position)?;
 
             match interpreter.execute_stmt_internal(&for_of.body).await? {
@@ -329,10 +338,12 @@ impl ControlFlow {
                 for catch_clause in &try_stmt.catch_clauses {
                     interpreter.environment.push_scope();
                     let error_value = RuntimeValue::Str(StrValue::new(error.message.clone()));
-                    interpreter.environment
+                    interpreter
+                        .environment
                         .declare(catch_clause.error_var.clone(), error_value)?;
 
-                    let result = Self::execute_block_internal(interpreter, &catch_clause.body).await;
+                    let result =
+                        Self::execute_block_internal(interpreter, &catch_clause.body).await;
                     interpreter.environment.pop_scope();
 
                     if let Some(finally_block) = &try_stmt.finally_block {

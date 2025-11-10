@@ -171,20 +171,16 @@ macro_rules! native_functions {
 #[macro_export]
 macro_rules! native_fn_variadic {
     ($impl:expr) => {
-        $crate::runtime::RuntimeValue::NativeFunction(
-            $crate::runtime::NativeFunctionValue::new(
-                $impl,
-                fn_type!(variadic, $crate::ast::types::PrimitiveType::void())
-            )
-        )
+        $crate::runtime::RuntimeValue::NativeFunction($crate::runtime::NativeFunctionValue::new(
+            $impl,
+            fn_type!(variadic, $crate::ast::types::PrimitiveType::void()),
+        ))
     };
     ($impl:expr, $return:expr) => {
-        $crate::runtime::RuntimeValue::NativeFunction(
-            $crate::runtime::NativeFunctionValue::new(
-                $impl,
-                fn_type!(variadic, $return)
-            )
-        )
+        $crate::runtime::RuntimeValue::NativeFunction($crate::runtime::NativeFunctionValue::new(
+            $impl,
+            fn_type!(variadic, $return),
+        ))
     };
 }
 

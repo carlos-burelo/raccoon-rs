@@ -1,7 +1,6 @@
 /// Type narrowing module
 /// Provides type guards and type narrowing logic for runtime type checking
 /// Consolidates logic from src/type_system/inference.rs
-
 use crate::runtime::RuntimeValue;
 
 /// Represents a narrowed type based on runtime checks
@@ -51,7 +50,10 @@ pub fn typeof_check(value: &RuntimeValue, type_name: &str) -> bool {
     match type_name {
         "int" | "number" => matches!(
             value,
-            RuntimeValue::Int(_) | RuntimeValue::BigInt(_) | RuntimeValue::Float(_) | RuntimeValue::Decimal(_)
+            RuntimeValue::Int(_)
+                | RuntimeValue::BigInt(_)
+                | RuntimeValue::Float(_)
+                | RuntimeValue::Decimal(_)
         ),
         "float" | "double" => matches!(value, RuntimeValue::Float(_) | RuntimeValue::Decimal(_)),
         "string" | "str" => matches!(value, RuntimeValue::Str(_)),
@@ -193,6 +195,8 @@ mod tests {
         assert!(is_numeric(&float_val));
         assert!(is_integer(&int_val));
         assert!(!is_integer(&float_val));
-        assert!(!is_numeric(&RuntimeValue::Str(crate::runtime::StrValue::new("test".to_string()))));
+        assert!(!is_numeric(&RuntimeValue::Str(
+            crate::runtime::StrValue::new("test".to_string())
+        )));
     }
 }

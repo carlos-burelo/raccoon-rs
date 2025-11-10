@@ -1,7 +1,7 @@
-use crate::runtime::{Registrar, RuntimeValue, FromRaccoon, ToRaccoon};
-use std::time::{SystemTime, UNIX_EPOCH};
+use crate::runtime::{FromRaccoon, Registrar, RuntimeValue, ToRaccoon};
 use std::thread;
 use std::time::Duration;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 pub fn register_time_module(registrar: &mut Registrar) {
     // now() -> i64 (milliseconds since epoch)

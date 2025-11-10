@@ -1,9 +1,8 @@
 /// Type conversion module
 /// Provides comprehensive type conversion utilities with proper error handling
 /// Extends casting.rs with more conversion helpers
-
 use crate::error::RaccoonError;
-use crate::runtime::{FloatValue, IntValue, RuntimeValue, StrValue, BoolValue};
+use crate::runtime::{BoolValue, FloatValue, IntValue, RuntimeValue, StrValue};
 use crate::tokens::Position;
 
 /// Result of a type conversion attempt
@@ -61,11 +60,7 @@ pub fn to_string(value: &RuntimeValue) -> String {
         RuntimeValue::Bool(b) => b.value.to_string(),
         RuntimeValue::Null(_) => "null".to_string(),
         RuntimeValue::List(l) => {
-            let elements: Vec<String> = l
-                .elements
-                .iter()
-                .map(to_string)
-                .collect();
+            let elements: Vec<String> = l.elements.iter().map(to_string).collect();
             format!("[{}]", elements.join(", "))
         }
         RuntimeValue::Map(m) => {
@@ -76,9 +71,7 @@ pub fn to_string(value: &RuntimeValue) -> String {
                 .collect();
             format!("{{{}}}", entries.join(", "))
         }
-        RuntimeValue::Object(o) => {
-            o.to_string()
-        }
+        RuntimeValue::Object(o) => o.to_string(),
         RuntimeValue::Class(c) => format!("class {}", c.class_name),
         RuntimeValue::ClassInstance(i) => format!("{}instance", i.class_name),
         RuntimeValue::Function(_) => "[function]".to_string(),
@@ -101,7 +94,11 @@ pub fn to_number(value: &RuntimeValue) -> ConversionResult {
         RuntimeValue::BigInt(i) => Ok(RuntimeValue::Int(IntValue::new(i.value as i64))),
         RuntimeValue::Float(f) => Ok(RuntimeValue::Float(FloatValue::new(f.value))),
         RuntimeValue::Decimal(d) => Ok(RuntimeValue::Float(FloatValue::new(d.value))),
-        RuntimeValue::Bool(b) => Ok(RuntimeValue::Int(IntValue::new(if b.value { 1 } else { 0 }))),
+        RuntimeValue::Bool(b) => Ok(RuntimeValue::Int(IntValue::new(if b.value {
+            1
+        } else {
+            0
+        }))),
         RuntimeValue::Str(s) => {
             let trimmed = s.value.trim();
             if trimmed.is_empty() {

@@ -456,11 +456,7 @@ impl RaccoonError {
         let msg = &self.message;
         output.push_str(&format!(
             "\n{} {} {}:{} -> {}",
-            header,
-            file_name,
-            line,
-            column,
-            msg
+            header, file_name, line, column, msg
         ));
 
         if let Some(context) = self.get_code_context(2) {

@@ -40,7 +40,10 @@ pub fn check_stmt(analyzer: &mut SemanticAnalyzer, stmt: &Stmt) -> Result<Type, 
     }
 }
 
-pub fn check_export_decl(analyzer: &mut SemanticAnalyzer, decl: &ExportDecl) -> Result<Type, RaccoonError> {
+pub fn check_export_decl(
+    analyzer: &mut SemanticAnalyzer,
+    decl: &ExportDecl,
+) -> Result<Type, RaccoonError> {
     if let Some(ref declaration) = decl.declaration {
         return analyzer.check_stmt(declaration);
     }
@@ -70,7 +73,10 @@ pub fn check_block(analyzer: &mut SemanticAnalyzer, block: &Block) -> Result<Typ
     Ok(PrimitiveType::void())
 }
 
-pub fn check_return_stmt(analyzer: &mut SemanticAnalyzer, stmt: &ReturnStmt) -> Result<Type, RaccoonError> {
+pub fn check_return_stmt(
+    analyzer: &mut SemanticAnalyzer,
+    stmt: &ReturnStmt,
+) -> Result<Type, RaccoonError> {
     if analyzer.current_function.is_none() {
         return Err(RaccoonError::new(
             "Return statement outside function",
@@ -109,7 +115,10 @@ pub fn check_continue_stmt(analyzer: &SemanticAnalyzer) -> Result<Type, RaccoonE
     Ok(PrimitiveType::void())
 }
 
-pub fn check_try_stmt(analyzer: &mut SemanticAnalyzer, stmt: &TryStmt) -> Result<Type, RaccoonError> {
+pub fn check_try_stmt(
+    analyzer: &mut SemanticAnalyzer,
+    stmt: &TryStmt,
+) -> Result<Type, RaccoonError> {
     check_block(analyzer, &stmt.try_block)?;
 
     for catch_clause in &stmt.catch_clauses {
@@ -141,7 +150,10 @@ pub fn check_try_stmt(analyzer: &mut SemanticAnalyzer, stmt: &TryStmt) -> Result
     Ok(PrimitiveType::void())
 }
 
-pub fn check_throw_stmt(analyzer: &mut SemanticAnalyzer, stmt: &ThrowStmt) -> Result<Type, RaccoonError> {
+pub fn check_throw_stmt(
+    analyzer: &mut SemanticAnalyzer,
+    stmt: &ThrowStmt,
+) -> Result<Type, RaccoonError> {
     analyzer.check_expr(&stmt.value)?;
     Ok(PrimitiveType::void())
 }

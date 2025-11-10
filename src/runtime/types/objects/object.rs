@@ -1,7 +1,7 @@
+use crate::ast::types::PrimitiveType;
 use crate::error::RaccoonError;
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{IntValue, ListValue, RuntimeValue, StrValue};
-use crate::ast::types::PrimitiveType;
 use crate::tokens::Position;
 use async_trait::async_trait;
 
@@ -43,27 +43,35 @@ impl TypeHandler for ObjectType {
                     .keys()
                     .map(|k| RuntimeValue::Str(StrValue::new(k.clone())))
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(keys, PrimitiveType::str())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    keys,
+                    PrimitiveType::str(),
+                )))
             }
             "values" => {
                 let values: Vec<RuntimeValue> = obj.properties.values().cloned().collect();
-                Ok(RuntimeValue::List(ListValue::new(values, PrimitiveType::any())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    values,
+                    PrimitiveType::any(),
+                )))
             }
             "entries" => {
                 let entries: Vec<RuntimeValue> = obj
                     .properties
                     .iter()
                     .map(|(k, v)| {
-                        let pair = vec![
-                            RuntimeValue::Str(StrValue::new(k.clone())),
-                            v.clone(),
-                        ];
+                        let pair = vec![RuntimeValue::Str(StrValue::new(k.clone())), v.clone()];
                         RuntimeValue::List(ListValue::new(pair, PrimitiveType::any()))
                     })
                     .collect();
-                Ok(RuntimeValue::List(ListValue::new(entries, PrimitiveType::any())))
+                Ok(RuntimeValue::List(ListValue::new(
+                    entries,
+                    PrimitiveType::any(),
+                )))
             }
-            "size" | "length" => Ok(RuntimeValue::Int(IntValue::new(obj.properties.len() as i64))),
+            "size" | "length" => Ok(RuntimeValue::Int(
+                IntValue::new(obj.properties.len() as i64),
+            )),
             "hasOwnProperty" => {
                 if _args.len() != 1 {
                     return Err(RaccoonError::new(

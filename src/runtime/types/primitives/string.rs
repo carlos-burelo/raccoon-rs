@@ -504,11 +504,9 @@ impl TypeHandler for StrType {
                 }
             }
 
-            "reverse" => {
-                Ok(RuntimeValue::Str(StrValue::new(
-                    s.chars().rev().collect::<String>(),
-                )))
-            }
+            "reverse" => Ok(RuntimeValue::Str(StrValue::new(
+                s.chars().rev().collect::<String>(),
+            ))),
 
             "replaceAll" => {
                 if args.len() != 2 {

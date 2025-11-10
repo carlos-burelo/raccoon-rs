@@ -3,22 +3,28 @@ use std::collections::HashMap;
 use crate::{
     ast::{nodes::*, types::*},
     error::RaccoonError,
-    symbol_table::{SymbolKind},
+    symbol_table::SymbolKind,
     type_system::TypeResolver,
 };
 
 use super::SemanticAnalyzer;
 
-pub fn register_class(analyzer: &mut SemanticAnalyzer, decl: &ClassDecl) -> Result<(), RaccoonError> {
+pub fn register_class(
+    analyzer: &mut SemanticAnalyzer,
+    decl: &ClassDecl,
+) -> Result<(), RaccoonError> {
     let mut superclass = None;
     if let Some(ref superclass_name) = decl.superclass {
-        let super_symbol = analyzer.symbol_table.lookup(superclass_name).ok_or_else(|| {
-            RaccoonError::new(
-                format!("Superclass '{}' not found", superclass_name),
-                decl.position,
-                analyzer.file.clone(),
-            )
-        })?;
+        let super_symbol = analyzer
+            .symbol_table
+            .lookup(superclass_name)
+            .ok_or_else(|| {
+                RaccoonError::new(
+                    format!("Superclass '{}' not found", superclass_name),
+                    decl.position,
+                    analyzer.file.clone(),
+                )
+            })?;
 
         if super_symbol.kind != SymbolKind::Class {
             return Err(RaccoonError::new(
@@ -53,7 +59,10 @@ pub fn register_class(analyzer: &mut SemanticAnalyzer, decl: &ClassDecl) -> Resu
     Ok(())
 }
 
-pub fn register_interface(analyzer: &mut SemanticAnalyzer, decl: &InterfaceDecl) -> Result<(), RaccoonError> {
+pub fn register_interface(
+    analyzer: &mut SemanticAnalyzer,
+    decl: &InterfaceDecl,
+) -> Result<(), RaccoonError> {
     let mut properties = HashMap::new();
 
     for prop in &decl.properties {
@@ -130,7 +139,10 @@ pub fn register_enum(analyzer: &mut SemanticAnalyzer, decl: &EnumDecl) -> Result
     Ok(())
 }
 
-pub fn register_type_alias(analyzer: &mut SemanticAnalyzer, decl: &TypeAliasDecl) -> Result<(), RaccoonError> {
+pub fn register_type_alias(
+    analyzer: &mut SemanticAnalyzer,
+    decl: &TypeAliasDecl,
+) -> Result<(), RaccoonError> {
     let resolver = TypeResolver::new(&analyzer.symbol_table, analyzer.file.clone());
     let resolved_type = resolver.resolve(&decl.alias_type)?;
 
@@ -145,7 +157,10 @@ pub fn register_type_alias(analyzer: &mut SemanticAnalyzer, decl: &TypeAliasDecl
     Ok(())
 }
 
-pub fn register_function(analyzer: &mut SemanticAnalyzer, decl: &FnDecl) -> Result<(), RaccoonError> {
+pub fn register_function(
+    analyzer: &mut SemanticAnalyzer,
+    decl: &FnDecl,
+) -> Result<(), RaccoonError> {
     let resolver = TypeResolver::new(&analyzer.symbol_table, analyzer.file.clone());
 
     let mut param_types = Vec::new();
@@ -185,7 +200,10 @@ pub fn register_function(analyzer: &mut SemanticAnalyzer, decl: &FnDecl) -> Resu
     Ok(())
 }
 
-pub fn check_var_decl(analyzer: &mut SemanticAnalyzer, decl: &VarDecl) -> Result<Type, RaccoonError> {
+pub fn check_var_decl(
+    analyzer: &mut SemanticAnalyzer,
+    decl: &VarDecl,
+) -> Result<Type, RaccoonError> {
     let resolver = TypeResolver::new(&analyzer.symbol_table, analyzer.file.clone());
 
     let explicit_type = resolver.resolve(&decl.type_annotation)?;
@@ -316,7 +334,10 @@ pub fn check_fn_decl(analyzer: &mut SemanticAnalyzer, decl: &FnDecl) -> Result<T
     })))
 }
 
-pub fn check_class_decl(analyzer: &mut SemanticAnalyzer, decl: &ClassDecl) -> Result<Type, RaccoonError> {
+pub fn check_class_decl(
+    analyzer: &mut SemanticAnalyzer,
+    decl: &ClassDecl,
+) -> Result<Type, RaccoonError> {
     let class_symbol = analyzer
         .symbol_table
         .lookup(&decl.name)

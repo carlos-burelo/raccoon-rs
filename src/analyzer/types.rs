@@ -5,7 +5,10 @@ use crate::{
 
 use super::SemanticAnalyzer;
 
-pub fn infer_function_return_type(analyzer: &mut SemanticAnalyzer, body: &[Stmt]) -> Result<Type, RaccoonError> {
+pub fn infer_function_return_type(
+    analyzer: &mut SemanticAnalyzer,
+    body: &[Stmt],
+) -> Result<Type, RaccoonError> {
     let mut return_types = Vec::new();
 
     for stmt in body {
@@ -16,7 +19,9 @@ pub fn infer_function_return_type(analyzer: &mut SemanticAnalyzer, body: &[Stmt]
         return Ok(PrimitiveType::void());
     }
 
-    analyzer.type_inference.infer_common_type(&return_types, (0, 0))
+    analyzer
+        .type_inference
+        .infer_common_type(&return_types, (0, 0))
 }
 
 pub fn collect_return_types(
