@@ -7,6 +7,9 @@ pub mod special;
 pub mod registry;
 pub mod operations;
 pub mod type_type;
+pub mod helpers;
+pub mod metadata;
+pub mod macros;
 
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;
