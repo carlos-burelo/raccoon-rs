@@ -1,4 +1,7 @@
+/// Refactored UnitType using helpers and metadata system
 use crate::error::RaccoonError;
+use crate::runtime::types::helpers::*;
+use crate::runtime::types::metadata::{MethodMetadata, TypeMetadata};
 use crate::runtime::types::TypeHandler;
 use crate::runtime::{RuntimeValue, StrValue};
 use crate::tokens::Position;
@@ -10,6 +13,20 @@ use async_trait::async_trait;
 
 pub struct UnitType;
 
+impl UnitType {
+    /// Returns complete type metadata with all methods and properties
+    pub fn metadata() -> TypeMetadata {
+        TypeMetadata::new(
+            "unit",
+            "Unit type representing void/absence of value, displayed as ()",
+        )
+        .with_instance_methods(vec![
+            MethodMetadata::new("toString", "str", "Convert to string '()'"),
+            MethodMetadata::new("toStr", "str", "Convert to string '()'"),
+        ])
+    }
+}
+
 #[async_trait]
 impl TypeHandler for UnitType {
     fn type_name(&self) -> &str {
@@ -20,7 +37,7 @@ impl TypeHandler for UnitType {
         &self,
         value: &mut RuntimeValue,
         method: &str,
-        _args: Vec<RuntimeValue>,
+        args: Vec<RuntimeValue>,
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
@@ -37,12 +54,11 @@ impl TypeHandler for UnitType {
         }
 
         match method {
-            "toString" | "toStr" => Ok(RuntimeValue::Str(StrValue::new("()".to_string()))),
-            _ => Err(RaccoonError::new(
-                format!("Method '{}' not found on unit", method),
-                position,
-                file,
-            )),
+            "toString" | "toStr" => {
+                require_args(&args, 0, method, position, file)?;
+                Ok(RuntimeValue::Str(StrValue::new("()".to_string())))
+            }
+            _ => Err(method_not_found_error("unit", method, position, file)),
         }
     }
 
@@ -53,10 +69,8 @@ impl TypeHandler for UnitType {
         position: Position,
         file: Option<String>,
     ) -> Result<RuntimeValue, RaccoonError> {
-        Err(RaccoonError::new(
-            format!("Static method '{}' not found on unit type", method),
-            position,
-            file,
+        Err(static_method_not_found_error(
+            "unit", method, position, file,
         ))
     }
 
