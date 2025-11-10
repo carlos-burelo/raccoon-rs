@@ -51,7 +51,7 @@ impl ModuleLoader {
         interpreter: &Interpreter,
         module_spec: &str,
     ) -> Result<RuntimeValue, RaccoonError> {
-        if module_spec.starts_with("std:") {
+        if module_spec.starts_with("std:") || module_spec == "internal:core" {
             if interpreter.stdlib_loader.module_exists(module_spec) {
                 return interpreter.stdlib_loader.load_module(module_spec).await;
             } else {
@@ -81,7 +81,7 @@ impl ModuleLoader {
         module_spec: &str,
         export_name: &str,
     ) -> Result<RuntimeValue, RaccoonError> {
-        if module_spec.starts_with("std:") {
+        if module_spec.starts_with("std:") || module_spec == "internal:core" {
             if interpreter.stdlib_loader.module_exists(module_spec) {
                 return interpreter
                     .stdlib_loader
