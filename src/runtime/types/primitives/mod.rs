@@ -2,7 +2,9 @@
 pub mod integers;
 pub mod floats;
 pub mod bool;
+pub mod bool_refactored;
 pub mod string;
+pub mod string_refactored;
 pub mod char;
 pub mod null;
 pub mod unit;

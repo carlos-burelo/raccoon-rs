@@ -10,6 +10,7 @@ pub mod type_type;
 pub mod helpers;
 pub mod metadata;
 pub mod macros;
+pub mod auto_register;
 
 use crate::error::RaccoonError;
 use crate::runtime::RuntimeValue;

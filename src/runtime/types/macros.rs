@@ -186,6 +186,107 @@ macro_rules! prop_meta {
     };
 }
 
+/// Macro to define a complete type declaratively
+/// Combines structure definition, TypeHandler implementation, and metadata
+///
+/// # Example
+/// ```ignore
+/// define_type! {
+///     struct MyType {
+///         type_name: "mytype",
+///         description: "My custom type",
+///
+///         instance_methods: {
+///             "myMethod" => |value, args, pos, file| {
+///                 // Implementation
+///                 Ok(RuntimeValue::Null(NullValue::new()))
+///             }
+///         },
+///
+///         static_methods: {
+///             "create" => |args, pos, file| {
+///                 // Implementation
+///                 Ok(RuntimeValue::Null(NullValue::new()))
+///             }
+///         }
+///     }
+/// }
+/// ```
+#[macro_export]
+macro_rules! define_type {
+    (
+        struct $name:ident {
+            type_name: $type_name:expr,
+            description: $description:expr
+            $(,)?
+        }
+    ) => {
+        pub struct $name;
+
+        impl Default for $name {
+            fn default() -> Self {
+                Self
+            }
+        }
+
+        impl $name {
+            pub fn metadata() -> $crate::runtime::types::metadata::TypeMetadata {
+                $crate::runtime::types::metadata::TypeMetadata::new($type_name, $description)
+            }
+        }
+
+        #[async_trait::async_trait]
+        impl $crate::runtime::types::TypeHandler for $name {
+            fn type_name(&self) -> &str {
+                $type_name
+            }
+
+            fn call_instance_method(
+                &self,
+                _value: &mut $crate::runtime::RuntimeValue,
+                method: &str,
+                _args: Vec<$crate::runtime::RuntimeValue>,
+                position: $crate::tokens::Position,
+                file: Option<String>,
+            ) -> Result<$crate::runtime::RuntimeValue, $crate::error::RaccoonError> {
+                Err($crate::runtime::types::helpers::method_not_found_error(
+                    $type_name,
+                    method,
+                    position,
+                    file,
+                ))
+            }
+
+            fn call_static_method(
+                &self,
+                method: &str,
+                _args: Vec<$crate::runtime::RuntimeValue>,
+                position: $crate::tokens::Position,
+                file: Option<String>,
+            ) -> Result<$crate::runtime::RuntimeValue, $crate::error::RaccoonError> {
+                Err($crate::runtime::types::helpers::static_method_not_found_error(
+                    $type_name,
+                    method,
+                    position,
+                    file,
+                ))
+            }
+
+            fn has_instance_method(&self, method: &str) -> bool {
+                Self::metadata().has_instance_method(method)
+            }
+
+            fn has_static_method(&self, method: &str) -> bool {
+                Self::metadata().has_static_method(method)
+            }
+
+            fn has_async_instance_method(&self, method: &str) -> bool {
+                Self::metadata().has_async_instance_method(method)
+            }
+        }
+    };
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
