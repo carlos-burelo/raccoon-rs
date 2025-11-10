@@ -6,8 +6,11 @@ pub mod bool_refactored;
 pub mod string;
 pub mod string_refactored;
 pub mod char;
+pub mod char_refactored;
 pub mod null;
+pub mod null_refactored;
 pub mod unit;
+pub mod unit_refactored;
 pub mod numeric_trait;
 
 // Re-export for convenience

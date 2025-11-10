@@ -2,6 +2,7 @@
 pub mod list;
 pub mod list_refactored;
 pub mod map;
+pub mod map_refactored;
 pub mod optional;
 pub mod range;
 pub mod set;
