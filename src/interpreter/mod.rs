@@ -140,13 +140,21 @@ impl Interpreter {
             self.load_std_core_if_needed().await?;
         }
 
+        // First, execute all import statements using the normal interpreter
+        // This ensures that imported variables are available in the environment
+        for stmt in &program.stmts {
+            if let Stmt::ImportDecl(_) = stmt {
+                self.execute_stmt_internal(stmt).await?;
+            }
+        }
+
         let compiler = crate::ir::IRCompiler::new();
         let ir_program = compiler.compile(program)?;
 
         let optimizer = crate::ir::IROptimizer::new(ir_program);
         let optimized_program = optimizer.optimize();
 
-        let mut vm = crate::ir::VM::new(self.environment.clone());
+        let mut vm = crate::ir::VM::new(self.environment.clone(), self.type_registry.clone());
         let result = vm.execute(optimized_program).await?;
 
         Ok(result)

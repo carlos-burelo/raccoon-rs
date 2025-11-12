@@ -1,5 +1,5 @@
 use crate::error::RaccoonError;
-use crate::runtime::{Environment, RuntimeValue};
+use crate::runtime::{Environment, RuntimeValue, TypeRegistry};
 use async_recursion::async_recursion;
 use std::collections::HashMap;
 
@@ -10,15 +10,17 @@ pub struct VM {
     environment: Environment,
     pc: usize,
     program: Option<IRProgram>,
+    type_registry: std::sync::Arc<TypeRegistry>,
 }
 
 impl VM {
-    pub fn new(environment: Environment) -> Self {
+    pub fn new(environment: Environment, type_registry: std::sync::Arc<TypeRegistry>) -> Self {
         Self {
             registers: HashMap::new(),
             environment,
             pc: 0,
             program: None,
+            type_registry,
         }
     }
 
@@ -476,7 +478,7 @@ impl VM {
                                 ctor_env.declare(param.clone(), arg_value)?;
                             }
 
-                            let mut ctor_vm = VM::new(ctor_env);
+                            let mut ctor_vm = VM::new(ctor_env, self.type_registry.clone());
                             let ctor_program = IRProgram {
                                 instructions: body.clone(),
                                 constant_pool: Vec::new(),
@@ -781,7 +783,7 @@ impl VM {
                             }
                         }
 
-                        let mut arm_vm = VM::new(self.environment.clone());
+                        let mut arm_vm = VM::new(self.environment.clone(), self.type_registry.clone());
                         let arm_program = IRProgram {
                             instructions: arm.body.clone(),
                             constant_pool: Vec::new(),
@@ -905,7 +907,7 @@ impl VM {
                                 RuntimeValue::Str(crate::runtime::StrValue::new(key.clone())),
                             )?;
 
-                            let mut loop_vm = VM::new(loop_env);
+                            let mut loop_vm = VM::new(loop_env, self.type_registry.clone());
                             let loop_program = IRProgram {
                                 instructions: body.clone(),
                                 constant_pool: Vec::new(),
@@ -923,7 +925,7 @@ impl VM {
                                 RuntimeValue::Int(crate::runtime::IntValue::new(i as i64)),
                             )?;
 
-                            let mut loop_vm = VM::new(loop_env);
+                            let mut loop_vm = VM::new(loop_env, self.type_registry.clone());
                             let loop_program = IRProgram {
                                 instructions: body.clone(),
                                 constant_pool: Vec::new(),
@@ -958,7 +960,7 @@ impl VM {
                             loop_env.push_scope();
                             loop_env.declare(variable.clone(), elem)?;
 
-                            let mut loop_vm = VM::new(loop_env);
+                            let mut loop_vm = VM::new(loop_env, self.type_registry.clone());
                             let loop_program = IRProgram {
                                 instructions: body.clone(),
                                 constant_pool: Vec::new(),
@@ -984,7 +986,7 @@ impl VM {
                 catch_handler,
                 finally_body,
             } => {
-                let mut try_vm = VM::new(self.environment.clone());
+                let mut try_vm = VM::new(self.environment.clone(), self.type_registry.clone());
                 let try_program = IRProgram {
                     instructions: try_body.clone(),
                     constant_pool: Vec::new(),
@@ -1001,7 +1003,7 @@ impl VM {
                             RuntimeValue::Str(crate::runtime::StrValue::new(error.message.clone())),
                         )?;
 
-                        let mut catch_vm = VM::new(self.environment.clone());
+                        let mut catch_vm = VM::new(self.environment.clone(), self.type_registry.clone());
                         let catch_program = IRProgram {
                             instructions: catch_body.clone(),
                             constant_pool: Vec::new(),
@@ -1014,7 +1016,7 @@ impl VM {
                 }
 
                 if let Some(finally) = finally_body {
-                    let mut finally_vm = VM::new(self.environment.clone());
+                    let mut finally_vm = VM::new(self.environment.clone(), self.type_registry.clone());
                     let finally_program = IRProgram {
                         instructions: finally.clone(),
                         constant_pool: Vec::new(),
@@ -1367,7 +1369,45 @@ impl VM {
         match callee {
             RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
             RuntimeValue::NativeAsyncFunction(func) => Ok((func.implementation)(args).await),
-            RuntimeValue::Function(_) => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
+            RuntimeValue::Function(func) => {
+                // Execute normal Function using the interpreter
+                let mut func_env = self.environment.clone();
+                func_env.push_scope();
+
+                // Bind parameters
+                for (i, param) in func.parameters.iter().enumerate() {
+                    let arg_value = args
+                        .get(i)
+                        .cloned()
+                        .unwrap_or(RuntimeValue::Null(crate::runtime::NullValue::new()));
+
+                    match &param.pattern {
+                        crate::ast::nodes::VarPattern::Identifier(name) => {
+                            func_env.declare(name.clone(), arg_value)?;
+                        }
+                        crate::ast::nodes::VarPattern::Destructuring(_) => {
+                            // For now, skip destructuring in parameters
+                        }
+                    }
+                }
+
+                // Execute function body using the interpreter
+                let mut interpreter = crate::interpreter::Interpreter::new(None);
+                interpreter.environment = func_env;
+                let mut result = RuntimeValue::Null(crate::runtime::NullValue::new());
+
+                for stmt in &func.body {
+                    match interpreter.execute_stmt_internal(stmt).await? {
+                        crate::interpreter::InterpreterResult::Value(v) => result = v,
+                        crate::interpreter::InterpreterResult::Return(v) => {
+                            return Ok(v);
+                        }
+                        _ => {}
+                    }
+                }
+
+                Ok(result)
+            }
             RuntimeValue::Dynamic(dyn_val) => {
                 if dyn_val.type_name() == "IRFunction" {
                     let ir_func: &crate::ir::IRFunctionValue =
@@ -1384,7 +1424,7 @@ impl VM {
                         func_env.declare(param.clone(), arg_value)?;
                     }
 
-                    let mut func_vm = VM::new(func_env);
+                    let mut func_vm = VM::new(func_env, self.type_registry.clone());
                     let func_program = IRProgram {
                         instructions: ir_func.body.clone(),
                         constant_pool: Vec::new(),
@@ -1453,7 +1493,7 @@ impl VM {
                                 }
 
                                 // Execute IR instructions
-                                let mut method_vm = VM::new(method_env);
+                                let mut method_vm = VM::new(method_env, self.type_registry.clone());
                                 let method_program = IRProgram {
                                     instructions: ir_method.body.clone(),
                                     constant_pool: Vec::new(),
@@ -1512,8 +1552,24 @@ impl VM {
                     None::<String>,
                 ))
             }
+            RuntimeValue::Str(_)
+            | RuntimeValue::Map(_)
+            | RuntimeValue::Int(_)
+            | RuntimeValue::Float(_)
+            | RuntimeValue::Decimal(_)
+            | RuntimeValue::BigInt(_)
+            | RuntimeValue::Bool(_) => {
+                // Use type registry to call instance methods on primitive types
+                self.type_registry.call_instance_method(
+                    &mut object.clone(),
+                    method,
+                    args,
+                    (0, 0),
+                    None::<String>,
+                )
+            }
             _ => {
-                // For built-in types, try to call methods like toString(), etc.
+                // For other types, return error
                 Err(RaccoonError::new(
                     &format!("Cannot call method on non-object type"),
                     (0, 0),
