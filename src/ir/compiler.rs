@@ -1053,13 +1053,46 @@ impl IRCompiler {
     fn compile_pattern(&mut self, pattern: &Pattern) -> Result<IRMatchPattern, RaccoonError> {
         match pattern {
             Pattern::Wildcard(_) => Ok(IRMatchPattern::Wildcard),
-            Pattern::Literal(_expr) => Ok(IRMatchPattern::Literal(RuntimeValue::Null(
-                crate::runtime::NullValue::new(),
-            ))),
-            Pattern::Range(_start, _end) => Ok(IRMatchPattern::Range(
-                RuntimeValue::Null(crate::runtime::NullValue::new()),
-                RuntimeValue::Null(crate::runtime::NullValue::new()),
-            )),
+            Pattern::Literal(expr) => {
+                let literal_value = match expr.as_ref() {
+                    Expr::IntLiteral(lit) => {
+                        RuntimeValue::Int(crate::runtime::IntValue::new(lit.value))
+                    }
+                    Expr::FloatLiteral(lit) => {
+                        RuntimeValue::Float(crate::runtime::FloatValue::new(lit.value))
+                    }
+                    Expr::StrLiteral(lit) => {
+                        RuntimeValue::Str(crate::runtime::StrValue::new(lit.value.clone()))
+                    }
+                    Expr::BoolLiteral(lit) => {
+                        RuntimeValue::Bool(crate::runtime::BoolValue::new(lit.value))
+                    }
+                    Expr::NullLiteral(_) => RuntimeValue::Null(crate::runtime::NullValue::new()),
+                    _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
+                };
+                Ok(IRMatchPattern::Literal(literal_value))
+            }
+            Pattern::Range(start, end) => {
+                let start_value = match start.as_ref() {
+                    Expr::IntLiteral(lit) => {
+                        RuntimeValue::Int(crate::runtime::IntValue::new(lit.value))
+                    }
+                    Expr::FloatLiteral(lit) => {
+                        RuntimeValue::Float(crate::runtime::FloatValue::new(lit.value))
+                    }
+                    _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
+                };
+                let end_value = match end.as_ref() {
+                    Expr::IntLiteral(lit) => {
+                        RuntimeValue::Int(crate::runtime::IntValue::new(lit.value))
+                    }
+                    Expr::FloatLiteral(lit) => {
+                        RuntimeValue::Float(crate::runtime::FloatValue::new(lit.value))
+                    }
+                    _ => RuntimeValue::Null(crate::runtime::NullValue::new()),
+                };
+                Ok(IRMatchPattern::Range(start_value, end_value))
+            }
             Pattern::Variable(name) => Ok(IRMatchPattern::Variable(name.clone())),
             Pattern::Array(patterns) => {
                 let mut compiled_patterns = Vec::new();

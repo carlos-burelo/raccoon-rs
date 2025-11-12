@@ -16,6 +16,8 @@ impl IROptimizer {
     pub fn optimize(mut self) -> IRProgram {
         for _ in 0..3 {
             self.constant_folding();
+            self.copy_propagation();
+            self.strength_reduction();
             self.dead_code_elimination();
             self.remove_nops();
             self.jump_threading();
@@ -364,7 +366,6 @@ impl IROptimizer {
         current
     }
 
-    #[allow(dead_code)]
     fn copy_propagation(&mut self) {
         let mut copies: HashMap<String, String> = HashMap::new();
         let mut new_instructions = Vec::new();
@@ -372,14 +373,14 @@ impl IROptimizer {
         for instruction in &self.program.instructions {
             match instruction {
                 Instruction::Move { dest, src } => {
-                    copies.insert(dest.to_string(), src.to_string());
+                    let src_str = src.to_string();
+                    let actual_src = copies.get(&src_str).cloned().unwrap_or(src_str);
+                    copies.insert(dest.to_string(), actual_src);
                     new_instructions.push(instruction.clone());
                 }
 
                 _ => {
-                    let _sources = instruction.source_registers();
                     let new_inst = instruction.clone();
-
                     new_instructions.push(new_inst);
 
                     if let Some(dest) = instruction.dest_register() {
@@ -392,7 +393,6 @@ impl IROptimizer {
         self.program.instructions = new_instructions;
     }
 
-    #[allow(dead_code)]
     fn strength_reduction(&mut self) {
         let mut new_instructions = Vec::new();
 
@@ -402,10 +402,19 @@ impl IROptimizer {
                     dest: _,
                     left: _,
                     right: _,
-                    op: _,
-                } => {
-                    new_instructions.push(instruction.clone());
-                }
+                    op,
+                } => match op {
+                    BinaryOperator::Multiply => {
+                        new_instructions.push(instruction.clone());
+                    }
+                    BinaryOperator::Divide => {
+                        new_instructions.push(instruction.clone());
+                    }
+                    BinaryOperator::Modulo => {
+                        new_instructions.push(instruction.clone());
+                    }
+                    _ => new_instructions.push(instruction.clone()),
+                },
 
                 _ => new_instructions.push(instruction.clone()),
             }
