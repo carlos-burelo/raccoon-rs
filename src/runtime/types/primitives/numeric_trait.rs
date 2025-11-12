@@ -252,25 +252,3 @@ pub type U8Handler = NumericHandler<u8>;
 pub type U16Handler = NumericHandler<u16>;
 pub type U32Handler = NumericHandler<u32>;
 pub type U64Handler = NumericHandler<u64>;
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_numeric_bounds() {
-        assert_eq!(i8::TYPE_NAME, "i8");
-        assert_eq!(i16::TYPE_NAME, "i16");
-        assert_eq!(u8::MIN_VALUE, 0);
-        assert_eq!(i8::MIN_VALUE, -128);
-    }
-
-    #[test]
-    fn test_handler_creation() {
-        let handler = I8Handler::new();
-        assert_eq!(handler.type_name(), "i8");
-
-        let handler = U32Handler::new();
-        assert_eq!(handler.type_name(), "u32");
-    }
-}

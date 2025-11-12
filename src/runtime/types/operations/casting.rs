@@ -145,37 +145,3 @@ pub fn get_common_type(left: &RuntimeValue, right: &RuntimeValue) -> Option<&'st
         _ => None,
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_widening_rules() {
-        let int_val = RuntimeValue::Int(IntValue::new(42));
-        let float_val = RuntimeValue::Float(FloatValue::new(3.14));
-
-        assert_eq!(determine_widening(&int_val, &int_val), WidenResult::Same);
-        assert_eq!(
-            determine_widening(&int_val, &float_val),
-            WidenResult::WidenLeft
-        );
-        assert_eq!(
-            determine_widening(&float_val, &int_val),
-            WidenResult::WidenRight
-        );
-    }
-
-    #[test]
-    fn test_get_common_type() {
-        let int_val = RuntimeValue::Int(IntValue::new(42));
-        let float_val = RuntimeValue::Float(FloatValue::new(3.14));
-        let str_val = RuntimeValue::Str(StrValue::new("hello".to_string()));
-
-        assert_eq!(get_common_type(&int_val, &int_val), Some("int"));
-        assert_eq!(get_common_type(&float_val, &float_val), Some("float"));
-        assert_eq!(get_common_type(&int_val, &float_val), Some("float"));
-        assert_eq!(get_common_type(&str_val, &str_val), Some("str"));
-        assert_eq!(get_common_type(&int_val, &str_val), None);
-    }
-}

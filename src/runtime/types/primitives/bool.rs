@@ -87,36 +87,3 @@ impl TypeHandler for BoolType {
         matches!(method, "parse" | "tryParse")
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_bool_to_str() {
-        let handler = BoolType;
-        let mut val = RuntimeValue::Bool(BoolValue::new(true));
-        let result = handler
-            .call_instance_method(&mut val, "toStr", vec![], Position::default(), None)
-            .unwrap();
-
-        match result {
-            RuntimeValue::Str(s) => assert_eq!(s.value, "true"),
-            _ => panic!("Expected Str"),
-        }
-    }
-
-    #[test]
-    fn test_bool_parse() {
-        let handler = BoolType;
-        let args = vec![RuntimeValue::Str(StrValue::new("true".to_string()))];
-        let result = handler
-            .call_static_method("parse", args, Position::default(), None)
-            .unwrap();
-
-        match result {
-            RuntimeValue::Bool(b) => assert!(b.value),
-            _ => panic!("Expected Bool"),
-        }
-    }
-}

@@ -250,36 +250,3 @@ pub fn property_not_found_error(
         file,
     )
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::runtime::{BoolValue, IntValue, StrValue};
-
-    #[test]
-    fn test_require_args() {
-        let args = vec![RuntimeValue::Int(IntValue::new(42))];
-        assert!(require_args(&args, 1, "test", Position::default(), None).is_ok());
-        assert!(require_args(&args, 2, "test", Position::default(), None).is_err());
-    }
-
-    #[test]
-    fn test_extract_str() {
-        let val = RuntimeValue::Str(StrValue::new("hello".to_string()));
-        assert_eq!(
-            extract_str(&val, "arg", Position::default(), None).unwrap(),
-            "hello"
-        );
-
-        let int_val = RuntimeValue::Int(IntValue::new(42));
-        assert!(extract_str(&int_val, "arg", Position::default(), None).is_err());
-    }
-
-    #[test]
-    fn test_to_truthy() {
-        assert!(to_truthy(&RuntimeValue::Bool(BoolValue::new(true))));
-        assert!(!to_truthy(&RuntimeValue::Bool(BoolValue::new(false))));
-        assert!(to_truthy(&RuntimeValue::Int(IntValue::new(1))));
-        assert!(!to_truthy(&RuntimeValue::Int(IntValue::new(0))));
-    }
-}

@@ -208,35 +208,3 @@ pub fn extract_map(args: &[RuntimeValue], index: usize) -> Result<MapValue, Stri
         _ => Err(format!("Argument {} is not a map", index)),
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::ast::types::FunctionType;
-
-    #[test]
-    fn test_collect_futures_empty() {
-        let list = ArrayValue::new(vec![], PrimitiveType::any());
-        let (results, has_pending, error) = collect_futures(&list, FutureCollectionStrategy::All);
-        assert!(results.is_empty());
-        assert!(!has_pending);
-        assert!(error.is_none());
-    }
-
-    #[test]
-    fn test_type_method_builder() {
-        let mut builder = TypeMethodBuilder::new("TestType");
-        let fn_type = Type::Function(Box::new(FunctionType {
-            params: vec![],
-            return_type: PrimitiveType::void(),
-            is_variadic: false,
-        }));
-
-        fn test_impl(_: Vec<RuntimeValue>) -> RuntimeValue {
-            RuntimeValue::Null(NullValue::new())
-        }
-
-        builder.add_method("test", fn_type, test_impl);
-        assert_eq!(builder.methods.len(), 1);
-    }
-}

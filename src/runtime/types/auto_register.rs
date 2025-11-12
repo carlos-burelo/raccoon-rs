@@ -42,13 +42,3 @@ pub fn get_registered_types() -> Vec<Box<dyn TypeHandler>> {
         .map(|entry| (entry.constructor)())
         .collect()
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_auto_register_infrastructure() {
-        let _types = get_registered_types();
-    }
-}

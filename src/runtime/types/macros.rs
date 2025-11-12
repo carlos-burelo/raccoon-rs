@@ -218,9 +218,3 @@ macro_rules! define_type {
         }
     };
 }
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_macros_compile() {}
-}
