@@ -210,12 +210,14 @@ impl VM {
                 name,
                 params,
                 body,
+                labels,
                 is_async,
             } => {
                 let ir_func = crate::ir::IRFunctionValue::new(
                     name.clone(),
                     params.clone(),
                     body.clone(),
+                    labels.clone(),
                     *is_async,
                 );
                 let function = RuntimeValue::Dynamic(Box::new(ir_func));
@@ -1339,7 +1341,7 @@ impl VM {
                     let func_program = IRProgram {
                         instructions: ir_func.body.clone(),
                         constant_pool: Vec::new(),
-                        labels: HashMap::new(),
+                        labels: ir_func.labels.clone(),
                     };
 
                     func_vm.execute(func_program).await

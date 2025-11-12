@@ -1,5 +1,6 @@
 use crate::ast::types::{FunctionType, PrimitiveType, Type};
 use crate::runtime::{DynamicValue, RuntimeValue};
+use std::collections::HashMap;
 
 use super::instruction::Instruction;
 
@@ -8,15 +9,23 @@ pub struct IRFunctionValue {
     pub name: String,
     pub params: Vec<String>,
     pub body: Vec<Instruction>,
+    pub labels: HashMap<String, usize>,
     pub is_async: bool,
 }
 
 impl IRFunctionValue {
-    pub fn new(name: String, params: Vec<String>, body: Vec<Instruction>, is_async: bool) -> Self {
+    pub fn new(
+        name: String,
+        params: Vec<String>,
+        body: Vec<Instruction>,
+        labels: HashMap<String, usize>,
+        is_async: bool,
+    ) -> Self {
         Self {
             name,
             params,
             body,
+            labels,
             is_async,
         }
     }
