@@ -1,0 +1,548 @@
+Running all tests with IR mode enabled...
+===========================================
+
+Testing: REFERENCE_COMPATIBILITY_TEST.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: arrow_functions_demo.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: async_and_arrays.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: debug_ir_simple.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: demo_colors.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: feature_array_destructuring.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: feature_arrow_functions.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: feature_decorators.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: feature_object_destructuring.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: math_utils.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_arrays.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_arrow_functions.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_bitwise_operators.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_classes.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_control_flow.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_error_handling.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_functions.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_interfaces.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_interfaces_simple.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_operators.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_primitive_types.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_scopes.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_static_methods.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: syntax_templates.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_advanced_inference.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_advanced_return_inference.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_advanced_types.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_anonymous_classes.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_anonymous_functions.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_array_holes.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_array_methods.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_array_object_indexing.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_arrow.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_arrow2.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_arrow_complete.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_arrow_notype.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_arrow_simple.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_arrow_single.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_bigint_numerics.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_builtins.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_class_rest.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_classes_advanced.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_classes_comprehensive.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_complete_syntax_semantics.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_complete_typing_system.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_debugging_features.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_decorators.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_decorators_comprehensive.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_destruct_combined.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_destruct_debug1.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_destruct_debug2.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_destruct_func.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_destruct_nested.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_destruct_object.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_destruct_rest.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_destruct_step1.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_enum_class_as_types.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_enum_type_syntax.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_esm_advanced.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_esm_modules_comprehensive.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_explicit_generics.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_export_types.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_extended_decorators.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_float_modulo.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_func_type.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_function_params.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_future_api_complete.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_future_api_simple.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_future_catch_finally.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_future_extended_api.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_future_object.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_generics.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_generics_simple.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_generics_vs_bitwise.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_getters_setters.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_http_diagnose.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_import_default.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_import_enum.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_improved_inference.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_index_access_assignment.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_inference_simple.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_isolated_typeargs.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_issue_spread_operator.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_map_complete.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_map_i32.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_map_minimal.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_map_no_main.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_module_math.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_module_utils.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_named_args.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_named_args_comprehensive.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_new_features.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_new_types.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_no_conflict_generics_bitwise.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_no_recursion.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_null_safety_operators.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_null_safety_simple.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_object_spread.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_object_string_keys.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_optional_params_simple.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_params_comprehensive.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_partial_sections_1_10.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_pattern_matching.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_pattern_matching_exhaustive.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_property_access_advanced.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_property_access_extended.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_raccoon_modules.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_recursion_debug.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_recursion_limit.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_rest_params.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_return_type_inference.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_section_11_generics.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_section_12_advanced_types.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_section_13_destructuring.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_simple_advanced_types.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_simple_array.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_simple_enum_class_types.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_simple_enum_export.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_simple_modules.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_simple_recursion.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_spread_operator.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_static_prop.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_stdlib_complete.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_stdlib_demo.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_string_stdlib.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_sugar_types.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_toStr.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_type_inference.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_type_system_comprehensive.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_type_system_csharp.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_types_edge_cases.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_typing_system_implemented.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: test_union_in_functions.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+Testing: use_math_utils.rcc ... ✗ FAILED
+    Error output:
+    timeout: failed to run command './target/release/raccoon': No such file or directory
+
+===========================================
+Test Results:
+  Total tests: 134
+  Passed: 0
+  Failed: 134
+
+Failed tests:
+
+  - REFERENCE_COMPATIBILITY_TEST.rcc
+  - arrow_functions_demo.rcc
+  - async_and_arrays.rcc
+  - debug_ir_simple.rcc
+  - demo_colors.rcc
+  - feature_array_destructuring.rcc
+  - feature_arrow_functions.rcc
+  - feature_decorators.rcc
+  - feature_object_destructuring.rcc
+  - math_utils.rcc
+  - syntax_arrays.rcc
+  - syntax_arrow_functions.rcc
+  - syntax_bitwise_operators.rcc
+  - syntax_classes.rcc
+  - syntax_control_flow.rcc
+  - syntax_error_handling.rcc
+  - syntax_functions.rcc
+  - syntax_interfaces.rcc
+  - syntax_interfaces_simple.rcc
+  - syntax_operators.rcc
+  - syntax_primitive_types.rcc
+  - syntax_scopes.rcc
+  - syntax_static_methods.rcc
+  - syntax_templates.rcc
+  - test_advanced_inference.rcc
+  - test_advanced_return_inference.rcc
+  - test_advanced_types.rcc
+  - test_anonymous_classes.rcc
+  - test_anonymous_functions.rcc
+  - test_array_holes.rcc
+  - test_array_methods.rcc
+  - test_array_object_indexing.rcc
+  - test_arrow.rcc
+  - test_arrow2.rcc
+  - test_arrow_complete.rcc
+  - test_arrow_notype.rcc
+  - test_arrow_simple.rcc
+  - test_arrow_single.rcc
+  - test_bigint_numerics.rcc
+  - test_builtins.rcc
+  - test_class_rest.rcc
+  - test_classes_advanced.rcc
+  - test_classes_comprehensive.rcc
+  - test_complete_syntax_semantics.rcc
+  - test_complete_typing_system.rcc
+  - test_debugging_features.rcc
+  - test_decorators.rcc
+  - test_decorators_comprehensive.rcc
+  - test_destruct_combined.rcc
+  - test_destruct_debug1.rcc
+  - test_destruct_debug2.rcc
+  - test_destruct_func.rcc
+  - test_destruct_nested.rcc
+  - test_destruct_object.rcc
+  - test_destruct_rest.rcc
+  - test_destruct_step1.rcc
+  - test_enum_class_as_types.rcc
+  - test_enum_type_syntax.rcc
+  - test_esm_advanced.rcc
+  - test_esm_modules_comprehensive.rcc
+  - test_explicit_generics.rcc
+  - test_export_types.rcc
+  - test_extended_decorators.rcc
+  - test_float_modulo.rcc
+  - test_func_type.rcc
+  - test_function_params.rcc
+  - test_future_api_complete.rcc
+  - test_future_api_simple.rcc
+  - test_future_catch_finally.rcc
+  - test_future_extended_api.rcc
+  - test_future_object.rcc
+  - test_generics.rcc
+  - test_generics_simple.rcc
+  - test_generics_vs_bitwise.rcc
+  - test_getters_setters.rcc
+  - test_http_diagnose.rcc
+  - test_import_default.rcc
+  - test_import_enum.rcc
+  - test_improved_inference.rcc
+  - test_index_access_assignment.rcc
+  - test_inference_simple.rcc
+  - test_isolated_typeargs.rcc
+  - test_issue_spread_operator.rcc
+  - test_map_complete.rcc
+  - test_map_i32.rcc
+  - test_map_minimal.rcc
+  - test_map_no_main.rcc
+  - test_module_math.rcc
+  - test_module_utils.rcc
+  - test_named_args.rcc
+  - test_named_args_comprehensive.rcc
+  - test_new_features.rcc
+  - test_new_types.rcc
+  - test_no_conflict_generics_bitwise.rcc
+  - test_no_recursion.rcc
+  - test_null_safety_operators.rcc
+  - test_null_safety_simple.rcc
+  - test_object_spread.rcc
+  - test_object_string_keys.rcc
+  - test_optional_params_simple.rcc
+  - test_params_comprehensive.rcc
+  - test_partial_sections_1_10.rcc
+  - test_pattern_matching.rcc
+  - test_pattern_matching_exhaustive.rcc
+  - test_property_access_advanced.rcc
+  - test_property_access_extended.rcc
+  - test_raccoon_modules.rcc
+  - test_recursion_debug.rcc
+  - test_recursion_limit.rcc
+  - test_rest_params.rcc
+  - test_return_type_inference.rcc
+  - test_section_11_generics.rcc
+  - test_section_12_advanced_types.rcc
+  - test_section_13_destructuring.rcc
+  - test_simple_advanced_types.rcc
+  - test_simple_array.rcc
+  - test_simple_enum_class_types.rcc
+  - test_simple_enum_export.rcc
+  - test_simple_modules.rcc
+  - test_simple_recursion.rcc
+  - test_spread_operator.rcc
+  - test_static_prop.rcc
+  - test_stdlib_complete.rcc
+  - test_stdlib_demo.rcc
+  - test_string_stdlib.rcc
+  - test_sugar_types.rcc
+  - test_toStr.rcc
+  - test_type_inference.rcc
+  - test_type_system_comprehensive.rcc
+  - test_type_system_csharp.rcc
+  - test_types_edge_cases.rcc
+  - test_typing_system_implemented.rcc
+  - test_union_in_functions.rcc
+  - use_math_utils.rcc
