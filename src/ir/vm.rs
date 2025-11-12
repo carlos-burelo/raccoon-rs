@@ -456,11 +456,17 @@ impl VM {
                                 as *const crate::ir::IRClassValue)
                         };
 
-                        let instance_props = ir_class.properties.clone();
+                        let mut instance_props = ir_class.properties.clone();
 
                         if let Some((params, body)) = &ir_class.constructor {
                             let mut ctor_env = self.environment.clone();
                             ctor_env.push_scope();
+
+                            let temp_instance = RuntimeValue::Object(crate::runtime::ObjectValue::new(
+                                instance_props.clone(),
+                                crate::ast::types::PrimitiveType::any(),
+                            ));
+                            ctor_env.declare("this".to_string(), temp_instance)?;
 
                             for (i, param) in params.iter().enumerate() {
                                 let arg_value = arg_values
@@ -477,6 +483,12 @@ impl VM {
                                 labels: HashMap::new(),
                             };
                             ctor_vm.execute(ctor_program).await?;
+
+                            if let Ok(updated_this) = ctor_vm.environment.get("this", (0, 0)) {
+                                if let RuntimeValue::Object(obj) = updated_this {
+                                    instance_props = obj.properties.clone();
+                                }
+                            }
                         }
 
                         let instance = RuntimeValue::Object(crate::runtime::ObjectValue::new(
@@ -982,10 +994,12 @@ impl VM {
             }
 
             Instruction::LoadThis { dest } => {
-                let this_val = RuntimeValue::Object(crate::runtime::ObjectValue::new(
-                    HashMap::new(),
-                    crate::ast::types::PrimitiveType::any(),
-                ));
+                let this_val = self.environment.get("this", (0, 0)).unwrap_or_else(|_| {
+                    RuntimeValue::Object(crate::runtime::ObjectValue::new(
+                        HashMap::new(),
+                        crate::ast::types::PrimitiveType::any(),
+                    ))
+                });
                 self.set_register(dest, this_val);
                 Ok(ExecutionResult::Continue)
             }
@@ -1387,19 +1401,46 @@ impl VM {
     }
 
     fn get_register(&self, reg: &Register) -> Result<RuntimeValue, RaccoonError> {
-        let key = reg.to_string();
-        self.registers.get(&key).cloned().ok_or_else(|| {
-            RaccoonError::new(
-                &format!("Register not found: {}", key),
-                (0, 0),
-                None::<String>,
-            )
-        })
+        match reg {
+            Register::Local(name) => {
+                self.environment.get(name, (0, 0)).or_else(|_| {
+                    let key = reg.to_string();
+                    self.registers.get(&key).cloned().ok_or_else(|| {
+                        RaccoonError::new(
+                            &format!("Register not found: {}", key),
+                            (0, 0),
+                            None::<String>,
+                        )
+                    })
+                })
+            }
+            _ => {
+                let key = reg.to_string();
+                self.registers.get(&key).cloned().ok_or_else(|| {
+                    RaccoonError::new(
+                        &format!("Register not found: {}", key),
+                        (0, 0),
+                        None::<String>,
+                    )
+                })
+            }
+        }
     }
 
     fn set_register(&mut self, reg: &Register, value: RuntimeValue) {
-        let key = reg.to_string();
-        self.registers.insert(key, value);
+        match reg {
+            Register::Local(name) => {
+                if self.environment.get(name, (0, 0)).is_ok() {
+                    let _ = self.environment.assign(name, value.clone(), (0, 0));
+                }
+                let key = reg.to_string();
+                self.registers.insert(key, value);
+            }
+            _ => {
+                let key = reg.to_string();
+                self.registers.insert(key, value);
+            }
+        }
     }
 
     fn resolve_label(&self, label: &str) -> Option<usize> {

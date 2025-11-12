@@ -108,7 +108,7 @@ impl IRCompiler {
             VarPattern::Destructuring(pattern) => {
                 if let Some(init) = &decl.initializer {
                     let value_reg = self.compile_expr(init)?;
-                    self.compile_destructuring_pattern(pattern, value_reg)?;
+                    self.compile_destructuring_pattern(pattern, value_reg, decl.is_constant)?;
                 }
             }
         }
@@ -119,19 +119,23 @@ impl IRCompiler {
         &mut self,
         pattern: &DestructuringPattern,
         src: Register,
+        is_const: bool,
     ) -> Result<(), RaccoonError> {
         match pattern {
             DestructuringPattern::Array(array_pattern) => {
                 let mut dests = Vec::new();
+                let mut var_names = Vec::new();
+
                 for element in &array_pattern.elements {
                     if let Some(elem) = element {
-                        let dest = match elem {
+                        let (dest, var_name) = match elem {
                             ArrayPatternElement::Identifier(ident) => {
-                                Register::Local(ident.name.clone())
+                                (Register::Local(ident.name.clone()), Some(ident.name.clone()))
                             }
-                            _ => self.next_temp(),
+                            _ => (self.next_temp(), None),
                         };
                         dests.push(dest);
+                        var_names.push(var_name);
                     }
                 }
 
@@ -140,23 +144,57 @@ impl IRCompiler {
                     .as_ref()
                     .map(|rest| Register::Local(rest.argument.name.clone()));
 
+                let rest_name = array_pattern
+                    .rest
+                    .as_ref()
+                    .map(|rest| rest.argument.name.clone());
+
                 self.program.emit(Instruction::DestructureArray {
-                    dests,
+                    dests: dests.clone(),
                     src,
                     has_rest: array_pattern.rest.is_some(),
-                    rest_dest,
+                    rest_dest: rest_dest.clone(),
                 });
+
+                for (dest, var_name) in dests.iter().zip(var_names.iter()) {
+                    if let Some(name) = var_name {
+                        self.program.emit(Instruction::Declare {
+                            name: name.clone(),
+                            is_const,
+                        });
+                        self.program.emit(Instruction::Store {
+                            name: name.clone(),
+                            src: dest.clone(),
+                        });
+                    }
+                }
+
+                if let Some(name) = rest_name {
+                    self.program.emit(Instruction::Declare {
+                        name: name.clone(),
+                        is_const,
+                    });
+                    if let Some(rest_reg) = rest_dest {
+                        self.program.emit(Instruction::Store {
+                            name: name.clone(),
+                            src: rest_reg,
+                        });
+                    }
+                }
             }
             DestructuringPattern::Object(object_pattern) => {
                 let mut mappings = Vec::new();
+                let mut var_names = Vec::new();
+
                 for prop in &object_pattern.properties {
-                    let dest = match &prop.value {
+                    let (dest, var_name) = match &prop.value {
                         ObjectPatternValue::Identifier(ident) => {
-                            Register::Local(ident.name.clone())
+                            (Register::Local(ident.name.clone()), Some(ident.name.clone()))
                         }
-                        _ => self.next_temp(),
+                        _ => (self.next_temp(), None),
                     };
                     mappings.push((prop.key.clone(), dest));
+                    var_names.push(var_name);
                 }
 
                 let rest_dest = object_pattern
@@ -164,11 +202,42 @@ impl IRCompiler {
                     .as_ref()
                     .map(|rest| Register::Local(rest.argument.name.clone()));
 
+                let rest_name = object_pattern
+                    .rest
+                    .as_ref()
+                    .map(|rest| rest.argument.name.clone());
+
                 self.program.emit(Instruction::DestructureObject {
-                    mappings,
+                    mappings: mappings.clone(),
                     src,
-                    rest_dest,
+                    rest_dest: rest_dest.clone(),
                 });
+
+                for ((_, dest), var_name) in mappings.iter().zip(var_names.iter()) {
+                    if let Some(name) = var_name {
+                        self.program.emit(Instruction::Declare {
+                            name: name.clone(),
+                            is_const,
+                        });
+                        self.program.emit(Instruction::Store {
+                            name: name.clone(),
+                            src: dest.clone(),
+                        });
+                    }
+                }
+
+                if let Some(name) = rest_name {
+                    self.program.emit(Instruction::Declare {
+                        name: name.clone(),
+                        is_const,
+                    });
+                    if let Some(rest_reg) = rest_dest {
+                        self.program.emit(Instruction::Store {
+                            name: name.clone(),
+                            src: rest_reg,
+                        });
+                    }
+                }
             }
         }
         Ok(())
@@ -1146,11 +1215,7 @@ impl IRCompiler {
     }
 
     fn compile_this_expr(&mut self) -> Result<Register, RaccoonError> {
-        let dest = self.next_temp();
-        self.program.emit(Instruction::LoadThis {
-            dest: dest.clone(),
-        });
-        Ok(dest)
+        Ok(Register::Local("this".to_string()))
     }
 
     fn compile_bigint_literal(&mut self, lit: &BigIntLiteral) -> Result<Register, RaccoonError> {
