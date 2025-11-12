@@ -254,7 +254,7 @@ pub enum Instruction {
     CreateClass {
         name: String,
         constructor: Option<(Vec<String>, Vec<Instruction>)>,
-        methods: Vec<(String, Vec<String>, Vec<Instruction>, bool)>,
+        methods: Vec<(String, Vec<String>, Vec<Instruction>, std::collections::HashMap<String, usize>, bool)>,
         properties: Vec<(String, Register)>,
     },
 

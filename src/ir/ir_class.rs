@@ -17,6 +17,7 @@ pub struct IRMethod {
     pub name: String,
     pub params: Vec<String>,
     pub body: Vec<Instruction>,
+    pub labels: HashMap<String, usize>,
     pub is_async: bool,
 }
 
@@ -24,17 +25,18 @@ impl IRClassValue {
     pub fn new(
         name: String,
         constructor: Option<(Vec<String>, Vec<Instruction>)>,
-        methods: Vec<(String, Vec<String>, Vec<Instruction>, bool)>,
+        methods: Vec<(String, Vec<String>, Vec<Instruction>, HashMap<String, usize>, bool)>,
         properties: Vec<(String, RuntimeValue)>,
     ) -> Self {
         let mut method_map = HashMap::new();
-        for (method_name, params, body, is_async) in methods {
+        for (method_name, params, body, labels, is_async) in methods {
             method_map.insert(
                 method_name.clone(),
                 IRMethod {
                     name: method_name,
                     params,
                     body,
+                    labels,
                     is_async,
                 },
             );
