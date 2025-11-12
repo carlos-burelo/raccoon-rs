@@ -94,6 +94,7 @@ pub enum Instruction {
         name: String,
         params: Vec<String>,
         body: Vec<Instruction>,
+        labels: std::collections::HashMap<String, usize>,
         is_async: bool,
     },
 

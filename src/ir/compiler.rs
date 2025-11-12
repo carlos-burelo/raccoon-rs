@@ -187,13 +187,24 @@ impl IRCompiler {
             body_compiler.compile_stmt(stmt)?;
         }
 
-        let dest = Register::Global(decl.name.clone());
+        self.program.emit(Instruction::Declare {
+            name: decl.name.clone(),
+            is_const: false,
+        });
+
+        let temp_reg = self.next_temp();
         self.program.emit(Instruction::CreateFunction {
-            dest,
+            dest: temp_reg.clone(),
             name: decl.name.clone(),
             params,
             body: body_compiler.program.instructions,
+            labels: body_compiler.program.labels,
             is_async: decl.is_async,
+        });
+
+        self.program.emit(Instruction::Store {
+            name: decl.name.clone(),
+            src: temp_reg,
         });
 
         Ok(())
@@ -603,10 +614,24 @@ impl IRCompiler {
             Expr::NullCoalescing(null_coal) => self.compile_null_coalescing(null_coal),
             Expr::Await(await_expr) => self.compile_await_expr(await_expr),
             Expr::Match(match_expr) => self.compile_match_expr(match_expr),
-            _ => {
+            Expr::This(_) => self.compile_this_expr(),
+            Expr::Super(_) => {
                 let dest = self.next_temp();
                 self.program.emit(Instruction::Comment {
-                    text: format!("Unimplemented expression: {:?}", expr),
+                    text: "Super expression requires method context".to_string(),
+                });
+                Ok(dest)
+            }
+            Expr::BigIntLiteral(lit) => self.compile_bigint_literal(lit),
+            Expr::NullAssertion(null_assert) => self.compile_null_assertion(null_assert),
+            Expr::TaggedTemplate(tagged) => self.compile_tagged_template(tagged),
+            Expr::Class(class_expr) => self.compile_class_expr(class_expr),
+            Expr::Spread(spread) => {
+                let operand = self.compile_expr(&spread.argument)?;
+                let dest = self.next_temp();
+                self.program.emit(Instruction::Spread {
+                    dest: dest.clone(),
+                    operand,
                 });
                 Ok(dest)
             }
@@ -860,21 +885,21 @@ impl IRCompiler {
             }
         }
 
-        let body_instructions = match &arrow.body {
+        let (body_instructions, body_labels) = match &arrow.body {
             ArrowFnBody::Expr(expr) => {
                 let mut body_compiler = IRCompiler::new();
                 let result = body_compiler.compile_expr(expr)?;
                 body_compiler.program.emit(Instruction::Return {
                     value: Some(result),
                 });
-                body_compiler.program.instructions
+                (body_compiler.program.instructions, body_compiler.program.labels)
             }
             ArrowFnBody::Block(stmts) => {
                 let mut body_compiler = IRCompiler::new();
                 for stmt in stmts {
                     body_compiler.compile_stmt(stmt)?;
                 }
-                body_compiler.program.instructions
+                (body_compiler.program.instructions, body_compiler.program.labels)
             }
         };
 
@@ -884,6 +909,7 @@ impl IRCompiler {
             name: "<arrow>".to_string(),
             params,
             body: body_instructions,
+            labels: body_labels,
             is_async: arrow.is_async,
         });
 
@@ -1117,6 +1143,138 @@ impl IRCompiler {
             }
             _ => Ok(IRMatchPattern::Wildcard),
         }
+    }
+
+    fn compile_this_expr(&mut self) -> Result<Register, RaccoonError> {
+        let dest = self.next_temp();
+        self.program.emit(Instruction::LoadThis {
+            dest: dest.clone(),
+        });
+        Ok(dest)
+    }
+
+    fn compile_bigint_literal(&mut self, lit: &BigIntLiteral) -> Result<Register, RaccoonError> {
+        let dest = self.next_temp();
+        self.program.emit(Instruction::LoadConst {
+            dest: dest.clone(),
+            value: RuntimeValue::Str(crate::runtime::StrValue::new(format!(
+                "BigInt({})",
+                lit.value
+            ))),
+        });
+        Ok(dest)
+    }
+
+    fn compile_null_assertion(
+        &mut self,
+        null_assert: &NullAssertionExpr,
+    ) -> Result<Register, RaccoonError> {
+        let value = self.compile_expr(&null_assert.operand)?;
+        let dest = self.next_temp();
+        self.program.emit(Instruction::NullAssert {
+            dest: dest.clone(),
+            value,
+        });
+        Ok(dest)
+    }
+
+    fn compile_tagged_template(
+        &mut self,
+        tagged: &TaggedTemplateExpr,
+    ) -> Result<Register, RaccoonError> {
+        let tag = self.compile_expr(&tagged.tag)?;
+
+        let mut parts = Vec::new();
+        let mut expressions = Vec::new();
+
+        for part in &tagged.template.parts {
+            match part {
+                crate::ast::nodes::TemplateStrPart::String(s) => {
+                    parts.push(s.value.clone());
+                }
+                crate::ast::nodes::TemplateStrPart::Expr(expr) => {
+                    parts.push(String::new());
+                    expressions.push(self.compile_expr(expr)?);
+                }
+            }
+        }
+
+        let dest = self.next_temp();
+        self.program.emit(Instruction::TaggedTemplate {
+            dest: dest.clone(),
+            tag,
+            parts,
+            expressions,
+        });
+
+        Ok(dest)
+    }
+
+    fn compile_class_expr(&mut self, class_expr: &ClassExpr) -> Result<Register, RaccoonError> {
+        let mut constructor = None;
+        let mut methods = Vec::new();
+        let mut properties = Vec::new();
+
+        if let Some(ctor) = &class_expr.constructor {
+            let mut params = Vec::new();
+            for param in &ctor.parameters {
+                if let VarPattern::Identifier(name) = &param.pattern {
+                    params.push(name.clone());
+                }
+            }
+
+            let mut body_compiler = IRCompiler::new();
+            for stmt in &ctor.body {
+                body_compiler.compile_stmt(stmt)?;
+            }
+
+            constructor = Some((params, body_compiler.program.instructions));
+        }
+
+        for method in &class_expr.methods {
+            let mut params = Vec::new();
+            for param in &method.parameters {
+                if let VarPattern::Identifier(name) = &param.pattern {
+                    params.push(name.clone());
+                }
+            }
+
+            let mut body_compiler = IRCompiler::new();
+            for stmt in &method.body {
+                body_compiler.compile_stmt(stmt)?;
+            }
+
+            methods.push((
+                method.name.clone(),
+                params,
+                body_compiler.program.instructions,
+                method.is_async,
+            ));
+        }
+
+        for prop in &class_expr.properties {
+            if let Some(init) = &prop.initializer {
+                let reg = self.compile_expr(init)?;
+                properties.push((prop.name.clone(), reg));
+            }
+        }
+
+        let dest = self.next_temp();
+        let temp_name = format!("<anonymous_class_{}>", self.temp_counter);
+
+        self.program.emit(Instruction::CreateClass {
+            name: temp_name.clone(),
+            constructor,
+            methods,
+            properties,
+        });
+
+        self.program.emit(Instruction::Load {
+            dest: dest.clone(),
+            name: temp_name,
+        });
+
+        Ok(dest)
     }
 }
 
