@@ -207,12 +207,18 @@ impl VM {
 
             Instruction::CreateFunction {
                 dest,
-                name: _,
-                params: _,
-                body: _,
-                is_async: _,
+                name,
+                params,
+                body,
+                is_async,
             } => {
-                let function = RuntimeValue::Null(crate::runtime::NullValue::new());
+                let ir_func = crate::ir::IRFunctionValue::new(
+                    name.clone(),
+                    params.clone(),
+                    body.clone(),
+                    *is_async,
+                );
+                let function = RuntimeValue::Dynamic(Box::new(ir_func));
                 self.set_register(dest, function);
                 Ok(ExecutionResult::Continue)
             }
@@ -280,7 +286,20 @@ impl VM {
                             let idx = i.value as usize;
                             if idx < arr.elements.len() {
                                 arr.elements[idx] = value_val;
+                                self.set_register(array, RuntimeValue::Array(arr));
+                            } else {
+                                return Err(RaccoonError::new(
+                                    "Array index out of bounds",
+                                    (0, 0),
+                                    None::<String>,
+                                ));
                             }
+                        } else {
+                            return Err(RaccoonError::new(
+                                "Array index must be an integer",
+                                (0, 0),
+                                None::<String>,
+                            ));
                         }
                     }
                     _ => {
@@ -376,6 +395,15 @@ impl VM {
                 match object_val {
                     RuntimeValue::Object(mut obj) => {
                         obj.properties.insert(property.clone(), value_val);
+                        self.set_register(object, RuntimeValue::Object(obj));
+                    }
+                    RuntimeValue::ClassInstance(instance) => {
+                        instance
+                            .properties
+                            .write()
+                            .unwrap()
+                            .insert(property.clone(), value_val);
+                        self.set_register(object, RuntimeValue::ClassInstance(instance));
                     }
                     _ => {
                         return Err(RaccoonError::new(
@@ -409,7 +437,7 @@ impl VM {
 
             Instruction::NewInstance {
                 dest,
-                class_name: _,
+                class_name,
                 args,
             } => {
                 let mut arg_values = Vec::new();
@@ -417,11 +445,53 @@ impl VM {
                     arg_values.push(self.get_register(arg)?);
                 }
 
-                let instance = RuntimeValue::Object(crate::runtime::ObjectValue::new(
-                    HashMap::new(),
-                    crate::ast::types::PrimitiveType::any(),
-                ));
-                self.set_register(dest, instance);
+                let class_val = self.environment.get(class_name, (0, 0))?;
+
+                match class_val {
+                    RuntimeValue::Dynamic(dyn_val) if dyn_val.type_name() == "IRClass" => {
+                        let ir_class: &crate::ir::IRClassValue = unsafe {
+                            &*(dyn_val.as_ref() as *const dyn crate::runtime::DynamicValue
+                                as *const crate::ir::IRClassValue)
+                        };
+
+                        let instance_props = ir_class.properties.clone();
+
+                        if let Some((params, body)) = &ir_class.constructor {
+                            let mut ctor_env = self.environment.clone();
+                            ctor_env.push_scope();
+
+                            for (i, param) in params.iter().enumerate() {
+                                let arg_value = arg_values
+                                    .get(i)
+                                    .cloned()
+                                    .unwrap_or(RuntimeValue::Null(crate::runtime::NullValue::new()));
+                                ctor_env.declare(param.clone(), arg_value)?;
+                            }
+
+                            let mut ctor_vm = VM::new(ctor_env);
+                            let ctor_program = IRProgram {
+                                instructions: body.clone(),
+                                constant_pool: Vec::new(),
+                                labels: HashMap::new(),
+                            };
+                            ctor_vm.execute(ctor_program).await?;
+                        }
+
+                        let instance = RuntimeValue::Object(crate::runtime::ObjectValue::new(
+                            instance_props,
+                            crate::ast::types::PrimitiveType::any(),
+                        ));
+                        self.set_register(dest, instance);
+                    }
+                    _ => {
+                        let instance = RuntimeValue::Object(crate::runtime::ObjectValue::new(
+                            HashMap::new(),
+                            crate::ast::types::PrimitiveType::any(),
+                        ));
+                        self.set_register(dest, instance);
+                    }
+                }
+
                 Ok(ExecutionResult::Continue)
             }
 
@@ -553,17 +623,25 @@ impl VM {
             } => {
                 let operand_val = self.get_register(operand)?;
 
-                let result = match operand_val {
+                let (result, new_val) = match operand_val {
                     RuntimeValue::Int(i) => {
-                        let new_val = i.value + 1;
+                        let new_value = RuntimeValue::Int(crate::runtime::IntValue::new(i.value + 1));
+                        let old_value = RuntimeValue::Int(crate::runtime::IntValue::new(i.value));
+
                         if *is_prefix {
-                            RuntimeValue::Int(crate::runtime::IntValue::new(new_val))
+                            (new_value.clone(), new_value)
                         } else {
-                            self.set_register(
-                                operand,
-                                RuntimeValue::Int(crate::runtime::IntValue::new(new_val)),
-                            );
-                            RuntimeValue::Int(crate::runtime::IntValue::new(i.value))
+                            (old_value, new_value)
+                        }
+                    }
+                    RuntimeValue::Float(f) => {
+                        let new_value = RuntimeValue::Float(crate::runtime::FloatValue::new(f.value + 1.0));
+                        let old_value = RuntimeValue::Float(crate::runtime::FloatValue::new(f.value));
+
+                        if *is_prefix {
+                            (new_value.clone(), new_value)
+                        } else {
+                            (old_value, new_value)
                         }
                     }
                     _ => {
@@ -575,6 +653,7 @@ impl VM {
                     }
                 };
 
+                self.set_register(operand, new_val);
                 self.set_register(dest, result);
                 Ok(ExecutionResult::Continue)
             }
@@ -586,17 +665,25 @@ impl VM {
             } => {
                 let operand_val = self.get_register(operand)?;
 
-                let result = match operand_val {
+                let (result, new_val) = match operand_val {
                     RuntimeValue::Int(i) => {
-                        let new_val = i.value - 1;
+                        let new_value = RuntimeValue::Int(crate::runtime::IntValue::new(i.value - 1));
+                        let old_value = RuntimeValue::Int(crate::runtime::IntValue::new(i.value));
+
                         if *is_prefix {
-                            RuntimeValue::Int(crate::runtime::IntValue::new(new_val))
+                            (new_value.clone(), new_value)
                         } else {
-                            self.set_register(
-                                operand,
-                                RuntimeValue::Int(crate::runtime::IntValue::new(new_val)),
-                            );
-                            RuntimeValue::Int(crate::runtime::IntValue::new(i.value))
+                            (old_value, new_value)
+                        }
+                    }
+                    RuntimeValue::Float(f) => {
+                        let new_value = RuntimeValue::Float(crate::runtime::FloatValue::new(f.value - 1.0));
+                        let old_value = RuntimeValue::Float(crate::runtime::FloatValue::new(f.value));
+
+                        if *is_prefix {
+                            (new_value.clone(), new_value)
+                        } else {
+                            (old_value, new_value)
                         }
                     }
                     _ => {
@@ -608,6 +695,7 @@ impl VM {
                     }
                 };
 
+                self.set_register(operand, new_val);
                 self.set_register(dest, result);
                 Ok(ExecutionResult::Continue)
             }
@@ -911,15 +999,25 @@ impl VM {
 
             Instruction::CreateClass {
                 name,
-                constructor: _,
-                methods: _,
-                properties: _,
+                constructor,
+                methods,
+                properties,
             } => {
-                let class = RuntimeValue::Object(crate::runtime::ObjectValue::new(
-                    HashMap::new(),
-                    crate::ast::types::PrimitiveType::any(),
-                ));
-                self.environment.declare(name.clone(), class)?;
+                let mut prop_values = Vec::new();
+                for (prop_name, prop_reg) in properties {
+                    let value = self.get_register(prop_reg)?;
+                    prop_values.push((prop_name.clone(), value));
+                }
+
+                let ir_class = crate::ir::IRClassValue::new(
+                    name.clone(),
+                    constructor.clone(),
+                    methods.clone(),
+                    prop_values,
+                );
+
+                let class_value = RuntimeValue::Dynamic(Box::new(ir_class));
+                self.environment.declare(name.clone(), class_value)?;
                 Ok(ExecutionResult::Continue)
             }
 
@@ -1146,10 +1244,61 @@ impl VM {
     ) -> Result<bool, RaccoonError> {
         match pattern {
             MatchPattern::Wildcard => Ok(true),
-            MatchPattern::Literal(lit) => Ok(value.to_string() == lit.to_string()),
+            MatchPattern::Literal(lit) => {
+                match (value, lit) {
+                    (RuntimeValue::Int(v), RuntimeValue::Int(l)) => Ok(v.value == l.value),
+                    (RuntimeValue::Float(v), RuntimeValue::Float(l)) => Ok((v.value - l.value).abs() < f64::EPSILON),
+                    (RuntimeValue::Str(v), RuntimeValue::Str(l)) => Ok(v.value == l.value),
+                    (RuntimeValue::Bool(v), RuntimeValue::Bool(l)) => Ok(v.value == l.value),
+                    (RuntimeValue::Null(_), RuntimeValue::Null(_)) => Ok(true),
+                    _ => Ok(false),
+                }
+            }
+            MatchPattern::Range(start, end) => {
+                match (value, start, end) {
+                    (RuntimeValue::Int(v), RuntimeValue::Int(s), RuntimeValue::Int(e)) => {
+                        Ok(v.value >= s.value && v.value <= e.value)
+                    }
+                    (RuntimeValue::Float(v), RuntimeValue::Float(s), RuntimeValue::Float(e)) => {
+                        Ok(v.value >= s.value && v.value <= e.value)
+                    }
+                    _ => Ok(false),
+                }
+            }
             MatchPattern::Variable(_) => Ok(true),
-            MatchPattern::Array(_) => Ok(matches!(value, RuntimeValue::Array(_))),
-            MatchPattern::Object(_) => Ok(matches!(value, RuntimeValue::Object(_))),
+            MatchPattern::Array(patterns) => {
+                match value {
+                    RuntimeValue::Array(arr) => {
+                        if patterns.len() != arr.elements.len() {
+                            return Ok(false);
+                        }
+                        for (i, p) in patterns.iter().enumerate() {
+                            if !self.matches_pattern(&arr.elements[i], p)? {
+                                return Ok(false);
+                            }
+                        }
+                        Ok(true)
+                    }
+                    _ => Ok(false),
+                }
+            }
+            MatchPattern::Object(props) => {
+                match value {
+                    RuntimeValue::Object(obj) => {
+                        for (key, pattern) in props {
+                            if let Some(prop_value) = obj.properties.get(key) {
+                                if !self.matches_pattern(prop_value, pattern)? {
+                                    return Ok(false);
+                                }
+                            } else {
+                                return Ok(false);
+                            }
+                        }
+                        Ok(true)
+                    }
+                    _ => Ok(false),
+                }
+            }
             MatchPattern::Or(patterns) => {
                 for p in patterns {
                     if self.matches_pattern(value, p)? {
@@ -1158,7 +1307,6 @@ impl VM {
                 }
                 Ok(false)
             }
-            _ => Ok(false),
         }
     }
 
@@ -1171,6 +1319,38 @@ impl VM {
             RuntimeValue::NativeFunction(func) => Ok((func.implementation)(args)),
             RuntimeValue::NativeAsyncFunction(func) => Ok((func.implementation)(args).await),
             RuntimeValue::Function(_) => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
+            RuntimeValue::Dynamic(dyn_val) => {
+                if dyn_val.type_name() == "IRFunction" {
+                    let ir_func: &crate::ir::IRFunctionValue =
+                        unsafe { &*(dyn_val.as_ref() as *const dyn crate::runtime::DynamicValue as *const crate::ir::IRFunctionValue) };
+
+                    let mut func_env = self.environment.clone();
+                    func_env.push_scope();
+
+                    for (i, param) in ir_func.params.iter().enumerate() {
+                        let arg_value = args
+                            .get(i)
+                            .cloned()
+                            .unwrap_or(RuntimeValue::Null(crate::runtime::NullValue::new()));
+                        func_env.declare(param.clone(), arg_value)?;
+                    }
+
+                    let mut func_vm = VM::new(func_env);
+                    let func_program = IRProgram {
+                        instructions: ir_func.body.clone(),
+                        constant_pool: Vec::new(),
+                        labels: HashMap::new(),
+                    };
+
+                    func_vm.execute(func_program).await
+                } else {
+                    Err(RaccoonError::new(
+                        "Cannot call non-function dynamic value",
+                        (0, 0),
+                        None::<String>,
+                    ))
+                }
+            }
             _ => Err(RaccoonError::new(
                 "Cannot call non-function value",
                 (0, 0),
