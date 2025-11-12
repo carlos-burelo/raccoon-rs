@@ -491,11 +491,44 @@ impl VM {
                             }
                         }
 
-                        let instance = RuntimeValue::Object(crate::runtime::ObjectValue::new(
-                            instance_props,
+                        // Convert IR methods to FunctionValue
+                        let mut method_map = HashMap::new();
+                        for (method_name, ir_method) in &ir_class.methods {
+                            // Convert IR method to FunctionValue
+                            let params: Vec<crate::ast::nodes::FnParam> = ir_method
+                                .params
+                                .iter()
+                                .map(|p| crate::ast::nodes::FnParam {
+                                    pattern: crate::ast::nodes::VarPattern::Identifier(p.clone()),
+                                    param_type: crate::ast::types::PrimitiveType::any(),
+                                    default_value: None,
+                                    is_optional: false,
+                                    is_rest: false,
+                                })
+                                .collect();
+
+                            // We need to convert IR instructions back to AST statements
+                            // For now, we'll store a special marker function that the IR VM will handle
+                            let func_value = crate::runtime::FunctionValue::new(
+                                params,
+                                vec![], // Empty body - we'll execute IR instructions directly
+                                ir_method.is_async,
+                                crate::ast::types::PrimitiveType::any(),
+                            );
+
+                            method_map.insert(method_name.clone(), func_value);
+                        }
+
+                        // Create ClassInstance with methods
+                        let instance = crate::runtime::ClassInstance::new(
+                            ir_class.name.clone(),
+                            instance_props.clone(),
+                            method_map,
+                            vec![],
                             crate::ast::types::PrimitiveType::any(),
-                        ));
-                        self.set_register(dest, instance);
+                        );
+
+                        self.set_register(dest, RuntimeValue::ClassInstance(instance));
                     }
                     _ => {
                         let instance = RuntimeValue::Object(crate::runtime::ObjectValue::new(
@@ -1393,10 +1426,100 @@ impl VM {
                     ))
                 }
             }
-            RuntimeValue::ClassInstance(_) => {
-                Ok(RuntimeValue::Null(crate::runtime::NullValue::new()))
+            RuntimeValue::ClassInstance(instance) => {
+                // First, try to get the IR class from the environment to access IR methods
+                if let Ok(class_val) = self.environment.get(&instance.class_name, (0, 0)) {
+                    if let RuntimeValue::Dynamic(dyn_val) = class_val {
+                        if dyn_val.type_name() == "IRClass" {
+                            let ir_class: &crate::ir::IRClassValue = unsafe {
+                                &*(dyn_val.as_ref() as *const dyn crate::runtime::DynamicValue
+                                    as *const crate::ir::IRClassValue)
+                            };
+
+                            // Check if the method exists in IR methods
+                            if let Some(ir_method) = ir_class.methods.get(method) {
+                                // Execute IR method
+                                let mut method_env = self.environment.clone();
+                                method_env.push_scope();
+                                method_env.declare("this".to_string(), RuntimeValue::ClassInstance(instance.clone()))?;
+
+                                // Bind parameters
+                                for (i, param) in ir_method.params.iter().enumerate() {
+                                    let arg_value = args
+                                        .get(i)
+                                        .cloned()
+                                        .unwrap_or(RuntimeValue::Null(crate::runtime::NullValue::new()));
+                                    method_env.declare(param.clone(), arg_value)?;
+                                }
+
+                                // Execute IR instructions
+                                let mut method_vm = VM::new(method_env);
+                                let method_program = IRProgram {
+                                    instructions: ir_method.body.clone(),
+                                    constant_pool: Vec::new(),
+                                    labels: ir_method.labels.clone(),
+                                };
+
+                                return method_vm.execute(method_program).await;
+                            }
+                        }
+                    }
+                }
+
+                // Fallback: check if method exists in instance.methods (for non-IR classes)
+                if let Some(method_func) = instance.methods.get(method) {
+                    // Only execute if the method has a non-empty body
+                    if !method_func.body.is_empty() {
+                        let mut method_env = self.environment.clone();
+                        method_env.push_scope();
+                        method_env.declare("this".to_string(), RuntimeValue::ClassInstance(instance.clone()))?;
+
+                        for (i, param) in method_func.parameters.iter().enumerate() {
+                            let arg_value = args
+                                .get(i)
+                                .cloned()
+                                .unwrap_or(RuntimeValue::Null(crate::runtime::NullValue::new()));
+
+                            match &param.pattern {
+                                crate::ast::nodes::VarPattern::Identifier(name) => {
+                                    method_env.declare(name.clone(), arg_value)?;
+                                }
+                                crate::ast::nodes::VarPattern::Destructuring(_) => {}
+                            }
+                        }
+
+                        let mut interpreter = crate::interpreter::Interpreter::new(None);
+                        interpreter.environment = method_env;
+                        let mut result = RuntimeValue::Null(crate::runtime::NullValue::new());
+
+                        for stmt in &method_func.body {
+                            match interpreter.execute_stmt_internal(stmt).await? {
+                                crate::interpreter::InterpreterResult::Value(v) => result = v,
+                                crate::interpreter::InterpreterResult::Return(v) => {
+                                    return Ok(v);
+                                }
+                                _ => {}
+                            }
+                        }
+
+                        return Ok(result);
+                    }
+                }
+
+                Err(RaccoonError::new(
+                    &format!("Method '{}' not found", method),
+                    (0, 0),
+                    None::<String>,
+                ))
             }
-            _ => Ok(RuntimeValue::Null(crate::runtime::NullValue::new())),
+            _ => {
+                // For built-in types, try to call methods like toString(), etc.
+                Err(RaccoonError::new(
+                    &format!("Cannot call method on non-object type"),
+                    (0, 0),
+                    None::<String>,
+                ))
+            }
         }
     }
 

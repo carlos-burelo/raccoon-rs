@@ -126,13 +126,13 @@ impl IRCompiler {
                 let mut dests = Vec::new();
                 let mut var_names = Vec::new();
 
+                // Use temporary registers for all destinations
                 for element in &array_pattern.elements {
                     if let Some(elem) = element {
-                        let (dest, var_name) = match elem {
-                            ArrayPatternElement::Identifier(ident) => {
-                                (Register::Local(ident.name.clone()), Some(ident.name.clone()))
-                            }
-                            _ => (self.next_temp(), None),
+                        let dest = self.next_temp();
+                        let var_name = match elem {
+                            ArrayPatternElement::Identifier(ident) => Some(ident.name.clone()),
+                            _ => None,
                         };
                         dests.push(dest);
                         var_names.push(var_name);
@@ -142,7 +142,7 @@ impl IRCompiler {
                 let rest_dest = array_pattern
                     .rest
                     .as_ref()
-                    .map(|rest| Register::Local(rest.argument.name.clone()));
+                    .map(|_| self.next_temp());
 
                 let rest_name = array_pattern
                     .rest
@@ -156,6 +156,7 @@ impl IRCompiler {
                     rest_dest: rest_dest.clone(),
                 });
 
+                // Now declare and store the variables from temporary registers
                 for (dest, var_name) in dests.iter().zip(var_names.iter()) {
                     if let Some(name) = var_name {
                         self.program.emit(Instruction::Declare {
@@ -317,6 +318,7 @@ impl IRCompiler {
                 method.name.clone(),
                 params,
                 body_compiler.program.instructions,
+                body_compiler.program.labels,
                 method.is_async,
             ));
         }
@@ -1313,6 +1315,7 @@ impl IRCompiler {
                 method.name.clone(),
                 params,
                 body_compiler.program.instructions,
+                body_compiler.program.labels,
                 method.is_async,
             ));
         }
